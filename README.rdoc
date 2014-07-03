@@ -1,0 +1,9 @@
+= Rei
+
+Rei for Android.
+
+== Install
+
+* Install Android SDK
+* $ ant debug
+* $ adb install -r bin/Rei-debug.apk
