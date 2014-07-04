@@ -42,6 +42,13 @@
 				android:src="@android:drawable/ic_input_add"
 				android:onClick="startIntervention"/>
 		<ImageButton 
+				android:id="@+id/stop_intervention_button"
+				android:layout_width="fill_parent"
+				android:layout_height="wrap_content"
+				android:src="@android:drawable/ic_input_delete"
+				android:visibility="gone"
+				android:onClick="stopIntervention"/>
+		<ImageButton 
 				android:id="@+id/resume_intervention_button"
 				android:layout_width="fill_parent"
 				android:layout_height="wrap_content"
@@ -55,13 +62,6 @@
 				android:src="@android:drawable/ic_media_pause"
 				android:visibility="gone"
 				android:onClick="pauseIntervention"/>
-		<ImageButton 
-				android:id="@+id/stop_intervention_button"
-				android:layout_width="fill_parent"
-				android:layout_height="wrap_content"
-				android:src="@android:drawable/ic_input_delete"
-				android:visibility="gone"
-				android:onClick="stopIntervention"/>
 	</LinearLayout>
 </LinearLayout>
 
