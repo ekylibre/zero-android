@@ -35,7 +35,7 @@ public class TrackingActivity extends Activity implements LocationListener {
     public void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.main);
+        setContentView(R.layout.tracking);
 
 				this.masterChrono = (Chronometer) findViewById(R.id.master_chrono);
 				this.coordinates  = (TextView)    findViewById(R.id.coordinates);
