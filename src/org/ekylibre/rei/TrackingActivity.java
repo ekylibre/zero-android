@@ -53,7 +53,7 @@ public class TrackingActivity extends Activity implements LocationListener {
 		public boolean onCreateOptionsMenu(Menu menu) {
 				// Inflate the menu items for use in the action bar
 				MenuInflater inflater = getMenuInflater();
-				inflater.inflate(R.menu.tracking_menu, menu);
+				inflater.inflate(R.menu.tracking, menu);
 				return super.onCreateOptionsMenu(menu);
 		}
 
@@ -82,8 +82,7 @@ public class TrackingActivity extends Activity implements LocationListener {
 				this.masterChrono.start();
 				stopButton.setVisibility(View.VISIBLE);
 				pauseButton.setVisibility(View.VISIBLE);
-				// Register the listener with the Location Manager to receive location updates
-				this.locationManager.requestLocationUpdates(this.locationProvider, 500, 0, this);
+				this.startTracking();
 		}
 
 
@@ -91,7 +90,7 @@ public class TrackingActivity extends Activity implements LocationListener {
 				this.masterChrono.stop();
 				stopButton.setVisibility(View.GONE);
 				pauseButton.setVisibility(View.GONE);
-				this.locationManager.removeUpdates(this);
+				this.stopTracking();
 		}
 
 
@@ -102,7 +101,7 @@ public class TrackingActivity extends Activity implements LocationListener {
 				startButton.setVisibility(View.GONE);
 				stopButton.setVisibility(View.GONE);
 				resumeButton.setVisibility(View.VISIBLE);
-				this.locationManager.removeUpdates(this);
+				this.stopTracking();
 		}
 
     public void resumeIntervention(View view) {
@@ -113,7 +112,16 @@ public class TrackingActivity extends Activity implements LocationListener {
 				startButton.setVisibility(View.VISIBLE);
 				stopButton.setVisibility(View.VISIBLE);
 				resumeButton.setVisibility(View.GONE);
+				this.startTracking();
+		}
+
+
+		private void startTracking() {
 				this.locationManager.requestLocationUpdates(this.locationProvider, 500, 0, this);
+		}
+
+		private void stopTracking() {
+				this.locationManager.removeUpdates(this);
 		}
 
 
