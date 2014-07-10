@@ -46,9 +46,10 @@
 			android:gravity="bottom"
 			>
 		<Button 
-				android:id="@+id/scan_code"
+				android:id="@+id/scan_code_button"
 				android:layout_width="fill_parent"
 				android:layout_height="wrap_content"
+				android:visibility="gone"
 				android:text="@string/scan_code"
 				android:onClick="scanCode"/>
 		<ImageButton 
@@ -56,6 +57,7 @@
 				android:layout_width="fill_parent"
 				android:layout_height="wrap_content"
 				android:src="@android:drawable/ic_input_add"
+				android:contentDescription="@string/start"
 				android:onClick="startIntervention"/>
 		<ImageButton 
 				android:id="@+id/stop_intervention_button"
@@ -63,6 +65,7 @@
 				android:layout_height="wrap_content"
 				android:src="@android:drawable/ic_input_delete"
 				android:visibility="gone"
+				android:contentDescription="@string/stop"
 				android:onClick="stopIntervention"/>
 		<ImageButton 
 				android:id="@+id/resume_intervention_button"
@@ -70,6 +73,7 @@
 				android:layout_height="wrap_content"
 				android:src="@android:drawable/ic_media_play"
 				android:visibility="gone"
+				android:contentDescription="@string/resume"
 				android:onClick="resumeIntervention"/>
 		<ImageButton 
 				android:id="@+id/pause_intervention_button"
@@ -77,6 +81,7 @@
 				android:layout_height="wrap_content"
 				android:src="@android:drawable/ic_media_pause"
 				android:visibility="gone"
+				android:contentDescription="@string/pause"
 				android:onClick="pauseIntervention"/>
 	</LinearLayout>
 </LinearLayout>

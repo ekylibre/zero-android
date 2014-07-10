@@ -8,25 +8,25 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MenuInflater;
-import android.widget.TextView;
+import android.widget.Button;
 import android.widget.Chronometer;
 import android.widget.ImageButton;
+import android.widget.TextView;
 import android.content.Intent;
 import android.location.Location;
 import android.location.LocationManager;
 import android.location.LocationListener;
 import android.content.Context;
-import com.google.zxing.client.android.CaptureActivity;
-/*
+
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
-*/
 
 public class TrackingActivity extends Activity implements LocationListener {
 		
 		private long masterDuration;
 		private long masterStart;
 		private Chronometer masterChrono;
+		private Button scanButton;
 		private ImageButton startButton, stopButton, pauseButton, resumeButton;
 		private TextView coordinates, barcode;
 		private LocationManager locationManager;
@@ -46,6 +46,7 @@ public class TrackingActivity extends Activity implements LocationListener {
 				this.stopButton   = (ImageButton) findViewById(R.id.stop_intervention_button);
 				this.pauseButton  = (ImageButton) findViewById(R.id.pause_intervention_button);
 				this.resumeButton = (ImageButton) findViewById(R.id.resume_intervention_button);
+				this.scanButton   = (Button)      findViewById(R.id.scan_code_button);
 
 				// Acquire a reference to the system Location Manager
 				this.locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
@@ -85,6 +86,7 @@ public class TrackingActivity extends Activity implements LocationListener {
 				this.masterChrono.start();
 				stopButton.setVisibility(View.VISIBLE);
 				pauseButton.setVisibility(View.VISIBLE);
+				scanButton.setVisibility(View.VISIBLE);
 				this.startTracking();
 		}
 
@@ -93,6 +95,7 @@ public class TrackingActivity extends Activity implements LocationListener {
 				this.masterChrono.stop();
 				stopButton.setVisibility(View.GONE);
 				pauseButton.setVisibility(View.GONE);
+				scanButton.setVisibility(View.GONE);
 				this.stopTracking();
 		}
 
@@ -103,6 +106,7 @@ public class TrackingActivity extends Activity implements LocationListener {
 				pauseButton.setVisibility(View.GONE);
 				startButton.setVisibility(View.GONE);
 				stopButton.setVisibility(View.GONE);
+				scanButton.setVisibility(View.GONE);
 				resumeButton.setVisibility(View.VISIBLE);
 				this.stopTracking();
 		}
@@ -111,33 +115,26 @@ public class TrackingActivity extends Activity implements LocationListener {
 				this.masterStart = SystemClock.elapsedRealtime();
 				this.masterChrono.setBase(this.masterStart - this.masterDuration);
 				this.masterChrono.start();
+				resumeButton.setVisibility(View.GONE);
 				pauseButton.setVisibility(View.VISIBLE);
 				startButton.setVisibility(View.VISIBLE);
 				stopButton.setVisibility(View.VISIBLE);
-				resumeButton.setVisibility(View.GONE);
+				scanButton.setVisibility(View.VISIBLE);
 				this.startTracking();
 		}
 
 
     public void scanCode(View view) {
-				// com.google.zxing.integration.android.
-				Intent intent = new Intent(this, CaptureActivity.class);
-				// Intent intent = new Intent("com.google.zxing.client.android.CaptureActivity");
-				intent.putExtra("SCAN_MODE", "QR_CODE_MODE");
-				startActivityForResult(intent, 0);
+				IntentIntegrator integrator = new IntentIntegrator(this);
+				integrator.initiateScan();
 		}
 
 		public void onActivityResult(int requestCode, int resultCode, Intent intent) {
-				if (requestCode == 0) {
-						if (resultCode == RESULT_OK) {
-								String contents = intent.getStringExtra("SCAN_RESULT");
-								String format = intent.getStringExtra("SCAN_RESULT_FORMAT");
-								// Handle successful scan
-								this.barcode.setText(contents);
-						} else if (resultCode == RESULT_CANCELED) {
-								// Handle cancel
-						}
+				IntentResult scanResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, intent);
+				if (scanResult != null) {
+						// handle scan result
 				}
+				// else continue with any other code you need in the method
 		}
 
 		private void startTracking() {
@@ -147,8 +144,6 @@ public class TrackingActivity extends Activity implements LocationListener {
 		private void stopTracking() {
 				this.locationManager.removeUpdates(this);
 		}
-
-
 
 		public void onLocationChanged(Location location) {
 				// Called when a new location is found by the network location provider.
