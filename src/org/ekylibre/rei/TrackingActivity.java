@@ -16,17 +16,19 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.location.LocationListener;
 import android.content.Context;
+import com.google.zxing.client.android.CaptureActivity;
+/*
+import com.google.zxing.integration.android.IntentIntegrator;
+import com.google.zxing.integration.android.IntentResult;
+*/
 
 public class TrackingActivity extends Activity implements LocationListener {
 		
 		private long masterDuration;
 		private long masterStart;
 		private Chronometer masterChrono;
-		private ImageButton startButton;
-		private ImageButton stopButton;
-		private ImageButton pauseButton;
-		private ImageButton resumeButton;
-		private TextView coordinates;
+		private ImageButton startButton, stopButton, pauseButton, resumeButton;
+		private TextView coordinates, barcode;
 		private LocationManager locationManager;
 		private String locationProvider;
 
@@ -39,6 +41,7 @@ public class TrackingActivity extends Activity implements LocationListener {
 
 				this.masterChrono = (Chronometer) findViewById(R.id.master_chrono);
 				this.coordinates  = (TextView)    findViewById(R.id.coordinates);
+				this.barcode      = (TextView)    findViewById(R.id.barcode);
 				this.startButton  = (ImageButton) findViewById(R.id.start_intervention_button);
 				this.stopButton   = (ImageButton) findViewById(R.id.stop_intervention_button);
 				this.pauseButton  = (ImageButton) findViewById(R.id.pause_intervention_button);
@@ -116,6 +119,27 @@ public class TrackingActivity extends Activity implements LocationListener {
 		}
 
 
+    public void scanCode(View view) {
+				// com.google.zxing.integration.android.
+				Intent intent = new Intent(this, CaptureActivity.class);
+				// Intent intent = new Intent("com.google.zxing.client.android.CaptureActivity");
+				intent.putExtra("SCAN_MODE", "QR_CODE_MODE");
+				startActivityForResult(intent, 0);
+		}
+
+		public void onActivityResult(int requestCode, int resultCode, Intent intent) {
+				if (requestCode == 0) {
+						if (resultCode == RESULT_OK) {
+								String contents = intent.getStringExtra("SCAN_RESULT");
+								String format = intent.getStringExtra("SCAN_RESULT_FORMAT");
+								// Handle successful scan
+								this.barcode.setText(contents);
+						} else if (resultCode == RESULT_CANCELED) {
+								// Handle cancel
+						}
+				}
+		}
+
 		private void startTracking() {
 				this.locationManager.requestLocationUpdates(this.locationProvider, 500, 0, this);
 		}
@@ -128,7 +152,7 @@ public class TrackingActivity extends Activity implements LocationListener {
 
 		public void onLocationChanged(Location location) {
 				// Called when a new location is found by the network location provider.
-				this.coordinates.setText(String.valueOf(location.getLatitude()) + " " + String.valueOf(location.getLongitude()));
+				this.coordinates.setText("LATLNG: " + String.valueOf(location.getLatitude()) + ", " + String.valueOf(location.getLongitude()));
 		}
 		
 		public void onStatusChanged(String provider, int status, Bundle extras) {}

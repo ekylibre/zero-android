@@ -34,12 +34,23 @@
 			android:layout_width="fill_parent"
 			android:layout_height="wrap_content"
 			/>
+	<TextView
+			android:id="@+id/barcode"
+			android:layout_width="fill_parent"
+			android:layout_height="wrap_content"
+			/>
 	<LinearLayout
 			android:orientation="vertical"
 			android:layout_width="fill_parent"
 			android:layout_height="fill_parent"
 			android:gravity="bottom"
 			>
+		<Button 
+				android:id="@+id/scan_code"
+				android:layout_width="fill_parent"
+				android:layout_height="wrap_content"
+				android:text="@string/scan_code"
+				android:onClick="scanCode"/>
 		<ImageButton 
 				android:id="@+id/start_intervention_button"
 				android:layout_width="fill_parent"
