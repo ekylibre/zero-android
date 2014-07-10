@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+# Depends-on: icoutils inkscape
+
+for size in 36 48 72 96 144 192
+do
+		#  --export-background=FFFFFF
+    inkscape -z --export-png=icon-${size}px.png --export-width=${size} --export-height=${size} icon.svg
+done
+
+# cp icon-48px.png  ../res/drawable/icon.png
+
+cp icon-36px.png  ../res/drawable-ldpi/icon.png
+cp icon-48px.png  ../res/drawable-mdpi/icon.png
+cp icon-72px.png  ../res/drawable-hdpi/icon.png
+cp icon-96px.png  ../res/drawable-xhdpi/icon.png
+cp icon-144px.png ../res/drawable-xxhdpi/icon.png
+cp icon-192px.png ../res/drawable-xxxhdpi/icon.png
+
+# Removes useless files
+rm -f icon-*px.png
