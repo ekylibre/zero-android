@@ -7,14 +7,14 @@ do
     inkscape -z --export-png=icon-${size}px.png --export-width=${size} --export-height=${size} icon.svg
 done
 
-# pngcrush icon-48px.png  ../res/drawable/icon.png
+# pngcrush icon-48px.png  ../res/drawable/ic_launcher.png
 
-pngcrush icon-36px.png  ../res/drawable-ldpi/icon.png
-pngcrush icon-48px.png  ../res/drawable-mdpi/icon.png
-pngcrush icon-72px.png  ../res/drawable-hdpi/icon.png
-pngcrush icon-96px.png  ../res/drawable-xhdpi/icon.png
-pngcrush icon-144px.png ../res/drawable-xxhdpi/icon.png
-pngcrush icon-192px.png ../res/drawable-xxxhdpi/icon.png
+pngcrush icon-36px.png  ../res/drawable-ldpi/ic_launcher.png
+pngcrush icon-48px.png  ../res/drawable-mdpi/ic_launcher.png
+pngcrush icon-72px.png  ../res/drawable-hdpi/ic_launcher.png
+pngcrush icon-96px.png  ../res/drawable-xhdpi/ic_launcher.png
+pngcrush icon-144px.png ../res/drawable-xxhdpi/ic_launcher.png
+pngcrush icon-192px.png ../res/drawable-xxxhdpi/ic_launcher.png
 
 # Removes useless files
 rm -f icon-*px.png
