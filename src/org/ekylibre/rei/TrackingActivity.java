@@ -2,6 +2,12 @@ package org.ekylibre.rei;
 
 import android.app.ActionBar;
 import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
+import android.location.Location;
+import android.location.LocationManager;
+import android.location.LocationListener;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.view.View;
@@ -12,11 +18,6 @@ import android.widget.Button;
 import android.widget.Chronometer;
 import android.widget.ImageButton;
 import android.widget.TextView;
-import android.content.Intent;
-import android.location.Location;
-import android.location.LocationManager;
-import android.location.LocationListener;
-import android.content.Context;
 
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
@@ -31,14 +32,15 @@ public class TrackingActivity extends Activity implements LocationListener {
 		private TextView coordinates, barcode;
 		private LocationManager locationManager;
 		private String locationProvider;
+    private DatabaseHelper dh;
+    private SQLiteDatabase db;
 
     /** Called when the activity is first created. */
     @Override
-    public void onCreate(Bundle savedInstanceState)
-    {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.tracking);
-
+        
 				this.masterChrono = (Chronometer) findViewById(R.id.master_chrono);
 				this.coordinates  = (TextView)    findViewById(R.id.coordinates);
 				this.barcode      = (TextView)    findViewById(R.id.barcode);
@@ -47,6 +49,10 @@ public class TrackingActivity extends Activity implements LocationListener {
 				this.pauseButton  = (ImageButton) findViewById(R.id.pause_intervention_button);
 				this.resumeButton = (ImageButton) findViewById(R.id.resume_intervention_button);
 				this.scanButton   = (Button)      findViewById(R.id.scan_code_button);
+
+        // Initialize DB
+        this.dh           = new DatabaseHelper(this.getApplication());
+        this.db           = this.dh.getWritableDatabase();        
 
 				// Acquire a reference to the system Location Manager
 				this.locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
@@ -148,6 +154,7 @@ public class TrackingActivity extends Activity implements LocationListener {
 		public void onLocationChanged(Location location) {
 				// Called when a new location is found by the network location provider.
 				this.coordinates.setText("LATLNG: " + String.valueOf(location.getLatitude()) + ", " + String.valueOf(location.getLongitude()));
+        this.addCrumb(location);
 		}
 		
 		public void onStatusChanged(String provider, int status, Bundle extras) {}
@@ -156,6 +163,13 @@ public class TrackingActivity extends Activity implements LocationListener {
 		
 		public void onProviderDisabled(String provider) {}
 
+
+    
+
+		private void addCrumb(Location location) {
+        Crumb crumb = new Crumb(location);
+        crumb.insert(this.db);
+		}
 
 
 		
