@@ -1,4 +1,4 @@
-package org.ekylibre.rei;
+package ekylibre.rei;
 
 import android.location.Location;
 import android.location.LocationListener;

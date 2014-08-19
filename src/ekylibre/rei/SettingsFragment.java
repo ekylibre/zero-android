@@ -1,4 +1,4 @@
-package org.ekylibre.rei;
+package ekylibre.rei;
 
 import android.preference.PreferenceFragment;
 import android.os.Bundle;

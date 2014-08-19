@@ -1,11 +1,11 @@
-package org.ekylibre.rei;
+package ekylibre.rei;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteDatabase.CursorFactory;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import org.ekylibre.rei.Crumb.CrumbColumns;
+import ekylibre.rei.Crumb.CrumbColumns;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
     public static final int DATABASE_VERSION = 1;

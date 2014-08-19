@@ -1,4 +1,4 @@
-package org.ekylibre.rei;
+package ekylibre.rei;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
