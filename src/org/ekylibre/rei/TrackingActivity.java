@@ -23,7 +23,19 @@ import android.widget.TextView;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+
+import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
 
 public class TrackingActivity extends Activity implements TrackingListenerWriter {
 		
@@ -110,6 +122,7 @@ public class TrackingActivity extends Activity implements TrackingListenerWriter
 				scanButton.setVisibility(View.GONE);
 				this.stopTracking();
         this.addCrumb("stop");
+        this.syncData();
 		}
 
 
@@ -123,6 +136,7 @@ public class TrackingActivity extends Activity implements TrackingListenerWriter
 				resumeButton.setVisibility(View.VISIBLE);
 				this.stopTracking();
         this.addCrumb("pause");
+        this.syncData();
 		}
 
     public void resumeIntervention(View view) {
@@ -173,8 +187,13 @@ public class TrackingActivity extends Activity implements TrackingListenerWriter
     }
 
     private void addCrumb(String type, HashMap<String, String> options) {
-        TrackingListener listener = new TrackingListener(this, type, options);
-        this.locationManager.requestSingleUpdate(this.locationProvider, listener, null);
+        Location location = this.locationManager.getLastKnownLocation(this.locationProvider);
+        if (location == null) {
+            TrackingListener listener = new TrackingListener(this, type, options);
+            this.locationManager.requestSingleUpdate(this.locationProvider, listener, null);
+        } else {
+            writeCrumb(location, type, options);
+        }
     }    
 
 		// public void writeCrumb(Location location) {
@@ -197,6 +216,29 @@ public class TrackingActivity extends Activity implements TrackingListenerWriter
         int count = cursor.getInt(0);
 				// Called when a new location is found by the network location provider.
         this.coordinates.setText("LATLNG: " + String.valueOf(location.getLatitude()) + ", " + String.valueOf(location.getLongitude()) + ", CNT: " + String.valueOf(count));
+    }
+
+
+    private void syncData() {
+        // // Create a new HttpClient and Post Header
+        // HttpClient httpClient = new DefaultHttpClient();
+        // HttpPost httpPost = new HttpPost("https://demo.ergolis.com/api/v1/crumbs");
+        
+        // try {
+        //     // Add your data
+        //     List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(2);
+        //     nameValuePairs.add(new BasicNameValuePair("id", "12345"));
+        //     nameValuePairs.add(new BasicNameValuePair("stringdata", "Hi"));
+        //     httpPost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+            
+        //     // Execute HTTP Post Request
+        //     HttpResponse response = httpClient.execute(httpPost);
+            
+        // } catch (ClientProtocolException e) {
+        //     // TODO Auto-generated catch block
+        // } catch (IOException e) {
+        //     // TODO Auto-generated catch block
+        // }
     }
 
 		
