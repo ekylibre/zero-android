@@ -4,17 +4,17 @@
 for size in 36 48 72 96 144 192
 do
 		#  --export-background=FFFFFF
-    inkscape -z --export-png=icon-${size}px.png --export-width=${size} --export-height=${size} icon.svg
+    inkscape -z --export-png=ic_launcher-${size}px.png --export-width=${size} --export-height=${size} ic_launcher.svg
 done
 
-# pngcrush icon-48px.png  ../res/drawable/ic_launcher.png
+# pngcrush ic_launcher-48px.png  ../res/drawable/ic_launcher.png
 
-pngcrush icon-36px.png  ../res/drawable-ldpi/ic_launcher.png
-pngcrush icon-48px.png  ../res/drawable-mdpi/ic_launcher.png
-pngcrush icon-72px.png  ../res/drawable-hdpi/ic_launcher.png
-pngcrush icon-96px.png  ../res/drawable-xhdpi/ic_launcher.png
-pngcrush icon-144px.png ../res/drawable-xxhdpi/ic_launcher.png
-pngcrush icon-192px.png ../res/drawable-xxxhdpi/ic_launcher.png
+pngcrush ic_launcher-36px.png  ../res/drawable-ldpi/ic_launcher.png
+pngcrush ic_launcher-48px.png  ../res/drawable-mdpi/ic_launcher.png
+pngcrush ic_launcher-72px.png  ../res/drawable-hdpi/ic_launcher.png
+pngcrush ic_launcher-96px.png  ../res/drawable-xhdpi/ic_launcher.png
+pngcrush ic_launcher-144px.png ../res/drawable-xxhdpi/ic_launcher.png
+pngcrush ic_launcher-192px.png ../res/drawable-xxxhdpi/ic_launcher.png
 
 # Removes useless files
-rm -f icon-*px.png
+rm -f ic_launcher-*px.png
