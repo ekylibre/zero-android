@@ -2,6 +2,7 @@ package org.ekylibre.rei;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 
 import android.content.ContentValues;
 import android.database.sqlite.SQLiteDatabase;
@@ -23,7 +24,7 @@ public class Crumb {
 
     private Boolean saved;
     private Boolean newRecord;
-		// private String name;
+    private String procedureNature;
 		// private String code;
 		// private BigDecimal quantity;
 		// private String unit;
@@ -36,6 +37,7 @@ public class Crumb {
         public static final String COLUMN_NAME_LONGITUDE = "longitude";
         public static final String COLUMN_NAME_READ_AT   = "read_at";
         public static final String COLUMN_NAME_ACCURACY  = "accuracy";
+        public static final String COLUMN_NAME_PROCEDURE_NATURE = "procedure_nature";
     }
 
 
@@ -52,6 +54,7 @@ public class Crumb {
         values.put(CrumbColumns.COLUMN_NAME_LONGITUDE, this.longitude);
         values.put(CrumbColumns.COLUMN_NAME_READ_AT, parser.format(new Date(this.readAt)));
         values.put(CrumbColumns.COLUMN_NAME_ACCURACY, this.accuracy);
+        values.put(CrumbColumns.COLUMN_NAME_PROCEDURE_NATURE, this.procedureNature);
         
         // Insert the new row, returning the primary key value of the new row
         long newRowId = db.insert(CrumbColumns.TABLE_NAME, null, values);
@@ -68,18 +71,30 @@ public class Crumb {
 
         
 		public Crumb(Location location) {
-				this.type      = "crumb";
+        this(location, "point");
+		}
+
+		public Crumb(Location location, String type) {
+        this(location, type, null);
+		}
+
+		public Crumb(Location location, String type, HashMap<String, String> options) {
+				this.type      = type;
 				this.latitude  = Math.round(COORDINATE_COEFF * location.getLatitude());
 				this.longitude = Math.round(COORDINATE_COEFF * location.getLongitude());
 				this.readAt    = location.getTime();
 				this.accuracy  = location.getAccuracy();
         this.newRecord = true;
         this.saved     = false;
-				// this.name      = name;
-				// this.code      = code;
-				// this.quantity  = quantity;
-				// this.unit      = unit;
+        if (options != null) {
+            this.procedureNature = options.get("procedureNature");
+            // this.name      = name;
+            // this.code      = code;
+            // this.quantity  = quantity;
+            // this.unit      = unit;
+        }
 		}
+
 
 
 		// private int id;

@@ -4,6 +4,7 @@ import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.location.Location;
 import android.location.LocationManager;
@@ -22,7 +23,9 @@ import android.widget.TextView;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
-public class TrackingActivity extends Activity implements LocationListener {
+import java.util.HashMap;
+
+public class TrackingActivity extends Activity implements TrackingListenerWriter {
 		
 		private long masterDuration;
 		private long masterStart;
@@ -34,6 +37,7 @@ public class TrackingActivity extends Activity implements LocationListener {
 		private String locationProvider;
     private DatabaseHelper dh;
     private SQLiteDatabase db;
+    private TrackingListener trackingListener;
 
     /** Called when the activity is first created. */
     @Override
@@ -55,6 +59,7 @@ public class TrackingActivity extends Activity implements LocationListener {
         this.db           = this.dh.getWritableDatabase();        
 
 				// Acquire a reference to the system Location Manager
+        this.trackingListener = new TrackingListener(this);
 				this.locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
 				this.locationProvider = LocationManager.GPS_PROVIDER;
     }
@@ -94,6 +99,7 @@ public class TrackingActivity extends Activity implements LocationListener {
 				pauseButton.setVisibility(View.VISIBLE);
 				scanButton.setVisibility(View.VISIBLE);
 				this.startTracking();
+        this.addCrumb("start", new HashMap() {{ put("procedureNature", "maintenance_task"); }});
 		}
 
 
@@ -103,6 +109,7 @@ public class TrackingActivity extends Activity implements LocationListener {
 				pauseButton.setVisibility(View.GONE);
 				scanButton.setVisibility(View.GONE);
 				this.stopTracking();
+        this.addCrumb("stop");
 		}
 
 
@@ -115,6 +122,7 @@ public class TrackingActivity extends Activity implements LocationListener {
 				scanButton.setVisibility(View.GONE);
 				resumeButton.setVisibility(View.VISIBLE);
 				this.stopTracking();
+        this.addCrumb("pause");
 		}
 
     public void resumeIntervention(View view) {
@@ -127,6 +135,7 @@ public class TrackingActivity extends Activity implements LocationListener {
 				stopButton.setVisibility(View.VISIBLE);
 				scanButton.setVisibility(View.VISIBLE);
 				this.startTracking();
+        this.addCrumb("resume");
 		}
 
 
@@ -138,39 +147,57 @@ public class TrackingActivity extends Activity implements LocationListener {
 		public void onActivityResult(int requestCode, int resultCode, Intent intent) {
 				IntentResult scanResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, intent);
 				if (scanResult != null) {
-						// handle scan result
+            final String contents = scanResult.getContents();
+            if (contents != null) {
+                // TODO: Ask for quantity
+                this.barcode.setText("CODE: " + contents);
+                
+                // handle scan result
+                this.addCrumb("scan", new HashMap() {{ put("scannedCode", contents); }});
+            }
 				}
 				// else continue with any other code you need in the method
 		}
 
 		private void startTracking() {
-				this.locationManager.requestLocationUpdates(this.locationProvider, 500, 0, this);
+				this.locationManager.requestLocationUpdates(this.locationProvider, 1000, 0, this.trackingListener);
 		}
 
 		private void stopTracking() {
-				this.locationManager.removeUpdates(this);
+				this.locationManager.removeUpdates(this.trackingListener);
 		}
 
-		public void onLocationChanged(Location location) {
-				// Called when a new location is found by the network location provider.
-				this.coordinates.setText("LATLNG: " + String.valueOf(location.getLatitude()) + ", " + String.valueOf(location.getLongitude()));
-        this.addCrumb(location);
-		}
-		
-		public void onStatusChanged(String provider, int status, Bundle extras) {}
-		
-		public void onProviderEnabled(String provider) {}
-		
-		public void onProviderDisabled(String provider) {}
 
+    private void addCrumb(String type) {
+        this.addCrumb(type, null);
+    }
 
-    
+    private void addCrumb(String type, HashMap<String, String> options) {
+        TrackingListener listener = new TrackingListener(this, type, options);
+        this.locationManager.requestSingleUpdate(this.locationProvider, listener, null);
+    }    
 
-		private void addCrumb(Location location) {
-        Crumb crumb = new Crumb(location);
+		// public void writeCrumb(Location location) {
+    //     writeCrumb(location, "point", null);
+		// }
+
+		// public void writeCrumb(Location location, String type) {
+    //     writeCrumb(location, type, null);
+		// }
+
+		public void writeCrumb(Location location, String type, HashMap<String, String> options) {
+        this.displayInfos(location);
+        Crumb crumb = new Crumb(location, type, options);
         crumb.insert(this.db);
 		}
 
+    private void displayInfos(Location location) {
+        Cursor cursor = this.db.rawQuery("SELECT count(*) FROM crumbs", null);
+        cursor.moveToFirst();
+        int count = cursor.getInt(0);
+				// Called when a new location is found by the network location provider.
+        this.coordinates.setText("LATLNG: " + String.valueOf(location.getLatitude()) + ", " + String.valueOf(location.getLongitude()) + ", CNT: " + String.valueOf(count));
+    }
 
 		
 }
