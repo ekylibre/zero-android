@@ -6,6 +6,7 @@
           android:installLocation="auto">
 
   <uses-permission android:name="android.permission.INTERNET" />
+  <uses-permission android:name="android.permission.AUTHENTICATE_ACCOUNTS" />
   <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
   <!-- <uses-permission android:name="android.permission.ACCESS_LOCATION_EXTRA_COMMANDS" /> -->
   <!-- <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" /> -->
@@ -34,11 +35,10 @@
     <!-- <service android:name="TrackingService"/> -->
 
     <!-- Authenticator related activities and service needs to be declared here in order for the app to recognize them-->
-    <!-- <activity android:name="ekylibre.rei.SignUpActivity" 
-              android:label="@string/signup"/>
     <activity android:name="ekylibre.rei.AuthenticatorActivity"
-              android:label="@string/authenticator"/> -->
-    <service android:name="ekylibre.rei.EkylibreAuthenticatorService">
+              android:label="@string/service_name"
+              android:icon="@drawable/ic_ekylibre"/>
+    <service android:name="ekylibre.rei.AuthenticatorService">
       <intent-filter>
         <action android:name="android.accounts.AccountAuthenticator" />
       </intent-filter>
