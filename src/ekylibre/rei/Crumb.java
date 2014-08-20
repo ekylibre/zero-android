@@ -1,33 +1,32 @@
 package ekylibre.rei;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-
 import android.content.ContentValues;
 import android.database.sqlite.SQLiteDatabase;
 import android.location.Location;
+import android.os.Bundle;
 import android.provider.BaseColumns;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class Crumb {
 
     // This coeff permits to store lat/lon as integer with an under-millimetric precision
     public static final long COORDINATE_COEFF = 1000000;
-    
 
-		private long id;
-		private String type;
-		private long latitude;
-		private long longitude;
-		private long readAt;
-		private Float accuracy;
+    private long id;
+    private String type;
+    private long latitude;
+    private long longitude;
+    private long readAt;
+    private Float accuracy;
+    private String procedureNature;
 
     private Boolean saved;
     private Boolean newRecord;
-    private String procedureNature;
-		// private String code;
-		// private BigDecimal quantity;
-		// private String unit;
+    // private String code;
+    // private BigDecimal quantity;
+    // private String unit;
 
     public static abstract class CrumbColumns implements BaseColumns {
         public static final String TABLE_NAME = "crumbs";
@@ -70,95 +69,30 @@ public class Crumb {
     }
 
         
-		public Crumb(Location location) {
+    public Crumb(Location location) {
         this(location, "point");
-		}
+    }
 
-		public Crumb(Location location, String type) {
+    public Crumb(Location location, String type) {
         this(location, type, null);
-		}
+    }
 
-		public Crumb(Location location, String type, HashMap<String, String> options) {
-				this.type      = type;
-				this.latitude  = Math.round(COORDINATE_COEFF * location.getLatitude());
-				this.longitude = Math.round(COORDINATE_COEFF * location.getLongitude());
-				this.readAt    = location.getTime();
-				this.accuracy  = location.getAccuracy();
+    public Crumb(Location location, String type, Bundle options) {
+        this.type      = type;
+        this.latitude  = Math.round(COORDINATE_COEFF * location.getLatitude());
+        this.longitude = Math.round(COORDINATE_COEFF * location.getLongitude());
+        this.readAt    = location.getTime();
+        this.accuracy  = location.getAccuracy();
         this.newRecord = true;
         this.saved     = false;
         if (options != null) {
-            this.procedureNature = options.get("procedureNature");
+            this.procedureNature = options.getString("procedureNature");
             // this.name      = name;
             // this.code      = code;
             // this.quantity  = quantity;
             // this.unit      = unit;
         }
-		}
+    }
 
-
-
-		// private int id;
-		// private String name;
-		// private BigDecimal latitude;
-		// private BigDecimal longitude;
-		// private Date readAt;
-		// private BigDecimal accuracy;
-		// private String type;
-		// private String code;
-		// private BigDecimal quantity;
-		// private String unit;
-
-		// public Crumb(Database db, String name, BigDecimal latitude, BigDecimal longitude, Date readAt, BigDecimal accuracy, String type, String code, BigDecimal quantity, String unit) {
-		// 		this.name      = name;
-		// 		this.latitude  = latitude;
-		// 		this.longitude = longitude;
-		// 		this.readAt    = readAt;
-		// 		this.accuracy  = accuracy;
-		// 		this.type      = type;
-		// 		this.code      = code;
-		// 		this.quantity  = quantity;
-		// 		this.unit      = unit;
-		// }
-		
-		// public Crumb(String name, BigDecimal latitude, BigDecimal longitude, Date readAt, BigDecimal accuracy, String type, String code, BigDecimal quantity, String unit) {
-		// 		this.name      = name;
-		// 		this.latitude  = latitude;
-		// 		this.longitude = longitude;
-		// 		this.readAt    = readAt;
-		// 		this.accuracy  = accuracy;
-		// 		this.type      = type;
-		// 		this.code      = code;
-		// 		this.quantity  = quantity;
-		// 		this.unit      = unit;
-		// }
-
-		// public Crumb(String name, BigDecimal latitude, BigDecimal longitude, Date readAt, BigDecimal accuracy, String type) {
-		// 		this.name      = name;
-		// 		this.latitude  = latitude;
-		// 		this.longitude = longitude;
-		// 		this.readAt    = readAt;
-		// 		this.accuracy  = accuracy;
-		// 		this.type      = type;
-		// 		this.code      = null;
-		// 		this.quantity  = null;
-		// 		this.unit      = null;
-		// }
-
-		// public Crumb(String name, BigDecimal latitude, BigDecimal longitude, Date readAt, BigDecimal accuracy) {
-		// 		this.name      = name;
-		// 		this.latitude  = latitude;
-		// 		this.longitude = longitude;
-		// 		this.readAt    = readAt;
-		// 		this.accuracy  = accuracy;
-		// 		this.type      = "crumb";
-		// 		this.code      = null;
-		// 		this.quantity  = null;
-		// 		this.unit      = null;
-		// }
-
-
-		// public void save() {
-				
-		// }
 
 }

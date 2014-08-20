@@ -1,9 +1,8 @@
 package ekylibre.rei;
 
 import android.location.Location;
-
-import java.util.HashMap;
+import android.os.Bundle;
 
 public interface TrackingListenerWriter {
-    public void writeCrumb(Location location, String type, HashMap<String, String> options);
+    public void writeCrumb(Location location, String type, Bundle options);
 }
