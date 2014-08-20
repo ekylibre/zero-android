@@ -7,24 +7,13 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 
+import ekylibre.Token;
+import ekylibre.User;
+
 
 public class Authenticator extends AbstractAccountAuthenticator {
 
-    /**
-     * Account type id
-     */
-    public static final String ACCOUNT_TYPE = "ekylibre.basic-account";
-    /**
-     * Account name
-     */
-    public static final String ACCOUNT_NAME = "Ekylibre";
-    /**
-     * Auth token types
-     */
-    public static final String AUTHTOKEN_TYPE_READ_ONLY = "Read only";
-    public static final String AUTHTOKEN_TYPE_READ_ONLY_LABEL = "Read only access to an Ekylibre account";
-    public static final String AUTHTOKEN_TYPE_FULL_ACCESS = "Full access";
-    public static final String AUTHTOKEN_TYPE_FULL_ACCESS_LABEL = "Full access to an Ekylibre account";
+    public static final String AUTH_TOKEN_TYPE_GLOBAL = "global";
 
     private final String TAG = this.getClass().getSimpleName();
     private Context context;
@@ -38,10 +27,10 @@ public class Authenticator extends AbstractAccountAuthenticator {
     // Don't add additional accounts
     @Override
     public Bundle addAccount(AccountAuthenticatorResponse response, String accountType, String authTokenType, String[] requiredFeatures, Bundle options) throws NetworkErrorException {
+        Log.d("rei", "> addAccount " + accountType);
         final Intent intent = new Intent(this.context, AuthenticatorActivity.class);
-        intent.putExtra(AuthenticatorActivity.ARG_ACCOUNT_TYPE, accountType);
-        intent.putExtra(AuthenticatorActivity.ARG_AUTH_TYPE, authTokenType);
-        intent.putExtra(AuthenticatorActivity.ARG_IS_ADDING_NEW_ACCOUNT, true);
+        intent.putExtra(AuthenticatorActivity.KEY_AUTH_TOKEN_TYPE, authTokenType);
+        intent.putExtra(AccountManager.KEY_ACCOUNT_TYPE, accountType);
         intent.putExtra(AccountManager.KEY_ACCOUNT_AUTHENTICATOR_RESPONSE, response);
 
         final Bundle bundle = new Bundle();
@@ -52,9 +41,10 @@ public class Authenticator extends AbstractAccountAuthenticator {
     // Getting an authentication token is not supported
     @Override
     public Bundle getAuthToken(AccountAuthenticatorResponse response, Account account, String authTokenType, Bundle options) throws NetworkErrorException {
+        Log.d("rei", "> getAuthToken");
         // If the caller requested an authToken type we don't support, then
         // return an error
-        if (!authTokenType.equals(AUTHTOKEN_TYPE_READ_ONLY) && !authTokenType.equals(AUTHTOKEN_TYPE_FULL_ACCESS)) {
+        if (!authTokenType.equals(AUTH_TOKEN_TYPE_GLOBAL)) {
             final Bundle result = new Bundle();
             result.putString(AccountManager.KEY_ERROR_MESSAGE, "invalid authTokenType");
             return result;
@@ -63,15 +53,17 @@ public class Authenticator extends AbstractAccountAuthenticator {
         // the server for an appropriate AuthToken.
         final AccountManager accountManager = AccountManager.get(this.context);
         String authToken = accountManager.peekAuthToken(account, authTokenType);
-        Log.d("rei", "> peekAuthToken returned - " + authToken);
+        Log.d("rei", "> getAuthToken > peekAuthToken returned - " + authToken);
         // Lets give another try to authenticate the user
         if (TextUtils.isEmpty(authToken)) {
+            Log.d("rei", "> getAuthToken > empty token");
             final String password = accountManager.getPassword(account);
             if (password != null) {
                 try {
                     Log.d("rei", TAG + "> re-authenticating with the existing password");
                     // authToken = sServerAuthenticate.userSignIn(account.name, password, authTokenType);
-                    authToken = null;
+                    // authToken = null;
+                    authToken = Token.create(account.name, password, "url");
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -79,6 +71,7 @@ public class Authenticator extends AbstractAccountAuthenticator {
         }
         // If we get an authToken - we return it
         if (!TextUtils.isEmpty(authToken)) {
+            Log.d("rei", "> getAuthToken > empty token!");
             final Bundle result = new Bundle();
             result.putString(AccountManager.KEY_ACCOUNT_NAME, account.name);
             result.putString(AccountManager.KEY_ACCOUNT_TYPE, account.type);
@@ -88,11 +81,12 @@ public class Authenticator extends AbstractAccountAuthenticator {
         // If we get here, then we couldn't access the user's password - so we
         // need to re-prompt them for their credentials. We do that by creating
         // an intent to display our AuthenticatorActivity.
+        Log.d("rei", "> getAuthToken > no password");
         final Intent intent = new Intent(this.context, AuthenticatorActivity.class);
         intent.putExtra(AccountManager.KEY_ACCOUNT_AUTHENTICATOR_RESPONSE, response);
-        intent.putExtra(AuthenticatorActivity.ARG_ACCOUNT_TYPE, account.type);
-        intent.putExtra(AuthenticatorActivity.ARG_AUTH_TYPE, authTokenType);
-        intent.putExtra(AuthenticatorActivity.ARG_ACCOUNT_NAME, account.name);
+        intent.putExtra(AccountManager.KEY_ACCOUNT_TYPE, account.type);
+        intent.putExtra(AccountManager.KEY_ACCOUNT_NAME, account.name);
+        intent.putExtra(AuthenticatorActivity.KEY_AUTH_TOKEN_TYPE, authTokenType);
         final Bundle bundle = new Bundle();
         bundle.putParcelable(AccountManager.KEY_INTENT, intent);
         return bundle;
@@ -101,37 +95,60 @@ public class Authenticator extends AbstractAccountAuthenticator {
     // Getting a label for the auth token is not supported
     @Override
     public String getAuthTokenLabel(String authTokenType) {
-        if (AUTHTOKEN_TYPE_FULL_ACCESS.equals(authTokenType))
-            return AUTHTOKEN_TYPE_FULL_ACCESS_LABEL;
-        else if (AUTHTOKEN_TYPE_READ_ONLY.equals(authTokenType))
-            return AUTHTOKEN_TYPE_READ_ONLY_LABEL;
-        else
-            return authTokenType + " (Label)";
+        if (authTokenType.equals(AUTH_TOKEN_TYPE_GLOBAL)) {
+            return this.context.getString(R.string.global_auth_token);
+        }
+        return null;
     }
 
     // Checking features for the account is not supported
     @Override
     public Bundle hasFeatures(AccountAuthenticatorResponse response, Account account, String[] features) throws NetworkErrorException {
         final Bundle result = new Bundle();
-        // result.putBoolean(KEY_BOOLEAN_RESULT, false);
+        result.putBoolean(AccountManager.KEY_BOOLEAN_RESULT, false);
         return result;
     }
 
     // Editing properties is not supported
     @Override
     public Bundle editProperties(AccountAuthenticatorResponse response, String accountType) {
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     // Ignore attempts to confirm credentials
     @Override
     public Bundle confirmCredentials(AccountAuthenticatorResponse response, Account account, Bundle options) throws NetworkErrorException {
-        return null;
+        Log.d("rei", "> confirmCredentials");
+        if (options != null && options.containsKey(AccountManager.KEY_PASSWORD)) {
+            final String password  = options.getString(AccountManager.KEY_PASSWORD);
+            final boolean verified = User.authenticate(account.name, password, "url");
+            final Bundle result = new Bundle();
+            result.putBoolean(AccountManager.KEY_BOOLEAN_RESULT, verified);
+            return result;
+        }
+
+        // Launch AuthenticatorActivity to confirm credentials
+        final Intent intent = new Intent(this.context, AuthenticatorActivity.class);
+        intent.putExtra(AccountManager.KEY_ACCOUNT_AUTHENTICATOR_RESPONSE, response);
+        intent.putExtra(AccountManager.KEY_ACCOUNT_NAME, account.name);
+        intent.putExtra(AuthenticatorActivity.KEY_CONFIRM_CREDENTIALS, true);
+
+        final Bundle bundle = new Bundle();
+        bundle.putParcelable(AccountManager.KEY_INTENT, intent);
+        return bundle;
     }
 
-    // Updating user credentials is not supported
+
+    // Updating user credentials 
     @Override
-    public Bundle updateCredentials(AccountAuthenticatorResponse response, Account account, String authTokenType, Bundle options) throws NetworkErrorException {
-        return null;
+    public Bundle updateCredentials(AccountAuthenticatorResponse response, Account account, String authTokenType, Bundle loginOptions) {
+        Log.d("rei", "> updateCredentials");
+        final Intent intent = new Intent(this.context, AuthenticatorActivity.class);
+        intent.putExtra(AccountManager.KEY_ACCOUNT_NAME, account.name);
+        intent.putExtra(AuthenticatorActivity.KEY_AUTH_TOKEN_TYPE, authTokenType);
+        intent.putExtra(AuthenticatorActivity.KEY_CONFIRM_CREDENTIALS, false);
+        final Bundle bundle = new Bundle();
+        bundle.putParcelable(AccountManager.KEY_INTENT, intent);
+        return bundle;
     }
 }

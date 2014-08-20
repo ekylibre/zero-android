@@ -111,7 +111,7 @@ public class TrackingActivity extends Activity implements TrackingListenerWriter
         scanButton.setVisibility(View.VISIBLE);
         this.startTracking();
 
-        Bundle options = new Bundle();
+        final Bundle options = new Bundle();
         options.putString("procedureNature", "maintenance_task");
         this.addCrumb("start", options);
     }
@@ -169,7 +169,7 @@ public class TrackingActivity extends Activity implements TrackingListenerWriter
                 this.barcode.setText("CODE: " + contents);
                 
                 // handle scan result
-                Bundle options = new Bundle();
+                final Bundle options = new Bundle();
                 options.putString("scannedCode", contents);
                 this.addCrumb("scan", options);
             }
