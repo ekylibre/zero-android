@@ -26,6 +26,9 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity {
     public final static String KEY_CONFIRM_CREDENTIALS = "confirmCredentials";
     public final static String KEY_ACCOUNT_PASSWORD = "accountPassword";
     public final static String KEY_AUTH_TOKEN_TYPE  = "authTokenType";
+    public final static String KEY_REDIRECT  = "redirect";
+
+    public final static String CHOICE_REDIRECT_TRACKING  = "tracking";
 
     private final String TAG = this.getClass().getSimpleName();
     private AccountManager accountManager;
@@ -80,6 +83,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity {
                 Log.d("rei", TAG + "> Started authenticating");
                 String authToken = null;
                 Bundle extras = new Bundle();
+                extras.putString(KEY_REDIRECT, getIntent().getStringExtra(KEY_REDIRECT));
                 try {
                     authToken = Token.create(accountName, accountPassword, "url");
                     extras.putString(AccountManager.KEY_ACCOUNT_NAME, accountName);
@@ -131,6 +135,10 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity {
         // }
         setAccountAuthenticatorResult(intent.getExtras());
         setResult(RESULT_OK, intent);
+        if (intent.getStringExtra(KEY_REDIRECT).equals(CHOICE_REDIRECT_TRACKING)) {
+            Intent trackingIntent = new Intent(this, TrackingActivity.class);
+            startActivity(trackingIntent);
+        }
         finish();
     }
 

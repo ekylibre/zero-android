@@ -61,8 +61,28 @@ public class TrackingActivity extends Activity implements TrackingListenerWriter
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // Get default account or ask for it if necessary
+        final AccountManager manager = AccountManager.get(this);
+        final Account[] accounts = manager.getAccountsByType(SyncAdapter.ACCOUNT_TYPE);
+        if (accounts.length <= 0) {
+            Intent intent = new Intent(this, AuthenticatorActivity.class);
+            intent.putExtra(AccountManager.KEY_ACCOUNT_TYPE, SyncAdapter.ACCOUNT_TYPE);
+            intent.putExtra(AuthenticatorActivity.KEY_REDIRECT, AuthenticatorActivity.CHOICE_REDIRECT_TRACKING);
+            startActivity(intent);
+            finish();
+            return;
+        } else if (accounts.length > 1) {
+            // TODO: Propose the list of account
+            this.mAccount = accounts[0];
+        } else {
+            this.mAccount = accounts[0];
+        }
+
+        // Set content view
         setContentView(R.layout.tracking);
         
+        // Find view elements
         this.masterChrono = (Chronometer) findViewById(R.id.master_chrono);
         this.coordinates  = (TextView)    findViewById(R.id.coordinates);
         this.barcode      = (TextView)    findViewById(R.id.barcode);
@@ -76,19 +96,7 @@ public class TrackingActivity extends Activity implements TrackingListenerWriter
         this.dh           = new DatabaseHelper(this.getApplication());
         this.db           = this.dh.getWritableDatabase();        
 
-        // Get default account
-        final AccountManager manager = AccountManager.get(this);
-        final Account[] accounts = manager.getAccountsByType(SyncAdapter.ACCOUNT_TYPE);
-        if (accounts.length <= 0) {
-            Intent intent = new Intent(this, AuthenticatorActivity.class);
-            intent.putExtra(AccountManager.KEY_ACCOUNT_TYPE, SyncAdapter.ACCOUNT_TYPE);
-            startActivity(intent);
-        } else if (accounts.length > 1) {
-            // TODO: Propose the list of account
-            this.mAccount = accounts[0];
-        } else {
-            this.mAccount = accounts[0];
-        }
+        // Synchronize data
         this.syncData();
 
         // Acquire a reference to the system Location Manager
