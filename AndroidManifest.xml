@@ -5,9 +5,12 @@
           android:versionName="0.0.0"
           android:installLocation="auto">
 
-  <uses-permission android:name="android.permission.INTERNET" />
-  <uses-permission android:name="android.permission.AUTHENTICATE_ACCOUNTS" />
   <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+  <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+  <uses-permission android:name="android.permission.AUTHENTICATE_ACCOUNTS" />
+  <uses-permission android:name="android.permission.INTERNET" />
+  <uses-permission android:name="android.permission.READ_SYNC_SETTINGS"/>
+  <uses-permission android:name="android.permission.WRITE_SYNC_SETTINGS"/>
   <!-- <uses-permission android:name="android.permission.ACCESS_LOCATION_EXTRA_COMMANDS" /> -->
   <!-- <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" /> -->
   
@@ -33,7 +36,7 @@
     </activity>
 
     <!-- <service android:name="TrackingService"/> -->
-
+    
     <!-- Authenticator related activities and service needs to be declared here in order for the app to recognize them-->
     <activity android:name="ekylibre.rei.AuthenticatorActivity"
               android:label="@string/service_name"
@@ -46,6 +49,24 @@
                  android:resource="@xml/authenticator" />
     </service>
 
+    <!-- Content provider -->
+    <provider android:name="ekylibre.rei.GlobalContentProvider"
+              android:authorities="ekylibre.rei.provider"
+              android:exported="false"
+              android:syncable="true"/>
+    
+    <!-- Sync related activities and service needs to be declared here in order for the app to recognize them-->
+    <service android:name="SyncService"
+             android:exported="true"
+             android:process=":sync">
+      <intent-filter>
+        <action android:name="android.content.SyncAdapter" />
+      </intent-filter>
+      <meta-data android:name="android.content.SyncAdapter"
+                 android:resource="@xml/syncadapter" />
+    </service>
+
+    <!-- Barcode scanning related activities and service needs to be declared here in order for the app to recognize them-->
     <activity android:name="com.google.zxing.client.android.CaptureActivity"
               android:screenOrientation="portrait"
               android:configChanges="orientation|keyboardHidden"
@@ -59,6 +80,7 @@
       <meta-data android:name="android.support.PARENT_ACTIVITY" android:value="TrackingActivity" />
     </activity>
 
+    <!-- Settings -->
     <activity android:name="SettingsActivity"
               android:label="@string/settings" 
               android:parentActivityName="TrackingActivity">
@@ -68,5 +90,6 @@
       </intent-filter>
       <meta-data android:name="android.support.PARENT_ACTIVITY" android:value="TrackingActivity" />
     </activity>
+
   </application>
 </manifest>

@@ -1,8 +1,10 @@
 package ekylibre.rei;
 
+import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.database.sqlite.SQLiteDatabase;
 import android.location.Location;
+import android.net.Uri;
 import android.os.Bundle;
 import android.provider.BaseColumns;
 
@@ -28,7 +30,23 @@ public class Crumb {
     // private BigDecimal quantity;
     // private String unit;
 
+    // Base URI
+    public static final Uri BASE_CONTENT_URI = Uri.parse("content://" + GlobalContentProvider.AUTHORITY);
+ 
+    // Path component for "crumb"-type resources..
+    private static final String PATH_CRUMBS = "crumbs";
+
+
     public static abstract class CrumbColumns implements BaseColumns {
+        // MIME type for lists of crumbs.
+        public static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/vnd.rei.crumbs";
+
+        // MIME type for individual crumbs.
+        public static final String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/vnd.rei.crumb";
+
+        // Fully qualified URI for "crumb" resources.
+        public static final Uri CONTENT_URI = BASE_CONTENT_URI.buildUpon().appendPath(PATH_CRUMBS).build();
+
         public static final String TABLE_NAME = "crumbs";
         // public static final String COLUMN_NAME_ID        = "id";
         public static final String COLUMN_NAME_TYPE      = "type";

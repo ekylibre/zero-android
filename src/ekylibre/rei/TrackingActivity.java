@@ -1,7 +1,10 @@
 package ekylibre.rei;
 
+import android.accounts.Account;
+import android.accounts.AccountManager;
 import android.app.ActionBar;
 import android.app.Activity;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
@@ -11,6 +14,7 @@ import android.location.LocationManager;
 import android.location.LocationListener;
 import android.os.Bundle;
 import android.os.SystemClock;
+import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -38,6 +42,8 @@ import org.apache.http.client.entity.UrlEncodedFormEntity;
 
 public class TrackingActivity extends Activity implements TrackingListenerWriter {
     
+    public final static String KEY_ACCOUNT = "account";
+
     private long masterDuration;
     private long masterStart;
     private Chronometer masterChrono;
@@ -49,6 +55,7 @@ public class TrackingActivity extends Activity implements TrackingListenerWriter
     private DatabaseHelper dh;
     private SQLiteDatabase db;
     private TrackingListener trackingListener;
+    private Account mAccount;
 
     /** Called when the activity is first created. */
     @Override
@@ -68,6 +75,21 @@ public class TrackingActivity extends Activity implements TrackingListenerWriter
         // Initialize DB
         this.dh           = new DatabaseHelper(this.getApplication());
         this.db           = this.dh.getWritableDatabase();        
+
+        // Get default account
+        final AccountManager manager = AccountManager.get(this);
+        final Account[] accounts = manager.getAccountsByType(SyncAdapter.ACCOUNT_TYPE);
+        if (accounts.length <= 0) {
+            Intent intent = new Intent(this, AuthenticatorActivity.class);
+            intent.putExtra(AccountManager.KEY_ACCOUNT_TYPE, SyncAdapter.ACCOUNT_TYPE);
+            startActivity(intent);
+        } else if (accounts.length > 1) {
+            // TODO: Propose the list of account
+            this.mAccount = accounts[0];
+        } else {
+            this.mAccount = accounts[0];
+        }
+        this.syncData();
 
         // Acquire a reference to the system Location Manager
         this.trackingListener = new TrackingListener(this);
@@ -223,26 +245,13 @@ public class TrackingActivity extends Activity implements TrackingListenerWriter
     }
 
 
+    // Call the sync service
     private void syncData() {
-        // // Create a new HttpClient and Post Header
-        // HttpClient httpClient = new DefaultHttpClient();
-        // HttpPost httpPost = new HttpPost("https://demo.ergolis.com/api/v1/crumbs");
-        
-        // try {
-        //     // Add your data
-        //     List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(2);
-        //     nameValuePairs.add(new BasicNameValuePair("id", "12345"));
-        //     nameValuePairs.add(new BasicNameValuePair("stringdata", "Hi"));
-        //     httpPost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
-            
-        //     // Execute HTTP Post Request
-        //     HttpResponse response = httpClient.execute(httpPost);
-            
-        // } catch (ClientProtocolException e) {
-        //     // TODO Auto-generated catch block
-        // } catch (IOException e) {
-        //     // TODO Auto-generated catch block
-        // }
+        Log.d("rei", "syncData: " + mAccount.toString() + ", " + GlobalContentProvider.AUTHORITY);
+        Bundle extras = new Bundle();
+        extras.putBoolean(ContentResolver.SYNC_EXTRAS_MANUAL, true);
+        extras.putBoolean(ContentResolver.SYNC_EXTRAS_EXPEDITED, true);
+        ContentResolver.requestSync(mAccount, GlobalContentProvider.AUTHORITY, extras);
     }
 
     
