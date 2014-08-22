@@ -172,49 +172,4 @@ public class TrackingProvider extends ContentProvider {
         return count;
     }
  
-    // /**
-    //  * SQLite backend for @{link FeedProvider}.
-    //  *
-    //  * Provides access to an disk-backed, SQLite datastore which is utilized by FeedProvider. This
-    //  * database should never be accessed by other parts of the application directly.
-    //  */
-    // static class DatabaseHelper extends SQLiteOpenHelper {
-    //     /** Schema version. */
-    //     public static final int DATABASE_VERSION = 1;
-    //     /** Filename for SQLite file. */
-    //     public static final String DATABASE_NAME = "feed.db";
- 
-    //     private static final String TYPE_TEXT = " TEXT";
-    //     private static final String TYPE_INTEGER = " INTEGER";
-    //     private static final String COMMA_SEP = ",";
-    //     /** SQL statement to create "crumb" table. */
-    //     private static final String SQL_CREATE_CRUMBS =
-    //             "CREATE TABLE " + TrackingContract.CrumbsColumns.TABLE_NAME + " (" +
-    //                     TrackingContract.CrumbsColumns._ID + " INTEGER PRIMARY KEY," +
-    //                     TrackingContract.CrumbsColumns.COLUMN_NAME_CRUMB_ID + TYPE_TEXT + COMMA_SEP +
-    //                     TrackingContract.CrumbsColumns.COLUMN_NAME_TITLE    + TYPE_TEXT + COMMA_SEP +
-    //                     TrackingContract.CrumbsColumns.COLUMN_NAME_LINK + TYPE_TEXT + COMMA_SEP +
-    //                     TrackingContract.CrumbsColumns.COLUMN_NAME_PUBLISHED + TYPE_INTEGER + ")";
- 
-    //     /** SQL statement to drop "crumb" table. */
-    //     private static final String SQL_DELETE_CRUMBS =
-    //             "DROP TABLE IF EXISTS " + TrackingContract.CrumbsColumns.TABLE_NAME;
- 
-    //     public DatabaseHelper(Context context) {
-    //         super(context, DATABASE_NAME, null, DATABASE_VERSION);
-    //     }
- 
-    //     @Override
-    //     public void onCreate(SQLiteDatabase database) {
-    //         database.execSQL(SQL_CREATE_CRUMBS);
-    //     }
- 
-    //     @Override
-    //     public void onUpgrade(SQLiteDatabase database, int oldVersion, int newVersion) {
-    //         // This database is only a cache for online data, so its upgrade policy is
-    //         // to simply to discard the data and start over
-    //         database.execSQL(SQL_DELETE_CRUMBS);
-    //         onCreate(database);
-    //     }
-    // }
 }
