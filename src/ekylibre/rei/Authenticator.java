@@ -14,6 +14,8 @@ import ekylibre.User;
 public class Authenticator extends AbstractAccountAuthenticator {
 
     public static final String AUTH_TOKEN_TYPE_GLOBAL = "global";
+    public final static String KEY_INSTANCE_URL       = "instanceURL";
+
 
     private final String TAG = "Authenticator";
     private Context mContext;
@@ -62,8 +64,8 @@ public class Authenticator extends AbstractAccountAuthenticator {
                 try {
                     Log.d("rei", TAG + "> re-authenticating with the existing password");
                     // authToken = sServerAuthenticate.userSignIn(account.name, password, authTokenType);
-                    // authToken = null;
-                    authToken = Token.create(account.name, password, "url");
+                    final String instanceUrl = accountManager.getUserData(account, KEY_INSTANCE_URL);
+                    authToken = Token.create(account.name, password, instanceUrl);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -120,7 +122,9 @@ public class Authenticator extends AbstractAccountAuthenticator {
     public Bundle confirmCredentials(AccountAuthenticatorResponse response, Account account, Bundle options) throws NetworkErrorException {
         Log.d("rei", "> confirmCredentials");
         if (options != null && options.containsKey(AccountManager.KEY_PASSWORD)) {
+            final AccountManager accountManager = AccountManager.get(mContext);
             final String password  = options.getString(AccountManager.KEY_PASSWORD);
+            final String instanceUrl = accountManager.getUserData(account, KEY_INSTANCE_URL);
             final boolean verified = User.authenticate(account.name, password, "url");
             final Bundle result = new Bundle();
             result.putBoolean(AccountManager.KEY_BOOLEAN_RESULT, verified);

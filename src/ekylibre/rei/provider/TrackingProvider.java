@@ -16,10 +16,10 @@ public class TrackingProvider extends ContentProvider {
     private DatabaseHelper mDatabaseHelper;
  
     // The constants below represent individual URI routes, as IDs. Every URI pattern recognized by
-    // this ContentProvider is defined using sUriMatcher.addURI(), and associated with one of these
+    // this ContentProvider is defined using URI_MATCHER.addURI(), and associated with one of these
     // IDs.
     //
-    // When a incoming URI is run through sUriMatcher, it will be tested against the defined
+    // When a incoming URI is run through URI_MATCHER, it will be tested against the defined
     // URI patterns, and the corresponding route ID will be returned.
 
     // Routes codes
@@ -27,10 +27,10 @@ public class TrackingProvider extends ContentProvider {
     public static final int ROUTE_CRUMB_ITEM = 101;
  
     // UriMatcher, used to decode incoming URIs.
-    private static final UriMatcher sUriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
+    private static final UriMatcher URI_MATCHER = new UriMatcher(UriMatcher.NO_MATCH);
     static {
-        sUriMatcher.addURI(TrackingContract.AUTHORITY, "crumbs",   ROUTE_CRUMB_LIST);
-        sUriMatcher.addURI(TrackingContract.AUTHORITY, "crumbs/#", ROUTE_CRUMB_ITEM);
+        URI_MATCHER.addURI(TrackingContract.AUTHORITY, "crumbs",   ROUTE_CRUMB_LIST);
+        URI_MATCHER.addURI(TrackingContract.AUTHORITY, "crumbs/#", ROUTE_CRUMB_ITEM);
     }
  
     @Override
@@ -42,7 +42,7 @@ public class TrackingProvider extends ContentProvider {
     // Determine the mime type for records returned by a given URI.
     @Override
     public String getType(Uri uri) {
-        switch (sUriMatcher.match(uri)) {
+        switch (URI_MATCHER.match(uri)) {
         case ROUTE_CRUMB_LIST:
             return TrackingContract.Crumbs.CONTENT_TYPE;
         case ROUTE_CRUMB_ITEM:
@@ -62,7 +62,7 @@ public class TrackingProvider extends ContentProvider {
     public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
         SQLiteDatabase database = mDatabaseHelper.getReadableDatabase();
         SelectionBuilder builder = new SelectionBuilder();
-        switch (sUriMatcher.match(uri)) {
+        switch (URI_MATCHER.match(uri)) {
         case ROUTE_CRUMB_ITEM:
             // Return a single crumb, by ID.
             String id = uri.getLastPathSegment();
@@ -90,7 +90,7 @@ public class TrackingProvider extends ContentProvider {
     public Uri insert(Uri uri, ContentValues values) {
         final SQLiteDatabase database = mDatabaseHelper.getWritableDatabase();
         assert database != null;
-        final int match = sUriMatcher.match(uri);
+        final int match = URI_MATCHER.match(uri);
         Uri result;
         switch (match) {
         case ROUTE_CRUMB_LIST:
@@ -116,7 +116,7 @@ public class TrackingProvider extends ContentProvider {
     public int delete(Uri uri, String selection, String[] selectionArgs) {
         SelectionBuilder builder = new SelectionBuilder();
         final SQLiteDatabase database = mDatabaseHelper.getWritableDatabase();
-        final int match = sUriMatcher.match(uri);
+        final int match = URI_MATCHER.match(uri);
         int count;
         switch (match) {
         case ROUTE_CRUMB_LIST:
@@ -148,7 +148,7 @@ public class TrackingProvider extends ContentProvider {
     public int update(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
         SelectionBuilder builder = new SelectionBuilder();
         final SQLiteDatabase database = mDatabaseHelper.getWritableDatabase();
-        final int match = sUriMatcher.match(uri);
+        final int match = URI_MATCHER.match(uri);
         int count;
         switch (match) {
         case ROUTE_CRUMB_LIST:

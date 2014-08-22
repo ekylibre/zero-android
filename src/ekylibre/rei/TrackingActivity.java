@@ -9,7 +9,6 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
-// import android.database.sqlite.SQLiteDatabase;
 import android.location.Location;
 import android.location.LocationManager;
 import android.location.LocationListener;
@@ -49,8 +48,6 @@ public class TrackingActivity extends Activity implements TrackingListenerWriter
     private TextView mCoordinates, mBarcode;
     private LocationManager mLocationManager;
     private String mLocationProvider;
-    // private DatabaseHelper mDatabaseHelper;
-    // private SQLiteDatabase mDatabase;
     private TrackingListener mTrackingListener;
     private Account mAccount;
 
@@ -70,7 +67,7 @@ public class TrackingActivity extends Activity implements TrackingListenerWriter
             finish();
             return;
         } else if (accounts.length > 1) {
-            // TODO: Propose the list of account
+            // TODO: Propose the list of account or get the one by default
             mAccount = accounts[0];
         } else {
             mAccount = accounts[0];
@@ -88,10 +85,6 @@ public class TrackingActivity extends Activity implements TrackingListenerWriter
         mPauseButton  = (ImageButton) findViewById(R.id.pause_intervention_button);
         mResumeButton = (ImageButton) findViewById(R.id.resume_intervention_button);
         mScanButton   = (Button)      findViewById(R.id.scan_code_button);
-
-        // Initialize DB
-        // mDatabaseHelper     = new DatabaseHelper(this.getApplication());
-        // mDatabase           = mDatabaseHelper.getWritableDatabase();        
 
         // Synchronize data
         this.syncData();
@@ -252,14 +245,9 @@ public class TrackingActivity extends Activity implements TrackingListenerWriter
         }
 
         getContentResolver().insert(TrackingContract.Crumbs.CONTENT_URI, values);
-        // Crumb crumb = new Crumb(location, type, options);
-        // crumb.insert(mDatabase);
-        // crumb.insert();
     }
 
     private void displayInfos(Location location) {
-        // Cursor cursor = mDatabase.rawQuery("SELECT count(*) FROM crumbs", null);
-        // cursor.moveToFirst();
         Cursor cursor = getContentResolver().query(TrackingContract.Crumbs.CONTENT_URI, TrackingContract.Crumbs.PROJECTION_NONE, null, null, null);
         int count = cursor.getCount();
         // Called when a new location is found by the network location provider.
