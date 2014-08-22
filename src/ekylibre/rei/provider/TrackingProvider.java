@@ -1,4 +1,4 @@
-package ekylibre.rei;
+package ekylibre.rei.provider;
  
 import android.content.ContentProvider;
 import android.content.ContentValues;
@@ -12,11 +12,8 @@ import android.util.Log;
 
 import ekylibre.rei.util.SelectionBuilder;
 
-public class GlobalContentProvider extends ContentProvider {
-    DatabaseHelper mDatabaseHelper;
- 
-    // Content authority for this provider.
-    public static final String AUTHORITY = "ekylibre.authority.basic";
+public class TrackingProvider extends ContentProvider {
+    private DatabaseHelper mDatabaseHelper;
  
     // The constants below represent individual URI routes, as IDs. Every URI pattern recognized by
     // this ContentProvider is defined using sUriMatcher.addURI(), and associated with one of these
@@ -26,14 +23,14 @@ public class GlobalContentProvider extends ContentProvider {
     // URI patterns, and the corresponding route ID will be returned.
 
     // Routes codes
-    public static final int ROUTE_CRUMBS = 1;
-    public static final int ROUTE_CRUMBS_ID = 2;
+    public static final int ROUTE_CRUMB_LIST = 100;
+    public static final int ROUTE_CRUMB_ITEM = 101;
  
     // UriMatcher, used to decode incoming URIs.
     private static final UriMatcher sUriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
     static {
-        sUriMatcher.addURI(AUTHORITY, "crumbs",   ROUTE_CRUMBS);
-        sUriMatcher.addURI(AUTHORITY, "crumbs/#", ROUTE_CRUMBS_ID);
+        sUriMatcher.addURI(TrackingContract.AUTHORITY, "crumbs",   ROUTE_CRUMB_LIST);
+        sUriMatcher.addURI(TrackingContract.AUTHORITY, "crumbs/#", ROUTE_CRUMB_ITEM);
     }
  
     @Override
@@ -45,13 +42,11 @@ public class GlobalContentProvider extends ContentProvider {
     // Determine the mime type for records returned by a given URI.
     @Override
     public String getType(Uri uri) {
-        final int match = sUriMatcher.match(uri);
-        switch (match) {
-            // Adds here new data types
-        case ROUTE_CRUMBS:
-            return Crumb.CrumbColumns.CONTENT_TYPE;
-        case ROUTE_CRUMBS_ID:
-            return Crumb.CrumbColumns.CONTENT_ITEM_TYPE;
+        switch (sUriMatcher.match(uri)) {
+        case ROUTE_CRUMB_LIST:
+            return TrackingContract.Crumbs.CONTENT_TYPE;
+        case ROUTE_CRUMB_ITEM:
+            return TrackingContract.Crumbs.CONTENT_ITEM_TYPE;
         default:
             throw new UnsupportedOperationException("Unknown URI: " + uri);
         }
@@ -67,15 +62,14 @@ public class GlobalContentProvider extends ContentProvider {
     public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
         SQLiteDatabase database = mDatabaseHelper.getReadableDatabase();
         SelectionBuilder builder = new SelectionBuilder();
-        int uriMatch = sUriMatcher.match(uri);
-        switch (uriMatch) {
-        case ROUTE_CRUMBS_ID:
+        switch (sUriMatcher.match(uri)) {
+        case ROUTE_CRUMB_ITEM:
             // Return a single crumb, by ID.
             String id = uri.getLastPathSegment();
-            builder.where(Crumb.CrumbColumns._ID + "=?", id);
-        case ROUTE_CRUMBS:
+            builder.where(TrackingContract.CrumbsColumns._ID + "=?", id);
+        case ROUTE_CRUMB_LIST:
             // Return all known crumbs.
-            builder.table(Crumb.CrumbColumns.TABLE_NAME)
+            builder.table(TrackingContract.CrumbsColumns.TABLE_NAME)
                 .where(selection, selectionArgs);
             Cursor cursor = builder.query(database, projection, sortOrder);
             // Note: Notification URI must be manually set here for loaders to correctly
@@ -99,11 +93,11 @@ public class GlobalContentProvider extends ContentProvider {
         final int match = sUriMatcher.match(uri);
         Uri result;
         switch (match) {
-        case ROUTE_CRUMBS:
-            long id = database.insertOrThrow(Crumb.CrumbColumns.TABLE_NAME, null, values);
-            result = Uri.parse(Crumb.CrumbColumns.CONTENT_URI + "/" + id);
+        case ROUTE_CRUMB_LIST:
+            long id = database.insertOrThrow(TrackingContract.CrumbsColumns.TABLE_NAME, null, values);
+            result = Uri.parse(TrackingContract.Crumbs.CONTENT_URI + "/" + id);
             break;
-        case ROUTE_CRUMBS_ID:
+        case ROUTE_CRUMB_ITEM:
             throw new UnsupportedOperationException("Insert not supported on URI: " + uri);
         default:
             throw new UnsupportedOperationException("Unknown URI: " + uri);
@@ -125,15 +119,15 @@ public class GlobalContentProvider extends ContentProvider {
         final int match = sUriMatcher.match(uri);
         int count;
         switch (match) {
-        case ROUTE_CRUMBS:
-            count = builder.table(Crumb.CrumbColumns.TABLE_NAME)
+        case ROUTE_CRUMB_LIST:
+            count = builder.table(TrackingContract.CrumbsColumns.TABLE_NAME)
                 .where(selection, selectionArgs)
                 .delete(database);
             break;
-        case ROUTE_CRUMBS_ID:
+        case ROUTE_CRUMB_ITEM:
             String id = uri.getLastPathSegment();
-            count = builder.table(Crumb.CrumbColumns.TABLE_NAME)
-                .where(Crumb.CrumbColumns._ID + "=?", id)
+            count = builder.table(TrackingContract.CrumbsColumns.TABLE_NAME)
+                .where(TrackingContract.CrumbsColumns._ID + "=?", id)
                 .where(selection, selectionArgs)
                 .delete(database);
             break;
@@ -157,15 +151,15 @@ public class GlobalContentProvider extends ContentProvider {
         final int match = sUriMatcher.match(uri);
         int count;
         switch (match) {
-        case ROUTE_CRUMBS:
-            count = builder.table(Crumb.CrumbColumns.TABLE_NAME)
+        case ROUTE_CRUMB_LIST:
+            count = builder.table(TrackingContract.CrumbsColumns.TABLE_NAME)
                 .where(selection, selectionArgs)
                 .update(database, values);
             break;
-        case ROUTE_CRUMBS_ID:
+        case ROUTE_CRUMB_ITEM:
             String id = uri.getLastPathSegment();
-            count = builder.table(Crumb.CrumbColumns.TABLE_NAME)
-                .where(Crumb.CrumbColumns._ID + "=?", id)
+            count = builder.table(TrackingContract.CrumbsColumns.TABLE_NAME)
+                .where(TrackingContract.CrumbsColumns._ID + "=?", id)
                 .where(selection, selectionArgs)
                 .update(database, values);
             break;
@@ -195,16 +189,16 @@ public class GlobalContentProvider extends ContentProvider {
     //     private static final String COMMA_SEP = ",";
     //     /** SQL statement to create "crumb" table. */
     //     private static final String SQL_CREATE_CRUMBS =
-    //             "CREATE TABLE " + Crumb.CrumbColumns.TABLE_NAME + " (" +
-    //                     Crumb.CrumbColumns._ID + " INTEGER PRIMARY KEY," +
-    //                     Crumb.CrumbColumns.COLUMN_NAME_CRUMB_ID + TYPE_TEXT + COMMA_SEP +
-    //                     Crumb.CrumbColumns.COLUMN_NAME_TITLE    + TYPE_TEXT + COMMA_SEP +
-    //                     Crumb.CrumbColumns.COLUMN_NAME_LINK + TYPE_TEXT + COMMA_SEP +
-    //                     Crumb.CrumbColumns.COLUMN_NAME_PUBLISHED + TYPE_INTEGER + ")";
+    //             "CREATE TABLE " + TrackingContract.CrumbsColumns.TABLE_NAME + " (" +
+    //                     TrackingContract.CrumbsColumns._ID + " INTEGER PRIMARY KEY," +
+    //                     TrackingContract.CrumbsColumns.COLUMN_NAME_CRUMB_ID + TYPE_TEXT + COMMA_SEP +
+    //                     TrackingContract.CrumbsColumns.COLUMN_NAME_TITLE    + TYPE_TEXT + COMMA_SEP +
+    //                     TrackingContract.CrumbsColumns.COLUMN_NAME_LINK + TYPE_TEXT + COMMA_SEP +
+    //                     TrackingContract.CrumbsColumns.COLUMN_NAME_PUBLISHED + TYPE_INTEGER + ")";
  
     //     /** SQL statement to drop "crumb" table. */
     //     private static final String SQL_DELETE_CRUMBS =
-    //             "DROP TABLE IF EXISTS " + Crumb.CrumbColumns.TABLE_NAME;
+    //             "DROP TABLE IF EXISTS " + TrackingContract.CrumbsColumns.TABLE_NAME;
  
     //     public DatabaseHelper(Context context) {
     //         super(context, DATABASE_NAME, null, DATABASE_VERSION);

@@ -1,4 +1,4 @@
-package ekylibre.rei;
+package ekylibre.rei.provider;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;

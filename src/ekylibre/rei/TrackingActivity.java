@@ -5,10 +5,11 @@ import android.accounts.AccountManager;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.content.ContentResolver;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
+// import android.database.sqlite.SQLiteDatabase;
 import android.location.Location;
 import android.location.LocationManager;
 import android.location.LocationListener;
@@ -27,8 +28,13 @@ import android.widget.TextView;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
+import ekylibre.rei.provider.TrackingContract;
+import ekylibre.rei.provider.TrackingProvider;
+
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class TrackingActivity extends Activity implements TrackingListenerWriter {
@@ -43,8 +49,8 @@ public class TrackingActivity extends Activity implements TrackingListenerWriter
     private TextView mCoordinates, mBarcode;
     private LocationManager mLocationManager;
     private String mLocationProvider;
-    private DatabaseHelper mDatabaseHelper;
-    private SQLiteDatabase mDatabase;
+    // private DatabaseHelper mDatabaseHelper;
+    // private SQLiteDatabase mDatabase;
     private TrackingListener mTrackingListener;
     private Account mAccount;
 
@@ -84,15 +90,15 @@ public class TrackingActivity extends Activity implements TrackingListenerWriter
         mScanButton   = (Button)      findViewById(R.id.scan_code_button);
 
         // Initialize DB
-        mDatabaseHelper           = new DatabaseHelper(this.getApplication());
-        mDatabase           = mDatabaseHelper.getWritableDatabase();        
+        // mDatabaseHelper     = new DatabaseHelper(this.getApplication());
+        // mDatabase           = mDatabaseHelper.getWritableDatabase();        
 
         // Synchronize data
         this.syncData();
 
         // Acquire a reference to the system Location Manager
         mTrackingListener = new TrackingListener(this);
-        mLocationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+        mLocationManager  = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
         mLocationProvider = LocationManager.GPS_PROVIDER;
     }
 
@@ -231,14 +237,31 @@ public class TrackingActivity extends Activity implements TrackingListenerWriter
 
     public void writeCrumb(Location location, String type, Bundle options) {
         this.displayInfos(location);
-        Crumb crumb = new Crumb(location, type, options);
-        crumb.insert(mDatabase);
+        
+        ContentValues values = new ContentValues();
+        SimpleDateFormat parser = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.sss");
+
+        values.put(TrackingContract.CrumbsColumns.TYPE, type);
+        values.put(TrackingContract.CrumbsColumns.LATITUDE, location.getLatitude());
+        values.put(TrackingContract.CrumbsColumns.LONGITUDE, location.getLongitude());
+        values.put(TrackingContract.CrumbsColumns.READ_AT, parser.format(new Date(location.getTime())));
+        values.put(TrackingContract.CrumbsColumns.ACCURACY, location.getAccuracy());
+
+        if (options != null) {
+            values.put(TrackingContract.CrumbsColumns.PROCEDURE_NATURE, options.getString("procedureNature"));
+        }
+
+        getContentResolver().insert(TrackingContract.Crumbs.CONTENT_URI, values);
+        // Crumb crumb = new Crumb(location, type, options);
+        // crumb.insert(mDatabase);
+        // crumb.insert();
     }
 
     private void displayInfos(Location location) {
-        Cursor cursor = mDatabase.rawQuery("SELECT count(*) FROM crumbs", null);
-        cursor.moveToFirst();
-        int count = cursor.getInt(0);
+        // Cursor cursor = mDatabase.rawQuery("SELECT count(*) FROM crumbs", null);
+        // cursor.moveToFirst();
+        Cursor cursor = getContentResolver().query(TrackingContract.Crumbs.CONTENT_URI, TrackingContract.Crumbs.PROJECTION_NONE, null, null, null);
+        int count = cursor.getCount();
         // Called when a new location is found by the network location provider.
         mCoordinates.setText("LATLNG: " + String.valueOf(location.getLatitude()) + ", " + String.valueOf(location.getLongitude()) + ", CNT: " + String.valueOf(count));
     }
@@ -246,11 +269,11 @@ public class TrackingActivity extends Activity implements TrackingListenerWriter
 
     // Call the sync service
     private void syncData() {
-        Log.d("rei", "syncData: " + mAccount.toString() + ", " + GlobalContentProvider.AUTHORITY);
+        Log.d("rei", "syncData: " + mAccount.toString() + ", " + TrackingProvider.AUTHORITY);
         Bundle extras = new Bundle();
         extras.putBoolean(ContentResolver.SYNC_EXTRAS_MANUAL, true);
         extras.putBoolean(ContentResolver.SYNC_EXTRAS_EXPEDITED, true);
-        ContentResolver.requestSync(mAccount, GlobalContentProvider.AUTHORITY, extras);
+        ContentResolver.requestSync(mAccount, TrackingProvider.AUTHORITY, extras);
     }
 
     

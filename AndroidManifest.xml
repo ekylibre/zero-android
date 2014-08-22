@@ -56,8 +56,8 @@
     </service>
 
     <!-- Content provider -->
-    <provider android:name="ekylibre.rei.GlobalContentProvider"
-              android:authorities="ekylibre.rei.provider"
+    <provider android:name="ekylibre.rei.provider.TrackingProvider"
+              android:authorities="ekylibre.rei.tracking.provider"
               android:exported="false"
               android:syncable="true"/>
     
