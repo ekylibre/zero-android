@@ -5,14 +5,19 @@
           android:versionName="0.0.0"
           android:installLocation="auto">
 
+  <permission android:name="ekylibre.rei.permission.AUTHENTICATE_ACCOUNTS"/>
+  <permission android:name="ekylibre.rei.permission.SYNC_DATA"/>
+
   <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-  <uses-permission android:name="android.permission.GET_ACCOUNTS" />
   <uses-permission android:name="android.permission.AUTHENTICATE_ACCOUNTS" />
   <uses-permission android:name="android.permission.INTERNET" />
+  <uses-permission android:name="android.permission.GET_ACCOUNTS" />
   <uses-permission android:name="android.permission.READ_SYNC_SETTINGS"/>
   <uses-permission android:name="android.permission.WRITE_SYNC_SETTINGS"/>
   <!-- <uses-permission android:name="android.permission.ACCESS_LOCATION_EXTRA_COMMANDS" /> -->
   <!-- <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" /> -->
+  <uses-permission android:name="ekylibre.rei.permission.AUTHENTICATE_ACCOUNTS" />
+  <uses-permission android:name="ekylibre.rei.permission.SYNC_DATA" />
   
   <uses-sdk android:minSdkVersion="16" android:targetSdkVersion="20" />
 
@@ -41,7 +46,8 @@
     <activity android:name="ekylibre.rei.AuthenticatorActivity"
               android:label="@string/service_name"
               android:icon="@drawable/ic_ekylibre"/>
-    <service android:name="ekylibre.rei.AuthenticatorService">
+    <service android:name="ekylibre.rei.AuthenticatorService"
+             android:permission="ekylibre.rei.permission.AUTHENTICATE_ACCOUNTS">
       <intent-filter>
         <action android:name="android.accounts.AccountAuthenticator" />
       </intent-filter>
@@ -56,8 +62,8 @@
               android:syncable="true"/>
     
     <!-- Sync related activities and service needs to be declared here in order for the app to recognize them-->
-    <service android:name="SyncService"
-             android:exported="true"
+    <service android:name="ekylibre.rei.SyncService"
+             android:permission="ekylibre.rei.permission.SYNC_DATA"
              android:process=":sync">
       <intent-filter>
         <action android:name="android.content.SyncAdapter" />
