@@ -35,8 +35,9 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity {
     private String mAuthTokenType;
     private String mAccountType;
     private String mAccountName;
-    private EditText mAccountNameEdit;
     private String mAccountPassword;
+
+    private EditText mAccountNameEdit;
     private EditText mAccountPasswordEdit;
 
     @Override

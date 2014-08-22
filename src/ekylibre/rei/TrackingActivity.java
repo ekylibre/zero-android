@@ -269,11 +269,11 @@ public class TrackingActivity extends Activity implements TrackingListenerWriter
 
     // Call the sync service
     private void syncData() {
-        Log.d("rei", "syncData: " + mAccount.toString() + ", " + TrackingProvider.AUTHORITY);
+        Log.d("rei", "syncData: " + mAccount.toString() + ", " + TrackingContract.AUTHORITY);
         Bundle extras = new Bundle();
         extras.putBoolean(ContentResolver.SYNC_EXTRAS_MANUAL, true);
         extras.putBoolean(ContentResolver.SYNC_EXTRAS_EXPEDITED, true);
-        ContentResolver.requestSync(mAccount, TrackingProvider.AUTHORITY, extras);
+        ContentResolver.requestSync(mAccount, TrackingContract.AUTHORITY, extras);
     }
 
     
