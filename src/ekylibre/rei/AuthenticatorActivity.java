@@ -31,35 +31,35 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity {
     public final static String CHOICE_REDIRECT_TRACKING  = "tracking";
 
     private final String TAG = this.getClass().getSimpleName();
-    private AccountManager accountManager;
-    private String authTokenType;
-    private String accountType;
-    private String accountName;
-    private EditText accountNameEdit;
-    private String accountPassword;
-    private EditText accountPasswordEdit;
+    private AccountManager mAccountManager;
+    private String mAuthTokenType;
+    private String mAccountType;
+    private String mAccountName;
+    private EditText mAccountNameEdit;
+    private String mAccountPassword;
+    private EditText mAccountPasswordEdit;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login);
 
-        accountNameEdit     = (EditText) findViewById(R.id.accountName);
-        accountPasswordEdit = (EditText) findViewById(R.id.accountPassword);
+        mAccountNameEdit     = (EditText) findViewById(R.id.accountName);
+        mAccountPasswordEdit = (EditText) findViewById(R.id.accountPassword);
 
-        accountManager = AccountManager.get(getBaseContext());
+        mAccountManager = AccountManager.get(getBaseContext());
 
         final Intent intent = getIntent();
 
-        authTokenType = intent.getStringExtra(KEY_AUTH_TOKEN_TYPE);
-        if (authTokenType == null)
-            authTokenType = Authenticator.AUTH_TOKEN_TYPE_GLOBAL;
+        mAuthTokenType = intent.getStringExtra(KEY_AUTH_TOKEN_TYPE);
+        if (mAuthTokenType == null)
+            mAuthTokenType = Authenticator.AUTH_TOKEN_TYPE_GLOBAL;
 
-        accountType = intent.getStringExtra(AccountManager.KEY_ACCOUNT_TYPE);
+        mAccountType = intent.getStringExtra(AccountManager.KEY_ACCOUNT_TYPE);
         
-        accountName = intent.getStringExtra(AccountManager.KEY_ACCOUNT_NAME);
-        if (accountName != null) {
-            accountNameEdit.setText(accountName);
+        mAccountName = intent.getStringExtra(AccountManager.KEY_ACCOUNT_NAME);
+        if (mAccountName != null) {
+            mAccountNameEdit.setText(mAccountName);
         }
     }
 
@@ -75,8 +75,8 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity {
 
 
     public void signIn(View view) {
-        accountName     = accountNameEdit.getText().toString();
-        accountPassword = accountPasswordEdit.getText().toString();
+        mAccountName     = mAccountNameEdit.getText().toString();
+        mAccountPassword = mAccountPasswordEdit.getText().toString();
         new AsyncTask<String, Void, Intent>() {
 
             @Override protected Intent doInBackground(String... params) {
@@ -85,11 +85,11 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity {
                 Bundle extras = new Bundle();
                 extras.putString(KEY_REDIRECT, getIntent().getStringExtra(KEY_REDIRECT));
                 try {
-                    authToken = Token.create(accountName, accountPassword, "url");
-                    extras.putString(AccountManager.KEY_ACCOUNT_NAME, accountName);
-                    extras.putString(AccountManager.KEY_ACCOUNT_TYPE, accountType);
+                    authToken = Token.create(mAccountName, mAccountPassword, "url");
+                    extras.putString(AccountManager.KEY_ACCOUNT_NAME, mAccountName);
+                    extras.putString(AccountManager.KEY_ACCOUNT_TYPE, mAccountType);
                     extras.putString(AccountManager.KEY_AUTHTOKEN, authToken);
-                    extras.putString(KEY_ACCOUNT_PASSWORD, accountPassword);
+                    extras.putString(KEY_ACCOUNT_PASSWORD, mAccountPassword);
                 } catch (Exception e) {
                     extras.putString(AccountManager.KEY_ERROR_MESSAGE, e.getMessage());
                 }
@@ -115,26 +115,27 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity {
         Log.d("rei", TAG + "> finishLogin");
         String accountName = intent.getStringExtra(AccountManager.KEY_ACCOUNT_NAME);
         String accountPassword = intent.getStringExtra(KEY_ACCOUNT_PASSWORD);
-        Log.d("rei", TAG + "> finishLogin("+ accountName +", "+ accountPassword +", "+ intent.getStringExtra(AccountManager.KEY_ACCOUNT_TYPE)+")");
+        Log.d("rei", TAG + "> finishLogin(" + accountName + ", " + accountPassword + ", " + intent.getStringExtra(AccountManager.KEY_ACCOUNT_TYPE) + ")");
         final Account account = new Account(accountName, intent.getStringExtra(AccountManager.KEY_ACCOUNT_TYPE));
         // if (getIntent().getBooleanExtra(KEY_IS_ADDING_NEW_ACCOUNT, false)) {
         String authToken = intent.getStringExtra(AccountManager.KEY_AUTHTOKEN);
         Log.d("rei", TAG + "> finishLogin > addAccountExplicitly " + authToken);
-        // String authTokenType = this.authTokenType;
+        // String authTokenType = mAuthTokenType;
         // Creating the account on the device and setting the auth token we got
         // (Not setting the auth token will cause another call to the server to authenticate the user)
-        if (this.accountManager.addAccountExplicitly(account, accountPassword, null)) {
+        if (mAccountManager.addAccountExplicitly(account, accountPassword, null)) {
             Log.d("rei", TAG + "> finishLogin > addAccountExplicitly: YES!");
         } else {
             Log.d("rei", TAG + "> finishLogin > addAccountExplicitly: NO!");
         }
-        this.accountManager.setAuthToken(account, authTokenType, authToken);
+        mAccountManager.setAuthToken(account, mAuthTokenType, authToken);
         // } else {
         //     Log.d("rei", TAG + "> finishLogin > setPassword");
-        //     this.accountManager.setPassword(account, accountPassword);
+        //     mAccountManager.setPassword(account, accountPassword);
         // }
         setAccountAuthenticatorResult(intent.getExtras());
         setResult(RESULT_OK, intent);
+        // Redirect to TrackingActivity if requested
         if (intent.getStringExtra(KEY_REDIRECT).equals(CHOICE_REDIRECT_TRACKING)) {
             Intent trackingIntent = new Intent(this, TrackingActivity.class);
             startActivity(trackingIntent);

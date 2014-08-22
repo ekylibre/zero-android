@@ -15,20 +15,20 @@ public class Authenticator extends AbstractAccountAuthenticator {
 
     public static final String AUTH_TOKEN_TYPE_GLOBAL = "global";
 
-    private final String TAG = this.getClass().getSimpleName();
-    private Context context;
+    private final String TAG = "Authenticator";
+    private Context mContext;
 
     // Simple constructor
     public Authenticator(Context context) {
         super(context);
-        this.context = context;
+        mContext = context;
     }
 
     // Don't add additional accounts
     @Override
     public Bundle addAccount(AccountAuthenticatorResponse response, String accountType, String authTokenType, String[] requiredFeatures, Bundle options) throws NetworkErrorException {
         Log.d("rei", "> addAccount " + accountType);
-        final Intent intent = new Intent(this.context, AuthenticatorActivity.class);
+        final Intent intent = new Intent(mContext, AuthenticatorActivity.class);
         intent.putExtra(AuthenticatorActivity.KEY_AUTH_TOKEN_TYPE, authTokenType);
         intent.putExtra(AccountManager.KEY_ACCOUNT_TYPE, accountType);
         intent.putExtra(AccountManager.KEY_ACCOUNT_AUTHENTICATOR_RESPONSE, response);
@@ -51,7 +51,7 @@ public class Authenticator extends AbstractAccountAuthenticator {
         }
         // Extract the username and password from the Account Manager, and ask
         // the server for an appropriate AuthToken.
-        final AccountManager accountManager = AccountManager.get(this.context);
+        final AccountManager accountManager = AccountManager.get(mContext);
         String authToken = accountManager.peekAuthToken(account, authTokenType);
         Log.d("rei", "> getAuthToken > peekAuthToken returned - " + authToken);
         // Lets give another try to authenticate the user
@@ -82,7 +82,7 @@ public class Authenticator extends AbstractAccountAuthenticator {
         // need to re-prompt them for their credentials. We do that by creating
         // an intent to display our AuthenticatorActivity.
         Log.d("rei", "> getAuthToken > no password");
-        final Intent intent = new Intent(this.context, AuthenticatorActivity.class);
+        final Intent intent = new Intent(mContext, AuthenticatorActivity.class);
         intent.putExtra(AccountManager.KEY_ACCOUNT_AUTHENTICATOR_RESPONSE, response);
         intent.putExtra(AccountManager.KEY_ACCOUNT_TYPE, account.type);
         intent.putExtra(AccountManager.KEY_ACCOUNT_NAME, account.name);
@@ -96,7 +96,7 @@ public class Authenticator extends AbstractAccountAuthenticator {
     @Override
     public String getAuthTokenLabel(String authTokenType) {
         if (authTokenType.equals(AUTH_TOKEN_TYPE_GLOBAL)) {
-            return this.context.getString(R.string.global_auth_token);
+            return mContext.getString(R.string.global_auth_token);
         }
         return null;
     }
@@ -128,7 +128,7 @@ public class Authenticator extends AbstractAccountAuthenticator {
         }
 
         // Launch AuthenticatorActivity to confirm credentials
-        final Intent intent = new Intent(this.context, AuthenticatorActivity.class);
+        final Intent intent = new Intent(mContext, AuthenticatorActivity.class);
         intent.putExtra(AccountManager.KEY_ACCOUNT_AUTHENTICATOR_RESPONSE, response);
         intent.putExtra(AccountManager.KEY_ACCOUNT_NAME, account.name);
         intent.putExtra(AuthenticatorActivity.KEY_CONFIRM_CREDENTIALS, true);
@@ -143,7 +143,7 @@ public class Authenticator extends AbstractAccountAuthenticator {
     @Override
     public Bundle updateCredentials(AccountAuthenticatorResponse response, Account account, String authTokenType, Bundle loginOptions) {
         Log.d("rei", "> updateCredentials");
-        final Intent intent = new Intent(this.context, AuthenticatorActivity.class);
+        final Intent intent = new Intent(mContext, AuthenticatorActivity.class);
         intent.putExtra(AccountManager.KEY_ACCOUNT_NAME, account.name);
         intent.putExtra(AuthenticatorActivity.KEY_AUTH_TOKEN_TYPE, authTokenType);
         intent.putExtra(AuthenticatorActivity.KEY_CONFIRM_CREDENTIALS, false);

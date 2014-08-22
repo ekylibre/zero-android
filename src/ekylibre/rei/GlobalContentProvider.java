@@ -42,7 +42,7 @@ public class GlobalContentProvider extends ContentProvider {
         return true;
     }
  
-    // Determine the mime type for crumbs returned by a given URI.
+    // Determine the mime type for records returned by a given URI.
     @Override
     public String getType(Uri uri) {
         final int match = sUriMatcher.match(uri);
@@ -60,8 +60,8 @@ public class GlobalContentProvider extends ContentProvider {
     /**
      * Perform a database query by URI.
      *
-     * <p>Currently supports returning all crumbs (/crumbs) and individual crumbs by ID
-     * (/crumbs/{ID}).
+     * <p>Currently supports returning all records (/records) and individual records by ID
+     * (/records/{ID}).
      */
     @Override
     public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
@@ -90,7 +90,7 @@ public class GlobalContentProvider extends ContentProvider {
     }
  
     /**
-     * Insert a new crumb into the database.
+     * Insert a new record into the database.
      */
     @Override
     public Uri insert(Uri uri, ContentValues values) {
@@ -116,7 +116,7 @@ public class GlobalContentProvider extends ContentProvider {
     }
  
     /**
-     * Delete an crumb by database by URI.
+     * Delete a record by database by URI.
      */
     @Override
     public int delete(Uri uri, String selection, String[] selectionArgs) {
@@ -148,7 +148,7 @@ public class GlobalContentProvider extends ContentProvider {
     }
  
     /**
-     * Update an etry in the database by URI.
+     * Update a record in the database by URI.
      */
     @Override
     public int update(Uri uri, ContentValues values, String selection, String[] selectionArgs) {

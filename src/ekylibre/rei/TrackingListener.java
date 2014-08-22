@@ -6,9 +6,9 @@ import android.os.Bundle;
 
 public class TrackingListener implements LocationListener {
 
-    private TrackingListenerWriter writer;
-    private String type;
-    private Bundle options;
+    private TrackingListenerWriter mWriter;
+    private String mType;
+    private Bundle mOptions;
 
     public TrackingListener(TrackingListenerWriter writer) {
         this(writer, "point");
@@ -19,13 +19,13 @@ public class TrackingListener implements LocationListener {
     }
 
     public TrackingListener(TrackingListenerWriter writer, String type, Bundle options) {
-        this.writer  = writer;
-        this.type    = type;
-        this.options = options;
+        mWriter  = writer;
+        mType    = type;
+        mOptions = options;
     }
 
     public void onLocationChanged(Location location) {
-        this.writer.writeCrumb(location, this.type, this.options);
+        mWriter.writeCrumb(location, mType, mOptions);
     }
     
     public void onStatusChanged(String provider, int status, Bundle extras) {}

@@ -31,30 +31,21 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.http.HttpResponse;
-import org.apache.http.NameValuePair;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.message.BasicNameValuePair;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
-
 public class TrackingActivity extends Activity implements TrackingListenerWriter {
     
     public final static String KEY_ACCOUNT = "account";
 
-    private long masterDuration;
-    private long masterStart;
-    private Chronometer masterChrono;
-    private Button scanButton;
-    private ImageButton startButton, stopButton, pauseButton, resumeButton;
-    private TextView coordinates, barcode;
-    private LocationManager locationManager;
-    private String locationProvider;
-    private DatabaseHelper dh;
-    private SQLiteDatabase db;
-    private TrackingListener trackingListener;
+    private long mMasterDuration;
+    private long mMasterStart;
+    private Chronometer mMasterChrono;
+    private Button mScanButton;
+    private ImageButton mStartButton, mStopButton, mPauseButton, mResumeButton;
+    private TextView mCoordinates, mBarcode;
+    private LocationManager mLocationManager;
+    private String mLocationProvider;
+    private DatabaseHelper mDatabaseHelper;
+    private SQLiteDatabase mDatabase;
+    private TrackingListener mTrackingListener;
     private Account mAccount;
 
     /** Called when the activity is first created. */
@@ -74,35 +65,35 @@ public class TrackingActivity extends Activity implements TrackingListenerWriter
             return;
         } else if (accounts.length > 1) {
             // TODO: Propose the list of account
-            this.mAccount = accounts[0];
+            mAccount = accounts[0];
         } else {
-            this.mAccount = accounts[0];
+            mAccount = accounts[0];
         }
 
         // Set content view
         setContentView(R.layout.tracking);
         
         // Find view elements
-        this.masterChrono = (Chronometer) findViewById(R.id.master_chrono);
-        this.coordinates  = (TextView)    findViewById(R.id.coordinates);
-        this.barcode      = (TextView)    findViewById(R.id.barcode);
-        this.startButton  = (ImageButton) findViewById(R.id.start_intervention_button);
-        this.stopButton   = (ImageButton) findViewById(R.id.stop_intervention_button);
-        this.pauseButton  = (ImageButton) findViewById(R.id.pause_intervention_button);
-        this.resumeButton = (ImageButton) findViewById(R.id.resume_intervention_button);
-        this.scanButton   = (Button)      findViewById(R.id.scan_code_button);
+        mMasterChrono = (Chronometer) findViewById(R.id.master_chrono);
+        mCoordinates  = (TextView)    findViewById(R.id.coordinates);
+        mBarcode      = (TextView)    findViewById(R.id.barcode);
+        mStartButton  = (ImageButton) findViewById(R.id.start_intervention_button);
+        mStopButton   = (ImageButton) findViewById(R.id.stop_intervention_button);
+        mPauseButton  = (ImageButton) findViewById(R.id.pause_intervention_button);
+        mResumeButton = (ImageButton) findViewById(R.id.resume_intervention_button);
+        mScanButton   = (Button)      findViewById(R.id.scan_code_button);
 
         // Initialize DB
-        this.dh           = new DatabaseHelper(this.getApplication());
-        this.db           = this.dh.getWritableDatabase();        
+        mDatabaseHelper           = new DatabaseHelper(this.getApplication());
+        mDatabase           = mDatabaseHelper.getWritableDatabase();        
 
         // Synchronize data
         this.syncData();
 
         // Acquire a reference to the system Location Manager
-        this.trackingListener = new TrackingListener(this);
-        this.locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
-        this.locationProvider = LocationManager.GPS_PROVIDER;
+        mTrackingListener = new TrackingListener(this);
+        mLocationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+        mLocationProvider = LocationManager.GPS_PROVIDER;
     }
 
     @Override
@@ -118,9 +109,9 @@ public class TrackingActivity extends Activity implements TrackingListenerWriter
         Intent intent;
         // Handle presses on the action bar items
         switch (item.getItemId()) {
-        // case R.id.action_search:
-        //     // openSearch();
-        //     return true;
+            // case R.id.action_search:
+            //     // openSearch();
+            //     return true;
         case R.id.action_settings:
             intent = new Intent(this, SettingsActivity.class);
             startActivity(intent);  
@@ -132,13 +123,13 @@ public class TrackingActivity extends Activity implements TrackingListenerWriter
 
 
     public void startIntervention(View view) {
-        this.masterStart = SystemClock.elapsedRealtime();
-        this.masterDuration = 0;
-        this.masterChrono.setBase(this.masterStart);
-        this.masterChrono.start();
-        stopButton.setVisibility(View.VISIBLE);
-        pauseButton.setVisibility(View.VISIBLE);
-        scanButton.setVisibility(View.VISIBLE);
+        mMasterStart = SystemClock.elapsedRealtime();
+        mMasterDuration = 0;
+        mMasterChrono.setBase(mMasterStart);
+        mMasterChrono.start();
+        mStopButton.setVisibility(View.VISIBLE);
+        mPauseButton.setVisibility(View.VISIBLE);
+        mScanButton.setVisibility(View.VISIBLE);
         this.startTracking();
 
         final Bundle options = new Bundle();
@@ -148,10 +139,10 @@ public class TrackingActivity extends Activity implements TrackingListenerWriter
 
 
     public void stopIntervention(View view) {
-        this.masterChrono.stop();
-        stopButton.setVisibility(View.GONE);
-        pauseButton.setVisibility(View.GONE);
-        scanButton.setVisibility(View.GONE);
+        mMasterChrono.stop();
+        mStopButton.setVisibility(View.GONE);
+        mPauseButton.setVisibility(View.GONE);
+        mScanButton.setVisibility(View.GONE);
         this.stopTracking();
         this.addCrumb("stop");
         this.syncData();
@@ -159,27 +150,27 @@ public class TrackingActivity extends Activity implements TrackingListenerWriter
 
 
     public void pauseIntervention(View view) {
-        this.masterDuration += SystemClock.elapsedRealtime() - this.masterStart;
-        this.masterChrono.stop();
-        pauseButton.setVisibility(View.GONE);
-        startButton.setVisibility(View.GONE);
-        stopButton.setVisibility(View.GONE);
-        scanButton.setVisibility(View.GONE);
-        resumeButton.setVisibility(View.VISIBLE);
+        mMasterDuration += SystemClock.elapsedRealtime() - mMasterStart;
+        mMasterChrono.stop();
+        mPauseButton.setVisibility(View.GONE);
+        mStartButton.setVisibility(View.GONE);
+        mStopButton.setVisibility(View.GONE);
+        mScanButton.setVisibility(View.GONE);
+        mResumeButton.setVisibility(View.VISIBLE);
         this.stopTracking();
         this.addCrumb("pause");
         this.syncData();
     }
 
     public void resumeIntervention(View view) {
-        this.masterStart = SystemClock.elapsedRealtime();
-        this.masterChrono.setBase(this.masterStart - this.masterDuration);
-        this.masterChrono.start();
-        resumeButton.setVisibility(View.GONE);
-        pauseButton.setVisibility(View.VISIBLE);
-        startButton.setVisibility(View.VISIBLE);
-        stopButton.setVisibility(View.VISIBLE);
-        scanButton.setVisibility(View.VISIBLE);
+        mMasterStart = SystemClock.elapsedRealtime();
+        mMasterChrono.setBase(mMasterStart - mMasterDuration);
+        mMasterChrono.start();
+        mResumeButton.setVisibility(View.GONE);
+        mPauseButton.setVisibility(View.VISIBLE);
+        mStartButton.setVisibility(View.VISIBLE);
+        mStopButton.setVisibility(View.VISIBLE);
+        mScanButton.setVisibility(View.VISIBLE);
         this.startTracking();
         this.addCrumb("resume");
     }
@@ -196,7 +187,7 @@ public class TrackingActivity extends Activity implements TrackingListenerWriter
             final String contents = scanResult.getContents();
             if (contents != null) {
                 // TODO: Ask for quantity
-                this.barcode.setText("CODE: " + contents);
+                mBarcode.setText("CODE: " + contents);
                 
                 // handle scan result
                 final Bundle options = new Bundle();
@@ -208,11 +199,11 @@ public class TrackingActivity extends Activity implements TrackingListenerWriter
     }
 
     private void startTracking() {
-        this.locationManager.requestLocationUpdates(this.locationProvider, 1000, 0, this.trackingListener);
+        mLocationManager.requestLocationUpdates(mLocationProvider, 1000, 0, mTrackingListener);
     }
 
     private void stopTracking() {
-        this.locationManager.removeUpdates(this.trackingListener);
+        mLocationManager.removeUpdates(mTrackingListener);
     }
 
 
@@ -221,10 +212,10 @@ public class TrackingActivity extends Activity implements TrackingListenerWriter
     }
 
     private void addCrumb(String type, Bundle options) {
-        Location location = this.locationManager.getLastKnownLocation(this.locationProvider);
+        Location location = mLocationManager.getLastKnownLocation(mLocationProvider);
         if (location == null) {
             TrackingListener listener = new TrackingListener(this, type, options);
-            this.locationManager.requestSingleUpdate(this.locationProvider, listener, null);
+            mLocationManager.requestSingleUpdate(mLocationProvider, listener, null);
         } else {
             writeCrumb(location, type, options);
         }
@@ -241,15 +232,15 @@ public class TrackingActivity extends Activity implements TrackingListenerWriter
     public void writeCrumb(Location location, String type, Bundle options) {
         this.displayInfos(location);
         Crumb crumb = new Crumb(location, type, options);
-        crumb.insert(this.db);
+        crumb.insert(mDatabase);
     }
 
     private void displayInfos(Location location) {
-        Cursor cursor = this.db.rawQuery("SELECT count(*) FROM crumbs", null);
+        Cursor cursor = mDatabase.rawQuery("SELECT count(*) FROM crumbs", null);
         cursor.moveToFirst();
         int count = cursor.getInt(0);
         // Called when a new location is found by the network location provider.
-        this.coordinates.setText("LATLNG: " + String.valueOf(location.getLatitude()) + ", " + String.valueOf(location.getLongitude()) + ", CNT: " + String.valueOf(count));
+        mCoordinates.setText("LATLNG: " + String.valueOf(location.getLatitude()) + ", " + String.valueOf(location.getLongitude()) + ", CNT: " + String.valueOf(count));
     }
 
 

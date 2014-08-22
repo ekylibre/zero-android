@@ -16,19 +16,19 @@ public class Crumb {
     // This coeff permits to store lat/lon as integer with an under-millimetric precision
     public static final long COORDINATE_COEFF = 1000000;
 
-    private long id;
-    private String type;
-    private long latitude;
-    private long longitude;
-    private long readAt;
-    private Float accuracy;
-    private String procedureNature;
+    private long   mId;
+    private String mType;
+    private long   mLatitude;
+    private long   mLongitude;
+    private long   mReadAt;
+    private Float  mAccuracy;
+    private String mProcedureNature;
+    // private String mScannedCode;
+    // private BigDecimal mQuantity;
+    // private String mUnit;
 
-    private Boolean saved;
-    private Boolean newRecord;
-    // private String code;
-    // private BigDecimal quantity;
-    // private String unit;
+    private Boolean mSaved;
+    private Boolean mNewRecord;
 
     // Base URI
     public static final Uri BASE_CONTENT_URI = Uri.parse("content://" + GlobalContentProvider.AUTHORITY);
@@ -66,21 +66,21 @@ public class Crumb {
         ContentValues values = new ContentValues();
         SimpleDateFormat parser = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.sss");
         // values.put(CrumbColumns.COLUMN_NAME_ID, id);
-        values.put(CrumbColumns.COLUMN_NAME_TYPE, this.type);
-        values.put(CrumbColumns.COLUMN_NAME_LATITUDE, this.latitude);
-        values.put(CrumbColumns.COLUMN_NAME_LONGITUDE, this.longitude);
-        values.put(CrumbColumns.COLUMN_NAME_READ_AT, parser.format(new Date(this.readAt)));
-        values.put(CrumbColumns.COLUMN_NAME_ACCURACY, this.accuracy);
-        values.put(CrumbColumns.COLUMN_NAME_PROCEDURE_NATURE, this.procedureNature);
+        values.put(CrumbColumns.COLUMN_NAME_TYPE, mType);
+        values.put(CrumbColumns.COLUMN_NAME_LATITUDE, mLatitude);
+        values.put(CrumbColumns.COLUMN_NAME_LONGITUDE, mLongitude);
+        values.put(CrumbColumns.COLUMN_NAME_READ_AT, parser.format(new Date(mReadAt)));
+        values.put(CrumbColumns.COLUMN_NAME_ACCURACY, mAccuracy);
+        values.put(CrumbColumns.COLUMN_NAME_PROCEDURE_NATURE, mProcedureNature);
         
         // Insert the new row, returning the primary key value of the new row
         long newRowId = db.insert(CrumbColumns.TABLE_NAME, null, values);
 
         if (newRowId > 0) {
-            this.id = newRowId;
-            this.newRecord = false;
+            mId = newRowId;
+            mNewRecord = false;
         } else {
-            this.saved = false;
+            mSaved = false;
         }
 
         return newRowId;
@@ -96,19 +96,18 @@ public class Crumb {
     }
 
     public Crumb(Location location, String type, Bundle options) {
-        this.type      = type;
-        this.latitude  = Math.round(COORDINATE_COEFF * location.getLatitude());
-        this.longitude = Math.round(COORDINATE_COEFF * location.getLongitude());
-        this.readAt    = location.getTime();
-        this.accuracy  = location.getAccuracy();
-        this.newRecord = true;
-        this.saved     = false;
+        mType      = type;
+        mLatitude  = Math.round(COORDINATE_COEFF * location.getLatitude());
+        mLongitude = Math.round(COORDINATE_COEFF * location.getLongitude());
+        mReadAt    = location.getTime();
+        mAccuracy  = location.getAccuracy();
+        mNewRecord = true;
+        mSaved     = false;
         if (options != null) {
-            this.procedureNature = options.getString("procedureNature");
-            // this.name      = name;
-            // this.code      = code;
-            // this.quantity  = quantity;
-            // this.unit      = unit;
+            mProcedureNature = options.getString("procedureNature");
+            // mScannedCode     = options.getString("scannedCode");
+            // mQuantity        = options.getString("quantity");
+            // mUnit            = options.getString("unit");
         }
     }
 

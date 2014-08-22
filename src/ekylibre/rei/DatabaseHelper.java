@@ -17,18 +17,18 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		}
 
 		@Override
-		public void onCreate(SQLiteDatabase db) {
-        onUpgrade(db, 0, DATABASE_VERSION);
+		public void onCreate(SQLiteDatabase database) {
+        onUpgrade(database, 0, DATABASE_VERSION);
 		}
 		
 		// newVersion is ignored because always the same
 		@Override
-		public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+		public void onUpgrade(SQLiteDatabase database, int oldVersion, int newVersion) {
 				switch(oldVersion) {
 				case 0:
-						db.execSQL("CREATE TABLE IF NOT EXISTS crumbs (" + CrumbColumns._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + CrumbColumns.COLUMN_NAME_TYPE + " VARCHAR(32), " + CrumbColumns.COLUMN_NAME_LATITUDE + " BIGINT, " + CrumbColumns.COLUMN_NAME_LONGITUDE + " BIGINT, " + CrumbColumns.COLUMN_NAME_READ_AT + " DATE, " + CrumbColumns.COLUMN_NAME_ACCURACY + " FLOAT, " + CrumbColumns.COLUMN_NAME_PROCEDURE_NATURE + " VARCHAR(64))"); //, code TEXT, quantity NUMERIC, unit TEXT
+						database.execSQL("CREATE TABLE IF NOT EXISTS crumbs (" + CrumbColumns._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + CrumbColumns.COLUMN_NAME_TYPE + " VARCHAR(32), " + CrumbColumns.COLUMN_NAME_LATITUDE + " BIGINT, " + CrumbColumns.COLUMN_NAME_LONGITUDE + " BIGINT, " + CrumbColumns.COLUMN_NAME_READ_AT + " DATE, " + CrumbColumns.COLUMN_NAME_ACCURACY + " FLOAT, " + CrumbColumns.COLUMN_NAME_PROCEDURE_NATURE + " VARCHAR(64))"); //, code TEXT, quantity NUMERIC, unit TEXT
         // case 1:
-				//  		db.execSQL("ALTER TABLE crumbs SET"); 
+				//  		database.execSQL("ALTER TABLE crumbs SET"); 
 				}
 		}
 
