@@ -98,11 +98,11 @@
      pagecolor="#ffffff"
      bordercolor="#666666"
      borderopacity="1.0"
-     inkscape:pageopacity="1"
+     inkscape:pageopacity="0"
      inkscape:pageshadow="2"
      inkscape:zoom="2.8284271"
-     inkscape:cx="48.259349"
-     inkscape:cy="76.530667"
+     inkscape:cx="69.0157"
+     inkscape:cy="130.47722"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -206,11 +206,21 @@
        id="path2544-4"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="ccccccccccccccscccscssccszscc" />
-    <path
-       style="fill:#3f9a4c;fill-opacity:1;fill-rule:nonzero;stroke:none"
-       d="m 0,892.36218 0,160.00002 160,0 0,-160.00002 z m 10,10 140,0 0,140.00002 -140,0 z m 20.000027,20 L 30,1022.3622 l 20,0 0,-40.00002 50,0 c 6.0595,0 10.12345,4.42281 9.99956,10 l 4.4e-4,30.00002 20,0 0,-30.00002 c 0,-9.39627 -2.81249,-13.84714 -7.75293,-20.11281 3.66277,-4.75501 7.75383,-10.23173 7.75293,-19.88719 -0.002,-17.47957 -15.21514,-30 -30,-30 z m 19.999973,20 50,4.6e-4 c 3.6862,3e-5 9.77659,2.91197 10,9.99954 0.22341,7.08754 -5.84496,9.99969 -10,10 l -50,0 z"
-       id="path2544-4-6"
-       inkscape:connector-curvature="0"
-       sodipodi:nodetypes="ccccccccccccccscccscssccszscc" />
+    <g
+       id="g3047">
+      <rect
+         y="906.9826"
+         x="15.504311"
+         height="130.53033"
+         width="129.45258"
+         id="rect3013"
+         style="color:#000000;fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:20;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate" />
+      <path
+         sodipodi:nodetypes="ccccccccccccccscccscssccszscc"
+         inkscape:connector-curvature="0"
+         id="path2544-4-6"
+         d="m 10,902.3622 0,140 140,0 0,-139.99999 z m 8.75,8.75 122.5,0 0,122.5 -122.5,0 z m 17.500023,17.49999 -2.3e-5,87.50001 17.5,0 0,-35.00002 43.75,0 c 5.30206,0 8.85802,3.86996 8.74961,8.75001 l 3.9e-4,26.25001 17.5,0 0,-26.25001 c 0,-8.22173 -2.46093,-12.11626 -6.78382,-17.59872 3.20493,-4.16063 6.78461,-8.95276 6.78382,-17.40128 C 123.749,939.56757 110.43676,928.6122 97.5,928.6122 z M 53.75,946.11218 l 43.75,4.1e-4 c 3.22543,2e-5 8.55451,2.54798 8.75,8.74959 0.19549,6.2016 -5.11434,8.74973 -8.75,8.74999 l -43.75,0 z"
+         style="fill:#3f9a4c;fill-opacity:1;fill-rule:nonzero;stroke:none" />
+    </g>
   </g>
 </svg>

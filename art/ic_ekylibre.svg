@@ -139,16 +139,16 @@
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
      inkscape:zoom="1"
-     inkscape:cx="-167.81383"
+     inkscape:cx="-165.81383"
      inkscape:cy="39.04292"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
-     inkscape:window-width="1432"
-     inkscape:window-height="795"
+     inkscape:window-width="1680"
+     inkscape:window-height="952"
      inkscape:window-x="0"
-     inkscape:window-y="178"
-     inkscape:window-maximized="0"
+     inkscape:window-y="25"
+     inkscape:window-maximized="1"
      fit-margin-top="0"
      fit-margin-left="0"
      fit-margin-right="0"
@@ -185,18 +185,22 @@
        id="path2544-3"
        sodipodi:nodetypes="cccccccccccccccccccccccccccc"
        inkscape:connector-curvature="0" />
-    <rect
-       style="fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:none"
-       id="rect2547-0-8"
-       width="152"
-       height="152"
-       x="1117.9287"
-       y="328.29074" />
-    <path
-       style="fill:#496daa;fill-opacity:1;fill-rule:nonzero;stroke:none"
-       d="m 1113.9285,324.29067 0,160.00012 160.0001,0 0,-160.00012 -160.0001,0 z m 10,10.00001 140.0001,0 0,140.00011 -140.0001,0 0,-140.00011 z m 20,20.00002 0,20.00001 0,20.00002 0,20.00001 0,20.00002 0,20.00001 100,0 0,-20.00001 -80,0 0,-20.00002 80,0 0,-20.00001 -80,0 0,-20.00002 80,0 0,-20.00001 -80,0 -20,0 z"
-       id="path2544-3-9"
-       sodipodi:nodetypes="cccccccccccccccccccccccccccc"
-       inkscape:connector-curvature="0" />
+    <g
+       id="g3006"
+       transform="matrix(0.87499945,0,0,0.87499934,149.24168,50.53667)">
+      <rect
+         y="328.29074"
+         x="1117.9287"
+         height="152"
+         width="152"
+         id="rect2547-0-8"
+         style="fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:none" />
+      <path
+         inkscape:connector-curvature="0"
+         sodipodi:nodetypes="cccccccccccccccccccccccccccc"
+         id="path2544-3-9"
+         d="m 1113.9285,324.29067 0,160.00012 160.0001,0 0,-160.00012 -160.0001,0 z m 10,10.00001 140.0001,0 0,140.00011 -140.0001,0 0,-140.00011 z m 20,20.00002 0,20.00001 0,20.00002 0,20.00001 0,20.00002 0,20.00001 100,0 0,-20.00001 -80,0 0,-20.00002 80,0 0,-20.00001 -80,0 0,-20.00002 80,0 0,-20.00001 -80,0 -20,0 z"
+         style="fill:#496daa;fill-opacity:1;fill-rule:nonzero;stroke:none" />
+    </g>
   </g>
 </svg>
