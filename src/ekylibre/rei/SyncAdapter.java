@@ -1,22 +1,29 @@
 package ekylibre.rei;
 
 import android.accounts.Account;
+import android.accounts.AccountManager;
+import android.accounts.AccountsException;
+import android.database.Cursor;
 import android.content.AbstractThreadedSyncAdapter;
 import android.content.ContentProviderClient;
 import android.content.ContentResolver;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.SyncResult;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 
-import org.apache.http.HttpResponse;
-import org.apache.http.NameValuePair;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.message.BasicNameValuePair;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
+import ekylibre.api.Crumb;
+import ekylibre.api.Instance;
+import ekylibre.rei.provider.TrackingContract;
+import ekylibre.rei.provider.TrackingProvider;
+
+import java.io.IOException;
+import java.util.Set;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 /**
  * Handle the transfer of data between a server and an
@@ -29,12 +36,15 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
     // Global variables
     // Define a variable to contain a content resolver instance
     ContentResolver mContentResolver;
+    AccountManager mAccountManager;
+
     /**
      * Set up the sync adapter
      */
     public SyncAdapter(Context context, boolean autoInitialize) {
         super(context, autoInitialize);
         mContentResolver = context.getContentResolver();
+        mAccountManager = AccountManager.get(context);
     }
 
     /**
@@ -45,6 +55,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
     public SyncAdapter(Context context, boolean autoInitialize, boolean allowParallelSyncs) {
         super(context, autoInitialize, allowParallelSyncs);
         mContentResolver = context.getContentResolver();
+        mAccountManager = AccountManager.get(context);
     }
 
     // Push data between rei and ekylibre
@@ -52,36 +63,64 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
     public void onPerformSync(Account account, Bundle extras, String authority, ContentProviderClient provider, SyncResult syncResult) {
         Log.i(TAG, "Beginning network synchronization");
         
-        // Get crumbs from provider
+        // Get crumbs from tracking (content) provider
+        Cursor cursor = mContentResolver.query(TrackingContract.Crumbs.CONTENT_URI, TrackingContract.Crumbs.PROJECTION_ALL, TrackingContract.CrumbsColumns.SYNCED + " IS NULL OR " + TrackingContract.CrumbsColumns.SYNCED + " <= 0", null, TrackingContract.Crumbs.SORT_ORDER_DEFAULT);
+        
 
-        // Post it to ekylibre
+        if (cursor.getCount() > 0) {
+            Instance instance = null;
+            try {
+                instance = new Instance(account, mAccountManager);
+            } catch(AccountsException e) {
+                Log.e(TAG, "Account manager or user cannot help. Cannot get token.");
+                return;
+            } catch(IOException e) {
+                Log.w(TAG, "IO problem. Cannot get token.");
+                return;
+            }
 
-        // Marks them as treated
+            try {
+                cursor.moveToFirst();
+                while (!cursor.isAfterLast()) {
+                    Log.i(TAG, "New crumb");
+                    
+                    // Post it to ekylibre
+                    JSONObject attributes = new JSONObject();
+                    attributes.put("nature", cursor.getString(1));
+                    attributes.put("latitude", cursor.getString(2));
+                    attributes.put("longitude", cursor.getString(3));
+                    attributes.put("read_at", cursor.getString(4));
+                    attributes.put("accuracy", cursor.getString(5));
+                    JSONObject hash = new JSONObject();
+                    Uri metadata = Uri.parse("http://domain.tld?" + cursor.getString(6));
+                    Set<String> keys = metadata.getQueryParameterNames();
+                    if (keys.size() > 0) {
+                        for (String key : keys) {
+                            if (!key.equals("null")) {
+                                hash.put(key, metadata.getQueryParameter(key));
+                            }
+                        }
+                        if (hash.length() > 0) {
+                            attributes.put("metadata", hash);
+                        }
+                    }
+
+                    long id = Crumb.create(instance, attributes);
+                    // Marks them as synced
+                    ContentValues values = new ContentValues();
+                    values.put(TrackingContract.CrumbsColumns.SYNCED, id);
+                    mContentResolver.update(Uri.withAppendedPath(TrackingContract.Crumbs.CONTENT_URI, Long.toString(cursor.getLong(0))), values, null, null);
+                    cursor.moveToNext();
+                }
+            } catch(Exception e) {
+                e.printStackTrace();
+            }
+        } else {
+            Log.i(TAG, "Nothing to sync");
+        }
+
         
         Log.i(TAG, "Finish network synchronization");
     }
-
-
-      
-        // // Create a new HttpClient and Post Header
-        // HttpClient httpClient = new DefaultHttpClient();
-        // HttpPost httpPost = new HttpPost("https://demo.ergolis.com/api/v1/crumbs");
-        
-        // try {
-        //     // Add your data
-        //     List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(2);
-        //     nameValuePairs.add(new BasicNameValuePair("id", "12345"));
-        //     nameValuePairs.add(new BasicNameValuePair("stringdata", "Hi"));
-        //     httpPost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
-            
-        //     // Execute HTTP Post Request
-        //     HttpResponse response = httpClient.execute(httpPost);
-            
-        // } catch (ClientProtocolException e) {
-        //     // TODO Auto-generated catch block
-        // } catch (IOException e) {
-        //     // TODO Auto-generated catch block
-        // }
-
 
 }

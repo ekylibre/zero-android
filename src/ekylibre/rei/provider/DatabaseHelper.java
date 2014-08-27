@@ -24,9 +24,18 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		public void onUpgrade(SQLiteDatabase database, int oldVersion, int newVersion) {
 				switch(oldVersion) {
 				case 0:
-						database.execSQL("CREATE TABLE IF NOT EXISTS crumbs (" + TrackingContract.CrumbsColumns._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + TrackingContract.CrumbsColumns.TYPE + " VARCHAR(32), " + TrackingContract.CrumbsColumns.LATITUDE + " BIGINT, " + TrackingContract.CrumbsColumns.LONGITUDE + " BIGINT, " + TrackingContract.CrumbsColumns.READ_AT + " DATE, " + TrackingContract.CrumbsColumns.ACCURACY + " FLOAT, " + TrackingContract.CrumbsColumns.PROCEDURE_NATURE + " VARCHAR(64))"); //, code TEXT, quantity NUMERIC, unit TEXT
-        // case 1:
-				//  		database.execSQL("ALTER TABLE crumbs SET"); 
+						database.execSQL("CREATE TABLE IF NOT EXISTS crumbs (" 
+                             + TrackingContract.CrumbsColumns._ID + " INTEGER PRIMARY KEY AUTOINCREMENT" 
+                             + ", " + TrackingContract.CrumbsColumns.TYPE + " VARCHAR(32) NOT NULL"
+                             + ", " + TrackingContract.CrumbsColumns.LATITUDE  + " BIGINT NOT NULL" 
+                             + ", " + TrackingContract.CrumbsColumns.LONGITUDE + " BIGINT NOT NULL" 
+                             + ", " + TrackingContract.CrumbsColumns.READ_AT + " DATETIME NOT NULL"
+                             + ", " + TrackingContract.CrumbsColumns.ACCURACY + " FLOAT"
+                             + ", " + TrackingContract.CrumbsColumns.SYNCED + " INTEGER NOT NULL DEFAULT 0"
+                             + ", " + TrackingContract.CrumbsColumns.METADATA + " TEXT"
+                             + ")");
+            // case 1:
+            //  		database.execSQL("ALTER TABLE crumbs SET ..."); 
 				}
 		}
 

@@ -5,6 +5,8 @@
     <string name="email_address">Email address</string>
     <string name="global_auth_token">Global Authentication Token</string>
     <string name="instance">Instance</string>
+    <string name="notif_invalidPasswordOrEmail">Invalid password or e-mail</string>
+    <string name="notif_loginSucceeded">Login succeeded</string>
     <string name="password">Password</string>
     <string name="pause">Pause</string>
     <string name="pref_interventionNameInput">Intervention name input</string>
@@ -20,8 +22,4 @@
     <string name="sign_in">Sign in</string>
     <string name="start">Start</string>
     <string name="stop">Stop</string>
-<!--
-    <string name="edit_message">Edit message!</string>
-    <string name="hello_world">Hello World!</string>
--->
 </resources>

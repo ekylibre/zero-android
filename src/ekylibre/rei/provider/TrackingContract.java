@@ -22,7 +22,7 @@ public final class TrackingContract {
         // MIME type for individual record.
         public static final String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/vnd.ekylibre.rei.crumb";
 
-        public static final String[] PROJECTION_ALL = {_ID, TYPE, LATITUDE, LONGITUDE, READ_AT, ACCURACY, PROCEDURE_NATURE};
+        public static final String[] PROJECTION_ALL = {_ID, TYPE, LATITUDE, LONGITUDE, READ_AT, ACCURACY, METADATA, SYNCED};
         public static final String[] PROJECTION_NONE = {_ID};
 
         public static final String SORT_ORDER_DEFAULT = _ID + " ASC";
@@ -37,7 +37,8 @@ public final class TrackingContract {
         public static final String LONGITUDE = "longitude";
         public static final String READ_AT   = "read_at";
         public static final String ACCURACY  = "accuracy";
-        public static final String PROCEDURE_NATURE = "procedure_nature";
+        public static final String METADATA  = "metadata";
+        public static final String SYNCED    = "synced";
     }
 
 }

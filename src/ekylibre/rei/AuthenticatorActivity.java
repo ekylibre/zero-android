@@ -12,7 +12,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import ekylibre.Token;
+import ekylibre.api.Token;
+import ekylibre.exceptions.UnauthorizedException;
 
 /**
  * The Authenticator activity.
@@ -69,16 +70,6 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity {
     }
 
 
-    // @Override
-    // protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-    //     // The sign up activity returned that the user has successfully created an account
-    //     if (requestCode == REQ_SIGNUP && resultCode == RESULT_OK) {
-    //         finishLogin(data);
-    //     } else
-    //         super.onActivityResult(requestCode, resultCode, data);
-    // }
-
-
     public void signIn(View view) {
         mAccountName     = mAccountNameEdit.getText().toString();
         mAccountPassword = mAccountPasswordEdit.getText().toString();
@@ -97,6 +88,8 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity {
                     extras.putString(AccountManager.KEY_AUTHTOKEN, authToken);
                     extras.putString(KEY_ACCOUNT_PASSWORD, mAccountPassword);
                     extras.putString(KEY_INSTANCE_URL, mAccountInstance);
+                } catch (UnauthorizedException e) {
+                    extras.putString(AccountManager.KEY_ERROR_MESSAGE, getString(R.string.notif_invalidPasswordOrEmail));
                 } catch (Exception e) {
                     extras.putString(AccountManager.KEY_ERROR_MESSAGE, e.getMessage());
                 }
@@ -109,7 +102,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity {
                 if (intent.hasExtra(AccountManager.KEY_ERROR_MESSAGE)) {
                     Toast.makeText(getBaseContext(), intent.getStringExtra(AccountManager.KEY_ERROR_MESSAGE), Toast.LENGTH_SHORT).show();
                 } else {
-                    Toast.makeText(getBaseContext(), "Pas trop mal", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getBaseContext(), getString(R.string.notif_loginSucceeded), Toast.LENGTH_SHORT).show();
                     finishLogin(intent);
                 }
             }

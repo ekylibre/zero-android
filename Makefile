@@ -2,6 +2,7 @@
 all: debug install
 
 clean:
+	ant clean
 	find ./ -name '*~' | xargs rm
 
 debug:

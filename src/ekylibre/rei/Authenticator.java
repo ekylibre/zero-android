@@ -7,8 +7,8 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 
-import ekylibre.Token;
-import ekylibre.User;
+import ekylibre.api.Token;
+import ekylibre.api.User;
 
 
 public class Authenticator extends AbstractAccountAuthenticator {

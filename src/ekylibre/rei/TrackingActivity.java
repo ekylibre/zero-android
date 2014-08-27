@@ -24,17 +24,24 @@ import android.widget.Chronometer;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import org.apache.http.NameValuePair;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.message.BasicNameValuePair;
+
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
 import ekylibre.rei.provider.TrackingContract;
 import ekylibre.rei.provider.TrackingProvider;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
 
 public class TrackingActivity extends Activity implements TrackingListenerWriter {
     
@@ -131,9 +138,9 @@ public class TrackingActivity extends Activity implements TrackingListenerWriter
         mScanButton.setVisibility(View.VISIBLE);
         this.startTracking();
 
-        final Bundle options = new Bundle();
-        options.putString("procedureNature", "maintenance_task");
-        this.addCrumb("start", options);
+        final Bundle metadata = new Bundle();
+        metadata.putString("procedureNature", "maintenance_task");
+        this.addCrumb("start", metadata);
     }
 
 
@@ -189,9 +196,9 @@ public class TrackingActivity extends Activity implements TrackingListenerWriter
                 mBarcode.setText("CODE: " + contents);
                 
                 // handle scan result
-                final Bundle options = new Bundle();
-                options.putString("scannedCode", contents);
-                this.addCrumb("scan", options);
+                final Bundle metadata = new Bundle();
+                metadata.putString("scannedCode", contents);
+                this.addCrumb("scan", metadata);
             }
         }
         // else continue with any other code you need in the method
@@ -210,13 +217,13 @@ public class TrackingActivity extends Activity implements TrackingListenerWriter
         this.addCrumb(type, null);
     }
 
-    private void addCrumb(String type, Bundle options) {
+    private void addCrumb(String type, Bundle metadata) {
         Location location = mLocationManager.getLastKnownLocation(mLocationProvider);
         if (location == null) {
-            TrackingListener listener = new TrackingListener(this, type, options);
+            TrackingListener listener = new TrackingListener(this, type, metadata);
             mLocationManager.requestSingleUpdate(mLocationProvider, listener, null);
         } else {
-            writeCrumb(location, type, options);
+            writeCrumb(location, type, metadata);
         }
     }    
 
@@ -228,7 +235,7 @@ public class TrackingActivity extends Activity implements TrackingListenerWriter
     //     writeCrumb(location, type, null);
     // }
 
-    public void writeCrumb(Location location, String type, Bundle options) {
+    public void writeCrumb(Location location, String type, Bundle metadata) {
         this.displayInfos(location);
         
         ContentValues values = new ContentValues();
@@ -239,9 +246,27 @@ public class TrackingActivity extends Activity implements TrackingListenerWriter
         values.put(TrackingContract.CrumbsColumns.LONGITUDE, location.getLongitude());
         values.put(TrackingContract.CrumbsColumns.READ_AT, parser.format(new Date(location.getTime())));
         values.put(TrackingContract.CrumbsColumns.ACCURACY, location.getAccuracy());
-
-        if (options != null) {
-            values.put(TrackingContract.CrumbsColumns.PROCEDURE_NATURE, options.getString("procedureNature"));
+        values.put(TrackingContract.CrumbsColumns.SYNCED, 0);
+        if (metadata != null) {
+            try {
+                List<NameValuePair> pairs = new ArrayList<NameValuePair>();
+                Object[] keys = metadata.keySet().toArray();
+                String key;
+                for(int i = 0; i < keys.length; i++) {
+                    key = (String) keys[i];
+                    metadata.getString(key);
+                    pairs.add(new BasicNameValuePair(key, metadata.getString(key)));
+                }
+                UrlEncodedFormEntity params  = new UrlEncodedFormEntity(pairs);
+                ByteArrayOutputStream stream = new ByteArrayOutputStream(4096);
+                params.writeTo(stream);
+                values.put(TrackingContract.CrumbsColumns.METADATA, stream.toString());
+            } catch(UnsupportedEncodingException e) {
+                e.printStackTrace();
+            } catch(IOException e) {
+                e.printStackTrace();
+            }
+            // values.put(TrackingContract.CrumbsColumns.METADATA, metadata.getString("procedureNature"));
         }
 
         getContentResolver().insert(TrackingContract.Crumbs.CONTENT_URI, values);
