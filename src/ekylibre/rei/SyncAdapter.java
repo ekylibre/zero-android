@@ -12,6 +12,7 @@ import android.content.Context;
 import android.content.SyncResult;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.Settings.Secure;
 import android.util.Log;
 
 import ekylibre.api.Crumb;
@@ -93,13 +94,9 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                     // attributes.put("longitude", cursor.getString(3));
                     attributes.put("geolocation", "SRID=4326; POINT(" + Double.toString(cursor.getDouble(3)) + " " + Double.toString(cursor.getDouble(2)) + ")");
                     SimpleDateFormat parser = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
-                    // SimpleDateFormat parser = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                    Log.d("read_at", String.valueOf(cursor.getLong(4)));
-                    Log.d("read_at", String.valueOf(new Date(cursor.getLong(4))));
-                    Log.d("read_at", parser.format(new Date(cursor.getLong(4))));
-                    Log.d("read_at", parser.format(new Date()));
                     attributes.put("read_at", parser.format(new Date(cursor.getLong(4))));
                     attributes.put("accuracy", cursor.getString(5));
+                    attributes.put("device_uid", "android:" + Secure.getString(mContentResolver, Secure.ANDROID_ID));
                     JSONObject hash = new JSONObject();
                     Uri metadata = Uri.parse("http://domain.tld?" + cursor.getString(6));
                     Set<String> keys = metadata.getQueryParameterNames();
