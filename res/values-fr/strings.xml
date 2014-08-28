@@ -22,4 +22,5 @@
     <string name="sign_in">Se connecter</string>
     <string name="start">Commencer</string>
     <string name="stop">Arrêter</string>
+    <string name="test_demo">Tester la démonstration</string>
 </resources>

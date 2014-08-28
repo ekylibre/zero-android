@@ -91,25 +91,27 @@ import org.json.JSONObject;
 public class Instance {
 
     private String mUrl;
+    private String mEmail;
     private String mToken;
 
-    public Instance(String url, String token) {
+    public Instance(String url, String email, String token) {
         mUrl   = url;
+        mEmail = email;
         mToken = token;
     }
 
     public Instance(Account account, AccountManager manager) throws AccountsException, IOException {
         mUrl   = manager.getUserData(account, Authenticator.KEY_INSTANCE_URL);
+        mEmail = account.name;
         mToken = manager.blockingGetAuthToken(account, Authenticator.AUTH_TOKEN_TYPE_GLOBAL, true);
         Log.d("Instance URL", mUrl);
         Log.d("Instance Token", mToken);
     }
 
-
     // Send POST call to given instance
     public JSONObject post(String path, JSONObject params) throws JSONException, ClientProtocolException, IOException, HTTPException {
         List<Header> headersList = new ArrayList<Header>();
-        headersList.add(new BasicHeader("X-Access-Token", mToken));
+        headersList.add(new BasicHeader("Authorization", "simple-token " + mEmail + " " + mToken));
         Header[] headers = new Header[headersList.size()];
         headersList.toArray(headers);
 

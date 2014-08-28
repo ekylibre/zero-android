@@ -37,7 +37,6 @@ import ekylibre.rei.provider.TrackingProvider;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -151,7 +150,6 @@ public class TrackingActivity extends Activity implements TrackingListenerWriter
         mScanButton.setVisibility(View.GONE);
         this.stopTracking();
         this.addCrumb("stop");
-        this.syncData();
     }
 
 
@@ -165,7 +163,6 @@ public class TrackingActivity extends Activity implements TrackingListenerWriter
         mResumeButton.setVisibility(View.VISIBLE);
         this.stopTracking();
         this.addCrumb("pause");
-        this.syncData();
     }
 
     public void resumeIntervention(View view) {
@@ -227,24 +224,17 @@ public class TrackingActivity extends Activity implements TrackingListenerWriter
         }
     }    
 
-    // public void writeCrumb(Location location) {
-    //     writeCrumb(location, "point", null);
-    // }
-
-    // public void writeCrumb(Location location, String type) {
-    //     writeCrumb(location, type, null);
-    // }
-
     public void writeCrumb(Location location, String type, Bundle metadata) {
         this.displayInfos(location);
         
         ContentValues values = new ContentValues();
-        SimpleDateFormat parser = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.sss");
 
         values.put(TrackingContract.CrumbsColumns.TYPE, type);
         values.put(TrackingContract.CrumbsColumns.LATITUDE, location.getLatitude());
         values.put(TrackingContract.CrumbsColumns.LONGITUDE, location.getLongitude());
-        values.put(TrackingContract.CrumbsColumns.READ_AT, parser.format(new Date(location.getTime())));
+        // values.put(TrackingContract.CrumbsColumns.READ_AT, location.getTime());
+        long readAt = (new Date()).getTime();
+        values.put(TrackingContract.CrumbsColumns.READ_AT, readAt);
         values.put(TrackingContract.CrumbsColumns.ACCURACY, location.getAccuracy());
         values.put(TrackingContract.CrumbsColumns.SYNCED, 0);
         if (metadata != null) {
@@ -270,6 +260,12 @@ public class TrackingActivity extends Activity implements TrackingListenerWriter
         }
 
         getContentResolver().insert(TrackingContract.Crumbs.CONTENT_URI, values);
+
+        // Sync data is interesting moment
+        if (type.equals("stop")) { //  || type.equals("pause")
+            this.syncData();
+        }
+
     }
 
     private void displayInfos(Location location) {
