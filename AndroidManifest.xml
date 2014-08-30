@@ -93,7 +93,7 @@
               android:parentActivityName="TrackingActivity">
       <intent-filter>
         <action android:name="android.intent.action.VIEW" />
-        <category android:name="android.intent.category.DEFAULT" />
+        <category android:name="android.intent.category.PREFERENCE" />
       </intent-filter>
       <meta-data android:name="android.support.PARENT_ACTIVITY" android:value="TrackingActivity" />
     </activity>

@@ -1,28 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-  <ListPreference
-      android:key="pref_interventionNameInput"
-      android:title="@string/pref_interventionNameInput"
-      android:summary="@string/pref_interventionNameInput_summary"
-      android:dialogTitle="@string/pref_interventionNameInput"
-      android:entries="@array/pref_interventionNameInput_entries"
-      android:entryValues="@array/pref_interventionNameInput_values"
+  <CheckBoxPreference
+      android:key="pref_showDetails"
+      android:title="@string/pref_showDetails"
+      android:dialogTitle="@string/pref_showDetails"
+      android:summary="@string/pref_showDetails_summary"
       android:persistent="true"
-      android:defaultValue="automatic" />
-  <PreferenceCategory 
-      android:title="@string/pref_sync"
-      android:key="pref_sync">
-    <CheckBoxPreference
-        android:key="pref_syncCrumbs"
-        android:title="@string/pref_syncCrumbs"
-        android:dialogTitle="@string/pref_syncCrumbs"
-        android:persistent="true"
-        android:defaultValue="true" />
-    <EditTextPreference
-        android:key="pref_syncServer"
-        android:title="@string/pref_syncServer"
-        android:summary="@string/pref_syncServer_summary"
-        android:persistent="true"
-        android:defaultValue="https://demo.ekylibre.org" />
-  </PreferenceCategory>
+      android:defaultValue="false"/>
 </PreferenceScreen>

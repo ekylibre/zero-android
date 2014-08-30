@@ -3,8 +3,15 @@
 							android:orientation="vertical"
 							android:layout_width="fill_parent"
 							android:layout_height="fill_parent">
+	<TextView
+			android:id="@+id/procedure_nature"
+			android:visibility="invisible"
+			android:layout_width="fill_parent"
+			android:layout_height="wrap_content"
+      android:gravity="center"/>
 	<Chronometer
 			android:id="@+id/master_chrono"
+			android:visibility="invisible"
 			android:layout_width="fill_parent"
 			android:layout_height="wrap_content"
 			android:textSize="@dimen/chrono_font_size"
@@ -16,14 +23,72 @@
 			android:layout_height="wrap_content"
 			android:textSize="@dimen/small_chrono_font_size"
 			android:gravity="center"/>
-	<TextView
+	<HorizontalScrollView
+			android:id="@+id/details"
+			android:visibility="gone"
+			android:layout_width="fill_parent"
+			android:layout_height="wrap_content">
+	  <LinearLayout
+			  android:orientation="horizontal"
+			  android:layout_width="fill_parent"
+			  android:layout_height="wrap_content">
+	    <LinearLayout
+			    android:orientation="vertical"
+          android:paddingLeft="16dp"
+          android:paddingRight="16dp"
+			    android:layout_width="fill_parent"
+			    android:layout_height="wrap_content">
+	      <TextView
+			      android:layout_width="fill_parent"
+			      android:layout_height="wrap_content"
+            android:text="@string/latitude"/>
+	      <TextView
+			      android:id="@+id/latitude"
+			      android:layout_width="fill_parent"
+			      android:layout_height="wrap_content"/>
+      </LinearLayout>
+	    <LinearLayout
+			    android:orientation="vertical"
+          android:paddingLeft="16dp"
+          android:paddingRight="16dp"
+			    android:layout_width="fill_parent"
+			    android:layout_height="wrap_content">
+	      <TextView
+			      android:layout_width="fill_parent"
+			      android:layout_height="wrap_content"
+            android:text="@string/longitude"/>
+	      <TextView
+			      android:id="@+id/longitude"
+			      android:layout_width="fill_parent"
+			      android:layout_height="wrap_content"/>
+      </LinearLayout>
+	    <LinearLayout
+			    android:orientation="vertical"
+          android:paddingLeft="16dp"
+          android:paddingRight="16dp"
+			    android:layout_width="fill_parent"
+			    android:layout_height="wrap_content">
+	      <TextView
+			      android:layout_width="fill_parent"
+			      android:layout_height="wrap_content"
+            android:text="@string/count"/>
+	      <TextView
+			      android:id="@+id/crumbs_count"
+			      android:layout_width="fill_parent"
+			      android:layout_height="wrap_content"/>
+      </LinearLayout>
+    </LinearLayout>
+  </HorizontalScrollView>
+  <!--
+	    <TextView
 			android:id="@+id/coordinates"
 			android:layout_width="fill_parent"
 			android:layout_height="wrap_content"/>
-	<TextView
+	    <TextView
 			android:id="@+id/barcode"
 			android:layout_width="fill_parent"
 			android:layout_height="wrap_content"/>
+  -->
 	<LinearLayout
 			android:orientation="vertical"
 			android:layout_width="fill_parent"

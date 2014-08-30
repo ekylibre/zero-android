@@ -11,12 +11,14 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.location.Location;
 import android.location.LocationManager;
 import android.location.LocationListener;
 import android.os.Bundle;
 import android.os.SystemClock;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
 import android.view.Menu;
@@ -24,6 +26,7 @@ import android.view.MenuItem;
 import android.view.MenuInflater;
 import android.widget.Button;
 import android.widget.Chronometer;
+import android.widget.HorizontalScrollView;
 import android.widget.TextView;
 
 import org.apache.http.NameValuePair;
@@ -50,14 +53,19 @@ public class TrackingActivity extends Activity implements TrackingListenerWriter
 
     private long mMasterDuration;
     private long mMasterStart;
+    private boolean mRunning;
+    private String mLastProcedureNature;
     private Chronometer mMasterChrono;
     private Button mScanButton, mStartButton, mStopButton, mPauseButton, mResumeButton;
-    private TextView mCoordinates, mBarcode;
+    private HorizontalScrollView mDetails;
+    private TextView mProcedureNature, mLatitude, mLongitude, mCrumbsCount, mCoordinates, mBarcode;
     private LocationManager mLocationManager;
     private String mLocationProvider;
     private TrackingListener mTrackingListener;
     private Account mAccount;
     private AlertDialog.Builder mProcedureChooser;
+    private SharedPreferences mPreferences;
+    private IntentIntegrator mScanIntegrator;
 
     /** Called when the activity is first created. */
     @Override
@@ -85,9 +93,14 @@ public class TrackingActivity extends Activity implements TrackingListenerWriter
         setContentView(R.layout.tracking);
         
         // Find view elements
+        mProcedureNature = (TextView) findViewById(R.id.procedure_nature);
         mMasterChrono = (Chronometer) findViewById(R.id.master_chrono);
-        mCoordinates  = (TextView)    findViewById(R.id.coordinates);
-        mBarcode      = (TextView)    findViewById(R.id.barcode);
+        mDetails      = (HorizontalScrollView) findViewById(R.id.details);
+        mLatitude     = (TextView)    findViewById(R.id.latitude);
+        mLongitude    = (TextView)    findViewById(R.id.longitude);
+        mCrumbsCount  = (TextView)    findViewById(R.id.crumbs_count);
+        // mCoordinates  = (TextView)    findViewById(R.id.coordinates);
+        // mBarcode      = (TextView)    findViewById(R.id.barcode);
         mStartButton  = (Button)      findViewById(R.id.start_intervention_button);
         mStopButton   = (Button)      findViewById(R.id.stop_intervention_button);
         mPauseButton  = (Button)      findViewById(R.id.pause_intervention_button);
@@ -102,28 +115,39 @@ public class TrackingActivity extends Activity implements TrackingListenerWriter
         mLocationManager  = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
         mLocationProvider = LocationManager.GPS_PROVIDER;
 
-        // 
+        // Reference preferences
+        mPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+
+        // Reference scan integrator
+        mScanIntegrator = new IntentIntegrator(this);
+
+        // Procedure nature chooser for starting intervention
         mProcedureChooser = new AlertDialog.Builder(this)
             .setTitle(R.string.procedure_nature)
             .setNegativeButton(android.R.string.cancel, null)
             .setItems(R.array.procedureNatures_entries, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
+                    mLastProcedureNature = getResources().getStringArray(R.array.procedureNatures_values)[which];
+                    Log.d("rei", "Start a new " + mLastProcedureNature);
+
+                    mStartButton.setVisibility(View.GONE);
+                    mMasterChrono.setVisibility(View.VISIBLE);
+                    mStopButton.setVisibility(View.VISIBLE);
+                    mPauseButton.setVisibility(View.VISIBLE);
+                    mScanButton.setVisibility(View.VISIBLE);
+                    mProcedureNature.setVisibility(View.VISIBLE);
+                    mProcedureNature.setText(getResources().getStringArray(R.array.procedureNatures_entries)[which]);
+
                     mMasterStart = SystemClock.elapsedRealtime();
                     mMasterDuration = 0;
                     mMasterChrono.setBase(mMasterStart);
                     mMasterChrono.start();
-                    mStopButton.setVisibility(View.VISIBLE);
-                    mPauseButton.setVisibility(View.VISIBLE);
-                    mScanButton.setVisibility(View.VISIBLE);
                     
                     startTracking();
 
-                    String value = getResources().getStringArray(R.array.procedureNatures_values)[which];
-                    Log.d("rei", "Add start crumb for " + value);
-
                     final Bundle metadata = new Bundle();
-                    metadata.putString("procedureNature", value);
+                    metadata.putString("procedureNature", mLastProcedureNature);
                     addCrumb("start", metadata);
                 }
             });
@@ -163,9 +187,13 @@ public class TrackingActivity extends Activity implements TrackingListenerWriter
 
     public void stopIntervention(View view) {
         mMasterChrono.stop();
+        mMasterChrono.setVisibility(View.INVISIBLE);
         mStopButton.setVisibility(View.GONE);
         mPauseButton.setVisibility(View.GONE);
         mScanButton.setVisibility(View.GONE);
+        mDetails.setVisibility(View.GONE);
+        mProcedureNature.setVisibility(View.INVISIBLE);
+        mStartButton.setVisibility(View.VISIBLE);
         this.stopTracking();
         this.addCrumb("stop");
     }
@@ -175,7 +203,7 @@ public class TrackingActivity extends Activity implements TrackingListenerWriter
         mMasterDuration += SystemClock.elapsedRealtime() - mMasterStart;
         mMasterChrono.stop();
         mPauseButton.setVisibility(View.GONE);
-        mStartButton.setVisibility(View.GONE);
+        // mStartButton.setVisibility(View.GONE);
         mStopButton.setVisibility(View.GONE);
         mScanButton.setVisibility(View.GONE);
         mResumeButton.setVisibility(View.VISIBLE);
@@ -189,7 +217,7 @@ public class TrackingActivity extends Activity implements TrackingListenerWriter
         mMasterChrono.start();
         mResumeButton.setVisibility(View.GONE);
         mPauseButton.setVisibility(View.VISIBLE);
-        mStartButton.setVisibility(View.VISIBLE);
+        // mStartButton.setVisibility(View.VISIBLE);
         mStopButton.setVisibility(View.VISIBLE);
         mScanButton.setVisibility(View.VISIBLE);
         this.startTracking();
@@ -198,21 +226,20 @@ public class TrackingActivity extends Activity implements TrackingListenerWriter
 
 
     public void scanCode(View view) {
-        IntentIntegrator integrator = new IntentIntegrator(this);
-        integrator.initiateScan();
+        mScanIntegrator.initiateScan();
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent intent) {
-        IntentResult scanResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, intent);
-        if (scanResult != null) {
-            final String contents = scanResult.getContents();
+        IntentResult aScanResult = mScanIntegrator.parseActivityResult(requestCode, resultCode, intent);
+        if (aScanResult != null) {
+            final String contents = aScanResult.getContents();
             if (contents != null) {
                 // TODO: Ask for quantity
-                mBarcode.setText("CODE: " + contents);
+                // mBarcode.setText("CODE: " + contents);
                 
                 // handle scan result
                 final Bundle metadata = new Bundle();
-                metadata.putString("scannedCode", contents);
+                metadata.putString("scannedCode", aScanResult.getFormatName() + ":" + contents);
                 this.addCrumb("scan", metadata);
             }
         }
@@ -221,10 +248,12 @@ public class TrackingActivity extends Activity implements TrackingListenerWriter
 
     private void startTracking() {
         mLocationManager.requestLocationUpdates(mLocationProvider, 1000, 0, mTrackingListener);
+        mRunning = true;
     }
 
     private void stopTracking() {
         mLocationManager.removeUpdates(mTrackingListener);
+        mRunning = false;
     }
 
 
@@ -243,8 +272,6 @@ public class TrackingActivity extends Activity implements TrackingListenerWriter
     }    
 
     public void writeCrumb(Location location, String type, Bundle metadata) {
-        this.displayInfos(location);
-        
         ContentValues values = new ContentValues();
 
         values.put(TrackingContract.CrumbsColumns.TYPE, type);
@@ -284,13 +311,25 @@ public class TrackingActivity extends Activity implements TrackingListenerWriter
             this.syncData();
         }
 
+        this.refreshDetails(location);
     }
 
-    private void displayInfos(Location location) {
-        Cursor cursor = getContentResolver().query(TrackingContract.Crumbs.CONTENT_URI, TrackingContract.Crumbs.PROJECTION_NONE, null, null, null);
-        int count = cursor.getCount();
-        // Called when a new location is found by the network location provider.
-        mCoordinates.setText("LATLNG: " + String.valueOf(location.getLatitude()) + ", " + String.valueOf(location.getLongitude()) + ", CNT: " + String.valueOf(count));
+    private void refreshDetails(Location location) {
+        Boolean aShow = mPreferences.getBoolean(SettingsActivity.PREF_SHOW_DETAILS, false);
+        if (aShow && mRunning) {
+            if (mDetails.getVisibility() != View.VISIBLE) {
+                mDetails.setVisibility(View.VISIBLE);
+            }
+            Cursor cursor = getContentResolver().query(TrackingContract.Crumbs.CONTENT_URI, TrackingContract.Crumbs.PROJECTION_NONE, null, null, null);
+            int count = cursor.getCount();
+            // Called when a new location is found by the network location provider.
+            mLatitude.setText(String.valueOf(location.getLatitude()));
+            mLongitude.setText(String.valueOf(location.getLongitude()));
+            mCrumbsCount.setText(String.valueOf(count));
+
+        } else if (mDetails.getVisibility() == View.VISIBLE) {
+            mDetails.setVisibility(View.GONE);
+        }
     }
 
 

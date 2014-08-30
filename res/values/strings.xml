@@ -2,19 +2,18 @@
 <resources>
   <string name="action_settings">Settings</string>
   <string name="app_name">Rei</string>
+  <string name="count">Count</string>
   <string name="email_address">Email address</string>
   <string name="global_auth_token">Global Authentication Token</string>
   <string name="instance">Instance</string>
+  <string name="latitude">Latitude</string>
+  <string name="longitude">Longitude</string>
   <string name="notif_invalidPasswordOrEmail">Invalid password or e-mail</string>
   <string name="notif_loginSucceeded">Login succeeded</string>
   <string name="password">Password</string>
   <string name="pause">Pause</string>
-  <string name="pref_interventionNameInput">Intervention name input</string>
-  <string name="pref_interventionNameInput_summary">How the name of an intervention is defined at every new start</string>
-  <string name="pref_sync">Synchronization</string>
-  <string name="pref_syncCrumbs">Synchronize data</string>
-  <string name="pref_syncServer">Ekylibre service</string>
-  <string name="pref_syncServer_summary">URL of your own instance</string>
+  <string name="pref_showDetails">Show details</string>
+  <string name="pref_showDetails_summary">Show coordinates and crumbs count during an intervention</string>
   <string name="procedure_nature">Procedure nature</string>
   <string name="resume">Resume</string>
   <string name="scan_code">Scan code</string>
