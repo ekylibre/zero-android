@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources>
+  <string-array name="procedureNatures_entries">
+    <item>Addition</item>
+    <item>Administrative task</item>
+    <item>Animal curative medicine admission</item>
+    <item>Animal fecondation</item>
+    <item>Animal feeding</item>
+    <item>Animal group changing</item>
+    <item>Animal health</item>
+    <item>Animal housing cleaning</item>
+    <item>Animal housing treatment</item>
+    <item>Animal illness treatment</item>
+    <item>Animal moving</item>
+    <item>Animal preventive medicine admission</item>
+    <item>Animal production</item>
+    <item>Blending</item>
+    <item>Bottling</item>
+    <item>Consummables addition</item>
+    <item>Cultipacking</item>
+    <item>Cultivation protection</item>
+    <item>Cutting</item>
+    <item>Fermentation</item>
+    <item>Filtration</item>
+    <item>Food supply</item>
+    <item>Grain transport</item>
+    <item>Grape harvest</item>
+    <item>Grape transport</item>
+    <item>Grinding</item>
+    <item>Growth control</item>
+    <item>Harvest</item>
+    <item>Haymaking</item>
+    <item>Hoeing</item>
+    <item>Implantation</item>
+    <item>Implanting</item>
+    <item>Maintenance task</item>
+    <item>Milk production</item>
+    <item>Mixing</item>
+    <item>Oviparous birth</item>
+    <item>Pasturing</item>
+    <item>Piece replacement</item>
+    <item>Plant chemical weed</item>
+    <item>Plant fertilisation</item>
+    <item>Plant illness treatment</item>
+    <item>Plant irrigation</item>
+    <item>Plant nutrition</item>
+    <item>Plant physical weed</item>
+    <item>Plowing</item>
+    <item>Pressing</item>
+    <item>Pruning</item>
+    <item>Raking</item>
+    <item>Remontage</item>
+    <item>Silage</item>
+    <item>Soil cleaning</item>
+    <item>Soil enrichment</item>
+    <item>Sowing</item>
+    <item>Tillage</item>
+    <item>Transfer</item>
+    <item>Transformation</item>
+    <item>Transport</item>
+    <item>Viviparous birth</item>
+  </string-array>
+  <string-array name="procedureNatures_values">
+    <item>addition</item>
+    <item>administrative_task</item>
+    <item>animal_curative_medicine_admission</item>
+    <item>animal_fecondation</item>
+    <item>animal_feeding</item>
+    <item>animal_group_changing</item>
+    <item>animal_health</item>
+    <item>animal_housing_cleaning</item>
+    <item>animal_housing_treatment</item>
+    <item>animal_illness_treatment</item>
+    <item>animal_moving</item>
+    <item>animal_preventive_medicine_admission</item>
+    <item>animal_production</item>
+    <item>blending</item>
+    <item>bottling</item>
+    <item>consummables_addition</item>
+    <item>cultipacking</item>
+    <item>cultivation_protection</item>
+    <item>cutting</item>
+    <item>fermentation</item>
+    <item>filtration</item>
+    <item>food_supply</item>
+    <item>grain_transport</item>
+    <item>grape_harvest</item>
+    <item>grape_transport</item>
+    <item>grinding</item>
+    <item>growth_control</item>
+    <item>harvest</item>
+    <item>haymaking</item>
+    <item>hoeing</item>
+    <item>implantation</item>
+    <item>implanting</item>
+    <item>maintenance_task</item>
+    <item>milk_production</item>
+    <item>mixing</item>
+    <item>oviparous_birth</item>
+    <item>pasturing</item>
+    <item>piece_replacement</item>
+    <item>plant_chemical_weed</item>
+    <item>plant_fertilisation</item>
+    <item>plant_illness_treatment</item>
+    <item>plant_irrigation</item>
+    <item>plant_nutrition</item>
+    <item>plant_physical_weed</item>
+    <item>plowing</item>
+    <item>pressing</item>
+    <item>pruning</item>
+    <item>raking</item>
+    <item>remontage</item>
+    <item>silage</item>
+    <item>soil_cleaning</item>
+    <item>soil_enrichment</item>
+    <item>sowing</item>
+    <item>tillage</item>
+    <item>transfer</item>
+    <item>transformation</item>
+    <item>transport</item>
+    <item>viviparous_birth</item>
+  </string-array>
+</resources>

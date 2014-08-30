@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources>
+  <string-array name="procedureNatures_entries">
+    <item>Ajout de produits</item>
+    <item>Alimentation</item>
+    <item>Alimentation des animaux</item>
+    <item>Amendement</item>
+    <item>Binage</item>
+    <item>Broyage</item>
+    <item>Changement de groupe d’animaux</item>
+    <item>Contrôle de croissance</item>
+    <item>Cultipacking</item>
+    <item>Désherbage chimique</item>
+    <item>Désherbage physique</item>
+    <item>Désinfection du sol</item>
+    <item>Embouteillage</item>
+    <item>Ensilage</item>
+    <item>Fenaison</item>
+    <item>Fermentation</item>
+    <item>Fertilisation des plantes</item>
+    <item>Filtration</item>
+    <item>Fécondation animale</item>
+    <item>Hersage</item>
+    <item>Hygiène des animaux</item>
+    <item>Hygiène des bâtiments d’élevage</item>
+    <item>Implantation d’une culture</item>
+    <item>Irrigation des plantes</item>
+    <item>Labour</item>
+    <item>Maintenance</item>
+    <item>Mise à niveau</item>
+    <item>Mouvement d’animaux</item>
+    <item>Mélange</item>
+    <item>Mélange</item>
+    <item>Nettoyage des bâtiments d’élevage</item>
+    <item>Nutrition des plantes</item>
+    <item>Plantation</item>
+    <item>Pressage</item>
+    <item>Production laitière</item>
+    <item>Productions animales</item>
+    <item>Protection des cultures</item>
+    <item>Pâturage</item>
+    <item>Remontage</item>
+    <item>Remplacement de pièces</item>
+    <item>Reproduction (ovipare)</item>
+    <item>Reproduction (vivipare)</item>
+    <item>Récolte</item>
+    <item>Semis</item>
+    <item>Soins médicaux des animaux</item>
+    <item>Taille</item>
+    <item>Taille</item>
+    <item>Traitement curatif des maladies animales</item>
+    <item>Traitement des cultures</item>
+    <item>Traitement préventif des maladies animales</item>
+    <item>Transfert</item>
+    <item>Transformation</item>
+    <item>Transport</item>
+    <item>Transport de grains</item>
+    <item>Transport de vendange</item>
+    <item>Travail du sol</item>
+    <item>Tâche administrative</item>
+    <item>Vendange</item>
+  </string-array>
+  <string-array name="procedureNatures_values">
+    <item>addition</item>
+    <item>food_supply</item>
+    <item>animal_feeding</item>
+    <item>soil_enrichment</item>
+    <item>hoeing</item>
+    <item>grinding</item>
+    <item>animal_group_changing</item>
+    <item>growth_control</item>
+    <item>cultipacking</item>
+    <item>plant_chemical_weed</item>
+    <item>plant_physical_weed</item>
+    <item>soil_cleaning</item>
+    <item>bottling</item>
+    <item>silage</item>
+    <item>haymaking</item>
+    <item>fermentation</item>
+    <item>plant_fertilisation</item>
+    <item>filtration</item>
+    <item>animal_fecondation</item>
+    <item>raking</item>
+    <item>animal_health</item>
+    <item>animal_housing_treatment</item>
+    <item>implantation</item>
+    <item>plant_irrigation</item>
+    <item>plowing</item>
+    <item>maintenance_task</item>
+    <item>consummables_addition</item>
+    <item>animal_moving</item>
+    <item>blending</item>
+    <item>mixing</item>
+    <item>animal_housing_cleaning</item>
+    <item>plant_nutrition</item>
+    <item>implanting</item>
+    <item>pressing</item>
+    <item>milk_production</item>
+    <item>animal_production</item>
+    <item>cultivation_protection</item>
+    <item>pasturing</item>
+    <item>remontage</item>
+    <item>piece_replacement</item>
+    <item>oviparous_birth</item>
+    <item>viviparous_birth</item>
+    <item>harvest</item>
+    <item>sowing</item>
+    <item>animal_illness_treatment</item>
+    <item>cutting</item>
+    <item>pruning</item>
+    <item>animal_curative_medicine_admission</item>
+    <item>plant_illness_treatment</item>
+    <item>animal_preventive_medicine_admission</item>
+    <item>transfer</item>
+    <item>transformation</item>
+    <item>transport</item>
+    <item>grain_transport</item>
+    <item>grape_transport</item>
+    <item>tillage</item>
+    <item>administrative_task</item>
+    <item>grape_harvest</item>
+  </string-array>
+</resources>

@@ -4,9 +4,12 @@ import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.app.ActionBar;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.AlertDialog.Builder;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.location.Location;
@@ -54,6 +57,7 @@ public class TrackingActivity extends Activity implements TrackingListenerWriter
     private String mLocationProvider;
     private TrackingListener mTrackingListener;
     private Account mAccount;
+    private AlertDialog.Builder mProcedureChooser;
 
     /** Called when the activity is first created. */
     @Override
@@ -97,6 +101,33 @@ public class TrackingActivity extends Activity implements TrackingListenerWriter
         mTrackingListener = new TrackingListener(this);
         mLocationManager  = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
         mLocationProvider = LocationManager.GPS_PROVIDER;
+
+        // 
+        mProcedureChooser = new AlertDialog.Builder(this)
+            .setTitle(R.string.procedure_nature)
+            .setNegativeButton(android.R.string.cancel, null)
+            .setItems(R.array.procedureNatures_entries, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    mMasterStart = SystemClock.elapsedRealtime();
+                    mMasterDuration = 0;
+                    mMasterChrono.setBase(mMasterStart);
+                    mMasterChrono.start();
+                    mStopButton.setVisibility(View.VISIBLE);
+                    mPauseButton.setVisibility(View.VISIBLE);
+                    mScanButton.setVisibility(View.VISIBLE);
+                    
+                    startTracking();
+
+                    String value = getResources().getStringArray(R.array.procedureNatures_values)[which];
+                    Log.d("rei", "Add start crumb for " + value);
+
+                    final Bundle metadata = new Bundle();
+                    metadata.putString("procedureNature", value);
+                    addCrumb("start", metadata);
+                }
+            });
+
     }
 
     @Override
@@ -126,18 +157,7 @@ public class TrackingActivity extends Activity implements TrackingListenerWriter
 
 
     public void startIntervention(View view) {
-        mMasterStart = SystemClock.elapsedRealtime();
-        mMasterDuration = 0;
-        mMasterChrono.setBase(mMasterStart);
-        mMasterChrono.start();
-        mStopButton.setVisibility(View.VISIBLE);
-        mPauseButton.setVisibility(View.VISIBLE);
-        mScanButton.setVisibility(View.VISIBLE);
-        this.startTracking();
-
-        final Bundle metadata = new Bundle();
-        metadata.putString("procedureNature", "maintenance_task");
-        this.addCrumb("start", metadata);
+        mProcedureChooser.show();
     }
 
 

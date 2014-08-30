@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string-array name="pref_interventionNameInput_entries">
-        <item>Automatic</item>
-        <item>Vocal</item>
-        <item>Textual</item>
-    </string-array>
-    <string-array name="pref_interventionNameInput_values">
-        <item>automatic</item>
-        <item>vocal</item>
-        <item>textual</item>
-    </string-array>      
+  <string-array name="pref_interventionNameInput_entries">
+    <item>Automatic</item>
+    <item>Vocal</item>
+    <item>Textual</item>
+  </string-array>
+  <string-array name="pref_interventionNameInput_values">
+    <item>automatic</item>
+    <item>vocal</item>
+    <item>textual</item>
+  </string-array>      
 </resources>
