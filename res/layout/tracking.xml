@@ -17,7 +17,7 @@
 			android:textSize="@dimen/chrono_font_size"
 			android:gravity="center"/>
 	<Chronometer
-			android:id="@+id/active_chrono"
+			android:id="@+id/precision_mode_chrono"
 			android:visibility="invisible"
 			android:layout_width="fill_parent"
 			android:layout_height="wrap_content"
@@ -79,16 +79,7 @@
       </LinearLayout>
     </LinearLayout>
   </HorizontalScrollView>
-  <!--
-	    <TextView
-			android:id="@+id/coordinates"
-			android:layout_width="fill_parent"
-			android:layout_height="wrap_content"/>
-	    <TextView
-			android:id="@+id/barcode"
-			android:layout_width="fill_parent"
-			android:layout_height="wrap_content"/>
-  -->
+
 	<LinearLayout
 			android:orientation="vertical"
 			android:layout_width="fill_parent"
@@ -102,6 +93,22 @@
 				android:drawableLeft="@android:drawable/ic_menu_info_details"
 				android:text="@string/scan_code"
 				android:onClick="scanCode"/>
+		<Button 
+				android:id="@+id/start_precision_mode_button"
+				android:layout_width="fill_parent"
+				android:layout_height="wrap_content"
+				android:drawableLeft="@android:drawable/btn_star_big_off"
+				android:visibility="gone"
+				android:text="@string/precision_mode"
+				android:onClick="startPrecisionMode"/>
+		<Button 
+				android:id="@+id/stop_precision_mode_button"
+				android:layout_width="fill_parent"
+				android:layout_height="wrap_content"
+				android:drawableLeft="@android:drawable/btn_star_big_on"
+				android:visibility="gone"
+				android:text="@string/precision_mode"
+				android:onClick="stopPrecisionMode"/>
 		<Button 
 				android:id="@+id/start_intervention_button"
 				android:layout_width="fill_parent"

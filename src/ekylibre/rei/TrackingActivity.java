@@ -54,12 +54,12 @@ public class TrackingActivity extends Activity implements TrackingListenerWriter
     
     public final static String KEY_ACCOUNT = "account";
 
-    private long mMasterDuration;
-    private long mMasterStart;
-    private boolean mRunning;
+    private long mMasterDuration, mMasterStart;
+    private long mPrecisionModeDuration, mPrecisionModeStart;
+    private boolean mRunning, mPrecisionMode;
     private String mLastProcedureNature, mLastProcedureNatureName;
-    private Chronometer mMasterChrono;
-    private Button mScanButton, mStartButton, mStopButton, mPauseButton, mResumeButton;
+    private Chronometer mMasterChrono, mPrecisionModeChrono;
+    private Button mScanButton, mStartButton, mStopButton, mPauseButton, mResumeButton, mPrecisionModeStartButton, mPrecisionModeStopButton;
     private HorizontalScrollView mDetails;
     private TextView mProcedureNature, mLatitude, mLongitude, mCrumbsCount, mCoordinates, mBarcode;
     private String mLocationProvider;
@@ -103,17 +103,18 @@ public class TrackingActivity extends Activity implements TrackingListenerWriter
         // Find view elements
         mProcedureNature = (TextView) findViewById(R.id.procedure_nature);
         mMasterChrono = (Chronometer) findViewById(R.id.master_chrono);
+        mPrecisionModeChrono = (Chronometer) findViewById(R.id.precision_mode_chrono);
         mDetails      = (HorizontalScrollView) findViewById(R.id.details);
         mLatitude     = (TextView)    findViewById(R.id.latitude);
         mLongitude    = (TextView)    findViewById(R.id.longitude);
         mCrumbsCount  = (TextView)    findViewById(R.id.crumbs_count);
-        // mCoordinates  = (TextView)    findViewById(R.id.coordinates);
-        // mBarcode      = (TextView)    findViewById(R.id.barcode);
         mStartButton  = (Button)      findViewById(R.id.start_intervention_button);
         mStopButton   = (Button)      findViewById(R.id.stop_intervention_button);
         mPauseButton  = (Button)      findViewById(R.id.pause_intervention_button);
         mResumeButton = (Button)      findViewById(R.id.resume_intervention_button);
         mScanButton   = (Button)      findViewById(R.id.scan_code_button);
+        mPrecisionModeStartButton  = (Button) findViewById(R.id.start_precision_mode_button);
+        mPrecisionModeStopButton   = (Button) findViewById(R.id.stop_precision_mode_button);
 
         // Synchronize data
         this.syncData();
@@ -156,6 +157,7 @@ public class TrackingActivity extends Activity implements TrackingListenerWriter
                     mStopButton.setVisibility(View.VISIBLE);
                     mPauseButton.setVisibility(View.VISIBLE);
                     mScanButton.setVisibility(View.VISIBLE);
+                    mPrecisionModeStartButton.setVisibility(View.VISIBLE);
                     mProcedureNature.setVisibility(View.VISIBLE);
                     mProcedureNature.setText(mLastProcedureNatureName);
 
@@ -212,11 +214,15 @@ public class TrackingActivity extends Activity implements TrackingListenerWriter
 
 
     public void stopIntervention(View view) {
+        if (mPrecisionMode) {
+            stopPrecisionMode(view);
+        }
         mMasterChrono.stop();
         mMasterChrono.setVisibility(View.INVISIBLE);
         mStopButton.setVisibility(View.GONE);
         mPauseButton.setVisibility(View.GONE);
         mScanButton.setVisibility(View.GONE);
+        mPrecisionModeStartButton.setVisibility(View.GONE);
         mDetails.setVisibility(View.GONE);
         mProcedureNature.setVisibility(View.INVISIBLE);
         mStartButton.setVisibility(View.VISIBLE);
@@ -231,6 +237,47 @@ public class TrackingActivity extends Activity implements TrackingListenerWriter
     }
 
 
+    public void startPrecisionMode(View view) {
+        mPrecisionMode = true;
+
+        mPrecisionModeStopButton.setVisibility(View.VISIBLE);
+        mPrecisionModeStartButton.setVisibility(View.GONE);
+
+        mPrecisionModeStart = SystemClock.elapsedRealtime();
+        mPrecisionModeDuration = 0;
+        mPrecisionModeChrono.setBase(mPrecisionModeStart);
+        mPrecisionModeChrono.start();
+        mPrecisionModeChrono.setVisibility(View.VISIBLE);
+
+        this.startTracking(800);
+        this.addCrumb("hard_start");
+
+        mNotificationBuilder
+            .setSmallIcon(R.drawable.ic_stat_notify_precision_mode)
+            .setContentText(getString(R.string.precision_mode));
+        mNotificationManager.notify(mNotificationID, mNotificationBuilder.build());
+    }
+
+
+    public void stopPrecisionMode(View view) {
+        mPrecisionModeStopButton.setVisibility(View.GONE);
+        mPrecisionModeStartButton.setVisibility(View.VISIBLE);
+
+        mPrecisionModeChrono.stop();
+        mPrecisionModeChrono.setVisibility(View.INVISIBLE);
+
+        this.startTracking();
+        this.addCrumb("hard_stop");
+
+        mNotificationBuilder
+            .setSmallIcon(R.drawable.ic_stat_notify_running)
+            .setContentText(getString(R.string.running));
+        mNotificationManager.notify(mNotificationID, mNotificationBuilder.build());
+
+        mPrecisionMode = false;
+    }
+
+
     public void pauseIntervention(View view) {
         mMasterDuration += SystemClock.elapsedRealtime() - mMasterStart;
         mMasterChrono.stop();
@@ -239,6 +286,13 @@ public class TrackingActivity extends Activity implements TrackingListenerWriter
         mStopButton.setVisibility(View.GONE);
         mScanButton.setVisibility(View.GONE);
         mResumeButton.setVisibility(View.VISIBLE);
+        if (mPrecisionMode) {
+            mPrecisionModeStopButton.setVisibility(View.GONE);
+            mPrecisionModeDuration += SystemClock.elapsedRealtime() - mPrecisionModeStart;
+            mPrecisionModeChrono.stop();
+        } else {
+            mPrecisionModeStartButton.setVisibility(View.GONE);
+        }
         this.stopTracking();
         this.addCrumb("pause");
         mNotificationBuilder
@@ -251,16 +305,29 @@ public class TrackingActivity extends Activity implements TrackingListenerWriter
         mMasterStart = SystemClock.elapsedRealtime();
         mMasterChrono.setBase(mMasterStart - mMasterDuration);
         mMasterChrono.start();
+
         mResumeButton.setVisibility(View.GONE);
         mPauseButton.setVisibility(View.VISIBLE);
         // mStartButton.setVisibility(View.VISIBLE);
         mStopButton.setVisibility(View.VISIBLE);
         mScanButton.setVisibility(View.VISIBLE);
+        if (mPrecisionMode) {
+            mPrecisionModeStart = SystemClock.elapsedRealtime();
+            mPrecisionModeChrono.setBase(mPrecisionModeStart - mPrecisionModeDuration);
+            mPrecisionModeChrono.start();
+            mNotificationBuilder
+                .setSmallIcon(R.drawable.ic_stat_notify_precision_mode)
+                .setContentText(getString(R.string.precision_mode));
+            mPrecisionModeStopButton.setVisibility(View.VISIBLE);
+        } else {
+            mNotificationBuilder
+                .setSmallIcon(R.drawable.ic_stat_notify_running)
+                .setContentText(getString(R.string.running));
+            mPrecisionModeStartButton.setVisibility(View.VISIBLE);
+        }
         this.startTracking();
         this.addCrumb("resume");
-        mNotificationBuilder
-            .setSmallIcon(R.drawable.ic_stat_notify_running)
-            .setContentText(getString(R.string.running));
+        
         mNotificationManager.notify(mNotificationID, mNotificationBuilder.build());
     }
 
@@ -287,7 +354,10 @@ public class TrackingActivity extends Activity implements TrackingListenerWriter
     }
 
     private void startTracking() {
-        mLocationManager.requestLocationUpdates(mLocationProvider, 1000, 0, mTrackingListener);
+        startTracking(4000);
+    }
+    private void startTracking(long interval) {
+        mLocationManager.requestLocationUpdates(mLocationProvider, interval, 0, mTrackingListener);
         mRunning = true;
     }
 

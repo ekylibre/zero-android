@@ -31,7 +31,7 @@ do
 
 done
 
-for icon in ic_stat_notify ic_stat_notify_running ic_stat_notify_paused
+for icon in ic_stat_notify ic_stat_notify_running ic_stat_notify_paused ic_stat_notify_precision_mode
 do
 
     for size in 24 36 48 72 96

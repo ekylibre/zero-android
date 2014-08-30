@@ -13,6 +13,7 @@
   <string name="password">Password</string>
   <string name="pause">Pause</string>
   <string name="paused">Paused</string>
+  <string name="precision_mode">Precision mode</string>
   <string name="pref_showDetails">Show details</string>
   <string name="pref_showDetails_summary">Show coordinates and crumbs count during an intervention</string>
   <string name="procedure_nature">Procedure nature</string>
