@@ -5,7 +5,10 @@ import android.accounts.AccountManager;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.AlertDialog.Builder;
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.ComponentName;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
@@ -54,12 +57,11 @@ public class TrackingActivity extends Activity implements TrackingListenerWriter
     private long mMasterDuration;
     private long mMasterStart;
     private boolean mRunning;
-    private String mLastProcedureNature;
+    private String mLastProcedureNature, mLastProcedureNatureName;
     private Chronometer mMasterChrono;
     private Button mScanButton, mStartButton, mStopButton, mPauseButton, mResumeButton;
     private HorizontalScrollView mDetails;
     private TextView mProcedureNature, mLatitude, mLongitude, mCrumbsCount, mCoordinates, mBarcode;
-    private LocationManager mLocationManager;
     private String mLocationProvider;
     private TrackingListener mTrackingListener;
     private Account mAccount;
@@ -67,6 +69,12 @@ public class TrackingActivity extends Activity implements TrackingListenerWriter
     private SharedPreferences mPreferences;
     private IntentIntegrator mScanIntegrator;
 
+    private LocationManager mLocationManager;
+    private NotificationManager mNotificationManager;
+    private Notification.Builder mNotificationBuilder;
+    private int mNotificationID;
+    //private Notification mNotification;
+    
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -121,6 +129,17 @@ public class TrackingActivity extends Activity implements TrackingListenerWriter
         // Reference scan integrator
         mScanIntegrator = new IntentIntegrator(this);
 
+        // Notification
+        mNotificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+        mNotificationID = 1;
+        mNotificationBuilder = new Notification.Builder(this)
+            .setOngoing(true)
+            .setContentTitle(getString(R.string.app_name))
+            .setContentText("")
+            .setContentIntent(PendingIntent.getActivity(this, 0, new Intent(this, TrackingActivity.class), PendingIntent.FLAG_UPDATE_CURRENT))
+            .setSmallIcon(R.drawable.ic_stat_notify);
+        
+
         // Procedure nature chooser for starting intervention
         mProcedureChooser = new AlertDialog.Builder(this)
             .setTitle(R.string.procedure_nature)
@@ -129,6 +148,7 @@ public class TrackingActivity extends Activity implements TrackingListenerWriter
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     mLastProcedureNature = getResources().getStringArray(R.array.procedureNatures_values)[which];
+                    mLastProcedureNatureName = getResources().getStringArray(R.array.procedureNatures_entries)[which];
                     Log.d("rei", "Start a new " + mLastProcedureNature);
 
                     mStartButton.setVisibility(View.GONE);
@@ -137,7 +157,7 @@ public class TrackingActivity extends Activity implements TrackingListenerWriter
                     mPauseButton.setVisibility(View.VISIBLE);
                     mScanButton.setVisibility(View.VISIBLE);
                     mProcedureNature.setVisibility(View.VISIBLE);
-                    mProcedureNature.setText(getResources().getStringArray(R.array.procedureNatures_entries)[which]);
+                    mProcedureNature.setText(mLastProcedureNatureName);
 
                     mMasterStart = SystemClock.elapsedRealtime();
                     mMasterDuration = 0;
@@ -149,6 +169,12 @@ public class TrackingActivity extends Activity implements TrackingListenerWriter
                     final Bundle metadata = new Bundle();
                     metadata.putString("procedureNature", mLastProcedureNature);
                     addCrumb("start", metadata);
+
+                    mNotificationBuilder
+                        .setSmallIcon(R.drawable.ic_stat_notify_running)
+                        .setContentTitle(mLastProcedureNatureName)
+                        .setContentText(getString(R.string.running));
+                    mNotificationManager.notify(mNotificationID, mNotificationBuilder.build());
                 }
             });
 
@@ -196,6 +222,12 @@ public class TrackingActivity extends Activity implements TrackingListenerWriter
         mStartButton.setVisibility(View.VISIBLE);
         this.stopTracking();
         this.addCrumb("stop");
+
+        mNotificationBuilder
+            .setSmallIcon(R.drawable.ic_stat_notify)
+            .setContentTitle(getString(R.string.app_name))
+            .setContentText("");
+        mNotificationManager.cancel(mNotificationID);
     }
 
 
@@ -209,7 +241,11 @@ public class TrackingActivity extends Activity implements TrackingListenerWriter
         mResumeButton.setVisibility(View.VISIBLE);
         this.stopTracking();
         this.addCrumb("pause");
-    }
+        mNotificationBuilder
+            .setSmallIcon(R.drawable.ic_stat_notify_paused)
+            .setContentText(getString(R.string.paused));
+        mNotificationManager.notify(mNotificationID, mNotificationBuilder.build());
+   }
 
     public void resumeIntervention(View view) {
         mMasterStart = SystemClock.elapsedRealtime();
@@ -222,6 +258,10 @@ public class TrackingActivity extends Activity implements TrackingListenerWriter
         mScanButton.setVisibility(View.VISIBLE);
         this.startTracking();
         this.addCrumb("resume");
+        mNotificationBuilder
+            .setSmallIcon(R.drawable.ic_stat_notify_running)
+            .setContentText(getString(R.string.running));
+        mNotificationManager.notify(mNotificationID, mNotificationBuilder.build());
     }
 
 
@@ -255,7 +295,6 @@ public class TrackingActivity extends Activity implements TrackingListenerWriter
         mLocationManager.removeUpdates(mTrackingListener);
         mRunning = false;
     }
-
 
     private void addCrumb(String type) {
         this.addCrumb(type, null);

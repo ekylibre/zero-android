@@ -1,25 +1,53 @@
 #!/usr/bin/env bash
 # Depends-on: icoutils inkscape
 
+# LDPI 0.75
+# MDPI 1
+# HDPI 1.5
+# XHDPI 2
+# XXHDPI 3
+# XXXHDPI 4
+
+
 for icon in ic_launcher ic_ekylibre
 do
 
-    for size in 36 48 72 96 144 192
+    for size in 48 72 96 144 192
     do
-		    #  --export-background=FFFFFF
-        inkscape -z --export-png=$icon-${size}px.png --export-width=${size} --export-height=${size} $icon.svg
+        inkscape -z --export-background=#000000 --export-background-opacity=0 --export-png=$icon-${size}px.png --export-width=${size} --export-height=${size} $icon.svg
     done
     
-    # pngcrush $icon-48px.png  ../res/drawable/$icon.png
+    # pngcrush -q $icon-48px.png  ../res/drawable/$icon.png
     
-    pngcrush $icon-36px.png  ../res/drawable-ldpi/$icon.png
-    pngcrush $icon-48px.png  ../res/drawable-mdpi/$icon.png
-    pngcrush $icon-72px.png  ../res/drawable-hdpi/$icon.png
-    pngcrush $icon-96px.png  ../res/drawable-xhdpi/$icon.png
-    pngcrush $icon-144px.png ../res/drawable-xxhdpi/$icon.png
-    pngcrush $icon-192px.png ../res/drawable-xxxhdpi/$icon.png
+    # pngcrush -q $icon-36px.png  ../res/drawable-ldpi/$icon.png
+    pngcrush -q $icon-48px.png  ../res/drawable-mdpi/$icon.png
+    pngcrush -q $icon-72px.png  ../res/drawable-hdpi/$icon.png
+    pngcrush -q $icon-96px.png  ../res/drawable-xhdpi/$icon.png
+    pngcrush -q $icon-144px.png ../res/drawable-xxhdpi/$icon.png
+    pngcrush -q $icon-192px.png ../res/drawable-xxxhdpi/$icon.png
     
     # Removes useless files
     rm -f $icon-*px.png
 
+done
+
+for icon in ic_stat_notify ic_stat_notify_running ic_stat_notify_paused
+do
+
+    for size in 24 36 48 72 96
+    do
+        inkscape -z --export-background=#000000 --export-background-opacity=0 --export-png=$icon-${size}px.png --export-width=${size} --export-height=${size} $icon.svg
+    done
+    
+    # pngcrush -q $icon-48px.png  ../res/drawable/$icon.png
+    
+    # pngcrush -q $icon-18px.png  ../res/drawable-ldpi/$icon.png
+    pngcrush -q $icon-24px.png ../res/drawable-mdpi/$icon.png
+    pngcrush -q $icon-36px.png ../res/drawable-hdpi/$icon.png
+    pngcrush -q $icon-48px.png ../res/drawable-xhdpi/$icon.png
+    pngcrush -q $icon-72px.png ../res/drawable-xxhdpi/$icon.png
+    pngcrush -q $icon-96px.png ../res/drawable-xxxhdpi/$icon.png
+    
+    # Removes useless files
+    rm -f $icon-*px.png
 done
