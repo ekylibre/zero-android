@@ -1,5 +1,4 @@
 #!/usr/bin/env ruby
-
 require 'rubygems'
 require 'nokogiri'
 require 'pathname'
@@ -8,9 +7,10 @@ require 'yaml'
 
 class Resourcer
 
-  def initialize(ekylibre_path)
-    @ekylibre_path = Pathname.new(File.expand_path(ekylibre_path))
-    @root = Pathname.new(File.expand_path("."))
+  def initialize()
+    here = Pathname.new(File.expand_path(__FILE__)).dirname
+    @root = here.join("..")
+    @ekylibre_path = @root.join("..", "ekylibre")
   end
 
   def do!
@@ -47,4 +47,4 @@ class Resourcer
 end
 
 
-Resourcer.new("../ekylibre").do!
+Resourcer.new.do!
