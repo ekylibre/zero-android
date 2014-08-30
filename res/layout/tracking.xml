@@ -2,20 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
 							android:orientation="vertical"
 							android:layout_width="fill_parent"
-							android:layout_height="fill_parent"
-							>
-	<!--
-			<TextView
-			android:layout_width="fill_parent"
-			android:layout_height="wrap_content"
-			android:text="@string/hello_world"
-			/>
-			<EditText android:id="@+id/edit_message"
-			android:layout_width="fill_parent"
-			android:layout_height="wrap_content"
-			android:hint="@string/edit_message"
-			/>
-	-->
+							android:layout_height="fill_parent">
 	<Chronometer
 			android:id="@+id/master_chrono"
 			android:layout_width="fill_parent"
@@ -27,61 +14,59 @@
 			android:visibility="invisible"
 			android:layout_width="fill_parent"
 			android:layout_height="wrap_content"
-			android:textSize="@dimen/chrono_font_size"
+			android:textSize="@dimen/small_chrono_font_size"
 			android:gravity="center"/>
 	<TextView
 			android:id="@+id/coordinates"
 			android:layout_width="fill_parent"
-			android:layout_height="wrap_content"
-			/>
+			android:layout_height="wrap_content"/>
 	<TextView
 			android:id="@+id/barcode"
 			android:layout_width="fill_parent"
-			android:layout_height="wrap_content"
-			/>
+			android:layout_height="wrap_content"/>
 	<LinearLayout
 			android:orientation="vertical"
 			android:layout_width="fill_parent"
 			android:layout_height="fill_parent"
-			android:gravity="bottom"
-			>
+			android:gravity="bottom">
 		<Button 
 				android:id="@+id/scan_code_button"
 				android:layout_width="fill_parent"
 				android:layout_height="wrap_content"
 				android:visibility="gone"
+				android:drawableLeft="@android:drawable/ic_menu_info_details"
 				android:text="@string/scan_code"
 				android:onClick="scanCode"/>
-		<ImageButton 
+		<Button 
 				android:id="@+id/start_intervention_button"
 				android:layout_width="fill_parent"
 				android:layout_height="wrap_content"
-				android:src="@android:drawable/ic_input_add"
-				android:contentDescription="@string/start"
+				android:drawableLeft="@android:drawable/ic_input_add"
+				android:text="@string/start"
 				android:onClick="startIntervention"/>
-		<ImageButton 
+		<Button 
 				android:id="@+id/stop_intervention_button"
 				android:layout_width="fill_parent"
 				android:layout_height="wrap_content"
-				android:src="@android:drawable/ic_input_delete"
+				android:drawableLeft="@android:drawable/ic_input_delete"
 				android:visibility="gone"
-				android:contentDescription="@string/stop"
+				android:text="@string/stop"
 				android:onClick="stopIntervention"/>
-		<ImageButton 
+		<Button 
 				android:id="@+id/resume_intervention_button"
 				android:layout_width="fill_parent"
 				android:layout_height="wrap_content"
-				android:src="@android:drawable/ic_media_play"
+				android:drawableLeft="@android:drawable/ic_media_play"
 				android:visibility="gone"
-				android:contentDescription="@string/resume"
+				android:text="@string/resume"
 				android:onClick="resumeIntervention"/>
-		<ImageButton 
+		<Button 
 				android:id="@+id/pause_intervention_button"
 				android:layout_width="fill_parent"
 				android:layout_height="wrap_content"
-				android:src="@android:drawable/ic_media_pause"
+				android:drawableLeft="@android:drawable/ic_media_pause"
 				android:visibility="gone"
-				android:contentDescription="@string/pause"
+				android:text="@string/pause"
 				android:onClick="pauseIntervention"/>
 	</LinearLayout>
 </LinearLayout>

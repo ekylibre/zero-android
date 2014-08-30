@@ -21,7 +21,6 @@ import android.view.MenuItem;
 import android.view.MenuInflater;
 import android.widget.Button;
 import android.widget.Chronometer;
-import android.widget.ImageButton;
 import android.widget.TextView;
 
 import org.apache.http.NameValuePair;
@@ -49,8 +48,7 @@ public class TrackingActivity extends Activity implements TrackingListenerWriter
     private long mMasterDuration;
     private long mMasterStart;
     private Chronometer mMasterChrono;
-    private Button mScanButton;
-    private ImageButton mStartButton, mStopButton, mPauseButton, mResumeButton;
+    private Button mScanButton, mStartButton, mStopButton, mPauseButton, mResumeButton;
     private TextView mCoordinates, mBarcode;
     private LocationManager mLocationManager;
     private String mLocationProvider;
@@ -86,10 +84,10 @@ public class TrackingActivity extends Activity implements TrackingListenerWriter
         mMasterChrono = (Chronometer) findViewById(R.id.master_chrono);
         mCoordinates  = (TextView)    findViewById(R.id.coordinates);
         mBarcode      = (TextView)    findViewById(R.id.barcode);
-        mStartButton  = (ImageButton) findViewById(R.id.start_intervention_button);
-        mStopButton   = (ImageButton) findViewById(R.id.stop_intervention_button);
-        mPauseButton  = (ImageButton) findViewById(R.id.pause_intervention_button);
-        mResumeButton = (ImageButton) findViewById(R.id.resume_intervention_button);
+        mStartButton  = (Button)      findViewById(R.id.start_intervention_button);
+        mStopButton   = (Button)      findViewById(R.id.stop_intervention_button);
+        mPauseButton  = (Button)      findViewById(R.id.pause_intervention_button);
+        mResumeButton = (Button)      findViewById(R.id.resume_intervention_button);
         mScanButton   = (Button)      findViewById(R.id.scan_code_button);
 
         // Synchronize data

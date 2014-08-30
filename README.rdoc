@@ -5,7 +5,7 @@
 == Installation (for developers)
 
 * Install build dependencies
-     $ apt-get install ant make
+     $ sudo apt-get install ant make
 * Install Android SDK
      $ wget http://dl.google.com/android/android-sdk_r23.0.2-linux.tgz
      $ tar xzvf android-sdk_r23.0.2-linux.tgz -C </path/to/android/sdk>
@@ -14,7 +14,7 @@
 * Adds SDK tools path to PATH
      $ export PATH="$ANDROID_HOME/platform-tools:$PATH"
      $ export PATH="$ANDROID_HOME/tools:$PATH"
-* Launch android and install packages: _Android 4.1.2 (API 16) Intel x86 Atom System Image_
+* Launch android and install packages: Android 4.1.2 (API 16) Intel x86 Atom System Image
      $ android
 * Add an AVD <my-smartphone> based on Galaxy Nexus for example
 * Launch the AVD
