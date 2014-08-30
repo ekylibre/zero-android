@@ -1,9 +1,28 @@
-= Rei
+= Rei (Android)
 
-Rei for Android.
+{Rei}[https://github.com/ekylibre/rei] for {Android}[http://www.android.com].
 
-== Install
+== Installation
 
 * Install Android SDK
-* $ ant debug
-* $ adb install -r bin/Rei-debug.apk
+     $ wget http://dl.google.com/android/android-sdk_r23.0.2-linux.tgz
+     $ tar xzvf android-sdk_r23.0.2-linux.tgz -C </path/to/android/sdk>
+* Adds SDK/tools path to PATH
+* Launch android and install packages: Android 4.1.2 (API 16) Intel x86 Atom System Image
+     $ android
+* Add an AVD <my-smartphone> with what you want
+* Launch AVD
+     $ emulator @<my-smartphone>
+* Set env variable ANDROID_HOME to the Android SDK path
+     $ export ANDROID_HOME=</path/to/android/sdk>
+* Install Ant
+     $ apt-get install ant
+* Compile debug release
+     $ make
+  or 
+     $ ant debug
+     $ adb install -r bin/Rei-debug.apk
+
+== License
+
+Rei is released under the {GNU/GPL3}[http://opensource.org/licenses/GPL-3.0] license.
