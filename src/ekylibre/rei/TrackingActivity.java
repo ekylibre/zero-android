@@ -169,7 +169,7 @@ public class TrackingActivity extends Activity implements TrackingListenerWriter
                     startTracking();
 
                     final Bundle metadata = new Bundle();
-                    metadata.putString("procedureNature", mLastProcedureNature);
+                    metadata.putString("procedure_nature", mLastProcedureNature);
                     addCrumb("start", metadata);
 
                     mNotificationBuilder
@@ -346,7 +346,7 @@ public class TrackingActivity extends Activity implements TrackingListenerWriter
                 
                 // handle scan result
                 final Bundle metadata = new Bundle();
-                metadata.putString("scannedCode", aScanResult.getFormatName() + ":" + contents);
+                metadata.putString("scanned_code", aScanResult.getFormatName() + ":" + contents);
                 this.addCrumb("scan", metadata);
             }
         }
