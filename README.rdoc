@@ -25,6 +25,14 @@
      $ ant debug
      $ adb install -r bin/Rei-debug.apk
 
+== Signing and publishing
+
+* http://developer.android.com/tools/publishing/app-signing.html
+
+Create a keystore:
+
+    keytool -genkey -v -keystore .keystore -alias playstore -keyalg RSA -keysize 2048 -validity 10000
+
 == License
 
 Rei is released under the {GNU/GPL3}[http://opensource.org/licenses/GPL-3.0] license.

@@ -1,4 +1,5 @@
 *~
+.keystore
 /out
 /gen
 /local.properties
