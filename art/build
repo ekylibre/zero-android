@@ -1,6 +1,10 @@
 #!/usr/bin/env bash
 # Depends-on: icoutils inkscape
 
+# For Play Store
+inkscape -z --export-background=#000000 --export-background-opacity=0 --export-png=store/icon.png --export-width=512px --export-height=512 ic_launcher.svg
+
+
 # LDPI 0.75
 # MDPI 1
 # HDPI 1.5
@@ -51,3 +55,4 @@ do
     # Removes useless files
     rm -f $icon-*px.png
 done
+
