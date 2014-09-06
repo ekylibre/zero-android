@@ -371,13 +371,13 @@ public class TrackingActivity extends Activity implements TrackingListenerWriter
     }
 
     private void addCrumb(String type, Bundle metadata) {
-        Location location = mLocationManager.getLastKnownLocation(mLocationProvider);
-        if (location == null) {
-            TrackingListener listener = new TrackingListener(this, type, metadata);
-            mLocationManager.requestSingleUpdate(mLocationProvider, listener, null);
-        } else {
-            writeCrumb(location, type, metadata);
-        }
+        // Location location = mLocationManager.getLastKnownLocation(mLocationProvider);
+        // if (location == null) {
+        TrackingListener listener = new TrackingListener(this, type, metadata);
+        mLocationManager.requestSingleUpdate(mLocationProvider, listener, null);
+        // } else {
+        //     writeCrumb(location, type, metadata);
+        // }
     }    
 
     public void writeCrumb(Location location, String type, Bundle metadata) {
