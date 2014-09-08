@@ -33,22 +33,19 @@ You need to install 32-bit libs:
      $ adb install -r bin/Rei-debug.apk
 
 
-== Signing and publishing
+== Signing and publishing APK on repositories
 
-=== Keystore
+1. Create a signing key
+   You need to define a key to release your APK in your repository. Create it unless it already exists: 
+      $ keytool -genkey -v -keystore ~/.android/release.keystore -alias <repository> -keyalg RSA -keysize 2048 -validity 10000
 
-You need to define a keystore to release your APK. Create it if you don't already have one: 
+2. Build a release APK
+      $ make release
 
-   $ keytool -genkey -v -keystore ~/.android/release.keystore -alias <store> -keyalg RSA -keysize 2048 -validity 10000
+3. Push on repository
 
-=== Build a release APK
-
-   $ make release
-
-=== Repositories publishing HOWTOs
-
-* {F-Droid}[https://f-droid.org/wiki/page/FAQ_-_App_Developers]
-* {Google Play}[http://developer.android.com/tools/publishing/app-signing.html]
+  * {F-Droid}[https://f-droid.org/wiki/page/FAQ_-_App_Developers]
+  * {Google Play}[http://developer.android.com/tools/publishing/app-signing.html]
 
 == License
 
