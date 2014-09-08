@@ -2,6 +2,8 @@
 
 {Rei}[https://github.com/ekylibre/rei] for {Android}[http://www.android.com].
 
+
+
 == Installation (for developers)
 
 === 64-bit installation prerequisites
@@ -24,16 +26,23 @@ You need to install 32-bit libs:
 5. Launch android and install packages: Android 4.1.2 (API 16) Intel x86 Atom System Image
      $ android
 6. Add an AVD <my-smartphone> based on Galaxy Nexus for example
-7. Launch the AVD
+
+
+
+== Build and install a debug {APK}[http://en.wikipedia.org/wiki/APK_%28file_format%29]
+
+1. Launch the AVD you created:
      $ emulator @<my-smartphone>
-8. Compile debug release and install it on device
+
+2. Compile debug release and install it on emulated device
      $ make
    or 
      $ ant debug
      $ adb install -r bin/Rei-debug.apk
 
 
-== Signing and publishing APK on repositories
+
+== Sign and publish APK on repositories
 
 1. Create a signing key to release your APK in your repository. Create it unless it already exists: 
       $ keytool -genkey -v -keystore ~/.android/release.keystore -alias <repository> -keyalg RSA -keysize 2048 -validity 10000
@@ -44,6 +53,8 @@ You need to install 32-bit libs:
 3. Push on repository
    * {F-Droid}[https://f-droid.org/wiki/page/FAQ_-_App_Developers]
    * {Google Play}[http://developer.android.com/tools/publishing/app-signing.html]
+
+
 
 == License
 
