@@ -35,11 +35,20 @@ You need to install 32-bit libs:
 
 == Signing and publishing
 
-* http://developer.android.com/tools/publishing/app-signing.html
+=== Keystore
 
-Create a keystore:
+You need to define a keystore to release your APK. Create it if you don't already have one: 
 
-    keytool -genkey -v -keystore .keystore -alias playstore -keyalg RSA -keysize 2048 -validity 10000
+   $ keytool -genkey -v -keystore ~/.android/release.keystore -alias <store> -keyalg RSA -keysize 2048 -validity 10000
+
+=== Build a release APK
+
+   $ make release
+
+=== Repositories publishing HOWTOs
+
+* {F-Droid}[https://f-droid.org/wiki/page/FAQ_-_App_Developers]
+* {Google Play}[http://developer.android.com/tools/publishing/app-signing.html]
 
 == License
 
