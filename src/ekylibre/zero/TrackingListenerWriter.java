@@ -1,4 +1,4 @@
-package ekylibre.rei;
+package ekylibre.zero;
 
 import android.location.Location;
 import android.os.Bundle;

@@ -1,6 +1,6 @@
-= Rei (Android)
+= Zero (Android)
 
-{Rei}[https://github.com/ekylibre/rei] for {Android}[http://www.android.com].
+{Zero}[https://github.com/ekylibre/zero] for {Android}[http://www.android.com].
 
 
 
@@ -38,7 +38,7 @@ You need to install 32-bit libs:
      $ make
    or 
      $ ant debug
-     $ adb install -r bin/Rei-debug.apk
+     $ adb install -r bin/Zero-debug.apk
 
 
 
@@ -58,4 +58,4 @@ You need to install 32-bit libs:
 
 == License
 
-Rei is released under the {GNU/GPL3}[http://opensource.org/licenses/GPL-3.0] license.
+Zero is released under the {GNU/GPL3}[http://opensource.org/licenses/GPL-3.0] license.

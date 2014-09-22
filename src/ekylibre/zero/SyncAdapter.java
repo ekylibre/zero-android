@@ -1,4 +1,4 @@
-package ekylibre.rei;
+package ekylibre.zero;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
@@ -17,8 +17,8 @@ import android.util.Log;
 
 import ekylibre.api.Crumb;
 import ekylibre.api.Instance;
-import ekylibre.rei.provider.TrackingContract;
-import ekylibre.rei.provider.TrackingProvider;
+import ekylibre.zero.provider.TrackingContract;
+import ekylibre.zero.provider.TrackingProvider;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -61,7 +61,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
         mAccountManager = AccountManager.get(context);
     }
 
-    // Push data between rei and ekylibre
+    // Push data between zero and ekylibre
     @Override
     public void onPerformSync(Account account, Bundle extras, String authority, ContentProviderClient provider, SyncResult syncResult) {
         Log.i(TAG, "Beginning network synchronization");

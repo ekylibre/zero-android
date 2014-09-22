@@ -9,7 +9,7 @@ import android.util.Log;
 import ekylibre.exceptions.HTTPException;
 import ekylibre.exceptions.ServerErrorException;
 import ekylibre.exceptions.UnauthorizedException;
-import ekylibre.rei.Authenticator;
+import ekylibre.zero.Authenticator;
 
 import java.io.BufferedReader; 
 import java.io.IOException;
@@ -142,7 +142,7 @@ public class Instance {
 
     // Send POST call to given URL with given params
     public static JSONObject post(String url, JSONObject params, Header[] headers) throws JSONException, ClientProtocolException, IOException, HTTPException {
-        Log.d("rei", "POST " + url);
+        Log.d("zero", "POST " + url);
 
         // Create a new HttpClient and Post Header
         HttpClient httpClient = new DefaultHttpClient();

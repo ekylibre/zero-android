@@ -1,4 +1,4 @@
-package ekylibre.rei;
+package ekylibre.zero;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
@@ -39,8 +39,8 @@ import org.apache.http.message.BasicNameValuePair;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
-import ekylibre.rei.provider.TrackingContract;
-import ekylibre.rei.provider.TrackingProvider;
+import ekylibre.zero.provider.TrackingContract;
+import ekylibre.zero.provider.TrackingProvider;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -53,6 +53,7 @@ import java.util.List;
 public class TrackingActivity extends Activity implements TrackingListenerWriter {
     
     public final static String KEY_ACCOUNT = "account";
+    public final static double MAXIMAL_ACCURACY = 4.0;
 
     private long mMasterDuration, mMasterStart;
     private long mPrecisionModeDuration, mPrecisionModeStart;
@@ -61,7 +62,7 @@ public class TrackingActivity extends Activity implements TrackingListenerWriter
     private Chronometer mMasterChrono, mPrecisionModeChrono;
     private Button mScanButton, mStartButton, mStopButton, mPauseButton, mResumeButton, mPrecisionModeStartButton, mPrecisionModeStopButton;
     private HorizontalScrollView mDetails;
-    private TextView mProcedureNature, mLatitude, mLongitude, mCrumbsCount, mCoordinates, mBarcode;
+    private TextView mProcedureNature, mAccuracy, mLatitude, mLongitude, mCrumbsCount, mCoordinates, mBarcode;
     private String mLocationProvider;
     private TrackingListener mTrackingListener;
     private Account mAccount;
@@ -105,6 +106,7 @@ public class TrackingActivity extends Activity implements TrackingListenerWriter
         mMasterChrono = (Chronometer) findViewById(R.id.master_chrono);
         mPrecisionModeChrono = (Chronometer) findViewById(R.id.precision_mode_chrono);
         mDetails      = (HorizontalScrollView) findViewById(R.id.details);
+        mAccuracy     = (TextView)    findViewById(R.id.accuracy);
         mLatitude     = (TextView)    findViewById(R.id.latitude);
         mLongitude    = (TextView)    findViewById(R.id.longitude);
         mCrumbsCount  = (TextView)    findViewById(R.id.crumbs_count);
@@ -150,7 +152,7 @@ public class TrackingActivity extends Activity implements TrackingListenerWriter
                 public void onClick(DialogInterface dialog, int which) {
                     mLastProcedureNature = getResources().getStringArray(R.array.procedureNatures_values)[which];
                     mLastProcedureNatureName = getResources().getStringArray(R.array.procedureNatures_entries)[which];
-                    Log.d("rei", "Start a new " + mLastProcedureNature);
+                    Log.d("zero", "Start a new " + mLastProcedureNature);
 
                     mStartButton.setVisibility(View.GONE);
                     mMasterChrono.setVisibility(View.VISIBLE);
@@ -381,6 +383,11 @@ public class TrackingActivity extends Activity implements TrackingListenerWriter
     }    
 
     public void writeCrumb(Location location, String type, Bundle metadata) {
+        // No point without a minimal accuracy
+        if (location.getAccuracy() > 5 && type.equals("point")) {
+            return;
+        }
+
         ContentValues values = new ContentValues();
 
         values.put(TrackingContract.CrumbsColumns.TYPE, type);
@@ -432,8 +439,9 @@ public class TrackingActivity extends Activity implements TrackingListenerWriter
             Cursor cursor = getContentResolver().query(TrackingContract.Crumbs.CONTENT_URI, TrackingContract.Crumbs.PROJECTION_NONE, null, null, null);
             int count = cursor.getCount();
             // Called when a new location is found by the network location provider.
-            mLatitude.setText(String.valueOf(location.getLatitude()));
-            mLongitude.setText(String.valueOf(location.getLongitude()));
+            mAccuracy.setText(String.valueOf(location.getAccuracy()) + "m");
+            mLatitude.setText(String.valueOf(location.getLatitude()) + "°");
+            mLongitude.setText(String.valueOf(location.getLongitude()) + "°");
             mCrumbsCount.setText(String.valueOf(count));
 
         } else if (mDetails.getVisibility() == View.VISIBLE) {
@@ -444,7 +452,7 @@ public class TrackingActivity extends Activity implements TrackingListenerWriter
 
     // Call the sync service
     private void syncData() {
-        Log.d("rei", "syncData: " + mAccount.toString() + ", " + TrackingContract.AUTHORITY);
+        Log.d("zero", "syncData: " + mAccount.toString() + ", " + TrackingContract.AUTHORITY);
         Bundle extras = new Bundle();
         extras.putBoolean(ContentResolver.SYNC_EXTRAS_MANUAL, true);
         extras.putBoolean(ContentResolver.SYNC_EXTRAS_EXPEDITED, true);

@@ -1,4 +1,4 @@
-package ekylibre.rei;
+package ekylibre.zero;
 
 import android.app.ActionBar;
 import android.app.Activity;

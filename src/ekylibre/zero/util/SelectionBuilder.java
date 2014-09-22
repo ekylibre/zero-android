@@ -20,7 +20,7 @@
  * -Changed package name
  */
 
-package ekylibre.rei.util;
+package ekylibre.zero.util;
 
 import android.content.ContentValues;
 import android.database.Cursor;
@@ -40,7 +40,7 @@ import java.util.Map;
  * thread safe.
  */
 public class SelectionBuilder {
-    private static final String TAG = "rei";
+    private static final String TAG = "zero";
 
     private String mTable = null;
     private Map<String, String> mProjectionMap = new HashMap<String, String>(); //Maps.newHashMap();

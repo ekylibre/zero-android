@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="ekylibre.rei"
+          package="ekylibre.zero"
           android:versionCode="1"
           android:versionName="0.0.0"
           android:installLocation="auto">
 
-  <permission android:name="ekylibre.rei.permission.AUTHENTICATE_ACCOUNTS"/>
-  <permission android:name="ekylibre.rei.permission.SYNC_DATA"/>
+  <permission android:name="ekylibre.zero.permission.AUTHENTICATE_ACCOUNTS"/>
+  <permission android:name="ekylibre.zero.permission.SYNC_DATA"/>
 
   <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
   <uses-permission android:name="android.permission.AUTHENTICATE_ACCOUNTS" />
@@ -17,8 +17,8 @@
   <uses-permission android:name="android.permission.WRITE_SYNC_SETTINGS"/>
   <!-- <uses-permission android:name="android.permission.ACCESS_LOCATION_EXTRA_COMMANDS" /> -->
   <!-- <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" /> -->
-  <uses-permission android:name="ekylibre.rei.permission.AUTHENTICATE_ACCOUNTS" />
-  <uses-permission android:name="ekylibre.rei.permission.SYNC_DATA" />
+  <uses-permission android:name="ekylibre.zero.permission.AUTHENTICATE_ACCOUNTS" />
+  <uses-permission android:name="ekylibre.zero.permission.SYNC_DATA" />
   
   <uses-sdk android:minSdkVersion="16" android:targetSdkVersion="20" />
 
@@ -46,11 +46,11 @@
     <!-- <service android:name="TrackingService"/> -->
     
     <!-- Authenticator related activities and service needs to be declared here in order for the app to recognize them-->
-    <activity android:name="ekylibre.rei.AuthenticatorActivity"
+    <activity android:name="ekylibre.zero.AuthenticatorActivity"
               android:label="@string/service_name"
               android:icon="@drawable/ic_ekylibre"/>
-    <service android:name="ekylibre.rei.AuthenticatorService"
-             android:permission="ekylibre.rei.permission.AUTHENTICATE_ACCOUNTS">
+    <service android:name="ekylibre.zero.AuthenticatorService"
+             android:permission="ekylibre.zero.permission.AUTHENTICATE_ACCOUNTS">
       <intent-filter>
         <action android:name="android.accounts.AccountAuthenticator" />
       </intent-filter>
@@ -59,14 +59,14 @@
     </service>
 
     <!-- Content provider -->
-    <provider android:name="ekylibre.rei.provider.TrackingProvider"
-              android:authorities="ekylibre.rei.tracking.provider"
+    <provider android:name="ekylibre.zero.provider.TrackingProvider"
+              android:authorities="ekylibre.zero.tracking.provider"
               android:exported="false"
               android:syncable="true"/>
     
     <!-- Sync related activities and service needs to be declared here in order for the app to recognize them-->
-    <service android:name="ekylibre.rei.SyncService"
-             android:permission="ekylibre.rei.permission.SYNC_DATA"
+    <service android:name="ekylibre.zero.SyncService"
+             android:permission="ekylibre.zero.permission.SYNC_DATA"
              android:process=":sync">
       <intent-filter>
         <action android:name="android.content.SyncAdapter" />

@@ -13,4 +13,4 @@ release:
 	ant release
 
 install:
-	adb install -r out/Rei-debug.apk
+	adb install -r out/Zero-debug.apk

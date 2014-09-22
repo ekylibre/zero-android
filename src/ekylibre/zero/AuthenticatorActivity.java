@@ -1,4 +1,4 @@
-package ekylibre.rei;
+package ekylibre.zero;
 
 import android.accounts.Account;
 import android.accounts.AccountAuthenticatorActivity;
@@ -77,7 +77,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity {
         new AsyncTask<String, Void, Intent>() {
 
             @Override protected Intent doInBackground(String... params) {
-                Log.d("rei", TAG + "> Started authenticating");
+                Log.d("zero", TAG + "> Started authenticating");
                 String authToken = null;
                 Bundle extras = new Bundle();
                 extras.putString(KEY_REDIRECT, getIntent().getStringExtra(KEY_REDIRECT));
@@ -120,14 +120,14 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity {
 
 
     private void finishLogin(Intent intent) {
-        Log.d("rei", TAG + "> finishLogin");
+        Log.d("zero", TAG + "> finishLogin");
         String accountName = intent.getStringExtra(AccountManager.KEY_ACCOUNT_NAME);
         String accountPassword = intent.getStringExtra(KEY_ACCOUNT_PASSWORD);
-        Log.d("rei", TAG + "> finishLogin(" + accountName + ", " + accountPassword + ", " + intent.getStringExtra(AccountManager.KEY_ACCOUNT_TYPE) + ")");
+        Log.d("zero", TAG + "> finishLogin(" + accountName + ", " + accountPassword + ", " + intent.getStringExtra(AccountManager.KEY_ACCOUNT_TYPE) + ")");
         final Account account = new Account(accountName, intent.getStringExtra(AccountManager.KEY_ACCOUNT_TYPE));
         // if (getIntent().getBooleanExtra(KEY_IS_ADDING_NEW_ACCOUNT, false)) {
         String authToken = intent.getStringExtra(AccountManager.KEY_AUTHTOKEN);
-        Log.d("rei", TAG + "> finishLogin > addAccountExplicitly " + authToken);
+        Log.d("zero", TAG + "> finishLogin > addAccountExplicitly " + authToken);
         // String authTokenType = mAuthTokenType;
         // Creating the account on the device and setting the auth token we got
         // (Not setting the auth token will cause another call to the server to authenticate the user)
@@ -135,13 +135,13 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity {
         userdata.putString(Authenticator.KEY_INSTANCE_URL, intent.getStringExtra(KEY_INSTANCE_URL));
 
         if (mAccountManager.addAccountExplicitly(account, accountPassword, userdata)) {
-            Log.d("rei", TAG + "> finishLogin > addAccountExplicitly: YES!");
+            Log.d("zero", TAG + "> finishLogin > addAccountExplicitly: YES!");
         } else {
-            Log.d("rei", TAG + "> finishLogin > addAccountExplicitly: NO!");
+            Log.d("zero", TAG + "> finishLogin > addAccountExplicitly: NO!");
         }
         mAccountManager.setAuthToken(account, mAuthTokenType, authToken);
         // } else {
-        //     Log.d("rei", TAG + "> finishLogin > setPassword");
+        //     Log.d("zero", TAG + "> finishLogin > setPassword");
         //     mAccountManager.setPassword(account, accountPassword);
         // }
         setAccountAuthenticatorResult(intent.getExtras());

@@ -41,6 +41,21 @@
 	      <TextView
 			      android:layout_width="fill_parent"
 			      android:layout_height="wrap_content"
+            android:text="@string/accuracy"/>
+	      <TextView
+			      android:id="@+id/accuracy"
+			      android:layout_width="fill_parent"
+			      android:layout_height="wrap_content"/>
+      </LinearLayout>
+	    <LinearLayout
+			    android:orientation="vertical"
+          android:paddingLeft="16dp"
+          android:paddingRight="16dp"
+			    android:layout_width="fill_parent"
+			    android:layout_height="wrap_content">
+	      <TextView
+			      android:layout_width="fill_parent"
+			      android:layout_height="wrap_content"
             android:text="@string/latitude"/>
 	      <TextView
 			      android:id="@+id/latitude"

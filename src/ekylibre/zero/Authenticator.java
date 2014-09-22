@@ -1,4 +1,4 @@
-package ekylibre.rei;
+package ekylibre.zero;
 
 import android.accounts.*;
 import android.content.Context;
@@ -29,7 +29,7 @@ public class Authenticator extends AbstractAccountAuthenticator {
     // Don't add additional accounts
     @Override
     public Bundle addAccount(AccountAuthenticatorResponse response, String accountType, String authTokenType, String[] requiredFeatures, Bundle options) throws NetworkErrorException {
-        Log.d("rei", "> addAccount " + accountType);
+        Log.d("zero", "> addAccount " + accountType);
         final Intent intent = new Intent(mContext, AuthenticatorActivity.class);
         intent.putExtra(AuthenticatorActivity.KEY_AUTH_TOKEN_TYPE, authTokenType);
         intent.putExtra(AccountManager.KEY_ACCOUNT_TYPE, accountType);
@@ -43,7 +43,7 @@ public class Authenticator extends AbstractAccountAuthenticator {
     // Getting an authentication token is not supported
     @Override
     public Bundle getAuthToken(AccountAuthenticatorResponse response, Account account, String authTokenType, Bundle options) throws NetworkErrorException {
-        Log.d("rei", "> getAuthToken");
+        Log.d("zero", "> getAuthToken");
         // If the caller requested an authToken type we don't support, then
         // return an error
         if (!authTokenType.equals(AUTH_TOKEN_TYPE_GLOBAL)) {
@@ -55,14 +55,14 @@ public class Authenticator extends AbstractAccountAuthenticator {
         // the server for an appropriate AuthToken.
         final AccountManager accountManager = AccountManager.get(mContext);
         String authToken = accountManager.peekAuthToken(account, authTokenType);
-        Log.d("rei", "> getAuthToken > peekAuthToken returned - " + authToken);
+        Log.d("zero", "> getAuthToken > peekAuthToken returned - " + authToken);
         // Lets give another try to authenticate the user
         if (TextUtils.isEmpty(authToken)) {
-            Log.d("rei", "> getAuthToken > empty token");
+            Log.d("zero", "> getAuthToken > empty token");
             final String password = accountManager.getPassword(account);
             if (password != null) {
                 try {
-                    Log.d("rei", TAG + "> re-authenticating with the existing password");
+                    Log.d("zero", TAG + "> re-authenticating with the existing password");
                     // authToken = sServerAuthenticate.userSignIn(account.name, password, authTokenType);
                     final String instanceUrl = accountManager.getUserData(account, KEY_INSTANCE_URL);
                     authToken = Token.create(account.name, password, instanceUrl);
@@ -73,7 +73,7 @@ public class Authenticator extends AbstractAccountAuthenticator {
         }
         // If we get an authToken - we return it
         if (!TextUtils.isEmpty(authToken)) {
-            Log.d("rei", "> getAuthToken > empty token!");
+            Log.d("zero", "> getAuthToken > empty token!");
             final Bundle result = new Bundle();
             result.putString(AccountManager.KEY_ACCOUNT_NAME, account.name);
             result.putString(AccountManager.KEY_ACCOUNT_TYPE, account.type);
@@ -83,7 +83,7 @@ public class Authenticator extends AbstractAccountAuthenticator {
         // If we get here, then we couldn't access the user's password - so we
         // need to re-prompt them for their credentials. We do that by creating
         // an intent to display our AuthenticatorActivity.
-        Log.d("rei", "> getAuthToken > no password");
+        Log.d("zero", "> getAuthToken > no password");
         final Intent intent = new Intent(mContext, AuthenticatorActivity.class);
         intent.putExtra(AccountManager.KEY_ACCOUNT_AUTHENTICATOR_RESPONSE, response);
         intent.putExtra(AccountManager.KEY_ACCOUNT_TYPE, account.type);
@@ -120,7 +120,7 @@ public class Authenticator extends AbstractAccountAuthenticator {
     // Ignore attempts to confirm credentials
     @Override
     public Bundle confirmCredentials(AccountAuthenticatorResponse response, Account account, Bundle options) throws NetworkErrorException {
-        Log.d("rei", "> confirmCredentials");
+        Log.d("zero", "> confirmCredentials");
         if (options != null && options.containsKey(AccountManager.KEY_PASSWORD)) {
             final AccountManager accountManager = AccountManager.get(mContext);
             final String password  = options.getString(AccountManager.KEY_PASSWORD);
@@ -146,7 +146,7 @@ public class Authenticator extends AbstractAccountAuthenticator {
     // Updating user credentials 
     @Override
     public Bundle updateCredentials(AccountAuthenticatorResponse response, Account account, String authTokenType, Bundle loginOptions) {
-        Log.d("rei", "> updateCredentials");
+        Log.d("zero", "> updateCredentials");
         final Intent intent = new Intent(mContext, AuthenticatorActivity.class);
         intent.putExtra(AccountManager.KEY_ACCOUNT_NAME, account.name);
         intent.putExtra(AuthenticatorActivity.KEY_AUTH_TOKEN_TYPE, authTokenType);

@@ -1,4 +1,4 @@
-package ekylibre.rei.provider;
+package ekylibre.zero.provider;
  
 import android.content.ContentProvider;
 import android.content.ContentValues;
@@ -10,7 +10,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.net.Uri;
 import android.util.Log;
 
-import ekylibre.rei.util.SelectionBuilder;
+import ekylibre.zero.util.SelectionBuilder;
 
 public class TrackingProvider extends ContentProvider {
     private DatabaseHelper mDatabaseHelper;
