@@ -114,7 +114,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity {
     public void testDemo(View view) {
         mAccountNameEdit.setText("admin@ekylibre.org");
         mAccountPasswordEdit.setText("12345678");
-        mAccountInstanceEdit.setText("https://tdj2014.ergolis.com");
+        mAccountInstanceEdit.setText("https://sommet-elevage-2014.ekylibre.com");
         signIn(view);
     }
 
