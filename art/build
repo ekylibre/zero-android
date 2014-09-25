@@ -13,7 +13,7 @@ inkscape -z --export-background=#000000 --export-background-opacity=0 --export-p
 # XXXHDPI 4
 
 
-for icon in ic_launcher ic_ekylibre
+for icon in ic_launcher ic_ekylibre_erp
 do
 
     for size in 48 72 96 144 192

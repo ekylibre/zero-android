@@ -14,9 +14,9 @@
    height="160.00012"
    id="ekylibre-logo"
    sodipodi:version="0.32"
-   inkscape:version="0.48.3.1 r9886"
+   inkscape:version="0.48.4 r9939"
    version="1.0"
-   sodipodi:docname="ic_ekylibre.svg"
+   sodipodi:docname="ic_ekylibre_erp.svg"
    inkscape:output_extension="org.inkscape.output.svg.inkscape"
    inkscape:export-filename="ekylibre.png"
    inkscape:export-xdpi="180"
@@ -58,16 +58,6 @@
        id="linearGradient2998"
        gradientUnits="userSpaceOnUse"
        gradientTransform="translate(-232.76642,420.63751)"
-       x1="-100"
-       y1="288.00003"
-       x2="-68"
-       y2="320" />
-    <linearGradient
-       inkscape:collect="always"
-       xlink:href="#linearGradient3265-8"
-       id="linearGradient3002-0"
-       gradientUnits="userSpaceOnUse"
-       gradientTransform="matrix(5.0000038,0,0,5.0000038,1095.9287,-1262.7106)"
        x1="-100"
        y1="288.00003"
        x2="-68"
@@ -138,16 +128,16 @@
      borderopacity="1.0"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:zoom="1"
-     inkscape:cx="-165.81383"
-     inkscape:cy="39.04292"
+     inkscape:zoom="2"
+     inkscape:cx="193.68654"
+     inkscape:cy="-9.4064262"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
-     inkscape:window-width="1680"
-     inkscape:window-height="952"
+     inkscape:window-width="1920"
+     inkscape:window-height="1027"
      inkscape:window-x="0"
-     inkscape:window-y="25"
+     inkscape:window-y="31"
      inkscape:window-maximized="1"
      fit-margin-top="0"
      fit-margin-left="0"
@@ -172,35 +162,76 @@
      inkscape:groupmode="layer"
      id="layer1"
      transform="translate(-1113.9285,-324.29067)">
-    <rect
-       style="fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:none"
-       id="rect2547-0"
-       width="152"
-       height="152"
-       x="599.92853"
-       y="181.2908" />
-    <path
-       style="fill:url(#linearGradient3002-0);fill-opacity:1;fill-rule:nonzero;stroke:none"
-       d="m 595.92845,177.29073 0,160.00012 160.0001,0 0,-160.00012 -160.0001,0 z m 10,10.00001 140.0001,0 0,140.00011 -140.0001,0 0,-140.00011 z m 20,20.00002 0,20.00001 0,20.00002 0,20.00001 0,20.00002 0,20.00001 100,0 0,-20.00001 -80,0 0,-20.00002 80,0 0,-20.00001 -80,0 0,-20.00002 80,0 0,-20.00001 -80,0 -20,0 z"
-       id="path2544-3"
-       sodipodi:nodetypes="cccccccccccccccccccccccccccc"
-       inkscape:connector-curvature="0" />
     <g
-       id="g3006"
-       transform="matrix(0.87499945,0,0,0.87499934,149.24168,50.53667)">
-      <rect
-         y="328.29074"
-         x="1117.9287"
-         height="152"
-         width="152"
-         id="rect2547-0-8"
-         style="fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:none" />
+       id="g3174"
+       transform="matrix(0.75,0,0,0.75,1187.814,508.14601)">
       <path
+         inkscape:export-ydpi="270"
+         inkscape:export-xdpi="270"
+         inkscape:export-filename="/home/brice/Projets/ekylibre/website/img/projects/icons/erp.png"
+         transform="matrix(0.54263564,0,0,0.53846156,-119.75422,-278.97643)"
+         d="M 420,260.93362 C 420,363.50079 337.49247,446.6479 235.71428,446.6479 133.93609,446.6479 51.428558,363.50079 51.428558,260.93362 51.428558,158.36646 133.93609,75.219345 235.71428,75.219345 337.49247,75.219345 420,158.36646 420,260.93362 z"
+         sodipodi:ry="185.71428"
+         sodipodi:rx="184.28572"
+         sodipodi:cy="260.93362"
+         sodipodi:cx="235.71428"
+         id="path2994"
+         style="fill:#476ba8;fill-opacity:1;fill-rule:evenodd;stroke:none"
+         sodipodi:type="arc" />
+      <path
+         inkscape:transform-center-y="-57.5"
+         sodipodi:nodetypes="cccccccc"
          inkscape:connector-curvature="0"
-         sodipodi:nodetypes="cccccccccccccccccccccccccccc"
-         id="path2544-3-9"
-         d="m 1113.9285,324.29067 0,160.00012 160.0001,0 0,-160.00012 -160.0001,0 z m 10,10.00001 140.0001,0 0,140.00011 -140.0001,0 0,-140.00011 z m 20,20.00002 0,20.00001 0,20.00002 0,20.00001 0,20.00002 0,20.00001 100,0 0,-20.00001 -80,0 0,-20.00002 80,0 0,-20.00001 -80,0 0,-20.00002 80,0 0,-20.00001 -80,0 -20,0 z"
-         style="fill:#496daa;fill-opacity:1;fill-rule:nonzero;stroke:none" />
+         id="path4434"
+         d="m -1.84725,-163.47371 20,0 0,-35 12,0 -22,-30 -22,30 12,0 z"
+         style="fill:#ffffff;fill-opacity:1;stroke:none" />
+      <use
+         inkscape:transform-center-x="47.296461"
+         height="1060"
+         width="1000"
+         transform="matrix(-0.5,-0.8660254,0.8660254,-0.5,132.15087,-200.65007)"
+         id="use4436"
+         inkscape:transform-center-y="26.597548"
+         xlink:href="#path4434"
+         y="0"
+         x="0" />
+      <use
+         inkscape:transform-center-x="-47.296459"
+         height="1060"
+         width="1000"
+         transform="matrix(-0.5,0.8660254,-0.8660254,-0.5,-107.69262,-214.77105)"
+         id="use4438"
+         inkscape:transform-center-y="26.597548"
+         xlink:href="#path4434"
+         y="0"
+         x="0" />
+      <path
+         inkscape:transform-center-y="57.499997"
+         sodipodi:nodetypes="cccccccc"
+         inkscape:connector-curvature="0"
+         id="path4434-6"
+         d="m -1.84725,-50.47371 20,0 0,-35 12,0 -22,-30 -22,30 12,0 z"
+         style="fill:#ffffff;fill-opacity:1;stroke:none" />
+      <use
+         inkscape:transform-center-x="-52.296457"
+         height="1060"
+         width="1000"
+         transform="matrix(-0.5,-0.8660254,0.8660254,-0.5,132.15087,-200.65007)"
+         id="use4476"
+         inkscape:transform-center-y="-31.053847"
+         xlink:href="#path4434-6"
+         y="0"
+         x="0" />
+      <use
+         inkscape:transform-center-x="52.296461"
+         height="1060"
+         width="1000"
+         transform="matrix(-0.5,0.8660254,-0.8660254,-0.5,-107.69262,-214.77105)"
+         id="use4478"
+         inkscape:transform-center-y="-31.053846"
+         xlink:href="#path4434-6"
+         y="0"
+         x="0" />
     </g>
   </g>
 </svg>
