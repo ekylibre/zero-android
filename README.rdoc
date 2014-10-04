@@ -9,7 +9,7 @@
 === 64-bit installation prerequisites
 
 You need to install 32-bit libs:
-    $ sudo apt-get libc6-i386 lib32z1 lib32stdc++6
+    $ sudo apt-get install libc6-i386 lib32z1 lib32stdc++6
 
 === Common installation
 
