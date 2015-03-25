@@ -1,21 +1,34 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <resources>
   <string-array name="procedureNatures_entries">
+    <item>Accouplage</item>
     <item>Ajout de produits</item>
     <item>Alimentation</item>
+    <item>Alimentation (manuelle)</item>
     <item>Alimentation des animaux</item>
     <item>Amendement</item>
+    <item>Amendement (automatique)</item>
+    <item>Amendement (manuel)</item>
+    <item>Aménagement foncier</item>
+    <item>Assemblage</item>
     <item>Binage</item>
     <item>Broyage</item>
     <item>Changement de groupe d’animaux</item>
+    <item>Clôtures</item>
     <item>Contrôle de croissance</item>
+    <item>Coupe</item>
     <item>Cultipacking</item>
+    <item>Déplacement</item>
+    <item>Désherbage</item>
     <item>Désherbage chimique</item>
     <item>Désherbage physique</item>
+    <item>Désherbage thermique</item>
     <item>Désinfection du sol</item>
     <item>Embouteillage</item>
     <item>Ensilage</item>
+    <item>Exclusion d’un groupe</item>
     <item>Fenaison</item>
+    <item>Fenaisson et pressage de fourrages</item>
     <item>Fermentation</item>
     <item>Fertilisation des plantes</item>
     <item>Filtration</item>
@@ -24,29 +37,36 @@
     <item>Hygiène des animaux</item>
     <item>Hygiène des bâtiments d’élevage</item>
     <item>Implantation d’une culture</item>
+    <item>Inclusion dans un groupe</item>
     <item>Irrigation des plantes</item>
     <item>Labour</item>
     <item>Maintenance</item>
     <item>Mise à niveau</item>
+    <item>Moisson</item>
     <item>Mouvement d’animaux</item>
     <item>Mélange</item>
-    <item>Mélange</item>
+    <item>Mélange de produits de protection des végétaux</item>
+    <item>Mélange de semences</item>
+    <item>Mélange d’aliment</item>
     <item>Nettoyage des bâtiments d’élevage</item>
     <item>Nutrition des plantes</item>
+    <item>Paillage ‒ Pallissage</item>
     <item>Plantation</item>
     <item>Pressage</item>
+    <item>Production d’oeufs</item>
     <item>Production laitière</item>
     <item>Productions animales</item>
     <item>Protection des cultures</item>
     <item>Pâturage</item>
     <item>Remontage</item>
     <item>Remplacement de pièces</item>
+    <item>Remplissage</item>
     <item>Reproduction (ovipare)</item>
     <item>Reproduction (vivipare)</item>
     <item>Récolte</item>
+    <item>Récolte de fruits à coques</item>
     <item>Semis</item>
     <item>Soins médicaux des animaux</item>
-    <item>Taille</item>
     <item>Taille</item>
     <item>Traitement curatif des maladies animales</item>
     <item>Traitement des cultures</item>
@@ -54,59 +74,83 @@
     <item>Transfert</item>
     <item>Transformation</item>
     <item>Transport</item>
+    <item>Transport de fourrages</item>
+    <item>Transport de fruits à coques</item>
     <item>Transport de grains</item>
     <item>Transport de vendange</item>
     <item>Travail du sol</item>
+    <item>Travail manuel</item>
+    <item>Travail manuel (maraîchage)</item>
     <item>Tâche administrative</item>
     <item>Vendange</item>
   </string-array>
   <string-array name="procedureNatures_values">
+    <item>coupling</item>
     <item>addition</item>
     <item>food_supply</item>
-    <item>animal_feeding</item>
+    <item>manual_food_supply</item>
+    <item>animal_nutrition</item>
     <item>soil_enrichment</item>
+    <item>automatic_soil_enrichment</item>
+    <item>manual_soil_enrichment</item>
+    <item>ground_arrangement</item>
+    <item>blending</item>
     <item>hoeing</item>
     <item>grinding</item>
     <item>animal_group_changing</item>
+    <item>enclosing</item>
     <item>growth_control</item>
+    <item>cutting</item>
     <item>cultipacking</item>
-    <item>plant_chemical_weed</item>
-    <item>plant_physical_weed</item>
+    <item>moving</item>
+    <item>weed_killing</item>
+    <item>chemical_weed_killing</item>
+    <item>physical_weed_killing</item>
+    <item>thermal_weed_killing</item>
     <item>soil_cleaning</item>
     <item>bottling</item>
     <item>silage</item>
+    <item>group_exclusion</item>
     <item>haymaking</item>
+    <item>straw_processing</item>
     <item>fermentation</item>
     <item>plant_fertilisation</item>
     <item>filtration</item>
     <item>animal_fecondation</item>
     <item>raking</item>
-    <item>animal_health</item>
+    <item>animal_care</item>
     <item>animal_housing_treatment</item>
     <item>implantation</item>
+    <item>group_inclusion</item>
     <item>plant_irrigation</item>
     <item>plowing</item>
     <item>maintenance_task</item>
     <item>consummables_addition</item>
+    <item>grains_harvest</item>
     <item>animal_moving</item>
-    <item>blending</item>
     <item>mixing</item>
+    <item>plant_chemical_mixing</item>
+    <item>seed_mixing</item>
+    <item>food_mixing</item>
     <item>animal_housing_cleaning</item>
     <item>plant_nutrition</item>
+    <item>mulching</item>
     <item>implanting</item>
     <item>pressing</item>
+    <item>egg_production</item>
     <item>milk_production</item>
     <item>animal_production</item>
-    <item>cultivation_protection</item>
+    <item>plant_care</item>
     <item>pasturing</item>
     <item>remontage</item>
     <item>piece_replacement</item>
+    <item>filling</item>
     <item>oviparous_birth</item>
     <item>viviparous_birth</item>
     <item>harvest</item>
+    <item>nuts_harvest</item>
     <item>sowing</item>
     <item>animal_illness_treatment</item>
-    <item>cutting</item>
     <item>pruning</item>
     <item>animal_curative_medicine_admission</item>
     <item>plant_illness_treatment</item>
@@ -114,9 +158,13 @@
     <item>transfer</item>
     <item>transformation</item>
     <item>transport</item>
+    <item>straw_transport</item>
+    <item>nuts_transport</item>
     <item>grain_transport</item>
     <item>grape_transport</item>
     <item>tillage</item>
+    <item>manual_working</item>
+    <item>garden_human_working</item>
     <item>administrative_task</item>
     <item>grape_harvest</item>
   </string-array>
