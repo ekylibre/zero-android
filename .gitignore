@@ -3,5 +3,5 @@
 /gen
 /local.properties
 /tmp
-release.keystore
+release.*
 *.img
