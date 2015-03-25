@@ -26,5 +26,6 @@
   <string name="sign_in">Sign in</string>
   <string name="start">Start</string>
   <string name="stop">Stop</string>
+  <string name="sync">Synchronize</string>
   <string name="test_demo">Test demo</string>
 </resources>

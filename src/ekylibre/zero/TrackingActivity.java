@@ -60,7 +60,7 @@ public class TrackingActivity extends Activity implements TrackingListenerWriter
     private boolean mRunning, mPrecisionMode;
     private String mLastProcedureNature, mLastProcedureNatureName;
     private Chronometer mMasterChrono, mPrecisionModeChrono;
-    private Button mScanButton, mStartButton, mStopButton, mPauseButton, mResumeButton, mPrecisionModeStartButton, mPrecisionModeStopButton;
+    private Button mScanButton, mStartButton, mStopButton, mPauseButton, mResumeButton, mPrecisionModeStartButton, mPrecisionModeStopButton, mSyncButton;
     private HorizontalScrollView mDetails;
     private TextView mProcedureNature, mAccuracy, mLatitude, mLongitude, mCrumbsCount, mCoordinates, mBarcode;
     private String mLocationProvider;
@@ -115,6 +115,7 @@ public class TrackingActivity extends Activity implements TrackingListenerWriter
         mPauseButton  = (Button)      findViewById(R.id.pause_intervention_button);
         mResumeButton = (Button)      findViewById(R.id.resume_intervention_button);
         mScanButton   = (Button)      findViewById(R.id.scan_code_button);
+        mSyncButton   = (Button)      findViewById(R.id.sync_button);
         mPrecisionModeStartButton  = (Button) findViewById(R.id.start_precision_mode_button);
         mPrecisionModeStopButton   = (Button) findViewById(R.id.stop_precision_mode_button);
 
@@ -159,6 +160,7 @@ public class TrackingActivity extends Activity implements TrackingListenerWriter
                     mStopButton.setVisibility(View.VISIBLE);
                     mPauseButton.setVisibility(View.VISIBLE);
                     mScanButton.setVisibility(View.VISIBLE);
+                    mSyncButton.setVisibility(View.GONE);
                     mPrecisionModeStartButton.setVisibility(View.VISIBLE);
                     mProcedureNature.setVisibility(View.VISIBLE);
                     mProcedureNature.setText(mLastProcedureNatureName);
@@ -228,6 +230,7 @@ public class TrackingActivity extends Activity implements TrackingListenerWriter
         mDetails.setVisibility(View.GONE);
         mProcedureNature.setVisibility(View.INVISIBLE);
         mStartButton.setVisibility(View.VISIBLE);
+        mSyncButton.setVisibility(View.VISIBLE);
         this.stopTracking();
         this.addCrumb("stop");
 
@@ -354,6 +357,12 @@ public class TrackingActivity extends Activity implements TrackingListenerWriter
         }
         // else continue with any other code you need in the method
     }
+
+    // Call the sync service
+    public void syncCrumbs(View view) {
+        this.syncData();
+    }
+    
 
     private void startTracking() {
         startTracking(4000);
