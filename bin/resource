@@ -1,4 +1,5 @@
 #!/usr/bin/env ruby
+# coding: utf-8
 require 'rubygems'
 require 'nokogiri'
 require 'pathname'
@@ -10,7 +11,7 @@ class Resourcer
   def initialize()
     here = Pathname.new(File.expand_path(__FILE__)).dirname
     @root = here.join("..")
-    @ekylibre_path = @root.join("..", "ekylibre")
+    @ekylibre_path = @root.join("../..", "ekylibre")
   end
 
   def do!
@@ -29,7 +30,7 @@ class Resourcer
         xml.resources {
           xml.send("string-array", name: "procedureNatures_entries") {
             for name in entries
-              xml.item(name);
+              xml.item(name.gsub('\'', '’'));
             end
           }
           xml.send("string-array", name: "procedureNatures_values") {
