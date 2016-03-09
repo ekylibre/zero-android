@@ -141,7 +141,7 @@ public class TrackingActivity extends Activity implements TrackingListenerWriter
             .setContentTitle(getString(R.string.app_name))
             .setContentText("")
             .setContentIntent(PendingIntent.getActivity(this, 0, new Intent(this, TrackingActivity.class), PendingIntent.FLAG_UPDATE_CURRENT))
-            .setSmallIcon(R.drawable.ic_stat_notify);
+            .setSmallIcon(R.mipmap.ic_stat_notify);
         
 
         // Procedure nature chooser for starting intervention
@@ -177,7 +177,7 @@ public class TrackingActivity extends Activity implements TrackingListenerWriter
                     addCrumb("start", metadata);
 
                     mNotificationBuilder
-                        .setSmallIcon(R.drawable.ic_stat_notify_running)
+                        .setSmallIcon(R.mipmap.ic_stat_notify_running)
                         .setContentTitle(mLastProcedureNatureName)
                         .setContentText(getString(R.string.running));
                     mNotificationManager.notify(mNotificationID, mNotificationBuilder.build());
@@ -235,7 +235,7 @@ public class TrackingActivity extends Activity implements TrackingListenerWriter
         this.addCrumb("stop");
 
         mNotificationBuilder
-            .setSmallIcon(R.drawable.ic_stat_notify)
+            .setSmallIcon(R.mipmap.ic_stat_notify)
             .setContentTitle(getString(R.string.app_name))
             .setContentText("");
         mNotificationManager.cancel(mNotificationID);
@@ -258,7 +258,7 @@ public class TrackingActivity extends Activity implements TrackingListenerWriter
         this.addCrumb("hard_start");
 
         mNotificationBuilder
-            .setSmallIcon(R.drawable.ic_stat_notify_precision_mode)
+            .setSmallIcon(R.mipmap.ic_stat_notify_precision_mode)
             .setContentText(getString(R.string.precision_mode));
         mNotificationManager.notify(mNotificationID, mNotificationBuilder.build());
     }
@@ -275,7 +275,7 @@ public class TrackingActivity extends Activity implements TrackingListenerWriter
         this.addCrumb("hard_stop");
 
         mNotificationBuilder
-            .setSmallIcon(R.drawable.ic_stat_notify_running)
+            .setSmallIcon(R.mipmap.ic_stat_notify_running)
             .setContentText(getString(R.string.running));
         mNotificationManager.notify(mNotificationID, mNotificationBuilder.build());
 
@@ -301,7 +301,7 @@ public class TrackingActivity extends Activity implements TrackingListenerWriter
         this.stopTracking();
         this.addCrumb("pause");
         mNotificationBuilder
-            .setSmallIcon(R.drawable.ic_stat_notify_paused)
+            .setSmallIcon(R.mipmap.ic_stat_notify_paused)
             .setContentText(getString(R.string.paused));
         mNotificationManager.notify(mNotificationID, mNotificationBuilder.build());
    }
@@ -321,12 +321,12 @@ public class TrackingActivity extends Activity implements TrackingListenerWriter
             mPrecisionModeChrono.setBase(mPrecisionModeStart - mPrecisionModeDuration);
             mPrecisionModeChrono.start();
             mNotificationBuilder
-                .setSmallIcon(R.drawable.ic_stat_notify_precision_mode)
+                .setSmallIcon(R.mipmap.ic_stat_notify_precision_mode)
                 .setContentText(getString(R.string.precision_mode));
             mPrecisionModeStopButton.setVisibility(View.VISIBLE);
         } else {
             mNotificationBuilder
-                .setSmallIcon(R.drawable.ic_stat_notify_running)
+                .setSmallIcon(R.mipmap.ic_stat_notify_running)
                 .setContentText(getString(R.string.running));
             mPrecisionModeStartButton.setVisibility(View.VISIBLE);
         }

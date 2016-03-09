@@ -35,7 +35,7 @@
   <application 
       android:allowBackup="true"
       android:label="@string/app_name" 
-      android:icon="@drawable/ic_launcher">
+      android:icon="@mipmap/ic_launcher">
 
     <activity android:name="TrackingActivity"
               android:launchMode="singleInstance"
@@ -52,7 +52,7 @@
     <!-- Authenticator related activities and service needs to be declared here in order for the app to recognize them-->
     <activity android:name="ekylibre.zero.AuthenticatorActivity"
               android:label="@string/service_name"
-              android:icon="@drawable/ic_ekylibre"/>
+              android:icon="@mipmap/ic_ekylibre"/>
     <service android:name="ekylibre.zero.AuthenticatorService"
              android:permission="ekylibre.zero.permission.AUTHENTICATE_ACCOUNTS">
       <intent-filter>
