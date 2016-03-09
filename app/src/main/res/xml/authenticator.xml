@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <account-authenticator xmlns:android="http://schemas.android.com/apk/res/android"
                        android:accountType="ekylibre.account.basic"
-                       android:icon="@drawable/ic_ekylibre"
-                       android:smallIcon="@drawable/ic_ekylibre"
+                       android:icon="@mipmap/ic_ekylibre"
+                       android:smallIcon="@mipmap/ic_ekylibre"
                        android:label="@string/service_name"/>
 <!-- android:accountPreferences="@xml/prefs" -->
