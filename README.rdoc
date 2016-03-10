@@ -1,6 +1,7 @@
 = Zero (Android)
 
 {Zero}[https://github.com/ekylibre/zero] for {Android}[http://www.android.com].
+This is an old version, please go to https://github.com/ekylibre/zero-android to see the latest version.
 
 
 
