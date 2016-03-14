@@ -13,8 +13,11 @@ You need to install 32-bit libs:
 
 === Common installation
 
-1. Install build dependencies
-     $ sudo apt-get install ant make
+1. Install Android Studio
+    go to this site and download android studio : http://developer.android.com/sdk/index.html
+    make sure the file you downloaded is in the folder you want android studio to be installed in.
+    unzip the file you downloaded with :
+    $ unzip android-studio-ide-141.2456560-linux.zip.crdownload
 2. Install Android SDK
      $ wget http://dl.google.com/android/android-sdk_r23.0.2-linux.tgz
      $ tar xzvf android-sdk_r23.0.2-linux.tgz -C </path/to/android/sdk>

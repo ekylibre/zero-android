@@ -1,108 +1,143 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="ekylibre.zero"
-          android:versionCode="3"
-          android:versionName="0.0.2"
-          android:installLocation="auto">
+    package="ekylibre.zero"
+    android:installLocation="auto"
+    android:versionCode="3"
+    android:versionName="0.0.2">
 
-  <permission android:name="ekylibre.zero.permission.AUTHENTICATE_ACCOUNTS"
-              android:label="@string/permlab_authenticateAccounts"
-              android:permissionGroup="android.permission-group.ACCOUNTS"/>
-  <permission android:name="ekylibre.zero.permission.SYNC_DATA"
-              android:label="@string/permlab_syncData"
-              android:permissionGroup="android.permission-group.SYNC_SETTINGS"/>
+    <uses-sdk
+        android:minSdkVersion="16"
+        android:targetSdkVersion="20" />
 
-  <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-  <uses-permission android:name="android.permission.AUTHENTICATE_ACCOUNTS" />
-  <uses-permission android:name="android.permission.INTERNET" />
-  <uses-permission android:name="android.permission.GET_ACCOUNTS" />
-  <uses-permission android:name="android.permission.READ_SYNC_SETTINGS"/>
-  <uses-permission android:name="android.permission.USE_CREDENTIALS"/>
-  <uses-permission android:name="android.permission.WRITE_SYNC_SETTINGS"/>
-  <!-- <uses-permission android:name="android.permission.ACCESS_LOCATION_EXTRA_COMMANDS" /> -->
-  <!-- <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" /> -->
-  <uses-permission android:name="ekylibre.zero.permission.AUTHENTICATE_ACCOUNTS" />
-  <uses-permission android:name="ekylibre.zero.permission.SYNC_DATA" />
-  
-  <uses-sdk android:minSdkVersion="16" android:targetSdkVersion="20" />
+    <permission
+        android:name="ekylibre.zero.permission.AUTHENTICATE_ACCOUNTS"
+        android:label="@string/permlab_authenticateAccounts"
+        android:permissionGroup="android.permission-group.ACCOUNTS" />
+    <permission
+        android:name="ekylibre.zero.permission.SYNC_DATA"
+        android:label="@string/permlab_syncData"
+        android:permissionGroup="android.permission-group.SYNC_SETTINGS" />
 
-  <supports-screens android:xlargeScreens="true"
-                    android:largeScreens="true"
-                    android:normalScreens="true"
-                    android:smallScreens="true"
-                    android:anyDensity="true"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.AUTHENTICATE_ACCOUNTS" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+    <uses-permission android:name="android.permission.READ_SYNC_SETTINGS" />
+    <uses-permission android:name="android.permission.USE_CREDENTIALS" />
+    <uses-permission android:name="android.permission.WRITE_SYNC_SETTINGS" />
+    <!-- <uses-permission android:name="android.permission.ACCESS_LOCATION_EXTRA_COMMANDS" /> -->
+    <!-- <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" /> -->
+    <uses-permission android:name="ekylibre.zero.permission.AUTHENTICATE_ACCOUNTS" />
+    <uses-permission android:name="ekylibre.zero.permission.SYNC_DATA" />
 
-  <application 
-      android:allowBackup="true"
-      android:label="@string/app_name" 
-      android:icon="@mipmap/ic_launcher">
+    <supports-screens
+        android:anyDensity="true"
+        android:largeScreens="true"
+        android:normalScreens="true"
+        android:smallScreens="true"
+        android:xlargeScreens="true" />
 
-    <activity android:name="TrackingActivity"
-              android:launchMode="singleInstance"
-              android:screenOrientation="portrait"
-              android:label="@string/app_name">
-      <intent-filter>
-        <action android:name="android.intent.action.MAIN" />
-        <category android:name="android.intent.category.LAUNCHER" />
-      </intent-filter>
-    </activity>
+    <android:uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <android:uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <android:uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
-    <!-- <service android:name="TrackingService"/> -->
-    
-    <!-- Authenticator related activities and service needs to be declared here in order for the app to recognize them-->
-    <activity android:name="ekylibre.zero.AuthenticatorActivity"
-              android:label="@string/service_name"
-              android:icon="@mipmap/ic_ekylibre"/>
-    <service android:name="ekylibre.zero.AuthenticatorService"
-             android:permission="ekylibre.zero.permission.AUTHENTICATE_ACCOUNTS">
-      <intent-filter>
-        <action android:name="android.accounts.AccountAuthenticator" />
-      </intent-filter>
-      <meta-data android:name="android.accounts.AccountAuthenticator"
-                 android:resource="@xml/authenticator" />
-    </service>
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name">
+        <activity
+            android:name=".TrackingActivity"
+            android:label="@string/app_name"
+            android:launchMode="singleInstance"
+            android:screenOrientation="portrait">
 
-    <!-- Content provider -->
-    <provider android:name="ekylibre.zero.provider.TrackingProvider"
-              android:authorities="ekylibre.zero.tracking.provider"
-              android:exported="false"
-              android:syncable="true"/>
-    
-    <!-- Sync related activities and service needs to be declared here in order for the app to recognize them-->
-    <service android:name="ekylibre.zero.SyncService"
-             android:permission="ekylibre.zero.permission.SYNC_DATA"
-             android:process=":sync">
-      <intent-filter>
-        <action android:name="android.content.SyncAdapter" />
-      </intent-filter>
-      <meta-data android:name="android.content.SyncAdapter"
-                 android:resource="@xml/syncadapter" />
-    </service>
+        </activity>
 
-    <!-- Barcode scanning related activities and service needs to be declared here in order for the app to recognize them-->
-    <activity android:name="com.google.zxing.client.android.CaptureActivity"
-              android:screenOrientation="portrait"
-              android:configChanges="orientation|keyboardHidden"
-              android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
-              android:windowSoftInputMode="stateAlwaysHidden"
-              android:parentActivityName="TrackingActivity">
-      <intent-filter>
-        <action android:name="com.google.zxing.client.android.SCAN"/>
-        <category android:name="android.intent.category.DEFAULT"/>
-      </intent-filter>
-      <meta-data android:name="android.support.PARENT_ACTIVITY" android:value="TrackingActivity" />
-    </activity>
+        <!-- <service android:name="TrackingService"/> -->
 
-    <!-- Settings -->
-    <activity android:name="SettingsActivity"
-              android:label="@string/settings" 
-              android:parentActivityName="TrackingActivity">
-      <intent-filter>
-        <action android:name="android.intent.action.VIEW" />
-        <category android:name="android.intent.category.PREFERENCE" />
-      </intent-filter>
-      <meta-data android:name="android.support.PARENT_ACTIVITY" android:value="TrackingActivity" />
-    </activity>
 
-  </application>
+        <!-- Authenticator related activities and service needs to be declared here in order for the app to recognize them -->
+        <activity
+            android:name=".AuthenticatorActivity"
+            android:icon="@mipmap/ic_ekylibre"
+            android:label="@string/service_name" />
+
+        <service
+            android:name=".AuthenticatorService"
+            android:permission="ekylibre.zero.permission.AUTHENTICATE_ACCOUNTS">
+            <intent-filter>
+                <action android:name="android.accounts.AccountAuthenticator" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.accounts.AccountAuthenticator"
+                android:resource="@xml/authenticator" />
+        </service>
+
+        <!-- Content provider -->
+        <provider
+            android:name=".provider.TrackingProvider"
+            android:authorities="ekylibre.zero.tracking.provider"
+            android:exported="false"
+            android:syncable="true" />
+
+        <!-- Sync related activities and service needs to be declared here in order for the app to recognize them -->
+        <service
+            android:name=".SyncService"
+            android:permission="ekylibre.zero.permission.SYNC_DATA"
+            android:process=":sync">
+            <intent-filter>
+                <action android:name="android.content.SyncAdapter" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.content.SyncAdapter"
+                android:resource="@xml/syncadapter" />
+        </service>
+
+        <!-- Barcode scanning related activities and service needs to be declared here in order for the app to recognize them -->
+        <activity
+            android:name="com.google.zxing.client.android.CaptureActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:parentActivityName=".TrackingActivity"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
+            android:windowSoftInputMode="stateAlwaysHidden">
+            <intent-filter>
+                <action android:name="com.google.zxing.client.android.SCAN" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="TrackingActivity" />
+        </activity>
+
+        <!-- Settings -->
+        <activity
+            android:name=".SettingsActivity"
+            android:label="@string/settings"
+            android:parentActivityName=".TrackingActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.PREFERENCE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="TrackingActivity" />
+        </activity>
+        <activity android:name=".IssuesActivity" />
+        <activity android:name=".IssueTypeActivity" />
+        <activity android:name=".IssueActivity" />
+        <activity android:name=".MenuActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+    </application>
+
 </manifest>
