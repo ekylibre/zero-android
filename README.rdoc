@@ -34,20 +34,12 @@ You need to install 32-bit libs:
 
 == Build and install a debug {APK}[http://en.wikipedia.org/wiki/APK_%28file_format%29]
 
-1. Launch the AVD you created:
-     $ emulator @<my-smartphone>
-
-2. Compile debug release and install it on emulated device
-     $ make
-   or 
-     $ ant debug
-     $ adb install -r bin/Zero-debug.apk
-
+1. In Android studio click on the "run 'app'" button (or use Maj+F10)
 
 
 == Sign and publish APK on repositories
 
-1. Create a signing key to release your APK in your repository. Create it unless it already exists: 
+1. Create a signing key to release your APK in your repository. Create it unless it already exists:
       $ keytool -genkey -v -keystore release.keystore -alias <repository> -keyalg RSA -keysize 2048 -validity 10000
 
 2. Build a release APK
@@ -57,7 +49,22 @@ You need to install 32-bit libs:
    * {F-Droid}[https://f-droid.org/wiki/page/FAQ_-_App_Developers]
    * {Google Play}[http://developer.android.com/tools/publishing/app-signing.html]
 
+1. In Android Studio click on Build (alt+b)
 
+2. Click on "generate build APK"
+
+3. If you do this for the first time click on "Create new"
+        Choose a folder in which will be saved your .jks
+        Fill in the information needed and click on "ok"
+
+   If you already have a java keystore, select it by clicking "Choose existing..."
+   Select your .jks in the files and click on "Ok"
+
+4. Click on "Next"
+
+5. Make sure the build type "release" is selected
+
+6. Click on "Finish"
 
 == License
 
