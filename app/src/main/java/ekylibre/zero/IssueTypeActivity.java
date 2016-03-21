@@ -15,15 +15,15 @@ public class IssueTypeActivity extends Activity {
     }
 
     public void Type_Animal(View v) {
-        Intent intent = new Intent(this, IssuesActivity.class);
+        Intent intent = new Intent(this, IssueActivity.class);
         startActivity(intent);
     }
     public void Type_Plant(View v) {
-        Intent intent = new Intent(this, IssuesActivity.class);
+        Intent intent = new Intent(this, IssueActivity.class);
         startActivity(intent);
     }
     public void Type_Equipment(View v) {
-        Intent intent = new Intent(this, IssuesActivity.class);
+        Intent intent = new Intent(this, IssueActivity.class);
         startActivity(intent);
     }
 }

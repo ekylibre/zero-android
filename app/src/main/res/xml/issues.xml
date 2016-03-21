@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <nomenclature name="issue_natures">
+        <items>
+            <item name="acarine_gall_mite" label="Phytopte"/>
+            <item name="accident" label="Accident"/>
+            <item name="anthracnose" label="Anthracnose"/>
+            <item name="aphid" label="Puceron"/>
+            <item name="bacteria_disease" label="Maladie bactérienne"/>
+            <item name="bacterial_leaf_blight" label="Bactériose des glumes du blé"/>
+            <item name="bacterial_streak" label="Glume noire des céréales"/>
+            <item name="bacteriosis" label="Bactériose"/>
+            <item name="black_rust" label="Rouille brune"/>
+            <item name="chenopodium_album" label="Chénopode blanc"/>
+            <item name="climate_issue" label="Incident climatique"/>
+            <item name="codling_moth" label="Carpocapse"/>
+            <item name="common_bunt" label="Carie commune"/>
+            <item name="cough" label="Toux"/>
+            <item name="croesus_septentrionalis" label="Tenthrède du noisetier"/>
+            <item name="defoliant_caterpillar" label="Chenille défoliatrice"/>
+            <item name="diarrhea" label="Diarrhée"/>
+            <item name="disease" label="Maladie"/>
+            <item name="drought" label="Sécheresse"/>
+            <item name="edema" label="Œdème"/>
+            <item name="empoasca_vitis_leafhopper" label="Cicadelle des grillures"/>
+            <item name="empty_fuel_tank" label="Panne sèche"/>
+            <item name="equipment_crash" label="Accident matériel"/>
+            <item name="escape" label="Fuite (d’animaux)"/>
+            <item name="fecondity_problem" label="Problème de fécondité"/>
+            <item name="fever" label="Fièvre"/>
+            <item name="flooding" label="Inondation"/>
+            <item name="fomitiporia" label="Fomitiporia"/>
+            <item name="fungus_disease" label="Maladie cryptogamique"/>
+            <item name="fusarium_head_blight" label="Fusariose"/>
+            <item name="grapevine_yellows" label="Flavescence dorée"/>
+            <item name="husk_fly" label="Mouche du brou"/>
+            <item name="insecta_disease" label="Présence d’insecte"/>
+            <item name="limping" label="Boîterie"/>
+            <item name="longhorn_beetle" label="Longicorne"/>
+            <item name="mammite" label="Mammite"/>
+            <item name="mechanical_issue" label="Problème mécanique"/>
+            <item name="nematoda_disease" label="Maladie à nématodes"/>
+            <item name="noble_rot" label="Pourriture grise ou noble"/>
+            <item name="nut_weevil" label="Balanin des noisettes"/>
+            <item name="phytophthora" label="Phytophthora"/>
+            <item name="piece_breakdown" label="Défaillance d’une pièce"/>
+            <item name="plant_disease" label="Maladie ou adventice lieés aux plantes"/>
+            <item name="pourridie_rot" label="Pourridié"/>
+            <item name="protozoa_disease" label="Maladie virale"/>
+            <item name="respiratory_problem" label="Problème respiratoire"/>
+            <item name="scale_insect" label="Cochenille"/>
+            <item name="scaphoideus_titanus_leafhopper" label="Cicadelle de la flavescence dorée"/>
+            <item name="septoria_blotch" label="Septoriose"/>
+            <item name="support_issue" label="Incident de support"/>
+            <item name="vine_mildew" label="Mildiou de la vigne"/>
+            <item name="vine_powdery_mildew" label="Oïdium de la vigne"/>
+            <item name="wheat_powdery_mildew" label="Oïdium des céréales"/>
+            <item name="wild_animal_ravage" label="Dégât d'animaux sauvages"/>
+            <item name="wood_leopard_moth" label="Zeuzère"/>
+            <item name="yellow_acarine" label="Acarien jaune"/>
+            <item name="yellow_rust" label="Rouille jaune"/>
+            <item name="issue" label="Incident"/>
+        </items>
+    </nomenclature>
+</PreferenceScreen>
