@@ -18,7 +18,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="Creating Issue"
+            android:text="Create Issue"
             android:id="@+id/textView3"
             android:layout_alignParentTop="true"
             android:layout_alignParentLeft="true"
@@ -27,25 +27,77 @@
         <Spinner
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/spinner2"
+            android:id="@+id/spinner"
             android:layout_below="@+id/spinner"
             android:layout_centerHorizontal="true" />
 
         <LinearLayout
             android:orientation="horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+        </LinearLayout>
+
+        <TableLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <NumberPicker
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/numberPickerSeverity" />
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center">
 
-            <NumberPicker
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/numberPickerEmergency" />
-        </LinearLayout>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:text="Severity"
+                    android:id="@+id/textView4"
+                    android:textAlignment="center"
+                    android:layout_weight="1"
+                    android:gravity="center" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:text="Emergency"
+                    android:id="@+id/textView5"
+                    android:layout_row="0"
+                    android:layout_column="1"
+                    android:textAlignment="center"
+                    android:layout_weight="1"
+                    android:gravity="center" />
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <NumberPicker
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/numberPickerSeverity"
+                    android:layout_row="1"
+                    android:layout_column="0"
+                    android:layout_marginRight="50dp"
+                    android:layout_marginLeft="50dp"
+                    android:layout_marginTop="5dp"
+                    android:theme="@android:style/DeviceDefault.Light.ButtonBar.AlertDialog" />
+
+                <NumberPicker
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/numberPickerEmergency"
+                    android:layout_column="1"
+                    android:layout_row="1"
+                    android:gravity="center_horizontal"
+                    android:layout_marginLeft="50dp"
+                    android:layout_marginRight="50dp"
+                    android:layout_marginTop="5dp" />
+            </TableRow>
+
+        </TableLayout>
 
     </LinearLayout>
 
