@@ -22,6 +22,7 @@ public class IssueActivity extends Activity {
         spinnerIssueTitle = (Spinner) findViewById(R.id.spinner);
 
         //List of the choices in the spinner
+
         List issueTitleList = new ArrayList();
         issueTitleList.add("animalTitle1");
         issueTitleList.add("animalTitle2");
