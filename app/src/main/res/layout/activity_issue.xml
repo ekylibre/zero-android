@@ -12,7 +12,8 @@
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:gravity="center_horizontal">
 
         <TextView
             android:layout_width="wrap_content"
@@ -22,14 +23,16 @@
             android:id="@+id/textView3"
             android:layout_alignParentTop="true"
             android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true" />
+            android:layout_alignParentStart="true"
+            android:layout_gravity="left" />
 
         <Spinner
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/spinner"
             android:layout_below="@+id/spinner"
-            android:layout_centerHorizontal="true" />
+            android:layout_centerHorizontal="true"
+            android:layout_gravity="left" />
 
         <LinearLayout
             android:orientation="horizontal"
@@ -40,7 +43,7 @@
 
         <TableLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content">
 
             <TableRow
                 android:layout_width="match_parent"
@@ -98,6 +101,32 @@
             </TableRow>
 
         </TableLayout>
+
+        <EditText
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/description"
+            android:autoText="false"
+            android:hint="Notes"
+            android:layout_marginTop="30dp"
+            android:layout_marginBottom="15dp"
+            android:maxLines="1" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Video / Picture"
+            android:id="@+id/button7"
+            android:layout_gravity="center_horizontal|bottom"
+            android:layout_marginBottom="15dp" />
+
+        <Button
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="Save"
+            android:id="@+id/button_save"
+            android:width="60dp"
+            android:onClick="issueSave" />
 
     </LinearLayout>
 

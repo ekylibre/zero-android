@@ -81,6 +81,12 @@
             android:exported="false"
             android:syncable="true" />
 
+        <provider
+            android:name=".provider.IssueProvider"
+            android:authorities="ekylibre.zero.issue.provider"
+            android:exported="false"
+            android:syncable="true" />
+
         <!-- Sync related activities and service needs to be declared here in order for the app to recognize them -->
         <service
             android:name=".SyncService"
