@@ -4,11 +4,16 @@
     <string name="action_settings">Settings</string>
     <string name="app_name">Zero</string>
     <string name="count">Count</string>
+    <string name="create_issue">Create Issue</string>
     <string name="email_address">Email address</string>
+    <string name="emergency">Emergency</string>
     <string name="global_auth_token">Global Authentication Token</string>
     <string name="instance">Instance</string>
     <string name="latitude">Latitude</string>
     <string name="longitude">Longitude</string>
+    <string name="new_issue">New issue</string>
+    <string name="new_intervention">New intervention</string>
+    <string name="notes">Notes</string>
     <string name="notif_invalidPasswordOrEmail">Invalid password or e-mail</string>
     <string name="notif_loginSucceeded">Login succeeded</string>
     <string name="password">Password</string>
@@ -22,13 +27,17 @@
     <string name="procedure_nature">Procedure nature</string>
     <string name="resume">Resume</string>
     <string name="running">Running…</string>
+    <string name="save">save</string>
     <string name="scan_code">Scan code</string>
     <string name="service_name">Ekylibre</string>
     <string name="settings">Settings</string>
+    <string name="severity">Severity</string>
     <string name="sign_in">Sign in</string>
     <string name="start">Start</string>
     <string name="stop">Stop</string>
     <string name="sync">Synchronize</string>
+    <string name="sync_all">Synchronize all</string>
     <string name="test_demo">Test demo</string>
-    <string name="tracking_service_name">Tracking_service_name</string>
+    <string name="tracking">Tracking</string>
+    <string name="tracking_service_name">Tracking service name</string>
 </resources>

@@ -83,24 +83,12 @@ public class IssueSyncAdapter extends AbstractThreadedSyncAdapter {
                     attributes.put("gravity", cursor.getInt(2));
                     attributes.put("priority", cursor.getInt(3));
                     attributes.put("description", cursor.getString(4));
-                    attributes.put("target_type", "Product");
-                    attributes.put("target_id", "1");
+                    //attributes.put("target_type", "Product");
+                    //attributes.put("target_id", "1");
                     SimpleDateFormat parser = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
                     attributes.put("observed_at", parser.format(new Date(cursor.getLong(8))));
-
-
-                    JSONObject hash = new JSONObject();
-                    Uri metadata = Uri.parse("http://domain.tld?" + cursor.getString(6));
-                    Set<String> keys = metadata.getQueryParameterNames();
-                    if (keys.size() > 0) {
-                        for (String key : keys) {
-                            if (!key.equals("null")) {
-                                hash.put(key, metadata.getQueryParameter(key));
-                            }
-                        }
-                        if (hash.length() > 0) {
-                            attributes.put("metadata", hash);
-                        }
+                    if(cursor.getDouble(9) != 0 && cursor.getDouble(10) != 0){
+                       attributes.put("geolocation", "SRID=4326; POINT(" + Double.toString(cursor.getDouble(9)) + " " + Double.toString(cursor.getDouble(10)) + ")");
                     }
 
                     long id = Issue.create(instance, attributes);
