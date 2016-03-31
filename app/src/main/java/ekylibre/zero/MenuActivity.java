@@ -53,7 +53,7 @@ public class MenuActivity extends Activity {
         startActivity(intent);
 
     }public void GotoNewIssue(View v){
-        Intent intent = new Intent(this,IssueTypeActivity.class);
+        Intent intent = new Intent(this,IssueActivity.class);
         startActivity(intent);
 
     }public void GotoConsultIssue(View v){
