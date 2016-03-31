@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources>
+  <string-array name="issueNatures_entries">
+    <item>Acarien jaune</item>
+    <item>Accident</item>
+    <item>Accident matériel</item>
+    <item>Anthracnose</item>
+    <item>Bactériose</item>
+    <item>Bactériose des glumes du blé</item>
+    <item>Balanin des noisettes</item>
+    <item>Boîterie</item>
+    <item>Carie commune</item>
+    <item>Carpocapse</item>
+    <item>Chenille défoliatrice</item>
+    <item>Chénopode blanc</item>
+    <item>Cicadelle de la flavescence dorée</item>
+    <item>Cicadelle des grillures</item>
+    <item>Cochenille</item>
+    <item>Diarrhée</item>
+    <item>Défaillance d’une pièce</item>
+    <item>Dégât d’animaux sauvages</item>
+    <item>Fièvre</item>
+    <item>Flavescence dorée</item>
+    <item>Fomitiporia</item>
+    <item>Fuite (d’animaux)</item>
+    <item>Fusariose</item>
+    <item>Glume noire des céréales</item>
+    <item>Incident</item>
+    <item>Incident climatique</item>
+    <item>Incident de support</item>
+    <item>Inondation</item>
+    <item>Longicorne</item>
+    <item>Maladie</item>
+    <item>Maladie bactérienne</item>
+    <item>Maladie cryptogamique</item>
+    <item>Maladie ou adventice lieés aux plantes</item>
+    <item>Maladie virale</item>
+    <item>Maladie à nématodes</item>
+    <item>Mammite</item>
+    <item>Mildiou de la vigne</item>
+    <item>Mouche du brou</item>
+    <item>Oïdium de la vigne</item>
+    <item>Oïdium des céréales</item>
+    <item>Panne sèche</item>
+    <item>Phytophthora</item>
+    <item>Phytopte</item>
+    <item>Pourridié</item>
+    <item>Pourriture grise ou noble</item>
+    <item>Problème de fécondité</item>
+    <item>Problème mécanique</item>
+    <item>Problème respiratoire</item>
+    <item>Présence d’insecte</item>
+    <item>Puceron</item>
+    <item>Rouille brune</item>
+    <item>Rouille jaune</item>
+    <item>Septoriose</item>
+    <item>Sécheresse</item>
+    <item>Tenthrède du noisetier</item>
+    <item>Toux</item>
+    <item>Zeuzère</item>
+    <item>Œdème</item>
+  </string-array>
+  <string-array name="issueNatures_values">
+    <item>yellow_acarine</item>
+    <item>accident</item>
+    <item>equipment_crash</item>
+    <item>anthracnose</item>
+    <item>bacteriosis</item>
+    <item>bacterial_leaf_blight</item>
+    <item>nut_weevil</item>
+    <item>limping</item>
+    <item>common_bunt</item>
+    <item>codling_moth</item>
+    <item>defoliant_caterpillar</item>
+    <item>chenopodium_album</item>
+    <item>scaphoideus_titanus_leafhopper</item>
+    <item>empoasca_vitis_leafhopper</item>
+    <item>scale_insect</item>
+    <item>diarrhea</item>
+    <item>piece_breakdown</item>
+    <item>wild_animal_ravage</item>
+    <item>fever</item>
+    <item>grapevine_yellows</item>
+    <item>fomitiporia</item>
+    <item>escape</item>
+    <item>fusarium_head_blight</item>
+    <item>bacterial_streak</item>
+    <item>issue</item>
+    <item>climate_issue</item>
+    <item>support_issue</item>
+    <item>flooding</item>
+    <item>longhorn_beetle</item>
+    <item>disease</item>
+    <item>bacteria_disease</item>
+    <item>fungus_disease</item>
+    <item>plant_disease</item>
+    <item>protozoa_disease</item>
+    <item>nematoda_disease</item>
+    <item>mammite</item>
+    <item>vine_mildew</item>
+    <item>husk_fly</item>
+    <item>vine_powdery_mildew</item>
+    <item>wheat_powdery_mildew</item>
+    <item>empty_fuel_tank</item>
+    <item>phytophthora</item>
+    <item>acarine_gall_mite</item>
+    <item>pourridie_rot</item>
+    <item>noble_rot</item>
+    <item>fecondity_problem</item>
+    <item>mechanical_issue</item>
+    <item>respiratory_problem</item>
+    <item>insecta_disease</item>
+    <item>aphid</item>
+    <item>black_rust</item>
+    <item>yellow_rust</item>
+    <item>septoria_blotch</item>
+    <item>drought</item>
+    <item>croesus_septentrionalis</item>
+    <item>cough</item>
+    <item>wood_leopard_moth</item>
+    <item>edema</item>
+  </string-array>
+</resources>
