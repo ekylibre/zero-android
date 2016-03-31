@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources>
+  <string-array name="issueNatures_entries">
+    <item>Apfelwickler</item>
+    <item>Atem Problem</item>
+    <item>Ausrüstung Crash</item>
+    <item>Bakterielle Streifen</item>
+    <item>Bakterien Krankheit</item>
+    <item>Bakterienbrand</item>
+    <item>Blattlaus</item>
+    <item>Bockkäfer</item>
+    <item>Durchfall</item>
+    <item>Dürre</item>
+    <item>Edelfäule</item>
+    <item>Empoasca Vitis leafhopper</item>
+    <item>Entlaubungsmittel Raupe</item>
+    <item>Fecondity Problem</item>
+    <item>Fieber</item>
+    <item>Flucht</item>
+    <item>Gelbrost</item>
+    <item>Grapevine Gelb-</item>
+    <item>Hinken</item>
+    <item>Holz Leopard Motte</item>
+    <item>Husk Fliege</item>
+    <item>Husten</item>
+    <item>Insecta Krankheit</item>
+    <item>Klimafrage</item>
+    <item>Krankheit</item>
+    <item>Krösus septentrionalis</item>
+    <item>Leerem Kraftstofftank</item>
+    <item>Milbengallen Milbe</item>
+    <item>Mutter Rüsselkäfer</item>
+    <item>Nematoda Krankheit</item>
+    <item>Pflanzenkrankheit</item>
+    <item>Pilzkrankheit</item>
+    <item>Problem</item>
+    <item>Protozoen-Krankheit</item>
+    <item>Schildlaus</item>
+    <item>Schwarzrost</item>
+    <item>Septoria Fleck</item>
+    <item>Steinbrand</item>
+    <item>Stück Zusammenbruch</item>
+    <item>Support-Problem</item>
+    <item>Unfall</item>
+    <item>Vine Mehltau</item>
+    <item>Vine Mehltau</item>
+    <item>Weizenmehltau</item>
+    <item>Wildes Tier Ravage</item>
+    <item>anthracnose</item>
+    <item>bacteriosis</item>
+    <item>gelb Milben</item>
+    <item>mechanische Ausgabe</item>
+    <item>Ährenfusariosen</item>
+    <item>Ödem</item>
+    <item>Überschwemmung</item>
+  </string-array>
+  <string-array name="issueNatures_values">
+    <item>codling_moth</item>
+    <item>respiratory_problem</item>
+    <item>equipment_crash</item>
+    <item>bacterial_streak</item>
+    <item>bacteria_disease</item>
+    <item>bacterial_leaf_blight</item>
+    <item>aphid</item>
+    <item>longhorn_beetle</item>
+    <item>diarrhea</item>
+    <item>drought</item>
+    <item>noble_rot</item>
+    <item>empoasca_vitis_leafhopper</item>
+    <item>defoliant_caterpillar</item>
+    <item>fecondity_problem</item>
+    <item>fever</item>
+    <item>escape</item>
+    <item>yellow_rust</item>
+    <item>grapevine_yellows</item>
+    <item>limping</item>
+    <item>wood_leopard_moth</item>
+    <item>husk_fly</item>
+    <item>cough</item>
+    <item>insecta_disease</item>
+    <item>climate_issue</item>
+    <item>disease</item>
+    <item>croesus_septentrionalis</item>
+    <item>empty_fuel_tank</item>
+    <item>acarine_gall_mite</item>
+    <item>nut_weevil</item>
+    <item>nematoda_disease</item>
+    <item>plant_disease</item>
+    <item>fungus_disease</item>
+    <item>issue</item>
+    <item>protozoa_disease</item>
+    <item>scale_insect</item>
+    <item>black_rust</item>
+    <item>septoria_blotch</item>
+    <item>common_bunt</item>
+    <item>piece_breakdown</item>
+    <item>support_issue</item>
+    <item>accident</item>
+    <item>vine_mildew</item>
+    <item>vine_powdery_mildew</item>
+    <item>wheat_powdery_mildew</item>
+    <item>wild_animal_ravage</item>
+    <item>anthracnose</item>
+    <item>bacteriosis</item>
+    <item>yellow_acarine</item>
+    <item>mechanical_issue</item>
+    <item>fusarium_head_blight</item>
+    <item>edema</item>
+    <item>flooding</item>
+  </string-array>
+</resources>

@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources>
+  <string-array name="issueNatures_entries">
+    <item>Acarine Gall acari</item>
+    <item>Afide</item>
+    <item>Batterica peronospora sul cespo</item>
+    <item>Carpocapsa</item>
+    <item>Creso septentrionalis</item>
+    <item>Diarrea</item>
+    <item>Empoasca vitis cicalina</item>
+    <item>Febbre</item>
+    <item>Fuga</item>
+    <item>Fusariosi della spiga</item>
+    <item>Grano oidio</item>
+    <item>Incidente</item>
+    <item>Legno leopardo falena</item>
+    <item>Malattia</item>
+    <item>Problema</item>
+    <item>Scaphoideus titanus cicalina</item>
+    <item>Selvatico animale Ravage</item>
+    <item>Septoria macchia</item>
+    <item>Siccità</item>
+    <item>Tosse</item>
+    <item>Vite oidio</item>
+    <item>acarine Giallo</item>
+    <item>allagamento</item>
+    <item>anthracnose</item>
+    <item>batteriosi</item>
+    <item>bunt Comune</item>
+    <item>dado punteruolo</item>
+    <item>defoliante caterpillar</item>
+    <item>giallumi della vite</item>
+    <item>husk fly</item>
+    <item>incidente attrezzature</item>
+    <item>la ruggine gialla</item>
+    <item>malattia Insecta</item>
+    <item>malattia Nematodi</item>
+    <item>malattia batteri</item>
+    <item>malattia fungina</item>
+    <item>malattia protozoi</item>
+    <item>malattie delle piante</item>
+    <item>mammite</item>
+    <item>muffa Vine</item>
+    <item>muffa nobile</item>
+    <item>problema del clima</item>
+    <item>problema di supporto</item>
+    <item>problema fecondità</item>
+    <item>problema meccanico</item>
+    <item>problema respiratorio</item>
+    <item>ripartizione pezzo</item>
+    <item>ruggine nero</item>
+    <item>scala insetto</item>
+    <item>serbatoio vuoto</item>
+    <item>striscia batterica</item>
+    <item>zoppo</item>
+  </string-array>
+  <string-array name="issueNatures_values">
+    <item>acarine_gall_mite</item>
+    <item>aphid</item>
+    <item>bacterial_leaf_blight</item>
+    <item>codling_moth</item>
+    <item>croesus_septentrionalis</item>
+    <item>diarrhea</item>
+    <item>empoasca_vitis_leafhopper</item>
+    <item>fever</item>
+    <item>escape</item>
+    <item>fusarium_head_blight</item>
+    <item>wheat_powdery_mildew</item>
+    <item>accident</item>
+    <item>wood_leopard_moth</item>
+    <item>disease</item>
+    <item>issue</item>
+    <item>scaphoideus_titanus_leafhopper</item>
+    <item>wild_animal_ravage</item>
+    <item>septoria_blotch</item>
+    <item>drought</item>
+    <item>cough</item>
+    <item>vine_powdery_mildew</item>
+    <item>yellow_acarine</item>
+    <item>flooding</item>
+    <item>anthracnose</item>
+    <item>bacteriosis</item>
+    <item>common_bunt</item>
+    <item>nut_weevil</item>
+    <item>defoliant_caterpillar</item>
+    <item>grapevine_yellows</item>
+    <item>husk_fly</item>
+    <item>equipment_crash</item>
+    <item>yellow_rust</item>
+    <item>insecta_disease</item>
+    <item>nematoda_disease</item>
+    <item>bacteria_disease</item>
+    <item>fungus_disease</item>
+    <item>protozoa_disease</item>
+    <item>plant_disease</item>
+    <item>mammite</item>
+    <item>vine_mildew</item>
+    <item>noble_rot</item>
+    <item>climate_issue</item>
+    <item>support_issue</item>
+    <item>fecondity_problem</item>
+    <item>mechanical_issue</item>
+    <item>respiratory_problem</item>
+    <item>piece_breakdown</item>
+    <item>black_rust</item>
+    <item>scale_insect</item>
+    <item>empty_fuel_tank</item>
+    <item>bacterial_streak</item>
+    <item>limping</item>
+  </string-array>
+</resources>
