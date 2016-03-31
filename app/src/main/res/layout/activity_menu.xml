@@ -23,7 +23,7 @@
             android:layout_width="200dp"
             android:layout_height="200dp"
             android:id="@+id/imageView"
-            android:src="@mipmap/ic_logo_vertical_menu" />
+            android:src="@mipmap/ic_home" />
 
         <Button
             android:layout_width="wrap_content"
