@@ -79,16 +79,14 @@ public class IssueSyncAdapter extends AbstractThreadedSyncAdapter {
 
                     // Post it to ekylibre
                     JSONObject attributes = new JSONObject();
-                    attributes.put("nature", "fusarium_head_blight");
+                    attributes.put("nature", cursor.getString(1));
                     attributes.put("gravity", cursor.getInt(2));
                     attributes.put("priority", cursor.getInt(3));
                     attributes.put("description", cursor.getString(4));
                     attributes.put("target_type", "Product");
                     attributes.put("target_id", "1");
-                    attributes.put("observed_at", "2016-03-31 14:00");
-
                     SimpleDateFormat parser = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
-                    //attributes.put("synched_at", parser.format(new Date(cursor.getLong(7))));
+                    attributes.put("observed_at", parser.format(new Date(cursor.getLong(8))));
 
 
                     JSONObject hash = new JSONObject();

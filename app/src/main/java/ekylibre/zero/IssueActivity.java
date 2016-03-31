@@ -21,7 +21,7 @@ import ekylibre.zero.provider.IssueContract;
 
 public class IssueActivity extends Activity {
 
-    Spinner spinnerIssueTitle;
+    Spinner mIssueNatureSpinner;
     NumberPicker mSeverity;
     NumberPicker mEmergency;
     EditText mDescription;
@@ -32,30 +32,19 @@ public class IssueActivity extends Activity {
         setContentView(R.layout.activity_issue);
 
         //récuperation of XML elements
-        spinnerIssueTitle = (Spinner) findViewById(R.id.spinner);
+        mIssueNatureSpinner = (Spinner) findViewById(R.id.spinner);
         mSeverity = (NumberPicker) findViewById(R.id.numberPickerSeverity);
         mEmergency = (NumberPicker) findViewById(R.id.numberPickerEmergency);
         mDescription = (EditText) findViewById(R.id.description);
 
 
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
+                R.array.issueNatures_entries, android.R.layout.simple_spinner_item);
+        // Specify the layout to use when the list of choices appears
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        // Apply the adapter to the spinner
+        mIssueNatureSpinner.setAdapter(adapter);
 
-        //creation of the list of the choices in the spinner
-        List issueTitleList = new ArrayList();
-        issueTitleList.add("animalTitle1");
-        issueTitleList.add("animalTitle2");
-        issueTitleList.add("animalTitle3");
-        issueTitleList.add("plantTitle1");
-        issueTitleList.add("plantTitle2");
-        issueTitleList.add("plantTitle3");
-        issueTitleList.add("equipmentTitle1");
-        issueTitleList.add("equipmentTitle2");
-        issueTitleList.add("equipmentTitle3");
-
-
-        //fill the spinner with the list
-        ArrayAdapter adapterTitleList = new ArrayAdapter(this,android.R.layout.simple_spinner_item,issueTitleList);
-        adapterTitleList.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinnerIssueTitle.setAdapter(adapterTitleList);
 
         //setting the minimum, maximum and initial value of the number pickers
         mSeverity.setMaxValue(5);
@@ -72,7 +61,7 @@ public class IssueActivity extends Activity {
         Context context = getApplicationContext();
         CharSequence text = "Issue saved";
         int duration = Toast.LENGTH_SHORT;
-        Calendar rightNow = Calendar.getInstance();
+
 
         Toast toast = Toast.makeText(context, text, duration);
         toast.show();
@@ -89,14 +78,17 @@ public class IssueActivity extends Activity {
         * Sets the values of each column and inserts the word. The arguments to the "put"
         * method are "column name" and "value"
         */
+        String[] mTestArray;
+        mTestArray = getResources().getStringArray(R.array.issueNatures_values);
 
 
-        mNewValues.put(IssueContract.IssueColumns.NATURE, "fusariose");
+        mNewValues.put(IssueContract.IssueColumns.NATURE, mTestArray[mIssueNatureSpinner.getSelectedItemPosition()]);
         mNewValues.put(IssueContract.IssueColumns.EMERGENCY, mEmergency.getValue());
         mNewValues.put(IssueContract.IssueColumns.SEVERITY,  mSeverity.getValue());
         mNewValues.put(IssueContract.IssueColumns.DESCRIPTION, mDescription.getText().toString());
         mNewValues.put(IssueContract.IssueColumns.PINNED, Boolean.FALSE);
-        mNewValues.put(IssueContract.IssueColumns.SYNCED_AT, rightNow.get(Calendar.DAY_OF_MONTH)+1 + "/" + rightNow.get(Calendar.MONTH)+1 + "/" + rightNow.get(Calendar.YEAR));
+//        mNewValues.put(IssueContract.IssueColumns.SYNCED_AT, rightNow.get(Calendar.DAY_OF_MONTH)+1 + "/" + rightNow.get(Calendar.MONTH)+1 + "/" + rightNow.get(Calendar.YEAR));
+        mNewValues.put(IssueContract.IssueColumns.OBSERVED_AT, (new java.util.Date()).getTime() );
 
 
 
