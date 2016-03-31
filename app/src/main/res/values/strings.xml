@@ -8,7 +8,7 @@
     <string name="email_address">Email address</string>
     <string name="emergency">Emergency</string>
     <string name="global_auth_token">Global Authentication Token</string>
-    <string name="instance">Instance</string>
+    <string name="instance">URL of your farm</string>
     <string name="latitude">Latitude</string>
     <string name="longitude">Longitude</string>
     <string name="new_issue">New issue</string>
