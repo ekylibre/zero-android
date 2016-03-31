@@ -155,13 +155,15 @@
 				android:visibility="gone"
 				android:text="@string/pause"
 				android:onClick="pauseIntervention"/>
-		<Button 
+		<!--
+		<Button
 				android:id="@+id/sync_button"
 				android:layout_width="fill_parent"
 				android:layout_height="wrap_content"
 				android:drawableLeft="@android:drawable/ic_popup_sync"
 				android:text="@string/sync"
 				android:onClick="syncCrumbs"/>
+		-->
 	</LinearLayout>
 </LinearLayout>
 
