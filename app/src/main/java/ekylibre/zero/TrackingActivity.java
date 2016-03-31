@@ -83,10 +83,10 @@ public class TrackingActivity extends Activity implements TrackingListenerWriter
 
         // Get default account or ask for it if necessary
         final AccountManager manager = AccountManager.get(this);
-        final Account[] accounts = manager.getAccountsByType(SyncAdapter.ACCOUNT_TYPE);
+        final Account[] accounts = manager.getAccountsByType(TrackingSyncAdapter.ACCOUNT_TYPE);
         if (accounts.length <= 0) {
             Intent intent = new Intent(this, AuthenticatorActivity.class);
-            intent.putExtra(AccountManager.KEY_ACCOUNT_TYPE, SyncAdapter.ACCOUNT_TYPE);
+            intent.putExtra(AccountManager.KEY_ACCOUNT_TYPE, TrackingSyncAdapter.ACCOUNT_TYPE);
             intent.putExtra(AuthenticatorActivity.KEY_REDIRECT, AuthenticatorActivity.CHOICE_REDIRECT_TRACKING);
             startActivity(intent);
             finish();

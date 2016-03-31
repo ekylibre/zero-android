@@ -10,11 +10,11 @@ import android.util.Log;
  * sync adapter class, allowing the sync adapter framework to call
  * onPerformSync().
  */
-public class SyncService extends Service {
-    private static final String TAG = "SyncService";
+public class IssueSyncService extends Service {
+    private static final String TAG = "IssueSyncService";
 
     // Storage for an instance of the sync adapter
-    private static SyncAdapter sSyncAdapter = null;
+    private static IssueSyncAdapter sSyncAdapter = null;
     // Object to use as a thread-safe lock
     private static final Object sSyncAdapterLock = new Object();
     /*
@@ -29,7 +29,7 @@ public class SyncService extends Service {
          */
         synchronized (sSyncAdapterLock) {
             if (sSyncAdapter == null) {
-                sSyncAdapter = new SyncAdapter(getApplicationContext(), true);
+                sSyncAdapter = new IssueSyncAdapter(getApplicationContext(), true);
             }
         }
     }
