@@ -146,11 +146,13 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity {
         // }
         setAccountAuthenticatorResult(intent.getExtras());
         setResult(RESULT_OK, intent);
-        // Redirect to TrackingActivity if requested
+        // Redirect to MenuActivity if requested
         String redirect = intent.getStringExtra(KEY_REDIRECT);
         if (redirect != null && redirect.equals(CHOICE_REDIRECT_TRACKING)) {
-            Intent trackingIntent = new Intent(this, TrackingActivity.class);
-            startActivity(trackingIntent);
+
+
+            Intent mainIntent = new Intent(this, MenuActivity.class);
+            startActivity(mainIntent);
         }
         finish();
     }

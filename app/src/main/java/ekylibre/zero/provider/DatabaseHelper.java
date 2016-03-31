@@ -41,6 +41,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                              + ", " + IssueContract.IssueColumns.SEVERITY + " INTEGER NOT NULL DEFAULT 3"
                              + ", " + IssueContract.IssueColumns.EMERGENCY + " INTEGER NOT NULL DEFAULT 3"
                              + ", " + IssueContract.IssueColumns.DESCRIPTION + " INTEGER NOT NULL DEFAULT 3"
+                             + ", " + IssueContract.IssueColumns.SYNCED + " BOOLEAN NOT NULL DEFAULT 0"
                              + ", " + IssueContract.IssueColumns.PINNED + " BOOLEAN NOT NULL DEFAULT 0"
                              + ", " + IssueContract.IssueColumns.SYNCED_AT + " DATE"
                              + ")");

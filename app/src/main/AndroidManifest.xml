@@ -37,9 +37,9 @@
         android:smallScreens="true"
         android:xlargeScreens="true" />
 
-    <android:uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <android:uses-permission android:name="android.permission.READ_PHONE_STATE" />
-    <android:uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
         android:allowBackup="true"
@@ -89,7 +89,21 @@
 
         <!-- Sync related activities and service needs to be declared here in order for the app to recognize them -->
         <service
-            android:name=".SyncService"
+            android:name=".TrackingSyncService"
+            android:permission="ekylibre.zero.permission.SYNC_DATA"
+            android:process=":sync"
+            android:label="@string/tracking_service_name">
+            <intent-filter>
+                <action android:name="android.content.SyncAdapter" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.content.SyncAdapter"
+                android:resource="@xml/trackingsyncadapter" />
+        </service>
+
+        <service
+            android:name=".IssueSyncService"
             android:permission="ekylibre.zero.permission.SYNC_DATA"
             android:process=":sync">
             <intent-filter>
@@ -98,7 +112,7 @@
 
             <meta-data
                 android:name="android.content.SyncAdapter"
-                android:resource="@xml/syncadapter" />
+                android:resource="@xml/issuesyncadapter" />
         </service>
 
         <!-- Barcode scanning related activities and service needs to be declared here in order for the app to recognize them -->

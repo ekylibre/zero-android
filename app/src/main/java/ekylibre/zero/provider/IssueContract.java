@@ -36,6 +36,7 @@ public class IssueContract {
         public static final String NATURE = "nature";
         public static final String SEVERITY = "severity";
         public static final String EMERGENCY = "emergency";
+        public static final String SYNCED = "synced";
         public static final String DESCRIPTION = "description";
         public static final String PINNED = "pinned";
         public static final String SYNCED_AT = "synced_at";
