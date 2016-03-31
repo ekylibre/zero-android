@@ -24,7 +24,7 @@ public class IssueContract {
         // MIME type for individual record.
         public static final String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/vnd.ekylibre.zero.issue";
 
-        public static final String[] PROJECTION_ALL = {_ID, NATURE, SEVERITY, EMERGENCY, SYNCED, DESCRIPTION, PINNED, SYNCED_AT, OBSERVED_AT};
+        public static final String[] PROJECTION_ALL = {_ID, NATURE, SEVERITY, EMERGENCY, SYNCED, DESCRIPTION, PINNED, SYNCED_AT, OBSERVED_AT, LATITUDE, LONGITUDE};
         public static final String[] PROJECTION_NONE = {_ID};
 
         public static final String SORT_ORDER_DEFAULT = _ID + " ASC";
@@ -41,5 +41,8 @@ public class IssueContract {
         public static final String PINNED = "pinned";
         public static final String SYNCED_AT = "synced_at";
         public static final String OBSERVED_AT = "observed_at";
+        public static final String LATITUDE = "latitude";
+        public static final String LONGITUDE = "longitude";
+
     }
 }

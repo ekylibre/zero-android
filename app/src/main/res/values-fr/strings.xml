@@ -4,11 +4,16 @@
   <string name="action_settings">Paramètres</string>
   <string name="app_name">Zero</string>
   <string name="count">Compte</string>
+  <string name="create_issue">Création Problème</string>
   <string name="email_address">Adresse e-mail</string>
+  <string name="emergency">Urgence</string>
   <string name="global_auth_token">Jeton d’authentification global</string>
   <string name="instance">Instance</string>
   <string name="latitude">Latitude</string>
   <string name="longitude">Longitude</string>
+  <string name="new_issue">Nouveau problème</string>
+  <string name="new_intervention">Nouvelle intervention</string>
+  <string name="notes">Notes</string>
   <string name="notif_invalidPasswordOrEmail">Mot de passe ou e-mail invalide</string>
   <string name="notif_loginSucceeded">Connexion réussie</string>
   <string name="password">Mot de passe</string>
@@ -22,12 +27,17 @@
   <string name="procedure_nature">Type d’intervention</string>
   <string name="resume">Continuer</string>
   <string name="running">En cours…</string>
+  <string name="save">sauvegarder</string>
   <string name="scan_code">Scanner un code-barre</string>
   <string name="service_name">Ekylibre</string>
   <string name="settings">Paramètres</string>
+  <string name="severity">Sévérité</string>
   <string name="sign_in">Se connecter</string>
   <string name="start">Commencer</string>
   <string name="stop">Arrêter</string>
   <string name="sync">Synchroniser</string>
+  <string name="sync_all">Synchronizer tout</string>
   <string name="test_demo">Tester la démonstration</string>
+  <string name="tracking">Suivi</string>
+  <string name="tracking_service_name">Nom du service de suivi</string>
 </resources>

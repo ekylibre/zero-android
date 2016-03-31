@@ -17,19 +17,25 @@ You need to install 32-bit libs:
     go to this site and download android studio : http://developer.android.com/sdk/index.html
     make sure the file you downloaded is in the folder you want android studio to be installed in.
     unzip the file you downloaded with :
+
     $ unzip android-studio-ide-141.2456560-linux.zip.crdownload
+
 2. Install Android SDK
      $ wget http://dl.google.com/android/android-sdk_r23.0.2-linux.tgz
      $ tar xzvf android-sdk_r23.0.2-linux.tgz -C </path/to/android/sdk>
+
 3. Set environment variable ANDROID_HOME
      $ export ANDROID_HOME=</path/to/android/sdk>
+
 4. Adds SDK tools path to PATH
      $ export PATH="$ANDROID_HOME/platform-tools:$PATH"
      $ export PATH="$ANDROID_HOME/tools:$PATH"
-5. Launch android and install packages: Android 4.1.2 (API 16) Intel x86 Atom System Image
-     $ android
-6. Add an AVD <my-smartphone> based on Galaxy Nexus for example
 
+5. Launch android and install packages: Android 4.1.2 (API 16) Intel x86 Atom System Image
+
+     $ android
+
+6. Add an AVD <my-smartphone> based on Galaxy Nexus for example
 
 
 == Build and install a debug {APK}[http://en.wikipedia.org/wiki/APK_%28file_format%29]
