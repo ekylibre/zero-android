@@ -10,15 +10,15 @@ require 'fileutils'
 class Resourcer
 
   LOCALES = {
-    arb: "values-ar",
-    cmn: "values-zh",
-    deu: "values-de",
+    # arb: "values-ar",
+    # cmn: "values-zh",
+    # deu: "values-de",
     eng: "values",
     fra: "values-fr",
-    ita: "values-it",
-    jpn: "values-ja",
-    por: "values-pt",
-    spa: "values-es",
+    # ita: "values-it",
+    # jpn: "values-ja",
+    # por: "values-pt",
+    # spa: "values-es",
   }
 
   def initialize()
