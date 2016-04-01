@@ -24,16 +24,42 @@ class Resourcer
   def initialize()
     here = Pathname.new(File.expand_path(__FILE__)).dirname
     @root = here.join("..")
-    @ekylibre_path = @root.join("../..", "ekylibre")
+    @ekylibre_path = @root.join("..", "ekylibre")
     @resources_path = @root.join('app', 'src', 'main', 'res')
   end
 
   def do!
     # do_procedure_natures!
+    do_procedures!
     do_issue_natures!
   end
 
   private
+
+  def do_procedures!
+    puts " * ".green + "Procedures"
+    ref = YAML.load_file(@ekylibre_path.join("config", "locales", "eng", "procedures.yml"))['eng']["procedures"].keys
+    for source, dest in {eng: "values", fra: "values-fr"}
+      reference = YAML.load_file(@ekylibre_path.join("config", "locales", source.to_s, "procedures.yml"))[source.to_s]["procedures"]
+      items = reference.delete_if{|k,v| !ref.include?(k) }.sort{|a,b| a[1] <=> b[1]}
+      entries, values = items.map{|x| x[1]}, items.map{|x| x[0]}
+      builder = Nokogiri::XML::Builder.new(encoding: 'UTF-8') do |xml|
+        xml.resources {
+          xml.send("string-array", name: "procedures_entries") {
+            entries.each do |name|
+              xml.item(name.gsub('\'', '’'));
+            end
+          }
+          xml.send("string-array", name: "procedures_values") {
+            values.each do |name|
+              xml.item(name);
+            end
+          }
+        }
+      end
+      File.write(@resources_path.join(dest, "arrays-procedures.xml"), builder.to_xml)
+    end
+  end
 
   def do_procedure_natures!
     puts " * ".green + "Procedure natures"
