@@ -17,8 +17,6 @@ import android.widget.NumberPicker;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import ekylibre.zero.provider.IssueContract;
-
 public class IssueActivity extends Activity {
 
     Spinner mIssueNatureSpinner;
@@ -29,7 +27,7 @@ public class IssueActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_issue);
+        setContentView(R.layout.issue);
 
         //récuperation of XML elements
         mIssueNatureSpinner = (Spinner) findViewById(R.id.spinner);
@@ -73,7 +71,7 @@ public class IssueActivity extends Activity {
             //     // openSearch();
             //     return true;
             case R.id.action_save:
-                issueSave(item.getActionView());
+                saveIssue(item.getActionView());
                 return true;
             default:
             return super.onOptionsItemSelected(item);
@@ -81,8 +79,7 @@ public class IssueActivity extends Activity {
     }
 
 
-
-    public void issueSave(View v){
+    public void saveIssue(View v) {
         Context context = getApplicationContext();
         CharSequence text = "Issue saved";
         int duration = Toast.LENGTH_SHORT;
@@ -102,26 +99,26 @@ public class IssueActivity extends Activity {
         mTestArray = getResources().getStringArray(R.array.issueNatures_values);
 
 
-        mNewValues.put(IssueContract.IssueColumns.NATURE, mTestArray[mIssueNatureSpinner.getSelectedItemPosition()]);
-        mNewValues.put(IssueContract.IssueColumns.EMERGENCY, mEmergency.getValue());
-        mNewValues.put(IssueContract.IssueColumns.SEVERITY,  mSeverity.getValue());
-        mNewValues.put(IssueContract.IssueColumns.DESCRIPTION, mDescription.getText().toString());
-        mNewValues.put(IssueContract.IssueColumns.PINNED, Boolean.FALSE);
-//        mNewValues.put(IssueContract.IssueColumns.SYNCED_AT, rightNow.get(Calendar.DAY_OF_MONTH)+1 + "/" + rightNow.get(Calendar.MONTH)+1 + "/" + rightNow.get(Calendar.YEAR));
-        mNewValues.put(IssueContract.IssueColumns.OBSERVED_AT, (new java.util.Date()).getTime() );
+        mNewValues.put(ZeroContract.IssuesColumns.NATURE, mTestArray[mIssueNatureSpinner.getSelectedItemPosition()]);
+        mNewValues.put(ZeroContract.IssuesColumns.EMERGENCY, mEmergency.getValue());
+        mNewValues.put(ZeroContract.IssuesColumns.SEVERITY, mSeverity.getValue());
+        mNewValues.put(ZeroContract.IssuesColumns.DESCRIPTION, mDescription.getText().toString());
+        mNewValues.put(ZeroContract.IssuesColumns.PINNED, Boolean.FALSE);
+//        mNewValues.put(ZeroContract.IssuesColumns.SYNCED_AT, rightNow.get(Calendar.DAY_OF_MONTH)+1 + "/" + rightNow.get(Calendar.MONTH)+1 + "/" + rightNow.get(Calendar.YEAR));
+        mNewValues.put(ZeroContract.IssuesColumns.OBSERVED_AT, (new java.util.Date()).getTime());
 
         LocationManager locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
         String locationProvider = LocationManager.NETWORK_PROVIDER;
         // Or use LocationManager.GPS_PROVIDER
         Location lastKnownLocation = locationManager.getLastKnownLocation(locationProvider);
         if (lastKnownLocation != null){
-            mNewValues.put(IssueContract.IssueColumns.LATITUDE, lastKnownLocation.getLatitude());
-            mNewValues.put(IssueContract.IssueColumns.LONGITUDE, lastKnownLocation.getLongitude());
+            mNewValues.put(ZeroContract.IssuesColumns.LATITUDE, lastKnownLocation.getLatitude());
+            mNewValues.put(ZeroContract.IssuesColumns.LONGITUDE, lastKnownLocation.getLongitude());
         }
 
 
         getContentResolver().insert(
-                IssueContract.Issues.CONTENT_URI,   // the user dictionary content URI
+                ZeroContract.Issues.CONTENT_URI,   // the user dictionary content URI
                 mNewValues                          // the values to insert
         );
 

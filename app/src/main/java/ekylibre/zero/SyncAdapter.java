@@ -17,8 +17,7 @@ import android.util.Log;
 
 import ekylibre.api.Crumb;
 import ekylibre.api.Instance;
-import ekylibre.zero.provider.IssueContract;
-import ekylibre.zero.provider.TrackingContract;
+import ekylibre.api.Issue;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -32,8 +31,8 @@ import org.json.JSONObject;
  * Handle the transfer of data between a server and an
  * app, using the Android sync adapter framework.
  */
-public class TrackingSyncAdapter extends AbstractThreadedSyncAdapter {
-    public static final String TAG = "TrackingSyncAdapter";
+public class SyncAdapter extends AbstractThreadedSyncAdapter {
+    public static final String TAG = "SyncAdapter";
     public static final String ACCOUNT_TYPE = "ekylibre.account.basic";
 
     // Global variables
@@ -44,7 +43,7 @@ public class TrackingSyncAdapter extends AbstractThreadedSyncAdapter {
     /**
      * Set up the sync adapter
      */
-    public TrackingSyncAdapter(Context context, boolean autoInitialize) {
+    public SyncAdapter(Context context, boolean autoInitialize) {
         super(context, autoInitialize);
         mContentResolver = context.getContentResolver();
         mAccountManager = AccountManager.get(context);
@@ -55,25 +54,31 @@ public class TrackingSyncAdapter extends AbstractThreadedSyncAdapter {
      * constructor maintains compatibility with Android 3.0
      * and later platform versions
      */
-    public TrackingSyncAdapter(Context context, boolean autoInitialize, boolean allowParallelSyncs) {
+    public SyncAdapter(Context context, boolean autoInitialize, boolean allowParallelSyncs) {
         super(context, autoInitialize, allowParallelSyncs);
         mContentResolver = context.getContentResolver();
         mAccountManager = AccountManager.get(context);
     }
 
-    // Push data between zero and ekylibre
+
     @Override
     public void onPerformSync(Account account, Bundle extras, String authority, ContentProviderClient provider, SyncResult syncResult) {
+        performCrumbsSync(account, extras, authority, provider, syncResult);
+        performIssuesSync(account, extras, authority, provider, syncResult);
+    }
+
+    // Push data between zero and ekylibre
+    public void performCrumbsSync(Account account, Bundle extras, String authority, ContentProviderClient provider, SyncResult syncResult) {
 
         Log.i(TAG, "Beginning network synchronization");
         
         // Get crumbs from tracking (content) provider
-        Cursor cursor = mContentResolver.query(TrackingContract.Crumbs.CONTENT_URI, TrackingContract.Crumbs.PROJECTION_ALL, TrackingContract.CrumbsColumns.SYNCED + " IS NULL OR " + TrackingContract.CrumbsColumns.SYNCED + " <= 0", null, TrackingContract.Crumbs.SORT_ORDER_DEFAULT);
-        
+        Cursor cursor = mContentResolver.query(ZeroContract.Crumbs.CONTENT_URI, ZeroContract.Crumbs.PROJECTION_ALL, ZeroContract.CrumbsColumns.SYNCED + " IS NULL OR " + ZeroContract.CrumbsColumns.SYNCED + " <= 0", null, ZeroContract.Crumbs.SORT_ORDER_DEFAULT);
 
-        if (cursor.getCount() > 0) {
-            Instance instance = getInstance(account);
-            try {
+
+        try {
+            if (cursor.getCount() > 0) {
+                Instance instance = getInstance(account);
                 cursor.moveToFirst();
                 while (!cursor.isAfterLast()) {
                     Log.i(TAG, "New crumb");
@@ -105,20 +110,69 @@ public class TrackingSyncAdapter extends AbstractThreadedSyncAdapter {
                     long id = Crumb.create(instance, attributes);
                     // Marks them as synced
                     ContentValues values = new ContentValues();
-                    values.put(TrackingContract.CrumbsColumns.SYNCED, id);
-                    mContentResolver.update(Uri.withAppendedPath(TrackingContract.Crumbs.CONTENT_URI, Long.toString(cursor.getLong(0))), values, null, null);
+                    values.put(ZeroContract.CrumbsColumns.SYNCED, id);
+                    mContentResolver.update(Uri.withAppendedPath(ZeroContract.Crumbs.CONTENT_URI, Long.toString(cursor.getLong(0))), values, null, null);
                     cursor.moveToNext();
                 }
-            } catch(Exception e) {
-                e.printStackTrace();
+            } else {
+                Log.i(TAG, "Nothing to sync");
             }
-        } else {
-            Log.i(TAG, "Nothing to sync");
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
         
         Log.i(TAG, "Finish network synchronization");
     }
+
+    // Push data between zero and ekylibre
+    public void performIssuesSync(Account account, Bundle extras, String authority, ContentProviderClient provider, SyncResult syncResult) {
+
+        Log.i(TAG, "Beginning network issues synchronization");
+
+        // Get crumbs from Issue (content) provider
+        Cursor cursor = mContentResolver.query(ZeroContract.Issues.CONTENT_URI, ZeroContract.Issues.PROJECTION_ALL, ZeroContract.IssuesColumns.SYNCED + " IS NULL OR " + ZeroContract.IssuesColumns.SYNCED + " <= 0", null, ZeroContract.Issues.SORT_ORDER_DEFAULT);
+
+
+        try {
+            if (cursor.getCount() > 0) {
+                Instance instance = getInstance(account);
+                cursor.moveToFirst();
+                while (!cursor.isAfterLast()) {
+                    Log.i(TAG, "New issue");
+
+                    // Post it to ekylibre
+                    JSONObject attributes = new JSONObject();
+                    attributes.put("nature", cursor.getString(1));
+                    attributes.put("gravity", cursor.getInt(2));
+                    attributes.put("priority", cursor.getInt(3));
+                    attributes.put("description", cursor.getString(5));
+                    //attributes.put("target_type", "Product");
+                    //attributes.put("target_id", "1");
+                    SimpleDateFormat parser = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
+                    attributes.put("observed_at", parser.format(new Date(cursor.getLong(8))));
+                    if (cursor.getDouble(9) != 0 && cursor.getDouble(10) != 0) {
+                        attributes.put("geolocation", "SRID=4326; POINT(" + Double.toString(cursor.getDouble(10)) + " " + Double.toString(cursor.getDouble(9)) + ")");
+                    }
+
+                    long id = Issue.create(instance, attributes);
+                    // Marks them as synced
+                    ContentValues values = new ContentValues();
+                    values.put(ZeroContract.IssuesColumns.SYNCED, id);
+                    mContentResolver.update(Uri.withAppendedPath(ZeroContract.Issues.CONTENT_URI, Long.toString(cursor.getLong(0))), values, null, null);
+                    cursor.moveToNext();
+                }
+            } else {
+                Log.i(TAG, "Nothing to sync");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
+        Log.i(TAG, "Finish network synchronization");
+    }
+
 
     protected Instance getInstance(Account account){
         Instance instance = null;

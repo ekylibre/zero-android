@@ -4,7 +4,6 @@ import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.app.Activity;
 import android.content.ContentResolver;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -13,9 +12,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
-
-import ekylibre.zero.provider.IssueContract;
-import ekylibre.zero.provider.TrackingContract;
 
 public class MenuActivity extends Activity {
 
@@ -29,15 +25,12 @@ public class MenuActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-
-
-
         // Get simple account or ask for it if necessary
         final AccountManager manager = AccountManager.get(this);
-        final Account[] accounts = manager.getAccountsByType(IssueSyncAdapter.ACCOUNT_TYPE);
+        final Account[] accounts = manager.getAccountsByType(SyncAdapter.ACCOUNT_TYPE);
         if (accounts.length <= 0) {
             Intent intent = new Intent(this, AuthenticatorActivity.class);
-            intent.putExtra(AccountManager.KEY_ACCOUNT_TYPE, IssueSyncAdapter.ACCOUNT_TYPE);
+            intent.putExtra(AccountManager.KEY_ACCOUNT_TYPE, SyncAdapter.ACCOUNT_TYPE);
             intent.putExtra(AuthenticatorActivity.KEY_REDIRECT, AuthenticatorActivity.CHOICE_REDIRECT_TRACKING);
             startActivity(intent);
             finish();
@@ -50,7 +43,7 @@ public class MenuActivity extends Activity {
         }
 
 
-        setContentView(R.layout.activity_menu);
+        setContentView(R.layout.menu);
     }
 
 
@@ -80,27 +73,30 @@ public class MenuActivity extends Activity {
     }
 
 
-    public void GotoTracking(View v){
+    public void gotoNewIntervention(View v) {
         Intent intent = new Intent(this,TrackingActivity.class);
         startActivity(intent);
 
-    }public void GotoNewIssue(View v){
+    }
+
+    public void gotoNewIssue(View v) {
         Intent intent = new Intent(this,IssueActivity.class);
         startActivity(intent);
 
-    }public void GotoConsultIssue(View v){
+    }
+
+    public void gotoIssue(View v) {
         Intent intent = new Intent(this,IssuesActivity.class);
         startActivity(intent);
     }
 
-    public void synchAll(View v){
-        Log.d("zero", "syncData: " + mAccount.toString() + ", " + IssueContract.AUTHORITY);
+    public void syncAll(View v) {
+        Log.d("zero", "syncData: " + mAccount.toString() + ", " + ZeroContract.AUTHORITY);
         Bundle extras = new Bundle();
         extras.putBoolean(ContentResolver.SYNC_EXTRAS_MANUAL, true);
         extras.putBoolean(ContentResolver.SYNC_EXTRAS_EXPEDITED, true);
 
-        ContentResolver.requestSync(mAccount, IssueContract.AUTHORITY, extras);
-        ContentResolver.requestSync(mAccount, TrackingContract.AUTHORITY, extras);
+        ContentResolver.requestSync(mAccount, ZeroContract.AUTHORITY, extras);
         Toast toast = Toast.makeText(getApplicationContext(), R.string.data_synced, Toast.LENGTH_SHORT);
         toast.show();
     }

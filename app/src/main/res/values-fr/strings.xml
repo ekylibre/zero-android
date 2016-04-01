@@ -7,7 +7,7 @@
   <string name="create_issue">Enregistrement de l\'incident</string>
   <string name="data_synced">Données synchronisées</string>
   <string name="email_address">Adresse e-mail</string>
-  <string name="priority">Priority</string>
+  <string name="priority">Priorité</string>
   <string name="global_auth_token">Jeton d’authentification global</string>
   <string name="instance">URL de votre ferme</string>
   <string name="latitude">Latitude</string>
@@ -28,7 +28,7 @@
   <string name="procedure_nature">Type d’intervention</string>
   <string name="resume">Continuer</string>
   <string name="running">En cours…</string>
-  <string name="save">sauvegarder</string>
+  <string name="save">Sauvegarder</string>
   <string name="scan_code">Scanner un code-barre</string>
   <string name="service_name">Ekylibre</string>
   <string name="settings">Paramètres</string>
@@ -37,8 +37,12 @@
   <string name="start">Commencer</string>
   <string name="stop">Arrêter</string>
   <string name="sync">Synchroniser</string>
-  <string name="sync_all">Synchronizer tout</string>
+  <string name="sync_all">Tout synchroniser</string>
   <string name="test_demo">Tester la démonstration</string>
   <string name="tracking">Suivi</string>
   <string name="tracking_service_name">Nom du service de suivi</string>
+  <string name="tracking_sync_service_name">Interventions</string>
+  <string name="issue_sync_service_name">Incidents</string>
+  <string name="emergency">Urgence</string>
+  <string name="severity">Gravité</string>
 </resources>
