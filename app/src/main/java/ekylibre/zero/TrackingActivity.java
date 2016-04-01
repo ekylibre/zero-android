@@ -20,10 +20,7 @@ import android.os.Bundle;
 import android.os.SystemClock;
 import android.preference.PreferenceManager;
 import android.util.Log;
-import android.view.MenuItem;
 import android.view.View;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.widget.Button;
 import android.widget.Chronometer;
 import android.widget.HorizontalScrollView;
@@ -35,8 +32,6 @@ import org.apache.http.message.BasicNameValuePair;
 
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
-
-import ekylibre.zero.provider.TrackingContract;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -79,10 +74,10 @@ public class TrackingActivity extends Activity implements TrackingListenerWriter
 
         // Get simple account or ask for it if necessary
         final AccountManager manager = AccountManager.get(this);
-        final Account[] accounts = manager.getAccountsByType(TrackingSyncAdapter.ACCOUNT_TYPE);
+        final Account[] accounts = manager.getAccountsByType(SyncAdapter.ACCOUNT_TYPE);
         if (accounts.length <= 0) {
             Intent intent = new Intent(this, AuthenticatorActivity.class);
-            intent.putExtra(AccountManager.KEY_ACCOUNT_TYPE, TrackingSyncAdapter.ACCOUNT_TYPE);
+            intent.putExtra(AccountManager.KEY_ACCOUNT_TYPE, SyncAdapter.ACCOUNT_TYPE);
             intent.putExtra(AuthenticatorActivity.KEY_REDIRECT, AuthenticatorActivity.CHOICE_REDIRECT_TRACKING);
             startActivity(intent);
             finish();
@@ -181,9 +176,9 @@ public class TrackingActivity extends Activity implements TrackingListenerWriter
                     mNotificationManager.notify(mNotificationID, mNotificationBuilder.build());
                 }
             });
-        if(!mRunning) {
-           // mProcedureChooser.show();
-        }
+        //  if (!mRunning) {
+        //      mProcedureChooser.show();
+        //  }
     }
 /*
     @Override
@@ -400,14 +395,14 @@ public class TrackingActivity extends Activity implements TrackingListenerWriter
 
         ContentValues values = new ContentValues();
 
-        values.put(TrackingContract.CrumbsColumns.TYPE, type);
-        values.put(TrackingContract.CrumbsColumns.LATITUDE, location.getLatitude());
-        values.put(TrackingContract.CrumbsColumns.LONGITUDE, location.getLongitude());
-        // values.put(TrackingContract.CrumbsColumns.READ_AT, location.getTime());
+        values.put(ZeroContract.CrumbsColumns.TYPE, type);
+        values.put(ZeroContract.CrumbsColumns.LATITUDE, location.getLatitude());
+        values.put(ZeroContract.CrumbsColumns.LONGITUDE, location.getLongitude());
+        // values.put(ZeroContract.CrumbsColumns.READ_AT, location.getTime());
         long readAt = (new Date()).getTime();
-        values.put(TrackingContract.CrumbsColumns.READ_AT, readAt);
-        values.put(TrackingContract.CrumbsColumns.ACCURACY, location.getAccuracy());
-        values.put(TrackingContract.CrumbsColumns.SYNCED, 0);
+        values.put(ZeroContract.CrumbsColumns.READ_AT, readAt);
+        values.put(ZeroContract.CrumbsColumns.ACCURACY, location.getAccuracy());
+        values.put(ZeroContract.CrumbsColumns.SYNCED, 0);
         if (metadata != null) {
             try {
                 List<NameValuePair> pairs = new ArrayList<NameValuePair>();
@@ -421,16 +416,16 @@ public class TrackingActivity extends Activity implements TrackingListenerWriter
                 UrlEncodedFormEntity params  = new UrlEncodedFormEntity(pairs);
                 ByteArrayOutputStream stream = new ByteArrayOutputStream(4096);
                 params.writeTo(stream);
-                values.put(TrackingContract.CrumbsColumns.METADATA, stream.toString());
+                values.put(ZeroContract.CrumbsColumns.METADATA, stream.toString());
             } catch(UnsupportedEncodingException e) {
                 e.printStackTrace();
             } catch(IOException e) {
                 e.printStackTrace();
             }
-            // values.put(TrackingContract.CrumbsColumns.METADATA, metadata.getString("procedureNature"));
+            // values.put(ZeroContract.CrumbsColumns.METADATA, metadata.getString("procedureNature"));
         }
 
-        getContentResolver().insert(TrackingContract.Crumbs.CONTENT_URI, values);
+        getContentResolver().insert(ZeroContract.Crumbs.CONTENT_URI, values);
 
         // Sync data is interesting moment
         if (type.equals("stop")) { //  || type.equals("pause")
@@ -446,7 +441,7 @@ public class TrackingActivity extends Activity implements TrackingListenerWriter
             if (mDetails.getVisibility() != View.VISIBLE) {
                 mDetails.setVisibility(View.VISIBLE);
             }
-            Cursor cursor = getContentResolver().query(TrackingContract.Crumbs.CONTENT_URI, TrackingContract.Crumbs.PROJECTION_NONE, null, null, null);
+            Cursor cursor = getContentResolver().query(ZeroContract.Crumbs.CONTENT_URI, ZeroContract.Crumbs.PROJECTION_NONE, null, null, null);
             int count = cursor.getCount();
             // Called when a new location is found by the network location provider.
             mAccuracy.setText(String.valueOf(location.getAccuracy()) + "m");
@@ -462,11 +457,11 @@ public class TrackingActivity extends Activity implements TrackingListenerWriter
 
     // Call the sync service
     private void syncData() {
-        Log.d("zero", "syncData: " + mAccount.toString() + ", " + TrackingContract.AUTHORITY);
+        Log.d("zero", "syncData: " + mAccount.toString() + ", " + ZeroContract.AUTHORITY);
         Bundle extras = new Bundle();
         extras.putBoolean(ContentResolver.SYNC_EXTRAS_MANUAL, true);
         extras.putBoolean(ContentResolver.SYNC_EXTRAS_EXPEDITED, true);
-        ContentResolver.requestSync(mAccount, TrackingContract.AUTHORITY, extras);
+        ContentResolver.requestSync(mAccount, ZeroContract.AUTHORITY, extras);
     }
 
     

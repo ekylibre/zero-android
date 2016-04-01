@@ -1,14 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="ekylibre.zero"
-    android:installLocation="auto"
-    android:versionCode="4"
-    android:versionName="0.1.0">
-
-    <uses-sdk
-        android:minSdkVersion="16"
-        android:targetSdkVersion="20" />
-
+    android:installLocation="auto">
     <permission
         android:name="ekylibre.zero.permission.AUTHENTICATE_ACCOUNTS"
         android:label="@string/permlab_authenticateAccounts"
@@ -52,8 +45,11 @@
             android:name=".TrackingActivity"
             android:label="@string/new_intervention"
             android:launchMode="singleInstance"
+            android:parentActivityName=".MenuActivity"
             android:screenOrientation="portrait">
-
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MenuActivity" />
         </activity>
 
         <!-- <service android:name="TrackingService"/> -->
@@ -79,34 +75,15 @@
 
         <!-- Content provider -->
         <provider
-            android:name=".provider.TrackingProvider"
-            android:authorities="ekylibre.zero.tracking.provider"
-            android:exported="false"
-            android:syncable="true" />
-
-        <provider
-            android:name=".provider.IssueProvider"
-            android:authorities="ekylibre.zero.issue.provider"
+            android:name=".ZeroProvider"
+            android:authorities="ekylibre.zero"
             android:exported="false"
             android:syncable="true" />
 
         <!-- Sync related activities and service needs to be declared here in order for the app to recognize them -->
         <service
-            android:name=".TrackingSyncService"
-            android:permission="ekylibre.zero.permission.SYNC_DATA"
-            android:process=":sync"
-            android:label="@string/tracking_service_name">
-            <intent-filter>
-                <action android:name="android.content.SyncAdapter" />
-            </intent-filter>
-
-            <meta-data
-                android:name="android.content.SyncAdapter"
-                android:resource="@xml/trackingsyncadapter" />
-        </service>
-
-        <service
-            android:name=".IssueSyncService"
+            android:name=".SyncService"
+            android:label="@string/service_name"
             android:permission="ekylibre.zero.permission.SYNC_DATA"
             android:process=":sync">
             <intent-filter>
@@ -115,7 +92,7 @@
 
             <meta-data
                 android:name="android.content.SyncAdapter"
-                android:resource="@xml/issuesyncadapter" />
+                android:resource="@xml/syncadapter" />
         </service>
 
         <!-- Barcode scanning related activities and service needs to be declared here in order for the app to recognize them -->
