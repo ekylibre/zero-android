@@ -50,7 +50,7 @@
 
         <activity
             android:name=".TrackingActivity"
-            android:label="@string/app_name"
+            android:label="@string/new_intervention"
             android:launchMode="singleInstance"
             android:screenOrientation="portrait">
 
@@ -150,11 +150,14 @@
 
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="TrackingActivity" />
+                android:value=".TrackingActivity" />
         </activity>
-        <activity android:name=".IssuesActivity" />
-        <activity android:name=".IssueTypeActivity" />
-        <activity android:name=".IssueActivity" />
+        <activity android:name=".IssuesActivity"
+            android:label=""/>
+        <activity android:name=".IssueTypeActivity"
+            android:label=""/>
+        <activity android:name=".IssueActivity"
+            android:label="@string/new_issue"/>
         <activity android:name=".MenuActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

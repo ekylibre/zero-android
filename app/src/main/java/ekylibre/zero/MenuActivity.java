@@ -7,6 +7,9 @@ import android.content.ContentResolver;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 
 import ekylibre.zero.provider.IssueContract;
@@ -27,7 +30,7 @@ public class MenuActivity extends Activity {
 
 
 
-        // Get default account or ask for it if necessary
+        // Get simple account or ask for it if necessary
         final AccountManager manager = AccountManager.get(this);
         final Account[] accounts = manager.getAccountsByType(IssueSyncAdapter.ACCOUNT_TYPE);
         if (accounts.length <= 0) {
@@ -38,7 +41,7 @@ public class MenuActivity extends Activity {
             finish();
             return;
         } else if (accounts.length > 1) {
-            // TODO: Propose the list of account or get the one by default
+            // TODO: Propose the list of account or get the one by simple
             mAccount = accounts[0];
         } else {
             mAccount = accounts[0];
@@ -47,6 +50,33 @@ public class MenuActivity extends Activity {
 
         setContentView(R.layout.activity_menu);
     }
+
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu items for use in the action bar
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.simple, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        Intent intent;
+        // Handle presses on the action bar items
+        switch (item.getItemId()) {
+            // case R.id.action_search:
+            //     // openSearch();
+            //     return true;
+            case R.id.action_settings:
+                intent = new Intent(this, SettingsActivity.class);
+                startActivity(intent);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
 
     public void GotoTracking(View v){
         Intent intent = new Intent(this,TrackingActivity.class);

@@ -202,7 +202,7 @@ public class Instance {
 
         HttpEntity entity = response.getEntity();
         inputStream = entity.getContent();
-        // // json is UTF-8 by default
+        // // json is UTF-8 by simple
         BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream, "UTF-8"), 8);
         StringBuilder stringBuilder = new StringBuilder();
             

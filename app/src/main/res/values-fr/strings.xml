@@ -4,14 +4,14 @@
   <string name="action_settings">Paramètres</string>
   <string name="app_name">Zero</string>
   <string name="count">Compte</string>
-  <string name="create_issue">Création Problème</string>
+  <string name="create_issue">Enregistrement de l\'incident</string>
   <string name="email_address">Adresse e-mail</string>
   <string name="emergency">Urgence</string>
   <string name="global_auth_token">Jeton d’authentification global</string>
   <string name="instance">URL de votre ferme</string>
   <string name="latitude">Latitude</string>
   <string name="longitude">Longitude</string>
-  <string name="new_issue">Nouveau problème</string>
+  <string name="new_issue">Nouvel incident</string>
   <string name="new_intervention">Nouvelle intervention</string>
   <string name="notes">Notes</string>
   <string name="notif_invalidPasswordOrEmail">Mot de passe ou e-mail invalide</string>
