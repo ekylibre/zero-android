@@ -40,7 +40,6 @@
   <string name="sync_all">Tout synchroniser</string>
   <string name="test_demo">Tester la démonstration</string>
   <string name="tracking">Suivi</string>
-  <string name="tracking_service_name">Nom du service de suivi</string>
   <string name="tracking_sync_service_name">Interventions</string>
   <string name="issue_sync_service_name">Incidents</string>
   <string name="emergency">Urgence</string>
