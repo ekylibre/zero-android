@@ -7,3 +7,4 @@ release.*
 *.img
 /.gradle
 /build
+/.idea
