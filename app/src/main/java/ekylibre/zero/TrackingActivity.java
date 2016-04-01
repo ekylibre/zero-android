@@ -206,7 +206,7 @@ public class TrackingActivity extends Activity implements TrackingListenerWriter
             intent = new Intent(this, SettingsActivity.class);
             startActivity(intent);  
             return true;
-        simple:
+        default:
             return super.onOptionsItemSelected(item);
         }
     }

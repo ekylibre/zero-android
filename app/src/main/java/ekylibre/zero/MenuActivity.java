@@ -4,6 +4,7 @@ import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.app.Activity;
 import android.content.ContentResolver;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -11,6 +12,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import ekylibre.zero.provider.IssueContract;
 import ekylibre.zero.provider.TrackingContract;
@@ -96,7 +98,11 @@ public class MenuActivity extends Activity {
         Bundle extras = new Bundle();
         extras.putBoolean(ContentResolver.SYNC_EXTRAS_MANUAL, true);
         extras.putBoolean(ContentResolver.SYNC_EXTRAS_EXPEDITED, true);
+
         ContentResolver.requestSync(mAccount, IssueContract.AUTHORITY, extras);
+        ContentResolver.requestSync(mAccount, TrackingContract.AUTHORITY, extras);
+        Toast toast = Toast.makeText(getApplicationContext(), R.string.data_synced, Toast.LENGTH_SHORT);
+        toast.show();
     }
 
 }

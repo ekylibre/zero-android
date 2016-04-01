@@ -3,11 +3,13 @@ package ekylibre.zero;
 import android.app.Activity;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.Intent;
 import android.location.Location;
 import android.location.LocationManager;
-import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
@@ -15,12 +17,6 @@ import android.widget.NumberPicker;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import java.sql.Date;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.List;
-
-import ekylibre.api.Issue;
 import ekylibre.zero.provider.IssueContract;
 
 public class IssueActivity extends Activity {
@@ -61,15 +57,37 @@ public class IssueActivity extends Activity {
 
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu items for use in the action bar
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.form, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        Intent intent;
+        // Handle presses on the action bar items
+        switch (item.getItemId()) {
+            // case R.id.action_search:
+            //     // openSearch();
+            //     return true;
+            case R.id.action_save:
+                issueSave(item.getActionView());
+                return true;
+            default:
+            return super.onOptionsItemSelected(item);
+        }
+    }
+
+
+
     public void issueSave(View v){
         Context context = getApplicationContext();
         CharSequence text = "Issue saved";
         int duration = Toast.LENGTH_SHORT;
         Toast toast = Toast.makeText(context, text, duration);
         toast.show();
-
-
-
 
         //http://developer.android.com/guide/topics/providers/content-provider-basics.html
 

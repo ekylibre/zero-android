@@ -5,8 +5,9 @@
   <string name="app_name">Zero</string>
   <string name="count">Compte</string>
   <string name="create_issue">Enregistrement de l\'incident</string>
+  <string name="data_synced">Données synchronisées</string>
   <string name="email_address">Adresse e-mail</string>
-  <string name="emergency">Urgence</string>
+  <string name="priority">Priority</string>
   <string name="global_auth_token">Jeton d’authentification global</string>
   <string name="instance">URL de votre ferme</string>
   <string name="latitude">Latitude</string>
@@ -31,7 +32,7 @@
   <string name="scan_code">Scanner un code-barre</string>
   <string name="service_name">Ekylibre</string>
   <string name="settings">Paramètres</string>
-  <string name="severity">Sévérité</string>
+  <string name="gravity">Gravité</string>
   <string name="sign_in">Se connecter</string>
   <string name="start">Commencer</string>
   <string name="stop">Arrêter</string>
