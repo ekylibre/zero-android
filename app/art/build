@@ -15,25 +15,48 @@ inkscape -z --export-background=#000000 --export-background-opacity=0 --export-p
 
 for icon in ic_launcher ic_ekylibre
 do
-
     for size in 48 72 96 144 192
     do
         inkscape -z --export-background=#000000 --export-background-opacity=0 --export-png=$icon-${size}px.png --export-width=${size} --export-height=${size} $icon.svg
     done
     
-    # pngcrush -q $icon-48px.png  ../res/drawable/$icon.png
+    # pngcrush -q $icon-48px.png  ../src/main/res/mipmap/$icon.png
     
-    # pngcrush -q $icon-36px.png  ../res/drawable-ldpi/$icon.png
-    pngcrush -q $icon-48px.png  ../res/drawable-mdpi/$icon.png
-    pngcrush -q $icon-72px.png  ../res/drawable-hdpi/$icon.png
-    pngcrush -q $icon-96px.png  ../res/drawable-xhdpi/$icon.png
-    pngcrush -q $icon-144px.png ../res/drawable-xxhdpi/$icon.png
-    pngcrush -q $icon-192px.png ../res/drawable-xxxhdpi/$icon.png
+    # pngcrush -q $icon-36px.png  ../src/main/res/mipmap-ldpi/$icon.png
+    pngcrush -q $icon-48px.png  ../src/main/res/mipmap-mdpi/$icon.png
+    pngcrush -q $icon-72px.png  ../src/main/res/mipmap-hdpi/$icon.png
+    pngcrush -q $icon-96px.png  ../src/main/res/mipmap-xhdpi/$icon.png
+    pngcrush -q $icon-144px.png ../src/main/res/mipmap-xxhdpi/$icon.png
+    pngcrush -q $icon-192px.png ../src/main/res/mipmap-xxxhdpi/$icon.png
     
     # Removes useless files
     rm -f $icon-*px.png
 
 done
+
+
+for icon in ic_home
+do
+
+    for size in 192 288 384 512 704
+    do
+        inkscape -z --export-background=#000000 --export-background-opacity=0 --export-png=$icon-${size}px.png --export-width=${size} --export-height=${size} $icon.svg
+    done
+    
+    # pngcrush -q $icon-48px.png  ../src/main/res/mipmap/$icon.png
+    
+    # pngcrush -q $icon-36px.png  ../src/main/res/mipmap-ldpi/$icon.png
+    pngcrush -q $icon-192px.png  ../src/main/res/mipmap-mdpi/$icon.png
+    pngcrush -q $icon-288px.png  ../src/main/res/mipmap-hdpi/$icon.png
+    pngcrush -q $icon-384px.png  ../src/main/res/mipmap-xhdpi/$icon.png
+    pngcrush -q $icon-512px.png ../src/main/res/mipmap-xxhdpi/$icon.png
+    pngcrush -q $icon-704px.png ../src/main/res/mipmap-xxxhdpi/$icon.png
+    
+    # Removes useless files
+    rm -f $icon-*px.png
+
+done
+
 
 for icon in ic_stat_notify ic_stat_notify_running ic_stat_notify_paused ic_stat_notify_precision_mode
 do
@@ -43,14 +66,14 @@ do
         inkscape -z --export-background=#000000 --export-background-opacity=0 --export-png=$icon-${size}px.png --export-width=${size} --export-height=${size} $icon.svg
     done
     
-    # pngcrush -q $icon-48px.png  ../res/drawable/$icon.png
+    # pngcrush -q $icon-48px.png  ../src/main/res/mipmap/$icon.png
     
-    # pngcrush -q $icon-18px.png  ../res/drawable-ldpi/$icon.png
-    pngcrush -q $icon-24px.png ../res/drawable-mdpi/$icon.png
-    pngcrush -q $icon-36px.png ../res/drawable-hdpi/$icon.png
-    pngcrush -q $icon-48px.png ../res/drawable-xhdpi/$icon.png
-    pngcrush -q $icon-72px.png ../res/drawable-xxhdpi/$icon.png
-    pngcrush -q $icon-96px.png ../res/drawable-xxxhdpi/$icon.png
+    # pngcrush -q $icon-18px.png  ../src/main/res/mipmap-ldpi/$icon.png
+    pngcrush -q $icon-24px.png ../src/main/res/mipmap-mdpi/$icon.png
+    pngcrush -q $icon-36px.png ../src/main/res/mipmap-hdpi/$icon.png
+    pngcrush -q $icon-48px.png ../src/main/res/mipmap-xhdpi/$icon.png
+    pngcrush -q $icon-72px.png ../src/main/res/mipmap-xxhdpi/$icon.png
+    pngcrush -q $icon-96px.png ../src/main/res/mipmap-xxxhdpi/$icon.png
     
     # Removes useless files
     rm -f $icon-*px.png
