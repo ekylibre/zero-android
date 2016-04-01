@@ -5,8 +5,9 @@
     <string name="app_name">Zero</string>
     <string name="count">Count</string>
     <string name="create_issue">Create Issue</string>
+    <string name="data_synced">Data synchronized</string>
     <string name="email_address">Email address</string>
-    <string name="emergency">Emergency</string>
+    <string name="priority">Priority</string>
     <string name="global_auth_token">Global Authentication Token</string>
     <string name="instance">URL of your farm</string>
     <string name="latitude">Latitude</string>
@@ -31,7 +32,7 @@
     <string name="scan_code">Scan code</string>
     <string name="service_name">Ekylibre</string>
     <string name="settings">Settings</string>
-    <string name="severity">Severity</string>
+    <string name="gravity">Gravity</string>
     <string name="sign_in">Sign in</string>
     <string name="start">Start</string>
     <string name="stop">Stop</string>
