@@ -8,7 +8,7 @@
   <string name="email_address">Adresse e-mail</string>
   <string name="emergency">Urgence</string>
   <string name="global_auth_token">Jeton d’authentification global</string>
-  <string name="instance">Instance</string>
+  <string name="instance">URL de votre ferme</string>
   <string name="latitude">Latitude</string>
   <string name="longitude">Longitude</string>
   <string name="new_issue">Nouveau problème</string>

@@ -115,7 +115,7 @@ public class TrackingActivity extends Activity implements TrackingListenerWriter
         mPauseButton  = (Button)      findViewById(R.id.pause_intervention_button);
         mResumeButton = (Button)      findViewById(R.id.resume_intervention_button);
         mScanButton   = (Button)      findViewById(R.id.scan_code_button);
-        mSyncButton   = (Button)      findViewById(R.id.sync_button);
+        //mSyncButton   = (Button)      findViewById(R.id.sync_button);
         mPrecisionModeStartButton  = (Button) findViewById(R.id.start_precision_mode_button);
         mPrecisionModeStopButton   = (Button) findViewById(R.id.stop_precision_mode_button);
 
