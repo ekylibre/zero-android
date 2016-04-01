@@ -88,7 +88,7 @@ public class IssueSyncAdapter extends AbstractThreadedSyncAdapter {
                     SimpleDateFormat parser = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
                     attributes.put("observed_at", parser.format(new Date(cursor.getLong(8))));
                     if(cursor.getDouble(9) != 0 && cursor.getDouble(10) != 0){
-                       attributes.put("geolocation", "SRID=4326; POINT(" + Double.toString(cursor.getDouble(9)) + " " + Double.toString(cursor.getDouble(10)) + ")");
+                       attributes.put("geolocation", "SRID=4326; POINT(" + Double.toString(cursor.getDouble(10)) + " " + Double.toString(cursor.getDouble(9)) + ")");
                     }
 
                     long id = Issue.create(instance, attributes);
