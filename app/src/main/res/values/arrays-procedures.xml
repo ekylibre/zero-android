@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources>
+  <string-array name="procedures_entries">
+    <item>All in one sowing</item>
+    <item>Animal antibiotic treatment</item>
+    <item>Animal artificial insemination</item>
+    <item>Animal group changing</item>
+    <item>Animal housing cleaning</item>
+    <item>Animal housing mulching</item>
+    <item>Chaptalization</item>
+    <item>Complete wine transfert</item>
+    <item>Crop residues grinding</item>
+    <item>Cutting</item>
+    <item>Detasseling</item>
+    <item>Direct silage</item>
+    <item>Egg collecting</item>
+    <item>Enzyme addition</item>
+    <item>Equipment item replacement</item>
+    <item>Fermentation</item>
+    <item>Fertilizing</item>
+    <item>Field plant sorting</item>
+    <item>Food preparation</item>
+    <item>Fuel up</item>
+    <item>Gas weeding</item>
+    <item>Grape pressing</item>
+    <item>Ground destratification</item>
+    <item>Hand weeding</item>
+    <item>Harvesting</item>
+    <item>Hilling</item>
+    <item>Hilling for sifting</item>
+    <item>Hoeing</item>
+    <item>Indirect silage</item>
+    <item>Land parcel grinding</item>
+    <item>Lifting</item>
+    <item>Manual feeding</item>
+    <item>Mechanical harvesting</item>
+    <item>Mechanical planting</item>
+    <item>Milking</item>
+    <item>Net installation</item>
+    <item>Net removing</item>
+    <item>Oil replacement</item>
+    <item>Partial wine transfert</item>
+    <item>Parturition</item>
+    <item>Pasturing</item>
+    <item>Plant covering</item>
+    <item>Plant mowing</item>
+    <item>Plant mulching</item>
+    <item>Plant uncovering</item>
+    <item>Plant watering</item>
+    <item>Plant watering installation</item>
+    <item>Plantation unfixing</item>
+    <item>Plowing</item>
+    <item>Raking</item>
+    <item>Seedling sorting</item>
+    <item>Sifting</item>
+    <item>Silage unload</item>
+    <item>Sowing</item>
+    <item>Sowing with spraying</item>
+    <item>Spraying</item>
+    <item>Standard enclosing</item>
+    <item>Steam weeding</item>
+    <item>Straw bunching</item>
+    <item>Sulfur addition</item>
+    <item>Superficial plowing</item>
+    <item>Swathing</item>
+    <item>Topkilling</item>
+    <item>Tunnel installation</item>
+    <item>Tunnel removing</item>
+    <item>Uncompacting</item>
+    <item>Wine blending</item>
+    <item>Wine bottling</item>
+  </string-array>
+  <string-array name="procedures_values">
+    <item>all_in_one_sowing</item>
+    <item>animal_antibiotic_treatment</item>
+    <item>animal_artificial_insemination</item>
+    <item>animal_group_changing</item>
+    <item>animal_housing_cleaning</item>
+    <item>animal_housing_mulching</item>
+    <item>chaptalization</item>
+    <item>complete_wine_transfer</item>
+    <item>crop_residues_grinding</item>
+    <item>cutting</item>
+    <item>detasseling</item>
+    <item>direct_silage</item>
+    <item>egg_collecting</item>
+    <item>enzyme_addition</item>
+    <item>equipment_item_replacement</item>
+    <item>fermentation</item>
+    <item>fertilizing</item>
+    <item>field_plant_sorting</item>
+    <item>food_preparation</item>
+    <item>fuel_up</item>
+    <item>gas_weeding</item>
+    <item>grape_pressing</item>
+    <item>ground_destratification</item>
+    <item>hand_weeding</item>
+    <item>harvesting</item>
+    <item>hilling</item>
+    <item>hilling_for_sifting</item>
+    <item>hoeing</item>
+    <item>indirect_silage</item>
+    <item>land_parcel_grinding</item>
+    <item>lifting</item>
+    <item>manual_feeding</item>
+    <item>mechanical_harvesting</item>
+    <item>mechanical_planting</item>
+    <item>milking</item>
+    <item>net_installation</item>
+    <item>net_removing</item>
+    <item>oil_replacement</item>
+    <item>partial_wine_transfer</item>
+    <item>parturition</item>
+    <item>pasturing</item>
+    <item>plant_covering</item>
+    <item>plant_mowing</item>
+    <item>plant_mulching</item>
+    <item>plant_uncovering</item>
+    <item>plant_watering</item>
+    <item>plant_watering_installation</item>
+    <item>plantation_unfixing</item>
+    <item>plowing</item>
+    <item>raking</item>
+    <item>seedling_sorting</item>
+    <item>sifting</item>
+    <item>silage_unload</item>
+    <item>sowing</item>
+    <item>sowing_with_spraying</item>
+    <item>spraying</item>
+    <item>standard_enclosing</item>
+    <item>steam_weeding</item>
+    <item>straw_bunching</item>
+    <item>sulfur_addition</item>
+    <item>superficial_plowing</item>
+    <item>swathing</item>
+    <item>topkilling</item>
+    <item>tunnel_installation</item>
+    <item>tunnel_removing</item>
+    <item>uncompacting</item>
+    <item>wine_blending</item>
+    <item>wine_bottling</item>
+  </string-array>
+</resources>

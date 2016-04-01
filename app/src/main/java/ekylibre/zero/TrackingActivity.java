@@ -139,11 +139,11 @@ public class TrackingActivity extends Activity implements TrackingListenerWriter
         mProcedureChooser = new AlertDialog.Builder(this)
             .setTitle(R.string.procedure_nature)
             .setNegativeButton(android.R.string.cancel, null)
-            .setItems(R.array.procedureNatures_entries, new DialogInterface.OnClickListener() {
+            .setItems(R.array.procedures_entries, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    mLastProcedureNature = getResources().getStringArray(R.array.procedureNatures_values)[which];
-                    mLastProcedureNatureName = getResources().getStringArray(R.array.procedureNatures_entries)[which];
+                    mLastProcedureNature = getResources().getStringArray(R.array.procedures_values)[which];
+                    mLastProcedureNatureName = getResources().getStringArray(R.array.procedures_entries)[which];
                     Log.d("zero", "Start a new " + mLastProcedureNature);
 
                     mStartButton.setVisibility(View.GONE);
