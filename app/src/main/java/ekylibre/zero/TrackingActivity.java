@@ -2,13 +2,11 @@ package ekylibre.zero;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
-import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
-import android.content.ComponentName;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
@@ -18,14 +16,13 @@ import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.location.Location;
 import android.location.LocationManager;
-import android.location.LocationListener;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.preference.PreferenceManager;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.Menu;
-import android.view.MenuItem;
 import android.view.MenuInflater;
 import android.widget.Button;
 import android.widget.Chronometer;
@@ -40,7 +37,6 @@ import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
 import ekylibre.zero.provider.TrackingContract;
-import ekylibre.zero.provider.TrackingProvider;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -81,7 +77,7 @@ public class TrackingActivity extends Activity implements TrackingListenerWriter
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // Get default account or ask for it if necessary
+        // Get simple account or ask for it if necessary
         final AccountManager manager = AccountManager.get(this);
         final Account[] accounts = manager.getAccountsByType(TrackingSyncAdapter.ACCOUNT_TYPE);
         if (accounts.length <= 0) {
@@ -92,7 +88,7 @@ public class TrackingActivity extends Activity implements TrackingListenerWriter
             finish();
             return;
         } else if (accounts.length > 1) {
-            // TODO: Propose the list of account or get the one by default
+            // TODO: Propose the list of account or get the one by simple
             mAccount = accounts[0];
         } else {
             mAccount = accounts[0];
@@ -115,7 +111,7 @@ public class TrackingActivity extends Activity implements TrackingListenerWriter
         mPauseButton  = (Button)      findViewById(R.id.pause_intervention_button);
         mResumeButton = (Button)      findViewById(R.id.resume_intervention_button);
         mScanButton   = (Button)      findViewById(R.id.scan_code_button);
-        //mSyncButton   = (Button)      findViewById(R.id.sync_button);
+        mSyncButton   = (Button)      findViewById(R.id.sync_button);
         mPrecisionModeStartButton  = (Button) findViewById(R.id.start_precision_mode_button);
         mPrecisionModeStopButton   = (Button) findViewById(R.id.stop_precision_mode_button);
 
@@ -162,8 +158,10 @@ public class TrackingActivity extends Activity implements TrackingListenerWriter
                     mScanButton.setVisibility(View.VISIBLE);
                     mSyncButton.setVisibility(View.GONE);
                     mPrecisionModeStartButton.setVisibility(View.VISIBLE);
-                    mProcedureNature.setVisibility(View.VISIBLE);
+                    //mProcedureNature.setVisibility(View.VISIBLE);
                     mProcedureNature.setText(mLastProcedureNatureName);
+
+                    setTitle(mLastProcedureNatureName);
 
                     mMasterStart = SystemClock.elapsedRealtime();
                     mMasterDuration = 0;
@@ -183,9 +181,11 @@ public class TrackingActivity extends Activity implements TrackingListenerWriter
                     mNotificationManager.notify(mNotificationID, mNotificationBuilder.build());
                 }
             });
-
+        if(!mRunning) {
+           // mProcedureChooser.show();
+        }
     }
-
+/*
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu items for use in the action bar
@@ -206,11 +206,11 @@ public class TrackingActivity extends Activity implements TrackingListenerWriter
             intent = new Intent(this, SettingsActivity.class);
             startActivity(intent);  
             return true;
-        default:
+        simple:
             return super.onOptionsItemSelected(item);
         }
     }
-
+*/
 
     public void startIntervention(View view) {
         mProcedureChooser.show();
@@ -230,10 +230,11 @@ public class TrackingActivity extends Activity implements TrackingListenerWriter
         mDetails.setVisibility(View.GONE);
         mProcedureNature.setVisibility(View.INVISIBLE);
         mStartButton.setVisibility(View.VISIBLE);
-        mSyncButton.setVisibility(View.VISIBLE);
+        //mSyncButton.setVisibility(View.VISIBLE);
         this.stopTracking();
         this.addCrumb("stop");
 
+        setTitle(R.string.new_intervention);
         mNotificationBuilder
             .setSmallIcon(R.mipmap.ic_stat_notify)
             .setContentTitle(getString(R.string.app_name))

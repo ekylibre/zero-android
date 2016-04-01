@@ -15,18 +15,11 @@
         android:layout_height="match_parent"
         android:gravity="center_horizontal">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="@string/create_issue"
-            android:id="@+id/textView3"
-            android:layout_gravity="left" />
-
         <Spinner
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/spinner" />
+            android:id="@+id/spinner"
+            android:layout_marginBottom="35dp" />
 
         <LinearLayout
             android:orientation="horizontal"
@@ -69,7 +62,8 @@
 
             <TableRow
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:layout_marginBottom="35dp">
 
                 <NumberPicker
                     android:layout_width="wrap_content"
@@ -102,8 +96,6 @@
             android:id="@+id/description"
             android:autoText="false"
             android:hint="@string/notes"
-            android:layout_marginTop="30dp"
-            android:layout_marginBottom="15dp"
             android:maxLines="1" />
 <!--
         <Button
