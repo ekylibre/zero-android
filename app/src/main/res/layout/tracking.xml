@@ -34,8 +34,8 @@
 			  android:layout_height="wrap_content">
 	    <LinearLayout
 			    android:orientation="vertical"
-          android:paddingLeft="16dp"
-          android:paddingRight="16dp"
+          		android:paddingLeft="16dp"
+          		android:paddingRight="16dp"
 			    android:layout_width="fill_parent"
 			    android:layout_height="wrap_content">
 	      <TextView
@@ -49,14 +49,14 @@
       </LinearLayout>
 	    <LinearLayout
 			    android:orientation="vertical"
-          android:paddingLeft="16dp"
-          android:paddingRight="16dp"
+          		android:paddingLeft="16dp"
+          		android:paddingRight="16dp"
 			    android:layout_width="fill_parent"
 			    android:layout_height="wrap_content">
 	      <TextView
 			      android:layout_width="fill_parent"
 			      android:layout_height="wrap_content"
-            android:text="@string/latitude"/>
+            	android:text="@string/latitude"/>
 	      <TextView
 			      android:id="@+id/latitude"
 			      android:layout_width="fill_parent"
@@ -155,15 +155,16 @@
 				android:visibility="gone"
 				android:text="@string/pause"
 				android:onClick="pauseIntervention"/>
-		<!--
+
 		<Button
 				android:id="@+id/sync_button"
 				android:layout_width="fill_parent"
 				android:layout_height="wrap_content"
 				android:drawableLeft="@android:drawable/ic_popup_sync"
 				android:text="@string/sync"
-				android:onClick="syncCrumbs"/>
-		-->
+				android:onClick="syncCrumbs"
+			android:visibility="gone" />
+
 	</LinearLayout>
 </LinearLayout>
 
