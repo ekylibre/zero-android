@@ -136,12 +136,15 @@
         </activity>
         <activity
             android:name=".IssuesActivity"
+            android:parentActivityName=".MenuActivity"
             android:label="" />
         <activity
             android:name=".IssueTypeActivity"
+            android:parentActivityName=".MenuActivity"
             android:label="" />
         <activity
             android:name=".IssueActivity"
+            android:parentActivityName=".MenuActivity"
             android:label="@string/new_issue" />
         <activity android:name=".MenuActivity">
             <intent-filter>
@@ -152,7 +155,9 @@
         </activity>
         <activity
             android:name=".SortingActivity"
-            android:label="@string/title_activity_sorting"></activity>
+            android:parentActivityName=".MenuActivity"
+            android:label="@string/title_activity_sorting">
+        </activity>
     </application>
 
 </manifest>
