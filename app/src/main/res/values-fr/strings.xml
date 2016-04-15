@@ -15,6 +15,7 @@
   <string name="latitude">Latitude</string>
   <string name="location">Géolocation</string>
   <string name="longitude">Longitude</string>
+  <string name="new_count">Nouveau Comptage</string>
   <string name="new_issue">Nouvel incident</string>
   <string name="new_intervention">Nouvelle intervention</string>
   <string name="notes">Notes</string>

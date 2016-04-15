@@ -66,6 +66,7 @@ public class IssueActivity extends Activity {
         mEmergency.setMinValue(0);
         mEmergency.setValue(2);
 
+        getActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
     @Override

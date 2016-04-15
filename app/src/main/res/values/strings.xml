@@ -18,6 +18,7 @@
     <string name="latitude">Latitude</string>
     <string name="location">Location</string>
     <string name="longitude">Longitude</string>
+    <string name="new_count">New Count</string>
     <string name="new_issue">New issue</string>
     <string name="new_intervention">New intervention</string>
     <string name="notes">Notes</string>
@@ -54,7 +55,4 @@
     <string name="title_activity_capture">Capture</string>
     <string name="title_activity_camera">Camera</string>
     <string name="title_activity_sorting">Counting</string>
-
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
