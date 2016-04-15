@@ -43,6 +43,14 @@
             android:text="@string/new_issue"
             android:textSize="20dp" />
 
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Sorting"
+            android:id="@+id/button6"
+            android:layout_gravity="center_horizontal"
+            android:onClick="gotoSorting" />
+
     </LinearLayout>
 
     <Button

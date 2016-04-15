@@ -3,26 +3,33 @@
     <string name="accuracy">Accuracy</string>
     <string name="action_settings">Settings</string>
     <string name="app_name">Zero</string>
+    <string name="analysis_count_hint">Enter a new count</string>
     <string name="count">Count</string>
     <string name="create_issue">Create Issue</string>
     <string name="data_synced">Data synchronized</string>
+    <string name="date_label">Date</string>
     <string name="email_address">Email address</string>
+    <string name="emergency">Emergency</string>
+    <string name="picture">Picture</string>
     <string name="priority">Priority</string>
     <string name="global_auth_token">Global Authentication Token</string>
     <string name="instance">URL of your farm</string>
     <string name="issue_sync_service_name">Issues</string>
     <string name="latitude">Latitude</string>
+    <string name="location">Location</string>
     <string name="longitude">Longitude</string>
     <string name="new_issue">New issue</string>
     <string name="new_intervention">New intervention</string>
     <string name="notes">Notes</string>
     <string name="notif_invalidPasswordOrEmail">Invalid password or e-mail</string>
     <string name="notif_loginSucceeded">Login succeeded</string>
+    <string name="observations">Observations</string>
     <string name="password">Password</string>
     <string name="pause">Pause</string>
     <string name="paused">Paused</string>
     <string name="permlab_authenticateAccounts">use Ekylibre accounts</string>
     <string name="permlab_syncData">synchronize data to Ekylibre</string>
+    <string name="permlab_capture">Take a picture</string>
     <string name="precision_mode">Precision mode</string>
     <string name="pref_showDetails">Show details</string>
     <string name="pref_showDetails_summary">Show coordinates and crumbs count during an intervention</string>
@@ -42,6 +49,12 @@
     <string name="test_demo">Test demo</string>
     <string name="tracking">Tracking</string>
     <string name="tracking_sync_service_name">Tracking data</string>
-    <string name="emergency">Emergency</string>
+    <string name="values">Values</string>
     <string name="severity">Severity</string>
+    <string name="title_activity_capture">Capture</string>
+    <string name="title_activity_camera">Camera</string>
+    <string name="title_activity_sorting">Counting</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

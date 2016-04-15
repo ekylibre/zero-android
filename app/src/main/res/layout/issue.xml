@@ -1,112 +1,126 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="ekylibre.zero.IssueActivity">
-
-    <LinearLayout
+    android:layout_height="match_parent">
+    <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:gravity="center_horizontal"
-        android:orientation="vertical">
-
-        <Spinner
-            android:id="@+id/spinner"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="35dp" />
+        tools:context="ekylibre.zero.IssueActivity">
 
         <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-        </LinearLayout>
-
-        <TableLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="match_parent"
+            android:gravity="center_horizontal"
+            android:orientation="vertical"
+            android:nestedScrollingEnabled="true"
+            android:paddingBottom="@dimen/activity_vertical_margin"
+            android:paddingLeft="@dimen/activity_horizontal_margin"
+            android:paddingRight="@dimen/activity_horizontal_margin"
+            android:paddingTop="@dimen/activity_vertical_margin">
 
-            <TableRow
+            <Spinner
+                android:id="@+id/spinner"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="35dp" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+            </LinearLayout>
+
+            <TableLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center">
+                android:layout_height="wrap_content">
 
-                <TextView
-                    android:id="@+id/severity"
+                <TableRow
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:text="@string/severity"
-                    android:textAlignment="center"
-                    android:textAppearance="?android:attr/textAppearanceMedium" />
+                    android:gravity="center">
 
-                <TextView
-                    android:id="@+id/emergency"
-                    android:layout_width="wrap_content"
+                    <TextView
+                        android:id="@+id/severity"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:text="@string/severity"
+                        android:textAlignment="center"
+                        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+                    <TextView
+                        android:id="@+id/emergency"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_column="1"
+                        android:layout_row="0"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:text="@string/emergency"
+                        android:textAlignment="center"
+                        android:textAppearance="?android:attr/textAppearanceMedium" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_column="1"
-                    android:layout_row="0"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:text="@string/emergency"
-                    android:textAlignment="center"
-                    android:textAppearance="?android:attr/textAppearanceMedium" />
-            </TableRow>
+                    android:layout_marginBottom="35dp">
 
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginBottom="35dp">
+                    <NumberPicker
+                        android:id="@+id/numberPickerSeverity"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_column="0"
+                        android:layout_marginLeft="50dp"
+                        android:layout_marginRight="50dp"
+                        android:layout_marginTop="5dp"
+                        android:layout_row="1"
+                        android:theme="@android:style/DeviceDefault.Light.ButtonBar.AlertDialog" />
 
-                <NumberPicker
-                    android:id="@+id/numberPickerSeverity"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_column="0"
-                    android:layout_marginLeft="50dp"
-                    android:layout_marginRight="50dp"
-                    android:layout_marginTop="5dp"
-                    android:layout_row="1"
-                    android:theme="@android:style/DeviceDefault.Light.ButtonBar.AlertDialog" />
+                    <NumberPicker
+                        android:id="@+id/numberPickerEmergency"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_column="1"
+                        android:layout_marginLeft="50dp"
+                        android:layout_marginRight="50dp"
+                        android:layout_marginTop="5dp"
+                        android:layout_row="1"
+                        android:gravity="center_horizontal" />
+                </TableRow>
 
-                <NumberPicker
-                    android:id="@+id/numberPickerEmergency"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_column="1"
-                    android:layout_marginLeft="50dp"
-                    android:layout_marginRight="50dp"
-                    android:layout_marginTop="5dp"
-                    android:layout_row="1"
-                    android:gravity="center_horizontal" />
-            </TableRow>
+            </TableLayout>
 
-        </TableLayout>
+            <ImageView
+                android:layout_width="fill_parent"
+                android:layout_height="200dp"
+                android:id="@+id/preview" />
 
-        <EditText
-            android:id="@+id/description"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:autoText="false"
-            android:hint="@string/notes"
-            android:maxLines="7" />
-<!--
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Video / Picture"
-            android:id="@+id/button7"
-            android:layout_gravity="center_horizontal|bottom"
-            android:layout_marginBottom="15dp" />
--->
+            <Button
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/picture"
+                android:id="@+id/picture"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginRight="75dp"
+                android:layout_marginLeft="75dp"
+                android:onClick="takePicture" />
 
-    </LinearLayout>
+            <EditText
+                android:id="@+id/description"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:autoText="false"
+                android:hint="@string/notes"
+                android:maxLines="6" />
 
+
+        </LinearLayout>
+    </ScrollView>
 </RelativeLayout>
+
+
+

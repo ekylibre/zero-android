@@ -82,12 +82,9 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                 cursor.moveToFirst();
                 while (!cursor.isAfterLast()) {
                     Log.i(TAG, "New crumb");
-                    
                     // Post it to ekylibre
                     JSONObject attributes = new JSONObject();
                     attributes.put("nature", cursor.getString(1));
-                    // attributes.put("latitude", cursor.getString(2));
-                    // attributes.put("longitude", cursor.getString(3));
                     attributes.put("geolocation", "SRID=4326; POINT(" + Double.toString(cursor.getDouble(3)) + " " + Double.toString(cursor.getDouble(2)) + ")");
                     SimpleDateFormat parser = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
                     attributes.put("read_at", parser.format(new Date(cursor.getLong(4))));
@@ -146,7 +143,8 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                     attributes.put("nature", cursor.getString(1));
                     attributes.put("gravity", cursor.getInt(2));
                     attributes.put("priority", cursor.getInt(3));
-                    attributes.put("description", cursor.getString(5));
+                    //byte[] utf8Description = cursor.getString(5).getBytes("UTF-8");
+                    attributes.put("description",cursor.getString(5) );
                     //attributes.put("target_type", "Product");
                     //attributes.put("target_id", "1");
                     SimpleDateFormat parser = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
