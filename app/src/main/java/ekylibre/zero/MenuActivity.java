@@ -85,10 +85,12 @@ public class MenuActivity extends Activity {
 
     }
 
-    public void gotoIssue(View v) {
-        Intent intent = new Intent(this,IssuesActivity.class);
+    public void gotoSorting(View v) {
+        Intent intent = new Intent(this,SortingActivity.class);
         startActivity(intent);
     }
+
+
 
     public void syncAll(View v) {
         Log.d("zero", "syncData: " + mAccount.toString() + ", " + ZeroContract.AUTHORITY);

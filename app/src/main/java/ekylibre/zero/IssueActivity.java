@@ -4,18 +4,31 @@ import android.app.Activity;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.location.Location;
 import android.location.LocationManager;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.NumberPicker;
 import android.widget.Spinner;
 import android.widget.Toast;
+
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+
 
 public class IssueActivity extends Activity {
 
@@ -78,6 +91,82 @@ public class IssueActivity extends Activity {
         }
     }
 
+    private static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 100;
+    private Uri fileUri;
+    public static  String selectedImagePath="";
+    int count = 0;
+    public void takePicture(View v){
+
+        selectedImagePath = Environment.getExternalStorageDirectory() + "/issue"+count+".jpg";
+        count++;
+        File file = new File(selectedImagePath);
+        Uri outputFileUri = Uri.fromFile(file);
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+
+        //intent.putExtra(MediaStore.EXTRA_OUTPUT, outputFileUri);  // set the image file name
+
+        startActivityForResult(intent, CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE);
+    }
+
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        /*ImageView mPreview = (ImageView) findViewById(R.id.preview);
+        if(resultCode != RESULT_CANCELED){
+
+            if (requestCode == CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE) {
+
+                if (data != null && data.getExtras()!=null) {
+                    if (data.getExtras().get("data") != null) {
+
+                        Bitmap bit = (Bitmap) data.getExtras().get("data");
+                        mPreview.setImageBitmap(bit);
+                    }
+                }
+            }
+        }*/
+
+        if (requestCode == CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE) {
+            Log.d("zero", data.toString());
+            try {
+                Bitmap bmp = (Bitmap) data.getExtras().get("data");
+
+                ByteArrayOutputStream stream = new ByteArrayOutputStream();
+
+                bmp.compress(Bitmap.CompressFormat.PNG, 100, stream);
+                byte[] byteArray = stream.toByteArray(); // convert camera photo to byte array
+                // save it in your external storage.
+                count++;
+                try {
+                    FileOutputStream fo = new FileOutputStream(new File(Environment.getExternalStorageDirectory() + "/_camera.png"));
+
+                    try {
+                        fo.write(byteArray);
+                        fo.flush();
+                        fo.close();
+                    } catch (IOException e) {
+                    }
+                } catch (FileNotFoundException f) {
+                }
+            }
+            catch (NullPointerException n){
+            }
+
+
+            if (resultCode == RESULT_OK) {
+                // Image captured and saved to fileUri specified in the Intent
+                Toast.makeText(this, "Image saved to:\n" + data.getData(), Toast.LENGTH_LONG).show();
+            } else if (resultCode == RESULT_CANCELED) {
+                    // User cancelled the image capture
+                Toast.makeText(this, "Cancelled", Toast.LENGTH_LONG).show();
+            } else {
+                    // Image capture failed, advise user
+                Toast.makeText(this, "Failed", Toast.LENGTH_LONG).show();
+            }
+        }
+
+    }
 
     public void saveIssue(View v) {
         Context context = getApplicationContext();

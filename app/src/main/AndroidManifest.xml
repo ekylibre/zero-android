@@ -2,6 +2,12 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="ekylibre.zero"
     android:installLocation="auto">
+
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="false" />
+    <uses-feature android:name="android.hardware.camera.autofocus" />
+
     <permission
         android:name="ekylibre.zero.permission.AUTHENTICATE_ACCOUNTS"
         android:label="@string/permlab_authenticateAccounts"
@@ -11,6 +17,7 @@
         android:label="@string/permlab_syncData"
         android:permissionGroup="android.permission-group.SYNC_SETTINGS" />
 
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.AUTHENTICATE_ACCOUNTS" />
     <uses-permission android:name="android.permission.INTERNET" />
@@ -39,8 +46,6 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:theme="@android:style/Theme.Holo.Light">
-
-
         <activity
             android:name=".TrackingActivity"
             android:label="@string/new_intervention"
@@ -129,18 +134,25 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".TrackingActivity" />
         </activity>
-        <activity android:name=".IssuesActivity"
-            android:label=""/>
-        <activity android:name=".IssueTypeActivity"
-            android:label=""/>
-        <activity android:name=".IssueActivity"
-            android:label="@string/new_issue"/>
+        <activity
+            android:name=".IssuesActivity"
+            android:label="" />
+        <activity
+            android:name=".IssueTypeActivity"
+            android:label="" />
+        <activity
+            android:name=".IssueActivity"
+            android:label="@string/new_issue" />
         <activity android:name=".MenuActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".SortingActivity"
+            android:label="@string/title_activity_sorting"></activity>
     </application>
 
 </manifest>
