@@ -73,11 +73,7 @@ public class SamplingActivity extends Activity {
     }
 
     public void saveSampling(View v) {
-        Context context = getApplicationContext();
-        CharSequence text = "Issue saved";
-        int duration = Toast.LENGTH_SHORT;
-        Toast toast = Toast.makeText(context, text, duration);
-        toast.show();
+
 
         //http://developer.android.com/guide/topics/providers/content-provider-basics.html
 
@@ -87,10 +83,6 @@ public class SamplingActivity extends Activity {
 
         // Sets the values of each column and inserts the word. The arguments to the "put"
         // method are "column name" and "value"
-
-        String[] mTestArray;
-        mTestArray = getResources().getStringArray(R.array.issueNatures_values);
-
 
         mNewValues.put(ZeroContract.SamplingColumns.OBSERVED_AT, (new java.util.Date()).getTime());
 
@@ -109,7 +101,14 @@ public class SamplingActivity extends Activity {
                 mNewValues                          // the values to insert
         );
 
-        //est censé fermer l'activity
+
+        Context context = getApplicationContext();
+        CharSequence text = "Sampling saved";
+        int duration = Toast.LENGTH_SHORT;
+        Toast toast = Toast.makeText(context, text, duration);
+        toast.show();
+
+        //close activity
         this.finish();
 
     }

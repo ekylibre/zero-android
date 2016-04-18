@@ -24,6 +24,10 @@ public class ZeroProvider extends ContentProvider {
     public static final int ROUTE_CRUMB_ITEM = 101;
     public static final int ROUTE_ISSUE_LIST = 200;
     public static final int ROUTE_ISSUE_ITEM = 201;
+    public static final int ROUTE_SAMPLING_ITEM = 300;
+    public static final int ROUTE_SAMPLING_LIST = 301;
+    public static final int ROUTE_SAMPLING_COUNTS_ITEM = 400;
+    public static final int ROUTE_SAMPLING_COUNTS_LIST = 401;
     // UriMatcher, used to decode incoming URIs.
     private static final UriMatcher URI_MATCHER = new UriMatcher(UriMatcher.NO_MATCH);
 
@@ -32,6 +36,10 @@ public class ZeroProvider extends ContentProvider {
         URI_MATCHER.addURI(ZeroContract.AUTHORITY, "crumbs/#", ROUTE_CRUMB_ITEM);
         URI_MATCHER.addURI(ZeroContract.AUTHORITY, "issues", ROUTE_ISSUE_LIST);
         URI_MATCHER.addURI(ZeroContract.AUTHORITY, "issues/#", ROUTE_ISSUE_ITEM);
+        URI_MATCHER.addURI(ZeroContract.AUTHORITY, "sampling", ROUTE_SAMPLING_ITEM);
+        URI_MATCHER.addURI(ZeroContract.AUTHORITY, "sampling/#", ROUTE_SAMPLING_LIST);
+        URI_MATCHER.addURI(ZeroContract.AUTHORITY, "sampling_counts", ROUTE_SAMPLING_COUNTS_ITEM);
+        URI_MATCHER.addURI(ZeroContract.AUTHORITY, "sampling_counts/#", ROUTE_SAMPLING_COUNTS_LIST);
     }
 
     private DatabaseHelper mDatabaseHelper;
@@ -54,6 +62,14 @@ public class ZeroProvider extends ContentProvider {
                 return ZeroContract.Issues.CONTENT_TYPE;
             case ROUTE_ISSUE_ITEM:
                 return ZeroContract.Issues.CONTENT_ITEM_TYPE;
+            case ROUTE_SAMPLING_LIST:
+                return ZeroContract.Sampling.CONTENT_TYPE;
+            case ROUTE_SAMPLING_ITEM:
+                return ZeroContract.Sampling.CONTENT_ITEM_TYPE;
+            case ROUTE_SAMPLING_COUNTS_LIST:
+                return ZeroContract.Counts.CONTENT_TYPE;
+            case ROUTE_SAMPLING_COUNTS_ITEM:
+                return ZeroContract.Counts.CONTENT_TYPE;
             default:
                 throw new UnsupportedOperationException("Unknown URI: " + uri);
         }
@@ -88,6 +104,7 @@ public class ZeroProvider extends ContentProvider {
                 assert context != null;
                 cursor.setNotificationUri(context.getContentResolver(), uri);
                 return cursor;
+
             case ROUTE_ISSUE_ITEM:
                 // Return a single ISSUE, by ID.
                 id = uri.getLastPathSegment();
@@ -95,6 +112,37 @@ public class ZeroProvider extends ContentProvider {
             case ROUTE_ISSUE_LIST:
                 // Return all known Issue.
                 builder.table(ZeroContract.IssuesColumns.TABLE_NAME)
+                        .where(selection, selectionArgs);
+                cursor = builder.query(database, projection, sortOrder);
+                // Note: Notification URI must be manually set here for loaders to correctly
+                // register ContentObservers.
+                context = getContext();
+                assert context != null;
+                cursor.setNotificationUri(context.getContentResolver(), uri);
+                return cursor;
+
+            case ROUTE_SAMPLING_ITEM:
+                // Return a single ISSUE, by ID.
+                id = uri.getLastPathSegment();
+                builder.where(ZeroContract.SamplingColumns._ID + "=?", id);
+            case ROUTE_SAMPLING_LIST:
+                // Return all known Issue.
+                builder.table(ZeroContract.SamplingColumns.TABLE_NAME)
+                        .where(selection, selectionArgs);
+                cursor = builder.query(database, projection, sortOrder);
+                // Note: Notification URI must be manually set here for loaders to correctly
+                // register ContentObservers.
+                context = getContext();
+                assert context != null;
+                cursor.setNotificationUri(context.getContentResolver(), uri);
+                return cursor;
+
+            case ROUTE_SAMPLING_COUNTS_ITEM:
+                // Return a single ISSUE, by ID.
+                id = uri.getLastPathSegment();
+                builder.where(ZeroContract.CountsColumns._ID + "=?", id);
+            case ROUTE_SAMPLING_COUNTS_LIST:                // Return all known Issue.
+                builder.table(ZeroContract.CountsColumns.TABLE_NAME)
                         .where(selection, selectionArgs);
                 cursor = builder.query(database, projection, sortOrder);
                 // Note: Notification URI must be manually set here for loaders to correctly
@@ -130,6 +178,18 @@ public class ZeroProvider extends ContentProvider {
                 result = Uri.parse(ZeroContract.Issues.CONTENT_URI + "/" + id);
                 break;
             case ROUTE_ISSUE_ITEM:
+                throw new UnsupportedOperationException("Insert not supported on URI: " + uri);
+            case ROUTE_SAMPLING_LIST:
+                id = database.insertOrThrow(ZeroContract.IssuesColumns.TABLE_NAME, null, values);
+                result = Uri.parse(ZeroContract.Issues.CONTENT_URI + "/" + id);
+                break;
+            case ROUTE_SAMPLING_ITEM:
+                throw new UnsupportedOperationException("Insert not supported on URI: " + uri);
+            case ROUTE_SAMPLING_COUNTS_LIST:
+                id = database.insertOrThrow(ZeroContract.IssuesColumns.TABLE_NAME, null, values);
+                result = Uri.parse(ZeroContract.Issues.CONTENT_URI + "/" + id);
+                break;
+            case ROUTE_SAMPLING_COUNTS_ITEM:
                 throw new UnsupportedOperationException("Insert not supported on URI: " + uri);
             default:
                 throw new UnsupportedOperationException("Unknown URI: " + uri);
@@ -176,6 +236,30 @@ public class ZeroProvider extends ContentProvider {
                         .where(selection, selectionArgs)
                         .delete(database);
                 break;
+            case ROUTE_SAMPLING_LIST:
+                count = builder.table(ZeroContract.SamplingColumns.TABLE_NAME)
+                        .where(selection, selectionArgs)
+                        .delete(database);
+                break;
+            case ROUTE_SAMPLING_ITEM:
+                id = uri.getLastPathSegment();
+                count = builder.table(ZeroContract.SamplingColumns.TABLE_NAME)
+                        .where(ZeroContract.SamplingColumns._ID + "=?", id)
+                        .where(selection, selectionArgs)
+                        .delete(database);
+                break;
+            case ROUTE_SAMPLING_COUNTS_LIST:
+                count = builder.table(ZeroContract.CountsColumns.TABLE_NAME)
+                        .where(selection, selectionArgs)
+                        .delete(database);
+                break;
+            case ROUTE_SAMPLING_COUNTS_ITEM:
+                id = uri.getLastPathSegment();
+                count = builder.table(ZeroContract.CountsColumns.TABLE_NAME)
+                        .where(ZeroContract.CountsColumns._ID + "=?", id)
+                        .where(selection, selectionArgs)
+                        .delete(database);
+                break;
             default:
                 throw new UnsupportedOperationException("Unknown URI: " + uri);
         }
@@ -218,6 +302,32 @@ public class ZeroProvider extends ContentProvider {
                 id = uri.getLastPathSegment();
                 count = builder.table(ZeroContract.IssuesColumns.TABLE_NAME)
                         .where(ZeroContract.IssuesColumns._ID + "=?", id)
+                        .where(selection, selectionArgs)
+                        .update(database, values);
+                break;
+
+            case ROUTE_SAMPLING_LIST:
+                count = builder.table(ZeroContract.SamplingColumns.TABLE_NAME)
+                        .where(selection, selectionArgs)
+                        .update(database, values);
+                break;
+            case ROUTE_SAMPLING_ITEM:
+                id = uri.getLastPathSegment();
+                count = builder.table(ZeroContract.SamplingColumns.TABLE_NAME)
+                        .where(ZeroContract.SamplingColumns._ID + "=?", id)
+                        .where(selection, selectionArgs)
+                        .update(database, values);
+                break;
+
+            case ROUTE_SAMPLING_COUNTS_LIST:
+                count = builder.table(ZeroContract.CountsColumns.TABLE_NAME)
+                        .where(selection, selectionArgs)
+                        .update(database, values);
+                break;
+            case ROUTE_SAMPLING_COUNTS_ITEM:
+                id = uri.getLastPathSegment();
+                count = builder.table(ZeroContract.CountsColumns.TABLE_NAME)
+                        .where(ZeroContract.CountsColumns._ID + "=?", id)
                         .where(selection, selectionArgs)
                         .update(database, values);
                 break;
