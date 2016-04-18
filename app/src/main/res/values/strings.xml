@@ -4,12 +4,14 @@
     <string name="action_settings">Settings</string>
     <string name="app_name">Zero</string>
     <string name="analysis_count_hint">Enter a new count</string>
+    <string name="average">average</string>
     <string name="count">Count</string>
     <string name="create_issue">Create Issue</string>
     <string name="data_synced">Data synchronized</string>
     <string name="date_label">Date</string>
     <string name="email_address">Email address</string>
     <string name="emergency">Emergency</string>
+    <string name="error_no_value">No value</string>
     <string name="picture">Picture</string>
     <string name="priority">Priority</string>
     <string name="global_auth_token">Global Authentication Token</string>

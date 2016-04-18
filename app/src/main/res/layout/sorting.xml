@@ -27,24 +27,32 @@
                 android:layout_marginBottom="5dp" />
 
             <LinearLayout
-                android:orientation="horizontal"
-                android:layout_width="wrap_content"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginBottom="5dp"
-                android:layout_marginTop="5dp"
-                android:id="@+id/valueLayout">
+                android:id="@+id/AllValuesLayout">
 
-                <EditText
-                    android:layout_width="314dp"
-                    android:layout_height="fill_parent"
-                    android:id="@+id/editText2" />
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="fill_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginBottom="5dp"
+                    android:layout_marginTop="5dp"
+                    android:id="@+id/valueLayout">
 
-                <ImageButton
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/imageButton"
-                    android:src="@android:drawable/ic_menu_close_clear_cancel" />
+                    <EditText
+                        android:layout_width="0dp"
+                        android:layout_height="fill_parent"
+                        android:id="@+id/editTextValue"
+                        android:layout_weight="0.85" />
 
+                    <ImageButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/imageButtonSuppr"
+                        android:src="@drawable/abc_ic_clear_mtrl_alpha" />
+
+                </LinearLayout>
             </LinearLayout>
 
             <Button
@@ -55,6 +63,41 @@
                 android:layout_gravity="center_horizontal"
                 android:background="#cfcfcf"
                 android:onClick="addValue" />
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="gone">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:text="@string/average"
+                    android:id="@+id/textView"
+                    android:layout_gravity="center"
+                    android:layout_weight="0.5"
+                    android:textAlignment="center" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:text="Medium Text"
+                    android:id="@+id/textAverage"
+                    android:layout_gravity="center"
+                    android:layout_weight="0.5"
+                    android:textAlignment="center" />
+
+                <Button
+                    style="?android:attr/buttonStyleSmall"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="get_average"
+                    android:id="@+id/buttonAverage"
+                    android:onClick="getAverage" />
+            </LinearLayout>
 
             <TextView
                 android:layout_width="wrap_content"
@@ -67,8 +110,7 @@
 
             <EditText
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/editText" />
+                android:layout_height="wrap_content" />
 
         </LinearLayout>
     </ScrollView>

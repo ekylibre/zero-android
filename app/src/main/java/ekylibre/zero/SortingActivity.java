@@ -1,6 +1,7 @@
 package ekylibre.zero;
 
 
+import android.app.ActionBar;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
@@ -8,6 +9,7 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.app.Activity;
+import android.text.Layout;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -15,9 +17,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.TableLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 
 public class SortingActivity extends Activity {
@@ -25,8 +33,8 @@ public class SortingActivity extends Activity {
 
     private LinearLayout mLayout;
     private EditText mEditText;
-    private Button mButton;
-
+    private TextView mAverageText;
+    private List<EditText> mListValues = new ArrayList();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,9 +42,11 @@ public class SortingActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.sorting);
 
-        mLayout = (LinearLayout) findViewById(R.id.linearLayout);
-        mEditText = (EditText) findViewById(R.id.editText);
-
+        mLayout = (LinearLayout) findViewById(R.id.AllValuesLayout);
+        mEditText = (EditText) findViewById(R.id.editTextValue);
+        mAverageText = (TextView) findViewById(R.id.textAverage);
+        mAverageText.setText("");
+        mListValues.add(mEditText);
         getActionBar().setDisplayHomeAsUpEnabled(true);
 
         TextView textView = new TextView(this);
@@ -52,12 +62,8 @@ public class SortingActivity extends Activity {
     }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        Intent intent;
         // Handle presses on the action bar items
         switch (item.getItemId()) {
-            // case R.id.action_search:
-            //     // openSearch();
-            //     return true;
             case R.id.action_save:
                 saveSampling(item.getActionView());
                 return true;
@@ -67,7 +73,7 @@ public class SortingActivity extends Activity {
     }
 
     public void saveSampling(View v) {
-/*        Context context = getApplicationContext();
+        Context context = getApplicationContext();
         CharSequence text = "Issue saved";
         int duration = Toast.LENGTH_SHORT;
         Toast toast = Toast.makeText(context, text, duration);
@@ -86,29 +92,23 @@ public class SortingActivity extends Activity {
         mTestArray = getResources().getStringArray(R.array.issueNatures_values);
 
 
-        mNewValues.put(ZeroContract.IssuesColumns.NATURE, mTestArray[mIssueNatureSpinner.getSelectedItemPosition()]);
-        mNewValues.put(ZeroContract.IssuesColumns.EMERGENCY, mEmergency.getValue());
-        mNewValues.put(ZeroContract.IssuesColumns.SEVERITY, mSeverity.getValue());
-        mNewValues.put(ZeroContract.IssuesColumns.DESCRIPTION, mDescription.getText().toString());
-        mNewValues.put(ZeroContract.IssuesColumns.PINNED, Boolean.FALSE);
-//        mNewValues.put(ZeroContract.IssuesColumns.SYNCED_AT, rightNow.get(Calendar.DAY_OF_MONTH)+1 + "/" + rightNow.get(Calendar.MONTH)+1 + "/" + rightNow.get(Calendar.YEAR));
-        mNewValues.put(ZeroContract.IssuesColumns.OBSERVED_AT, (new java.util.Date()).getTime());
+        mNewValues.put(ZeroContract.SamplingColumns.DATE, (new java.util.Date()).getTime());
 
         LocationManager locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
         String locationProvider = LocationManager.NETWORK_PROVIDER;
         // Or use LocationManager.GPS_PROVIDER
         Location lastKnownLocation = locationManager.getLastKnownLocation(locationProvider);
         if (lastKnownLocation != null){
-            mNewValues.put(ZeroContract.IssuesColumns.LATITUDE, lastKnownLocation.getLatitude());
-            mNewValues.put(ZeroContract.IssuesColumns.LONGITUDE, lastKnownLocation.getLongitude());
+            mNewValues.put(ZeroContract.SamplingColumns.LATITUDE, lastKnownLocation.getLatitude());
+            mNewValues.put(ZeroContract.SamplingColumns.LONGITUDE, lastKnownLocation.getLongitude());
         }
 
 
         getContentResolver().insert(
-                ZeroContract.Issues.CONTENT_URI,   // the user dictionary content URI
+                ZeroContract.Samples.CONTENT_URI,   // the user dictionary content URI
                 mNewValues                          // the values to insert
         );
-*/
+
         //est censé fermer l'activity
         this.finish();
 
@@ -116,20 +116,53 @@ public class SortingActivity extends Activity {
 
     public void addValue(View view){
 
-        final EditText input = new EditText(this);
-        TextView t = createTextview(mEditText.getText().toString());
-        mLayout.addView(t);
+        if(mEditText.getText().toString().equals("")){
+            Toast.makeText(this, R.string.error_no_value, Toast.LENGTH_LONG).show();
+        }
+        else{
+            EditText input = new EditText(this);
+            //ActionBar.LayoutParams editTextParam =new ActionBar.LayoutParams(0, ViewGroup.LayoutParams.MATCH_PARENT);
+            //editTextParam.weight = 0;
+            //input.setLayoutParams(editTextParam);
+            input.setLayoutParams(new TableLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, 1f));
 
+            ImageButton suppr = new ImageButton(this);
+            suppr.setImageResource(R.drawable.abc_ic_clear_mtrl_alpha);
+
+            LinearLayout valueLayout = new LinearLayout(this);
+            valueLayout.setOrientation(LinearLayout.HORIZONTAL);
+
+            mLayout.addView(valueLayout);
+
+            valueLayout.addView(input);
+            valueLayout.addView(suppr);
+
+            mListValues.add(input);
+        }
     }
 
+    public void getAverage(View view){
+       /*
+        int total = 0;
+        int nbvalues = mListValues.size();
+        float moyenne;
 
-    public TextView createTextview(String text){
-        final ViewGroup.LayoutParams lparams = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        final TextView textView = new TextView(this);
-        textView.setLayoutParams(lparams);
-        textView.setText(text);
-        return textView;
+        Iterator it = mListValues.iterator();
+
+        while(it.hasNext()){
+            total = total + Integer.parseInt(it.next().toString());
+        }
+
+
+        //for(int i=0;i<nbvalues;i++){
+
+            //EditText tmp = mListValues.get(i);
+            //total = total + Integer.parseInt(tmp.getText().toString());
+
+        }
+        moyenne = total/nbvalues;
+        //String moyenne_text = ((String) moyenne);
+        mAverageText.setText(moyenne);
+        */
     }
-
-
 }
