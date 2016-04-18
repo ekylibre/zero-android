@@ -28,7 +28,7 @@ import java.util.Iterator;
 import java.util.List;
 
 
-public class SortingActivity extends Activity {
+public class SamplingActivity extends Activity {
 
 
     private LinearLayout mLayout;
@@ -92,7 +92,7 @@ public class SortingActivity extends Activity {
         mTestArray = getResources().getStringArray(R.array.issueNatures_values);
 
 
-        mNewValues.put(ZeroContract.SamplingColumns.DATE, (new java.util.Date()).getTime());
+        mNewValues.put(ZeroContract.SamplingColumns.OBSERVED_AT, (new java.util.Date()).getTime());
 
         LocationManager locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
         String locationProvider = LocationManager.NETWORK_PROVIDER;
@@ -105,7 +105,7 @@ public class SortingActivity extends Activity {
 
 
         getContentResolver().insert(
-                ZeroContract.Samples.CONTENT_URI,   // the user dictionary content URI
+                ZeroContract.Sampling.CONTENT_URI,   // the user dictionary content URI
                 mNewValues                          // the values to insert
         );
 
