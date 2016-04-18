@@ -49,19 +49,21 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                         + ")");
 
             case 2:
-                database.execSQL("CREATE TABLE IF NOT EXISTS sampling ("
+                    database.execSQL("CREATE TABLE IF NOT EXISTS sampling ("
                         + ZeroContract.SamplingColumns._ID + " INTEGER PRIMARY KEY AUTOINCREMENT"
                         + ", " + ZeroContract.SamplingColumns.OBSERVED_AT + " DATE"
                         + ", " + ZeroContract.SamplingColumns.LATITUDE + " REAL"
                         + ", " + ZeroContract.SamplingColumns.LONGITUDE + " REAL"
                         + ", " + ZeroContract.SamplingColumns.ADVOCATED_DENSITY + " REAL"
-                        + ", " + ZeroContract.SamplingColumns.COUNTS_ID + " INTEGER FOREIGN KEY"
+                        + ", " + ZeroContract.SamplingColumns.COUNTS_ID + " INTEGER"
                         + ", " + ZeroContract.SamplingColumns.OBSERVATION + " TEXT"
+                        +", FOREIGN KEY(" + ZeroContract.SamplingColumns.COUNTS_ID +") REFERENCES " + ZeroContract.CountsColumns.TABLE_NAME + "(" + ZeroContract.CountsColumns._ID + ")"
                         + ")");
                 database.execSQL("CREATE TABLE IF NOT EXISTS sampling_counts ("
                         + ZeroContract.CountsColumns._ID + " INTEGER PRIMARY KEY AUTOINCREMENT"
-                        + ", " + ZeroContract.CountsColumns.VALUE + " INTEGER PRIMARY KEY AUTOINCREMENT"
-                        + ", " + ZeroContract.CountsColumns.SAMPLING_ID + " INTEGER FOREIGN KEY AUTOINCREMENT"
+                        + ", " + ZeroContract.CountsColumns.VALUE + " INTEGER"
+                        + ", " + ZeroContract.CountsColumns.SAMPLING_ID + " INTEGER"
+                        +", FOREIGN KEY(" + ZeroContract.CountsColumns.SAMPLING_ID +") REFERENCES " + ZeroContract.SamplingColumns.TABLE_NAME + "(" + ZeroContract.SamplingColumns._ID + ")"
                         +")");
 
         }
