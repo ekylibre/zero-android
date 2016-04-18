@@ -4,10 +4,13 @@
   <string name="action_settings">Paramètres</string>
   <string name="app_name">Zero</string>
   <string name="analysis_count_hint">Entrer une nouvelle valeur</string>
+  <string name="average">Moyenne</string>
   <string name="count">Compte</string>
   <string name="create_issue">Enregistrement de l\'incident</string>
   <string name="data_synced">Données synchronisées</string>
   <string name="email_address">Adresse e-mail</string>
+  <string name="emergency">Urgence</string>
+  <string name="error_no_value">Pas de valeur</string>
   <string name="picture">Photo</string>
   <string name="priority">Priorité</string>
   <string name="global_auth_token">Jeton d’authentification global</string>
@@ -49,7 +52,6 @@
   <string name="tracking_sync_service_name">Interventions</string>
   <string name="values">Valeurs</string>
   <string name="issue_sync_service_name">Incidents</string>
-  <string name="emergency">Urgence</string>
   <string name="severity">Gravité</string>
   <string name="title_activity_sorting">Comptage</string>
 </resources>
