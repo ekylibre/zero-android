@@ -86,7 +86,7 @@ public class MenuActivity extends Activity {
     }
 
     public void gotoSorting(View v) {
-        Intent intent = new Intent(this,SortingActivity.class);
+        Intent intent = new Intent(this,SamplingActivity.class);
         startActivity(intent);
     }
 

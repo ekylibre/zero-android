@@ -41,7 +41,7 @@ public final class ZeroContract {
 
     public interface SamplingColumns extends BaseColumns {
         String TABLE_NAME = "Sampling";
-        String DATE = "date";
+        String OBSERVED_AT = "date";
         String LATITUDE = "latitude";
         String LONGITUDE = "longitude";
         String ADVOCATED_DENSITY = "advocated_density";
@@ -50,7 +50,8 @@ public final class ZeroContract {
     }
 
     public interface CountsColumns extends BaseColumns {
-        String NUMBER = "number";
+        String TABLE_NAME = "Counts";
+        String VALUE = "number";
         String SAMPLING_ID = "sampling_id";
     }
 
@@ -83,15 +84,15 @@ public final class ZeroContract {
         public static final String SORT_ORDER_DEFAULT = _ID + " ASC";
     }
 
-    public static final class Samples implements SamplingColumns {
+    public static final class Sampling implements SamplingColumns {
         // Content URI for this table
         public static final Uri CONTENT_URI = Uri.withAppendedPath(ZeroContract.CONTENT_URI, "sampling");
         // MIME type for lists of records.
-        public static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/vnd.ekylibre.zero.issues";
+        public static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/vnd.ekylibre.zero.sampling";
         // MIME type for individual record.
-        public static final String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/vnd.ekylibre.zero.issue";
+        public static final String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/vnd.ekylibre.zero.sampling";
 
-        public static final String[] PROJECTION_ALL = {_ID, TABLE_NAME, DATE, LATITUDE, LONGITUDE, ADVOCATED_DENSITY, COUNTS_ID, OBSERVATION};
+        public static final String[] PROJECTION_ALL = {_ID, OBSERVED_AT, LATITUDE, LONGITUDE, ADVOCATED_DENSITY, COUNTS_ID, OBSERVATION};
         public static final String[] PROJECTION_NONE = {_ID};
 
         public static final String SORT_ORDER_DEFAULT = _ID + " ASC";
@@ -101,11 +102,11 @@ public final class ZeroContract {
         // Content URI for this table
         public static final Uri CONTENT_URI = Uri.withAppendedPath(ZeroContract.CONTENT_URI, "counts");
         // MIME type for lists of records.
-        public static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/vnd.ekylibre.zero.issues";
+        public static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/vnd.ekylibre.zero.counts";
         // MIME type for individual record.
-        public static final String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/vnd.ekylibre.zero.issue";
+        public static final String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/vnd.ekylibre.zero.counts";
 
-        public static final String[] PROJECTION_ALL = {_ID, NUMBER, SAMPLING_ID};
+        public static final String[] PROJECTION_ALL = {_ID, VALUE, SAMPLING_ID};
         public static final String[] PROJECTION_NONE = {_ID};
 
         public static final String SORT_ORDER_DEFAULT = _ID + " ASC";

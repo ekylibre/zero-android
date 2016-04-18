@@ -154,7 +154,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".SortingActivity"
+            android:name=".SamplingActivity"
             android:parentActivityName=".MenuActivity"
             android:label="@string/title_activity_sorting">
         </activity>
