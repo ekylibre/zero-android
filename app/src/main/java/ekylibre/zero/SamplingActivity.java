@@ -26,15 +26,17 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.ListIterator;
 
 
 public class SamplingActivity extends Activity {
 
 
     private LinearLayout mLayout;
-    private EditText mEditText;
+    private EditText mObservationEditText;
     private TextView mAverageText;
     private List<EditText> mListValues = new ArrayList();
+    private ListIterator<EditText> mListIteratorValues;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,14 +45,12 @@ public class SamplingActivity extends Activity {
         setContentView(R.layout.sorting);
 
         mLayout = (LinearLayout) findViewById(R.id.AllValuesLayout);
-        mEditText = (EditText) findViewById(R.id.editTextValue);
+        mObservationEditText = (EditText)findViewById(R.id.observationEditText);
         mAverageText = (TextView) findViewById(R.id.textAverage);
         mAverageText.setText("");
-        mListValues.add(mEditText);
         getActionBar().setDisplayHomeAsUpEnabled(true);
 
-        TextView textView = new TextView(this);
-        textView.setText("New text");
+        addValue(mLayout);
     }
 
     @Override
@@ -74,33 +74,47 @@ public class SamplingActivity extends Activity {
 
     public void saveSampling(View v) {
 
-
         //http://developer.android.com/guide/topics/providers/content-provider-basics.html
 
         // Defines an object to contain the new values to insert
-        ContentValues mNewValues = new ContentValues();
-
-
+        ContentValues mNewValuesSampling = new ContentValues();
+        ContentValues mNewValuesSamplingCount = new ContentValues();
         // Sets the values of each column and inserts the word. The arguments to the "put"
         // method are "column name" and "value"
-
-        mNewValues.put(ZeroContract.SamplingColumns.OBSERVED_AT, (new java.util.Date()).getTime());
-
+        mNewValuesSampling.put(ZeroContract.SamplingColumns.OBSERVED_AT, (new java.util.Date()).getTime());
         LocationManager locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
         String locationProvider = LocationManager.NETWORK_PROVIDER;
         // Or use LocationManager.GPS_PROVIDER
         Location lastKnownLocation = locationManager.getLastKnownLocation(locationProvider);
-        if (lastKnownLocation != null){
-            mNewValues.put(ZeroContract.SamplingColumns.LATITUDE, lastKnownLocation.getLatitude());
-            mNewValues.put(ZeroContract.SamplingColumns.LONGITUDE, lastKnownLocation.getLongitude());
+        if (lastKnownLocation != null) {
+            mNewValuesSampling.put(ZeroContract.SamplingColumns.LATITUDE, lastKnownLocation.getLatitude());
+            mNewValuesSampling.put(ZeroContract.SamplingColumns.LONGITUDE, lastKnownLocation.getLongitude());
+        }
+        mNewValuesSampling.put(ZeroContract.SamplingColumns.OBSERVATION, mObservationEditText.getText().toString());
+
+        mListIteratorValues = mListValues.listIterator();
+
+
+
+        getContentResolver().insert(
+                ZeroContract.Samplings.CONTENT_URI,   // the user dictionary content URI
+                mNewValuesSampling                          // the values to insert
+        );
+
+
+
+        while(mListIteratorValues.hasNext()){
+            EditText et = mListIteratorValues.next();
+            if(et.getText().toString() != null){
+                mNewValuesSamplingCount.put(ZeroContract.SamplingCountsColumns.VALUE, et.getText().toString());
+            }
         }
 
 
         getContentResolver().insert(
-                ZeroContract.Sampling.CONTENT_URI,   // the user dictionary content URI
-                mNewValues                          // the values to insert
+                ZeroContract.SamplingCounts.CONTENT_URI,
+                mNewValuesSamplingCount
         );
-
 
         Context context = getApplicationContext();
         CharSequence text = "Sampling saved";
@@ -115,29 +129,25 @@ public class SamplingActivity extends Activity {
 
     public void addValue(View view){
 
-        if(mEditText.getText().toString().equals("")){
-            Toast.makeText(this, R.string.error_no_value, Toast.LENGTH_LONG).show();
-        }
-        else{
-            EditText input = new EditText(this);
-            //ActionBar.LayoutParams editTextParam =new ActionBar.LayoutParams(0, ViewGroup.LayoutParams.MATCH_PARENT);
-            //editTextParam.weight = 0;
-            //input.setLayoutParams(editTextParam);
-            input.setLayoutParams(new TableLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, 1f));
+        EditText input = new EditText(this);
+        //ActionBar.LayoutParams editTextParam =new ActionBar.LayoutParams(0, ViewGroup.LayoutParams.MATCH_PARENT);
+        //editTextParam.weight = 0;
+        //input.setLayoutParams(editTextParam);
+        input.setLayoutParams(new TableLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, 1f));
 
-            ImageButton suppr = new ImageButton(this);
-            suppr.setImageResource(R.drawable.abc_ic_clear_mtrl_alpha);
+        //ImageButton suppr = new ImageButton(this);
+        //suppr.setImageResource(R.drawable.abc_ic_clear_mtrl_alpha);
 
-            LinearLayout valueLayout = new LinearLayout(this);
-            valueLayout.setOrientation(LinearLayout.HORIZONTAL);
+        LinearLayout valueLayout = new LinearLayout(this);
+        valueLayout.setOrientation(LinearLayout.HORIZONTAL);
 
-            mLayout.addView(valueLayout);
+        mLayout.addView(valueLayout);
 
-            valueLayout.addView(input);
-            valueLayout.addView(suppr);
+        valueLayout.addView(input);
+        //valueLayout.addView(suppr);
 
-            mListValues.add(input);
-        }
+        mListValues.add(input);
+
     }
 
     public void getAverage(View view){
