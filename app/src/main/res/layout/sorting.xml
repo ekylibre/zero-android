@@ -40,18 +40,6 @@
                     android:layout_marginTop="5dp"
                     android:id="@+id/valueLayout">
 
-                    <EditText
-                        android:layout_width="0dp"
-                        android:layout_height="fill_parent"
-                        android:id="@+id/editTextValue"
-                        android:layout_weight="0.85" />
-
-                    <ImageButton
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/imageButtonSuppr"
-                        android:src="@drawable/abc_ic_clear_mtrl_alpha" />
-
                 </LinearLayout>
             </LinearLayout>
 
@@ -110,7 +98,8 @@
 
             <EditText
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:id="@+id/observationEditText" />
 
         </LinearLayout>
     </ScrollView>
