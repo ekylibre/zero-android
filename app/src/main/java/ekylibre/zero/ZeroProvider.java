@@ -33,6 +33,8 @@ public class ZeroProvider extends ContentProvider {
     public static final int ROUTE_PLANT_DENSITY_ABACI_ITEM = 501;
     public static final int ROUTE_PLANT_DENSITY_ABACUS_ITEMS_LIST = 600;
     public static final int ROUTE_PLANT_DENSITY_ABACUS_ITEMS_ITEM = 601;
+    public static final int ROUTE_PLANTS_ITEM = 700;
+    public static final int ROUTE_PLANTS_LIST = 701;
     // UriMatcher, used to decode incoming URIs.
     private static final UriMatcher URI_MATCHER = new UriMatcher(UriMatcher.NO_MATCH);
 
@@ -49,6 +51,8 @@ public class ZeroProvider extends ContentProvider {
         URI_MATCHER.addURI(ZeroContract.AUTHORITY, "plant_density_abaci/#", ROUTE_PLANT_DENSITY_ABACI_ITEM);
         URI_MATCHER.addURI(ZeroContract.AUTHORITY, "plant_density_abacus_items", ROUTE_PLANT_DENSITY_ABACUS_ITEMS_LIST);
         URI_MATCHER.addURI(ZeroContract.AUTHORITY, "plant_density_abacus_items/#", ROUTE_PLANT_DENSITY_ABACUS_ITEMS_ITEM);
+        URI_MATCHER.addURI(ZeroContract.AUTHORITY, "plants", ROUTE_PLANTS_ITEM);
+        URI_MATCHER.addURI(ZeroContract.AUTHORITY, "plants/#", ROUTE_PLANTS_LIST);
     }
 
     private DatabaseHelper mDatabaseHelper;
@@ -87,6 +91,10 @@ public class ZeroProvider extends ContentProvider {
                 return ZeroContract.PlantDensityAbacusItems.CONTENT_TYPE;
             case ROUTE_PLANT_DENSITY_ABACUS_ITEMS_ITEM:
                 return ZeroContract.PlantDensityAbacusItems.CONTENT_TYPE;
+            case ROUTE_PLANTS_LIST:
+                return ZeroContract.Plants.CONTENT_TYPE;
+            case ROUTE_PLANTS_ITEM:
+                return ZeroContract.Plants.CONTENT_TYPE;
             default:
                 throw new UnsupportedOperationException("Unknown URI: " + uri);
         }
@@ -199,6 +207,21 @@ public class ZeroProvider extends ContentProvider {
                 cursor.setNotificationUri(context.getContentResolver(), uri);
                 return cursor;
 
+            case ROUTE_PLANTS_ITEM:
+                // Return a single ISSUE, by ID.
+                id = uri.getLastPathSegment();
+                builder.where(ZeroContract.PlantsColumns._ID + "=?", id);
+            case ROUTE_PLANTS_LIST:                // Return all known Issue.
+                builder.table(ZeroContract.PlantsColumns.TABLE_NAME)
+                        .where(selection, selectionArgs);
+                cursor = builder.query(database, projection, sortOrder);
+                // Note: Notification URI must be manually set here for loaders to correctly
+                // register ContentObservers.
+                context = getContext();
+                assert context != null;
+                cursor.setNotificationUri(context.getContentResolver(), uri);
+                return cursor;
+
 
             default:
                 throw new UnsupportedOperationException("Unknown URI: " + uri);
@@ -241,8 +264,8 @@ public class ZeroProvider extends ContentProvider {
             case ROUTE_PLANT_COUNTING_ITEM_ITEM:
                 throw new UnsupportedOperationException("Insert not supported on URI: " + uri);
             case ROUTE_PLANT_DENSITY_ABACI_LIST:
-                id = database.insertOrThrow(ZeroContract.PlantCountingItemsColumns.TABLE_NAME, null, values);
-                result = Uri.parse(ZeroContract.PlantCountingItems.CONTENT_URI + "/" + id);
+                id = database.insertOrThrow(ZeroContract.PlantDensityAbaciColumns.TABLE_NAME, null, values);
+                result = Uri.parse(ZeroContract.PlantDensityAbaci.CONTENT_URI + "/" + id);
                 break;
             case ROUTE_PLANT_DENSITY_ABACI_ITEM:
                 throw new UnsupportedOperationException("Insert not supported on URI: " + uri);
@@ -251,6 +274,12 @@ public class ZeroProvider extends ContentProvider {
                 result = Uri.parse(ZeroContract.PlantDensityAbacusItems.CONTENT_URI + "/" + id);
                 break;
             case ROUTE_PLANT_DENSITY_ABACUS_ITEMS_ITEM:
+                throw new UnsupportedOperationException("Insert not supported on URI: " + uri);
+            case ROUTE_PLANTS_LIST:
+                id = database.insertOrThrow(ZeroContract.PlantsColumns.TABLE_NAME, null, values);
+                result = Uri.parse(ZeroContract.Plants.CONTENT_URI + "/" + id);
+                break;
+            case ROUTE_PLANTS_ITEM:
                 throw new UnsupportedOperationException("Insert not supported on URI: " + uri);
             default:
                 throw new UnsupportedOperationException("Unknown URI: " + uri);
@@ -342,6 +371,18 @@ public class ZeroProvider extends ContentProvider {
                 id = uri.getLastPathSegment();
                 count = builder.table(ZeroContract.PlantDensityAbacusItemsColumns.TABLE_NAME)
                         .where(ZeroContract.PlantDensityAbacusItemsColumns._ID + "=?", id)
+                        .where(selection, selectionArgs)
+                        .delete(database);
+                break;
+           case ROUTE_PLANTS_LIST:
+                count = builder.table(ZeroContract.PlantsColumns.TABLE_NAME)
+                        .where(selection, selectionArgs)
+                        .delete(database);
+                break;
+            case ROUTE_PLANTS_ITEM:
+                id = uri.getLastPathSegment();
+                count = builder.table(ZeroContract.PlantsColumns.TABLE_NAME)
+                        .where(ZeroContract.PlantsColumns._ID + "=?", id)
                         .where(selection, selectionArgs)
                         .delete(database);
                 break;
@@ -437,6 +478,18 @@ public class ZeroProvider extends ContentProvider {
                 id = uri.getLastPathSegment();
                 count = builder.table(ZeroContract.PlantDensityAbacusItemsColumns.TABLE_NAME)
                         .where(ZeroContract.PlantDensityAbacusItemsColumns._ID + "=?", id)
+                        .where(selection, selectionArgs)
+                        .update(database, values);
+                break;
+            case ROUTE_PLANTS_LIST:
+                count = builder.table(ZeroContract.PlantsColumns.TABLE_NAME)
+                        .where(selection, selectionArgs)
+                        .update(database, values);
+                break;
+            case ROUTE_PLANTS_ITEM:
+                id = uri.getLastPathSegment();
+                count = builder.table(ZeroContract.PlantsColumns.TABLE_NAME)
+                        .where(ZeroContract.PlantsColumns._ID + "=?", id)
                         .where(selection, selectionArgs)
                         .update(database, values);
                 break;

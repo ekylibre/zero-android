@@ -78,6 +78,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                         + ", " + ZeroContract.PlantDensityAbacusItemsColumns.SEEDING_DENSITY_VALUE + " INTEGER"
                         + ", " + ZeroContract.PlantDensityAbacusItemsColumns.PLANTS_COUNTS + " INTEGER"
                         + ")");
+            case 5:
+                    database.execSQL("CREATE TABLE IF NOT EXISTS plants ("
+                        + ZeroContract.PlantsColumns._ID + " INTEGER PRIMARY KEY AUTOINCREMENT"
+                        + ", " + ZeroContract.Plants.NAME + " VARCHAR(255)"
+                        + ", " + ZeroContract.Plants.SHAPE+ " VARCHAR(32)"
+                        + ", " + ZeroContract.Plants.VARIETY + " VARCHAR(255)"
+                        + ", " + ZeroContract.Plants.EKYLIBRE_ID + " INTEGER"
+                        + ", " + ZeroContract.Plants.ACTIVE + " BOOLEAN"
+                        + ")");
         }
     }
 }
