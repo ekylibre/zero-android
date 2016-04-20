@@ -1,35 +1,29 @@
 package ekylibre.zero;
 
 
-import android.app.ActionBar;
 import android.content.ContentValues;
 import android.content.Context;
-import android.content.Intent;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.app.Activity;
-import android.text.Layout;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TableLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
 
 
-public class SamplingActivity extends Activity {
+public class PlantCountingActivity extends Activity {
 
 
     private LinearLayout mLayout;
@@ -42,7 +36,7 @@ public class SamplingActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.sorting);
+        setContentView(R.layout.plant_counting);
 
         mLayout = (LinearLayout) findViewById(R.id.AllValuesLayout);
         mObservationEditText = (EditText)findViewById(R.id.observationEditText);
@@ -81,23 +75,23 @@ public class SamplingActivity extends Activity {
         ContentValues mNewValuesSamplingCount = new ContentValues();
         // Sets the values of each column and inserts the word. The arguments to the "put"
         // method are "column name" and "value"
-        mNewValuesSampling.put(ZeroContract.SamplingColumns.OBSERVED_AT, (new java.util.Date()).getTime());
+        mNewValuesSampling.put(ZeroContract.PlantCountingColumns.OBSERVED_AT, (new java.util.Date()).getTime());
         LocationManager locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
         String locationProvider = LocationManager.NETWORK_PROVIDER;
         // Or use LocationManager.GPS_PROVIDER
         Location lastKnownLocation = locationManager.getLastKnownLocation(locationProvider);
         if (lastKnownLocation != null) {
-            mNewValuesSampling.put(ZeroContract.SamplingColumns.LATITUDE, lastKnownLocation.getLatitude());
-            mNewValuesSampling.put(ZeroContract.SamplingColumns.LONGITUDE, lastKnownLocation.getLongitude());
+            mNewValuesSampling.put(ZeroContract.PlantCountingColumns.LATITUDE, lastKnownLocation.getLatitude());
+            mNewValuesSampling.put(ZeroContract.PlantCountingColumns.LONGITUDE, lastKnownLocation.getLongitude());
         }
-        mNewValuesSampling.put(ZeroContract.SamplingColumns.OBSERVATION, mObservationEditText.getText().toString());
+        mNewValuesSampling.put(ZeroContract.PlantCountingColumns.OBSERVATION, mObservationEditText.getText().toString());
 
         mListIteratorValues = mListValues.listIterator();
 
 
 
         getContentResolver().insert(
-                ZeroContract.Samplings.CONTENT_URI,   // the user dictionary content URI
+                ZeroContract.PlantCounting.CONTENT_URI,   // the user dictionary content URI
                 mNewValuesSampling                          // the values to insert
         );
 
@@ -106,13 +100,13 @@ public class SamplingActivity extends Activity {
         while(mListIteratorValues.hasNext()){
             EditText et = mListIteratorValues.next();
             if(et.getText().toString() != null){
-                mNewValuesSamplingCount.put(ZeroContract.SamplingCountsColumns.VALUE, et.getText().toString());
+                mNewValuesSamplingCount.put(ZeroContract.PlantCountingItemColumns.VALUE, et.getText().toString());
             }
         }
 
 
         getContentResolver().insert(
-                ZeroContract.SamplingCounts.CONTENT_URI,
+                ZeroContract.PlantCountingItem.CONTENT_URI,
                 mNewValuesSamplingCount
         );
 
