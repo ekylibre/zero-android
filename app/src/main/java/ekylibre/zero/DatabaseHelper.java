@@ -72,6 +72,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                         + ", " + ZeroContract.PlantDensityAbaciColumns.SAMPLING_LENGTH_UNIT + " VARCHAR(32)"
                         + ", " + ZeroContract.PlantDensityAbaciColumns.SEEDING_DENSITY_UNIT + " VARCHAR(32)"
                         + ")");
+            case 4:
+                    database.execSQL("CREATE TABLE IF NOT EXISTS plant_density_abacus_items ("
+                        + ZeroContract.PlantDensityAbacusItemsColumns._ID + " INTEGER PRIMARY KEY AUTOINCREMENT"
+                        + ", " + ZeroContract.PlantDensityAbacusItemsColumns.SEEDING_DENSITY_VALUE + " INTEGER"
+                        + ", " + ZeroContract.PlantDensityAbacusItemsColumns.PLANTS_COUNTS + " INTEGER"
+                        + ")");
         }
     }
 }
