@@ -100,13 +100,13 @@ public class PlantCountingActivity extends Activity {
         while(mListIteratorValues.hasNext()){
             EditText et = mListIteratorValues.next();
             if(et.getText().toString() != null){
-                mNewValuesSamplingCount.put(ZeroContract.PlantCountingItemColumns.VALUE, et.getText().toString());
+                mNewValuesSamplingCount.put(ZeroContract.PlantCountingItemsColumns.VALUE, et.getText().toString());
             }
         }
 
 
         getContentResolver().insert(
-                ZeroContract.PlantCountingItem.CONTENT_URI,
+                ZeroContract.PlantCountingItems.CONTENT_URI,
                 mNewValuesSamplingCount
         );
 
