@@ -58,12 +58,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                         + ", " + ZeroContract.PlantCountingColumns.OBSERVATION + " TEXT"
                         + ")");
                     database.execSQL("CREATE TABLE IF NOT EXISTS plant_counting_items ("
-                        + ZeroContract.PlantCountingItemColumns._ID + " INTEGER PRIMARY KEY AUTOINCREMENT"
-                        + ", " + ZeroContract.PlantCountingItemColumns.VALUE + " INTEGER"
-                        + ", " + ZeroContract.PlantCountingItemColumns.PLANT_COUNTING_ID + " INTEGER"
-                        + ", FOREIGN KEY(" + ZeroContract.PlantCountingItemColumns.PLANT_COUNTING_ID +") REFERENCES " + ZeroContract.PlantCountingColumns.TABLE_NAME + "(" + ZeroContract.PlantCountingColumns._ID + ") ON DELETE CASCADE"
+                        + ZeroContract.PlantCountingItemsColumns._ID + " INTEGER PRIMARY KEY AUTOINCREMENT"
+                        + ", " + ZeroContract.PlantCountingItemsColumns.VALUE + " INTEGER"
+                        + ", " + ZeroContract.PlantCountingItemsColumns.PLANT_COUNTING_ID + " INTEGER"
+                        + ", FOREIGN KEY(" + ZeroContract.PlantCountingItemsColumns.PLANT_COUNTING_ID +") REFERENCES " + ZeroContract.PlantCountingColumns.TABLE_NAME + "(" + ZeroContract.PlantCountingColumns._ID + ") ON DELETE CASCADE"
                         + ")");
-            /*case 3:
+            case 3:
                     database.execSQL("CREATE TABLE IF NOT EXISTS plant_density_abaci ("
                         + ZeroContract.PlantDensityAbaciColumns._ID + " INTEGER PRIMARY KEY AUTOINCREMENT"
                         + ", " + ZeroContract.PlantDensityAbaciColumns.NAME + " VARCHAR(192)"
@@ -72,6 +72,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                         + ", " + ZeroContract.PlantDensityAbaciColumns.SAMPLING_LENGTH_UNIT + " VARCHAR(32)"
                         + ", " + ZeroContract.PlantDensityAbaciColumns.SEEDING_DENSITY_UNIT + " VARCHAR(32)"
                         + ")");
-        */}
+        }
     }
 }

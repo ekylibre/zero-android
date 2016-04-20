@@ -29,6 +29,8 @@ public class ZeroProvider extends ContentProvider {
     public static final int ROUTE_SAMPLING_ITEM = 301;
     public static final int ROUTE_SAMPLING_COUNT_LIST = 400;
     public static final int ROUTE_SAMPLING_COUNT_ITEM = 401;
+    public static final int ROUTE_PLANT_DENSITY_ABACI_LIST = 500;
+    public static final int ROUTE_PLANT_DENSITY_ABACI_ITEM = 501;
     // UriMatcher, used to decode incoming URIs.
     private static final UriMatcher URI_MATCHER = new UriMatcher(UriMatcher.NO_MATCH);
 
@@ -41,6 +43,8 @@ public class ZeroProvider extends ContentProvider {
         URI_MATCHER.addURI(ZeroContract.AUTHORITY, "samplings/#", ROUTE_SAMPLING_ITEM);
         URI_MATCHER.addURI(ZeroContract.AUTHORITY, "sampling_counts", ROUTE_SAMPLING_COUNT_LIST);
         URI_MATCHER.addURI(ZeroContract.AUTHORITY, "sampling_counts/#", ROUTE_SAMPLING_COUNT_ITEM);
+        URI_MATCHER.addURI(ZeroContract.AUTHORITY, "plant_density_abaci", ROUTE_PLANT_DENSITY_ABACI_LIST);
+        URI_MATCHER.addURI(ZeroContract.AUTHORITY, "plant_density_abaci/#", ROUTE_PLANT_DENSITY_ABACI_ITEM);
     }
 
     private DatabaseHelper mDatabaseHelper;
@@ -68,9 +72,13 @@ public class ZeroProvider extends ContentProvider {
             case ROUTE_SAMPLING_ITEM:
                 return ZeroContract.PlantCounting.CONTENT_ITEM_TYPE;
             case ROUTE_SAMPLING_COUNT_LIST:
-                return ZeroContract.PlantCountingItem.CONTENT_TYPE;
+                return ZeroContract.PlantCountingItems.CONTENT_TYPE;
             case ROUTE_SAMPLING_COUNT_ITEM:
-                return ZeroContract.PlantCountingItem.CONTENT_TYPE;
+                return ZeroContract.PlantCountingItems.CONTENT_TYPE;
+            case ROUTE_PLANT_DENSITY_ABACI_LIST:
+                return ZeroContract.PlantDensityAbaci.CONTENT_TYPE;
+            case ROUTE_PLANT_DENSITY_ABACI_ITEM:
+                return ZeroContract.PlantDensityAbaci.CONTENT_TYPE;
             default:
                 throw new UnsupportedOperationException("Unknown URI: " + uri);
         }
@@ -141,9 +149,9 @@ public class ZeroProvider extends ContentProvider {
             case ROUTE_SAMPLING_COUNT_ITEM:
                 // Return a single ISSUE, by ID.
                 id = uri.getLastPathSegment();
-                builder.where(ZeroContract.PlantCountingItemColumns._ID + "=?", id);
+                builder.where(ZeroContract.PlantCountingItemsColumns._ID + "=?", id);
             case ROUTE_SAMPLING_COUNT_LIST:                // Return all known Issue.
-                builder.table(ZeroContract.PlantCountingItemColumns.TABLE_NAME)
+                builder.table(ZeroContract.PlantCountingItemsColumns.TABLE_NAME)
                         .where(selection, selectionArgs);
                 cursor = builder.query(database, projection, sortOrder);
                 // Note: Notification URI must be manually set here for loaders to correctly
@@ -152,6 +160,23 @@ public class ZeroProvider extends ContentProvider {
                 assert context != null;
                 cursor.setNotificationUri(context.getContentResolver(), uri);
                 return cursor;
+
+            case ROUTE_PLANT_DENSITY_ABACI_ITEM:
+                // Return a single ISSUE, by ID.
+                id = uri.getLastPathSegment();
+                builder.where(ZeroContract.PlantDensityAbaciColumns._ID + "=?", id);
+            case ROUTE_PLANT_DENSITY_ABACI_LIST:                // Return all known Issue.
+                builder.table(ZeroContract.PlantDensityAbaciColumns.TABLE_NAME)
+                        .where(selection, selectionArgs);
+                cursor = builder.query(database, projection, sortOrder);
+                // Note: Notification URI must be manually set here for loaders to correctly
+                // register ContentObservers.
+                context = getContext();
+                assert context != null;
+                cursor.setNotificationUri(context.getContentResolver(), uri);
+                return cursor;
+
+
             default:
                 throw new UnsupportedOperationException("Unknown URI: " + uri);
         }
@@ -187,10 +212,16 @@ public class ZeroProvider extends ContentProvider {
             case ROUTE_SAMPLING_ITEM:
                 throw new UnsupportedOperationException("Insert not supported on URI: " + uri);
             case ROUTE_SAMPLING_COUNT_LIST:
-                id = database.insertOrThrow(ZeroContract.PlantCountingItemColumns.TABLE_NAME, null, values);
-                result = Uri.parse(ZeroContract.PlantCountingItem.CONTENT_URI + "/" + id);
+                id = database.insertOrThrow(ZeroContract.PlantCountingItemsColumns.TABLE_NAME, null, values);
+                result = Uri.parse(ZeroContract.PlantCountingItems.CONTENT_URI + "/" + id);
                 break;
             case ROUTE_SAMPLING_COUNT_ITEM:
+                throw new UnsupportedOperationException("Insert not supported on URI: " + uri);
+            case ROUTE_PLANT_DENSITY_ABACI_LIST:
+                id = database.insertOrThrow(ZeroContract.PlantCountingItemsColumns.TABLE_NAME, null, values);
+                result = Uri.parse(ZeroContract.PlantCountingItems.CONTENT_URI + "/" + id);
+                break;
+            case ROUTE_PLANT_DENSITY_ABACI_ITEM:
                 throw new UnsupportedOperationException("Insert not supported on URI: " + uri);
             default:
                 throw new UnsupportedOperationException("Unknown URI: " + uri);
@@ -250,14 +281,26 @@ public class ZeroProvider extends ContentProvider {
                         .delete(database);
                 break;
             case ROUTE_SAMPLING_COUNT_LIST:
-                count = builder.table(ZeroContract.PlantCountingItemColumns.TABLE_NAME)
+                count = builder.table(ZeroContract.PlantCountingItemsColumns.TABLE_NAME)
                         .where(selection, selectionArgs)
                         .delete(database);
                 break;
             case ROUTE_SAMPLING_COUNT_ITEM:
                 id = uri.getLastPathSegment();
-                count = builder.table(ZeroContract.PlantCountingItemColumns.TABLE_NAME)
-                        .where(ZeroContract.PlantCountingItemColumns._ID + "=?", id)
+                count = builder.table(ZeroContract.PlantCountingItemsColumns.TABLE_NAME)
+                        .where(ZeroContract.PlantCountingItemsColumns._ID + "=?", id)
+                        .where(selection, selectionArgs)
+                        .delete(database);
+                break;
+            case ROUTE_PLANT_DENSITY_ABACI_LIST:
+                count = builder.table(ZeroContract.PlantDensityAbaciColumns.TABLE_NAME)
+                        .where(selection, selectionArgs)
+                        .delete(database);
+                break;
+            case ROUTE_PLANT_DENSITY_ABACI_ITEM:
+                id = uri.getLastPathSegment();
+                count = builder.table(ZeroContract.PlantDensityAbaciColumns.TABLE_NAME)
+                        .where(ZeroContract.PlantDensityAbaciColumns._ID + "=?", id)
                         .where(selection, selectionArgs)
                         .delete(database);
                 break;
@@ -321,14 +364,26 @@ public class ZeroProvider extends ContentProvider {
                 break;
 
             case ROUTE_SAMPLING_COUNT_LIST:
-                count = builder.table(ZeroContract.PlantCountingItemColumns.TABLE_NAME)
+                count = builder.table(ZeroContract.PlantCountingItemsColumns.TABLE_NAME)
                         .where(selection, selectionArgs)
                         .update(database, values);
                 break;
             case ROUTE_SAMPLING_COUNT_ITEM:
                 id = uri.getLastPathSegment();
-                count = builder.table(ZeroContract.PlantCountingItemColumns.TABLE_NAME)
-                        .where(ZeroContract.PlantCountingItemColumns._ID + "=?", id)
+                count = builder.table(ZeroContract.PlantCountingItemsColumns.TABLE_NAME)
+                        .where(ZeroContract.PlantCountingItemsColumns._ID + "=?", id)
+                        .where(selection, selectionArgs)
+                        .update(database, values);
+                break;
+            case ROUTE_PLANT_DENSITY_ABACI_LIST:
+                count = builder.table(ZeroContract.PlantDensityAbaciColumns.TABLE_NAME)
+                        .where(selection, selectionArgs)
+                        .update(database, values);
+                break;
+            case ROUTE_PLANT_DENSITY_ABACI_ITEM:
+                id = uri.getLastPathSegment();
+                count = builder.table(ZeroContract.PlantDensityAbaciColumns.TABLE_NAME)
+                        .where(ZeroContract.PlantDensityAbaciColumns._ID + "=?", id)
                         .where(selection, selectionArgs)
                         .update(database, values);
                 break;

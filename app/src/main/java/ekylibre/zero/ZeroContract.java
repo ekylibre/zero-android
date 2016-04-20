@@ -48,7 +48,7 @@ public final class ZeroContract {
         String OBSERVATION = "observation";
     }
 
-    public interface PlantCountingItemColumns extends BaseColumns {
+    public interface PlantCountingItemsColumns extends BaseColumns {
         String TABLE_NAME = "sampling_counts";
         String VALUE = "value";
         String PLANT_COUNTING_ID = "sampling_id";
@@ -106,7 +106,21 @@ public final class ZeroContract {
         public static final String SORT_ORDER_DEFAULT = _ID + " ASC";
     }
 
-    public static final class PlantCountingItem implements PlantCountingItemColumns {
+    public static final class PlantCountingItems implements PlantCountingItemsColumns {
+        // Content URI for this table
+        public static final Uri CONTENT_URI = Uri.withAppendedPath(ZeroContract.CONTENT_URI, "PlantCountingItems");
+        // MIME type for lists of records.
+        public static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/vnd.ekylibre.zero.PlantCountingItems";
+        // MIME type for individual record.
+        public static final String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/vnd.ekylibre.zero.PlantCountingItem";
+
+        public static final String[] PROJECTION_ALL = {_ID, VALUE, PLANT_COUNTING_ID};
+        public static final String[] PROJECTION_NONE = {_ID};
+
+        public static final String SORT_ORDER_DEFAULT = _ID + " ASC";
+    }
+
+    public static final class PlantDensityAbaci implements PlantDensityAbaciColumns {
         // Content URI for this table
         public static final Uri CONTENT_URI = Uri.withAppendedPath(ZeroContract.CONTENT_URI, "sampling_counts");
         // MIME type for lists of records.
@@ -114,7 +128,7 @@ public final class ZeroContract {
         // MIME type for individual record.
         public static final String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/vnd.ekylibre.zero.sampling_count";
 
-        public static final String[] PROJECTION_ALL = {_ID, VALUE, PLANT_COUNTING_ID};
+        public static final String[] PROJECTION_ALL = {_ID, NAME, VARIETY, GERMINATION_PERCENTAGE, SEEDING_DENSITY_UNIT, SAMPLING_LENGTH_UNIT};
         public static final String[] PROJECTION_NONE = {_ID};
 
         public static final String SORT_ORDER_DEFAULT = _ID + " ASC";
