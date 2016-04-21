@@ -39,19 +39,24 @@ public final class ZeroContract {
 
     }
 
-    public interface PlantCountingColumns extends BaseColumns {
+    public interface PlantCountingsColumns extends BaseColumns {
         String TABLE_NAME = "samplings";
         String OBSERVED_AT = "observed_at";
         String LATITUDE = "latitude";
         String LONGITUDE = "longitude";
         String ADVOCATED_DENSITY = "advocated_density";
         String OBSERVATION = "observation";
+        String PLANTS_NAME = "plants_name";
+        String PLANT_DENSITY_ABACUS_ITEM_ID = "plant_density_abacus_item_id";
+        String PLANT_DENSITY_ABACI_ID = "plant_density_abaci_id";
+        String PLANTS_ID = "plants_id";
     }
 
     public interface PlantCountingItemsColumns extends BaseColumns {
         String TABLE_NAME = "sampling_counts";
         String VALUE = "value";
         String PLANT_COUNTING_ID = "sampling_id";
+        String SYNCHED_AT = "synched_at";
     }
 
     public interface PlantDensityAbaciColumns extends BaseColumns {
@@ -107,7 +112,7 @@ public final class ZeroContract {
         public static final String SORT_ORDER_DEFAULT = _ID + " ASC";
     }
 
-    public static final class PlantCounting implements PlantCountingColumns {
+    public static final class PlantCountings implements PlantCountingsColumns {
         // Content URI for this table
         public static final Uri CONTENT_URI = Uri.withAppendedPath(ZeroContract.CONTENT_URI, "PlantCountings");
         // MIME type for lists of records.
@@ -115,7 +120,7 @@ public final class ZeroContract {
         // MIME type for individual record.
         public static final String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/vnd.ekylibre.zero.PlantCounting";
 
-        public static final String[] PROJECTION_ALL = {_ID, OBSERVED_AT, LATITUDE, LONGITUDE, ADVOCATED_DENSITY, OBSERVATION};
+        public static final String[] PROJECTION_ALL = {_ID, OBSERVED_AT, LATITUDE, LONGITUDE, ADVOCATED_DENSITY, OBSERVATION, PLANTS_NAME, PLANT_DENSITY_ABACUS_ITEM_ID, PLANT_DENSITY_ABACI_ID, PLANTS_ID};
         public static final String[] PROJECTION_NONE = {_ID};
 
         public static final String SORT_ORDER_DEFAULT = _ID + " ASC";
@@ -129,7 +134,7 @@ public final class ZeroContract {
         // MIME type for individual record.
         public static final String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/vnd.ekylibre.zero.PlantCountingItem";
 
-        public static final String[] PROJECTION_ALL = {_ID, VALUE, PLANT_COUNTING_ID};
+        public static final String[] PROJECTION_ALL = {_ID, VALUE, PLANT_COUNTING_ID, SYNCHED_AT};
         public static final String[] PROJECTION_NONE = {_ID};
 
         public static final String SORT_ORDER_DEFAULT = _ID + " ASC";

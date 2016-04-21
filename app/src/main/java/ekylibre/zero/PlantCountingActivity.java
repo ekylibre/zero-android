@@ -75,23 +75,23 @@ public class PlantCountingActivity extends Activity {
         ContentValues mNewValuesSamplingCount = new ContentValues();
         // Sets the values of each column and inserts the word. The arguments to the "put"
         // method are "column name" and "value"
-        mNewValuesSampling.put(ZeroContract.PlantCountingColumns.OBSERVED_AT, (new java.util.Date()).getTime());
+        mNewValuesSampling.put(ZeroContract.PlantCountingsColumns.OBSERVED_AT, (new java.util.Date()).getTime());
         LocationManager locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
         String locationProvider = LocationManager.NETWORK_PROVIDER;
         // Or use LocationManager.GPS_PROVIDER
         Location lastKnownLocation = locationManager.getLastKnownLocation(locationProvider);
         if (lastKnownLocation != null) {
-            mNewValuesSampling.put(ZeroContract.PlantCountingColumns.LATITUDE, lastKnownLocation.getLatitude());
-            mNewValuesSampling.put(ZeroContract.PlantCountingColumns.LONGITUDE, lastKnownLocation.getLongitude());
+            mNewValuesSampling.put(ZeroContract.PlantCountingsColumns.LATITUDE, lastKnownLocation.getLatitude());
+            mNewValuesSampling.put(ZeroContract.PlantCountingsColumns.LONGITUDE, lastKnownLocation.getLongitude());
         }
-        mNewValuesSampling.put(ZeroContract.PlantCountingColumns.OBSERVATION, mObservationEditText.getText().toString());
+        mNewValuesSampling.put(ZeroContract.PlantCountingsColumns.OBSERVATION, mObservationEditText.getText().toString());
 
         mListIteratorValues = mListValues.listIterator();
 
 
 
         getContentResolver().insert(
-                ZeroContract.PlantCounting.CONTENT_URI,   // the user dictionary content URI
+                ZeroContract.PlantCountings.CONTENT_URI,   // the user dictionary content URI
                 mNewValuesSampling                          // the values to insert
         );
 

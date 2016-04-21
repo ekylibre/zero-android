@@ -76,9 +76,9 @@ public class ZeroProvider extends ContentProvider {
             case ROUTE_ISSUE_ITEM:
                 return ZeroContract.Issues.CONTENT_ITEM_TYPE;
             case ROUTE_PLANT_COUNTING_LIST:
-                return ZeroContract.PlantCounting.CONTENT_TYPE;
+                return ZeroContract.PlantCountings.CONTENT_TYPE;
             case ROUTE_PLANT_COUNTING_ITEM:
-                return ZeroContract.PlantCounting.CONTENT_ITEM_TYPE;
+                return ZeroContract.PlantCountings.CONTENT_ITEM_TYPE;
             case ROUTE_PLANT_COUNTING_ITEM_LIST:
                 return ZeroContract.PlantCountingItems.CONTENT_TYPE;
             case ROUTE_PLANT_COUNTING_ITEM_ITEM:
@@ -149,10 +149,10 @@ public class ZeroProvider extends ContentProvider {
             case ROUTE_PLANT_COUNTING_ITEM:
                 // Return a single ISSUE, by ID.
                 id = uri.getLastPathSegment();
-                builder.where(ZeroContract.PlantCountingColumns._ID + "=?", id);
+                builder.where(ZeroContract.PlantCountingsColumns._ID + "=?", id);
             case ROUTE_PLANT_COUNTING_LIST:
                 // Return all known Issue.
-                builder.table(ZeroContract.PlantCountingColumns.TABLE_NAME)
+                builder.table(ZeroContract.PlantCountingsColumns.TABLE_NAME)
                         .where(selection, selectionArgs);
                 cursor = builder.query(database, projection, sortOrder);
                 // Note: Notification URI must be manually set here for loaders to correctly
@@ -252,8 +252,8 @@ public class ZeroProvider extends ContentProvider {
             case ROUTE_ISSUE_ITEM:
                 throw new UnsupportedOperationException("Insert not supported on URI: " + uri);
             case ROUTE_PLANT_COUNTING_LIST:
-                id = database.insertOrThrow(ZeroContract.PlantCountingColumns.TABLE_NAME, null, values);
-                result = Uri.parse(ZeroContract.PlantCounting.CONTENT_URI + "/" + id);
+                id = database.insertOrThrow(ZeroContract.PlantCountingsColumns.TABLE_NAME, null, values);
+                result = Uri.parse(ZeroContract.PlantCountings.CONTENT_URI + "/" + id);
                 break;
             case ROUTE_PLANT_COUNTING_ITEM:
                 throw new UnsupportedOperationException("Insert not supported on URI: " + uri);
@@ -327,14 +327,14 @@ public class ZeroProvider extends ContentProvider {
                         .delete(database);
                 break;
             case ROUTE_PLANT_COUNTING_LIST:
-                count = builder.table(ZeroContract.PlantCountingColumns.TABLE_NAME)
+                count = builder.table(ZeroContract.PlantCountingsColumns.TABLE_NAME)
                         .where(selection, selectionArgs)
                         .delete(database);
                 break;
             case ROUTE_PLANT_COUNTING_ITEM:
                 id = uri.getLastPathSegment();
-                count = builder.table(ZeroContract.PlantCountingColumns.TABLE_NAME)
-                        .where(ZeroContract.PlantCountingColumns._ID + "=?", id)
+                count = builder.table(ZeroContract.PlantCountingsColumns.TABLE_NAME)
+                        .where(ZeroContract.PlantCountingsColumns._ID + "=?", id)
                         .where(selection, selectionArgs)
                         .delete(database);
                 break;
@@ -433,14 +433,14 @@ public class ZeroProvider extends ContentProvider {
                 break;
 
             case ROUTE_PLANT_COUNTING_LIST:
-                count = builder.table(ZeroContract.PlantCountingColumns.TABLE_NAME)
+                count = builder.table(ZeroContract.PlantCountingsColumns.TABLE_NAME)
                         .where(selection, selectionArgs)
                         .update(database, values);
                 break;
             case ROUTE_PLANT_COUNTING_ITEM:
                 id = uri.getLastPathSegment();
-                count = builder.table(ZeroContract.PlantCountingColumns.TABLE_NAME)
-                        .where(ZeroContract.PlantCountingColumns._ID + "=?", id)
+                count = builder.table(ZeroContract.PlantCountingsColumns.TABLE_NAME)
+                        .where(ZeroContract.PlantCountingsColumns._ID + "=?", id)
                         .where(selection, selectionArgs)
                         .update(database, values);
                 break;
