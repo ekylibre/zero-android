@@ -49,43 +49,50 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                         + ")");
 
             case 2:
-                    database.execSQL("CREATE TABLE IF NOT EXISTS plant_counting ("
-                        + ZeroContract.PlantCountingColumns._ID + " INTEGER PRIMARY KEY AUTOINCREMENT"
-                        + ", " + ZeroContract.PlantCountingColumns.OBSERVED_AT + " DATE"
-                        + ", " + ZeroContract.PlantCountingColumns.LATITUDE + " REAL"
-                        + ", " + ZeroContract.PlantCountingColumns.LONGITUDE + " REAL"
-                        + ", " + ZeroContract.PlantCountingColumns.ADVOCATED_DENSITY + " REAL"
-                        + ", " + ZeroContract.PlantCountingColumns.OBSERVATION + " TEXT"
+                    database.execSQL("CREATE TABLE IF NOT EXISTS plant_countings ("
+                        + ZeroContract.PlantCountingsColumns._ID + " INTEGER PRIMARY KEY AUTOINCREMENT"
+                        + ", " + ZeroContract.PlantCountingsColumns.OBSERVED_AT + " DATE"
+                        + ", " + ZeroContract.PlantCountingsColumns.LATITUDE + " REAL"
+                        + ", " + ZeroContract.PlantCountingsColumns.LONGITUDE + " REAL"
+                        + ", " + ZeroContract.PlantCountingsColumns.ADVOCATED_DENSITY + " REAL"
+                        + ", " + ZeroContract.PlantCountingsColumns.OBSERVATION + " TEXT"
+                        + ", " + ZeroContract.PlantCountingsColumns.PLANTS_NAME + " TEXT"
+                        + ", " + ZeroContract.PlantCountingsColumns.PLANT_DENSITY_ABACUS_ITEM_ID + " INTEGER"
+                        + ", " + ZeroContract.PlantCountingsColumns.PLANT_DENSITY_ABACI_ID + " INTEGER"
+                        + ", " + ZeroContract.PlantCountingsColumns.PLANTS_ID + " INTEGER"
+                        + ", FOREIGN KEY(" + ZeroContract.PlantCountingsColumns.PLANT_DENSITY_ABACUS_ITEM_ID +") REFERENCES " + ZeroContract.PlantDensityAbacusItemsColumns.TABLE_NAME + "(" + ZeroContract.PlantDensityAbacusItemsColumns._ID + ") ON DELETE CASCADE"
+                        + ", FOREIGN KEY(" + ZeroContract.PlantCountingsColumns.PLANT_DENSITY_ABACI_ID +") REFERENCES " + ZeroContract.PlantDensityAbaciColumns.TABLE_NAME + "(" + ZeroContract.PlantDensityAbaciColumns._ID + ") ON DELETE CASCADE"
+                        + ", FOREIGN KEY(" + ZeroContract.PlantCountingsColumns.PLANTS_ID +") REFERENCES " + ZeroContract.PlantsColumns.TABLE_NAME + "(" + ZeroContract.PlantsColumns._ID + ") ON DELETE CASCADE"
                         + ")");
+
                     database.execSQL("CREATE TABLE IF NOT EXISTS plant_counting_items ("
                         + ZeroContract.PlantCountingItemsColumns._ID + " INTEGER PRIMARY KEY AUTOINCREMENT"
                         + ", " + ZeroContract.PlantCountingItemsColumns.VALUE + " INTEGER"
                         + ", " + ZeroContract.PlantCountingItemsColumns.PLANT_COUNTING_ID + " INTEGER"
-                        + ", FOREIGN KEY(" + ZeroContract.PlantCountingItemsColumns.PLANT_COUNTING_ID +") REFERENCES " + ZeroContract.PlantCountingColumns.TABLE_NAME + "(" + ZeroContract.PlantCountingColumns._ID + ") ON DELETE CASCADE"
+                        + ", " + ZeroContract.PlantCountingItemsColumns.SYNCHED_AT + " DATE"
+                        + ", FOREIGN KEY(" + ZeroContract.PlantCountingItemsColumns.PLANT_COUNTING_ID +") REFERENCES " + ZeroContract.PlantCountingsColumns.TABLE_NAME + "(" + ZeroContract.PlantCountingsColumns._ID + ") ON DELETE CASCADE"
                         + ")");
             case 3:
                     database.execSQL("CREATE TABLE IF NOT EXISTS plant_density_abaci ("
-                        + ZeroContract.PlantDensityAbaciColumns._ID + " INTEGER PRIMARY KEY AUTOINCREMENT"
-                        + ", " + ZeroContract.PlantDensityAbaciColumns.NAME + " VARCHAR(192)"
-                        + ", " + ZeroContract.PlantDensityAbaciColumns.VARIETY + " VARCHAR(192)"
-                        + ", " + ZeroContract.PlantDensityAbaciColumns.GERMINATION_PERCENTAGE + " INTEGER"
-                        + ", " + ZeroContract.PlantDensityAbaciColumns.SAMPLING_LENGTH_UNIT + " VARCHAR(32)"
-                        + ", " + ZeroContract.PlantDensityAbaciColumns.SEEDING_DENSITY_UNIT + " VARCHAR(32)"
+                        + ZeroContract.PlantDensityAbaciColumns._ID + " INTEGER PRIMARY KEY"
+                        + ", " + ZeroContract.PlantDensityAbaciColumns.NAME + " VARCHAR(255)"
+                        + ", " + ZeroContract.PlantDensityAbaciColumns.VARIETY + " VARCHAR(255)"
+                        + ", " + ZeroContract.PlantDensityAbaciColumns.GERMINATION_PERCENTAGE + " REAL"
+                        + ", " + ZeroContract.PlantDensityAbaciColumns.SAMPLING_LENGTH_UNIT + " VARCHAR(255)"
+                        + ", " + ZeroContract.PlantDensityAbaciColumns.SEEDING_DENSITY_UNIT + " VARCHAR(255)"
                         + ")");
-            case 4:
                     database.execSQL("CREATE TABLE IF NOT EXISTS plant_density_abacus_items ("
-                        + ZeroContract.PlantDensityAbacusItemsColumns._ID + " INTEGER PRIMARY KEY AUTOINCREMENT"
+                        + ZeroContract.PlantDensityAbacusItemsColumns._ID + " INTEGER PRIMARY KEY"
                         + ", " + ZeroContract.PlantDensityAbacusItemsColumns.SEEDING_DENSITY_VALUE + " INTEGER"
                         + ", " + ZeroContract.PlantDensityAbacusItemsColumns.PLANTS_COUNTS + " INTEGER"
                         + ")");
-            case 5:
+            case 4:
                     database.execSQL("CREATE TABLE IF NOT EXISTS plants ("
-                        + ZeroContract.PlantsColumns._ID + " INTEGER PRIMARY KEY AUTOINCREMENT"
+                        + ZeroContract.PlantsColumns._ID + " INTEGER PRIMARY KEY"
                         + ", " + ZeroContract.Plants.NAME + " VARCHAR(255)"
-                        + ", " + ZeroContract.Plants.SHAPE+ " VARCHAR(32)"
+                        + ", " + ZeroContract.Plants.SHAPE+ " TEXT"
                         + ", " + ZeroContract.Plants.VARIETY + " VARCHAR(255)"
-                        + ", " + ZeroContract.Plants.EKYLIBRE_ID + " INTEGER"
-                        + ", " + ZeroContract.Plants.ACTIVE + " BOOLEAN"
+                        + ", " + ZeroContract.Plants.ACTIVE + " BOOLEAN NOT NULL"
                         + ")");
         }
     }
