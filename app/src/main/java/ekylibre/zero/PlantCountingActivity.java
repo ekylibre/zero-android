@@ -1,17 +1,22 @@
 package ekylibre.zero;
 
 
+import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.app.Activity;
+import android.text.InputType;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -19,9 +24,12 @@ import android.widget.TableLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.regex.Pattern;
 
 
 public class PlantCountingActivity extends Activity {
@@ -34,6 +42,7 @@ public class PlantCountingActivity extends Activity {
     private ListIterator<EditText> mListIteratorValues;
     private ListView mAdvocatedDensityList;
     private ListView mPlantDensityAbaciNameList;
+    private Pattern mIntegerPattern = Pattern.compile("^\\d+$");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,12 +62,25 @@ public class PlantCountingActivity extends Activity {
                 ZeroContract.PlantDensityAbaciColumns.NAME
         };
 
-        getContentResolver().query(
+        List<String> PDA = new ArrayList<String>();
+        Cursor mCursor = getContentResolver().query(
                 ZeroContract.PlantDensityAbaci.CONTENT_URI,
                 mProjectionPlantDensityAbaci,
                 null,
                 null,
                 null);
+        Log.d("zero","beginning");
+        while(mCursor.moveToNext()){
+            PDA.add(mCursor.getString(0));
+            Log.d("zero",mCursor.getString(0));
+        }
+        Log.d("zero","end");
+        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(
+                 this,
+                 android.R.layout.simple_list_item_1,
+                 PDA );
+
+         mAdvocatedDensityList.setAdapter(arrayAdapter);
 
         addValue(mLayout);
 
@@ -76,32 +98,32 @@ public class PlantCountingActivity extends Activity {
         // Handle presses on the action bar items
         switch (item.getItemId()) {
             case R.id.action_save:
-                saveSampling(item.getActionView());
+                savePlantCounting(item.getActionView());
                 return true;
             default:
             return super.onOptionsItemSelected(item);
         }
     }
 
-    public void saveSampling(View v) {
+    public void savePlantCounting(View v) {
 
         //http://developer.android.com/guide/topics/providers/content-provider-basics.html
 
         // Defines an object to contain the new values to insert
-        ContentValues mNewValuesSampling = new ContentValues();
-        ContentValues mNewValuesSamplingCount = new ContentValues();
+        ContentValues mNewValuesPlantCounting = new ContentValues();
+        ContentValues mNewValuesPlantCountingItem = new ContentValues();
         // Sets the values of each column and inserts the word. The arguments to the "put"
         // method are "column name" and "value"
-        mNewValuesSampling.put(ZeroContract.PlantCountingsColumns.OBSERVED_AT, (new java.util.Date()).getTime());
+        mNewValuesPlantCounting.put(ZeroContract.PlantCountingsColumns.OBSERVED_AT, (new java.util.Date()).getTime());
         LocationManager locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
         String locationProvider = LocationManager.NETWORK_PROVIDER;
         // Or use LocationManager.GPS_PROVIDER
         Location lastKnownLocation = locationManager.getLastKnownLocation(locationProvider);
         if (lastKnownLocation != null) {
-            mNewValuesSampling.put(ZeroContract.PlantCountingsColumns.LATITUDE, lastKnownLocation.getLatitude());
-            mNewValuesSampling.put(ZeroContract.PlantCountingsColumns.LONGITUDE, lastKnownLocation.getLongitude());
+            mNewValuesPlantCounting.put(ZeroContract.PlantCountingsColumns.LATITUDE, lastKnownLocation.getLatitude());
+            mNewValuesPlantCounting.put(ZeroContract.PlantCountingsColumns.LONGITUDE, lastKnownLocation.getLongitude());
         }
-        mNewValuesSampling.put(ZeroContract.PlantCountingsColumns.OBSERVATION, mObservationEditText.getText().toString());
+        mNewValuesPlantCounting.put(ZeroContract.PlantCountingsColumns.OBSERVATION, mObservationEditText.getText().toString());
 
         mListIteratorValues = mListValues.listIterator();
 
@@ -109,7 +131,7 @@ public class PlantCountingActivity extends Activity {
 
         getContentResolver().insert(
                 ZeroContract.PlantCountings.CONTENT_URI,   // the user dictionary content URI
-                mNewValuesSampling                          // the values to insert
+                mNewValuesPlantCounting                          // the values to insert
         );
 
 
@@ -117,18 +139,18 @@ public class PlantCountingActivity extends Activity {
         while(mListIteratorValues.hasNext()){
             EditText et = mListIteratorValues.next();
             if(et.getText().toString() != null){
-                mNewValuesSamplingCount.put(ZeroContract.PlantCountingItemsColumns.VALUE, et.getText().toString());
+                mNewValuesPlantCountingItem.put(ZeroContract.PlantCountingItemsColumns.VALUE, et.getText().toString());
             }
         }
 
 
         getContentResolver().insert(
                 ZeroContract.PlantCountingItems.CONTENT_URI,
-                mNewValuesSamplingCount
+                mNewValuesPlantCountingItem
         );
 
         Context context = getApplicationContext();
-        CharSequence text = "Sampling saved";
+        CharSequence text = "Plant Counting saved";
         int duration = Toast.LENGTH_SHORT;
         Toast toast = Toast.makeText(context, text, duration);
         toast.show();
@@ -154,6 +176,7 @@ public class PlantCountingActivity extends Activity {
 
         mLayout.addView(valueLayout);
 
+        input.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_CLASS_NUMBER);
         valueLayout.addView(input);
         //valueLayout.addView(suppr);
 
@@ -162,27 +185,32 @@ public class PlantCountingActivity extends Activity {
     }
 
     public void getAverage(View view){
-       /*
-        int total = 0;
+
+        float total = 0;
         int nbvalues = mListValues.size();
-        float moyenne;
+        float moyenne = 0;
 
         Iterator it = mListValues.iterator();
 
         while(it.hasNext()){
-            total = total + Integer.parseInt(it.next().toString());
-        }
+
+            EditText editText = (EditText) it.next();
+            String txt = editText.getText().toString();
 
 
-        //for(int i=0;i<nbvalues;i++){
 
-            //EditText tmp = mListValues.get(i);
-            //total = total + Integer.parseInt(tmp.getText().toString());
 
+            if(mIntegerPattern.matcher(txt).find()){
+                total += Float.parseFloat(txt);
+            }
+            else{
+                Toast toast = Toast.makeText(this, "wrong_type", Toast.LENGTH_SHORT);
+                toast.show();
+            }
         }
         moyenne = total/nbvalues;
         //String moyenne_text = ((String) moyenne);
-        mAverageText.setText(moyenne);
-        */
+        mAverageText.setText(String.valueOf(moyenne));
+
     }
 }

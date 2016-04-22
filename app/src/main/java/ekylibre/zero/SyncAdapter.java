@@ -19,14 +19,18 @@ import ekylibre.api.Crumb;
 import ekylibre.api.Instance;
 import ekylibre.api.Issue;
 import ekylibre.api.PlantDensityAbacus;
+import ekylibre.exceptions.HTTPException;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.Set;
 
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
@@ -67,6 +71,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
     public void onPerformSync(Account account, Bundle extras, String authority, ContentProviderClient provider, SyncResult syncResult) {
         performCrumbsSync(account, extras, authority, provider, syncResult);
         performIssuesSync(account, extras, authority, provider, syncResult);
+        performPlantDensityAbaciSync(account, extras, authority, provider, syncResult);
     }
 
 
@@ -174,40 +179,31 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
         Log.i(TAG, "Finish network synchronization");
     }
 
-public void performPlantDensityAbaciSync(Account account, Bundle extras, String authority, ContentProviderClient provider, SyncResult syncResult) {
+    public void performPlantDensityAbaciSync(Account account, Bundle extras, String authority, ContentProviderClient provider, SyncResult syncResult) {
 
-        Log.i(TAG, "Beginning network issues synchronization");
+        Log.i(TAG, "Beginning network plant_density_abaci synchronization");
 
-        // Get crumbs from Issue (content) provider
-        Cursor cursor = mContentResolver.query(ZeroContract.Issues.CONTENT_URI, ZeroContract.Issues.PROJECTION_ALL, ZeroContract.IssuesColumns.SYNCED + " IS NULL OR " + ZeroContract.IssuesColumns.SYNCED + " <= 0", null, ZeroContract.Issues.SORT_ORDER_DEFAULT);
-
+        Instance instance = getInstance(account);
 
         try {
-            if (cursor.getCount() > 0) {
-                Instance instance = getInstance(account);
-                cursor.moveToFirst();
-                while (!cursor.isAfterLast()) {
-                    Log.i(TAG, "New issue");
+            List<PlantDensityAbacus> abacusList = PlantDensityAbacus.all(instance, new JSONObject());
+            Iterator<PlantDensityAbacus> abacus = abacusList.iterator();
+            while(abacus.hasNext()){
 
-                    // Post it to ekylibre
-                    JSONObject attributes = new JSONObject();
-
-
-                    List<PlantDensityAbacus> PlantDensityAbacusList = PlantDensityAbacus.all(instance, attributes);
-                    // Marks them as synced
-                    ContentValues values = new ContentValues();
-                    //values.put(ZeroContract.IssuesColumns.SYNCED, id);
-                    mContentResolver.update(Uri.withAppendedPath(ZeroContract.Issues.CONTENT_URI, Long.toString(cursor.getLong(0))), values, null, null);
-                    cursor.moveToNext();
-                }
-            } else {
-                Log.i(TAG, "Nothing to sync");
             }
-        } catch (Exception e) {
-            e.printStackTrace();
+
+
+
         }
+        catch (JSONException j){
 
+        }
+        catch (IOException i){
 
+        }
+        catch (HTTPException h){
+
+        }
         Log.i(TAG, "Finish network synchronization");
     }
 
