@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TableLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -31,6 +32,8 @@ public class PlantCountingActivity extends Activity {
     private TextView mAverageText;
     private List<EditText> mListValues = new ArrayList();
     private ListIterator<EditText> mListIteratorValues;
+    private ListView mAdvocatedDensityList;
+    private ListView mPlantDensityAbaciNameList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,8 +46,22 @@ public class PlantCountingActivity extends Activity {
         mAverageText = (TextView) findViewById(R.id.textAverage);
         mAverageText.setText("");
         getActionBar().setDisplayHomeAsUpEnabled(true);
+        mAdvocatedDensityList = (ListView) findViewById(R.id.advocatedDensityListView);
+        mPlantDensityAbaciNameList = (ListView) findViewById(R.id.abaciName);
+
+        String[] mProjectionPlantDensityAbaci = {
+                ZeroContract.PlantDensityAbaciColumns.NAME
+        };
+
+        getContentResolver().query(
+                ZeroContract.PlantDensityAbaci.CONTENT_URI,
+                mProjectionPlantDensityAbaci,
+                null,
+                null,
+                null);
 
         addValue(mLayout);
+
     }
 
     @Override
