@@ -54,22 +54,20 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                         + ", " + ZeroContract.PlantCountingsColumns.OBSERVED_AT + " DATE"
                         + ", " + ZeroContract.PlantCountingsColumns.LATITUDE + " REAL"
                         + ", " + ZeroContract.PlantCountingsColumns.LONGITUDE + " REAL"
-                        + ", " + ZeroContract.PlantCountingsColumns.ADVOCATED_DENSITY + " REAL"
                         + ", " + ZeroContract.PlantCountingsColumns.OBSERVATION + " TEXT"
-                        + ", " + ZeroContract.PlantCountingsColumns.PLANTS_NAME + " TEXT"
+                            + ", " + ZeroContract.PlantCountingsColumns.SYNCED_AT + " DATE"
                         + ", " + ZeroContract.PlantCountingsColumns.PLANT_DENSITY_ABACUS_ITEM_ID + " INTEGER"
-                        + ", " + ZeroContract.PlantCountingsColumns.PLANT_DENSITY_ABACI_ID + " INTEGER"
-                        + ", " + ZeroContract.PlantCountingsColumns.PLANTS_ID + " INTEGER"
+                        + ", " + ZeroContract.PlantCountingsColumns.PLANT_DENSITY_ABACUS_ID + " INTEGER"
+                        + ", " + ZeroContract.PlantCountingsColumns.PLANT_ID + " INTEGER"
                         + ", FOREIGN KEY(" + ZeroContract.PlantCountingsColumns.PLANT_DENSITY_ABACUS_ITEM_ID +") REFERENCES " + ZeroContract.PlantDensityAbacusItemsColumns.TABLE_NAME + "(" + ZeroContract.PlantDensityAbacusItemsColumns._ID + ") ON DELETE CASCADE"
-                        + ", FOREIGN KEY(" + ZeroContract.PlantCountingsColumns.PLANT_DENSITY_ABACI_ID +") REFERENCES " + ZeroContract.PlantDensityAbaciColumns.TABLE_NAME + "(" + ZeroContract.PlantDensityAbaciColumns._ID + ") ON DELETE CASCADE"
-                        + ", FOREIGN KEY(" + ZeroContract.PlantCountingsColumns.PLANTS_ID +") REFERENCES " + ZeroContract.PlantsColumns.TABLE_NAME + "(" + ZeroContract.PlantsColumns._ID + ") ON DELETE CASCADE"
+                        + ", FOREIGN KEY(" + ZeroContract.PlantCountingsColumns.PLANT_DENSITY_ABACUS_ID +") REFERENCES " + ZeroContract.PlantDensityAbaciColumns.TABLE_NAME + "(" + ZeroContract.PlantDensityAbaciColumns._ID + ") ON DELETE CASCADE"
+                        + ", FOREIGN KEY(" + ZeroContract.PlantCountingsColumns.PLANT_ID +") REFERENCES " + ZeroContract.PlantsColumns.TABLE_NAME + "(" + ZeroContract.PlantsColumns._ID + ") ON DELETE CASCADE"
                         + ")");
 
                     database.execSQL("CREATE TABLE IF NOT EXISTS plant_counting_items ("
                         + ZeroContract.PlantCountingItemsColumns._ID + " INTEGER PRIMARY KEY AUTOINCREMENT"
                         + ", " + ZeroContract.PlantCountingItemsColumns.VALUE + " INTEGER"
                         + ", " + ZeroContract.PlantCountingItemsColumns.PLANT_COUNTING_ID + " INTEGER"
-                        + ", " + ZeroContract.PlantCountingItemsColumns.SYNCHED_AT + " DATE"
                         + ", FOREIGN KEY(" + ZeroContract.PlantCountingItemsColumns.PLANT_COUNTING_ID +") REFERENCES " + ZeroContract.PlantCountingsColumns.TABLE_NAME + "(" + ZeroContract.PlantCountingsColumns._ID + ") ON DELETE CASCADE"
                         + ")");
             case 3:
@@ -84,7 +82,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                     database.execSQL("CREATE TABLE IF NOT EXISTS plant_density_abacus_items ("
                         + ZeroContract.PlantDensityAbacusItemsColumns._ID + " INTEGER PRIMARY KEY"
                         + ", " + ZeroContract.PlantDensityAbacusItemsColumns.SEEDING_DENSITY_VALUE + " INTEGER"
-                        + ", " + ZeroContract.PlantDensityAbacusItemsColumns.PLANTS_COUNTS + " INTEGER"
+                        + ", " + ZeroContract.PlantDensityAbacusItemsColumns.PLANTS_COUNT + " INTEGER"
                         + ")");
             case 4:
                     database.execSQL("CREATE TABLE IF NOT EXISTS plants ("

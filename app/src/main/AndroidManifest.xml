@@ -135,14 +135,6 @@
                 android:value=".TrackingActivity" />
         </activity>
         <activity
-            android:name=".IssuesActivity"
-            android:parentActivityName=".MenuActivity"
-            android:label="" />
-        <activity
-            android:name=".IssueTypeActivity"
-            android:parentActivityName=".MenuActivity"
-            android:label="" />
-        <activity
             android:name=".IssueActivity"
             android:parentActivityName=".MenuActivity"
             android:label="@string/new_issue" />
