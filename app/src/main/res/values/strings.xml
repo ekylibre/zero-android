@@ -2,6 +2,7 @@
 <resources>
     <string name="accuracy">Accuracy</string>
     <string name="action_settings">Settings</string>
+    <string name="advocated_density">Advocated density</string>
     <string name="app_name">Zero</string>
     <string name="analysis_count_hint">Enter a new count</string>
     <string name="average">average</string>
