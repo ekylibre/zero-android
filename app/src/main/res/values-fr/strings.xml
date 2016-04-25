@@ -2,7 +2,7 @@
 <resources>
   <string name="accuracy">Précision</string>
   <string name="action_settings">Paramètres</string>
-  <string name="advocated_density">Advocated density</string>
+  <string name="advocated_density">Densité préconisée</string>
   <string name="app_name">Zero</string>
   <string name="analysis_count_hint">Entrer une nouvelle valeur</string>
   <string name="average">Moyenne</string>
@@ -15,6 +15,7 @@
   <string name="error_no_value">Pas de valeur</string>
   <string name="picture">Photo</string>
   <string name="priority">Priorité</string>
+  <string name="get_average_button">Moyenne</string>
   <string name="global_auth_token">Jeton d’authentification global</string>
   <string name="instance">URL de votre ferme</string>
   <string name="issue_sync_service_name">Incidents</string>
@@ -34,6 +35,8 @@
   <string name="permlab_authenticateAccounts">S’authentifier auprès d’Ekylibre</string>
   <string name="permlab_syncData">Synchroniser les données vers Ekylibre</string>
   <string name="permlab_capture">Prendre une photo</string>
+  <string name="plant_name">Nom du plant</string>
+  <string name="plant_variety_label">Variété de plant</string>
   <string name="precision_mode">Mode précis</string>
   <string name="pref_showDetails">Afficher les détails</string>
   <string name="pref_showDetails_summary">Afficher les coordonnées et le nombre de miettes durant une intervention</string>

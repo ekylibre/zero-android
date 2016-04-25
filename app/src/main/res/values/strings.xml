@@ -15,6 +15,7 @@
     <string name="error_no_value">No value</string>
     <string name="picture">Picture</string>
     <string name="priority">Priority</string>
+    <string name="get_average_button">Moyenne</string>
     <string name="global_auth_token">Global Authentication Token</string>
     <string name="instance">URL of your farm</string>
     <string name="issue_sync_service_name">Issues</string>
@@ -34,6 +35,8 @@
     <string name="permlab_authenticateAccounts">use Ekylibre accounts</string>
     <string name="permlab_syncData">synchronize data to Ekylibre</string>
     <string name="permlab_capture">Take a picture</string>
+    <string name="plant_variety_label">Plant variety</string>
+    <string name="plant_name">Plant name</string>
     <string name="precision_mode">Precision mode</string>
     <string name="pref_showDetails">Show details</string>
     <string name="pref_showDetails_summary">Show coordinates and crumbs count during an intervention</string>
