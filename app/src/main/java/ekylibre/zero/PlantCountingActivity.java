@@ -10,6 +10,7 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.app.Activity;
 import android.text.InputType;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -54,7 +55,12 @@ public class PlantCountingActivity extends Activity {
         mObservationEditText = (EditText)findViewById(R.id.observationEditText);
         mAverageText = (TextView) findViewById(R.id.textAverage);
         mAverageText.setText("");
-        getActionBar().setDisplayHomeAsUpEnabled(true);
+        try {
+            getActionBar().setDisplayHomeAsUpEnabled(true);
+        }
+        catch (NullPointerException n){
+
+        }
         mAdvocatedDensityList = (ListView) findViewById(R.id.advocatedDensityListView);
         mPlantDensityAbaciNameList = (ListView) findViewById(R.id.abaciName);
 
@@ -187,9 +193,8 @@ public class PlantCountingActivity extends Activity {
     public void getAverage(View view){
 
         float total = 0;
-        int nbvalues = mListValues.size();
+        int nbvalues = 0;
         float moyenne = 0;
-
         Iterator it = mListValues.iterator();
 
         while(it.hasNext()){
@@ -197,20 +202,37 @@ public class PlantCountingActivity extends Activity {
             EditText editText = (EditText) it.next();
             String txt = editText.getText().toString();
 
-
-
-
-            if(mIntegerPattern.matcher(txt).find()){
+            //editText.indexOf("/")!=-1
+            if(
+                    editText.getText().toString().indexOf("/")==-1 &&
+                    editText.getText().toString().indexOf("*")==-1 &&
+                    editText.getText().toString().indexOf("-")==-1 &&
+                    editText.getText().toString().indexOf("+")==-1 &&
+                    editText.getText().toString().indexOf(".")==-1 &&
+                    editText.getText().toString().indexOf(",")==-1 &&
+                    editText.getText().toString().indexOf(";")==-1 &&
+                    editText.getText().toString().indexOf(":")==-1 &&
+                    editText.getText().toString().indexOf("(")==-1 &&
+                    editText.getText().toString().indexOf(")")==-1 &&
+                    !TextUtils.isEmpty(editText.getText())
+                    ){
                 total += Float.parseFloat(txt);
+                nbvalues++;
             }
             else{
-                Toast toast = Toast.makeText(this, "wrong_type", Toast.LENGTH_SHORT);
+                Toast toast = Toast.makeText(this, "wrong type at value " + editText.getText().toString(), Toast.LENGTH_SHORT);
                 toast.show();
             }
+
+            //if(mIntegerPattern.matcher(txt).find() ){
+            //    total += Float.parseFloat(txt);
+            //}
+            //else{
+            //    Toast toast = Toast.makeText(this, "wrong_type", Toast.LENGTH_SHORT);
+            //    toast.show();
+            //}
         }
         moyenne = total/nbvalues;
-        //String moyenne_text = ((String) moyenne);
         mAverageText.setText(String.valueOf(moyenne));
-
     }
 }
