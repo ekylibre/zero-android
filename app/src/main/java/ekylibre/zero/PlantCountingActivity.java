@@ -202,18 +202,17 @@ public class PlantCountingActivity extends Activity {
             EditText editText = (EditText) it.next();
             String txt = editText.getText().toString();
 
-            //editText.indexOf("/")!=-1
             if(
-                    editText.getText().toString().indexOf("/")==-1 &&
-                    editText.getText().toString().indexOf("*")==-1 &&
-                    editText.getText().toString().indexOf("-")==-1 &&
-                    editText.getText().toString().indexOf("+")==-1 &&
-                    editText.getText().toString().indexOf(".")==-1 &&
-                    editText.getText().toString().indexOf(",")==-1 &&
-                    editText.getText().toString().indexOf(";")==-1 &&
-                    editText.getText().toString().indexOf(":")==-1 &&
-                    editText.getText().toString().indexOf("(")==-1 &&
-                    editText.getText().toString().indexOf(")")==-1 &&
+                    !editText.getText().toString().contains("/") &&
+                    !editText.getText().toString().contains("*") &&
+                    !editText.getText().toString().contains("-") &&
+                    !editText.getText().toString().contains("+") &&
+                    !editText.getText().toString().contains(".") &&
+                    !editText.getText().toString().contains(",") &&
+                    !editText.getText().toString().contains(";") &&
+                    !editText.getText().toString().contains(":") &&
+                    !editText.getText().toString().contains("(") &&
+                    !editText.getText().toString().contains(")") &&
                     !TextUtils.isEmpty(editText.getText())
                     ){
                 total += Float.parseFloat(txt);
@@ -223,14 +222,6 @@ public class PlantCountingActivity extends Activity {
                 Toast toast = Toast.makeText(this, "wrong type at value " + editText.getText().toString(), Toast.LENGTH_SHORT);
                 toast.show();
             }
-
-            //if(mIntegerPattern.matcher(txt).find() ){
-            //    total += Float.parseFloat(txt);
-            //}
-            //else{
-            //    Toast toast = Toast.makeText(this, "wrong_type", Toast.LENGTH_SHORT);
-            //    toast.show();
-            //}
         }
         moyenne = total/nbvalues;
         mAverageText.setText(String.valueOf(moyenne));
