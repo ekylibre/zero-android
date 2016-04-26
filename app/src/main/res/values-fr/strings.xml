@@ -35,7 +35,7 @@
   <string name="permlab_authenticateAccounts">S’authentifier auprès d’Ekylibre</string>
   <string name="permlab_syncData">Synchroniser les données vers Ekylibre</string>
   <string name="permlab_capture">Prendre une photo</string>
-  <string name="plant_name">Nom du plant</string>
+  <string name="plant_name">Nom de la culture</string>
   <string name="plant_variety_label">Variété de plant</string>
   <string name="precision_mode">Mode précis</string>
   <string name="pref_showDetails">Afficher les détails</string>

@@ -59,7 +59,7 @@ public class PlantCountingActivity extends Activity {
             getActionBar().setDisplayHomeAsUpEnabled(true);
         }
         catch (NullPointerException n){
-
+            Log.d("zero","Null pointer exception action bar");
         }
         mAdvocatedDensityList = (ListView) findViewById(R.id.advocatedDensityListView);
         mPlantDensityAbaciNameList = (ListView) findViewById(R.id.abaciName);
@@ -68,7 +68,10 @@ public class PlantCountingActivity extends Activity {
                 ZeroContract.PlantDensityAbaciColumns.NAME
         };
 
-        List<String> PDA = new ArrayList<String>();
+
+
+
+        List<String> pda = new ArrayList<>();
         Cursor mCursor = getContentResolver().query(
                 ZeroContract.PlantDensityAbaci.CONTENT_URI,
                 mProjectionPlantDensityAbaci,
@@ -76,19 +79,31 @@ public class PlantCountingActivity extends Activity {
                 null,
                 null);
         Log.d("zero","beginning");
-        while(mCursor.moveToNext()){
-            PDA.add(mCursor.getString(0));
+        boolean b = mCursor.isNull(1);
+
+        if(b){
+            Log.d("zero","****************true*********************");
+        }else{
+            Log.d("zero","________________false____________________");
+        }
+
+        mCursor.moveToFirst();
+        do{
+            pda.add(mCursor.getString(0));
             Log.d("zero",mCursor.getString(0));
         }
+        while(mCursor.moveToNext());
+
         Log.d("zero","end");
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(
                  this,
                  android.R.layout.simple_list_item_1,
-                 PDA );
+                 pda );
 
          mAdvocatedDensityList.setAdapter(arrayAdapter);
 
         addValue(mLayout);
+        mCursor.close();
 
     }
 
@@ -113,8 +128,6 @@ public class PlantCountingActivity extends Activity {
 
     public void savePlantCounting(View v) {
 
-        //http://developer.android.com/guide/topics/providers/content-provider-basics.html
-
         // Defines an object to contain the new values to insert
         ContentValues mNewValuesPlantCounting = new ContentValues();
         ContentValues mNewValuesPlantCountingItem = new ContentValues();
@@ -130,17 +143,12 @@ public class PlantCountingActivity extends Activity {
             mNewValuesPlantCounting.put(ZeroContract.PlantCountingsColumns.LONGITUDE, lastKnownLocation.getLongitude());
         }
         mNewValuesPlantCounting.put(ZeroContract.PlantCountingsColumns.OBSERVATION, mObservationEditText.getText().toString());
-
         mListIteratorValues = mListValues.listIterator();
-
-
 
         getContentResolver().insert(
                 ZeroContract.PlantCountings.CONTENT_URI,   // the user dictionary content URI
                 mNewValuesPlantCounting                          // the values to insert
         );
-
-
 
         while(mListIteratorValues.hasNext()){
             EditText et = mListIteratorValues.next();
@@ -148,7 +156,6 @@ public class PlantCountingActivity extends Activity {
                 mNewValuesPlantCountingItem.put(ZeroContract.PlantCountingItemsColumns.VALUE, et.getText().toString());
             }
         }
-
 
         getContentResolver().insert(
                 ZeroContract.PlantCountingItems.CONTENT_URI,
