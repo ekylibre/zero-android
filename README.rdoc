@@ -43,17 +43,7 @@ You need to install 32-bit libs:
 1. In Android studio click on the "run 'app'" button (or use Maj+F10)
 
 
-== Sign and publish APK on repositories
-
-1. Create a signing key to release your APK in your repository. Create it unless it already exists:
-      $ keytool -genkey -v -keystore release.keystore -alias <repository> -keyalg RSA -keysize 2048 -validity 10000
-
-2. Build a release APK
-      $ make release
-
-3. Push on repository
-   * {F-Droid}[https://f-droid.org/wiki/page/FAQ_-_App_Developers]
-   * {Google Play}[http://developer.android.com/tools/publishing/app-signing.html]
+== Sign and publish APK on repositories with Android studio
 
 1. In Android Studio click on Build (alt+b)
 
@@ -71,6 +61,19 @@ You need to install 32-bit libs:
 5. Make sure the build type "release" is selected
 
 6. Click on "Finish"
+
+== Sign and publish APK on repositories without Android studio
+
+1. Create a signing key to release your APK in your repository. Create it unless it already exists:
+      $ keytool -genkey -v -keystore release.keystore -alias <repository> -keyalg RSA -keysize 2048 -validity 10000
+
+2. Build a release APK
+      $ make release
+
+3. Push on repository
+   * {F-Droid}[https://f-droid.org/wiki/page/FAQ_-_App_Developers]
+   * {Google Play}[http://developer.android.com/tools/publishing/app-signing.html]
+
 
 == License
 
