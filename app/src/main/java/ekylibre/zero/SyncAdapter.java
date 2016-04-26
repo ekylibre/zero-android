@@ -3,6 +3,7 @@ package ekylibre.zero;
 import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.accounts.AccountsException;
+import android.content.ContentProvider;
 import android.database.Cursor;
 import android.content.AbstractThreadedSyncAdapter;
 import android.content.ContentProviderClient;
@@ -22,6 +23,7 @@ import ekylibre.api.PlantDensityAbacus;
 import ekylibre.exceptions.HTTPException;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Iterator;
@@ -151,10 +153,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                     attributes.put("nature", cursor.getString(1));
                     attributes.put("gravity", cursor.getInt(2));
                     attributes.put("priority", cursor.getInt(3));
-                    //byte[] utf8Description = cursor.getString(5).getBytes("UTF-8");
                     attributes.put("description",cursor.getString(5) );
-                    //attributes.put("target_type", "Product");
-                    //attributes.put("target_id", "1");
                     SimpleDateFormat parser = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
                     attributes.put("observed_at", parser.format(new Date(cursor.getLong(8))));
                     if (cursor.getDouble(9) != 0 && cursor.getDouble(10) != 0) {
@@ -182,29 +181,30 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
     public void performPlantDensityAbaciSync(Account account, Bundle extras, String authority, ContentProviderClient provider, SyncResult syncResult) {
 
         Log.i(TAG, "Beginning network plant_density_abaci synchronization");
-
+        ContentValues cv = new ContentValues();
         Instance instance = getInstance(account);
+
+
 
         try {
             List<PlantDensityAbacus> abacusList = PlantDensityAbacus.all(instance, new JSONObject());
+            Log.d("zero", "Nombre d'abaque : " + abacusList.size() );
             Iterator<PlantDensityAbacus> abacus = abacusList.iterator();
             while(abacus.hasNext()){
-
+                cv.put(ZeroContract.PlantDensityAbacusItemsColumns._ID, abacus.next().toString());
             }
-
-
-
         }
         catch (JSONException j){
-
+            Log.d("zero", "JSON Exception : " + j.getMessage());
+            j.printStackTrace();
         }
         catch (IOException i){
-
+            Log.d("zero", "IO Exception : " + i.getMessage());
         }
         catch (HTTPException h){
-
+            Log.d("zero", "HTTP Exception : " + h.getMessage());
         }
-        Log.i(TAG, "Finish network synchronization");
+        Log.i(TAG, "Finish network plant_density_abaci synchronization");
     }
 
 

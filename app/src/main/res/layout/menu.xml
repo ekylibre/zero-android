@@ -28,28 +28,36 @@
 
         <Button
             android:id="@+id/button4"
-            android:layout_width="wrap_content"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:onClick="gotoNewIntervention"
             android:text="@string/new_intervention"
-            android:textSize="20dp" />
+            android:textSize="20dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="5dp" />
 
         <Button
             android:id="@+id/button5"
-            android:layout_width="wrap_content"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="10dp"
             android:onClick="gotoNewIssue"
             android:text="@string/new_issue"
-            android:textSize="20dp" />
+            android:textSize="20dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="5dp" />
 
         <Button
-            android:layout_width="wrap_content"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:text="@string/new_count"
             android:id="@+id/button6"
             android:layout_gravity="center_horizontal"
-            android:onClick="gotoSorting" />
+            android:onClick="gotoSorting"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="5dp" />
 
     </LinearLayout>
 

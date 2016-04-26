@@ -1,5 +1,7 @@
 package ekylibre.api;
 
+import android.util.Log;
+
 import org.apache.http.client.ClientProtocolException;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -28,7 +30,7 @@ public class PlantDensityAbacus {
         // JSONObject params = Instance.BundleToJSON(attributes);
         JSONObject params = attributes;
 
-        JSONArray json = instance.getJSONArray("/api/v1/issues", params);
+        JSONArray json = instance.getJSONArray("/api/v1/plant_density_abaci", params);
 
         List<PlantDensityAbacus> array = new ArrayList<>();
 
@@ -44,11 +46,13 @@ public class PlantDensityAbacus {
 
         List<PlantDensityAbacusItem> items = new ArrayList<>();
 
+        Log.d("zero", "Object PlantDensityAbacus : " + object.toString());
+
         mName = object.getString("name");
-        mVariety =object.getString("variety");
+        mVariety =object.getString("variety_name");
         mGerminationPercentage = object.getDouble("germination_percentage");
         mSeedingDensityUnit = object.getString("seeding_density_unit");
-        mSamplingLenghtUnit =  object.getString("sampling_lenght_unit");
+        mSamplingLenghtUnit =  object.getString("sampling_length_unit");
         mItems = items;
     }
 
