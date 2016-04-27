@@ -180,19 +180,36 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 
     public void performPlantDensityAbaciSync(Account account, Bundle extras, String authority, ContentProviderClient provider, SyncResult syncResult) {
 
+        Log.i(TAG, "Destruction of the PlantDensityAbacus table");
+        int result = mContentResolver.delete(ZeroContract.PlantDensityAbaci.CONTENT_URI, null, null);
+
+
+
         Log.i(TAG, "Beginning network plant_density_abaci synchronization");
         ContentValues cv = new ContentValues();
         Instance instance = getInstance(account);
 
-
-
         try {
             List<PlantDensityAbacus> abacusList = PlantDensityAbacus.all(instance, new JSONObject());
             Log.d("zero", "Nombre d'abaque : " + abacusList.size() );
-            Iterator<PlantDensityAbacus> abacus = abacusList.iterator();
-            while(abacus.hasNext()){
-                cv.put(ZeroContract.PlantDensityAbacusItemsColumns._ID, abacus.next().toString());
+            Iterator<PlantDensityAbacus> abacusIterator = abacusList.iterator();
+
+            Log.d("zero", "début parcours de liste plantDensityAbacus");
+
+            while(abacusIterator.hasNext()){
+
+                Log.d("zero", "boucle");
+
+                PlantDensityAbacus plantDensityAbacus = abacusIterator.next();
+                cv.put(ZeroContract.PlantDensityAbaciColumns._ID, plantDensityAbacus.getId());
+                cv.put(ZeroContract.PlantDensityAbaciColumns.NAME, plantDensityAbacus.getName());
+                cv.put(ZeroContract.PlantDensityAbaciColumns.VARIETY, plantDensityAbacus.getVariety());
+                cv.put(ZeroContract.PlantDensityAbaciColumns.GERMINATION_PERCENTAGE, plantDensityAbacus.getGerminationPercentage());
+                cv.put(ZeroContract.PlantDensityAbaciColumns.SEEDING_DENSITY_UNIT, plantDensityAbacus.getSeedingDensityUnit());
+                cv.put(ZeroContract.PlantDensityAbaciColumns.SAMPLING_LENGTH_UNIT, plantDensityAbacus.getSamplingLenghtUnit());
+                mContentResolver.insert(ZeroContract.PlantDensityAbaci.CONTENT_URI, cv);
             }
+            Log.d("zero", "début parcours de liste plantDensityAbacus");
         }
         catch (JSONException j){
             Log.d("zero", "JSON Exception : " + j.getMessage());
@@ -204,7 +221,12 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
         catch (HTTPException h){
             Log.d("zero", "HTTP Exception : " + h.getMessage());
         }
+
+
+
         Log.i(TAG, "Finish network plant_density_abaci synchronization");
+
+
     }
 
 

@@ -68,9 +68,6 @@ public class PlantCountingActivity extends Activity {
                 ZeroContract.PlantDensityAbaciColumns.NAME
         };
 
-
-
-
         List<String> pda = new ArrayList<>();
         Cursor mCursor = getContentResolver().query(
                 ZeroContract.PlantDensityAbaci.CONTENT_URI,
@@ -78,31 +75,33 @@ public class PlantCountingActivity extends Activity {
                 null,
                 null,
                 null);
+
         Log.d("zero","beginning");
-        boolean b = mCursor.isNull(1);
 
-        if(b){
-            Log.d("zero","****************true*********************");
-        }else{
-            Log.d("zero","________________false____________________");
+        if (mCursor.getCount() > 0){
+            Log.d("zero", "data exists");
+            mCursor.moveToFirst();
+
+            do{
+                pda.add(mCursor.getString(0));
+                Log.d("zero",mCursor.getString(0));
+            }
+            while(mCursor.moveToNext());
+
+            Log.d("zero","end");
+            ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(
+                     this,
+                     android.R.layout.simple_list_item_1,
+                     pda );
+
+             mAdvocatedDensityList.setAdapter(arrayAdapter);
+
+            addValue(mLayout);
         }
+        else{
+            Log.d("zero", "data does NOT exist");
 
-        mCursor.moveToFirst();
-        do{
-            pda.add(mCursor.getString(0));
-            Log.d("zero",mCursor.getString(0));
         }
-        while(mCursor.moveToNext());
-
-        Log.d("zero","end");
-        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(
-                 this,
-                 android.R.layout.simple_list_item_1,
-                 pda );
-
-         mAdvocatedDensityList.setAdapter(arrayAdapter);
-
-        addValue(mLayout);
         mCursor.close();
 
     }
