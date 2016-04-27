@@ -17,7 +17,7 @@ import ekylibre.exceptions.HTTPException;
  * Created by antoine on 21/04/16.
  */
 public class PlantDensityAbacus {
-
+    private int mid;
     private String mName;
     private String mVariety;
     private double mGerminationPercentage;
@@ -48,6 +48,7 @@ public class PlantDensityAbacus {
 
         Log.d("zero", "Object PlantDensityAbacus : " + object.toString());
 
+        mid = object.getInt("id");
         mName = object.getString("name");
         mVariety =object.getString("variety_name");
         mGerminationPercentage = object.getDouble("germination_percentage");
@@ -56,12 +57,41 @@ public class PlantDensityAbacus {
         mItems = items;
     }
 
-    public PlantDensityAbacus(String name, String variety, double germinationPercentage, String seedingDensityUnit, String samplingLenghtUnit, List<PlantDensityAbacusItem> items ){
+    public PlantDensityAbacus(int id, String name, String variety, double germinationPercentage, String seedingDensityUnit, String samplingLenghtUnit, List<PlantDensityAbacusItem> items ){
+        mid = id;
         mName = name;
         mVariety = variety;
         mGerminationPercentage = germinationPercentage;
         mSeedingDensityUnit = seedingDensityUnit;
         mSamplingLenghtUnit = samplingLenghtUnit;
         mItems = items;
+    }
+
+    public int getId() {
+        return mid;
+    }
+
+    public String getName() {
+        return mName;
+    }
+
+    public String getVariety() {
+        return mVariety;
+    }
+
+    public double getGerminationPercentage() {
+        return mGerminationPercentage;
+    }
+
+    public String getSeedingDensityUnit() {
+        return mSeedingDensityUnit;
+    }
+
+    public String getSamplingLenghtUnit() {
+        return mSamplingLenghtUnit;
+    }
+
+    public List<PlantDensityAbacusItem> getItems() {
+        return mItems;
     }
 }
