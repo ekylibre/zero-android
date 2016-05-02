@@ -39,6 +39,7 @@ public class PlantCountingActivity extends Activity {
     private LinearLayout mLayout;
     private EditText mObservationEditText;
     private TextView mAverageText;
+    private ListView mListVariety;
     private List<EditText> mListValues = new ArrayList();
     private ListIterator<EditText> mListIteratorValues;
     private ListView mAdvocatedDensityList;
@@ -63,7 +64,7 @@ public class PlantCountingActivity extends Activity {
         }
         mAdvocatedDensityList = (ListView) findViewById(R.id.advocatedDensityListView);
         mPlantDensityAbaciNameList = (ListView) findViewById(R.id.abaciName);
-
+        mListVariety = (ListView) findViewById(R.id.varietyList);
         String[] mProjectionPlantDensityAbaci = {
                 ZeroContract.PlantDensityAbaciColumns.NAME
         };
@@ -102,7 +103,18 @@ public class PlantCountingActivity extends Activity {
             Log.d("zero", "data does NOT exist");
 
         }
+
+        //Cursor mCursorPlant = getContentResolver().query(
+        //        ZeroContract.Plants.CONTENT_URI,
+        //        mProject,
+        //        null,
+        //        null,
+        //        null);
+
+
+
         mCursor.close();
+
 
     }
 
@@ -175,14 +187,7 @@ public class PlantCountingActivity extends Activity {
     public void addValue(View view){
 
         EditText input = new EditText(this);
-        //ActionBar.LayoutParams editTextParam =new ActionBar.LayoutParams(0, ViewGroup.LayoutParams.MATCH_PARENT);
-        //editTextParam.weight = 0;
-        //input.setLayoutParams(editTextParam);
         input.setLayoutParams(new TableLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, 1f));
-
-        //ImageButton suppr = new ImageButton(this);
-        //suppr.setImageResource(R.drawable.abc_ic_clear_mtrl_alpha);
-
         LinearLayout valueLayout = new LinearLayout(this);
         valueLayout.setOrientation(LinearLayout.HORIZONTAL);
 
@@ -190,7 +195,7 @@ public class PlantCountingActivity extends Activity {
 
         input.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_CLASS_NUMBER);
         valueLayout.addView(input);
-        //valueLayout.addView(suppr);
+
 
         mListValues.add(input);
 
@@ -232,4 +237,5 @@ public class PlantCountingActivity extends Activity {
         moyenne = total/nbvalues;
         mAverageText.setText(String.valueOf(moyenne));
     }
+
 }
