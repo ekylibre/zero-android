@@ -36,7 +36,7 @@
     <string name="permlab_syncData">synchronize data to Ekylibre</string>
     <string name="permlab_capture">Take a picture</string>
     <string name="plant_variety_label">Plant variety</string>
-    <string name="plant_name">Plant name</string>
+    <string name="plant_name">Plant</string>
     <string name="precision_mode">Precision mode</string>
     <string name="pref_showDetails">Show details</string>
     <string name="pref_showDetails_summary">Show coordinates and crumbs count during an intervention</string>
