@@ -68,8 +68,48 @@ public class PlantCountingActivity extends Activity {
         String[] mProjectionPlantDensityAbaci = {
                 ZeroContract.PlantDensityAbaciColumns.NAME
         };
+        String[] mProjectionPlant = {
+                ZeroContract.PlantsColumns.VARIETY
+        };
 
-        List<String> pda = new ArrayList<>();
+        /////////////////////////////////////////////////
+
+
+        List<String> listPlant = new ArrayList<>();
+        Cursor mCursorPlant = getContentResolver().query(
+                ZeroContract.Plants.CONTENT_URI,
+                mProjectionPlant,
+                null,
+                null,
+                null
+        );
+
+        Log.d("zero", "beginning plant");
+
+        if (mCursorPlant.getCount() > 0) {
+            Log.d("zero", "data exists");
+            mCursorPlant.moveToFirst();
+            do{
+                listPlant.add(mCursorPlant.getString(0));
+                Log.d("zero",mCursorPlant.getString(0));
+            }
+            while(mCursorPlant.moveToNext());
+            Log.d("zero","end");
+            ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(
+                    this,
+                    android.R.layout.simple_list_item_1,
+                    listPlant );
+
+            mListVariety.setAdapter(arrayAdapter);
+
+        }
+        else{
+            Log.d("zero", "data does NOT exist");
+
+        }
+
+        /////////////////////////////////////////////////
+        List<String> listplantdensityabacus = new ArrayList<>();
         Cursor mCursor = getContentResolver().query(
                 ZeroContract.PlantDensityAbaci.CONTENT_URI,
                 mProjectionPlantDensityAbaci,
@@ -77,14 +117,14 @@ public class PlantCountingActivity extends Activity {
                 null,
                 null);
 
-        Log.d("zero","beginning");
+        Log.d("zero","beginning plant density abacus");
 
         if (mCursor.getCount() > 0){
             Log.d("zero", "data exists");
             mCursor.moveToFirst();
 
             do{
-                pda.add(mCursor.getString(0));
+                listplantdensityabacus.add(mCursor.getString(0));
                 Log.d("zero",mCursor.getString(0));
             }
             while(mCursor.moveToNext());
@@ -93,7 +133,7 @@ public class PlantCountingActivity extends Activity {
             ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(
                      this,
                      android.R.layout.simple_list_item_1,
-                     pda );
+                     listplantdensityabacus );
 
              mAdvocatedDensityList.setAdapter(arrayAdapter);
 
@@ -103,18 +143,8 @@ public class PlantCountingActivity extends Activity {
             Log.d("zero", "data does NOT exist");
 
         }
-
-        //Cursor mCursorPlant = getContentResolver().query(
-        //        ZeroContract.Plants.CONTENT_URI,
-        //        mProject,
-        //        null,
-        //        null,
-        //        null);
-
-
-
         mCursor.close();
-
+        /////////////////////////////////////////////////
 
     }
 
