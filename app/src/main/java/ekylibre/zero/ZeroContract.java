@@ -36,7 +36,6 @@ public final class ZeroContract {
         String OBSERVED_AT = "observed_at";
         String LATITUDE = "latitude";
         String LONGITUDE = "longitude";
-
     }
 
     public interface PlantCountingsColumns extends BaseColumns {

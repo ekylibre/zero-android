@@ -4,30 +4,31 @@ import android.app.Activity;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.location.Location;
 import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
-import android.widget.ImageView;
+
 import android.widget.NumberPicker;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import java.io.ByteArrayOutputStream;
+import com.google.android.gms.appindexing.Action;
+import com.google.android.gms.appindexing.AppIndex;
+import com.google.android.gms.common.api.GoogleApiClient;
+
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 
 public class IssueActivity extends Activity {
@@ -36,6 +37,12 @@ public class IssueActivity extends Activity {
     NumberPicker mSeverity;
     NumberPicker mEmergency;
     EditText mDescription;
+    
+    /**
+     * ATTENTION: This was auto-generated to implement the App Indexing API.
+     * See https://g.co/AppIndexing/AndroidStudio for more information.
+     */
+    private GoogleApiClient client;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,6 +74,9 @@ public class IssueActivity extends Activity {
         mEmergency.setValue(2);
 
         getActionBar().setDisplayHomeAsUpEnabled(true);
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
     }
 
     @Override
@@ -76,97 +86,79 @@ public class IssueActivity extends Activity {
         inflater.inflate(R.menu.form, menu);
         return super.onCreateOptionsMenu(menu);
     }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        Intent intent;
         // Handle presses on the action bar items
         switch (item.getItemId()) {
-            // case R.id.action_search:
-            //     // openSearch();
-            //     return true;
             case R.id.action_save:
                 saveIssue(item.getActionView());
                 return true;
             default:
-            return super.onOptionsItemSelected(item);
+                return super.onOptionsItemSelected(item);
         }
     }
 
-    private static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 100;
-    private Uri fileUri;
-    public static  String selectedImagePath="";
-    int count = 0;
-    public void takePicture(View v){
+    String mCurrentPhotoPath;
+    static final int REQUEST_TAKE_PHOTO = 1;
 
-        selectedImagePath = Environment.getExternalStorageDirectory() + "/issue"+count+".jpg";
-        count++;
-        File file = new File(selectedImagePath);
-        Uri outputFileUri = Uri.fromFile(file);
-        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-
-        //intent.putExtra(MediaStore.EXTRA_OUTPUT, outputFileUri);  // set the image file name
-
-        startActivityForResult(intent, CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE);
+    public void takePicture(View v) throws IOException{
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        // Ensure that there's a camera activity to handle the intent
+        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+            // Create the File where the photo should go
+            File photoFile = null;
+            try {
+                photoFile = createImageFile();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            // Continue only if the File was successfully created
+            if (photoFile != null) {
+                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(photoFile));
+                startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO);
+                // Add file to the Gallery
+                sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.fromFile(photoFile)));
+            }
+        }
     }
 
+    public File createImageFile() throws IOException {
 
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String imageFileName = "ISSUE_" + timeStamp + "_";
+        File storageDir = Environment.getExternalStoragePublicDirectory(
+                Environment.DIRECTORY_PICTURES);
+        File image = null;
+        try {
+            image = File.createTempFile(
+                    imageFileName,  /* prefix */
+                    ".jpg",         /* suffix */
+                    storageDir      /* directory */
+            );
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        // Save a file: path for use with ACTION_VIEW intents
+        mCurrentPhotoPath = "file:" + image.getAbsolutePath();
+        return image;
+    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        /*ImageView mPreview = (ImageView) findViewById(R.id.preview);
-        if(resultCode != RESULT_CANCELED){
 
-            if (requestCode == CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE) {
-
-                if (data != null && data.getExtras()!=null) {
-                    if (data.getExtras().get("data") != null) {
-
-                        Bitmap bit = (Bitmap) data.getExtras().get("data");
-                        mPreview.setImageBitmap(bit);
-                    }
-                }
-            }
-        }*/
-
-        if (requestCode == CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE) {
-            Log.d("zero", data.toString());
-            try {
-                Bitmap bmp = (Bitmap) data.getExtras().get("data");
-
-                ByteArrayOutputStream stream = new ByteArrayOutputStream();
-
-                bmp.compress(Bitmap.CompressFormat.PNG, 100, stream);
-                byte[] byteArray = stream.toByteArray(); // convert camera photo to byte array
-                // save it in your external storage.
-                count++;
-                try {
-                    FileOutputStream fo = new FileOutputStream(new File(Environment.getExternalStorageDirectory() + "/_camera.png"));
-
-                    try {
-                        fo.write(byteArray);
-                        fo.flush();
-                        fo.close();
-                    } catch (IOException e) {
-                    }
-                } catch (FileNotFoundException f) {
-                }
-            }
-            catch (NullPointerException n){
-            }
-
-
+        if (requestCode == REQUEST_TAKE_PHOTO){
             if (resultCode == RESULT_OK) {
-                // Image captured and saved to fileUri specified in the Intent
-                Toast.makeText(this, "Image saved to:\n" + data.getData(), Toast.LENGTH_LONG).show();
+                Toast.makeText(this, "Image saved", Toast.LENGTH_LONG).show();
             } else if (resultCode == RESULT_CANCELED) {
-                    // User cancelled the image capture
+                // User cancelled the image capture
                 Toast.makeText(this, "Cancelled", Toast.LENGTH_LONG).show();
             } else {
-                    // Image capture failed, advise user
+                // Image capture failed, advise user
                 Toast.makeText(this, "Failed", Toast.LENGTH_LONG).show();
             }
         }
-
     }
 
     public void saveIssue(View v) {
@@ -195,13 +187,13 @@ public class IssueActivity extends Activity {
         mNewValues.put(ZeroContract.IssuesColumns.DESCRIPTION, mDescription.getText().toString());
         mNewValues.put(ZeroContract.IssuesColumns.PINNED, Boolean.FALSE);
 //        mNewValues.put(ZeroContract.IssuesColumns.SYNCED_AT, rightNow.get(Calendar.DAY_OF_MONTH)+1 + "/" + rightNow.get(Calendar.MONTH)+1 + "/" + rightNow.get(Calendar.YEAR));
-        mNewValues.put(ZeroContract.IssuesColumns.OBSERVED_AT, (new java.util.Date()).getTime());
+        mNewValues.put(ZeroContract.IssuesColumns.OBSERVED_AT, (new Date()).getTime());
 
         LocationManager locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
         String locationProvider = LocationManager.NETWORK_PROVIDER;
         // Or use LocationManager.GPS_PROVIDER
         Location lastKnownLocation = locationManager.getLastKnownLocation(locationProvider);
-        if (lastKnownLocation != null){
+        if (lastKnownLocation != null) {
             mNewValues.put(ZeroContract.IssuesColumns.LATITUDE, lastKnownLocation.getLatitude());
             mNewValues.put(ZeroContract.IssuesColumns.LONGITUDE, lastKnownLocation.getLongitude());
         }
@@ -215,5 +207,45 @@ public class IssueActivity extends Activity {
         //est censé fermer l'activity
         this.finish();
 
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        client.connect();
+        Action viewAction = Action.newAction(
+                Action.TYPE_VIEW, // TODO: choose an action type.
+                "Issue Page", // TODO: Define a title for the content shown.
+                // TODO: If you have web page content that matches this app activity's content,
+                // make sure this auto-generated web page URL is correct.
+                // Otherwise, set the URL to null.
+                Uri.parse("http://host/path"),
+                // TODO: Make sure this auto-generated app URL is correct.
+                Uri.parse("android-app://ekylibre.zero/http/host/path")
+        );
+        AppIndex.AppIndexApi.start(client, viewAction);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        Action viewAction = Action.newAction(
+                Action.TYPE_VIEW, // TODO: choose an action type.
+                "Issue Page", // TODO: Define a title for the content shown.
+                // TODO: If you have web page content that matches this app activity's content,
+                // make sure this auto-generated web page URL is correct.
+                // Otherwise, set the URL to null.
+                Uri.parse("http://host/path"),
+                // TODO: Make sure this auto-generated app URL is correct.
+                Uri.parse("android-app://ekylibre.zero/http/host/path")
+        );
+        AppIndex.AppIndexApi.end(client, viewAction);
+        client.disconnect();
     }
 }
