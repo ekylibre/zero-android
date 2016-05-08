@@ -6,9 +6,8 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context="ekylibre.zero.IssueActivity">
-
-    </ScrollView>
+        tools:context="ekylibre.zero.IssueActivity"
+        android:fillViewport="false">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -100,20 +99,22 @@
         </TableLayout>
 
         <ImageView
-            android:layout_width="106dp"
-            android:layout_height="50dp"
             android:id="@+id/preview"
-            android:src="@android:drawable/ic_menu_camera"
-            android:layout_weight="0.15" />
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/lastTakePicture"
+            android:layout_gravity="center_horizontal" />
 
         <Button
-            android:layout_width="fill_parent"
+            android:layout_width="204dp"
             android:layout_height="wrap_content"
-            android:text="@string/picture"
-            android:id="@+id/picture"
+            android:text="@string/permlab_capture"
+            android:id="@+id/takeAPicture"
             android:layout_gravity="center_horizontal"
-            android:layout_marginRight="75dp"
-            android:layout_marginLeft="75dp"
             android:onClick="takePicture" />
 
         <EditText
@@ -126,6 +127,8 @@
 
 
     </LinearLayout>
+    </ScrollView>
+
 </RelativeLayout>
 
 
