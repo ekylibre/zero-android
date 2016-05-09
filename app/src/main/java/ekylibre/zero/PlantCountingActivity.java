@@ -32,6 +32,8 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.regex.Pattern;
 
+import ekylibre.api.PlantDensityAbacusItem;
+
 
 public class PlantCountingActivity extends Activity {
 
@@ -65,85 +67,107 @@ public class PlantCountingActivity extends Activity {
         mAdvocatedDensityList = (ListView) findViewById(R.id.advocatedDensityListView);
         mPlantDensityAbaciNameList = (ListView) findViewById(R.id.abaciName);
         mListVariety = (ListView) findViewById(R.id.varietyList);
-        String[] mProjectionPlantDensityAbaci = {
-                ZeroContract.PlantDensityAbaciColumns.NAME
+        String[] mProjectionAdvocatedDensity = {
+                ZeroContract.PlantDensityAbacusItemsColumns.SEEDING_DENSITY_VALUE
         };
-        String[] mProjectionPlant = {
+        String[] mProjectionPlantName = {
+                ZeroContract.PlantsColumns.NAME
+        };
+        String[] mProjectionPlantVariety = {
                 ZeroContract.PlantsColumns.VARIETY
         };
 
         /////////////////////////////////////////////////
-
-
-        List<String> listPlant = new ArrayList<>();
+        List<String> listPlantName = new ArrayList<>();
         Cursor mCursorPlant = getContentResolver().query(
                 ZeroContract.Plants.CONTENT_URI,
-                mProjectionPlant,
+                mProjectionPlantName,
                 null,
                 null,
                 null
         );
-
-        Log.d("zero", "beginning plant");
-
+        Log.d("zero", "beginning plant name");
         if (mCursorPlant.getCount() > 0) {
             Log.d("zero", "data exists");
             mCursorPlant.moveToFirst();
             do{
-                listPlant.add(mCursorPlant.getString(0));
-                Log.d("zero",mCursorPlant.getString(0));
+                listPlantName.add(mCursorPlant.getString(0));
+                Log.d("zero","name : " + mCursorPlant.getString(0));
             }
             while(mCursorPlant.moveToNext());
-            Log.d("zero","end");
+            Log.d("zero","end plant name");
+            Log.d("zero","nb in cursor : " + mCursorPlant.getCount());
             ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(
                     this,
                     android.R.layout.simple_list_item_1,
-                    listPlant );
-
-            mListVariety.setAdapter(arrayAdapter);
-
+                    listPlantName );
+            mPlantDensityAbaciNameList.setAdapter(arrayAdapter);
         }
         else{
             Log.d("zero", "data does NOT exist");
-
         }
-
+        mCursorPlant.close();
         /////////////////////////////////////////////////
-        List<String> listplantdensityabacus = new ArrayList<>();
-        Cursor mCursor = getContentResolver().query(
-                ZeroContract.PlantDensityAbaci.CONTENT_URI,
-                mProjectionPlantDensityAbaci,
+        List<String> listPlantVariety = new ArrayList<>();
+        Cursor mCursorPlantVariety = getContentResolver().query(
+                ZeroContract.Plants.CONTENT_URI,
+                mProjectionPlantVariety,
                 null,
+                null,
+                null
+        );
+        Log.d("zero", "beginning plant");
+        if (mCursorPlantVariety.getCount() > 0) {
+            Log.d("zero", "data exists");
+            mCursorPlantVariety.moveToFirst();
+            do{
+                listPlantVariety.add(mCursorPlantVariety.getString(0));
+                Log.d("zero","variety : " + mCursorPlantVariety.getString(0));
+            }
+            while(mCursorPlantVariety.moveToNext());
+            Log.d("zero","end");
+            Log.d("zero","nb in cursor : " + mCursorPlantVariety.getCount());
+            ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(
+                    this,
+                    android.R.layout.simple_list_item_1,
+                    listPlantVariety );
+            mListVariety.setAdapter(arrayAdapter);
+        }
+        else{
+            Log.d("zero", "data does NOT exist");
+        }
+        mCursorPlantVariety.close();
+        /////////////////////////////////////////////////
+        List<String> listPlantDensityAbacus = new ArrayList<>();
+        Cursor mCursorDensity = getContentResolver().query(
+                ZeroContract.PlantDensityAbacusItems.CONTENT_URI,
+                mProjectionAdvocatedDensity,
+                ZeroContract.PlantDensityAbacusItemsColumns._ID + " = " + ZeroContract.PlantCountingsColumns.PLANT_DENSITY_ABACUS_ID,
                 null,
                 null);
-
         Log.d("zero","beginning plant density abacus");
-
-        if (mCursor.getCount() > 0){
+        if (mCursorDensity.getCount() > 0){
             Log.d("zero", "data exists");
-            mCursor.moveToFirst();
-
+            mCursorDensity.moveToFirst();
             do{
-                listplantdensityabacus.add(mCursor.getString(0));
-                Log.d("zero",mCursor.getString(0));
+                listPlantDensityAbacus.add(mCursorDensity.getString(0));
+                Log.d("zero", "Density : " + mCursorDensity.getString(0));
             }
-            while(mCursor.moveToNext());
-
+            while(mCursorDensity.moveToNext());
             Log.d("zero","end");
+            Log.d("zero","nb in cursor : " + mCursorDensity.getCount());
+
             ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(
                      this,
                      android.R.layout.simple_list_item_1,
-                     listplantdensityabacus );
-
+                     listPlantDensityAbacus );
              mAdvocatedDensityList.setAdapter(arrayAdapter);
-
             addValue(mLayout);
         }
         else{
             Log.d("zero", "data does NOT exist");
-
         }
-        mCursor.close();
+        mCursorDensity.close();
         /////////////////////////////////////////////////
 
     }

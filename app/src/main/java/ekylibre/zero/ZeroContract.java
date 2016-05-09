@@ -66,7 +66,7 @@ public final class ZeroContract {
     }
 
     public interface PlantDensityAbacusItemsColumns extends BaseColumns {
-        String TABLE_NAME = "plant_density_abacus_item";
+        String TABLE_NAME = "plant_density_abacus_items";
         String SEEDING_DENSITY_VALUE = "seeding_density_value";
         String PLANTS_COUNT = "plants_count";
     }

@@ -55,7 +55,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                         + ", " + ZeroContract.PlantCountingsColumns.LATITUDE + " REAL"
                         + ", " + ZeroContract.PlantCountingsColumns.LONGITUDE + " REAL"
                         + ", " + ZeroContract.PlantCountingsColumns.OBSERVATION + " TEXT"
-                            + ", " + ZeroContract.PlantCountingsColumns.SYNCED_AT + " DATE"
+                        + ", " + ZeroContract.PlantCountingsColumns.SYNCED_AT + " DATE"
                         + ", " + ZeroContract.PlantCountingsColumns.PLANT_DENSITY_ABACUS_ITEM_ID + " INTEGER"
                         + ", " + ZeroContract.PlantCountingsColumns.PLANT_DENSITY_ABACUS_ID + " INTEGER"
                         + ", " + ZeroContract.PlantCountingsColumns.PLANT_ID + " INTEGER"

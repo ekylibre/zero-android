@@ -14,4 +14,5 @@ public class PlantDensityAbacusItem {
         mSeedingDensityValue = seedingDensityValue;
         mPlantsCount = plantsCount;
     }
+
 }

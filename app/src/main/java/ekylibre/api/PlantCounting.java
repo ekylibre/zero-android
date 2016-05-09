@@ -8,7 +8,6 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import ekylibre.exceptions.HTTPException;
@@ -16,28 +15,28 @@ import ekylibre.exceptions.HTTPException;
 /**
  * Created by antoine on 22/04/16.
  */
-public class PlantsCounting {
+public class PlantCounting {
     int mId;
     String mRead_at;
-    public static List<PlantsCounting> all(Instance instance, JSONObject attributes) throws JSONException, IOException, HTTPException {
+    public static List<PlantCounting> all(Instance instance, JSONObject attributes) throws JSONException, IOException, HTTPException {
         // JSONObject params = Instance.BundleToJSON(attributes);
         JSONObject params = attributes;
 
         JSONArray json = instance.getJSONArray("/api/v1/plants_counting", params);
 
-        List<PlantsCounting> array = new ArrayList<>();
+        List<PlantCounting> array = new ArrayList<>();
 
         for(int i = 0 ; i < json.length() ; i++ ){
 
-            array.add(new PlantsCounting(json.getJSONObject(i)));
+            array.add(new PlantCounting(json.getJSONObject(i)));
         }
 
         return array;
     }
 
-    public PlantsCounting(JSONObject object) throws JSONException{
+    public PlantCounting(JSONObject object) throws JSONException{
 
-        Log.d("zero", "Object Plants : " + object.toString());
+        Log.d("zero", "Object Plant : " + object.toString());
 
         mId = object.getInt("id");
         mRead_at = object.getString("read_at");
