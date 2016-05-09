@@ -1,6 +1,5 @@
 package ekylibre.api;
 
-import android.graphics.drawable.shapes.Shape;
 import android.util.Log;
 
 import org.json.JSONArray;
@@ -17,38 +16,37 @@ import ekylibre.exceptions.HTTPException;
  * Created by antoine on 22/04/16.
  */
 
-public class Plants {
+public class Plant {
     int mId;
     String mName;
     String mVariety;
     //shape
-    Boolean mActive;
 
-    public static List<Plants> all(Instance instance, JSONObject attributes) throws JSONException, IOException, HTTPException {
+    public static List<Plant> all(Instance instance, JSONObject attributes) throws JSONException, IOException, HTTPException {
         // JSONObject params = Instance.BundleToJSON(attributes);
         JSONObject params = attributes;
 
         JSONArray json = instance.getJSONArray("/api/v1/plants", params);
 
-        List<Plants> array = new ArrayList<>();
+        List<Plant> array = new ArrayList<>();
 
         for(int i = 0 ; i < json.length() ; i++ ){
 
-            array.add(new Plants(json.getJSONObject(i)));
+            array.add(new Plant(json.getJSONObject(i)));
         }
 
         return array;
     }
 
-    public Plants(JSONObject object) throws JSONException{
+    public Plant(JSONObject object) throws JSONException{
 
-        Log.d("zero", "Object Plants : " + object.toString());
+        Log.d("zero", "Object Plant : " + object.toString());
 
         mId = object.getInt("id");
         mName = object.getString("name");
-        mVariety =object.getString("variety_name");
+        mVariety =object.getString("variety");
         //mShape = (float)object.getDouble("shape");
-        mActive = object.getBoolean("active");
+
     }
 
     public int getId() {
@@ -63,9 +61,7 @@ public class Plants {
         return mVariety;
     }
 
-    public Boolean getActive() {
-        return mActive;
-    }
+
 
 
 }

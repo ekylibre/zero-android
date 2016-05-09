@@ -3,7 +3,6 @@ package ekylibre.zero;
 import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.accounts.AccountsException;
-import android.content.ContentProvider;
 import android.database.Cursor;
 import android.content.AbstractThreadedSyncAdapter;
 import android.content.ContentProviderClient;
@@ -20,16 +19,14 @@ import ekylibre.api.Crumb;
 import ekylibre.api.Instance;
 import ekylibre.api.Issue;
 import ekylibre.api.PlantDensityAbacus;
-import ekylibre.api.Plants;
+import ekylibre.api.Plant;
 import ekylibre.exceptions.HTTPException;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
-import java.util.ListIterator;
 import java.util.Set;
 
 
@@ -211,7 +208,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                 cv.put(ZeroContract.PlantDensityAbaciColumns.SAMPLING_LENGTH_UNIT, plantDensityAbacus.getSamplingLenghtUnit());
                 mContentResolver.insert(ZeroContract.PlantDensityAbaci.CONTENT_URI, cv);
             }
-            Log.d("zero", "début parcours de liste plantDensityAbacus");
+            Log.d("zero", "fin parcours de liste plantDensityAbacus");
         }
         catch (JSONException j){
             Log.d("zero", "JSON Exception : " + j.getMessage());
@@ -233,36 +230,27 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 
     public void performPlantsSync(Account account, Bundle extras, String authority, ContentProviderClient provider, SyncResult syncResult) {
 
-        Log.i(TAG, "Destruction of the Plants table");
+        Log.i(TAG, "Destruction of the Plant table");
         int result = mContentResolver.delete(ZeroContract.Plants.CONTENT_URI, null, null);
-
-
-
         Log.i(TAG, "Beginning network plants synchronization");
         ContentValues cv = new ContentValues();
         Instance instance = getInstance(account);
 
         try {
-
-            List<Plants> plantsList = Plants.all(instance, new JSONObject());
+            List<Plant> plantsList = Plant.all(instance, new JSONObject());
             Log.d("zero", "Nombre de plants : " + plantsList.size() );
-            Iterator<Plants> plantsIterator = plantsList.iterator();
-
+            Iterator<Plant> plantsIterator = plantsList.iterator();
             Log.d("zero", "début parcours de liste plantDensityAbacus");
-
             while(plantsIterator.hasNext()){
-
                 Log.d("zero", "boucle");
-
-                Plants plants = plantsIterator.next();
-                cv.put(ZeroContract.PlantDensityAbaciColumns._ID, plants.getId());
-                cv.put(ZeroContract.PlantDensityAbaciColumns.NAME, plants.getName());
-                cv.put(ZeroContract.PlantDensityAbaciColumns.VARIETY, plants.getVariety());
-                cv.put(ZeroContract.PlantDensityAbaciColumns.VARIETY, plants.getActive());
-
-                mContentResolver.insert(ZeroContract.PlantDensityAbaci.CONTENT_URI, cv);
+                Plant plants = plantsIterator.next();
+                cv.put(ZeroContract.Plants._ID, plants.getId());
+                cv.put(ZeroContract.Plants.NAME, plants.getName());
+                cv.put(ZeroContract.Plants.VARIETY, plants.getVariety());
+                cv.put(ZeroContract.Plants.ACTIVE, true);
+                mContentResolver.insert(ZeroContract.Plants.CONTENT_URI, cv);
             }
-            Log.d("zero", "début parcours de liste plantDensityAbacus");
+            Log.d("zero", "fin parcours de liste plantDensityAbacus");
         }
         catch (JSONException j){
             Log.d("zero", "JSON Exception : " + j.getMessage());
@@ -274,13 +262,47 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
         catch (HTTPException h){
             Log.d("zero", "HTTP Exception : " + h.getMessage());
         }
-
-
-
         Log.i(TAG, "Finish network plant_density_abaci synchronization");
-
-
     }
+
+    public void performPlantCounting(Account account, Bundle extras, String authority, ContentProviderClient provider, SyncResult syncResult) {
+
+        Log.i(TAG, "Destruction of the Plant table");
+        int result = mContentResolver.delete(ZeroContract.Plants.CONTENT_URI, null, null);
+        Log.i(TAG, "Beginning network plants synchronization");
+        ContentValues cv = new ContentValues();
+        Instance instance = getInstance(account);
+
+        try {
+            List<Plant> plantsList = Plant.all(instance, new JSONObject());
+            Log.d("zero", "Nombre de plants : " + plantsList.size() );
+            Iterator<Plant> plantsIterator = plantsList.iterator();
+            Log.d("zero", "début parcours de liste plantDensityAbacus");
+            while(plantsIterator.hasNext()){
+                Log.d("zero", "boucle");
+                Plant plants = plantsIterator.next();
+                cv.put(ZeroContract.Plants._ID, plants.getId());
+                cv.put(ZeroContract.Plants.NAME, plants.getName());
+                cv.put(ZeroContract.Plants.VARIETY, plants.getVariety());
+                cv.put(ZeroContract.Plants.ACTIVE, true);
+                mContentResolver.insert(ZeroContract.Plants.CONTENT_URI, cv);
+            }
+            Log.d("zero", "fin parcours de liste plantDensityAbacus");
+        }
+        catch (JSONException j){
+            Log.d("zero", "JSON Exception : " + j.getMessage());
+            j.printStackTrace();
+        }
+        catch (IOException i){
+            Log.d("zero", "IO Exception : " + i.getMessage());
+        }
+        catch (HTTPException h){
+            Log.d("zero", "HTTP Exception : " + h.getMessage());
+        }
+        Log.i(TAG, "Finish network plant_density_abaci synchronization");
+    }
+
+
 
 
     protected Instance getInstance(Account account){
