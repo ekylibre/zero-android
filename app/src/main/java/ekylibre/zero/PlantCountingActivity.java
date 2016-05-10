@@ -1,14 +1,17 @@
 package ekylibre.zero;
 
 
+import android.app.AlertDialog;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.database.Cursor;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.app.Activity;
+import android.os.SystemClock;
 import android.text.InputType;
 import android.text.TextUtils;
 import android.util.Log;
@@ -24,6 +27,8 @@ import android.widget.ListView;
 import android.widget.TableLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import org.json.JSONObject;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -46,7 +51,11 @@ public class PlantCountingActivity extends Activity {
     private ListIterator<EditText> mListIteratorValues;
     private ListView mAdvocatedDensityList;
     private ListView mPlantDensityAbaciNameList;
+    private AlertDialog.Builder mPlantChooser;
     private Pattern mIntegerPattern = Pattern.compile("^\\d+$");
+
+    private CharSequence[] mPlantID ;
+    private CharSequence[] mPlantName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,6 +79,9 @@ public class PlantCountingActivity extends Activity {
         String[] mProjectionAdvocatedDensity = {
                 ZeroContract.PlantDensityAbacusItemsColumns.SEEDING_DENSITY_VALUE
         };
+        String[] mProjectionPlantId = {
+                ZeroContract.PlantsColumns._ID
+        };
         String[] mProjectionPlantName = {
                 ZeroContract.PlantsColumns.NAME
         };
@@ -79,24 +91,53 @@ public class PlantCountingActivity extends Activity {
 
         /////////////////////////////////////////////////
         List<String> listPlantName = new ArrayList<>();
-        Cursor mCursorPlant = getContentResolver().query(
+        Cursor mCursorPlantName = getContentResolver().query(
                 ZeroContract.Plants.CONTENT_URI,
                 mProjectionPlantName,
                 null,
                 null,
                 null
         );
+        Cursor mCursorPlantId = getContentResolver().query(
+                ZeroContract.Plants.CONTENT_URI,
+                mProjectionPlantId,
+                null,
+                null,
+                null
+        );
+
+
+
         Log.d("zero", "beginning plant name");
-        if (mCursorPlant.getCount() > 0) {
+        if (mCursorPlantName.getCount() > 0 && mCursorPlantId.getCount()>0) {
             Log.d("zero", "data exists");
-            mCursorPlant.moveToFirst();
+            mCursorPlantName.moveToFirst();
+            mCursorPlantId.moveToFirst();
+            int itName = 0;
+            int itId = 0;
             do{
+                Log.d("zero","name : " + mCursorPlantName.getString(0));
+                mPlantName[itName] =mCursorPlantName.getString(0);
+                itName++;
+            }
+            while(mCursorPlantName.moveToNext());
+
+            do{
+                Log.d("zero","id : " + mCursorPlantId.getString(0));
+                mPlantID[itId] =mCursorPlantId.getString(0);
+                itId++;
+            }
+            while(mCursorPlantName.moveToNext());
+
+            /*do{
                 listPlantName.add(mCursorPlant.getString(0));
                 Log.d("zero","name : " + mCursorPlant.getString(0));
             }
             while(mCursorPlant.moveToNext());
+            */
+
             Log.d("zero","end plant name");
-            Log.d("zero","nb in cursor : " + mCursorPlant.getCount());
+            Log.d("zero","nb in cursor : " + mCursorPlantName.getCount());
             ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(
                     this,
                     android.R.layout.simple_list_item_1,
@@ -106,7 +147,28 @@ public class PlantCountingActivity extends Activity {
         else{
             Log.d("zero", "data does NOT exist");
         }
+
+        /*mPlantChooser = new AlertDialog.Builder(this)
+                .setTitle("Choix du plant")
+                .setNegativeButton(android.R.string.cancel, null)
+                .setItems(, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        //mLastProcedureNature = getResources().getStringArray(R.array.procedures_values)[which];
+
+
+                    }
+                });
+
+*/
         mCursorPlant.close();
+
+
+
+
+
+
+
         /////////////////////////////////////////////////
         List<String> listPlantVariety = new ArrayList<>();
         Cursor mCursorPlantVariety = getContentResolver().query(
