@@ -45,6 +45,8 @@
     <string name="running">Running…</string>
     <string name="save">Save</string>
     <string name="scan_code">Scan code</string>
+    <string name="select_plant">Select plant</string>
+    <string name="select_variety">Select variety</string>
     <string name="service_name">Ekylibre</string>
     <string name="settings">Settings</string>
     <string name="gravity">Gravity</string>

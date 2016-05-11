@@ -20,56 +20,53 @@
 
             <LinearLayout
                 android:orientation="vertical"
-                android:layout_width="wrap_content"
+                android:layout_width="fill_parent"
                 android:layout_height="wrap_content">
 
                 <LinearLayout
-                    android:orientation="horizontal"
+                    android:orientation="vertical"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_marginBottom="25dp" >
+                    android:layout_marginBottom="25dp"
+                    android:onClick="choosePlant">
 
                     <TextView
-                        android:layout_width="189dp"
+                        android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
-                        android:textAppearance="?android:attr/textAppearanceMedium"
-                        android:text="@string/plant_name"
-                        android:id="@+id/textView7"
-                        android:gravity="fill_horizontal|center_vertical"
-                        android:layout_gravity="center_vertical" />
+                        android:textAppearance="?android:attr/textAppearanceLarge"
+                        android:text="@string/select_plant"
+                        android:id="@+id/plantName"
+                        android:layout_gravity="center_horizontal"
+                        android:onClick="chosePlant"
+                        android:linksClickable="false"
+                        android:clickable="true"
+                        android:background="#dddddd"
+                        android:padding="10dp" />
 
-                    <ListView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/abaciName"
-                        android:layout_weight="25" />
                 </LinearLayout>
 
                 <LinearLayout
                     android:orientation="vertical"
-                    android:layout_width="wrap_content"
+                    android:layout_width="fill_parent"
                     android:layout_height="wrap_content">
 
                     <LinearLayout
-                        android:orientation="horizontal"
+                        android:orientation="vertical"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_marginBottom="25dp" >
 
                         <TextView
-                            android:layout_width="189dp"
+                            android:layout_width="fill_parent"
                             android:layout_height="wrap_content"
-                            android:textAppearance="?android:attr/textAppearanceMedium"
-                            android:text="@string/plant_variety_label"
-                            android:id="@+id/textView6"
-                            android:gravity="fill_horizontal|center_vertical"
-                            android:layout_gravity="center_vertical" />
-
-                        <ListView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:id="@+id/varietyList"
-                            android:layout_weight="25" />
+                            android:textAppearance="?android:attr/textAppearanceLarge"
+                            android:text="@string/select_variety"
+                            android:id="@+id/varietyName"
+                            android:onClick="choseVariety"
+                            android:linksClickable="false"
+                            android:clickable="true"
+                            android:background="#dddddd"
+                            android:padding="10dp" />
                     </LinearLayout>
 
                     <LinearLayout
@@ -84,19 +81,16 @@
                             android:layout_marginBottom="25dp">
 
                             <TextView
-                                android:layout_width="189dp"
+                                android:layout_width="fill_parent"
                                 android:layout_height="wrap_content"
-                                android:textAppearance="?android:attr/textAppearanceMedium"
+                                android:textAppearance="?android:attr/textAppearanceLarge"
                                 android:text="@string/advocated_density"
-                                android:id="@+id/textView3"
-                                android:gravity="fill_horizontal|center_vertical"
-                                android:layout_gravity="center_vertical" />
+                                android:id="@+id/densityValue"
+                                android:linksClickable="false"
+                                android:clickable="true"
+                                android:background="#dddddd"
+                                android:padding="10dp" />
 
-                            <ListView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:id="@+id/advocatedDensityListView"
-                                android:layout_weight="25" />
                         </LinearLayout>
                     </LinearLayout>
                 </LinearLayout>
@@ -133,7 +127,6 @@
                 android:text="+"
                 android:id="@+id/button7"
                 android:layout_gravity="center_horizontal"
-                android:background="#cfcfcf"
                 android:onClick="addValue" />
 
             <LinearLayout
