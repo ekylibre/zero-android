@@ -5,6 +5,8 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.location.Location;
 import android.location.LocationManager;
 import android.net.Uri;
@@ -20,6 +22,7 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 
 
+import android.widget.ImageView;
 import android.widget.NumberPicker;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -35,20 +38,23 @@ import java.util.Date;
 
 public class IssueActivity extends Activity {
 
-    public static int count = 0;
+    public static final int SHOW_PICTURE = 30;
+
     public static final int REQUEST_TAKE_PHOTO = 10;
 
     File photoFile = null;
+
+
     private File picturesFile;
     private String appDirectoryName = "ZERO_ISSUE";
-
-
+    public static int count = 0;
 
     String mCurrentPhotoPath;
     Spinner mIssueNatureSpinner;
     NumberPicker mSeverity;
     NumberPicker mEmergency;
     EditText mDescription;
+    ImageView mImagePreview;
     
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
@@ -66,6 +72,7 @@ public class IssueActivity extends Activity {
         mSeverity = (NumberPicker) findViewById(R.id.numberPickerSeverity);
         mEmergency = (NumberPicker) findViewById(R.id.numberPickerEmergency);
         mDescription = (EditText) findViewById(R.id.description);
+        mImagePreview = (ImageView) findViewById(R.id.imagePreview);
 
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
                 R.array.issueNatures_entries, android.R.layout.simple_spinner_item);
@@ -168,11 +175,9 @@ public class IssueActivity extends Activity {
         mCurrentPhotoPath = "file:" + image_path.getAbsolutePath();
         return image_path;
     }
-
-
-    // Finds the first image in the specified folder and uses it to open the devices native gallery app with all images in that folder.
-    public boolean OpenGalleryFromPathToFolder(Context context, String folderPath )
-    {
+/**
+     // Finds the first image in the specified folder and uses it to open the devices native gallery app with all images in that folder.
+    public void OpenGalleryFromPathToFolder(Context context, String folderPath) throws IOException{
 
         File folder = new File(folderPath);
         File[] allFiles = folder.listFiles();
@@ -185,17 +190,16 @@ public class IssueActivity extends Activity {
             {
                 Intent intent = new Intent(Intent.ACTION_VIEW);
                 intent.setData(imageInFolder);
-                context.startActivity(intent);
-                return true;
+
+                startActivityForResult(intent, SHOW_PICTURE);
             }
         }
-        return false;
     }
 
     // converts the absolute path of a file to a content path
     // absolute path example: /storage/emulated/0/Pictures/folderName/Image1.jpg
     // content path example: content://media/external/images/media/47560
-    private android.net.Uri getImageContentUri(Context context, File imageFile) {
+    private Uri getImageContentUri(Context context, File imageFile) {
         String filePath = imageFile.getAbsolutePath();
         Cursor cursor = context.getContentResolver().query(
                 MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
@@ -216,22 +220,24 @@ public class IssueActivity extends Activity {
             }
         }
     }
-
+**/
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data){
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQUEST_TAKE_PHOTO){
-            if (resultCode == RESULT_OK){
-
-                OpenGalleryFromPathToFolder(IssueActivity.this, picturesFile.getPath());
+        if (requestCode == REQUEST_TAKE_PHOTO) {
+            if (resultCode == RESULT_OK) {
+                Bitmap image = BitmapFactory.decodeFile(photoFile.getPath());
+                mImagePreview.setImageBitmap(image);
                 Toast.makeText(this, "Image saved", Toast.LENGTH_LONG).show();
-            }else if(resultCode == RESULT_CANCELED){
+            } else if (resultCode == RESULT_CANCELED) {
                 // User cancelled the image capture
                 Toast.makeText(this, "Cancelled", Toast.LENGTH_LONG).show();
-            }else{
+            } else {
                 // Image capture failed, advise user
                 Toast.makeText(this, "Failed", Toast.LENGTH_LONG).show();
             }
+        }else if (requestCode == SHOW_PICTURE) {
+
         }
     }
 
