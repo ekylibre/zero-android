@@ -182,8 +182,6 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
         Log.i(TAG, "Destruction of the PlantDensityAbacus table");
         int result = mContentResolver.delete(ZeroContract.PlantDensityAbaci.CONTENT_URI, null, null);
 
-
-
         Log.i(TAG, "Beginning network plant_density_abaci synchronization");
         ContentValues cv = new ContentValues();
         Instance instance = getInstance(account);
@@ -197,7 +195,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 
             while(abacusIterator.hasNext()){
 
-                Log.d("zero", "boucle");
+                Log.d("zero", "boucle abaque");
 
                 PlantDensityAbacus plantDensityAbacus = abacusIterator.next();
                 cv.put(ZeroContract.PlantDensityAbaciColumns._ID, plantDensityAbacus.getId());
