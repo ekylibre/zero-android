@@ -19,10 +19,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.TableLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -31,7 +29,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
-import java.util.regex.Pattern;
 
 
 
@@ -42,15 +39,17 @@ public class PlantCountingActivity extends Activity {
     private EditText mObservationEditText;
     private TextView mAverageText;
     private TextView mPlantName;
-    private TextView mVarietyName;
-    private TextView mDensityValue;
+    private TextView mAbaque;
+    private TextView mDensityText;
     private List<EditText> mListValues = new ArrayList();
     private ListIterator<EditText> mListIteratorValues;
     private AlertDialog.Builder mPlantChooser;
     private AlertDialog.Builder mVarietyChooser;
+
+
     private CharSequence[] mPlantID ;
     private CharSequence[] mPlantNameTab;
-    private CharSequence[] mVarietyNameTab;
+    private CharSequence[] mAbaqueTab;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,8 +60,8 @@ public class PlantCountingActivity extends Activity {
         mLayout = (LinearLayout) findViewById(R.id.AllValuesLayout);
         mObservationEditText = (EditText)findViewById(R.id.observationEditText);
         mPlantName = (TextView)findViewById(R.id.plantName);
-        mVarietyName = (TextView)findViewById(R.id.varietyName);
-        mDensityValue = (TextView)findViewById(R.id.densityValue);
+        mAbaque = (TextView)findViewById(R.id.Abaque);
+        mDensityText = (TextView)findViewById(R.id.densityValue);
         mAverageText = (TextView) findViewById(R.id.textAverage);
         mAverageText.setText("");
 
@@ -84,15 +83,13 @@ public class PlantCountingActivity extends Activity {
         String[] mProjectionPlantName = {
                 ZeroContract.PlantsColumns.NAME
         };
-        String[] mProjectionPlantVarietyName = {
-                ZeroContract.PlantsColumns.VARIETY
-        };
+
         //String[] mProjectionAbacus = {
         //        ZeroContract.Plants
         //};
 
         /////////////////////////////////////////////////
-        List<String> listPlantName = new ArrayList<>();
+
         Cursor mCursorPlantName = getContentResolver().query(
                 ZeroContract.Plants.CONTENT_URI,
                 mProjectionPlantName,
@@ -110,106 +107,143 @@ public class PlantCountingActivity extends Activity {
 
 
         Log.d("zero", "beginning plant name");
-        if (mCursorPlantName.getCount() > 0 && mCursorPlantId.getCount()>0) {
-            Log.d("zero", "data exists");
-            mCursorPlantName.moveToFirst();
-            mCursorPlantId.moveToFirst();
-            int itName = 0;
-            int itId = 0;
-            mPlantNameTab = new CharSequence[mCursorPlantName.getCount()];
-            do{
-                Log.d("zero","name : " + mCursorPlantName.getString(0));
-                mPlantNameTab[itName] =mCursorPlantName.getString(0);
-                Log.d("zero","tablename["+itName+"] : " + mPlantNameTab[itName]);
-                listPlantName.add(mCursorPlantName.getString(0));
-                itName++;
+        try {
+            Log.d("zero","plant name count :" + mCursorPlantName.getCount());
+            if (mCursorPlantName.getCount() > 0 && mCursorPlantId.getCount() > 0) {
+                Log.d("zero", "data exists");
+                mCursorPlantName.moveToFirst();
+                mCursorPlantId.moveToFirst();
+                int itName = 0;
+                int itId = 0;
+                mPlantNameTab = new CharSequence[mCursorPlantName.getCount()];
+                do {
+                    Log.d("zero", "name : " + mCursorPlantName.getString(0));
+                    mPlantNameTab[itName] = mCursorPlantName.getString(0);
+                    Log.d("zero", "tablename[" + itName + "] : " + mPlantNameTab[itName]);
+                    itName++;
+                }
+                while (mCursorPlantName.moveToNext());
+
+                do {
+                    Log.d("zero", "id : " + mCursorPlantId.getString(0));
+                    mPlantID[itId] = mCursorPlantId.getString(0);
+                    itId++;
+                }
+                while (mCursorPlantName.moveToNext());
+
+                Log.d("zero", "end plant name");
+                Log.d("zero", "nb in cursor : " + mCursorPlantName.getCount());
+
+            } else {
+                Log.d("zero", "Plant data does NOT exist");
             }
-            while(mCursorPlantName.moveToNext());
-
-            do{
-                Log.d("zero","id : " + mCursorPlantId.getString(0));
-                mPlantID[itId] =mCursorPlantId.getString(0);
-                itId++;
-            }
-            while(mCursorPlantName.moveToNext());
 
 
-            Log.d("zero","end plant name");
-            Log.d("zero","nb in cursor : " + mCursorPlantName.getCount());
-            ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(
-                    this,
-                    android.R.layout.simple_list_item_1,
-                    listPlantName );
-            //mPlantDensityAbaciNameList.setAdapter(arrayAdapter);
+            mPlantChooser = new AlertDialog.Builder(this)
+                    .setTitle("Choix du plant")
+
+                    .setItems(mPlantNameTab, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            mPlantName.setText(mPlantNameTab[which]);
+                            //Mise a jour de la seconde liste
+                            setAbacusList();
+                        }
+                    });
+
+            mCursorPlantId.close();
+            mCursorPlantName.close();
         }
-        else{
-            Log.d("zero", "data does NOT exist");
+        catch(NullPointerException n){
+            Toast toast = Toast.makeText(getApplicationContext(), "No data", Toast.LENGTH_SHORT);
+            toast.show();
         }
-
-        mPlantChooser = new AlertDialog.Builder(this)
-                .setTitle("Choix du plant")
-                .setNegativeButton(android.R.string.cancel, null)
-                .setItems(mPlantNameTab, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        mPlantName.setText(mPlantNameTab[which]);
-                    }
-                });
-
-        mCursorPlantId.close();
-        mCursorPlantName.close();
-
 
         /////////////////////////////////////////////////
 
-        List<String> listVarietyName = new ArrayList<>();
-        Cursor mCursorVarietyName = getContentResolver().query(
+
+    }
+    //Once the item from the plant is chosen. The abacus list must be updated
+    public void setAbacusList(){
+
+        String[] mProjectionAbaque = {
+                ZeroContract.PlantDensityAbaci.NAME
+        };
+
+        String[] mProjectionVariety = {
+                ZeroContract.Plants.VARIETY,
+        };
+
+
+
+        Cursor mCursorVariety = getContentResolver().query(
                 ZeroContract.Plants.CONTENT_URI,
-                mProjectionPlantVarietyName,
-                null,
+                mProjectionVariety,
+                ZeroContract.PlantsColumns.NAME + " like \"" + mPlantName.getText().toString() + "\"",
                 null,
                 null
         );
+        Log.d("zero", "valeur récupérée : " + mPlantName.getText().toString());
 
-        Log.d("zero", "beginning variety name");
-        if (mCursorVarietyName.getCount() > 0){
-            Log.d("zero", "data exists");
-            mCursorVarietyName.moveToFirst();
-            int itName = 0;
-            mVarietyNameTab = new CharSequence[mCursorVarietyName.getCount()];
-            do{
-                Log.d("zero","name : " + mCursorVarietyName.getString(0));
-                mVarietyNameTab[itName] =mCursorVarietyName.getString(0);
-                Log.d("zero","tablename["+itName+"] : " + mVarietyNameTab[itName]);
-                listVarietyName.add(mCursorVarietyName.getString(0));
-                itName++;
+        try {
+
+            mCursorVariety.moveToFirst();
+
+            Log.d("zero", "Valeur du where : " + mCursorVariety.getString(0).toString());
+
+            Cursor mCursorAbaque = getContentResolver().query(
+                    ZeroContract.PlantDensityAbaci.CONTENT_URI,
+                    mProjectionAbaque,
+                    ZeroContract.PlantDensityAbaciColumns.VARIETY + " like \"" + mCursorVariety.getString(0).toString() + "\"",
+                    null,
+                    null
+            );
+
+            Log.d("zero", "beginning abaque");
+            if (mCursorAbaque.getCount() > 0) {
+                Log.d("zero", "data exists");
+                mCursorAbaque.moveToFirst();
+                int itName = 0;
+                mAbaqueTab = new CharSequence[mCursorAbaque.getCount()];
+                do {
+                    Log.d("zero", "name : " + mCursorAbaque.getString(0));
+                    mAbaqueTab[itName] = mCursorAbaque.getString(0);
+                    Log.d("zero", "tablename[" + itName + "] : " + mAbaqueTab[itName]);
+
+                    itName++;
+                }
+                while (mCursorAbaque.moveToNext());
+
+                Log.d("zero", "end Abaque");
+                Log.d("zero", "nb in cursor : " + mCursorAbaque.getCount());
+            } else {
+                Log.d("zero", "abaque data does NOT exist");
             }
-            while(mCursorVarietyName.moveToNext());
 
-            Log.d("zero","end Variety name");
-            Log.d("zero","nb in cursor : " + mCursorPlantName.getCount());
+            mVarietyChooser = new AlertDialog.Builder(this)
+                    .setTitle("Choix de l'abaque")
+                    .setNegativeButton(android.R.string.cancel, null)
+                    .setItems(mAbaqueTab, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            mAbaque.setText(mAbaqueTab[which]);
+                        }
+                    });
+            mCursorVariety.close();
+            mCursorAbaque.close();
         }
-        else{
-            Log.d("zero", "data does NOT exist");
+        catch(NullPointerException n){
+            Toast toast = Toast.makeText(getApplicationContext(), "No data", Toast.LENGTH_SHORT);
+            toast.show();
         }
 
-        mVarietyChooser = new AlertDialog.Builder(this)
-                .setTitle("Choix de la varieté")
-                .setNegativeButton(android.R.string.cancel, null)
-                .setItems(mVarietyNameTab, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        mVarietyName.setText(mVarietyNameTab[which]);
-                    }
-                });
-
-        mCursorVarietyName.close();
     }
+
 
     public void chosePlant(View view){
-        mPlantChooser.show();
+            mPlantChooser.show();
     }
-    public void choseVariety(View view){
+    public void choseAbaque(View view){
         mVarietyChooser.show();
     }
 
@@ -269,10 +303,7 @@ public class PlantCountingActivity extends Activity {
                 mNewValuesPlantCountingItem
         );
 
-        Context context = getApplicationContext();
-        CharSequence text = "Plant Counting saved";
-        int duration = Toast.LENGTH_SHORT;
-        Toast toast = Toast.makeText(context, text, duration);
+        Toast toast = Toast.makeText(getApplicationContext(), "Plant Counting saved", Toast.LENGTH_SHORT);
         toast.show();
 
         //close activity
