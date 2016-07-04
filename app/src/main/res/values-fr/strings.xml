@@ -17,12 +17,13 @@
   <string name="priority">Priorité</string>
   <string name="get_average_button">Moyenne</string>
   <string name="global_auth_token">Jeton d’authentification global</string>
+  <string name="gravity">Gravité</string>
   <string name="instance">URL de votre ferme</string>
   <string name="issue_sync_service_name">Incidents</string>
   <string name="latitude">Latitude</string>
   <string name="location">Géolocation</string>
   <string name="longitude">Longitude</string>
-  <string name="new_count">Nouveau Comptage</string>
+  <string name="new_count">Nouveau comptage</string>
   <string name="new_issue">Nouvel incident</string>
   <string name="new_intervention">Nouvelle intervention</string>
   <string name="notes">Notes</string>
@@ -49,16 +50,15 @@
   <string name="select_abacus">Sélectionner une abaque</string>
   <string name="service_name">Ekylibre</string>
   <string name="settings">Paramètres</string>
-  <string name="gravity">Gravité</string>
+  <string name="severity">Gravité</string>
   <string name="sign_in">Se connecter</string>
   <string name="start">Commencer</string>
   <string name="stop">Arrêter</string>
   <string name="sync">Synchroniser</string>
   <string name="sync_all">Tout synchroniser</string>
   <string name="test_demo">Tester la démonstration</string>
+  <string name="title_activity_sorting">Comptage</string>
   <string name="tracking">Suivi</string>
   <string name="tracking_sync_service_name">Interventions</string>
   <string name="values">Valeurs</string>
-  <string name="severity">Gravité</string>
-  <string name="title_activity_sorting">Comptage</string>
 </resources>
