@@ -38,11 +38,13 @@
         android:normalScreens="true"
         android:smallScreens="true"
         android:xlargeScreens="true" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/Ekylibre">
+
         <activity
             android:name=".TrackingActivity"
             android:label="@string/new_intervention"
@@ -59,7 +61,10 @@
         <activity
             android:name=".AuthenticatorActivity"
             android:icon="@mipmap/ic_ekylibre"
-            android:label="@string/service_name" />
+            android:label="@string/service_name"
+            android:configChanges = "orientation"
+            android:screenOrientation="portrait"
+            />
 
         <service
             android:name=".AuthenticatorService"
