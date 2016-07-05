@@ -19,7 +19,6 @@ public class Authenticator extends AbstractAccountAuthenticator {
 
     private final String TAG = "Authenticator";
     private Context mContext;
-
     // Simple constructor
     public Authenticator(Context context) {
         super(context);
