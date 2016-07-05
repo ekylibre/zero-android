@@ -12,67 +12,63 @@
 
 
     <LinearLayout
+        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:gravity="center_vertical|center_horizontal"
-        android:orientation="vertical">
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:id="@+id/linearLayout2"
+        android:layout_centerVertical="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true">
 
-        <LinearLayout
-            android:orientation="vertical"
-            android:layout_width="match_parent"
+        <Button
+            android:id="@+id/button4"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:padding="20dp">
+            android:onClick="gotoNewIntervention"
+            android:text="@string/new_intervention"
+            android:textSize="20dp"
+            android:background="@color/basic_grey"/>
 
-            <ImageView
-                android:id="@+id/imageView"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:minHeight="120dp"
-                android:src="@mipmap/ic_home" />
+        <Button
+            android:id="@+id/button5"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:onClick="gotoNewIssue"
+            android:text="@string/new_issue"
+            android:textSize="20dp"
+            android:background="@color/basic_grey"
+            android:layout_marginTop="5dp"/>
 
-            <Button
-                android:id="@+id/button4"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:onClick="gotoNewIntervention"
-                android:text="@string/new_intervention"
-                android:textSize="20dp" />
-
-            <Button
-                android:id="@+id/button5"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:onClick="gotoNewIssue"
-                android:text="@string/new_issue"
-                android:textSize="20dp" />
-
-            <Button
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/new_count"
-                android:id="@+id/button6"
-                android:layout_gravity="center_horizontal"
-                android:onClick="gotoSorting" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:orientation="vertical"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="bottom">
-
-            <Button
-                android:id="@+id/menuSynch"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:onClick="syncAll"
-                android:text="@string/sync_all" />
-        </LinearLayout>
+        <Button
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/new_count"
+            android:id="@+id/button6"
+            android:layout_gravity="center_horizontal"
+            android:onClick="gotoSorting"
+            android:background="@color/basic_grey"
+            android:layout_marginTop="5dp"/>
 
     </LinearLayout>
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true">
+
+        <Button
+            android:id="@+id/menuSynch"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:onClick="syncAll"
+            android:text="@string/sync_all"
+            android:background="@color/basic_grey"/>
+
+    </LinearLayout>
+
 
 </RelativeLayout>

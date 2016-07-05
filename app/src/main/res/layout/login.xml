@@ -95,8 +95,8 @@
         android:text="@string/sign_in"
         android:onClick="signIn"
         android:textStyle="bold"
-        android:background="@color/basic_grey"
-        android:layout_gravity="center_horizontal" />
+        android:background="@drawable/buttonbar"
+        android:layout_gravity="center_horizontal"/>
   </LinearLayout>
 
 </LinearLayout>
