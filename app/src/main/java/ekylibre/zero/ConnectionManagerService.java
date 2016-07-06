@@ -1,6 +1,7 @@
 package ekylibre.zero;
 
 import android.accounts.Account;
+import android.accounts.AccountManager;
 import android.app.Service;
 import android.content.ContentResolver;
 import android.content.Intent;
@@ -12,30 +13,36 @@ import android.os.IBinder;
 import android.util.Log;
 import android.widget.Toast;
 
-/**
- * Created by PierreBougon on 7/6/16.
- * Connection class for Ekylibre-zero
- */
+/*************************************
+ * Created by PierreBougon on 7/6/16.*
+ * Connection class for Ekylibre-zero*
+ ************************************/
 
 public class ConnectionManagerService extends Service
 {
+    private static final String TAG = "ConnectionManagerS";
     private ConnectivityManager     connectivityManager;
     private NetworkInfo             networkInfo;
     private Handler                 handler;
-    private Account                 mAccount;
+    private Account                 mAccount = null;
+    public boolean                  mobile_permission = true;
+    //public boolean                  mobile_permissionChecked = false;
 
+    /*
+    **  Get the account which is currently used
+    **  Set handler to try sync every hDelay ms
+    **  Each time the handler is up we try to connect : Wifi | 3G | 4G
+    **  If a connection is up then we sync all the data
+    */
     @Override
-    public void onCreate ()
+    public void         onCreate()
     {
         final int       hDelay;
-        MenuActivity    menu = new MenuActivity();
 
-        // Need to change this to get the actual account
-        mAccount = menu.getAccount();
         connectivityManager = (ConnectivityManager)getSystemService(CONNECTIVITY_SERVICE);
         networkInfo = connectivityManager.getActiveNetworkInfo();
         handler = new Handler();
-        hDelay = 10000;
+        hDelay = 300000;
         handler.postDelayed(new Runnable() {
             @Override
             public void run()
@@ -47,15 +54,35 @@ public class ConnectionManagerService extends Service
         }, hDelay);
     }
 
-    private boolean  try_connection()
+    /*
+    ** Get the current account to sync the data
+     */
+    @Override
+    public int  onStartCommand(Intent intent, int flags, int startId)
     {
-        boolean     wifi;
+        String  accountName;
+
+        accountName = intent.getStringExtra(AccountManager.KEY_ACCOUNT_NAME);
+        Log.d(TAG, "accountName = " + accountName);
+        mAccount = AccountManager.get(this).getAccountsByType(SyncAdapter.ACCOUNT_TYPE)[0];
+        //TODO Chose the better choice to let the service run when we need to
+        return (START_NOT_STICKY);
+    }
+
+    /*
+    ** Method to verify internet connection
+     */
+    private boolean     try_connection()
+    {
+        boolean         wifi;
+        boolean         mobile;
 
         if (networkInfo != null && networkInfo.isAvailable() && networkInfo.isConnected())
         {
             wifi = networkInfo.getType() == ConnectivityManager.TYPE_WIFI;
+            mobile = networkInfo.getType() == ConnectivityManager.TYPE_MOBILE;
             Log.d("NetworkState", "L'interface de connexion active est du Wifi : " + wifi);
-            if (wifi)
+            if (wifi || (mobile && mobile_permission))
                 return (true);
             else
                 return (false);
@@ -63,8 +90,13 @@ public class ConnectionManagerService extends Service
         return (false);
     }
 
+    /*
+    **  Sync all the data called automatically on handler
+     */
     private void syncAll()
     {
+        if (mAccount == null)
+            return ;
         Log.d("zero", "syncData: " + mAccount.toString() + ", " + ZeroContract.AUTHORITY);
         Bundle extras = new Bundle();
         extras.putBoolean(ContentResolver.SYNC_EXTRAS_MANUAL, true);
