@@ -43,7 +43,8 @@ public class ConnectionManagerService extends Service
         networkInfo = connectivityManager.getActiveNetworkInfo();
         handler = new Handler();
         hDelay = 300000;
-        handler.postDelayed(new Runnable() {
+        handler.postDelayed(new Runnable()
+        {
             @Override
             public void run()
             {
@@ -56,7 +57,7 @@ public class ConnectionManagerService extends Service
 
     /*
     ** Get the current account to sync the data
-     */
+    */
     @Override
     public int  onStartCommand(Intent intent, int flags, int startId)
     {
@@ -71,7 +72,7 @@ public class ConnectionManagerService extends Service
 
     /*
     ** Method to verify internet connection
-     */
+    */
     private boolean     try_connection()
     {
         boolean         wifi;
@@ -92,7 +93,7 @@ public class ConnectionManagerService extends Service
 
     /*
     **  Sync all the data called automatically on handler
-     */
+    */
     private void syncAll()
     {
         if (mAccount == null)
