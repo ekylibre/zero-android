@@ -20,7 +20,6 @@ public class MenuActivity extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         // Get simple account or ask for it if necessary
         final AccountManager manager = AccountManager.get(this);
         final Account[] accounts = manager.getAccountsByType(SyncAdapter.ACCOUNT_TYPE);
@@ -39,14 +38,10 @@ public class MenuActivity extends Activity {
         }
 
         Intent connectIntent = new Intent(MenuActivity.this, ConnectionManagerService.class);
+        connectIntent.putExtra(AccountManager.KEY_ACCOUNT_NAME, mAccount.name);
         startService(connectIntent);
 
         setContentView(R.layout.menu);
-    }
-
-    public Account  getAccount()
-    {
-        return (this.mAccount);
     }
 
     @Override
