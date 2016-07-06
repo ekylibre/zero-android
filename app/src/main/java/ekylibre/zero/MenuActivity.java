@@ -16,7 +16,6 @@ import android.widget.Toast;
 public class MenuActivity extends Activity {
 
     private Account mAccount;
-    private ConnectionManagerService  connect;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -38,13 +37,17 @@ public class MenuActivity extends Activity {
         } else {
             mAccount = accounts[0];
         }
-        //TODO try to generalize that into a public class connection
-        connect = new ConnectionManagerService();
-        connect.try_connection();
+
+        Intent connectIntent = new Intent(MenuActivity.this, ConnectionManagerService.class);
+        startService(connectIntent);
 
         setContentView(R.layout.menu);
     }
 
+    public Account  getAccount()
+    {
+        return (this.mAccount);
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

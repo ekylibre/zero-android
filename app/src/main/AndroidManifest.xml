@@ -33,7 +33,6 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
-
     <supports-screens
         android:anyDensity="true"
         android:largeScreens="true"
@@ -78,6 +77,11 @@
             <meta-data
                 android:name="android.accounts.AccountAuthenticator"
                 android:resource="@xml/authenticator" />
+        </service>
+
+        <service
+            android:name=".ConnectionManagerService"
+            android:permission="android.permission.ACCESS_NETWORK_STATE">
         </service>
 
         <!-- Content provider -->
