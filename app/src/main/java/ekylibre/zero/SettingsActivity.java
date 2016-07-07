@@ -2,12 +2,14 @@ package ekylibre.zero;
 
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
+import android.preference.PreferenceFragment;
 
 public class SettingsActivity extends PreferenceActivity
 {
+    final private String TAG = "SETTINGS";
     public final static String PREF_SHOW_DETAILS = "pref_showDetails";
+    public final static String PREF_MOBILE_NETWORK = "pref_MobileNetwork";
 
-    /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState)
     {

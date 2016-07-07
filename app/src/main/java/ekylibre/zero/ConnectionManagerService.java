@@ -5,11 +5,14 @@ import android.accounts.AccountManager;
 import android.app.Service;
 import android.content.ContentResolver;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
+import android.preference.Preference;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -25,7 +28,7 @@ public class ConnectionManagerService extends Service
     private NetworkInfo             networkInfo;
     private Handler                 handler;
     private Account                 mAccount = null;
-    public boolean                  mobile_permission = true;
+    public boolean                  mobile_permission = false;
     //public boolean                  mobile_permissionChecked = false;
 
     /*
@@ -40,8 +43,8 @@ public class ConnectionManagerService extends Service
         final int       hDelay;
 
         handler = new Handler();
-        hDelay = 300000;
-        //hDelay = 10000;
+        //hDelay = 300000;
+        hDelay = 10000;
         handler.postDelayed(new Runnable()
         {
             @Override
@@ -65,9 +68,11 @@ public class ConnectionManagerService extends Service
         accountName = intent.getStringExtra(AccountManager.KEY_ACCOUNT_NAME);
         Log.d(TAG, "accountName = " + accountName);
         mAccount = AccountManager.get(this).getAccountsByType(SyncAdapter.ACCOUNT_TYPE)[0];
+
         //TODO Chose the better choice to let the service run when we need to
         return (START_NOT_STICKY);
     }
+
 
     /*
     ** Method to verify internet connection
@@ -77,13 +82,17 @@ public class ConnectionManagerService extends Service
         boolean         wifi;
         boolean         mobile;
 
+        SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
+        mobile_permission = pref.getBoolean(SettingsActivity.PREF_MOBILE_NETWORK, false);
+        Log.d(TAG, "Mobile network is allowed : " + mobile_permission);
         connectivityManager = (ConnectivityManager)getSystemService(CONNECTIVITY_SERVICE);
         networkInfo = connectivityManager.getActiveNetworkInfo();
         if (networkInfo != null && networkInfo.isAvailable() && networkInfo.isConnected())
         {
             wifi = networkInfo.getType() == ConnectivityManager.TYPE_WIFI;
             mobile = networkInfo.getType() == ConnectivityManager.TYPE_MOBILE;
-            Log.d("NetworkState", "L'interface de connexion active est du Wifi : " + wifi);
+            Log.d(TAG, "Wifi is active : " + wifi);
+            Log.d(TAG, "Mobile is active : " + mobile);
             if (wifi || (mobile && mobile_permission))
                 return (true);
             else
