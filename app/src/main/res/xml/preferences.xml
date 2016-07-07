@@ -1,10 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-  <CheckBoxPreference
-      android:key="pref_showDetails"
-      android:title="@string/pref_showDetails"
-      android:dialogTitle="@string/pref_showDetails"
-      android:summary="@string/pref_showDetails_summary"
-      android:persistent="true"
-      android:defaultValue="false"/>
+    <PreferenceCategory android:title="@string/general_parameters">
+        <CheckBoxPreference
+            android:key="pref_showDetails"
+            android:title="@string/pref_showDetails"
+            android:dialogTitle="@string/pref_showDetails"
+            android:summary="@string/pref_showDetails_summary"
+            android:persistent="true"
+            android:defaultValue="false"/>
+    </PreferenceCategory>
+    <PreferenceCategory android:title="@string/network">
+        <CheckBoxPreference
+            android:key="pref_allowMobileNetwork"
+            android:title="@string/pref_mobileNetwork"
+            android:summary="@string/pref_mobileNetwork_summary"
+            android:persistent="true"
+            android:defaultValue="false"/>
+    </PreferenceCategory>
 </PreferenceScreen>

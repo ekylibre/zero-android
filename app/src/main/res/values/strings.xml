@@ -63,4 +63,8 @@
     <string name="title_activity_capture">Capture</string>
     <string name="title_activity_camera">Camera</string>
     <string name="title_activity_sorting">Counting</string>
+    <string name="general_parameters">General parameters</string>
+    <string name="network">Network</string>
+    <string name="pref_mobileNetwork">Mobile network</string>
+    <string name="pref_mobileNetwork_summary">Allow application to use mobile network connection</string>
 </resources>
