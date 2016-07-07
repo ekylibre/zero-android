@@ -11,10 +11,11 @@
     </PreferenceCategory>
     <PreferenceCategory android:title="@string/network">
         <CheckBoxPreference
-            android:key="pref_allowMobileNetwork"
+            android:key="pref_MobileNetwork"
             android:title="@string/pref_mobileNetwork"
+            android:dialogTitle="@string/pref_mobileNetwork"
             android:summary="@string/pref_mobileNetwork_summary"
             android:persistent="true"
-            android:defaultValue="false"/>
+            android:defaultValue="false" />
     </PreferenceCategory>
 </PreferenceScreen>
