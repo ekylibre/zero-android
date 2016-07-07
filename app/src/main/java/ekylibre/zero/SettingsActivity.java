@@ -1,13 +1,10 @@
 package ekylibre.zero;
 
-import android.app.ActionBar;
-import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
+import android.preference.PreferenceActivity;
 
-public class SettingsActivity extends Activity {
-
+public class SettingsActivity extends PreferenceActivity
+{
     public final static String PREF_SHOW_DETAILS = "pref_showDetails";
 
     /** Called when the activity is first created. */
@@ -15,10 +12,8 @@ public class SettingsActivity extends Activity {
     public void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-
-				getActionBar().setDisplayHomeAsUpEnabled(true);
-				
-				// Display the fragment as the main content.
+        getActionBar().setDisplayHomeAsUpEnabled(true);
+        // Display the fragment as the main content.
         getFragmentManager().beginTransaction()
 						.replace(android.R.id.content, new SettingsFragment())
 						.commit();

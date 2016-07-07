@@ -39,10 +39,9 @@ public class ConnectionManagerService extends Service
     {
         final int       hDelay;
 
-        connectivityManager = (ConnectivityManager)getSystemService(CONNECTIVITY_SERVICE);
-        networkInfo = connectivityManager.getActiveNetworkInfo();
         handler = new Handler();
         hDelay = 300000;
+        //hDelay = 10000;
         handler.postDelayed(new Runnable()
         {
             @Override
@@ -73,11 +72,13 @@ public class ConnectionManagerService extends Service
     /*
     ** Method to verify internet connection
     */
-    private boolean     try_connection()
+    public boolean     try_connection()
     {
         boolean         wifi;
         boolean         mobile;
 
+        connectivityManager = (ConnectivityManager)getSystemService(CONNECTIVITY_SERVICE);
+        networkInfo = connectivityManager.getActiveNetworkInfo();
         if (networkInfo != null && networkInfo.isAvailable() && networkInfo.isConnected())
         {
             wifi = networkInfo.getType() == ConnectivityManager.TYPE_WIFI;
