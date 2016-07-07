@@ -23,13 +23,12 @@ import android.widget.Toast;
 
 public class ConnectionManagerService extends Service
 {
-    private static final String TAG = "ConnectionManagerS";
+    private static final String     TAG = "ConnectionManagerS";
     private ConnectivityManager     connectivityManager;
     private NetworkInfo             networkInfo;
     private Handler                 handler;
     private Account                 mAccount = null;
     public boolean                  mobile_permission = false;
-    //public boolean                  mobile_permissionChecked = false;
 
     /*
     **  Get the account which is currently used
@@ -43,8 +42,8 @@ public class ConnectionManagerService extends Service
         final int       hDelay;
 
         handler = new Handler();
-        //hDelay = 300000;
-        hDelay = 10000;
+        hDelay = 300000;
+        //hDelay = 10000;
         handler.postDelayed(new Runnable()
         {
             @Override
@@ -73,6 +72,28 @@ public class ConnectionManagerService extends Service
         return (START_NOT_STICKY);
     }
 
+    /*
+    ** Set the private boolean mobile_permission
+    */
+    public void     set_MobilePerm(boolean pref)
+    {
+        mobile_permission = pref;
+    }
+
+    /*
+    ** Get mobilePerm from SharedPreference set on settings activity
+    */
+    public boolean          get_MobilePerm()
+    {
+        SharedPreferences   pref;
+        boolean             userPrefMobile;
+
+        pref = PreferenceManager.getDefaultSharedPreferences(this);
+        userPrefMobile = pref.getBoolean(SettingsActivity.PREF_MOBILE_NETWORK, false);
+        set_MobilePerm(userPrefMobile);
+        Log.d(TAG, "Mobile network is allowed : " + mobile_permission);
+        return (mobile_permission);
+    }
 
     /*
     ** Method to verify internet connection
@@ -82,9 +103,7 @@ public class ConnectionManagerService extends Service
         boolean         wifi;
         boolean         mobile;
 
-        SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
-        mobile_permission = pref.getBoolean(SettingsActivity.PREF_MOBILE_NETWORK, false);
-        Log.d(TAG, "Mobile network is allowed : " + mobile_permission);
+        get_MobilePerm();
         connectivityManager = (ConnectivityManager)getSystemService(CONNECTIVITY_SERVICE);
         networkInfo = connectivityManager.getActiveNetworkInfo();
         if (networkInfo != null && networkInfo.isAvailable() && networkInfo.isConnected())
