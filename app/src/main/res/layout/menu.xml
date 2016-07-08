@@ -22,13 +22,23 @@
         android:layout_alignParentStart="true">
 
         <Button
+            android:id="@+id/btntodolist"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:onClick="gotoTodolist"
+            android:text="@string/todoList"
+            android:textSize="20dp"
+            android:background="@color/basic_grey"/>
+
+        <Button
             android:id="@+id/btncalendar"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:onClick="gotoCalendar"
             android:text="@string/calendar"
             android:textSize="20dp"
-            android:background="@color/basic_grey"/>
+            android:background="@color/basic_grey"
+            android:layout_marginTop="5dp"/>
 
         <Button
             android:id="@+id/button4"
