@@ -68,7 +68,8 @@
             android:layout_gravity="center_horizontal"
             android:onClick="gotoSorting"
             android:background="@color/basic_grey"
-            android:layout_marginTop="5dp"/>
+            android:layout_marginTop="5dp"
+            android:visibility="gone"/>
 
     </LinearLayout>
 

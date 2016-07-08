@@ -19,6 +19,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TableLayout;
@@ -47,7 +48,7 @@ public class PlantCountingActivity extends Activity {
     private AlertDialog.Builder mVarietyChooser;
 
 
-    private CharSequence[] mPlantID ;
+    private CharSequence[] mPlantID;
     private CharSequence[] mPlantNameTab;
     private CharSequence[] mAbaqueTab;
 
@@ -59,9 +60,9 @@ public class PlantCountingActivity extends Activity {
 
         mLayout = (LinearLayout) findViewById(R.id.AllValuesLayout);
         mObservationEditText = (EditText)findViewById(R.id.observationEditText);
-        mPlantName = (TextView)findViewById(R.id.plantName);
-        mAbaque = (TextView)findViewById(R.id.Abaque);
-        mDensityText = (TextView)findViewById(R.id.densityValue);
+        mPlantName = (Button)findViewById(R.id.plantName);
+        mAbaque = (Button)findViewById(R.id.Abaque);
+        mDensityText = (Button)findViewById(R.id.densityValue);
         mAverageText = (TextView) findViewById(R.id.textAverage);
         mAverageText.setText("");
 
@@ -240,7 +241,7 @@ public class PlantCountingActivity extends Activity {
     }
 
 
-    public void chosePlant(View view){
+    public void chosePlant(View view) {
             mPlantChooser.show();
     }
     public void choseAbaque(View view){
