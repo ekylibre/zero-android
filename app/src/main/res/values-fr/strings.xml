@@ -65,4 +65,5 @@
     <string name="network">Réseau</string>
     <string name="pref_mobileNetwork">Réseau mobile</string>
     <string name="pref_mobileNetwork_summary">Autoriser l\'application à utiliser le réseau mobile (3G, 4G)</string>
+    <string name="calendar">Agenda</string>
 </resources>

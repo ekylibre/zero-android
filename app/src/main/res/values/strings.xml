@@ -67,4 +67,5 @@
     <string name="network">Network</string>
     <string name="pref_mobileNetwork">Mobile network</string>
     <string name="pref_mobileNetwork_summary">Allow application to use mobile network connection</string>
+    <string name="calendar">Calendar</string>
 </resources>

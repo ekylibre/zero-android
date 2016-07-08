@@ -7,7 +7,7 @@
             android:dialogTitle="@string/pref_showDetails"
             android:summary="@string/pref_showDetails_summary"
             android:persistent="true"
-            android:defaultValue="false"/>
+            android:defaultValue="false" />
     </PreferenceCategory>
     <PreferenceCategory android:title="@string/network">
         <CheckBoxPreference
