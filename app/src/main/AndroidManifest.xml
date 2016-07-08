@@ -79,6 +79,12 @@
             android:label="@string/calendar"
             />
 
+        <activity
+        android:name=".TodoListActivity"
+        android:icon="@mipmap/ic_ekylibre"
+        android:label="@string/todoList"
+        />
+
         <service
             android:name=".AuthenticatorService"
             android:permission="ekylibre.zero.permission.AUTHENTICATE_ACCOUNTS">

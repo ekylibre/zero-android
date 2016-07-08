@@ -93,6 +93,11 @@ public class MenuActivity extends Activity {
         startActivity(intent);
     }
 
+    public void gotoTodolist(View v) {
+        Intent intent = new Intent(this, TodoListActivity.class);
+        startActivity(intent);
+    }
+
     public void syncAll(View v) {
         Log.d("zero", "syncData: " + mAccount.toString() + ", " + ZeroContract.AUTHORITY);
         Bundle extras = new Bundle();
