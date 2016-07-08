@@ -11,7 +11,6 @@ import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
-import android.preference.Preference;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.widget.Toast;
@@ -24,8 +23,7 @@ import android.widget.Toast;
 public class ConnectionManagerService extends Service
 {
     private static final String     TAG = "ConnectionManagerS";
-    private ConnectivityManager     connectivityManager;
-    private NetworkInfo             networkInfo;
+
     private Handler                 handler;
     private Account                 mAccount = null;
     public boolean                  mobile_permission = false;
@@ -39,10 +37,9 @@ public class ConnectionManagerService extends Service
     @Override
     public void         onCreate()
     {
-        final int       hDelay;
+        final int       hDelay = 300000;
 
         handler = new Handler();
-        hDelay = 300000;
         //hDelay = 10000;
         handler.postDelayed(new Runnable()
         {
@@ -77,7 +74,7 @@ public class ConnectionManagerService extends Service
     */
     public void     set_MobilePerm(boolean pref)
     {
-        mobile_permission = pref;
+        this.mobile_permission = pref;
     }
 
     /*
@@ -98,10 +95,12 @@ public class ConnectionManagerService extends Service
     /*
     ** Method to verify internet connection
     */
-    public boolean     try_connection()
+    public boolean              try_connection()
     {
-        boolean         wifi;
-        boolean         mobile;
+        ConnectivityManager     connectivityManager;
+        NetworkInfo             networkInfo;
+        boolean                 wifi;
+        boolean                 mobile;
 
         get_MobilePerm();
         connectivityManager = (ConnectivityManager)getSystemService(CONNECTIVITY_SERVICE);

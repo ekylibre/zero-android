@@ -11,6 +11,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.CalendarView;
 import android.widget.Toast;
 
 public class MenuActivity extends Activity {
@@ -87,7 +88,10 @@ public class MenuActivity extends Activity {
         startActivity(intent);
     }
 
-
+    public void gotoCalendar(View v) {
+        Intent intent = new Intent(this, CalendarActivity.class);
+        startActivity(intent);
+    }
 
     public void syncAll(View v) {
         Log.d("zero", "syncData: " + mAccount.toString() + ", " + ZeroContract.AUTHORITY);
