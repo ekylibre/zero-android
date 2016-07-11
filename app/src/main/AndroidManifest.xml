@@ -8,7 +8,6 @@
     <uses-permission android:name="android.permission.WRITE_CALENDAR" />
 
 
-
     <uses-feature
         android:name="android.hardware.camera"
         android:required="false" />
@@ -146,8 +145,8 @@
         <!-- Settings -->
         <activity
             android:name=".SettingsActivity"
-            android:label="@string/settings"
-            android:parentActivityName=".TrackingActivity">
+            android:label="@string/settings">
+
 
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
@@ -158,6 +157,9 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".TrackingActivity" />
         </activity>
+<!--
+    android:parentActivityName=".TrackingActivity">
+-->
 
         <activity
             android:name=".IssueActivity"

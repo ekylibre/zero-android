@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <style name="Ekylibre" parent="android:Theme.Holo.Light.DarkActionBar" >
+    <style name="Ekylibre" parent="Theme.AppCompat.Light.DarkActionBar" >
         <item name="colorPrimary">@color/brand_secondary</item>
         <item name="colorPrimaryDark">@color/brand_secondary_dark</item>
     </style>
