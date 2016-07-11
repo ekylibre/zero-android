@@ -6,14 +6,24 @@ import android.content.Context;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.provider.CalendarContract;
+import android.provider.Settings;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Adapter;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 /**************************************
  * Created by pierre on 7/8/16.       *
@@ -31,13 +41,9 @@ public class TodoListActivity extends Activity
     private final int    EVENT_LOCATION = 6;
     private final String TAG            = "TodoListAct";
 
-    private ListView                todoList;
+    private ListView                todoListView;
     private ArrayAdapter<String>    adapter;
 
-    /**
-    *** TODO ==> Get event at 00h00 do not work !
-    ***
-    **/
 
     /*
     ** This activity display all the tasks of the day requesting the actual phone calendar
@@ -50,11 +56,42 @@ public class TodoListActivity extends Activity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.todolist);
 
-        todoList = (ListView)findViewById(R.id.listView);
-        adapter = new ArrayAdapter<String>(TodoListActivity.this, android.R.layout.simple_list_item_1);
+        todoListView = (ListView)findViewById(R.id.listView);
+        List<TodoItem> todolist = createList();
 
-        adapter = fillAdapter(adapter);
-        todoList.setAdapter(adapter);
+        TodoAdapter adapter = new TodoAdapter(TodoListActivity.this, todolist);
+        todoListView.setAdapter(adapter);
+    }
+
+    private List<TodoItem>          createList()
+    {
+        Cursor                      curs;
+        String                      startDateFormatted;
+        String                      endDateFormatted;
+
+        curs = getEvents();
+        affEvents(curs);
+
+        List<TodoItem> todoList = new ArrayList<TodoItem>();
+
+        DateFormat formatterSTART = new SimpleDateFormat("HH:mm - ");
+        DateFormat formatterEND = new SimpleDateFormat("HH:mm");
+
+        if (curs.moveToFirst())
+        {
+            do
+            {
+                Date startDate = new Date(curs.getLong(DTSTART));
+                Date endDate = new Date(curs.getLong(DTEND));
+                startDateFormatted = formatterSTART.format(startDate);
+                if (curs.getInt(ALL_DAY) == 0)
+                    endDateFormatted = formatterEND.format(endDate);
+                else
+                    endDateFormatted = "00h00";
+                todoList.add(new TodoItem(startDateFormatted, endDateFormatted, curs.getString(TITLE), curs.getString(DESCRIPTION)));
+            } while (curs.moveToNext());
+        }
+        return (todoList);
     }
 
     /*
@@ -106,24 +143,6 @@ public class TodoListActivity extends Activity
         calendar.add(Calendar.DAY_OF_YEAR, 1);
         Log.d(TAG, "TOMORROW DATE = " + calendar.getTime());
         return (calendar);
-    }
-
-    /*
-    ** Fill adapter with Events got from getEvents
-    */
-    private ArrayAdapter<String>    fillAdapter(ArrayAdapter<String> adapter)
-    {
-        Cursor                      curs;
-
-        curs = getEvents();
-        if (curs.moveToFirst())
-        {
-            do
-            {
-                adapter.add(curs.getString(TITLE));
-            } while (curs.moveToNext());
-        }
-        return (adapter);
     }
 
     /*
@@ -194,18 +213,27 @@ public class TodoListActivity extends Activity
         return (returnCurs);
     }
 
-    public void         affEvents()
+    public void         affEvents(Cursor curs)
     {
-        Cursor          curs;
+        int             it;
 
-        curs = getEvents();
+        it = 0;
+        if (curs == null)
+            curs = getEvents();
         if (curs.moveToFirst())
         {
             do
             {
-                Toast.makeText(this.getApplicationContext(),
-                        "Title: " + curs.getString(1),
-                        Toast.LENGTH_LONG).show();
+                ++it;
+                Log.d(TAG, "==========");
+                Log.d(TAG, "ENVENT NUM " + it);
+                Log.d(TAG, "ID = " + curs.getString(CALENDAR_ID));
+                Log.d(TAG, "DESC = " + curs.getString(DESCRIPTION));
+                Log.d(TAG, "DATE START = " + curs.getString(DTSTART));
+                Log.d(TAG, "DATE END = " + curs.getString(DTEND));
+                Log.d(TAG, "ALL DAY = " + curs.getString(ALL_DAY));
+                Log.d(TAG, "EVT LOCATION = " + curs.getString(EVENT_LOCATION));
+                Log.d(TAG, "==========");
             } while (curs.moveToNext());
         }
     }

@@ -11,8 +11,9 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.CalendarView;
 import android.widget.Toast;
+
+import ekylibre.zero.service.ConnectionManagerService;
 
 public class MenuActivity extends Activity {
 
