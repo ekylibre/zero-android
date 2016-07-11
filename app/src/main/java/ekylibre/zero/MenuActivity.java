@@ -2,26 +2,40 @@ package ekylibre.zero;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
-import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.Toast;
+
 
 import ekylibre.zero.service.ConnectionManagerService;
 
-public class MenuActivity extends Activity {
+public class MenuActivity extends ActionBarActivity
+{
 
-    private Account mAccount;
+    private Account                 mAccount;
+    private ListView                menuList;
+    private DrawerLayout            drawerLayout;
+    private ActionBarDrawerToggle   menuToggle;
+    private String                  mActivityTitle;
+    private final String            menuTitle = "MENU SLIBAR";
+
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.menu);
         // Get simple account or ask for it if necessary
         final AccountManager manager = AccountManager.get(this);
         final Account[] accounts = manager.getAccountsByType(SyncAdapter.ACCOUNT_TYPE);
@@ -43,7 +57,37 @@ public class MenuActivity extends Activity {
         connectIntent.putExtra(AccountManager.KEY_ACCOUNT_NAME, mAccount.name);
         startService(connectIntent);
 
-        setContentView(R.layout.menu);
+
+
+        drawerLayout = (DrawerLayout)findViewById(R.id.drawer_layout);
+        mActivityTitle = getTitle().toString();
+        menuList = (ListView)findViewById(R.id.menuList);
+        String[] test = new String[]{"test1", "test2", "test3", "test4", "test5"};
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(MenuActivity.this,
+                android.R.layout.simple_list_item_1, test);
+        menuList.setAdapter(adapter);
+
+
+        menuToggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.drawer_open, R.string.drawer_close)
+        {
+            public void onDrawerOpened(View drawerView)
+            {
+                super.onDrawerOpened(drawerView);
+                getSupportActionBar().setTitle("Navigation!");
+                invalidateOptionsMenu();
+            }
+
+            public void onDrawerClosed(View view)
+            {
+                super.onDrawerClosed(view);
+                getSupportActionBar().setTitle(mActivityTitle);
+                invalidateOptionsMenu();
+            }
+        };
+        menuToggle.setDrawerIndicatorEnabled(true);
+        drawerLayout.setDrawerListener(menuToggle);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeButtonEnabled(true);
     }
 
     @Override
@@ -57,6 +101,10 @@ public class MenuActivity extends Activity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         Intent intent;
+        if (menuToggle.onOptionsItemSelected(item))
+        {
+            return true;
+        }
         // Handle presses on the action bar items
         switch (item.getItemId()) {
             // case R.id.action_search:
