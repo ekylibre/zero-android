@@ -1,4 +1,4 @@
-package ekylibre.zero;
+package ekylibre.zero.service;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
@@ -14,6 +14,11 @@ import android.os.IBinder;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.widget.Toast;
+
+import ekylibre.zero.R;
+import ekylibre.zero.SettingsActivity;
+import ekylibre.zero.SyncAdapter;
+import ekylibre.zero.ZeroContract;
 
 /*************************************
  * Created by PierreBougon on 7/6/16.*

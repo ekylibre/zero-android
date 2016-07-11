@@ -86,7 +86,7 @@
         />
 
         <service
-            android:name=".AuthenticatorService"
+            android:name=".service.AuthenticatorService"
             android:permission="ekylibre.zero.permission.AUTHENTICATE_ACCOUNTS">
             <intent-filter>
                 <action android:name="android.accounts.AccountAuthenticator" />
@@ -98,7 +98,7 @@
         </service>
 
         <service
-            android:name=".ConnectionManagerService"
+            android:name=".service.ConnectionManagerService"
             android:permission="android.permission.ACCESS_NETWORK_STATE">
         </service>
 
@@ -111,7 +111,7 @@
 
         <!-- Sync related activities and service needs to be declared here in order for the app to recognize them -->
         <service
-            android:name=".SyncService"
+            android:name=".service.SyncService"
             android:label="@string/service_name"
             android:permission="ekylibre.zero.permission.SYNC_DATA"
             android:process=":sync">

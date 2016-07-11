@@ -1,9 +1,11 @@
-package ekylibre.zero;
+package ekylibre.zero.service;
 
 import android.app.Service;
 import android.content.Intent;
 import android.os.IBinder;
 import android.util.Log;
+
+import ekylibre.zero.SyncAdapter;
 
 /**
  * Define a Service that returns an IBinder for the

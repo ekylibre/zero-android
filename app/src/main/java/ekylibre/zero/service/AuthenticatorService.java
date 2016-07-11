@@ -1,8 +1,10 @@
-package ekylibre.zero;
+package ekylibre.zero.service;
 
 import android.app.Service;
 import android.content.Intent;
 import android.os.IBinder;
+
+import ekylibre.zero.Authenticator;
 
 /**
  * A bound Service that instantiates the authenticator
