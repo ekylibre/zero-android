@@ -1,0 +1,217 @@
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu items for use in the action bar
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.form, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle presses on the action bar items
+        switch (item.getItemId()) {
+            case R.id.action_save:
+                saveIssue(item.getActionView());
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    public void takePicture(View v) throws IOException{
+
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        // Ensure that there's a camera activity to handle the intent
+        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+            // Create the File where the photo should go
+            try{
+                photoFile = createImageFile(picturesFile);
+            }catch (IOException e){
+                e.printStackTrace();
+            }
+            // Continue only if the File was successfully created
+            if (photoFile != null) {
+                // Launch Intent to take picture
+                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(photoFile));
+
+                startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO);
+
+                // mount file to the GalleryView
+                sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.fromFile(photoFile)));
+            }
+        }
+    }
+
+    public File createImageFile(File picturesFile) throws IOException {
+
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String imageFileName = "ISSUE_" + timeStamp + "_";
+
+        File image_path = null;
+        try {
+            image_path = File.createTempFile(
+                    imageFileName,  /* prefix */
+                    ".jpg",         /* suffix */
+                    picturesFile      /* directory */
+            );
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        // Save a file: path for use with ACTION_VIEW intents
+        mCurrentPhotoPath = "file:" + image_path.getAbsolutePath();
+        return image_path;
+    }
+/**
+     // Finds the first image in the specified folder and uses it to open the devices native gallery app with all images in that folder.
+    public void OpenGalleryFromPathToFolder(Context context, String folderPath) throws IOException{
+
+        File folder = new File(folderPath);
+        File[] allFiles = folder.listFiles();
+
+        if (allFiles != null && allFiles.length > 0)
+        {
+            Uri imageInFolder = getImageContentUri(context, allFiles[0]);
+
+            if (imageInFolder != null)
+            {
+                Intent intent = new Intent(Intent.ACTION_VIEW);
+                intent.setData(imageInFolder);
+
+                startActivityForResult(intent, SHOW_PICTURE);
+            }
+        }
+    }
+
+    // converts the absolute path of a file to a content path
+    // absolute path example: /storage/emulated/0/Pictures/folderName/Image1.jpg
+    // content path example: content://media/external/images/media/47560
+    private Uri getImageContentUri(Context context, File imageFile) {
+        String filePath = imageFile.getAbsolutePath();
+        Cursor cursor = context.getContentResolver().query(
+                MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+                new String[]{android.provider.MediaStore.Images.Media._ID},
+                MediaStore.Images.Media.DATA + "=? ",
+                new String[]{filePath}, null);
+        if (cursor != null && cursor.moveToFirst()) {
+            int id = cursor.getInt(cursor.getColumnIndex(MediaStore.MediaColumns._ID));
+            return android.net.Uri.withAppendedPath(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "" + id);
+        } else {
+            if (imageFile.exists()) {
+                ContentValues values = new ContentValues();
+                values.put(MediaStore.Images.Media.DATA, filePath);
+                return context.getContentResolver().insert(
+                        MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
+            } else {
+                return null;
+            }
+        }
+    }
+**/
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data){
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_TAKE_PHOTO) {
+            if (resultCode == RESULT_OK) {
+                Bitmap image = BitmapFactory.decodeFile(photoFile.getPath());
+                mImagePreview.setImageBitmap(image);
+                Toast.makeText(this, "Image saved", Toast.LENGTH_LONG).show();
+            } else if (resultCode == RESULT_CANCELED) {
+                // User cancelled the image capture
+                Toast.makeText(this, "Cancelled", Toast.LENGTH_LONG).show();
+            } else {
+                // Image capture failed, advise user
+                Toast.makeText(this, "Failed", Toast.LENGTH_LONG).show();
+            }
+        }else if (requestCode == SHOW_PICTURE) {
+
+        }
+    }
+
+    public void saveIssue(View v) {
+        Context context = getApplicationContext();
+        CharSequence text = "Issue saved";
+        int duration = Toast.LENGTH_SHORT;
+        Toast toast = Toast.makeText(context, text, duration);
+        toast.show();
+
+        //http://developer.android.com/guide/topics/providers/content-provider-basics.html
+
+        // Defines an object to contain the new values to insert
+        ContentValues mNewValues = new ContentValues();
+
+        /*
+        * Sets the values of each column and inserts the word. The arguments to the "put"
+        * method are "column name" and "value"
+        */
+        String[] mTestArray;
+        mTestArray = getResources().getStringArray(R.array.issueNatures_values);
+
+
+        mNewValues.put(ZeroContract.IssuesColumns.NATURE, mTestArray[mIssueNatureSpinner.getSelectedItemPosition()]);
+        mNewValues.put(ZeroContract.IssuesColumns.EMERGENCY, mEmergency.getValue());
+        mNewValues.put(ZeroContract.IssuesColumns.SEVERITY, mSeverity.getValue());
+        mNewValues.put(ZeroContract.IssuesColumns.DESCRIPTION, mDescription.getText().toString());
+        mNewValues.put(ZeroContract.IssuesColumns.PINNED, Boolean.FALSE);
+//        mNewValues.put(ZeroContract.IssuesColumns.SYNCED_AT, rightNow.get(Calendar.DAY_OF_MONTH)+1 + "/" + rightNow.get(Calendar.MONTH)+1 + "/" + rightNow.get(Calendar.YEAR));
+        mNewValues.put(ZeroContract.IssuesColumns.OBSERVED_AT, (new Date()).getTime());
+
+        LocationManager locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+        String locationProvider = LocationManager.NETWORK_PROVIDER;
+        // Or use LocationManager.GPS_PROVIDER
+        Location lastKnownLocation = locationManager.getLastKnownLocation(locationProvider);
+        if (lastKnownLocation != null) {
+            mNewValues.put(ZeroContract.IssuesColumns.LATITUDE, lastKnownLocation.getLatitude());
+            mNewValues.put(ZeroContract.IssuesColumns.LONGITUDE, lastKnownLocation.getLongitude());
+        }
+
+        getContentResolver().insert(
+                ZeroContract.Issues.CONTENT_URI,   // the user dictionary content URI
+                mNewValues                          // the values to insert
+        );
+
+        //est censé fermer l'activity
+        this.finish();
+
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        client.connect();
+        Action viewAction = Action.newAction(
+                Action.TYPE_VIEW, // TODO: choose an action type.
+                "Issue Page", // TODO: Define a title for the content shown.
+                // TODO: If you have web page content that matches this app activity's content,
+                // make sure this auto-generated web page URL is correct.
+                // Otherwise, set the URL to null.
+                Uri.parse("http://host/path"),
+                // TODO: Make sure this auto-generated app URL is correct.
+                Uri.parse("android-app://ekylibre.zero/http/host/path")
+        );
+        AppIndex.AppIndexApi.start(client, viewAction);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        Action viewAction = Action.newAction(
+                Action.TYPE_VIEW, // TODO: choose an action type.
+                "Issue Page", // TODO: Define a title for the content shown.
+                // TODO: If you have web page content that matches this app activity's content,
+                // make sure this auto-generated web page URL is correct.
+                // Otherwise, set the URL to null.
+                Uri.parse("http://host/path"),
+                // TODO: Make sure this auto-generated app URL is correct.
+                Uri.parse("android-app://ekylibre.zero/http/host/path")
+        );
+        AppIndex.AppIndexApi.end(client, viewAction);
+        client.disconnect();
+    }
+}

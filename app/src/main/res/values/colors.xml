@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="basic_grey">#AAAAAA</color>
+    <color name="dark_grey">#777777</color>
     <color name="basic_blue">#476BA8</color>
     <color name="basic_green">#66A65E</color>
     <color name="brand_secondary">#66a65e</color>
