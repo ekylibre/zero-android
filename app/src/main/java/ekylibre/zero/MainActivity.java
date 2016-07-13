@@ -61,6 +61,10 @@ public class MainActivity extends AppCompatActivity
         setAccountName(mNavigationView);
     }
 
+    /*
+    ** Setting the navigation view on drawer layout
+    ** This is the slide menu on the left
+    */
     private void    setDrawerLayout()
     {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -74,6 +78,10 @@ public class MainActivity extends AppCompatActivity
         mNavigationView = navigationView;
     }
 
+    /*
+    ** Setting the floating button which is use to access to
+    ** different type of action buttons
+    */
     private void    setFloatingActBtn()
     {
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -95,6 +103,11 @@ public class MainActivity extends AppCompatActivity
         mToolbar = toolbar;
     }
 
+    /*
+    ** Get the preferred account which is the previous account used
+    ** If there is no account specified redirection to login activity is done
+    ** TODO ==> Select account in pref
+    */
     private boolean    setAccount()
     {
         final Account[]   accounts;
@@ -115,6 +128,9 @@ public class MainActivity extends AppCompatActivity
         return (true);
     }
 
+    /*
+    ** Get and set name and instance of the actual account setting appropriate private variable
+    */
     private void    setAccountName(NavigationView navigationView)
     {
         View headerLayout = navigationView.inflateHeaderView(R.layout.nav_header_main);
@@ -133,6 +149,9 @@ public class MainActivity extends AppCompatActivity
                 (ListView)findViewById(R.id.listView));
     }
 
+    /*
+    ** Close slide menu on back press
+    */
     @Override
     public void onBackPressed()
     {
@@ -147,14 +166,20 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
+    /*
+    ** Set toolbar options
+    */
     @Override
     public boolean onCreateOptionsMenu(Menu menu)
     {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
         return true;
     }
 
+    /*
+    ** Actions on toolbar items
+    ** Items are identified by their view id
+    */
     @Override
     public boolean onOptionsItemSelected(MenuItem item)
     {
@@ -165,11 +190,15 @@ public class MainActivity extends AppCompatActivity
         {
             intent = new Intent(this, SettingsActivity.class);
             startActivity(intent);
-            return true;
+            return (true);
         }
         return super.onOptionsItemSelected(item);
     }
 
+    /*
+    ** Actions on slide menu
+    ** Items are identified by their view id on menu file
+    */
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item)
@@ -208,6 +237,6 @@ public class MainActivity extends AppCompatActivity
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
-        return true;
+        return (true);
     }
 }
