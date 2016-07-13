@@ -49,17 +49,18 @@
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/Ekylibre">
+        android:theme="@style/AppTheme">
+
 
         <activity
             android:name=".TrackingActivity"
             android:label="@string/new_intervention"
             android:launchMode="singleInstance"
-            android:parentActivityName=".MenuActivity"
+            android:parentActivityName=".MainActivity"
             android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".MenuActivity" />
+                android:value=".MainActivity" />
         </activity>
 
         <!-- <service android:name="TrackingService"/> -->
@@ -71,6 +72,17 @@
             android:configChanges = "orientation"
             android:screenOrientation="portrait"
             />
+
+            <activity
+                android:name=".MainActivity"
+                android:label="@string/app_name"
+                android:theme="@style/AppTheme.NoActionBar">
+                <intent-filter>
+                    <action android:name="android.intent.action.MAIN" />
+
+                    <category android:name="android.intent.category.LAUNCHER" />
+                </intent-filter>
+            </activity>
 
         <activity
             android:name=".CalendarActivity"
@@ -166,11 +178,6 @@
             android:parentActivityName=".MenuActivity"
             android:label="@string/new_issue" />
         <activity android:name=".MenuActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity
             android:name=".PlantCountingActivity"

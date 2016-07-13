@@ -68,22 +68,7 @@ public class MenuActivity extends ActionBarActivity
         menuList.setAdapter(adapter);
 
 
-        menuToggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.drawer_open, R.string.drawer_close)
-        {
-            public void onDrawerOpened(View drawerView)
-            {
-                super.onDrawerOpened(drawerView);
-                getSupportActionBar().setTitle("Navigation!");
-                invalidateOptionsMenu();
-            }
 
-            public void onDrawerClosed(View view)
-            {
-                super.onDrawerClosed(view);
-                getSupportActionBar().setTitle(mActivityTitle);
-                invalidateOptionsMenu();
-            }
-        };
         menuToggle.setDrawerIndicatorEnabled(true);
         drawerLayout.setDrawerListener(menuToggle);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);

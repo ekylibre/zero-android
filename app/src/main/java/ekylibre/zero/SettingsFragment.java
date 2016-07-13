@@ -2,6 +2,7 @@ package ekylibre.zero;
 
 import android.preference.PreferenceFragment;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 
 public class SettingsFragment extends PreferenceFragment {
     @Override
@@ -10,6 +11,7 @@ public class SettingsFragment extends PreferenceFragment {
 
         // Load the preferences from an XML resource
         addPreferencesFromResource(R.xml.preferences);
+
     }
 
 }

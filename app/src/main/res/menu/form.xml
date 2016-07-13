@@ -1,4 +1,5 @@
-<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
   <!-- Search, should appear as action button -->
 	<!--
   <item android:id="@+id/action_search"
@@ -10,5 +11,5 @@
   <item android:id="@+id/action_save"
         android:icon="@android:drawable/ic_menu_save"
         android:title="@string/save"
-        android:showAsAction="always" />
+        app:showAsAction="always" />
 </menu>
