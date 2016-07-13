@@ -1,5 +1,7 @@
 package ekylibre.zero;
 
+import android.accounts.Account;
+import android.accounts.AccountManager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -10,21 +12,27 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.List;
 
 /**************************************
  * Created by pierre on 7/12/16.      *
- * ekylibre.zero for zero-android    *
+ * ekylibre.zero for zero-android     *
  *************************************/
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+
+    private Account     mAccount;
+    private TextView    mNav_account;
+    private TextView    mNav_instance;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,8 +62,14 @@ public class MainActivity extends AppCompatActivity
         TodoListActivity todo = new TodoListActivity(MainActivity.this,
                 (ListView)findViewById(R.id.listView));
 
+        mAccount = AccountManager.get(this).getAccountsByType(SyncAdapter.ACCOUNT_TYPE)[0];
+        View headerLayout = navigationView.inflateHeaderView(R.layout.nav_header_main);
 
-
+        mNav_account = (TextView)headerLayout.findViewById(R.id.nav_accountName);
+        mNav_account.setText(mAccount.name);
+        AccountManager accManager = AccountManager.get(this);
+        mNav_instance = (TextView)headerLayout.findViewById(R.id.nav_farmURL);
+        mNav_instance.setText(accManager.getUserData(mAccount, AuthenticatorActivity.KEY_INSTANCE_URL));
 
     }
 
@@ -116,9 +130,10 @@ public class MainActivity extends AppCompatActivity
             Intent intent = new Intent(this, SettingsActivity.class);
             startActivity(intent);
         }
-        else if (id == R.id.nav_share)
+        else if (id == R.id.nav_account)
         {
-
+            Intent intent = new Intent(this, AccountManagerActivity.class);
+            startActivity(intent);
         }
         else if (id == R.id.nav_send)
         {
