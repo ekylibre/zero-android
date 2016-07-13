@@ -30,17 +30,40 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-    private Account     mAccount;
-    private TextView    mNav_account;
-    private TextView    mNav_instance;
+    private Account         mAccount;
+    private TextView        mNav_account;
+    private TextView        mNav_instance;
+    private NavigationView  mNavigationView;
+    private Toolbar         mToolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
 
+        setToolbar();
+        setFloatingActBtn();
+        setDrawerLayout();
+        setAccount();
+        setTodolist();
+        setAccountName(mNavigationView);
+    }
+
+    private void    setDrawerLayout()
+    {
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, drawer, mToolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawer.setDrawerListener(toggle);
+        toggle.syncState();
+
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
+        mNavigationView = navigationView;
+    }
+
+    private void    setFloatingActBtn()
+    {
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -49,20 +72,22 @@ public class MainActivity extends AppCompatActivity
                         .setAction("Action", null).show();
             }
         });
+    }
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.setDrawerListener(toggle);
-        toggle.syncState();
+    private void    setToolbar()
+    {
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        mToolbar = toolbar;
+    }
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
-
-        TodoListActivity todo = new TodoListActivity(MainActivity.this,
-                (ListView)findViewById(R.id.listView));
-
+    private void    setAccount()
+    {
         mAccount = AccountManager.get(this).getAccountsByType(SyncAdapter.ACCOUNT_TYPE)[0];
+    }
+
+    private void    setAccountName(NavigationView navigationView)
+    {
         View headerLayout = navigationView.inflateHeaderView(R.layout.nav_header_main);
 
         mNav_account = (TextView)headerLayout.findViewById(R.id.nav_accountName);
@@ -71,6 +96,12 @@ public class MainActivity extends AppCompatActivity
         mNav_instance = (TextView)headerLayout.findViewById(R.id.nav_farmURL);
         mNav_instance.setText(accManager.getUserData(mAccount, AuthenticatorActivity.KEY_INSTANCE_URL));
 
+    }
+
+    private void    setTodolist()
+    {
+        TodoListActivity todo = new TodoListActivity(MainActivity.this,
+                (ListView)findViewById(R.id.listView));
     }
 
     @Override
