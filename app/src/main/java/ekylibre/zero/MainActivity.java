@@ -27,8 +27,18 @@ import java.util.List;
  * ekylibre.zero for zero-android     *
  *************************************/
 
+
+/*
+** The home menu for the app
+** There is a slide menu if you slide left including :
+** - Information activity
+** - Some management activity
+**
+** You can access all actions activity from the floating button
+*/
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener
+{
 
     private Account         mAccount;
     private TextView        mNav_account;
@@ -37,14 +47,16 @@ public class MainActivity extends AppCompatActivity
     private Toolbar         mToolbar;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        if (!setAccount())
+            return ;
         setToolbar();
         setFloatingActBtn();
         setDrawerLayout();
-        setAccount();
         setTodolist();
         setAccountName(mNavigationView);
     }
@@ -65,9 +77,11 @@ public class MainActivity extends AppCompatActivity
     private void    setFloatingActBtn()
     {
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
+        fab.setOnClickListener(new View.OnClickListener()
+        {
             @Override
-            public void onClick(View view) {
+            public void onClick(View view)
+            {
                 Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
             }
@@ -81,9 +95,24 @@ public class MainActivity extends AppCompatActivity
         mToolbar = toolbar;
     }
 
-    private void    setAccount()
+    private boolean    setAccount()
     {
-        mAccount = AccountManager.get(this).getAccountsByType(SyncAdapter.ACCOUNT_TYPE)[0];
+        final Account[]   accounts;
+
+        final AccountManager manager = AccountManager.get(this);
+        accounts = manager.getAccountsByType(SyncAdapter.ACCOUNT_TYPE);
+        if (accounts.length <= 0)
+        {
+            Intent intent = new Intent(this, AuthenticatorActivity.class);
+            intent.putExtra(AccountManager.KEY_ACCOUNT_TYPE, SyncAdapter.ACCOUNT_TYPE);
+            intent.putExtra(AuthenticatorActivity.KEY_REDIRECT, AuthenticatorActivity.CHOICE_REDIRECT_TRACKING);
+            startActivity(intent);
+            finish();
+            return (false);
+        }
+        else
+            mAccount = AccountManager.get(this).getAccountsByType(SyncAdapter.ACCOUNT_TYPE)[0];
+        return (true);
     }
 
     private void    setAccountName(NavigationView navigationView)
@@ -105,17 +134,22 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
-    public void onBackPressed() {
+    public void onBackPressed()
+    {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
+        if (drawer.isDrawerOpen(GravityCompat.START))
+        {
             drawer.closeDrawer(GravityCompat.START);
-        } else {
+        }
+        else
+        {
             super.onBackPressed();
         }
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
+    public boolean onCreateOptionsMenu(Menu menu)
+    {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
         return true;
@@ -138,7 +172,8 @@ public class MainActivity extends AppCompatActivity
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
+    public boolean onNavigationItemSelected(MenuItem item)
+    {
         int id = item.getItemId();
 
         if (id == R.id.nav_tracking)
