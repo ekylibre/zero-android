@@ -67,4 +67,5 @@
     <string name="pref_mobileNetwork_summary">Autoriser l\'application à utiliser le réseau mobile (3G, 4G)</string>
     <string name="calendar">Agenda</string>
     <string name="todoList">Liste des tâches</string>
+    <string name="accountManager">Gestion des comptes</string>
 </resources>

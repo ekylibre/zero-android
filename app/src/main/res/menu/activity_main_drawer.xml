@@ -25,7 +25,7 @@
             <item
                 android:id="@+id/nav_account"
                 android:icon="@drawable/ic_account"
-                android:title="@+id/accountManager" />
+                android:title="@string/accountManager" />
             <item
                 android:id="@+id/nav_send"
                 android:icon="@drawable/ic_menu_send"
