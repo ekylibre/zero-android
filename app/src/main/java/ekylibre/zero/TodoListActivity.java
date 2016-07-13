@@ -30,7 +30,7 @@ import java.util.List;
  * ekylibre.zero for zero-android     *
  *************************************/
 
-public class TodoListActivity extends Activity
+public class TodoListActivity
 {
     private final int    CALENDAR_ID    = 0;
     private final int    TITLE          = 1;
@@ -43,6 +43,7 @@ public class TodoListActivity extends Activity
 
     private ListView                todoListView;
     private ArrayAdapter<String>    adapter;
+    private Context                 context;
 
 
     /*
@@ -50,20 +51,23 @@ public class TodoListActivity extends Activity
     ** Events are stock in ArrayAdapter between today 00h00 tomorrow 00h00
     ** CONSTANTS are use to get the part of data you want from adapter
     */
-    @Override
-    public void onCreate(Bundle savedInstanceState)
-    {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.todolist);
 
-        todoListView = (ListView)findViewById(R.id.listView);
+    public TodoListActivity(Context context, ListView foundListView)
+    {
+        this.todoListView = foundListView;
+        this.context = context;
         List<TodoItem> todolist = createList();
 
-        TodoAdapter adapter = new TodoAdapter(TodoListActivity.this, todolist);
+        TodoAdapter adapter = new TodoAdapter(context, todolist);
         todoListView.setAdapter(adapter);
     }
 
-    private List<TodoItem>          createList()
+    public void setListView(ListView listView)
+    {
+        todoListView = listView;
+    }
+
+    public List<TodoItem>          createList()
     {
         Cursor                      curs;
         String                      startDateFormatted;
@@ -206,7 +210,7 @@ public class TodoListActivity extends Activity
         selection = setSelection(startTime, endTime);
 
 
-        context = this.getBaseContext();
+        context = this.context;
         contentResolver = context.getContentResolver();
         returnCurs = contentResolver.query(CalendarContract.Events.CONTENT_URI,
                 projection, selection, null, CalendarContract.Events.DTSTART);
