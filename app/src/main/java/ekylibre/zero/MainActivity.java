@@ -22,6 +22,8 @@ import android.widget.Toast;
 
 import java.util.List;
 
+import ekylibre.zero.service.ConnectionManagerService;
+
 /**************************************
  * Created by pierre on 7/12/16.      *
  * ekylibre.zero for zero-android     *
@@ -59,6 +61,15 @@ public class MainActivity extends AppCompatActivity
         setDrawerLayout();
         setTodolist();
         setAccountName(mNavigationView);
+        startConnectionManager();
+    }
+
+    private void    startConnectionManager()
+    {
+        Intent connectIntent = new Intent(MainActivity.this, ConnectionManagerService.class);
+        connectIntent.putExtra(AccountManager.KEY_ACCOUNT_NAME, mAccount.name);
+        startService(connectIntent);
+
     }
 
     /*
