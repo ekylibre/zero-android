@@ -60,7 +60,6 @@ public class MainActivity extends AppCompatActivity
         setFloatingActBtn();
         setDrawerLayout();
         setTodolist();
-        setAccountName(mNavigationView);
         startConnectionManager();
     }
 
@@ -69,7 +68,6 @@ public class MainActivity extends AppCompatActivity
         Intent connectIntent = new Intent(MainActivity.this, ConnectionManagerService.class);
         connectIntent.putExtra(AccountManager.KEY_ACCOUNT_NAME, mAccount.name);
         startService(connectIntent);
-
     }
 
     /*
@@ -160,6 +158,15 @@ public class MainActivity extends AppCompatActivity
                 (ListView)findViewById(R.id.listView));
     }
 
+    @Override
+    public void onStart()
+    {
+        super.onStart();
+        AccountTool accTool = new AccountTool(MainActivity.this);
+        mAccount = accTool.getCurrentAccount();
+        setAccountName(mNavigationView);
+    }
+
     /*
     ** Close slide menu on back press
     */
@@ -245,7 +252,6 @@ public class MainActivity extends AppCompatActivity
         {
 
         }
-
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return (true);
