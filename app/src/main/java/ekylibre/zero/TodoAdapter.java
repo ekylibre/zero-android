@@ -10,8 +10,8 @@ import android.widget.TextView;
 import java.util.List;
 
 /**************************************
- * Created by pierre on 7/11/16.     *
- * ekylibre.zero for zero-android*
+ * Created by pierre on 7/11/16.      *
+ * ekylibre.zero for zero-android     *
  *************************************/
 
 public class TodoAdapter extends ArrayAdapter<TodoItem>
