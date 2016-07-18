@@ -16,15 +16,19 @@ public class AccountTool
 {
     private Context mContext;
 
-    public Account getCurrentAccount(Context context)
+    public AccountTool(Context context)
     {
         mContext = context;
-        SharedPreferences preference = PreferenceManager.getDefaultSharedPreferences(context);
+    }
+
+    public Account getCurrentAccount()
+    {
+        SharedPreferences preference = PreferenceManager.getDefaultSharedPreferences(mContext);
         String accName = preference.getString(AccountManagerActivity.CURRENT_ACCOUNT_NAME, null);
         String accInstance = preference.getString(AccountManagerActivity.CURRENT_ACCOUNT_INSTANCE, null);
         if (accName == null)
             return (null);
-        Account[] listAccount = AccountManager.get(context).getAccountsByType(SyncAdapter.ACCOUNT_TYPE);
+        Account[] listAccount = AccountManager.get(mContext).getAccountsByType(SyncAdapter.ACCOUNT_TYPE);
         Account currAcc = findCurrentAccount(listAccount, accName, accInstance);
         return (currAcc);
     }
