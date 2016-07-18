@@ -1,5 +1,6 @@
 package ekylibre.zero;
 
+import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
@@ -13,22 +14,25 @@ import android.widget.ListView;
 
 public class AccountManagerActivity extends AppCompatActivity
 {
-    private String[]              listAccount = new String[]{"Admin", "Acc 1", "Account2", "Account3", "Account3", "Account3", "Account3", "Account3", "Account3", "Account3", "Account3", "Account3", "Account3", "Account3", "Account3", "Account3", "Account3", "Account3", "Account3", "Account3"};
-    public ArrayAdapter<String> adapter;
-    private String TAG = "AccountManager";
+    private Account[]               listAccount;
+    private String                  TAG = "AccountManager";
+    private AccountAdapter          accountAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_account_manager);
-        ListView accountList = (ListView)findViewById(R.id.account_list);
+        ListView accountListView = (ListView)findViewById(R.id.account_list);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
-        adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, listAccount);
-        accountList.setAdapter(adapter);
+
+        listAccount = AccountManager.get(this).getAccountsByType(SyncAdapter.ACCOUNT_TYPE);
+
+        accountAdapter = new AccountAdapter(this, listAccount);
+        accountListView.setAdapter(accountAdapter);
     }
 
     public void    addAccount(View v)
