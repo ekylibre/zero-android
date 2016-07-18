@@ -1,16 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="ekylibre.zero.AccountManagerActivity"
-    android:weightSum="1"
-    android:orientation="horizontal">
+    android:fitsSystemWindows="true"
+    tools:context=".AccountManagerActivity">
 
-    <include layout="@layout/toolbar"/>
-
-    <ListView
-        android:layout_width="wrap_content"
+    <Button
+        android:layout_width="281dp"
         android:layout_height="wrap_content"
-        android:id="@+id/listView2" />
-</LinearLayout>
+        android:text="@string/add_account"
+        android:id="@+id/add_account_button"
+        android:layout_gravity="bottom"
+        android:onClick="addAccount"/>
+
+    <include
+        layout="@layout/account_list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="?attr/actionBarSize"
+        android:layout_marginBottom="50dp"/>
+
+
+    <include
+        layout="@layout/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+
+</android.support.design.widget.CoordinatorLayout>

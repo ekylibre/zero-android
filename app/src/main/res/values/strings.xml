@@ -71,5 +71,6 @@
     <string name="todoList">Todo list</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
-    <string name="accoutManager">Account manager</string>
+    <string name="accountManager">Account manager</string>
+    <string name="add_account">Add account</string>
 </resources>

@@ -68,4 +68,6 @@
     <string name="calendar">Agenda</string>
     <string name="todoList">Liste des tâches</string>
     <string name="accountManager">Gestion des comptes</string>
+    <string name="add_account">Ajouter un compte</string>
+
 </resources>

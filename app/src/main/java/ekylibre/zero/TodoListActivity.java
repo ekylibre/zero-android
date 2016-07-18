@@ -47,7 +47,7 @@ public class TodoListActivity
 
 
     /*
-    ** This activity display all the tasks of the day requesting the actual phone calendar
+    ** This activity display all the tasks of the current day requesting the actual phone calendar
     ** Events are stock in ArrayAdapter between today 00h00 tomorrow 00h00
     ** CONSTANTS are use to get the part of data you want from adapter
     */
