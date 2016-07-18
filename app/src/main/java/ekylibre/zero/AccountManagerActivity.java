@@ -3,12 +3,15 @@ package ekylibre.zero;
 import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
@@ -17,6 +20,8 @@ public class AccountManagerActivity extends AppCompatActivity
     private Account[]               listAccount;
     private String                  TAG = "AccountManager";
     private AccountAdapter          accountAdapter;
+    public final static String      CURRENT_ACCOUNT_NAME = "Current account";
+    public final static String      CURRENT_ACCOUNT_INSTANCE = "Current instance";
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -28,11 +33,28 @@ public class AccountManagerActivity extends AppCompatActivity
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
+        getSupportActionBar().setTitle(R.string.accountManager);
 
         listAccount = AccountManager.get(this).getAccountsByType(SyncAdapter.ACCOUNT_TYPE);
 
         accountAdapter = new AccountAdapter(this, listAccount);
         accountListView.setAdapter(accountAdapter);
+        accountListView.setOnItemClickListener(new AdapterView.OnItemClickListener()
+        {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id)
+            {
+                Account newCurrAccount;
+                AccountManager accManager = AccountManager.get(AccountManagerActivity.this);
+
+                newCurrAccount = (Account)parent.getItemAtPosition(position);
+                SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(AccountManagerActivity.this);
+                SharedPreferences.Editor editor = preferences.edit();
+                editor.putString(CURRENT_ACCOUNT_NAME, newCurrAccount.name);
+                editor.putString(CURRENT_ACCOUNT_INSTANCE, accManager.getUserData(newCurrAccount, AuthenticatorActivity.KEY_INSTANCE_URL));
+                editor.commit();
+            }
+        });
     }
 
     public void    addAccount(View v)
@@ -43,4 +65,5 @@ public class AccountManagerActivity extends AppCompatActivity
         startActivity(intent);
         finish();
     }
+
 }

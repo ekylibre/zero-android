@@ -146,12 +146,12 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity {
         // }
         setAccountAuthenticatorResult(intent.getExtras());
         setResult(RESULT_OK, intent);
-        // Redirect to MenuActivity if requested
+        // Redirect to MainActivity if requested
         String redirect = intent.getStringExtra(KEY_REDIRECT);
         if (redirect != null && redirect.equals(CHOICE_REDIRECT_TRACKING)) {
 
 
-            Intent mainIntent = new Intent(this, MenuActivity.class);
+            Intent mainIntent = new Intent(this, MainActivity.class);
             startActivity(mainIntent);
         }
         finish();

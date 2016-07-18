@@ -9,4 +9,5 @@ import android.widget.TextView;
 public class AccountViewHolder
 {
     public TextView accountName;
+    public TextView accountInstance;
 }
