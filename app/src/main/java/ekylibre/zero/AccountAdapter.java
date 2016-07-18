@@ -1,6 +1,7 @@
 package ekylibre.zero;
 
 import android.accounts.Account;
+import android.accounts.AccountManager;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,9 +17,12 @@ import java.util.List;
  *************************************/
 public class AccountAdapter  extends ArrayAdapter<Account>
 {
+    Context mContext;
+
     public AccountAdapter(Context context, Account[] accountList)
     {
         super(context, 0, accountList);
+        mContext = context;
     }
 
     @Override
@@ -35,10 +39,13 @@ public class AccountAdapter  extends ArrayAdapter<Account>
         {
             viewHolder = new AccountViewHolder();
             viewHolder.accountName = (TextView)convertView.findViewById(R.id.accountName);
+            viewHolder.accountInstance = (TextView)convertView.findViewById(R.id.accountInstance);
             convertView.setTag(viewHolder);
         }
+        AccountManager accManager = AccountManager.get(mContext);
         Account     item = getItem(position);
         viewHolder.accountName.setText(item.name);
+        viewHolder.accountInstance.setText(accManager.getUserData(item, AuthenticatorActivity.KEY_INSTANCE_URL));
 
 
         return (convertView);
