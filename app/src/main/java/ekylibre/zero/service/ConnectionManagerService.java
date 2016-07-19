@@ -15,6 +15,7 @@ import android.preference.PreferenceManager;
 import android.util.Log;
 import android.widget.Toast;
 
+import ekylibre.zero.AccountTool;
 import ekylibre.zero.R;
 import ekylibre.zero.SettingsActivity;
 import ekylibre.zero.SyncAdapter;
@@ -68,8 +69,7 @@ public class ConnectionManagerService extends Service
 
         accountName = intent.getStringExtra(AccountManager.KEY_ACCOUNT_NAME);
         Log.d(TAG, "accountName = " + accountName);
-        mAccount = AccountManager.get(this).getAccountsByType(SyncAdapter.ACCOUNT_TYPE)[0];
-
+        mAccount = AccountTool.getCurrentAccount(ConnectionManagerService.this);
         //TODO Chose the better choice to let the service run when we need to
         return (START_NOT_STICKY);
     }

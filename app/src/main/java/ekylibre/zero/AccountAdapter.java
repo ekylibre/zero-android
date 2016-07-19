@@ -42,10 +42,9 @@ public class AccountAdapter  extends ArrayAdapter<Account>
             viewHolder.accountInstance = (TextView)convertView.findViewById(R.id.accountInstance);
             convertView.setTag(viewHolder);
         }
-        AccountManager accManager = AccountManager.get(mContext);
         Account     item = getItem(position);
-        viewHolder.accountName.setText(item.name);
-        viewHolder.accountInstance.setText(accManager.getUserData(item, AuthenticatorActivity.KEY_INSTANCE_URL));
+        viewHolder.accountName.setText(AccountTool.getAccountName(item, mContext));
+        viewHolder.accountInstance.setText(AccountTool.getAccountInstance(item, mContext));
 
 
         return (convertView);
