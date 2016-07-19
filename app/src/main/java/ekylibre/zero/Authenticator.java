@@ -15,6 +15,7 @@ public class Authenticator extends AbstractAccountAuthenticator {
 
     public static final String AUTH_TOKEN_TYPE_GLOBAL = "global";
     public final static String KEY_INSTANCE_URL       = "instanceURL";
+    public final static String KEY_ACCOUNT_NAME        = "accountName";
 
 
     private final String TAG = "Authenticator";

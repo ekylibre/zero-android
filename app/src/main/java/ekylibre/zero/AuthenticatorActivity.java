@@ -28,6 +28,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity {
     public final static String KEY_AUTH_TOKEN_TYPE     = "authTokenType";
     public final static String KEY_CONFIRM_CREDENTIALS = "confirmCredentials";
     public final static String KEY_INSTANCE_URL        = "instanceURL";
+    public final static String KEY_ACCOUNT_NAME        = "accountName";
     public final static String KEY_REDIRECT            = "redirect";
 
     public final static String CHOICE_REDIRECT_TRACKING  = "tracking";
@@ -121,7 +122,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity {
 
     private void finishLogin(Intent intent) {
         Log.d("zero", TAG + "> finishLogin");
-        String accountName = intent.getStringExtra(AccountManager.KEY_ACCOUNT_NAME);
+        String accountName = intent.getStringExtra(AccountManager.KEY_ACCOUNT_NAME) + " - " + intent.getStringExtra(KEY_INSTANCE_URL);
         String accountPassword = intent.getStringExtra(KEY_ACCOUNT_PASSWORD);
         Log.d("zero", TAG + "> finishLogin(" + accountName + ", " + accountPassword + ", " + intent.getStringExtra(AccountManager.KEY_ACCOUNT_TYPE) + ")");
         final Account account = new Account(accountName, intent.getStringExtra(AccountManager.KEY_ACCOUNT_TYPE));
@@ -133,6 +134,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity {
         // (Not setting the auth token will cause another call to the server to authenticate the user)
         Bundle userdata = new Bundle();
         userdata.putString(Authenticator.KEY_INSTANCE_URL, intent.getStringExtra(KEY_INSTANCE_URL));
+        userdata.putString(Authenticator.KEY_ACCOUNT_NAME, intent.getStringExtra(AccountManager.KEY_ACCOUNT_NAME));
 
         if (mAccountManager.addAccountExplicitly(account, accountPassword, userdata)) {
             Log.d("zero", TAG + "> finishLogin > addAccountExplicitly: YES!");

@@ -12,6 +12,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -47,6 +48,8 @@ public class MainActivity extends AppCompatActivity
     private TextView        mNav_instance;
     private NavigationView  mNavigationView;
     private Toolbar         mToolbar;
+    private boolean         firstPass;
+    private final String    TAG = "MainActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -54,6 +57,7 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        firstPass = true;
         if (!setAccount())
             return ;
         setToolbar();
@@ -144,11 +148,11 @@ public class MainActivity extends AppCompatActivity
     {
         View headerLayout = navigationView.inflateHeaderView(R.layout.nav_header_main);
 
-        mNav_account = (TextView)headerLayout.findViewById(R.id.nav_accountName);
-        mNav_account.setText(mAccount.name);
         AccountManager accManager = AccountManager.get(this);
+        mNav_account = (TextView)headerLayout.findViewById(R.id.nav_accountName);
+        mNav_account.setText(AccountTool.getAccountName(mAccount, this));
         mNav_instance = (TextView)headerLayout.findViewById(R.id.nav_farmURL);
-        mNav_instance.setText(accManager.getUserData(mAccount, AuthenticatorActivity.KEY_INSTANCE_URL));
+        mNav_instance.setText(AccountTool.getAccountInstance(mAccount, this));
 
     }
 
@@ -162,9 +166,10 @@ public class MainActivity extends AppCompatActivity
     public void onStart()
     {
         super.onStart();
-        AccountTool accTool = new AccountTool(MainActivity.this);
-        mAccount = accTool.getCurrentAccount();
-        setAccountName(mNavigationView);
+        mAccount = AccountTool.getCurrentAccount(MainActivity.this);
+        if (firstPass)
+            setAccountName(mNavigationView);
+        firstPass = false;
     }
 
     /*
