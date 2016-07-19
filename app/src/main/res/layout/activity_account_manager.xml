@@ -9,12 +9,16 @@
     tools:context=".AccountManagerActivity">
 
     <Button
-        android:layout_width="281dp"
+        android:layout_width="220dp"
         android:layout_height="wrap_content"
         android:text="@string/add_account"
         android:id="@+id/add_account_button"
         android:layout_gravity="bottom"
-        android:onClick="addAccount"/>
+        android:onClick="addAccount"
+        android:drawableLeft="@drawable/account_add"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="#000000"
+        android:textStyle="bold"/>
 
     <include
         layout="@layout/account_list"

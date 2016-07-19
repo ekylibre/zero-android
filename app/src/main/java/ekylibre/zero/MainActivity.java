@@ -159,7 +159,7 @@ public class MainActivity extends AppCompatActivity
     private void    setTodolist()
     {
         TodoListActivity todo = new TodoListActivity(MainActivity.this,
-                (ListView)findViewById(R.id.listView));
+                (ListView)findViewById(R.id.listView), (TextView)findViewById(R.id.todayDate));
     }
 
     @Override
