@@ -51,7 +51,6 @@ public class AccountManagerActivity extends AppCompatActivity
                 SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(AccountManagerActivity.this);
                 SharedPreferences.Editor editor = preferences.edit();
                 editor.putString(CURRENT_ACCOUNT_NAME, newCurrAccount.name);
-                editor.putString(CURRENT_ACCOUNT_INSTANCE, accManager.getUserData(newCurrAccount, AuthenticatorActivity.KEY_INSTANCE_URL));
                 editor.commit();
             }
         });

@@ -10,7 +10,7 @@ import java.util.Objects;
 
 /**************************************
  * Created by pierre on 7/18/16.      *
- * ekylibre.zero for zero-android    *
+ * ekylibre.zero for zero-android     *
  *************************************/
 public class AccountTool
 {
@@ -21,25 +21,52 @@ public class AccountTool
         mContext = context;
     }
 
-    public Account getCurrentAccount()
+    public static String getAccountName(Account account, Context context)
     {
-        SharedPreferences preference = PreferenceManager.getDefaultSharedPreferences(mContext);
+        AccountManager accountManager = AccountManager.get(context);
+        String accName = accountManager.getUserData(account, Authenticator.KEY_ACCOUNT_NAME);
+        return (accName);
+    }
+
+    public static String getAccountInstance(Account account, Context context)
+    {
+        AccountManager accountManager = AccountManager.get(context);
+        String accInstance = accountManager.getUserData(account, Authenticator.KEY_INSTANCE_URL);
+        return (accInstance);
+    }
+
+    public static Account getCurrentAccount(Context context)
+    {
+        SharedPreferences preference = PreferenceManager.getDefaultSharedPreferences(context);
         String accName = preference.getString(AccountManagerActivity.CURRENT_ACCOUNT_NAME, null);
-        String accInstance = preference.getString(AccountManagerActivity.CURRENT_ACCOUNT_INSTANCE, null);
+        if (accName == null)
+        {
+            setFirstAccountPref(preference, context);
+            preference = PreferenceManager.getDefaultSharedPreferences(context);
+            accName = preference.getString(AccountManagerActivity.CURRENT_ACCOUNT_NAME, null);
+        }
         if (accName == null)
             return (null);
-        Account[] listAccount = AccountManager.get(mContext).getAccountsByType(SyncAdapter.ACCOUNT_TYPE);
-        Account currAcc = findCurrentAccount(listAccount, accName, accInstance);
+        Account[] listAccount = AccountManager.get(context).getAccountsByType(SyncAdapter.ACCOUNT_TYPE);
+        Account currAcc = findCurrentAccount(listAccount, accName, context);
         return (currAcc);
     }
 
-    private Account findCurrentAccount(Account[] listAccount, String accName, String accInstance)
+    private static void    setFirstAccountPref(SharedPreferences preferences, Context context)
+    {
+        Account newCurrAccount = AccountManager.get(context).getAccountsByType(SyncAdapter.ACCOUNT_TYPE)[0];
+
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putString(AccountManagerActivity.CURRENT_ACCOUNT_NAME, newCurrAccount.name);
+        editor.commit();
+    }
+
+    private static Account findCurrentAccount(Account[] listAccount, String accName, Context context)
     {
         int i = -1;
-        AccountManager accManager = AccountManager.get(mContext);
+        AccountManager accManager = AccountManager.get(context);
 
-        while (listAccount[++i] != null && !Objects.equals(listAccount[i].name, accName)
-                && !Objects.equals(accManager.getUserData(listAccount[i], AuthenticatorActivity.KEY_INSTANCE_URL), accInstance));
+        while (++i < listAccount.length && !Objects.equals(listAccount[i].name, accName));
         return (listAccount[i]);
     }
 }
