@@ -52,6 +52,7 @@ public class AccountManagerActivity extends AppCompatActivity
                 SharedPreferences.Editor editor = preferences.edit();
                 editor.putString(CURRENT_ACCOUNT_NAME, newCurrAccount.name);
                 editor.commit();
+                Log.d(TAG, "New current account is ==> " + newCurrAccount.name);
             }
         });
     }
