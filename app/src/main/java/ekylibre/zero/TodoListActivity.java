@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 /**************************************
  * Created by pierre on 7/8/16.       *
@@ -44,6 +45,7 @@ public class TodoListActivity
     private ListView                todoListView;
     private ArrayAdapter<String>    adapter;
     private Context                 context;
+    private TextView                todayDate;
 
 
     /*
@@ -52,14 +54,18 @@ public class TodoListActivity
     ** CONSTANTS are use to get the part of data you want from adapter
     */
 
-    public TodoListActivity(Context context, ListView foundListView)
+    public TodoListActivity(Context context, ListView foundListView, TextView foundTextView)
     {
         this.todoListView = foundListView;
+        this.todayDate = foundTextView;
         this.context = context;
         List<TodoItem> todolist = createList();
 
         TodoAdapter adapter = new TodoAdapter(context, todolist);
         todoListView.setAdapter(adapter);
+        String date = DateFormat.getDateInstance(DateFormat.LONG,
+                Locale.getDefault()).format(getDateOfDay().getTime());
+        todayDate.setText(date);
     }
 
     public void setListView(ListView listView)

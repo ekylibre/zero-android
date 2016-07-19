@@ -10,6 +10,8 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.app.Activity;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.text.InputType;
 import android.text.TextUtils;
 import android.util.Log;
@@ -33,9 +35,8 @@ import java.util.ListIterator;
 
 
 
-public class PlantCountingActivity extends Activity {
-
-
+public class PlantCountingActivity extends AppCompatActivity
+{
     private LinearLayout mLayout;
     private EditText mObservationEditText;
     private TextView mAverageText;
@@ -44,8 +45,8 @@ public class PlantCountingActivity extends Activity {
     private TextView mDensityText;
     private List<EditText> mListValues = new ArrayList();
     private ListIterator<EditText> mListIteratorValues;
-    private AlertDialog.Builder mPlantChooser;
-    private AlertDialog.Builder mVarietyChooser;
+    private AlertDialog.Builder mPlantChooser = null;
+    private AlertDialog.Builder mVarietyChooser = null;
 
 
     private CharSequence[] mPlantID;
@@ -53,12 +54,13 @@ public class PlantCountingActivity extends Activity {
     private CharSequence[] mAbaqueTab;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState)
+    {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.plant_counting);
 
-        mLayout = (LinearLayout) findViewById(R.id.AllValuesLayout);
+        mLayout = (LinearLayout) findViewById(R.id.Valueslayout);
         mObservationEditText = (EditText)findViewById(R.id.observationEditText);
         mPlantName = (Button)findViewById(R.id.plantName);
         mAbaque = (Button)findViewById(R.id.Abaque);
@@ -66,114 +68,93 @@ public class PlantCountingActivity extends Activity {
         mAverageText = (TextView) findViewById(R.id.textAverage);
         mAverageText.setText("");
 
-        mPlantID = new CharSequence[4];
-        mPlantNameTab = new CharSequence[4];
 
-        try {
-            getActionBar().setDisplayHomeAsUpEnabled(true);
-        }
-        catch (NullPointerException n){
-            Log.d("zero","Null pointer exception action bar");
-        }
-        String[] mProjectionDensity = {
-                ZeroContract.PlantDensityAbacusItemsColumns.SEEDING_DENSITY_VALUE
-        };
-        String[] mProjectionPlantId = {
-                ZeroContract.PlantsColumns._ID
-        };
-        String[] mProjectionPlantName = {
-                ZeroContract.PlantsColumns.NAME
-        };
+/*        String[] mProjectionDensity = {ZeroContract.PlantDensityAbacusItemsColumns.SEEDING_DENSITY_VALUE};
+        String[] mProjectionPlantId = {ZeroContract.PlantsColumns._ID};
+        String[] mProjectionPlantName = {ZeroContract.PlantsColumns.NAME};
 
         //String[] mProjectionAbacus = {
         //        ZeroContract.Plants
         //};
 
-        /////////////////////////////////////////////////
 
         Cursor mCursorPlantName = getContentResolver().query(
                 ZeroContract.Plants.CONTENT_URI,
                 mProjectionPlantName,
                 null,
                 null,
-                null
-        );
+                null);
+
         Cursor mCursorPlantId = getContentResolver().query(
                 ZeroContract.Plants.CONTENT_URI,
                 mProjectionPlantId,
                 null,
                 null,
-                null
-        );
+                null);
 
 
-        Log.d("zero", "beginning plant name");
-        try {
-            Log.d("zero","plant name count :" + mCursorPlantName.getCount());
-            if (mCursorPlantName.getCount() > 0 && mCursorPlantId.getCount() > 0) {
-                Log.d("zero", "data exists");
-                mCursorPlantName.moveToFirst();
-                mCursorPlantId.moveToFirst();
-                int itName = 0;
-                int itId = 0;
-                mPlantNameTab = new CharSequence[mCursorPlantName.getCount()];
-                do {
+        Log.d("zero", "plant name count :" + mCursorPlantName.getCount());
+        if (mCursorPlantName.getCount() > 0 && mCursorPlantId.getCount() > 0)
+        {
+            Log.d("zero", "data exists");
+            int itName = 0;
+            int itId = 0;
+            mPlantNameTab = new CharSequence[mCursorPlantName.getCount()];
+            if (mCursorPlantName.moveToFirst())
+            {
+                do
+                {
                     Log.d("zero", "name : " + mCursorPlantName.getString(0));
                     mPlantNameTab[itName] = mCursorPlantName.getString(0);
                     Log.d("zero", "tablename[" + itName + "] : " + mPlantNameTab[itName]);
                     itName++;
-                }
-                while (mCursorPlantName.moveToNext());
-
-                do {
+                } while (mCursorPlantName.moveToNext());
+            }
+            if (mCursorPlantId.moveToFirst())
+            {
+                do
+                {
                     Log.d("zero", "id : " + mCursorPlantId.getString(0));
                     mPlantID[itId] = mCursorPlantId.getString(0);
                     itId++;
-                }
-                while (mCursorPlantName.moveToNext());
-
-                Log.d("zero", "end plant name");
-                Log.d("zero", "nb in cursor : " + mCursorPlantName.getCount());
-
-            } else {
-                Log.d("zero", "Plant data does NOT exist");
+                } while (mCursorPlantId.moveToNext());
             }
+            Log.d("zero", "end plant name");
+            Log.d("zero", "nb in cursor : " + mCursorPlantName.getCount());
 
-
-            mPlantChooser = new AlertDialog.Builder(this)
-                    .setTitle("Choix du plant")
-
-                    .setItems(mPlantNameTab, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            mPlantName.setText(mPlantNameTab[which]);
-                            //Mise a jour de la seconde liste
-                            setAbacusList();
-                        }
-                    });
-
-            mCursorPlantId.close();
-            mCursorPlantName.close();
         }
-        catch(NullPointerException n){
-            Toast toast = Toast.makeText(getApplicationContext(), "No data", Toast.LENGTH_SHORT);
-            toast.show();
+        else
+        {
+            Toast.makeText(this, "Data does not exist", Toast.LENGTH_SHORT).show();
+            Log.d("zero", "Plant data does NOT exist");
         }
 
-        /////////////////////////////////////////////////
 
+        mPlantChooser = new AlertDialog.Builder(this)
+                .setTitle("Choix du plant")
+                .setItems(mPlantNameTab, new DialogInterface.OnClickListener()
+                {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which)
+                    {
+                        mPlantName.setText(mPlantNameTab[which]);
+                        //Mise a jour de la seconde liste
 
+                    }
+                });
+
+        mCursorPlantId.close();
+        mCursorPlantName.close();
+        setAbacusList();*/
     }
+
     //Once the item from the plant is chosen. The abacus list must be updated
-    public void setAbacusList(){
+    public void setAbacusList()
+    {
 
-        String[] mProjectionAbaque = {
-                ZeroContract.PlantDensityAbaci.NAME
-        };
+/*        String[] mProjectionAbaque = {ZeroContract.PlantDensityAbaci.NAME};
 
-        String[] mProjectionVariety = {
-                ZeroContract.Plants.VARIETY,
-        };
+        String[] mProjectionVariety = {ZeroContract.Plants.VARIETY};
 
 
 
@@ -182,84 +163,88 @@ public class PlantCountingActivity extends Activity {
                 mProjectionVariety,
                 ZeroContract.PlantsColumns.NAME + " like \"" + mPlantName.getText().toString() + "\"",
                 null,
-                null
-        );
+                null);
         Log.d("zero", "valeur récupérée : " + mPlantName.getText().toString());
 
-        try {
+        if (mCursorVariety.moveToFirst())
+        {
 
-            mCursorVariety.moveToFirst();
-
-            Log.d("zero", "Valeur du where : " + mCursorVariety.getString(0).toString());
-
+            Log.d("zero", "Valeur du where : " + mCursorVariety.getString(0));
             Cursor mCursorAbaque = getContentResolver().query(
                     ZeroContract.PlantDensityAbaci.CONTENT_URI,
                     mProjectionAbaque,
                     ZeroContract.PlantDensityAbaciColumns.VARIETY + " like \"" + mCursorVariety.getString(0).toString() + "\"",
                     null,
-                    null
-            );
+                    null);
 
             Log.d("zero", "beginning abaque");
-            if (mCursorAbaque.getCount() > 0) {
+            if (mCursorAbaque.getCount() > 0)
+            {
                 Log.d("zero", "data exists");
                 mCursorAbaque.moveToFirst();
                 int itName = 0;
                 mAbaqueTab = new CharSequence[mCursorAbaque.getCount()];
-                do {
+                do
+                {
                     Log.d("zero", "name : " + mCursorAbaque.getString(0));
                     mAbaqueTab[itName] = mCursorAbaque.getString(0);
                     Log.d("zero", "tablename[" + itName + "] : " + mAbaqueTab[itName]);
-
                     itName++;
-                }
-                while (mCursorAbaque.moveToNext());
+                } while (mCursorAbaque.moveToNext());
 
                 Log.d("zero", "end Abaque");
                 Log.d("zero", "nb in cursor : " + mCursorAbaque.getCount());
-            } else {
+            }
+            else
+            {
                 Log.d("zero", "abaque data does NOT exist");
             }
-
             mVarietyChooser = new AlertDialog.Builder(this)
                     .setTitle("Choix de l'abaque")
                     .setNegativeButton(android.R.string.cancel, null)
-                    .setItems(mAbaqueTab, new DialogInterface.OnClickListener() {
+                    .setItems(mAbaqueTab, new DialogInterface.OnClickListener()
+                    {
                         @Override
-                        public void onClick(DialogInterface dialog, int which) {
+                        public void onClick(DialogInterface dialog, int which)
+                        {
                             mAbaque.setText(mAbaqueTab[which]);
                         }
                     });
-            mCursorVariety.close();
-            mCursorAbaque.close();
         }
-        catch(NullPointerException n){
-            Toast toast = Toast.makeText(getApplicationContext(), "No data", Toast.LENGTH_SHORT);
-            toast.show();
-        }
-
+        mCursorVariety.close();*/
     }
 
 
-    public void chosePlant(View view) {
-            mPlantChooser.show();
+    public void chosePlant(View view)
+    {
+/*        if (mPlantChooser == null)
+            return ;
+        mPlantChooser.show();*/
     }
-    public void choseAbaque(View view){
-        mVarietyChooser.show();
+
+    public void choseAbaque(View view)
+    {
+/*        if (mVarietyChooser == null)
+            return ;
+        mVarietyChooser.show();*/
     }
 
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
+    public boolean onCreateOptionsMenu(Menu menu)
+    {
         // Inflate the menu items for use in the action bar
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.form, menu);
         return super.onCreateOptionsMenu(menu);
     }
+
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
         // Handle presses on the action bar items
-        switch (item.getItemId()) {
+        switch (item.getItemId())
+        {
             case R.id.action_save:
                 savePlantCounting(item.getActionView());
                 return true;
@@ -268,19 +253,24 @@ public class PlantCountingActivity extends Activity {
         }
     }
 
-    public void savePlantCounting(View v) {
+    public void savePlantCounting(View v)
+    {
 
+/*
         // Defines an object to contain the new values to insert
         ContentValues mNewValuesPlantCounting = new ContentValues();
         ContentValues mNewValuesPlantCountingItem = new ContentValues();
+
         // Sets the values of each column and inserts the word. The arguments to the "put"
         // method are "column name" and "value"
         mNewValuesPlantCounting.put(ZeroContract.PlantCountingsColumns.OBSERVED_AT, (new java.util.Date()).getTime());
         LocationManager locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
         String locationProvider = LocationManager.NETWORK_PROVIDER;
+
         // Or use LocationManager.GPS_PROVIDER
         Location lastKnownLocation = locationManager.getLastKnownLocation(locationProvider);
-        if (lastKnownLocation != null) {
+        if (lastKnownLocation != null)
+        {
             mNewValuesPlantCounting.put(ZeroContract.PlantCountingsColumns.LATITUDE, lastKnownLocation.getLatitude());
             mNewValuesPlantCounting.put(ZeroContract.PlantCountingsColumns.LONGITUDE, lastKnownLocation.getLongitude());
         }
@@ -288,31 +278,33 @@ public class PlantCountingActivity extends Activity {
         mListIteratorValues = mListValues.listIterator();
 
         getContentResolver().insert(
-                ZeroContract.PlantCountings.CONTENT_URI,   // the user dictionary content URI
-                mNewValuesPlantCounting                          // the values to insert
-        );
+                ZeroContract.PlantCountings.CONTENT_URI,
+                mNewValuesPlantCounting);
 
-        while(mListIteratorValues.hasNext()){
+        while(mListIteratorValues.hasNext())
+        {
             EditText et = mListIteratorValues.next();
-            if(et.getText().toString() != null){
+            if(et.getText().toString() != null)
+            {
                 mNewValuesPlantCountingItem.put(ZeroContract.PlantCountingItemsColumns.VALUE, et.getText().toString());
             }
         }
 
         getContentResolver().insert(
                 ZeroContract.PlantCountingItems.CONTENT_URI,
-                mNewValuesPlantCountingItem
-        );
+                mNewValuesPlantCountingItem);
 
         Toast toast = Toast.makeText(getApplicationContext(), "Plant Counting saved", Toast.LENGTH_SHORT);
         toast.show();
 
         //close activity
         this.finish();
+*/
 
     }
 
-    public void addValue(View view){
+    public void addValue(View view)
+    {
 
         EditText input = new EditText(this);
         input.setLayoutParams(new TableLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, 1f));
@@ -329,20 +321,20 @@ public class PlantCountingActivity extends Activity {
 
     }
 
-    public void getAverage(View view){
+    public void getAverage(View view)
+    {
 
         float total = 0;
         int nbvalues = 0;
         float moyenne = 0;
         Iterator it = mListValues.iterator();
 
-        while(it.hasNext()){
-
+        while(it.hasNext())
+        {
             EditText editText = (EditText) it.next();
             String txt = editText.getText().toString();
 
-            if(
-                    !editText.getText().toString().contains("/") &&
+            if (!editText.getText().toString().contains("/") &&
                     !editText.getText().toString().contains("*") &&
                     !editText.getText().toString().contains("-") &&
                     !editText.getText().toString().contains("+") &&
@@ -352,17 +344,18 @@ public class PlantCountingActivity extends Activity {
                     !editText.getText().toString().contains(":") &&
                     !editText.getText().toString().contains("(") &&
                     !editText.getText().toString().contains(")") &&
-                    !TextUtils.isEmpty(editText.getText())
-                    ){
+                    !TextUtils.isEmpty(editText.getText()))
+            {
                 total += Float.parseFloat(txt);
                 nbvalues++;
             }
-            else{
+            else
+            {
                 Toast toast = Toast.makeText(this, "wrong type at value " + editText.getText().toString(), Toast.LENGTH_SHORT);
                 toast.show();
             }
         }
-        moyenne = total/nbvalues;
+        moyenne = total / nbvalues;
         mAverageText.setText(String.valueOf(moyenne));
     }
 
