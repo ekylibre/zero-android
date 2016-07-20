@@ -4,30 +4,23 @@ package ekylibre.zero;
 import android.app.AlertDialog;
 import android.content.ContentValues;
 import android.content.Context;
-import android.content.DialogInterface;
-import android.database.Cursor;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
-import android.app.Activity;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.text.InputType;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TableLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -255,7 +248,6 @@ public class PlantCountingActivity extends AppCompatActivity
 
     public void savePlantCounting(View v)
     {
-
 /*
         // Defines an object to contain the new values to insert
         ContentValues mNewValuesPlantCounting = new ContentValues();
@@ -298,65 +290,44 @@ public class PlantCountingActivity extends AppCompatActivity
         toast.show();
 
         //close activity
-        this.finish();
-*/
+        this.finish();*/
 
     }
 
     public void addValue(View view)
     {
-
         EditText input = new EditText(this);
-        input.setLayoutParams(new TableLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, 1f));
-        LinearLayout valueLayout = new LinearLayout(this);
-        valueLayout.setOrientation(LinearLayout.HORIZONTAL);
-
-        mLayout.addView(valueLayout);
-
-        input.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_CLASS_NUMBER);
-        valueLayout.addView(input);
-
-
+        input.setLayoutParams(new TableLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT, 1f));
+        input.setPadding(0, 50, 0, 0);
+        input.setInputType(InputType.TYPE_CLASS_NUMBER);
+        mLayout.addView(input);
         mListValues.add(input);
-
     }
 
     public void getAverage(View view)
     {
+        float   total = 0;
+        int     nbvalues = 0;
+        float   averageScore = 0;
 
-        float total = 0;
-        int nbvalues = 0;
-        float moyenne = 0;
         Iterator it = mListValues.iterator();
 
         while(it.hasNext())
         {
-            EditText editText = (EditText) it.next();
+            EditText editText = (EditText)it.next();
             String txt = editText.getText().toString();
 
-            if (!editText.getText().toString().contains("/") &&
-                    !editText.getText().toString().contains("*") &&
-                    !editText.getText().toString().contains("-") &&
-                    !editText.getText().toString().contains("+") &&
-                    !editText.getText().toString().contains(".") &&
-                    !editText.getText().toString().contains(",") &&
-                    !editText.getText().toString().contains(";") &&
-                    !editText.getText().toString().contains(":") &&
-                    !editText.getText().toString().contains("(") &&
-                    !editText.getText().toString().contains(")") &&
-                    !TextUtils.isEmpty(editText.getText()))
+            if (!TextUtils.isEmpty(editText.getText()))
             {
                 total += Float.parseFloat(txt);
                 nbvalues++;
             }
-            else
-            {
-                Toast toast = Toast.makeText(this, "wrong type at value " + editText.getText().toString(), Toast.LENGTH_SHORT);
-                toast.show();
-            }
         }
-        moyenne = total / nbvalues;
-        mAverageText.setText(String.valueOf(moyenne));
+        if (nbvalues == 0)
+            averageScore = 0;
+        else
+            averageScore = total / nbvalues;
+        mAverageText.setText(String.valueOf(averageScore));
     }
 
 }

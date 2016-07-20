@@ -1,109 +1,113 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
+<ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin">
 
-
-    <Button
+    <RelativeLayout
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/select_plant"
-        android:id="@+id/plantName"
-        android:onClick="chosePlant"
-        android:padding="10dp"
-        android:layout_marginTop="30dp"
-        android:textAppearance="?android:attr/textAppearanceLarge"/>
-
-    <Button
-        android:layout_marginTop="10dp"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/select_abacus"
-        android:id="@+id/Abaque"
-        android:onClick="choseAbaque"
-        android:padding="10dp"
-        android:layout_below="@+id/plantName"
-        android:textAppearance="?android:attr/textAppearanceLarge"/>
-
-    <Button
-        android:layout_marginTop="10dp"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/advocated_density"
-        android:id="@+id/densityValue"
-        android:padding="10dp"
-        android:layout_below="@+id/Abaque"
-        android:textAppearance="?android:attr/textAppearanceLarge"/>
+        android:layout_height="fill_parent"
+        android:orientation="vertical"
+        android:focusable="true"
+        android:focusableInTouchMode="true">
 
 
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="+"
-        android:id="@+id/button7"
-        android:layout_gravity="center_horizontal"
-        android:onClick="addValue"
-        android:layout_below="@+id/densityValue"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="60dp"/>
-
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/Valueslayout"
-        android:orientation="horizontal">
-        <LinearLayout
-            android:orientation="horizontal"
+        <Button
             android:layout_width="fill_parent"
-            android:layout_height="match_parent"
-            android:layout_marginBottom="5dp"
-            android:layout_marginTop="5dp"
-            android:id="@+id/valueLayout">
+            android:layout_height="wrap_content"
+            android:text="@string/select_plant"
+            android:id="@+id/plantName"
+            android:onClick="chosePlant"
+            android:padding="10dp"
+            android:layout_marginTop="20dp"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:layout_alignEnd="@+id/Abaque" />
+
+        <Button
+            android:layout_marginTop="10dp"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/select_abacus"
+            android:id="@+id/Abaque"
+            android:onClick="choseAbaque"
+            android:padding="10dp"
+            android:layout_below="@+id/plantName"
+            android:textAppearance="?android:attr/textAppearanceLarge"/>
+
+        <Button
+            android:layout_marginTop="10dp"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/advocated_density"
+            android:id="@+id/densityValue"
+            android:padding="10dp"
+            android:layout_below="@+id/Abaque"
+            android:textAppearance="?android:attr/textAppearanceLarge"/>
+
+
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="+"
+            android:id="@+id/button7"
+            android:layout_gravity="center_horizontal"
+            android:onClick="addValue"
+            android:layout_below="@+id/densityValue"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="60dp"/>
+
+
+        <LinearLayout
+            android:layout_width="400dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/Valueslayout"
+            android:orientation="vertical"
+            android:layout_below="@+id/button7"
+            android:layout_centerHorizontal="true"
+            android:paddingTop="5dp">
 
         </LinearLayout>
-    </LinearLayout>
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/get_average_button"
-        android:id="@+id/buttonAverage"
-        android:onClick="getAverage"
-        android:layout_below="@+id/button7"
-        android:layout_marginTop="40dp"/>
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/get_average_button"
+            android:id="@+id/buttonAverage"
+            android:onClick="getAverage"
+            android:layout_below="@+id/Valueslayout"
+            android:layout_marginTop="40dp" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Result calculus"
-        android:id="@+id/textAverage"
-        android:layout_gravity="center_horizontal"
-        android:textAlignment="center"
-        android:layout_alignBaseline="@+id/buttonAverage"
-        android:layout_alignBottom="@+id/buttonAverage"
-        android:layout_alignStart="@+id/button7" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Result calculus"
+            android:id="@+id/textAverage"
+            android:layout_gravity="center_horizontal"
+            android:textAlignment="center"
+            android:layout_alignBaseline="@+id/buttonAverage"
+            android:layout_alignBottom="@+id/buttonAverage"
+            android:layout_alignStart="@+id/button7" />
 
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/observations"
-        android:id="@+id/textView4"
-        android:layout_marginBottom="5dp"
-        android:layout_marginTop="5dp"
-        android:layout_below="@+id/buttonAverage"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/observations"
+            android:id="@+id/textView4"
+            android:layout_marginBottom="5dp"
+            android:layout_marginTop="5dp"
+            android:layout_below="@+id/buttonAverage"/>
 
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/observationEditText"
-        android:layout_below="@+id/textView4"/>
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/observationEditText"
+            android:layout_below="@+id/textView4" />
 
-</RelativeLayout>
+    </RelativeLayout>
+</ScrollView>
