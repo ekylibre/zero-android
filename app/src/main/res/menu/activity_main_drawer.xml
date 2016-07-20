@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    tools:context=".MainActivity">
 
     <group android:checkableBehavior="single">
         <item
@@ -14,22 +16,23 @@
             android:id="@+id/nav_counting"
             android:icon="@drawable/ic_count"
             android:title="@string/new_count" />
-        <item
-            android:id="@+id/nav_settings"
-            android:icon="@drawable/ic_menu_manage"
-            android:title="@string/settings" />
+
     </group>
 
-    <item android:title="Communicate">
+    <item android:title="@string/parameters">
         <menu>
             <item
                 android:id="@+id/nav_account"
                 android:icon="@drawable/ic_account"
                 android:title="@string/accountManager" />
             <item
+                android:id="@+id/nav_settings"
+                android:icon="@drawable/ic_menu_manage"
+                android:title="@string/settings" />
+            <item
                 android:id="@+id/nav_send"
                 android:icon="@drawable/ic_menu_send"
-                android:title="Send" />
+                android:title="Void" />
         </menu>
     </item>
 
