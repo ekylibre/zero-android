@@ -67,6 +67,23 @@ public class MainActivity extends AppCompatActivity
         startConnectionManager();
     }
 
+    /*
+    ** Callback call when the activity is visible / revisible
+    ** Use to set / reset the header of the drawer layout
+    */
+    @Override
+    public void onStart()
+    {
+        super.onStart();
+        mAccount = AccountTool.getCurrentAccount(MainActivity.this);
+        if (firstPass)
+            setAccountName(mNavigationView);
+        firstPass = false;
+    }
+
+    /*
+    ** Start service which auto sync when internet is detected
+    */
     private void    startConnectionManager()
     {
         Intent connectIntent = new Intent(MainActivity.this, ConnectionManagerService.class);
@@ -109,6 +126,9 @@ public class MainActivity extends AppCompatActivity
         });
     }
 
+    /*
+    ** Set toolbar which is the new version of th action bar
+    */
     private void    setToolbar()
     {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -156,20 +176,15 @@ public class MainActivity extends AppCompatActivity
 
     }
 
+    /*
+    ** The main content of the activity which is set on TodoListActivity
+    ** This list will sync your phone and Ekylibre calendar to show all
+    ** tasks of the current day
+    */
     private void    setTodolist()
     {
         TodoListActivity todo = new TodoListActivity(MainActivity.this,
                 (ListView)findViewById(R.id.listView), (TextView)findViewById(R.id.todayDate));
-    }
-
-    @Override
-    public void onStart()
-    {
-        super.onStart();
-        mAccount = AccountTool.getCurrentAccount(MainActivity.this);
-        if (firstPass)
-            setAccountName(mNavigationView);
-        firstPass = false;
     }
 
     /*
@@ -262,6 +277,10 @@ public class MainActivity extends AppCompatActivity
         return (true);
     }
 
+    /*
+    ** onClick metchod which is call when click on header of drawer layout is detected
+    ** actualy redirecting to the accout manager
+    */
     public void launchAccountManagerActivity(View v)
     {
         Intent intent = new Intent(this, AccountManagerActivity.class);
