@@ -7,6 +7,8 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.database.Cursor;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
@@ -27,6 +29,7 @@ import android.view.ViewTreeObserver;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TableLayout;
 import android.widget.TextView;
@@ -47,10 +50,16 @@ public class PlantCountingActivity extends AppCompatActivity
     private TextView                mPlantName;
     private TextView                mAbaque;
     private TextView                mDensityText;
+    private ImageView               mIndicator;
     private List<EditText>          mListValues = new ArrayList();
     private ListIterator<EditText>  mListIteratorValues;
     private AlertDialog.Builder     mPlantChooser = null;
     private AlertDialog.Builder     mVarietyChooser = null;
+    private Drawable                mGreen;
+    private Drawable                mOrange;
+    private Drawable                mRed;
+
+    private int                     testColor = 0;
 
 
     private CharSequence[] mPlantID;
@@ -68,6 +77,10 @@ public class PlantCountingActivity extends AppCompatActivity
         mAbaque = (Button)findViewById(R.id.Abaque);
         mAverageText = (TextView) findViewById(R.id.textAverage);
         mAverageText.setText("");
+        mIndicator = (ImageView)findViewById(R.id.indicator);
+        mGreen = getResources().getDrawable(R.color.basic_green);
+        mOrange = getResources().getDrawable(R.color.basic_orange);
+        mRed = getResources().getDrawable(R.color.basic_red);
 
         Cursor cursorPlantName = queryPlantName();
         Cursor cursorPlantId = queryPlantId();
@@ -98,9 +111,19 @@ public class PlantCountingActivity extends AppCompatActivity
         setHandlerAverageValue();
     }
 
+    private boolean averageIsOkay(float averageValue)
+    {
+        //TODO here check if the average value is in the right interval from abacus
+        return (true);
+    }
+
     private void setHandlerAverageValue()
     {
-        final int     delay = 1000;
+/*
+        final int     delay = 500;
+*/
+        //test value for color iteration
+        final int delay = 3000;
 
         final Handler handler = new Handler();
         handler.postDelayed(new Runnable()
@@ -108,7 +131,18 @@ public class PlantCountingActivity extends AppCompatActivity
             @Override
             public void run()
             {
-                getAverage();
+                float average = getAverage();
+                if (averageIsOkay(average))
+                {
+                    if (testColor % 3 == 0)
+                        mIndicator.setBackground(mGreen);
+                    else if (testColor % 3 == 1)
+                        mIndicator.setBackground(mOrange);
+                    else
+                        mIndicator.setBackground(mRed);
+                    testColor++;
+                }
+
                 handler.postDelayed(this, delay);
             }
         }, delay);
@@ -387,7 +421,7 @@ public class PlantCountingActivity extends AppCompatActivity
         mListValues.add(input);
     }
 
-    public void getAverage()
+    public float getAverage()
     {
         float   total = 0;
         int     nbvalues = 0;
@@ -411,5 +445,6 @@ public class PlantCountingActivity extends AppCompatActivity
         else
             averageScore = total / nbvalues;
         mAverageText.setText(String.valueOf(averageScore));
+        return (averageScore);
     }
 }
