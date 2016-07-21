@@ -1,6 +1,7 @@
 package ekylibre.zero;
 
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.ContentValues;
 import android.content.Context;
@@ -9,15 +10,21 @@ import android.database.Cursor;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.text.InputType;
 import android.text.TextUtils;
+import android.util.DisplayMetrics;
 import android.util.Log;
+import android.util.TypedValue;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
+import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -57,10 +64,8 @@ public class PlantCountingActivity extends AppCompatActivity
         setContentView(R.layout.plant_counting);
 
         mLayout = (LinearLayout) findViewById(R.id.Valueslayout);
-        mObservationEditText = (EditText)findViewById(R.id.observationEditText);
         mPlantName = (Button)findViewById(R.id.plantName);
         mAbaque = (Button)findViewById(R.id.Abaque);
-        mDensityText = (Button)findViewById(R.id.densityValue);
         mAverageText = (TextView) findViewById(R.id.textAverage);
         mAverageText.setText("");
 
@@ -90,7 +95,23 @@ public class PlantCountingActivity extends AppCompatActivity
 
         cursorPlantId.close();
         cursorPlantName.close();
+        setHandlerAverageValue();
+    }
 
+    private void setHandlerAverageValue()
+    {
+        final int     delay = 1000;
+
+        final Handler handler = new Handler();
+        handler.postDelayed(new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                getAverage();
+                handler.postDelayed(this, delay);
+            }
+        }, delay);
     }
 
     private void    createPlantChooser()
@@ -159,7 +180,6 @@ public class PlantCountingActivity extends AppCompatActivity
         return (cursorPlantName);
     }
 
-    //Once the item from the plant is chosen. The abacus list must be updated
     public void setAbacusList()
     {
         Cursor cursorVariety = queryVariety();
@@ -260,7 +280,6 @@ public class PlantCountingActivity extends AppCompatActivity
     @Override
     public boolean onCreateOptionsMenu(Menu menu)
     {
-        // Inflate the menu items for use in the action bar
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.form, menu);
         return super.onCreateOptionsMenu(menu);
@@ -269,7 +288,6 @@ public class PlantCountingActivity extends AppCompatActivity
     @Override
     public boolean onOptionsItemSelected(MenuItem item)
     {
-        // Handle presses on the action bar items
         switch (item.getItemId())
         {
             case R.id.action_save:
@@ -348,14 +366,28 @@ public class PlantCountingActivity extends AppCompatActivity
     public void addValue(View view)
     {
         EditText input = new EditText(this);
-        input.setLayoutParams(new TableLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT, 1f));
-        input.setPadding(0, 35, 0, 0);
+        TableLayout.LayoutParams lp = new TableLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT, 1f);
+        lp.setMargins(0, 30, 0, 0);
+        input.setPadding(0, 0, 0, 10);
+        input.setLayoutParams(lp);
+        input.setSingleLine(true);
         input.setInputType(InputType.TYPE_CLASS_NUMBER);
+        input.setOnEditorActionListener(
+            new EditText.OnEditorActionListener()
+            {
+                @Override
+                public boolean onEditorAction(TextView v, int actionId, KeyEvent event)
+                {
+                    if (event == null)
+                        getAverage();
+                    return (false);
+                }
+            });
         mLayout.addView(input);
         mListValues.add(input);
     }
 
-    public void getAverage(View view)
+    public void getAverage()
     {
         float   total = 0;
         int     nbvalues = 0;
