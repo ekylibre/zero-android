@@ -22,7 +22,7 @@ public class PlantCounting {
         // JSONObject params = Instance.BundleToJSON(attributes);
         JSONObject params = attributes;
 
-        JSONArray json = instance.getJSONArray("/api/v1/plants_counting", params);
+        JSONArray json = instance.getJSONArray("/api/v1/plant_countings", params);
 
         List<PlantCounting> array = new ArrayList<>();
 

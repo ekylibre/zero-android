@@ -39,7 +39,7 @@ public final class ZeroContract {
     }
 
     public interface PlantCountingsColumns extends BaseColumns {
-        String TABLE_NAME = "plan_countings";
+        String TABLE_NAME = "plant_countings";
         String OBSERVED_AT = "observed_at";
         String LATITUDE = "latitude";
         String LONGITUDE = "longitude";
