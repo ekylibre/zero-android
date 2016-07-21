@@ -33,17 +33,17 @@ import java.util.ListIterator;
 
 public class PlantCountingActivity extends AppCompatActivity
 {
-    private final String    TAG = "PlantCounting";
-    private LinearLayout mLayout;
-    private EditText mObservationEditText;
-    private TextView mAverageText;
-    private TextView mPlantName;
-    private TextView mAbaque;
-    private TextView mDensityText;
-    private List<EditText> mListValues = new ArrayList();
-    private ListIterator<EditText> mListIteratorValues;
-    private AlertDialog.Builder mPlantChooser = null;
-    private AlertDialog.Builder mVarietyChooser = null;
+    private final String            TAG = "PlantCounting";
+    private LinearLayout            mLayout;
+    private EditText                mObservationEditText;
+    private TextView                mAverageText;
+    private TextView                mPlantName;
+    private TextView                mAbaque;
+    private TextView                mDensityText;
+    private List<EditText>          mListValues = new ArrayList();
+    private ListIterator<EditText>  mListIteratorValues;
+    private AlertDialog.Builder     mPlantChooser = null;
+    private AlertDialog.Builder     mVarietyChooser = null;
 
 
     private CharSequence[] mPlantID;
@@ -63,13 +63,6 @@ public class PlantCountingActivity extends AppCompatActivity
         mDensityText = (Button)findViewById(R.id.densityValue);
         mAverageText = (TextView) findViewById(R.id.textAverage);
         mAverageText.setText("");
-
-        /*String[] projectionDensity = {ZeroContract.PlantDensityAbacusItemsColumns.SEEDING_DENSITY_VALUE};
-
-
-        //String[] mProjectionAbacus = {
-        //        ZeroContract.Plants
-        //};*/
 
         Cursor cursorPlantName = queryPlantName();
         Cursor cursorPlantId = queryPlantId();
@@ -289,57 +282,74 @@ public class PlantCountingActivity extends AppCompatActivity
 
     public void savePlantCounting(View v)
     {
+        insertNewValuesPlantCounting();
+        ContentValues newValuesPlantCountingItem = fillNewValuesPlantCountingItems();
+        insertNewValuesPlantCountingItems(newValuesPlantCountingItem);
+        this.finish();
+    }
 
-        // Defines an object to contain the new values to insert
-        ContentValues mNewValuesPlantCounting = new ContentValues();
-        ContentValues mNewValuesPlantCountingItem = new ContentValues();
-
-        // Sets the values of each column and inserts the word. The arguments to the "put"
-        // method are "column name" and "value"
-        mNewValuesPlantCounting.put(ZeroContract.PlantCountingsColumns.OBSERVED_AT, (new java.util.Date()).getTime());
-        LocationManager locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
-        String locationProvider = LocationManager.NETWORK_PROVIDER;
-
-        // Or use LocationManager.GPS_PROVIDER
-        Location lastKnownLocation = locationManager.getLastKnownLocation(locationProvider);
-        if (lastKnownLocation != null)
+    private void insertNewValuesPlantCountingItems(ContentValues newValuesPlantCountingItem)
+    {
+        if (!mListValues.isEmpty())
         {
-            mNewValuesPlantCounting.put(ZeroContract.PlantCountingsColumns.LATITUDE, lastKnownLocation.getLatitude());
-            mNewValuesPlantCounting.put(ZeroContract.PlantCountingsColumns.LONGITUDE, lastKnownLocation.getLongitude());
+            getContentResolver().insert(
+                    ZeroContract.PlantCountingItems.CONTENT_URI,
+                    newValuesPlantCountingItem);
         }
-        mNewValuesPlantCounting.put(ZeroContract.PlantCountingsColumns.OBSERVATION, mObservationEditText.getText().toString());
-        mListIteratorValues = mListValues.listIterator();
+        Toast toast = Toast.makeText(getApplicationContext(), "Plant Counting saved", Toast.LENGTH_SHORT);
+        toast.show();
+    }
 
-        getContentResolver().insert(
-                ZeroContract.PlantCountings.CONTENT_URI,
-                mNewValuesPlantCounting);
+    private ContentValues fillNewValuesPlantCountingItems()
+    {
+        ContentValues newValuesPlantCountingItem = new ContentValues();
 
         while(mListIteratorValues.hasNext())
         {
             EditText et = mListIteratorValues.next();
             if(et.getText().toString() != null)
             {
-                mNewValuesPlantCountingItem.put(ZeroContract.PlantCountingItemsColumns.VALUE, et.getText().toString());
+                newValuesPlantCountingItem.put(ZeroContract.PlantCountingItemsColumns.VALUE, et.getText().toString());
             }
         }
+        return (newValuesPlantCountingItem);
+    }
 
+    private void insertNewValuesPlantCounting()
+    {
+        ContentValues newValuesPlantCounting = new ContentValues();
+
+        newValuesPlantCounting.put(ZeroContract.PlantCountingsColumns.OBSERVED_AT,
+                (new java.util.Date()).getTime());
+        setLocation(newValuesPlantCounting);
+        newValuesPlantCounting.put(ZeroContract.PlantCountingsColumns.OBSERVATION,
+                mObservationEditText.getText().toString());
+        mListIteratorValues = mListValues.listIterator();
         getContentResolver().insert(
-                ZeroContract.PlantCountingItems.CONTENT_URI,
-                mNewValuesPlantCountingItem);
+                ZeroContract.PlantCountings.CONTENT_URI,
+                newValuesPlantCounting);
+    }
 
-        Toast toast = Toast.makeText(getApplicationContext(), "Plant Counting saved", Toast.LENGTH_SHORT);
-        toast.show();
-
-        //close activity
-        this.finish();
-
+    private void setLocation(ContentValues newValuesPlantCounting)
+    {
+        LocationManager locationManager =
+                (LocationManager)this.getSystemService(Context.LOCATION_SERVICE);
+        String locationProvider = LocationManager.NETWORK_PROVIDER;
+        Location lastKnownLocation = locationManager.getLastKnownLocation(locationProvider);
+        if (lastKnownLocation != null)
+        {
+            newValuesPlantCounting.put(ZeroContract.PlantCountingsColumns.LATITUDE,
+                    lastKnownLocation.getLatitude());
+            newValuesPlantCounting.put(ZeroContract.PlantCountingsColumns.LONGITUDE,
+                    lastKnownLocation.getLongitude());
+        }
     }
 
     public void addValue(View view)
     {
         EditText input = new EditText(this);
         input.setLayoutParams(new TableLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT, 1f));
-        input.setPadding(0, 50, 0, 0);
+        input.setPadding(0, 35, 0, 0);
         input.setInputType(InputType.TYPE_CLASS_NUMBER);
         mLayout.addView(input);
         mListValues.add(input);
@@ -370,5 +380,4 @@ public class PlantCountingActivity extends AppCompatActivity
             averageScore = total / nbvalues;
         mAverageText.setText(String.valueOf(averageScore));
     }
-
 }
