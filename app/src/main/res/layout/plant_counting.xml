@@ -90,10 +90,11 @@
             android:text="Result calculus"
             android:id="@+id/textAverage"
             android:textAlignment="center"
+            android:gravity="center"
+            android:layout_marginTop="29dp"
             android:layout_below="@+id/button7"
-            android:layout_alignStart="@+id/button7"
-            android:layout_gravity="center"
-            android:layout_marginTop="30dp"/>
+            android:textStyle="bold"
+            android:textColor="#000000"/>
 
 
         <TextView
@@ -102,7 +103,7 @@
             android:text="@string/observations"
             android:id="@+id/textView4"
             android:layout_marginBottom="5dp"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="30dp"
             android:layout_below="@+id/textAverage"/>
 
         <EditText
@@ -110,6 +111,14 @@
             android:layout_height="wrap_content"
             android:id="@+id/observationEditText"
             android:layout_below="@+id/textView4" />
+
+        <ImageView
+            android:id="@+id/indicator"
+            android:layout_width="150dp"
+            android:layout_height="25dp"
+            android:layout_above="@+id/textView4"
+            android:layout_toEndOf="@+id/button7"
+            android:background="@color/dark_grey"/>
 
     </RelativeLayout>
 </ScrollView>

@@ -7,4 +7,7 @@
     <color name="basic_green">#66A65E</color>
     <color name="brand_secondary">#66a65e</color>
     <color name="brand_secondary_dark">#4a7945</color>
+    <color name="basic_red">#CC2525</color>
+    <color name="basic_orange">#CC4325</color>
+
 </resources>
