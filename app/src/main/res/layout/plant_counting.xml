@@ -57,9 +57,8 @@
             android:id="@+id/button7"
             android:layout_gravity="center_horizontal"
             android:onClick="addValue"
-            android:layout_below="@+id/densityValue"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="60dp"/>
+            android:layout_below="@+id/Valueslayout"
+            android:layout_centerHorizontal="true" />
 
 
         <LinearLayout
@@ -67,9 +66,10 @@
             android:layout_height="wrap_content"
             android:id="@+id/Valueslayout"
             android:orientation="vertical"
-            android:layout_below="@+id/button7"
+            android:layout_below="@+id/densityValue"
             android:layout_centerHorizontal="true"
-            android:paddingTop="5dp">
+            android:paddingTop="5dp"
+            android:layout_marginTop="60dp">
 
         </LinearLayout>
 

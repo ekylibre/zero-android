@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<sync-adapter xmlns:android="http://schemas.android.com/apk/res/android"
-              android:accountType="ekylibre.account.basic"
-              android:allowParallelSyncs="false"
+<sync-adapter
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android="http://schemas.android.com/apk/res/android"
+    android:accountType="ekylibre.account.basic"
+    android:allowParallelSyncs="false"
     android:contentAuthority="ekylibre.zero"
-              android:isAlwaysSyncable="true"
+    android:isAlwaysSyncable="true"
     android:supportsUploading="true"
-    android:userVisible="true"
-              />
+    android:userVisible="true" />
