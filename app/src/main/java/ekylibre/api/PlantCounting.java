@@ -2,6 +2,7 @@ package ekylibre.api;
 
 import android.util.Log;
 
+import org.apache.http.client.ClientProtocolException;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -32,6 +33,15 @@ public class PlantCounting {
         }
 
         return array;
+    }
+
+    public static long create(Instance instance, JSONObject attributes)
+            throws JSONException, ClientProtocolException, IOException, HTTPException
+    {
+        JSONObject json = instance.post("/api/v1/crumbs", attributes);
+        long id = json.getLong("id");
+
+        return (id);
     }
 
     public PlantCounting(JSONObject object) throws JSONException{

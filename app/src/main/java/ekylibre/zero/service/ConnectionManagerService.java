@@ -43,10 +43,10 @@ public class ConnectionManagerService extends Service
     @Override
     public void         onCreate()
     {
-        final int       hDelay = 300000;
+        // Final value is 300000 others values are just here to test sync
+        final int       hDelay = 10000;
 
         handler = new Handler();
-        //hDelay = 10000;
         handler.postDelayed(new Runnable()
         {
             @Override

@@ -116,9 +116,9 @@
             android:id="@+id/indicator"
             android:layout_width="150dp"
             android:layout_height="25dp"
-            android:layout_above="@+id/textView4"
-            android:layout_toEndOf="@+id/button7"
-            android:background="@color/dark_grey"/>
+            android:background="@color/dark_grey"
+            android:layout_alignBottom="@+id/textAverage"
+            android:layout_alignParentEnd="true" />
 
     </RelativeLayout>
 </ScrollView>

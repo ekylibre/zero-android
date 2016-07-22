@@ -48,6 +48,7 @@ public final class ZeroContract {
         String PLANT_DENSITY_ABACUS_ITEM_ID = "plant_density_abacus_item_id";
         String PLANT_DENSITY_ABACUS_ID = "plant_density_abacus_id";
         String PLANT_ID = "plant_id";
+        String SYNCED = "synced";
     }
 
     public interface PlantCountingItemsColumns extends BaseColumns {
