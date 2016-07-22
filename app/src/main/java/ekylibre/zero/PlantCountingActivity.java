@@ -81,6 +81,7 @@ public class PlantCountingActivity extends AppCompatActivity
         mGreen = getResources().getDrawable(R.color.basic_green);
         mOrange = getResources().getDrawable(R.color.basic_orange);
         mRed = getResources().getDrawable(R.color.basic_red);
+        mObservationEditText = (EditText)findViewById(R.id.observationEditText);
 
         Cursor cursorPlantName = queryPlantName();
         Cursor cursorPlantId = queryPlantId();
@@ -227,7 +228,6 @@ public class PlantCountingActivity extends AppCompatActivity
         {
             Log.d(TAG, "data exists");
             fillAbacusTab(cursorAbacus);
-
             Log.d(TAG, "end Abaque");
             Log.d(TAG, "nb in cursor : " + cursorAbacus.getCount());
         }
@@ -356,6 +356,7 @@ public class PlantCountingActivity extends AppCompatActivity
     {
         ContentValues newValuesPlantCountingItem = new ContentValues();
 
+        mListIteratorValues = mListValues.listIterator();
         while(mListIteratorValues.hasNext())
         {
             EditText et = mListIteratorValues.next();
@@ -376,7 +377,6 @@ public class PlantCountingActivity extends AppCompatActivity
         setLocation(newValuesPlantCounting);
         newValuesPlantCounting.put(ZeroContract.PlantCountingsColumns.OBSERVATION,
                 mObservationEditText.getText().toString());
-        mListIteratorValues = mListValues.listIterator();
         getContentResolver().insert(
                 ZeroContract.PlantCountings.CONTENT_URI,
                 newValuesPlantCounting);

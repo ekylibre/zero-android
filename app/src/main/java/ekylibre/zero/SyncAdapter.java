@@ -18,6 +18,7 @@ import android.util.Log;
 import ekylibre.api.Crumb;
 import ekylibre.api.Instance;
 import ekylibre.api.Issue;
+import ekylibre.api.PlantCounting;
 import ekylibre.api.PlantDensityAbacus;
 import ekylibre.api.Plant;
 import ekylibre.exceptions.HTTPException;
@@ -69,10 +70,12 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 
     @Override
     public void onPerformSync(Account account, Bundle extras, String authority, ContentProviderClient provider, SyncResult syncResult) {
+        Log.d(TAG, "Performing Sync ! Pushing all the local data to Ekylibre instance");
         performCrumbsSync(account, extras, authority, provider, syncResult);
         performIssuesSync(account, extras, authority, provider, syncResult);
         performPlantDensityAbaciSync(account, extras, authority, provider, syncResult);
         performPlantsSync(account, extras, authority, provider, syncResult);
+        performPlantCounting(account, extras, authority, provider, syncResult);
     }
 
 
@@ -263,41 +266,54 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
         Log.i(TAG, "Finish network plant_density_abaci synchronization");
     }
 
-    public void performPlantCounting(Account account, Bundle extras, String authority, ContentProviderClient provider, SyncResult syncResult) {
+    public void performPlantCounting(Account account, Bundle extras, String authority, ContentProviderClient provider, SyncResult syncResult)
+    {
+        Log.i(TAG, "Beginning network synchronization");
+        Cursor cursor = mContentResolver.query(ZeroContract.PlantCountings.CONTENT_URI,
+                ZeroContract.PlantCountings.PROJECTION_ALL,
+                null,
+                null,
+                ZeroContract.PlantCountings.SORT_ORDER_DEFAULT);
+        try
+        {
+            if (cursor != null && cursor.getCount() > 0)
+            {
+                Instance instance = getInstance(account);
 
-        Log.i(TAG, "Destruction of the Plant table");
-        int result = mContentResolver.delete(ZeroContract.Plants.CONTENT_URI, null, null);
-        Log.i(TAG, "Beginning network plants synchronization");
-        ContentValues cv = new ContentValues();
-        Instance instance = getInstance(account);
+                while (cursor.moveToNext())
+                {
+                    Log.i(TAG, "New plantCounting");
+                    // Post it to ekylibre
+                    JSONObject attributes = new JSONObject();
+                    attributes.put("geolocation", "SRID=4326; POINT(" + Double.toString(cursor.getDouble(3)) + " " + Double.toString(cursor.getDouble(2)) + ")");
+                    SimpleDateFormat parser = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
+                    attributes.put("observed_at", parser.format(new Date(cursor.getLong(1))));
+                    attributes.put("observation", cursor.getString(4));
+                    attributes.put("plant_density_abacus_item_id", cursor.getString(5));
+                    attributes.put("plant_density_abacus_id", cursor.getString(7));
+                    attributes.put("plant_id", cursor.getString(8));
+                    attributes.put("device_uid", "android:" + Secure.getString(mContentResolver, Secure.ANDROID_ID));
 
-        try {
-            List<Plant> plantsList = Plant.all(instance, new JSONObject());
-            Log.d("zero", "Nombre de plants : " + plantsList.size() );
-            Iterator<Plant> plantsIterator = plantsList.iterator();
-            Log.d("zero", "début parcours de liste plantDensityAbacus");
-            while(plantsIterator.hasNext()){
-                Log.d("zero", "boucle");
-                Plant plants = plantsIterator.next();
-                cv.put(ZeroContract.Plants._ID, plants.getId());
-                cv.put(ZeroContract.Plants.NAME, plants.getName());
-                cv.put(ZeroContract.Plants.VARIETY, plants.getVariety());
-                cv.put(ZeroContract.Plants.ACTIVE, true);
-                mContentResolver.insert(ZeroContract.Plants.CONTENT_URI, cv);
+                    long id = PlantCounting.create(instance, attributes);
+
+
+                    //TODO reup this part of code to sync this only when we have to
+/*                    ContentValues values = new ContentValues();
+                    values.put(ZeroContract.PlantCountings.SYNCED, id);
+                    mContentResolver.update(Uri.withAppendedPath(ZeroContract.PlantCountings.CONTENT_URI, Long.toString(cursor.getLong(0))), values, null, null);*/
+                }
+                cursor.close();
             }
-            Log.d("zero", "fin parcours de liste plantDensityAbacus");
+            else
+            {
+                Log.i(TAG, "Nothing to sync");
+            }
         }
-        catch (JSONException j){
-            Log.d("zero", "JSON Exception : " + j.getMessage());
-            j.printStackTrace();
+        catch (Exception e)
+        {
+            e.printStackTrace();
         }
-        catch (IOException i){
-            Log.d("zero", "IO Exception : " + i.getMessage());
-        }
-        catch (HTTPException h){
-            Log.d("zero", "HTTP Exception : " + h.getMessage());
-        }
-        Log.i(TAG, "Finish network plant_density_abaci synchronization");
+        Log.i(TAG, "Finish network synchronization");
     }
 
 
