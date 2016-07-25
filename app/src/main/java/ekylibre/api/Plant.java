@@ -16,14 +16,16 @@ import ekylibre.exceptions.HTTPException;
  * Created by antoine on 22/04/16.
  */
 
-public class Plant {
+public class Plant
+{
     private static final String TAG = "Plant";
-    int mId;
-    String mName;
-    String mVariety;
+    int     mId;
+    String  mName;
+    String  mVariety;
     //shape
 
-    public static List<Plant> all(Instance instance, JSONObject attributes) throws JSONException, IOException, HTTPException {
+    public static List<Plant> all(Instance instance, JSONObject attributes) throws JSONException, IOException, HTTPException
+    {
         // JSONObject params = Instance.BundleToJSON(attributes);
         JSONObject params = attributes;
         Log.d(TAG, "Get JSONArray => /api/v1/plants || params = " + params);
@@ -37,15 +39,14 @@ public class Plant {
         return array;
     }
 
-    public Plant(JSONObject object) throws JSONException{
-
+    public Plant(JSONObject object) throws JSONException
+    {
         Log.d("zero", "Object Plant : " + object.toString());
 
         mId = object.getInt("id");
         mName = object.getString("name");
         mVariety =object.getString("variety");
         //mShape = (float)object.getDouble("shape");
-
     }
 
     public int getId() {
