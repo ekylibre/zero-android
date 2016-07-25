@@ -17,6 +17,7 @@ import ekylibre.exceptions.HTTPException;
  */
 
 public class Plant {
+    private static final String TAG = "Plant";
     int mId;
     String mName;
     String mVariety;
@@ -26,6 +27,7 @@ public class Plant {
         // JSONObject params = Instance.BundleToJSON(attributes);
         JSONObject params = attributes;
 
+        Log.d(TAG, "Get JSONArray => /api/v1/plants || params = " + params);
         JSONArray json = instance.getJSONArray("/api/v1/plants", params);
 
         List<Plant> array = new ArrayList<>();

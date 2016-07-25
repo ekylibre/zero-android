@@ -220,7 +220,7 @@ public class PlantCountingActivity extends AppCompatActivity
         Cursor cursorVariety = queryVariety();
         Cursor cursorAbacus = queryAbacus(cursorVariety);
 
-        Log.d(TAG, "valeur récupérée : " + mPlantName.getText().toString());
+        Log.d(TAG, "valeur récupérée : " + mPlantName.getText());
         Log.d(TAG, "Valeur du where : " + cursorVariety.getString(0));
                Log.d("zero", "beginning abaque");
 
@@ -272,14 +272,17 @@ public class PlantCountingActivity extends AppCompatActivity
     {
         String[] projectionAbaque = {ZeroContract.PlantDensityAbaci.NAME};
 
-        cursorVariety.moveToFirst();
-        Cursor cursorAbacus = getContentResolver().query(
-                ZeroContract.PlantDensityAbaci.CONTENT_URI,
-                projectionAbaque,
-                ZeroContract.PlantDensityAbaciColumns.VARIETY + " like \"" + cursorVariety.getString(0) + "\"",
-                null,
-                null);
-        return (cursorAbacus);
+        if (cursorVariety.moveToFirst())
+        {
+            Cursor cursorAbacus = getContentResolver().query(
+                    ZeroContract.PlantDensityAbaci.CONTENT_URI,
+                    projectionAbaque,
+                    ZeroContract.PlantDensityAbaciColumns.VARIETY + " like \"" + cursorVariety.getString(0) + "\"",
+                    null,
+                    null);
+            return (cursorAbacus);
+        }
+        return (null);
     }
 
     private Cursor    queryVariety()

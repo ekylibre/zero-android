@@ -38,7 +38,7 @@ public class PlantCounting {
     public static long create(Instance instance, JSONObject attributes)
             throws JSONException, ClientProtocolException, IOException, HTTPException
     {
-        JSONObject json = instance.post("/api/v1/crumbs", attributes);
+        JSONObject json = instance.post("/api/v1/plant_countings", attributes);
         long id = json.getLong("id");
 
         return (id);
