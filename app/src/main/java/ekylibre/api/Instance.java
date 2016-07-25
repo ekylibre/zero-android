@@ -230,7 +230,7 @@ public class Instance {
 
     // Send POST call to given URL with given params
     public static JSONArray getJSONArray(String url, JSONObject params, Header[] headers) throws JSONException, ClientProtocolException, IOException, HTTPException {
-        Log.d("zero", "POST " + url);
+        Log.d("zero", "GET " + url);
 
         // Create a new HttpClient and Get Header
         HttpClient httpClient = new DefaultHttpClient();
