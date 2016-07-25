@@ -67,6 +67,27 @@ public class PlantCountingActivity extends AppCompatActivity
     private CharSequence[] mAbaqueTab;
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu)
+    {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.form, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
+        switch (item.getItemId())
+        {
+            case R.id.action_save:
+                savePlantCounting(item.getActionView());
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
@@ -110,6 +131,69 @@ public class PlantCountingActivity extends AppCompatActivity
         cursorPlantId.close();
         cursorPlantName.close();
         setHandlerAverageValue();
+    }
+
+    private void fillAbacusTab(Cursor cursorAbacus)
+    {
+        int itName = 0;
+
+        mAbaqueTab = new CharSequence[cursorAbacus.getCount()];
+        while (cursorAbacus.moveToNext())
+        {
+            Log.d("zero", "name : " + cursorAbacus.getString(0));
+            mAbaqueTab[itName] = cursorAbacus.getString(0);
+            Log.d("zero", "tablename[" + itName + "] : " + mAbaqueTab[itName]);
+            itName++;
+        }
+    }
+
+    private void    fillPlantId(Cursor cursorPlantId)
+    {
+        int itId    = 0;
+
+        while (cursorPlantId.moveToNext())
+        {
+            Log.d(TAG, "id : " + cursorPlantId.getString(0));
+            mPlantID[itId] = cursorPlantId.getString(0);
+            itId++;
+        }
+    }
+
+    private void    fillPlantName(Cursor cursorPlantName)
+    {
+        int itName  = 0;
+
+        while (cursorPlantName.moveToNext())
+        {
+            Log.d(TAG, "name : " + cursorPlantName.getString(0));
+            mPlantNameTab[itName] = cursorPlantName.getString(0);
+            Log.d(TAG, "tablename[" + itName + "] : " + mPlantNameTab[itName]);
+            itName++;
+        }
+    }
+
+    public void setAbacusList()
+    {
+        Cursor cursorVariety = queryVariety();
+        Cursor cursorAbacus = queryAbacus(cursorVariety);
+
+        Log.d(TAG, "valeur récupérée : " + mPlantName.getText());
+        Log.d(TAG, "Valeur du where : " + cursorVariety.getString(0));
+        Log.d("zero", "beginning abaque");
+
+        if (cursorAbacus != null)
+        {
+            Log.d(TAG, "data exists");
+            fillAbacusTab(cursorAbacus);
+            Log.d(TAG, "end Abaque");
+            Log.d(TAG, "nb in cursor : " + cursorAbacus.getCount());
+        }
+        else
+        {
+            Log.d(TAG, "abaque data does NOT exist");
+        }
+        createVarietyChooser();
+        cursorVariety.close();
     }
 
     private boolean averageIsOkay(float averageValue)
@@ -164,29 +248,19 @@ public class PlantCountingActivity extends AppCompatActivity
                 });
     }
 
-    private void    fillPlantId(Cursor cursorPlantId)
+    private void createVarietyChooser()
     {
-        int itId    = 0;
-
-        while (cursorPlantId.moveToNext())
-        {
-            Log.d(TAG, "id : " + cursorPlantId.getString(0));
-            mPlantID[itId] = cursorPlantId.getString(0);
-            itId++;
-        }
-    }
-
-    private void    fillPlantName(Cursor cursorPlantName)
-    {
-        int itName  = 0;
-
-        while (cursorPlantName.moveToNext())
-        {
-            Log.d(TAG, "name : " + cursorPlantName.getString(0));
-            mPlantNameTab[itName] = cursorPlantName.getString(0);
-            Log.d(TAG, "tablename[" + itName + "] : " + mPlantNameTab[itName]);
-            itName++;
-        }
+        mVarietyChooser = new AlertDialog.Builder(this)
+                .setTitle("Choix de l'abaque")
+                .setNegativeButton(android.R.string.cancel, null)
+                .setItems(mAbaqueTab, new DialogInterface.OnClickListener()
+                {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which)
+                    {
+                        mAbaque.setText(mAbaqueTab[which]);
+                    }
+                });
     }
 
     private Cursor  queryPlantId()
@@ -213,59 +287,6 @@ public class PlantCountingActivity extends AppCompatActivity
                 null,
                 null);
         return (cursorPlantName);
-    }
-
-    public void setAbacusList()
-    {
-        Cursor cursorVariety = queryVariety();
-        Cursor cursorAbacus = queryAbacus(cursorVariety);
-
-        Log.d(TAG, "valeur récupérée : " + mPlantName.getText());
-        Log.d(TAG, "Valeur du where : " + cursorVariety.getString(0));
-               Log.d("zero", "beginning abaque");
-
-        if (cursorAbacus != null)
-        {
-            Log.d(TAG, "data exists");
-            fillAbacusTab(cursorAbacus);
-            Log.d(TAG, "end Abaque");
-            Log.d(TAG, "nb in cursor : " + cursorAbacus.getCount());
-        }
-        else
-        {
-            Log.d(TAG, "abaque data does NOT exist");
-        }
-        createVarietyChooser();
-        cursorVariety.close();
-    }
-
-    private void createVarietyChooser()
-    {
-        mVarietyChooser = new AlertDialog.Builder(this)
-                .setTitle("Choix de l'abaque")
-                .setNegativeButton(android.R.string.cancel, null)
-                .setItems(mAbaqueTab, new DialogInterface.OnClickListener()
-                {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which)
-                    {
-                        mAbaque.setText(mAbaqueTab[which]);
-                    }
-                });
-    }
-
-    private void fillAbacusTab(Cursor cursorAbacus)
-    {
-        int itName = 0;
-
-        mAbaqueTab = new CharSequence[cursorAbacus.getCount()];
-        while (cursorAbacus.moveToNext())
-        {
-            Log.d("zero", "name : " + cursorAbacus.getString(0));
-            mAbaqueTab[itName] = cursorAbacus.getString(0);
-            Log.d("zero", "tablename[" + itName + "] : " + mAbaqueTab[itName]);
-            itName++;
-        }
     }
 
     private Cursor queryAbacus(Cursor cursorVariety)
@@ -298,7 +319,6 @@ public class PlantCountingActivity extends AppCompatActivity
         return (cursorVariety);
     }
 
-
     public void chosePlant(View view)
     {
         if (mPlantChooser == null)
@@ -313,46 +333,12 @@ public class PlantCountingActivity extends AppCompatActivity
         mVarietyChooser.show();
     }
 
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu)
-    {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.form, menu);
-        return super.onCreateOptionsMenu(menu);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item)
-    {
-        switch (item.getItemId())
-        {
-            case R.id.action_save:
-                savePlantCounting(item.getActionView());
-                return true;
-            default:
-            return super.onOptionsItemSelected(item);
-        }
-    }
-
     public void savePlantCounting(View v)
     {
         insertNewValuesPlantCounting();
         ContentValues newValuesPlantCountingItem = fillNewValuesPlantCountingItems();
         insertNewValuesPlantCountingItems(newValuesPlantCountingItem);
         this.finish();
-    }
-
-    private void insertNewValuesPlantCountingItems(ContentValues newValuesPlantCountingItem)
-    {
-        if (!mListValues.isEmpty())
-        {
-            getContentResolver().insert(
-                    ZeroContract.PlantCountingItems.CONTENT_URI,
-                    newValuesPlantCountingItem);
-        }
-        Toast toast = Toast.makeText(getApplicationContext(), "Plant Counting saved", Toast.LENGTH_SHORT);
-        toast.show();
     }
 
     private ContentValues fillNewValuesPlantCountingItems()
@@ -369,6 +355,18 @@ public class PlantCountingActivity extends AppCompatActivity
             }
         }
         return (newValuesPlantCountingItem);
+    }
+
+    private void insertNewValuesPlantCountingItems(ContentValues newValuesPlantCountingItem)
+    {
+        if (!mListValues.isEmpty())
+        {
+            getContentResolver().insert(
+                    ZeroContract.PlantCountingItems.CONTENT_URI,
+                    newValuesPlantCountingItem);
+        }
+        Toast toast = Toast.makeText(getApplicationContext(), "Plant Counting saved", Toast.LENGTH_SHORT);
+        toast.show();
     }
 
     private void insertNewValuesPlantCounting()

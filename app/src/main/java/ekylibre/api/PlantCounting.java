@@ -28,7 +28,7 @@ public class PlantCounting
         JSONArray json = instance.getJSONArray("/api/v1/plant_countings", params);
         List<PlantCounting> array = new ArrayList<>();
 
-        for(int i = 0; i < json.length(); i++)
+        for (int i = 0; i < json.length(); i++)
         {
             array.add(new PlantCounting(json.getJSONObject(i)));
         }
