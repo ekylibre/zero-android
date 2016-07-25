@@ -29,17 +29,15 @@ public class PlantDensityAbacus {
     public static List<PlantDensityAbacus> all(Instance instance, JSONObject attributes) throws JSONException, IOException, HTTPException {
         // JSONObject params = Instance.BundleToJSON(attributes);
         JSONObject params = attributes;
-
         JSONArray json = instance.getJSONArray("/api/v1/plant_density_abaci", params);
-
         List<PlantDensityAbacus> array = new ArrayList<>();
 
-        for(int i = 0 ; i < json.length() ; i++ ){
-
+        for(int i = 0; i < json.length(); i++)
+        {
             array.add(new PlantDensityAbacus(json.getJSONObject(i)));
         }
 
-        return array;
+        return (array);
     }
 
     public PlantDensityAbacus(JSONObject object) throws JSONException{

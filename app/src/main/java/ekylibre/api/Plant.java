@@ -26,17 +26,14 @@ public class Plant {
     public static List<Plant> all(Instance instance, JSONObject attributes) throws JSONException, IOException, HTTPException {
         // JSONObject params = Instance.BundleToJSON(attributes);
         JSONObject params = attributes;
-
         Log.d(TAG, "Get JSONArray => /api/v1/plants || params = " + params);
         JSONArray json = instance.getJSONArray("/api/v1/plants", params);
-
         List<Plant> array = new ArrayList<>();
 
-        for(int i = 0 ; i < json.length() ; i++ ){
-
+        for(int i = 0 ; i < json.length() ; i++ )
+        {
             array.add(new Plant(json.getJSONObject(i)));
         }
-
         return array;
     }
 

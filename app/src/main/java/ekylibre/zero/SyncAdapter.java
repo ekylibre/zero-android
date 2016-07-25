@@ -76,7 +76,8 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
         performIssuesSync(account, extras, authority, provider, syncResult);
         performPlantDensityAbaciSync(account, extras, authority, provider, syncResult);
         performPlantsSync(account, extras, authority, provider, syncResult);
-        //performPlantCounting(account, extras, authority, provider, syncResult);
+        performPlantCounting(account, extras, authority, provider, syncResult);
+        performPlantCountingItem(account, extras, authority, provider, syncResult);
     }
 
 
@@ -197,8 +198,8 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 
             Log.d("zero", "début parcours de liste plantDensityAbacus");
 
-            while(abacusIterator.hasNext()){
-
+            while(abacusIterator.hasNext())
+            {
                 Log.d("zero", "boucle abaque");
 
                 PlantDensityAbacus plantDensityAbacus = abacusIterator.next();
@@ -239,16 +240,13 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
         Instance instance = getInstance(account);
 
         try {
-            Log.d(TAG, "==========================");
-            Log.d(TAG, "==========================");
-            Log.d(TAG, "==========================");
-            Log.d(TAG, "==========================");
 
             List<Plant> plantsList = Plant.all(instance, new JSONObject());
             Log.d(TAG, "Nombre de plants : " + plantsList.size() );
             Iterator<Plant> plantsIterator = plantsList.iterator();
             Log.d(TAG, "début parcours de liste plantDensityAbacus");
-            while(plantsIterator.hasNext()){
+            while(plantsIterator.hasNext())
+            {
                 Log.d(TAG, "boucle");
                 Plant plants = plantsIterator.next();
                 cv.put(ZeroContract.Plants._ID, plants.getId());
@@ -273,6 +271,50 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
     }
 
     public void performPlantCounting(Account account, Bundle extras, String authority, ContentProviderClient provider, SyncResult syncResult)
+    {
+        Log.i(TAG, "Beginning network synchronization");
+        Cursor cursor = mContentResolver.query(ZeroContract.PlantCountings.CONTENT_URI,
+                ZeroContract.PlantCountings.PROJECTION_ALL,
+                null,
+                null,
+                ZeroContract.PlantCountings.SORT_ORDER_DEFAULT);
+        try
+        {
+            if (cursor != null && cursor.getCount() > 0)
+            {
+                Instance instance = getInstance(account);
+
+                while (cursor.moveToNext())
+                {
+                    Log.i(TAG, "New plantCounting");
+                    // Post it to ekylibre
+                    JSONObject attributes = new JSONObject();
+                    attributes.put("geolocation", "SRID=4326; POINT(" + Double.toString(cursor.getDouble(3)) + " " + Double.toString(cursor.getDouble(2)) + ")");
+                    SimpleDateFormat parser = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
+                    attributes.put("observed_at", parser.format(new Date(cursor.getLong(1))));
+                    attributes.put("observation", cursor.getString(4));
+                    attributes.put("plant_density_abacus_item_id", cursor.getString(5));
+                    attributes.put("plant_density_abacus_id", cursor.getString(7));
+                    attributes.put("plant_id", cursor.getString(8));
+                    attributes.put("device_uid", "android:" + Secure.getString(mContentResolver, Secure.ANDROID_ID));
+
+                    long id = PlantCounting.create(instance, attributes);
+                }
+                cursor.close();
+            }
+            else
+            {
+                Log.i(TAG, "Nothing to sync");
+            }
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        Log.i(TAG, "Finish network synchronization");
+    }
+
+    public void performPlantCountingItem(Account account, Bundle extras, String authority, ContentProviderClient provider, SyncResult syncResult)
     {
         Log.i(TAG, "Beginning network synchronization");
         Cursor cursor = mContentResolver.query(ZeroContract.PlantCountingItems.CONTENT_URI,
