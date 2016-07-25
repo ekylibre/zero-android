@@ -15,12 +15,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase database) {
-        // TODO :: ask for help on this part of the code cannot create new columns on tables
         onUpgrade(database, 0, DATABASE_VERSION);
-        onUpgrade(database, 1, DATABASE_VERSION);
-        onUpgrade(database, 2, DATABASE_VERSION);
-        onUpgrade(database, 3, DATABASE_VERSION);
-        onUpgrade(database, 4, DATABASE_VERSION);
     }
 
     // newVersion is ignored because always the same
@@ -64,7 +59,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                             + ", " + ZeroContract.PlantCountingsColumns.PLANT_DENSITY_ABACUS_ITEM_ID + " INTEGER"
                             + ", " + ZeroContract.PlantCountingsColumns.PLANT_DENSITY_ABACUS_ID + " INTEGER"
                             + ", " + ZeroContract.PlantCountingsColumns.PLANT_ID + " INTEGER"
-                            + ", " + ZeroContract.PlantCountingsColumns.SYNCED + " INTEGER NOT NULL DEFAULT 0"
                             + ", FOREIGN KEY(" + ZeroContract.PlantCountingsColumns.PLANT_DENSITY_ABACUS_ITEM_ID +") REFERENCES " + ZeroContract.PlantDensityAbacusItemsColumns.TABLE_NAME + "(" + ZeroContract.PlantDensityAbacusItemsColumns._ID + ") ON DELETE CASCADE"
                             + ", FOREIGN KEY(" + ZeroContract.PlantCountingsColumns.PLANT_DENSITY_ABACUS_ID +") REFERENCES " + ZeroContract.PlantDensityAbaciColumns.TABLE_NAME + "(" + ZeroContract.PlantDensityAbaciColumns._ID + ") ON DELETE CASCADE"
                             + ", FOREIGN KEY(" + ZeroContract.PlantCountingsColumns.PLANT_ID +") REFERENCES " + ZeroContract.PlantsColumns.TABLE_NAME + "(" + ZeroContract.PlantsColumns._ID + ") ON DELETE CASCADE"
@@ -98,6 +92,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                         + ", " + ZeroContract.Plants.VARIETY + " VARCHAR(255)"
                         + ", " + ZeroContract.Plants.ACTIVE + " BOOLEAN NOT NULL"
                         + ")");
+/*
+            case 5:
+                    database.execSQL();
+*/
         }
     }
 }

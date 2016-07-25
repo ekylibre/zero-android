@@ -95,6 +95,7 @@ public class Instance {
     private String mUrl;
     private String mEmail;
     private String mToken;
+    private final static String TAG = "Instance";
 
     public Instance(String url, String email, String token) {
         mUrl   = url;
@@ -104,7 +105,7 @@ public class Instance {
 
     public Instance(Account account, AccountManager manager) throws AccountsException, IOException {
         mUrl   = manager.getUserData(account, Authenticator.KEY_INSTANCE_URL);
-        mEmail = account.name;
+        mEmail = manager.getUserData(account, Authenticator.KEY_ACCOUNT_NAME);
         mToken = manager.blockingGetAuthToken(account, Authenticator.AUTH_TOKEN_TYPE_GLOBAL, true);
         Log.d("Instance URL", mUrl);
         Log.d("Instance Token", mToken);
@@ -234,6 +235,7 @@ public class Instance {
         // Create a new HttpClient and Get Header
         HttpClient httpClient = new DefaultHttpClient();
         HttpGet httpGet = new HttpGet(url);
+        Log.i(TAG, "Header => " + headers[0].toString());
         if (headers != null) {
             httpGet.setHeaders(headers);
         }
