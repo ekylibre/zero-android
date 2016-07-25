@@ -11,8 +11,8 @@ import org.json.JSONObject;
 
 public class Token {
 
-    public static String create(String email, String password, String url) throws JSONException, ClientProtocolException, IOException, HTTPException {
-
+    public static String create(String email, String password, String url) throws JSONException, ClientProtocolException, IOException, HTTPException
+    {
         JSONObject params = new JSONObject();
         params.put("email", email);
         params.put("password", password);

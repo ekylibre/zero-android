@@ -12,7 +12,8 @@ import ekylibre.exceptions.HTTPException;
 /**
  * Created by antoine on 22/04/16.
  */
-public class PlantCountingItem {
+public class PlantCountingItem
+{
     private List<Integer> mValues;
     private Float mAverage;
     private String mObservations;

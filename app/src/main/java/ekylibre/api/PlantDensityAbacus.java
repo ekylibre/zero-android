@@ -16,7 +16,8 @@ import ekylibre.exceptions.HTTPException;
 /**
  * Created by antoine on 21/04/16.
  */
-public class PlantDensityAbacus {
+public class PlantDensityAbacus
+{
     private int mid;
     private String mName;
     private String mVariety;
@@ -26,7 +27,8 @@ public class PlantDensityAbacus {
     private List<PlantDensityAbacusItem> mItems;
 
 
-    public static List<PlantDensityAbacus> all(Instance instance, JSONObject attributes) throws JSONException, IOException, HTTPException {
+    public static List<PlantDensityAbacus> all(Instance instance, JSONObject attributes) throws JSONException, IOException, HTTPException
+    {
         // JSONObject params = Instance.BundleToJSON(attributes);
         JSONObject params = attributes;
         JSONArray json = instance.getJSONArray("/api/v1/plant_density_abaci", params);
@@ -36,14 +38,12 @@ public class PlantDensityAbacus {
         {
             array.add(new PlantDensityAbacus(json.getJSONObject(i)));
         }
-
         return (array);
     }
 
-    public PlantDensityAbacus(JSONObject object) throws JSONException{
-
+    public PlantDensityAbacus(JSONObject object) throws JSONException
+    {
         List<PlantDensityAbacusItem> items = new ArrayList<>();
-
         Log.d("zero", "Object PlantDensityAbacus : " + object.toString());
 
         mid = object.getInt("id");
@@ -55,7 +55,8 @@ public class PlantDensityAbacus {
         mItems = items;
     }
 
-    public PlantDensityAbacus(int id, String name, String variety, double germinationPercentage, String seedingDensityUnit, String samplingLenghtUnit, List<PlantDensityAbacusItem> items ){
+    public PlantDensityAbacus(int id, String name, String variety, double germinationPercentage, String seedingDensityUnit, String samplingLenghtUnit, List<PlantDensityAbacusItem> items )
+    {
         mid = id;
         mName = name;
         mVariety = variety;

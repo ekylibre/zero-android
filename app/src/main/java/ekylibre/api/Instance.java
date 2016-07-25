@@ -90,20 +90,22 @@ import org.json.JSONObject;
 // SC_HTTP_VERSION_NOT_SUPPORTED	505 HTTP Version Not Supported (HTTP/1.1 - RFC 2616) 
 // SC_INSUFFICIENT_STORAGE	507 Insufficient Storage (WebDAV - RFC 2518) 
 
-public class Instance {
-
+public class Instance
+{
     private String mUrl;
     private String mEmail;
     private String mToken;
     private final static String TAG = "Instance";
 
-    public Instance(String url, String email, String token) {
+    public Instance(String url, String email, String token)
+    {
         mUrl   = url;
         mEmail = email;
         mToken = token;
     }
 
-    public Instance(Account account, AccountManager manager) throws AccountsException, IOException {
+    public Instance(Account account, AccountManager manager) throws AccountsException, IOException
+    {
         mUrl   = manager.getUserData(account, Authenticator.KEY_INSTANCE_URL);
         mEmail = manager.getUserData(account, Authenticator.KEY_ACCOUNT_NAME);
         mToken = manager.blockingGetAuthToken(account, Authenticator.AUTH_TOKEN_TYPE_GLOBAL, true);
@@ -112,7 +114,8 @@ public class Instance {
     }
 
     // Send POST call to given instance
-    public JSONObject post(String path, JSONObject params) throws JSONException, ClientProtocolException, IOException, HTTPException {
+    public JSONObject post(String path, JSONObject params) throws JSONException, ClientProtocolException, IOException, HTTPException
+    {
         List<Header> headersList = new ArrayList<Header>();
         headersList.add(new BasicHeader("Authorization", "simple-token " + mEmail + " " + mToken));
         Header[] headers = new Header[headersList.size()];
@@ -127,13 +130,15 @@ public class Instance {
 
 
     // Send POST call to given URL with given params
-    public static JSONObject post(String url, JSONObject params, Header[] headers) throws JSONException, ClientProtocolException, IOException, HTTPException {
+    public static JSONObject post(String url, JSONObject params, Header[] headers) throws JSONException, ClientProtocolException, IOException, HTTPException
+    {
         Log.d("zero", "POST " + url);
 
         // Create a new HttpClient and Post Header
         HttpClient httpClient = new DefaultHttpClient();
         HttpPost httpPost = new HttpPost(url);
-        if (headers != null) {
+        if (headers != null)
+        {
             httpPost.setHeaders(headers);
         }
         httpPost.setHeader("Content-type", "application/json");
@@ -141,7 +146,8 @@ public class Instance {
         InputStream inputStream = null;
         String result = null;
         // try {
-        if (params != null) {
+        if (params != null)
+        {
             httpPost.setEntity(new StringEntity(params.toString()));
         }
             
@@ -202,10 +208,13 @@ public class Instance {
         // } catch (IOException e) {
         //     e.printStackTrace();
         // } finally {
-        try {
+        try
+        {
             if (inputStream != null)
                 inputStream.close();
-        } catch(Exception squish) {
+        }
+        catch(Exception squish)
+        {
         }
         // }
 
@@ -214,7 +223,8 @@ public class Instance {
 
 
 // Send GET call to given instance
-    public JSONArray getJSONArray(String path, JSONObject params) throws JSONException, ClientProtocolException, IOException, HTTPException {
+    public JSONArray getJSONArray(String path, JSONObject params) throws JSONException, ClientProtocolException, IOException, HTTPException
+    {
         List<Header> headersList = new ArrayList<Header>();
         headersList.add(new BasicHeader("Authorization", "simple-token " + mEmail + " " + mToken));
         Header[] headers = new Header[headersList.size()];
@@ -229,14 +239,16 @@ public class Instance {
 
 
     // Send POST call to given URL with given params
-    public static JSONArray getJSONArray(String url, JSONObject params, Header[] headers) throws JSONException, ClientProtocolException, IOException, HTTPException {
+    public static JSONArray getJSONArray(String url, JSONObject params, Header[] headers) throws JSONException, ClientProtocolException, IOException, HTTPException
+    {
         Log.d("zero", "GET " + url);
 
         // Create a new HttpClient and Get Header
         HttpClient httpClient = new DefaultHttpClient();
         HttpGet httpGet = new HttpGet(url);
         Log.i(TAG, "Header => " + headers[0].toString());
-        if (headers != null) {
+        if (headers != null)
+        {
             httpGet.setHeaders(headers);
         }
         httpGet.setHeader("Content-type", "application/json");
@@ -244,7 +256,8 @@ public class Instance {
         InputStream inputStream = null;
         String result = null;
         // try {
-        if (params != null) {
+        if (params != null)
+        {
             //httpGet.setEntity(new StringEntity(params.toString()));
         }
 
@@ -254,39 +267,40 @@ public class Instance {
         // Check status
         StatusLine statusLine = response.getStatusLine();
         int statusCode = statusLine.getStatusCode();
-        switch(statusLine.getStatusCode()) {
-        case HttpStatus.SC_BAD_REQUEST:
-        case HttpStatus.SC_UNAUTHORIZED:
-        case HttpStatus.SC_PAYMENT_REQUIRED:
-        case HttpStatus.SC_FORBIDDEN:
-        case HttpStatus.SC_NOT_FOUND:
-        case HttpStatus.SC_METHOD_NOT_ALLOWED:
-        case HttpStatus.SC_NOT_ACCEPTABLE:
-        case HttpStatus.SC_PROXY_AUTHENTICATION_REQUIRED:
-        case HttpStatus.SC_REQUEST_TIMEOUT:
-        case HttpStatus.SC_CONFLICT:
-        case HttpStatus.SC_GONE:
-        case HttpStatus.SC_LENGTH_REQUIRED:
-        case HttpStatus.SC_PRECONDITION_FAILED:
-        case HttpStatus.SC_REQUEST_TOO_LONG:
-        case HttpStatus.SC_REQUEST_URI_TOO_LONG:
-        case HttpStatus.SC_UNSUPPORTED_MEDIA_TYPE:
-        case HttpStatus.SC_REQUESTED_RANGE_NOT_SATISFIABLE:
-        case HttpStatus.SC_EXPECTATION_FAILED:
-        case HttpStatus.SC_INSUFFICIENT_SPACE_ON_RESOURCE:
-        case HttpStatus.SC_METHOD_FAILURE:
-        case HttpStatus.SC_UNPROCESSABLE_ENTITY:
-        case HttpStatus.SC_LOCKED:
-        case HttpStatus.SC_FAILED_DEPENDENCY:
-            throw new UnauthorizedException();
-        case HttpStatus.SC_INTERNAL_SERVER_ERROR:
-        case HttpStatus.SC_NOT_IMPLEMENTED:
-        case HttpStatus.SC_BAD_GATEWAY:
-        case HttpStatus.SC_SERVICE_UNAVAILABLE:
-        case HttpStatus.SC_GATEWAY_TIMEOUT:
-        case HttpStatus.SC_HTTP_VERSION_NOT_SUPPORTED:
-        case HttpStatus.SC_INSUFFICIENT_STORAGE:
-            throw new ServerErrorException();
+        switch(statusLine.getStatusCode())
+        {
+            case HttpStatus.SC_BAD_REQUEST:
+            case HttpStatus.SC_UNAUTHORIZED:
+            case HttpStatus.SC_PAYMENT_REQUIRED:
+            case HttpStatus.SC_FORBIDDEN:
+            case HttpStatus.SC_NOT_FOUND:
+            case HttpStatus.SC_METHOD_NOT_ALLOWED:
+            case HttpStatus.SC_NOT_ACCEPTABLE:
+            case HttpStatus.SC_PROXY_AUTHENTICATION_REQUIRED:
+            case HttpStatus.SC_REQUEST_TIMEOUT:
+            case HttpStatus.SC_CONFLICT:
+            case HttpStatus.SC_GONE:
+            case HttpStatus.SC_LENGTH_REQUIRED:
+            case HttpStatus.SC_PRECONDITION_FAILED:
+            case HttpStatus.SC_REQUEST_TOO_LONG:
+            case HttpStatus.SC_REQUEST_URI_TOO_LONG:
+            case HttpStatus.SC_UNSUPPORTED_MEDIA_TYPE:
+            case HttpStatus.SC_REQUESTED_RANGE_NOT_SATISFIABLE:
+            case HttpStatus.SC_EXPECTATION_FAILED:
+            case HttpStatus.SC_INSUFFICIENT_SPACE_ON_RESOURCE:
+            case HttpStatus.SC_METHOD_FAILURE:
+            case HttpStatus.SC_UNPROCESSABLE_ENTITY:
+            case HttpStatus.SC_LOCKED:
+            case HttpStatus.SC_FAILED_DEPENDENCY:
+                throw new UnauthorizedException();
+            case HttpStatus.SC_INTERNAL_SERVER_ERROR:
+            case HttpStatus.SC_NOT_IMPLEMENTED:
+            case HttpStatus.SC_BAD_GATEWAY:
+            case HttpStatus.SC_SERVICE_UNAVAILABLE:
+            case HttpStatus.SC_GATEWAY_TIMEOUT:
+            case HttpStatus.SC_HTTP_VERSION_NOT_SUPPORTED:
+            case HttpStatus.SC_INSUFFICIENT_STORAGE:
+                throw new ServerErrorException();
         }
 
         HttpEntity entity = response.getEntity();
@@ -296,7 +310,8 @@ public class Instance {
         StringBuilder stringBuilder = new StringBuilder();
 
         String line = null;
-        while ((line = reader.readLine()) != null) {
+        while ((line = reader.readLine()) != null)
+        {
             stringBuilder.append(line + "\n");
         }
         result = stringBuilder.toString();
@@ -305,10 +320,13 @@ public class Instance {
         // } catch (IOException e) {
         //     e.printStackTrace();
         // } finally {
-        try {
+        try
+        {
             if (inputStream != null)
                 inputStream.close();
-        } catch(Exception squish) {
+        }
+        catch(Exception squish)
+        {
         }
         // }
 
