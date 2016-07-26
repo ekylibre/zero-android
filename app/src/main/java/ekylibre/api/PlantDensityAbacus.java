@@ -48,7 +48,7 @@ public class PlantDensityAbacus
 
         mid = object.getInt("id");
         mName = object.getString("name");
-        mVariety = object.getString("variety_name");
+        mVariety = object.getString("variety");
         mGerminationPercentage = object.getDouble("germination_percentage");
         mSeedingDensityUnit = object.getString("seeding_density_unit");
         mSamplingLenghtUnit = object.getString("sampling_length_unit");

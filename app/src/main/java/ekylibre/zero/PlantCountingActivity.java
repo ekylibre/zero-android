@@ -293,7 +293,8 @@ public class PlantCountingActivity extends AppCompatActivity
             Cursor cursorAbacus = getContentResolver().query(
                     ZeroContract.PlantDensityAbaci.CONTENT_URI,
                     projectionAbaque,
-                    ZeroContract.PlantDensityAbaciColumns.VARIETY + " like \"" + cursorVariety.getString(0) + "\"",
+                    ZeroContract.PlantDensityAbaciColumns.VARIETY + " IS NOT NULL"
+                            + " AND " + ZeroContract.PlantDensityAbaciColumns.VARIETY + " like \"" + cursorVariety.getString(0) + "\"",
                     null,
                     null);
             return (cursorAbacus);
