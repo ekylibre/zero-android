@@ -92,7 +92,11 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
         Log.i(TAG, "Beginning network synchronization");
         
         // Get crumbs from tracking (content) provider
-        Cursor cursor = mContentResolver.query(ZeroContract.Crumbs.CONTENT_URI, ZeroContract.Crumbs.PROJECTION_ALL, ZeroContract.CrumbsColumns.SYNCED + " IS NULL OR " + ZeroContract.CrumbsColumns.SYNCED + " <= 0", null, ZeroContract.Crumbs.SORT_ORDER_DEFAULT);
+        Cursor cursor = mContentResolver.query(ZeroContract.Crumbs.CONTENT_URI,
+                ZeroContract.Crumbs.PROJECTION_ALL,
+                ZeroContract.CrumbsColumns.SYNCED + " IS NULL OR " + ZeroContract.CrumbsColumns.SYNCED + " <= 0",
+                null,
+                ZeroContract.Crumbs.SORT_ORDER_DEFAULT);
 
         try
         {

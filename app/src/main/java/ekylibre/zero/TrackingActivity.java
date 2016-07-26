@@ -13,18 +13,22 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.preference.PreferenceManager;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Chronometer;
 import android.widget.HorizontalScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
@@ -41,10 +45,12 @@ import java.util.Date;
 import java.util.List;
 
 import ekylibre.api.ZeroContract;
+import ekylibre.zero.util.AccountTool;
 
 
-public class TrackingActivity extends Activity implements TrackingListenerWriter {
-    
+public class TrackingActivity extends Activity implements TrackingListenerWriter
+{
+
     public final static String KEY_ACCOUNT = "account";
     public final static double MAXIMAL_ACCURACY = 4.0;
 
@@ -62,62 +68,58 @@ public class TrackingActivity extends Activity implements TrackingListenerWriter
     private AlertDialog.Builder mProcedureChooser;
     private SharedPreferences mPreferences;
     private IntentIntegrator mScanIntegrator;
+    private final int   REQUEST_CODE = 123;
 
     private LocationManager mLocationManager;
     private NotificationManager mNotificationManager;
     private Notification.Builder mNotificationBuilder;
     private int mNotificationID;
     //private Notification mNotification;
-    
+
+    @Override
+    public void onStart()
+    {
+        super.onStart();
+        if (!AccountTool.isAnyAccountExist(this))
+            AccountTool.askForAccount(this, this);
+    }
+
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // Get simple account or ask for it if necessary
-        final AccountManager manager = AccountManager.get(this);
-        final Account[] accounts = manager.getAccountsByType(SyncAdapter.ACCOUNT_TYPE);
-        if (accounts.length <= 0) {
-            Intent intent = new Intent(this, AuthenticatorActivity.class);
-            intent.putExtra(AccountManager.KEY_ACCOUNT_TYPE, SyncAdapter.ACCOUNT_TYPE);
-            intent.putExtra(AuthenticatorActivity.KEY_REDIRECT, AuthenticatorActivity.CHOICE_REDIRECT_TRACKING);
-            startActivity(intent);
-            finish();
-            return;
-        } else if (accounts.length > 1) {
-            // TODO: Propose the list of account or get the one by simple
-            mAccount = accounts[0];
-        } else {
-            mAccount = accounts[0];
-        }
+
+        mAccount = AccountTool.getCurrentAccount(this);
+
 
         // Set content view
         setContentView(R.layout.tracking);
-        
+
         // Find view elements
         mProcedureNature = (TextView) findViewById(R.id.procedure_nature);
         mMasterChrono = (Chronometer) findViewById(R.id.master_chrono);
         mPrecisionModeChrono = (Chronometer) findViewById(R.id.precision_mode_chrono);
-        mDetails      = (HorizontalScrollView) findViewById(R.id.details);
-        mAccuracy     = (TextView)    findViewById(R.id.accuracy);
-        mLatitude     = (TextView)    findViewById(R.id.latitude);
-        mLongitude    = (TextView)    findViewById(R.id.longitude);
-        mCrumbsCount  = (TextView)    findViewById(R.id.crumbs_count);
-        mStartButton  = (Button)      findViewById(R.id.start_intervention_button);
-        mStopButton   = (Button)      findViewById(R.id.stop_intervention_button);
-        mPauseButton  = (Button)      findViewById(R.id.pause_intervention_button);
-        mResumeButton = (Button)      findViewById(R.id.resume_intervention_button);
-        mScanButton   = (Button)      findViewById(R.id.scan_code_button);
-        mSyncButton   = (Button)      findViewById(R.id.sync_button);
-        mPrecisionModeStartButton  = (Button) findViewById(R.id.start_precision_mode_button);
-        mPrecisionModeStopButton   = (Button) findViewById(R.id.stop_precision_mode_button);
+        mDetails = (HorizontalScrollView) findViewById(R.id.details);
+        mAccuracy = (TextView) findViewById(R.id.accuracy);
+        mLatitude = (TextView) findViewById(R.id.latitude);
+        mLongitude = (TextView) findViewById(R.id.longitude);
+        mCrumbsCount = (TextView) findViewById(R.id.crumbs_count);
+        mStartButton = (Button) findViewById(R.id.start_intervention_button);
+        mStopButton = (Button) findViewById(R.id.stop_intervention_button);
+        mPauseButton = (Button) findViewById(R.id.pause_intervention_button);
+        mResumeButton = (Button) findViewById(R.id.resume_intervention_button);
+        mScanButton = (Button) findViewById(R.id.scan_code_button);
+        mSyncButton = (Button) findViewById(R.id.sync_button);
+        mPrecisionModeStartButton = (Button) findViewById(R.id.start_precision_mode_button);
+        mPrecisionModeStopButton = (Button) findViewById(R.id.stop_precision_mode_button);
 
         // Synchronize data
         this.syncData();
 
         // Acquire a reference to the system Location Manager
         mTrackingListener = new TrackingListener(this);
-        mLocationManager  = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+        mLocationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
         mLocationProvider = LocationManager.GPS_PROVIDER;
 
         // Reference preferences
@@ -130,54 +132,54 @@ public class TrackingActivity extends Activity implements TrackingListenerWriter
         mNotificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         mNotificationID = 1;
         mNotificationBuilder = new Notification.Builder(this)
-            .setOngoing(true)
-            .setContentTitle(getString(R.string.app_name))
-            .setContentText("")
-            .setContentIntent(PendingIntent.getActivity(this, 0, new Intent(this, TrackingActivity.class), PendingIntent.FLAG_UPDATE_CURRENT))
-            .setSmallIcon(R.mipmap.ic_stat_notify);
-        
+                .setOngoing(true)
+                .setContentTitle(getString(R.string.app_name))
+                .setContentText("")
+                .setContentIntent(PendingIntent.getActivity(this, 0, new Intent(this, TrackingActivity.class), PendingIntent.FLAG_UPDATE_CURRENT))
+                .setSmallIcon(R.mipmap.ic_stat_notify);
+
 
         // Procedure nature chooser for starting intervention
         mProcedureChooser = new AlertDialog.Builder(this)
-            .setTitle(R.string.procedure_nature)
-            .setNegativeButton(android.R.string.cancel, null)
-            .setItems(R.array.procedures_entries, new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    mLastProcedureNature = getResources().getStringArray(R.array.procedures_values)[which];
-                    mLastProcedureNatureName = getResources().getStringArray(R.array.procedures_entries)[which];
-                    Log.d("zero", "Start a new " + mLastProcedureNature);
+                .setTitle(R.string.procedure_nature)
+                .setNegativeButton(android.R.string.cancel, null)
+                .setItems(R.array.procedures_entries, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        mLastProcedureNature = getResources().getStringArray(R.array.procedures_values)[which];
+                        mLastProcedureNatureName = getResources().getStringArray(R.array.procedures_entries)[which];
+                        Log.d("zero", "Start a new " + mLastProcedureNature);
 
-                    mStartButton.setVisibility(View.GONE);
-                    mMasterChrono.setVisibility(View.VISIBLE);
-                    mStopButton.setVisibility(View.VISIBLE);
-                    mPauseButton.setVisibility(View.VISIBLE);
-                    mScanButton.setVisibility(View.VISIBLE);
-                    mSyncButton.setVisibility(View.GONE);
-                    mPrecisionModeStartButton.setVisibility(View.VISIBLE);
-                    //mProcedureNature.setVisibility(View.VISIBLE);
-                    mProcedureNature.setText(mLastProcedureNatureName);
+                        mStartButton.setVisibility(View.GONE);
+                        mMasterChrono.setVisibility(View.VISIBLE);
+                        mStopButton.setVisibility(View.VISIBLE);
+                        mPauseButton.setVisibility(View.VISIBLE);
+                        mScanButton.setVisibility(View.VISIBLE);
+                        mSyncButton.setVisibility(View.GONE);
+                        mPrecisionModeStartButton.setVisibility(View.VISIBLE);
+                        //mProcedureNature.setVisibility(View.VISIBLE);
+                        mProcedureNature.setText(mLastProcedureNatureName);
 
-                    setTitle(mLastProcedureNatureName);
+                        setTitle(mLastProcedureNatureName);
 
-                    mMasterStart = SystemClock.elapsedRealtime();
-                    mMasterDuration = 0;
-                    mMasterChrono.setBase(mMasterStart);
-                    mMasterChrono.start();
-                    
-                    startTracking();
+                        mMasterStart = SystemClock.elapsedRealtime();
+                        mMasterDuration = 0;
+                        mMasterChrono.setBase(mMasterStart);
+                        mMasterChrono.start();
 
-                    final Bundle metadata = new Bundle();
-                    metadata.putString("procedure_nature", mLastProcedureNature);
-                    addCrumb("start", metadata);
+                        startTracking();
 
-                    mNotificationBuilder
-                        .setSmallIcon(R.mipmap.ic_stat_notify_running)
-                        .setContentTitle(mLastProcedureNatureName)
-                        .setContentText(getString(R.string.running));
-                    mNotificationManager.notify(mNotificationID, mNotificationBuilder.build());
-                }
-            });
+                        final Bundle metadata = new Bundle();
+                        metadata.putString("procedure_nature", mLastProcedureNature);
+                        addCrumb("start", metadata);
+
+                        mNotificationBuilder
+                                .setSmallIcon(R.mipmap.ic_stat_notify_running)
+                                .setContentTitle(mLastProcedureNatureName)
+                                .setContentText(getString(R.string.running));
+                        mNotificationManager.notify(mNotificationID, mNotificationBuilder.build());
+                    }
+                });
         //  if (!mRunning) {
         //      mProcedureChooser.show();
         //  }
@@ -233,9 +235,9 @@ public class TrackingActivity extends Activity implements TrackingListenerWriter
 
         setTitle(R.string.new_intervention);
         mNotificationBuilder
-            .setSmallIcon(R.mipmap.ic_stat_notify)
-            .setContentTitle(getString(R.string.app_name))
-            .setContentText("");
+                .setSmallIcon(R.mipmap.ic_stat_notify)
+                .setContentTitle(getString(R.string.app_name))
+                .setContentText("");
         mNotificationManager.cancel(mNotificationID);
     }
 
@@ -256,8 +258,8 @@ public class TrackingActivity extends Activity implements TrackingListenerWriter
         this.addCrumb("hard_start");
 
         mNotificationBuilder
-            .setSmallIcon(R.mipmap.ic_stat_notify_precision_mode)
-            .setContentText(getString(R.string.precision_mode));
+                .setSmallIcon(R.mipmap.ic_stat_notify_precision_mode)
+                .setContentText(getString(R.string.precision_mode));
         mNotificationManager.notify(mNotificationID, mNotificationBuilder.build());
     }
 
@@ -273,8 +275,8 @@ public class TrackingActivity extends Activity implements TrackingListenerWriter
         this.addCrumb("hard_stop");
 
         mNotificationBuilder
-            .setSmallIcon(R.mipmap.ic_stat_notify_running)
-            .setContentText(getString(R.string.running));
+                .setSmallIcon(R.mipmap.ic_stat_notify_running)
+                .setContentText(getString(R.string.running));
         mNotificationManager.notify(mNotificationID, mNotificationBuilder.build());
 
         mPrecisionMode = false;
@@ -299,10 +301,10 @@ public class TrackingActivity extends Activity implements TrackingListenerWriter
         this.stopTracking();
         this.addCrumb("pause");
         mNotificationBuilder
-            .setSmallIcon(R.mipmap.ic_stat_notify_paused)
-            .setContentText(getString(R.string.paused));
+                .setSmallIcon(R.mipmap.ic_stat_notify_paused)
+                .setContentText(getString(R.string.paused));
         mNotificationManager.notify(mNotificationID, mNotificationBuilder.build());
-   }
+    }
 
     public void resumeIntervention(View view) {
         mMasterStart = SystemClock.elapsedRealtime();
@@ -319,18 +321,18 @@ public class TrackingActivity extends Activity implements TrackingListenerWriter
             mPrecisionModeChrono.setBase(mPrecisionModeStart - mPrecisionModeDuration);
             mPrecisionModeChrono.start();
             mNotificationBuilder
-                .setSmallIcon(R.mipmap.ic_stat_notify_precision_mode)
-                .setContentText(getString(R.string.precision_mode));
+                    .setSmallIcon(R.mipmap.ic_stat_notify_precision_mode)
+                    .setContentText(getString(R.string.precision_mode));
             mPrecisionModeStopButton.setVisibility(View.VISIBLE);
         } else {
             mNotificationBuilder
-                .setSmallIcon(R.mipmap.ic_stat_notify_running)
-                .setContentText(getString(R.string.running));
+                    .setSmallIcon(R.mipmap.ic_stat_notify_running)
+                    .setContentText(getString(R.string.running));
             mPrecisionModeStartButton.setVisibility(View.VISIBLE);
         }
         this.startTracking();
         this.addCrumb("resume");
-        
+
         mNotificationManager.notify(mNotificationID, mNotificationBuilder.build());
     }
 
@@ -346,7 +348,7 @@ public class TrackingActivity extends Activity implements TrackingListenerWriter
             if (contents != null) {
                 // TODO: Ask for quantity
                 // mBarcode.setText("CODE: " + contents);
-                
+
                 // handle scan result
                 final Bundle metadata = new Bundle();
                 metadata.putString("scanned_code", aScanResult.getFormatName() + ":" + contents);
@@ -360,19 +362,34 @@ public class TrackingActivity extends Activity implements TrackingListenerWriter
     public void syncCrumbs(View view) {
         this.syncData();
     }
-    
+
 
     private void startTracking() {
         startTracking(4000);
     }
+
     private void startTracking(long interval) {
-        mLocationManager.requestLocationUpdates(mLocationProvider, interval, 0, mTrackingListener);
-        mRunning = true;
+        try
+        {
+            mLocationManager.requestLocationUpdates(mLocationProvider, interval, 0, mTrackingListener);
+            mRunning = true;
+        }
+        catch(SecurityException e)
+        {
+            Toast.makeText(this, getResources().getString(R.string.GPSissue), Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void stopTracking() {
-        mLocationManager.removeUpdates(mTrackingListener);
-        mRunning = false;
+        try
+        {
+            mLocationManager.removeUpdates(mTrackingListener);
+            mRunning = false;
+        }
+        catch(SecurityException e)
+        {
+            Toast.makeText(this, getResources().getString(R.string.GPSissue), Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void addCrumb(String type) {
@@ -380,14 +397,21 @@ public class TrackingActivity extends Activity implements TrackingListenerWriter
     }
 
     private void addCrumb(String type, Bundle metadata) {
-        // Location location = mLocationManager.getLastKnownLocation(mLocationProvider);
-        // if (location == null) {
-        TrackingListener listener = new TrackingListener(this, type, metadata);
-        mLocationManager.requestSingleUpdate(mLocationProvider, listener, null);
-        // } else {
-        //     writeCrumb(location, type, metadata);
-        // }
-    }    
+        try
+        {
+            // Location location = mLocationManager.getLastKnownLocation(mLocationProvider);
+            // if (location == null) {
+            TrackingListener listener = new TrackingListener(this, type, metadata);
+            mLocationManager.requestSingleUpdate(mLocationProvider, listener, null);
+            // } else {
+            //     writeCrumb(location, type, metadata);
+            // }
+        }
+        catch(SecurityException e)
+        {
+            Toast.makeText(this, getResources().getString(R.string.GPSissue), Toast.LENGTH_SHORT).show();
+        }
+    }
 
     public void writeCrumb(Location location, String type, Bundle metadata) {
         // No point without a minimal accuracy
@@ -443,7 +467,11 @@ public class TrackingActivity extends Activity implements TrackingListenerWriter
             if (mDetails.getVisibility() != View.VISIBLE) {
                 mDetails.setVisibility(View.VISIBLE);
             }
-            Cursor cursor = getContentResolver().query(ZeroContract.Crumbs.CONTENT_URI, ZeroContract.Crumbs.PROJECTION_NONE, null, null, null);
+            Cursor cursor = getContentResolver().query(ZeroContract.Crumbs.CONTENT_URI,
+                    ZeroContract.Crumbs.PROJECTION_NONE,
+                    "\"" + ZeroContract.Crumbs.USER + "\"" + " LIKE " + "\"" + mAccount.name + "\"",
+                    null,
+                    null);
             int count = cursor.getCount();
             // Called when a new location is found by the network location provider.
             mAccuracy.setText(String.valueOf(location.getAccuracy()) + "m");

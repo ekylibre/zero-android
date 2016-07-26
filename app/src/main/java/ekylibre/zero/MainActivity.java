@@ -71,6 +71,8 @@ public class MainActivity extends AppCompatActivity
     public void onStart()
     {
         super.onStart();
+        if (!AccountTool.isAnyAccountExist(this))
+            AccountTool.askForAccount(this, this);
         mAccount = AccountTool.getCurrentAccount(MainActivity.this);
         if (firstPass)
             setAccountName(mNavigationView);

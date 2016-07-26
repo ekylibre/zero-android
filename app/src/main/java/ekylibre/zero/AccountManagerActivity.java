@@ -15,6 +15,8 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import ekylibre.zero.util.AccountTool;
+
 public class AccountManagerActivity extends AppCompatActivity
 {
     private Account[]               listAccount;
@@ -22,6 +24,14 @@ public class AccountManagerActivity extends AppCompatActivity
     private AccountAdapter          accountAdapter;
     public final static String      CURRENT_ACCOUNT_NAME = "Current account";
     public final static String      CURRENT_ACCOUNT_INSTANCE = "Current instance";
+
+    @Override
+    public void onStart()
+    {
+        super.onStart();
+        if (!AccountTool.isAnyAccountExist(this))
+            AccountTool.askForAccount(this, this);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
