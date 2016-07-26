@@ -24,6 +24,7 @@ import ekylibre.api.PlantDensityAbacus;
 import ekylibre.api.Plant;
 import ekylibre.api.ZeroContract;
 import ekylibre.exceptions.HTTPException;
+import ekylibre.zero.util.AccountTool;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -86,7 +87,6 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
     ** Following methods are used to transfer data between zero and ekylibre instance
     ** There are POST and GET call
     */
-
     public void performCrumbsSync(Account account, Bundle extras, String authority, ContentProviderClient provider, SyncResult syncResult)
     {
         Log.i(TAG, "Beginning network synchronization");
@@ -94,7 +94,8 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
         // Get crumbs from tracking (content) provider
         Cursor cursor = mContentResolver.query(ZeroContract.Crumbs.CONTENT_URI,
                 ZeroContract.Crumbs.PROJECTION_ALL,
-                ZeroContract.CrumbsColumns.SYNCED + " IS NULL OR " + ZeroContract.CrumbsColumns.SYNCED + " <= 0",
+                "\"" + ZeroContract.CrumbsColumns.USER + "\"" + "LIKE" + "\"" + account.name + "\""
+                        + " AND " + ZeroContract.CrumbsColumns.SYNCED + " IS NULL OR " + ZeroContract.CrumbsColumns.SYNCED + " <= 0",
                 null,
                 ZeroContract.Crumbs.SORT_ORDER_DEFAULT);
 
@@ -165,7 +166,12 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
         Log.i(TAG, "Beginning network issues synchronization");
 
         // Get crumbs from Issue (content) provider
-        Cursor cursor = mContentResolver.query(ZeroContract.Issues.CONTENT_URI, ZeroContract.Issues.PROJECTION_ALL, ZeroContract.IssuesColumns.SYNCED + " IS NULL OR " + ZeroContract.IssuesColumns.SYNCED + " <= 0", null, ZeroContract.Issues.SORT_ORDER_DEFAULT);
+        Cursor cursor = mContentResolver.query(ZeroContract.Issues.CONTENT_URI,
+                ZeroContract.Issues.PROJECTION_ALL,
+                "\"" + ZeroContract.Issues.USER + "\"" + "LIKE" + "\"" + account.name + "\""
+                        + " AND " + ZeroContract.IssuesColumns.SYNCED + " IS NULL OR " + ZeroContract.IssuesColumns.SYNCED + " <= 0",
+                null,
+                ZeroContract.Issues.SORT_ORDER_DEFAULT);
 
 
         try
@@ -317,7 +323,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
         Log.i(TAG, "Beginning network synchronization");
         Cursor cursor = mContentResolver.query(ZeroContract.PlantCountings.CONTENT_URI,
                 ZeroContract.PlantCountings.PROJECTION_ALL,
-                null,
+                "\"" + ZeroContract.PlantCountingsColumns.USER + "\"" + "LIKE" + "\"" + account.name + "\"",
                 null,
                 ZeroContract.PlantCountings.SORT_ORDER_DEFAULT);
         try
@@ -361,7 +367,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
         Log.i(TAG, "Beginning network synchronization");
         Cursor cursor = mContentResolver.query(ZeroContract.PlantCountingItems.CONTENT_URI,
                 ZeroContract.PlantCountingItems.PROJECTION_ALL,
-                null,
+                "\"" + ZeroContract.PlantCountingItemsColumns.USER + "\"" + "LIKE" + "\"" + account.name + "\"",
                 null,
                 ZeroContract.PlantCountingItems.SORT_ORDER_DEFAULT);
         try

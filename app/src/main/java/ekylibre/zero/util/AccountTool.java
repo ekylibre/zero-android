@@ -93,7 +93,6 @@ public class AccountTool
 
         while (++i < listAccount.length && !Objects.equals(listAccount[i].name, accName));
         if (i == listAccount.length)
-
             return (listAccount[0]);
         return (listAccount[i]);
     }
