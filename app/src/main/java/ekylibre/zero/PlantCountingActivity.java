@@ -55,7 +55,7 @@ public class PlantCountingActivity extends AppCompatActivity {
     private List<EditText> mListValues = new ArrayList();
     private ListIterator<EditText> mListIteratorValues;
     private AlertDialog.Builder mPlantChooser = null;
-    private AlertDialog.Builder mVarietyChooser = null;
+    private AlertDialog.Builder mAbacusChooser = null;
     private Drawable mGreen;
     private Drawable mOrange;
     private Drawable mRed;
@@ -185,7 +185,7 @@ public class PlantCountingActivity extends AppCompatActivity {
         } else {
             Log.d(TAG, "abaque data does NOT exist");
         }
-        createVarietyChooser();
+        createAbacusChooser();
         cursorVariety.close();
     }
 
@@ -223,7 +223,7 @@ public class PlantCountingActivity extends AppCompatActivity {
 
     private void createPlantChooser() {
         mPlantChooser = new AlertDialog.Builder(this)
-                .setTitle("Choix du plant")
+                .setTitle(getResources().getString(R.string.chose_plant))
                 .setItems(mPlantNameTab, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -233,9 +233,9 @@ public class PlantCountingActivity extends AppCompatActivity {
                 });
     }
 
-    private void createVarietyChooser() {
-        mVarietyChooser = new AlertDialog.Builder(this)
-                .setTitle("Choix de l'abaque")
+    private void createAbacusChooser() {
+        mAbacusChooser = new AlertDialog.Builder(this)
+                .setTitle(getResources().getString(R.string.chose_abacus))
                 .setNegativeButton(android.R.string.cancel, null)
                 .setItems(mAbaqueTab, new DialogInterface.OnClickListener() {
                     @Override
@@ -306,42 +306,47 @@ public class PlantCountingActivity extends AppCompatActivity {
     }
 
     public void choseAbaque(View view) {
-        if (mVarietyChooser == null)
+        if (mAbacusChooser == null)
             return;
-        mVarietyChooser.show();
+        mAbacusChooser.show();
     }
 
     public void savePlantCounting(View v) {
         insertNewValuesPlantCounting();
-        ContentValues newValuesPlantCountingItem = fillNewValuesPlantCountingItems();
-        insertNewValuesPlantCountingItems(newValuesPlantCountingItem);
+        pushNewValue();
+        Toast toast = Toast.makeText(getApplicationContext(), "Plant Counting saved", Toast.LENGTH_SHORT);
+        toast.show();
         this.finish();
     }
 
-    private ContentValues fillNewValuesPlantCountingItems() {
-        ContentValues newValuesPlantCountingItem = new ContentValues();
+    private void pushNewValue()
+    {
+        ContentValues newValuePlantCountingItem = new ContentValues();
 
         mListIteratorValues = mListValues.listIterator();
-        while (mListIteratorValues.hasNext()) {
+        while (mListIteratorValues.hasNext())
+        {
             EditText et = mListIteratorValues.next();
-            if (et.getText().toString() != null) {
-                newValuesPlantCountingItem.put(ZeroContract.PlantCountingItemsColumns.VALUE, et.getText().toString());
+            if (et.getText().toString() != null)
+            {
+                newValuePlantCountingItem.put(ZeroContract.PlantCountingItemsColumns.VALUE, et.getText().toString());
+                newValuePlantCountingItem.put(ZeroContract.PlantCountingItemsColumns.USER, mAccount.name);
+                insertNewValuePlantCountingItems(newValuePlantCountingItem);
+
             }
         }
-        return (newValuesPlantCountingItem);
+        return ;
     }
 
-    private void insertNewValuesPlantCountingItems(ContentValues newValuesPlantCountingItem) {
-        if (!mListValues.isEmpty()) {
-            getContentResolver().insert(
-                    ZeroContract.PlantCountingItems.CONTENT_URI,
-                    newValuesPlantCountingItem);
-        }
-        Toast toast = Toast.makeText(getApplicationContext(), "Plant Counting saved", Toast.LENGTH_SHORT);
-        toast.show();
+    private void insertNewValuePlantCountingItems(ContentValues newValuePlantCountingItem)
+    {
+        getContentResolver().insert(
+                ZeroContract.PlantCountingItems.CONTENT_URI,
+                newValuePlantCountingItem);
     }
 
-    private void insertNewValuesPlantCounting() {
+    private void insertNewValuesPlantCounting()
+    {
         ContentValues newValuesPlantCounting = new ContentValues();
 
         newValuesPlantCounting.put(ZeroContract.PlantCountingsColumns.OBSERVED_AT,
@@ -354,7 +359,8 @@ public class PlantCountingActivity extends AppCompatActivity {
                 newValuesPlantCounting);
     }
 
-    private void setLocation(ContentValues newValuesPlantCounting) {
+    private void setLocation(ContentValues newValuesPlantCounting)
+    {
         LocationManager locationManager =
                 (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
         String locationProvider = LocationManager.NETWORK_PROVIDER;

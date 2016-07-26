@@ -48,6 +48,7 @@
     <string name="scan_code">Scanner un code-barre</string>
     <string name="select_plant">Sélectionner une culture</string>
     <string name="select_abacus">Sélectionner une abaque</string>
+    <string name="select_density">Densité recomendée</string>
     <string name="service_name">Ekylibre</string>
     <string name="settings">Paramètres</string>
     <string name="severity">Gravité</string>
@@ -71,5 +72,7 @@
     <string name="add_account">Ajouter un compte</string>
     <string name="parameters">Paramètres</string>
     <string name="GPSissue">Il y a un problème avec votre GPS</string>
-
+    <string name="chose_plant">Choix de la culture</string>
+    <string name="chose_abacus">Choix de l\'abaque</string>
+    <string name="chose_density">Choix de la densité</string>
 </resources>
