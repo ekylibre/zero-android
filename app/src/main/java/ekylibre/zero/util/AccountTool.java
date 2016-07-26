@@ -2,7 +2,9 @@ package ekylibre.zero.util;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
@@ -10,6 +12,7 @@ import java.util.Objects;
 
 import ekylibre.zero.AccountManagerActivity;
 import ekylibre.zero.Authenticator;
+import ekylibre.zero.AuthenticatorActivity;
 import ekylibre.zero.SyncAdapter;
 
 /**************************************
@@ -30,6 +33,25 @@ public class AccountTool
         AccountManager accountManager = AccountManager.get(context);
         String accName = accountManager.getUserData(account, Authenticator.KEY_ACCOUNT_NAME);
         return (accName);
+    }
+
+    public static boolean isAnyAccountExist(Context context)
+    {
+        AccountManager accMan = AccountManager.get(context);
+        final Account[] accList = accMan.getAccountsByType(SyncAdapter.ACCOUNT_TYPE);
+        if (accList.length == 0)
+            return (false);
+        else
+            return (true);
+    }
+
+    public static void  askForAccount(Context context, Activity activity)
+    {
+        Intent intent = new Intent(context, AuthenticatorActivity.class);
+        intent.putExtra(AccountManager.KEY_ACCOUNT_TYPE, SyncAdapter.ACCOUNT_TYPE);
+        intent.putExtra(AuthenticatorActivity.KEY_REDIRECT, AuthenticatorActivity.CHOICE_REDIRECT_TRACKING);
+        context.startActivity(intent);
+        activity.finish();
     }
 
     public static String getAccountInstance(Account account, Context context)
@@ -71,6 +93,7 @@ public class AccountTool
 
         while (++i < listAccount.length && !Objects.equals(listAccount[i].name, accName));
         if (i == listAccount.length)
+
             return (listAccount[0]);
         return (listAccount[i]);
     }

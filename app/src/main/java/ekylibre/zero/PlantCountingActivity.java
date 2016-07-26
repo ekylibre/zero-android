@@ -86,6 +86,14 @@ public class PlantCountingActivity extends AppCompatActivity {
     }
 
     @Override
+    public void onStart()
+    {
+        super.onStart();
+        if (!AccountTool.isAnyAccountExist(this))
+            AccountTool.askForAccount(this, this);
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.plant_counting);
@@ -350,20 +358,22 @@ public class PlantCountingActivity extends AppCompatActivity {
         LocationManager locationManager =
                 (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
         String locationProvider = LocationManager.NETWORK_PROVIDER;
-        try {
+        try
+        {
             Location lastKnownLocation = locationManager.getLastKnownLocation(locationProvider);
+            if (lastKnownLocation != null)
+            {
+                newValuesPlantCounting.put(ZeroContract.PlantCountingsColumns.LATITUDE,
+                        lastKnownLocation.getLatitude());
+                newValuesPlantCounting.put(ZeroContract.PlantCountingsColumns.LONGITUDE,
+                        lastKnownLocation.getLongitude());
+            }
         }
         catch(SecurityException e)
         {
-            Toast.makeText(R.string.GPSissue);
+            Toast.makeText(this, getResources().getString(R.string.GPSissue), Toast.LENGTH_SHORT).show();
         }
-            if (lastKnownLocation != null)
-        {
-            newValuesPlantCounting.put(ZeroContract.PlantCountingsColumns.LATITUDE,
-                    lastKnownLocation.getLatitude());
-            newValuesPlantCounting.put(ZeroContract.PlantCountingsColumns.LONGITUDE,
-                    lastKnownLocation.getLongitude());
-        }
+
     }
 
     public void addValue(View view)

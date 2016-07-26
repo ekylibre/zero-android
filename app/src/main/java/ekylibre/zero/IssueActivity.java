@@ -35,6 +35,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import ekylibre.api.ZeroContract;
+import ekylibre.zero.util.AccountTool;
 
 public class IssueActivity extends Activity {
 
@@ -291,7 +292,8 @@ public class IssueActivity extends Activity {
     @Override
     public void onStart() {
         super.onStart();
-
+        if (!AccountTool.isAnyAccountExist(this))
+            AccountTool.askForAccount(this, this);
         // ATTENTION: This was auto-generated to implement the App Indexing API.
         // See https://g.co/AppIndexing/AndroidStudio for more information.
         client.connect();
