@@ -1,6 +1,7 @@
 package ekylibre.zero;
 
 
+import android.accounts.Account;
 import android.app.AlertDialog;
 import android.content.ContentValues;
 import android.content.Context;
@@ -34,11 +35,13 @@ import java.util.List;
 import java.util.ListIterator;
 
 import ekylibre.api.ZeroContract;
+import ekylibre.zero.util.AccountTool;
 
 
 public class PlantCountingActivity extends AppCompatActivity
 {
     private final String            TAG = "PlantCounting";
+    private Account                 mAccount;
     private LinearLayout            mLayout;
     private EditText                mObservationEditText;
     private TextView                mAverageText;
@@ -98,6 +101,7 @@ public class PlantCountingActivity extends AppCompatActivity
         mOrange = getResources().getDrawable(R.color.basic_orange);
         mRed = getResources().getDrawable(R.color.basic_red);
         mObservationEditText = (EditText)findViewById(R.id.observationEditText);
+        mAccount = AccountTool.getCurrentAccount(this);
 
         Cursor cursorPlantName = queryPlantName();
         Cursor cursorPlantId = queryPlantId();
@@ -265,7 +269,7 @@ public class PlantCountingActivity extends AppCompatActivity
         Cursor cursorPlantId = getContentResolver().query(
                 ZeroContract.Plants.CONTENT_URI,
                 projectionPlantId,
-                null,
+                "\"" + ZeroContract.Plants.USER + "\"" + " LIKE " + "\"" + mAccount.name + "\"",
                 null,
                 null);
         return (cursorPlantId);
@@ -278,7 +282,7 @@ public class PlantCountingActivity extends AppCompatActivity
         Cursor cursorPlantName = getContentResolver().query(
                 ZeroContract.Plants.CONTENT_URI,
                 projectionPlantName,
-                null,
+                "\"" + ZeroContract.Plants.USER + "\"" + " LIKE " + "\"" + mAccount.name + "\"",
                 null,
                 null);
         return (cursorPlantName);
@@ -293,7 +297,8 @@ public class PlantCountingActivity extends AppCompatActivity
             Cursor cursorAbacus = getContentResolver().query(
                     ZeroContract.PlantDensityAbaci.CONTENT_URI,
                     projectionAbaque,
-                    ZeroContract.PlantDensityAbaciColumns.VARIETY + " IS NOT NULL"
+                    "\"" + ZeroContract.PlantDensityAbaciColumns.USER + "\"" + " LIKE " + "\"" + mAccount.name + "\""
+                            + " AND " + ZeroContract.PlantDensityAbaciColumns.VARIETY + " IS NOT NULL"
                             + " AND " + ZeroContract.PlantDensityAbaciColumns.VARIETY + " like \"" + cursorVariety.getString(0) + "\"",
                     null,
                     null);
@@ -309,7 +314,8 @@ public class PlantCountingActivity extends AppCompatActivity
         Cursor cursorVariety = getContentResolver().query(
                 ZeroContract.Plants.CONTENT_URI,
                 mProjectionVariety,
-                ZeroContract.PlantsColumns.NAME + " like \"" + mPlantName.getText().toString() + "\"",
+                "\"" + ZeroContract.Plants.USER + "\"" + " LIKE " + "\"" + mAccount.name + "\""
+                + " AND " + ZeroContract.PlantsColumns.NAME + " like \"" + mPlantName.getText().toString() + "\"",
                 null,
                 null);
         return (cursorVariety);

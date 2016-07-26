@@ -22,6 +22,7 @@ public final class ZeroContract {
         String ACCURACY = "accuracy";
         String METADATA = "metadata";
         String SYNCED = "synced";
+        String USER = "user";
     }
 
     public interface IssuesColumns extends BaseColumns {
@@ -36,6 +37,7 @@ public final class ZeroContract {
         String OBSERVED_AT = "observed_at";
         String LATITUDE = "latitude";
         String LONGITUDE = "longitude";
+        String USER = "user";
     }
 
     public interface PlantCountingsColumns extends BaseColumns {
@@ -49,12 +51,14 @@ public final class ZeroContract {
         String PLANT_DENSITY_ABACUS_ID = "plant_density_abacus_id";
         String PLANT_ID = "plant_id";
         String SYNCED = "synced";
+        String USER = "user";
     }
 
     public interface PlantCountingItemsColumns extends BaseColumns {
         String TABLE_NAME = "plant_counting_items";
         String VALUE = "value";
         String PLANT_COUNTING_ID = "plant_counting_id";
+        String USER = "user";
     }
 
     public interface PlantDensityAbaciColumns extends BaseColumns {
@@ -64,12 +68,14 @@ public final class ZeroContract {
         String GERMINATION_PERCENTAGE = "germination_percentage";
         String SEEDING_DENSITY_UNIT = "seeding_density_unit";
         String SAMPLING_LENGTH_UNIT = "sampling_length_unit";
+        String USER = "user";
     }
 
     public interface PlantDensityAbacusItemsColumns extends BaseColumns {
         String TABLE_NAME = "plant_density_abacus_items";
         String SEEDING_DENSITY_VALUE = "seeding_density_value";
         String PLANTS_COUNT = "plants_count";
+        String USER = "user";
     }
 
     public interface PlantsColumns extends BaseColumns {
@@ -78,6 +84,7 @@ public final class ZeroContract {
         String SHAPE = "shape";
         String VARIETY = "variety";
         String ACTIVE = "active";
+        String USER = "user";
     }
 
     public static final class Crumbs implements CrumbsColumns {
