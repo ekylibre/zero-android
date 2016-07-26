@@ -9,7 +9,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 
-import ekylibre.zero.DatabaseHelper;
 import ekylibre.zero.util.SelectionBuilder;
 
 public class ZeroProvider extends ContentProvider {

@@ -1,4 +1,4 @@
-package ekylibre.zero;
+package ekylibre.api;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
@@ -97,10 +97,14 @@ public class DatabaseHelper extends SQLiteOpenHelper
                         + ", " + ZeroContract.Plants.VARIETY + " VARCHAR(255)"
                         + ", " + ZeroContract.Plants.ACTIVE + " BOOLEAN NOT NULL"
                         + ")");
-/*
             case 5:
-                    database.execSQL();
-*/
+                database.execSQL("ALTER TABLE crumbs ADD user");
+                database.execSQL("ALTER TABLE issues ADD user");
+                database.execSQL("ALTER TABLE plant_countings ADD user");
+                database.execSQL("ALTER TABLE plant_counting_items ADD user");
+                database.execSQL("ALTER TABLE plant_density_abaci user");
+                database.execSQL("ALTER TABLE plant_density_abacus_items ADD user");
+                database.execSQL("ALTER TABLE plants ADD user");
         }
     }
 }
