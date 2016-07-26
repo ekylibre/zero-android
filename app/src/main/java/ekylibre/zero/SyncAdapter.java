@@ -22,6 +22,7 @@ import ekylibre.api.PlantCounting;
 import ekylibre.api.PlantCountingItem;
 import ekylibre.api.PlantDensityAbacus;
 import ekylibre.api.Plant;
+import ekylibre.api.ZeroContract;
 import ekylibre.exceptions.HTTPException;
 
 import java.io.IOException;
@@ -260,11 +261,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
             Log.d("zero", "HTTP Exception : " + h.getMessage());
         }
 
-
-
         Log.i(TAG, "Finish network plant_density_abaci synchronization");
-
-
     }
 
     public void performPlantsSync(Account account, Bundle extras, String authority, ContentProviderClient provider, SyncResult syncResult)

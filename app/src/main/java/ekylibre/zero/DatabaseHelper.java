@@ -4,6 +4,8 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import ekylibre.api.ZeroContract;
+
 public class DatabaseHelper extends SQLiteOpenHelper
 {
     public static final int DATABASE_VERSION = 4;
@@ -28,14 +30,14 @@ public class DatabaseHelper extends SQLiteOpenHelper
         {
             case 0:
                 database.execSQL("CREATE TABLE IF NOT EXISTS crumbs ("
-                        + ekylibre.zero.ZeroContract.CrumbsColumns._ID + " INTEGER PRIMARY KEY AUTOINCREMENT"
-                        + ", " + ekylibre.zero.ZeroContract.CrumbsColumns.TYPE + " VARCHAR(32) NOT NULL"
-                        + ", " + ekylibre.zero.ZeroContract.CrumbsColumns.LATITUDE + " DOUBLE NOT NULL"
-                        + ", " + ekylibre.zero.ZeroContract.CrumbsColumns.LONGITUDE + " DOUBLE NOT NULL"
-                        + ", " + ekylibre.zero.ZeroContract.CrumbsColumns.READ_AT + " BIGINT NOT NULL"
-                        + ", " + ekylibre.zero.ZeroContract.CrumbsColumns.ACCURACY + " FLOAT"
-                        + ", " + ekylibre.zero.ZeroContract.CrumbsColumns.SYNCED + " INTEGER NOT NULL DEFAULT 0"
-                        + ", " + ekylibre.zero.ZeroContract.CrumbsColumns.METADATA + " TEXT"
+                        + ZeroContract.CrumbsColumns._ID + " INTEGER PRIMARY KEY AUTOINCREMENT"
+                        + ", " + ZeroContract.CrumbsColumns.TYPE + " VARCHAR(32) NOT NULL"
+                        + ", " + ZeroContract.CrumbsColumns.LATITUDE + " DOUBLE NOT NULL"
+                        + ", " + ZeroContract.CrumbsColumns.LONGITUDE + " DOUBLE NOT NULL"
+                        + ", " + ZeroContract.CrumbsColumns.READ_AT + " BIGINT NOT NULL"
+                        + ", " + ZeroContract.CrumbsColumns.ACCURACY + " FLOAT"
+                        + ", " + ZeroContract.CrumbsColumns.SYNCED + " INTEGER NOT NULL DEFAULT 0"
+                        + ", " + ZeroContract.CrumbsColumns.METADATA + " TEXT"
                         + ")");
             case 1:
                 database.execSQL("CREATE TABLE IF NOT EXISTS issues ("
