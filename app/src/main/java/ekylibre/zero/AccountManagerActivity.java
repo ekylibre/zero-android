@@ -2,6 +2,7 @@ package ekylibre.zero;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
+import android.content.ContentResolver;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
@@ -14,7 +15,9 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 
+import ekylibre.api.ZeroContract;
 import ekylibre.zero.util.AccountTool;
 
 public class AccountManagerActivity extends AppCompatActivity
@@ -63,8 +66,24 @@ public class AccountManagerActivity extends AppCompatActivity
                 editor.putString(CURRENT_ACCOUNT_NAME, newCurrAccount.name);
                 editor.commit();
                 Log.d(TAG, "New current account is ==> " + newCurrAccount.name);
+                syncAll(newCurrAccount);
+                finish();
             }
         });
+    }
+
+    private void syncAll(Account account)
+    {
+        if (account == null)
+            return ;
+        Log.d("zero", "syncData: " + account.toString() + ", " + ZeroContract.AUTHORITY);
+        Bundle extras = new Bundle();
+        extras.putBoolean(ContentResolver.SYNC_EXTRAS_MANUAL, true);
+        extras.putBoolean(ContentResolver.SYNC_EXTRAS_EXPEDITED, true);
+
+        ContentResolver.requestSync(account, ZeroContract.AUTHORITY, extras);
+        Toast toast = Toast.makeText(getApplicationContext(), R.string.data_synced, Toast.LENGTH_SHORT);
+        toast.show();
     }
 
     public void    addAccount(View v)
