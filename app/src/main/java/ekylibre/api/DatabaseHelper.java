@@ -102,7 +102,7 @@ public class DatabaseHelper extends SQLiteOpenHelper
                 database.execSQL("ALTER TABLE issues ADD user");
                 database.execSQL("ALTER TABLE plant_countings ADD user");
                 database.execSQL("ALTER TABLE plant_counting_items ADD user");
-                database.execSQL("ALTER TABLE plant_density_abaci user");
+                database.execSQL("ALTER TABLE plant_density_abaci ADD user");
                 database.execSQL("ALTER TABLE plant_density_abacus_items ADD user");
                 database.execSQL("ALTER TABLE plants ADD user");
         }

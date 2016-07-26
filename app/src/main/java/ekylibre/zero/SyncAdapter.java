@@ -244,6 +244,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
                 cv.put(ZeroContract.PlantDensityAbaciColumns.GERMINATION_PERCENTAGE, plantDensityAbacus.getGerminationPercentage());
                 cv.put(ZeroContract.PlantDensityAbaciColumns.SEEDING_DENSITY_UNIT, plantDensityAbacus.getSeedingDensityUnit());
                 cv.put(ZeroContract.PlantDensityAbaciColumns.SAMPLING_LENGTH_UNIT, plantDensityAbacus.getSamplingLenghtUnit());
+                cv.put(ZeroContract.PlantDensityAbaciColumns.USER, account.name);
                 mContentResolver.insert(ZeroContract.PlantDensityAbaci.CONTENT_URI, cv);
             }
             Log.d("zero", "fin parcours de liste plantDensityAbacus");
@@ -286,6 +287,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
                 cv.put(ZeroContract.Plants.NAME, plants.getName());
                 cv.put(ZeroContract.Plants.VARIETY, plants.getVariety());
                 cv.put(ZeroContract.Plants.ACTIVE, true);
+                cv.put(ZeroContract.Plants.USER, account.name);
                 mContentResolver.insert(ZeroContract.Plants.CONTENT_URI, cv);
             }
             Log.d(TAG, "fin parcours de liste plantDensityAbacus");

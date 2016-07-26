@@ -1,12 +1,18 @@
 package ekylibre.zero;
 
+import android.*;
+import android.Manifest;
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.CalendarContract;
 import android.provider.Settings;
+import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -31,21 +37,20 @@ import java.util.Locale;
  * ekylibre.zero for zero-android     *
  *************************************/
 
-public class TodoListActivity
-{
-    private final int    CALENDAR_ID    = 0;
-    private final int    TITLE          = 1;
-    private final int    DESCRIPTION    = 2;
-    private final int    DTSTART        = 3;
-    private final int    DTEND          = 4;
-    private final int    ALL_DAY        = 5;
-    private final int    EVENT_LOCATION = 6;
-    private final String TAG            = "TodoListAct";
+public class TodoListActivity {
+    private final int CALENDAR_ID = 0;
+    private final int TITLE = 1;
+    private final int DESCRIPTION = 2;
+    private final int DTSTART = 3;
+    private final int DTEND = 4;
+    private final int ALL_DAY = 5;
+    private final int EVENT_LOCATION = 6;
+    private final String TAG = "TodoListAct";
 
-    private ListView                todoListView;
-    private ArrayAdapter<String>    adapter;
-    private Context                 context;
-    private TextView                todayDate;
+    private ListView todoListView;
+    private ArrayAdapter<String> adapter;
+    private Context context;
+    private TextView todayDate;
 
 
     /*
@@ -54,12 +59,13 @@ public class TodoListActivity
     ** CONSTANTS are use to get the part of data you want from adapter
     */
 
-    public TodoListActivity(Context context, ListView foundListView, TextView foundTextView)
-    {
+    public TodoListActivity(Context context, ListView foundListView, TextView foundTextView) {
         this.todoListView = foundListView;
         this.todayDate = foundTextView;
         this.context = context;
         List<TodoItem> todolist = createList();
+        if (todolist == null)
+            return;
 
         TodoAdapter adapter = new TodoAdapter(context, todolist);
         todoListView.setAdapter(adapter);
@@ -68,18 +74,18 @@ public class TodoListActivity
         todayDate.setText(date);
     }
 
-    public void setListView(ListView listView)
-    {
+    public void setListView(ListView listView) {
         todoListView = listView;
     }
 
-    public List<TodoItem>          createList()
-    {
-        Cursor                      curs;
-        String                      startDateFormatted;
-        String                      endDateFormatted;
+    public List<TodoItem> createList() {
+        Cursor curs;
+        String startDateFormatted;
+        String endDateFormatted;
 
         curs = getEvents();
+        if (curs == null)
+            return (null);
         affEvents(curs);
 
         List<TodoItem> todoList = new ArrayList<TodoItem>();
@@ -87,10 +93,8 @@ public class TodoListActivity
         DateFormat formatterSTART = new SimpleDateFormat("HH:mm - ");
         DateFormat formatterEND = new SimpleDateFormat("HH:mm");
 
-        if (curs.moveToFirst())
-        {
-            do
-            {
+        if (curs.moveToFirst()) {
+            do {
                 Date startDate = new Date(curs.getLong(DTSTART));
                 Date endDate = new Date(curs.getLong(DTEND));
                 startDateFormatted = formatterSTART.format(startDate);
@@ -107,15 +111,14 @@ public class TodoListActivity
     /*
     ** Return new instance of Calendar containing current date
     */
-    public Calendar getDateOfDay()
-    {
-        Calendar    calendar = Calendar.getInstance();
-        int         year;
-        int         month;
-        int         day;
-        int         hour;
-        int         minute;
-        int         second;
+    public Calendar getDateOfDay() {
+        Calendar calendar = Calendar.getInstance();
+        int year;
+        int month;
+        int day;
+        int hour;
+        int minute;
+        int second;
 
         year = calendar.get(Calendar.YEAR);
         month = calendar.get(Calendar.MONTH);
@@ -132,15 +135,14 @@ public class TodoListActivity
     /*
     ** Return new instance of Calendar containing tomorrow date
     */
-    public Calendar getDateOfTomorrow()
-    {
-        Calendar    calendar = Calendar.getInstance();
-        int         year;
-        int         month;
-        int         day;
-        int         hour;
-        int         minute;
-        int         second;
+    public Calendar getDateOfTomorrow() {
+        Calendar calendar = Calendar.getInstance();
+        int year;
+        int month;
+        int day;
+        int hour;
+        int minute;
+        int second;
 
         year = calendar.get(Calendar.YEAR);
         month = calendar.get(Calendar.MONTH);
@@ -158,8 +160,7 @@ public class TodoListActivity
     /*
     ** Set fields we want to request on getEvents from phone calendar
     */
-    private String[]    setProjection()
-    {
+    private String[] setProjection() {
         return (new String[]
                 {
                         CalendarContract.Events.CALENDAR_ID,
@@ -175,8 +176,7 @@ public class TodoListActivity
     /*
     ** Core of the request send to phone calendar
     */
-    private String  setSelection(Calendar startTime, Calendar endTime)
-    {
+    private String setSelection(Calendar startTime, Calendar endTime) {
         return ("(( " + CalendarContract.Events.DTSTART + " >= " + startTime.getTimeInMillis() +
                 " ) AND ( " + CalendarContract.Events.DTSTART + " <= " + endTime.getTimeInMillis() + " ))");
     }
@@ -184,9 +184,8 @@ public class TodoListActivity
     /*
     ** Return Instance of Calendar with a Date passed by argument
     */
-    private Calendar    setTime(Date date)
-    {
-        Calendar        time;
+    private Calendar setTime(Date date) {
+        Calendar time;
 
         time = Calendar.getInstance();
         time.setTime(date);
@@ -198,15 +197,15 @@ public class TodoListActivity
     ** setSelection (Core of the request)
     ** setProjection (Selection of fields to request)
     */
-    public Cursor getEvents()
-    {
-        Context         context;
+    @TargetApi(23)
+    public Cursor getEvents() {
+        Context context;
         ContentResolver contentResolver;
-        Calendar        startTime;
-        Calendar        endTime;
-        String[]        projection;
-        String          selection;
-        Cursor          returnCurs;
+        Calendar startTime;
+        Calendar endTime;
+        String[] projection;
+        String selection;
+        Cursor returnCurs = null;
 
         Log.d(TAG, "Getting events from local calendar");
         projection = setProjection();
@@ -218,8 +217,17 @@ public class TodoListActivity
 
         context = this.context;
         contentResolver = context.getContentResolver();
+        if (Build.VERSION.SDK_INT >= 23 &&
+                (ActivityCompat.checkSelfPermission(context, android.Manifest.permission.READ_CALENDAR) != PackageManager.PERMISSION_GRANTED
+                || ActivityCompat.checkSelfPermission(context, Manifest.permission.WRITE_CALENDAR) != PackageManager.PERMISSION_GRANTED))
+        {
+            return (null);
+        }
         returnCurs = contentResolver.query(CalendarContract.Events.CONTENT_URI,
-                projection, selection, null, CalendarContract.Events.DTSTART);
+                projection,
+                selection,
+                null,
+                CalendarContract.Events.DTSTART);
         return (returnCurs);
     }
 
