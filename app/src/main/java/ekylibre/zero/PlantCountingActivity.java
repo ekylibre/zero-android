@@ -2,16 +2,19 @@ package ekylibre.zero;
 
 
 import android.accounts.Account;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.text.InputType;
 import android.text.TextUtils;
@@ -29,6 +32,7 @@ import android.widget.LinearLayout;
 import android.widget.TableLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -38,26 +42,25 @@ import ekylibre.api.ZeroContract;
 import ekylibre.zero.util.AccountTool;
 
 
-public class PlantCountingActivity extends AppCompatActivity
-{
-    private final String            TAG = "PlantCounting";
-    private Account                 mAccount;
-    private LinearLayout            mLayout;
-    private EditText                mObservationEditText;
-    private TextView                mAverageText;
-    private TextView                mPlantName;
-    private TextView                mAbaque;
-    private TextView                mDensityText;
-    private ImageView               mIndicator;
-    private List<EditText>          mListValues = new ArrayList();
-    private ListIterator<EditText>  mListIteratorValues;
-    private AlertDialog.Builder     mPlantChooser = null;
-    private AlertDialog.Builder     mVarietyChooser = null;
-    private Drawable                mGreen;
-    private Drawable                mOrange;
-    private Drawable                mRed;
+public class PlantCountingActivity extends AppCompatActivity {
+    private final String TAG = "PlantCounting";
+    private Account mAccount;
+    private LinearLayout mLayout;
+    private EditText mObservationEditText;
+    private TextView mAverageText;
+    private TextView mPlantName;
+    private TextView mAbaque;
+    private TextView mDensityText;
+    private ImageView mIndicator;
+    private List<EditText> mListValues = new ArrayList();
+    private ListIterator<EditText> mListIteratorValues;
+    private AlertDialog.Builder mPlantChooser = null;
+    private AlertDialog.Builder mVarietyChooser = null;
+    private Drawable mGreen;
+    private Drawable mOrange;
+    private Drawable mRed;
 
-    private int                     testColor = 0;
+    private int testColor = 0;
 
 
     private CharSequence[] mPlantID;
@@ -65,18 +68,15 @@ public class PlantCountingActivity extends AppCompatActivity
     private CharSequence[] mAbaqueTab;
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu)
-    {
+    public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.form, menu);
         return super.onCreateOptionsMenu(menu);
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item)
-    {
-        switch (item.getItemId())
-        {
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
             case R.id.action_save:
                 savePlantCounting(item.getActionView());
                 return true;
@@ -86,29 +86,27 @@ public class PlantCountingActivity extends AppCompatActivity
     }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.plant_counting);
 
         mLayout = (LinearLayout) findViewById(R.id.Valueslayout);
-        mPlantName = (Button)findViewById(R.id.plantName);
-        mAbaque = (Button)findViewById(R.id.Abaque);
+        mPlantName = (Button) findViewById(R.id.plantName);
+        mAbaque = (Button) findViewById(R.id.Abaque);
         mAverageText = (TextView) findViewById(R.id.textAverage);
         mAverageText.setText("");
-        mIndicator = (ImageView)findViewById(R.id.indicator);
+        mIndicator = (ImageView) findViewById(R.id.indicator);
         mGreen = getResources().getDrawable(R.color.basic_green);
         mOrange = getResources().getDrawable(R.color.basic_orange);
         mRed = getResources().getDrawable(R.color.basic_red);
-        mObservationEditText = (EditText)findViewById(R.id.observationEditText);
+        mObservationEditText = (EditText) findViewById(R.id.observationEditText);
         mAccount = AccountTool.getCurrentAccount(this);
 
         Cursor cursorPlantName = queryPlantName();
         Cursor cursorPlantId = queryPlantId();
 
         Log.d(TAG, "plant name count :" + cursorPlantName.getCount());
-        if (cursorPlantName != null && cursorPlantId != null)
-        {
+        if (cursorPlantName != null && cursorPlantId != null) {
             Log.d(TAG, "Data exists !");
             mPlantNameTab = new CharSequence[cursorPlantName.getCount()];
             mPlantID = new CharSequence[cursorPlantId.getCount()];
@@ -118,9 +116,7 @@ public class PlantCountingActivity extends AppCompatActivity
 
             Log.d(TAG, "end plant name");
             Log.d(TAG, "nb in cursor : " + cursorPlantName.getCount());
-        }
-        else
-        {
+        } else {
             Toast.makeText(this, "Data does not exist", Toast.LENGTH_SHORT).show();
             Log.d(TAG, "Plant data does NOT exist");
         }
@@ -132,13 +128,11 @@ public class PlantCountingActivity extends AppCompatActivity
         setHandlerAverageValue();
     }
 
-    private void fillAbacusTab(Cursor cursorAbacus)
-    {
+    private void fillAbacusTab(Cursor cursorAbacus) {
         int itName = 0;
 
         mAbaqueTab = new CharSequence[cursorAbacus.getCount()];
-        while (cursorAbacus.moveToNext())
-        {
+        while (cursorAbacus.moveToNext()) {
             Log.d("zero", "name : " + cursorAbacus.getString(0));
             mAbaqueTab[itName] = cursorAbacus.getString(0);
             Log.d("zero", "tablename[" + itName + "] : " + mAbaqueTab[itName]);
@@ -146,24 +140,20 @@ public class PlantCountingActivity extends AppCompatActivity
         }
     }
 
-    private void    fillPlantId(Cursor cursorPlantId)
-    {
-        int itId    = 0;
+    private void fillPlantId(Cursor cursorPlantId) {
+        int itId = 0;
 
-        while (cursorPlantId.moveToNext())
-        {
+        while (cursorPlantId.moveToNext()) {
             Log.d(TAG, "id : " + cursorPlantId.getString(0));
             mPlantID[itId] = cursorPlantId.getString(0);
             itId++;
         }
     }
 
-    private void    fillPlantName(Cursor cursorPlantName)
-    {
-        int itName  = 0;
+    private void fillPlantName(Cursor cursorPlantName) {
+        int itName = 0;
 
-        while (cursorPlantName.moveToNext())
-        {
+        while (cursorPlantName.moveToNext()) {
             Log.d(TAG, "name : " + cursorPlantName.getString(0));
             mPlantNameTab[itName] = cursorPlantName.getString(0);
             Log.d(TAG, "tablename[" + itName + "] : " + mPlantNameTab[itName]);
@@ -171,8 +161,7 @@ public class PlantCountingActivity extends AppCompatActivity
         }
     }
 
-    public void setAbacusList()
-    {
+    public void setAbacusList() {
         Cursor cursorVariety = queryVariety();
         Cursor cursorAbacus = queryAbacus(cursorVariety);
 
@@ -180,29 +169,24 @@ public class PlantCountingActivity extends AppCompatActivity
         Log.d(TAG, "Valeur du where : " + cursorVariety.getString(0));
         Log.d("zero", "beginning abaque");
 
-        if (cursorAbacus != null)
-        {
+        if (cursorAbacus != null) {
             Log.d(TAG, "data exists");
             fillAbacusTab(cursorAbacus);
             Log.d(TAG, "end Abaque");
             Log.d(TAG, "nb in cursor : " + cursorAbacus.getCount());
-        }
-        else
-        {
+        } else {
             Log.d(TAG, "abaque data does NOT exist");
         }
         createVarietyChooser();
         cursorVariety.close();
     }
 
-    private boolean averageIsOkay(float averageValue)
-    {
+    private boolean averageIsOkay(float averageValue) {
         //TODO here check if the average value is in the right interval from abacus
         return (true);
     }
 
-    private void setHandlerAverageValue()
-    {
+    private void setHandlerAverageValue() {
 /*
         final int     delay = 500;
 */
@@ -210,14 +194,11 @@ public class PlantCountingActivity extends AppCompatActivity
         final int delay = 3000;
 
         final Handler handler = new Handler();
-        handler.postDelayed(new Runnable()
-        {
+        handler.postDelayed(new Runnable() {
             @Override
-            public void run()
-            {
+            public void run() {
                 float average = getAverage();
-                if (averageIsOkay(average))
-                {
+                if (averageIsOkay(average)) {
                     if (testColor % 3 == 0)
                         mIndicator.setBackground(mGreen);
                     else if (testColor % 3 == 1)
@@ -232,38 +213,31 @@ public class PlantCountingActivity extends AppCompatActivity
         }, delay);
     }
 
-    private void    createPlantChooser()
-    {
+    private void createPlantChooser() {
         mPlantChooser = new AlertDialog.Builder(this)
                 .setTitle("Choix du plant")
-                .setItems(mPlantNameTab, new DialogInterface.OnClickListener()
-                {
+                .setItems(mPlantNameTab, new DialogInterface.OnClickListener() {
                     @Override
-                    public void onClick(DialogInterface dialog, int which)
-                    {
+                    public void onClick(DialogInterface dialog, int which) {
                         mPlantName.setText(mPlantNameTab[which]);
                         setAbacusList();
                     }
                 });
     }
 
-    private void createVarietyChooser()
-    {
+    private void createVarietyChooser() {
         mVarietyChooser = new AlertDialog.Builder(this)
                 .setTitle("Choix de l'abaque")
                 .setNegativeButton(android.R.string.cancel, null)
-                .setItems(mAbaqueTab, new DialogInterface.OnClickListener()
-                {
+                .setItems(mAbaqueTab, new DialogInterface.OnClickListener() {
                     @Override
-                    public void onClick(DialogInterface dialog, int which)
-                    {
+                    public void onClick(DialogInterface dialog, int which) {
                         mAbaque.setText(mAbaqueTab[which]);
                     }
                 });
     }
 
-    private Cursor  queryPlantId()
-    {
+    private Cursor queryPlantId() {
         String[] projectionPlantId = {ZeroContract.PlantsColumns._ID};
 
         Cursor cursorPlantId = getContentResolver().query(
@@ -275,8 +249,7 @@ public class PlantCountingActivity extends AppCompatActivity
         return (cursorPlantId);
     }
 
-    private Cursor  queryPlantName()
-    {
+    private Cursor queryPlantName() {
         String[] projectionPlantName = {ZeroContract.PlantsColumns.NAME};
 
         Cursor cursorPlantName = getContentResolver().query(
@@ -288,12 +261,10 @@ public class PlantCountingActivity extends AppCompatActivity
         return (cursorPlantName);
     }
 
-    private Cursor queryAbacus(Cursor cursorVariety)
-    {
+    private Cursor queryAbacus(Cursor cursorVariety) {
         String[] projectionAbaque = {ZeroContract.PlantDensityAbaci.NAME};
 
-        if (cursorVariety.moveToFirst())
-        {
+        if (cursorVariety.moveToFirst()) {
             Cursor cursorAbacus = getContentResolver().query(
                     ZeroContract.PlantDensityAbaci.CONTENT_URI,
                     projectionAbaque,
@@ -307,62 +278,53 @@ public class PlantCountingActivity extends AppCompatActivity
         return (null);
     }
 
-    private Cursor    queryVariety()
-    {
+    private Cursor queryVariety() {
         String[] mProjectionVariety = {ZeroContract.Plants.VARIETY};
 
         Cursor cursorVariety = getContentResolver().query(
                 ZeroContract.Plants.CONTENT_URI,
                 mProjectionVariety,
                 "\"" + ZeroContract.Plants.USER + "\"" + " LIKE " + "\"" + mAccount.name + "\""
-                + " AND " + ZeroContract.PlantsColumns.NAME + " like \"" + mPlantName.getText().toString() + "\"",
+                        + " AND " + ZeroContract.PlantsColumns.NAME + " like \"" + mPlantName.getText().toString() + "\"",
                 null,
                 null);
         return (cursorVariety);
     }
 
-    public void chosePlant(View view)
-    {
+    public void chosePlant(View view) {
         if (mPlantChooser == null)
-            return ;
+            return;
         mPlantChooser.show();
     }
 
-    public void choseAbaque(View view)
-    {
+    public void choseAbaque(View view) {
         if (mVarietyChooser == null)
-            return ;
+            return;
         mVarietyChooser.show();
     }
 
-    public void savePlantCounting(View v)
-    {
+    public void savePlantCounting(View v) {
         insertNewValuesPlantCounting();
         ContentValues newValuesPlantCountingItem = fillNewValuesPlantCountingItems();
         insertNewValuesPlantCountingItems(newValuesPlantCountingItem);
         this.finish();
     }
 
-    private ContentValues fillNewValuesPlantCountingItems()
-    {
+    private ContentValues fillNewValuesPlantCountingItems() {
         ContentValues newValuesPlantCountingItem = new ContentValues();
 
         mListIteratorValues = mListValues.listIterator();
-        while(mListIteratorValues.hasNext())
-        {
+        while (mListIteratorValues.hasNext()) {
             EditText et = mListIteratorValues.next();
-            if(et.getText().toString() != null)
-            {
+            if (et.getText().toString() != null) {
                 newValuesPlantCountingItem.put(ZeroContract.PlantCountingItemsColumns.VALUE, et.getText().toString());
             }
         }
         return (newValuesPlantCountingItem);
     }
 
-    private void insertNewValuesPlantCountingItems(ContentValues newValuesPlantCountingItem)
-    {
-        if (!mListValues.isEmpty())
-        {
+    private void insertNewValuesPlantCountingItems(ContentValues newValuesPlantCountingItem) {
+        if (!mListValues.isEmpty()) {
             getContentResolver().insert(
                     ZeroContract.PlantCountingItems.CONTENT_URI,
                     newValuesPlantCountingItem);
@@ -371,8 +333,7 @@ public class PlantCountingActivity extends AppCompatActivity
         toast.show();
     }
 
-    private void insertNewValuesPlantCounting()
-    {
+    private void insertNewValuesPlantCounting() {
         ContentValues newValuesPlantCounting = new ContentValues();
 
         newValuesPlantCounting.put(ZeroContract.PlantCountingsColumns.OBSERVED_AT,
@@ -385,13 +346,18 @@ public class PlantCountingActivity extends AppCompatActivity
                 newValuesPlantCounting);
     }
 
-    private void setLocation(ContentValues newValuesPlantCounting)
-    {
+    private void setLocation(ContentValues newValuesPlantCounting) {
         LocationManager locationManager =
-                (LocationManager)this.getSystemService(Context.LOCATION_SERVICE);
+                (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
         String locationProvider = LocationManager.NETWORK_PROVIDER;
-        Location lastKnownLocation = locationManager.getLastKnownLocation(locationProvider);
-        if (lastKnownLocation != null)
+        try {
+            Location lastKnownLocation = locationManager.getLastKnownLocation(locationProvider);
+        }
+        catch(SecurityException e)
+        {
+            Toast.makeText(R.string.GPSissue);
+        }
+            if (lastKnownLocation != null)
         {
             newValuesPlantCounting.put(ZeroContract.PlantCountingsColumns.LATITUDE,
                     lastKnownLocation.getLatitude());

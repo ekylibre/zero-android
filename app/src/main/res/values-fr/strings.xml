@@ -70,5 +70,6 @@
     <string name="accountManager">Gestion des comptes</string>
     <string name="add_account">Ajouter un compte</string>
     <string name="parameters">Paramètres</string>
+    <string name="GPSissue">Il y a un problème avec votre GPS</string>
 
 </resources>
