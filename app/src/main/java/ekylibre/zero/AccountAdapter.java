@@ -1,7 +1,6 @@
 package ekylibre.zero;
 
 import android.accounts.Account;
-import android.accounts.AccountManager;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,7 +8,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
-import java.util.List;
+import ekylibre.zero.util.AccountTool;
 
 /**************************************
  * Created by pierre on 7/18/16.      *

@@ -40,6 +40,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import ekylibre.api.ZeroContract;
+
 
 public class TrackingActivity extends Activity implements TrackingListenerWriter {
     

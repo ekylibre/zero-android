@@ -18,6 +18,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 
+import ekylibre.api.ZeroContract;
 import ekylibre.zero.service.ConnectionManagerService;
 
 public class MenuActivity extends ActionBarActivity

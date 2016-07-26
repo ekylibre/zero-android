@@ -1,7 +1,5 @@
 package ekylibre.api;
 
-import ekylibre.zero.ZeroContract;
-
 /**
  * Created by antoine on 21/04/16.
  */

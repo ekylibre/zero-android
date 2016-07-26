@@ -1,4 +1,4 @@
-package ekylibre.zero;
+package ekylibre.zero.util;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
@@ -7,6 +7,10 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
 import java.util.Objects;
+
+import ekylibre.zero.AccountManagerActivity;
+import ekylibre.zero.Authenticator;
+import ekylibre.zero.SyncAdapter;
 
 /**************************************
  * Created by pierre on 7/18/16.      *

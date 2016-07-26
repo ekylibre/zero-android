@@ -15,11 +15,10 @@ import android.preference.PreferenceManager;
 import android.util.Log;
 import android.widget.Toast;
 
-import ekylibre.zero.AccountTool;
+import ekylibre.zero.util.AccountTool;
 import ekylibre.zero.R;
 import ekylibre.zero.SettingsActivity;
-import ekylibre.zero.SyncAdapter;
-import ekylibre.zero.ZeroContract;
+import ekylibre.api.ZeroContract;
 
 /*************************************
  * Created by PierreBougon on 7/6/16.*
