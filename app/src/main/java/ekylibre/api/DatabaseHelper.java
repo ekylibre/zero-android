@@ -8,7 +8,7 @@ import ekylibre.api.ZeroContract;
 
 public class DatabaseHelper extends SQLiteOpenHelper
 {
-    public static final int DATABASE_VERSION = 5;
+    public static final int DATABASE_VERSION = 6;
     public static final String DATABASE_NAME = "zero";
 
     public DatabaseHelper(Context context)
@@ -98,13 +98,15 @@ public class DatabaseHelper extends SQLiteOpenHelper
                         + ", " + ZeroContract.Plants.ACTIVE + " BOOLEAN NOT NULL"
                         + ")");
             case 5:
-                database.execSQL("ALTER TABLE crumbs ADD user");
-                database.execSQL("ALTER TABLE issues ADD user");
-                database.execSQL("ALTER TABLE plant_countings ADD user");
-                database.execSQL("ALTER TABLE plant_counting_items ADD user");
-                database.execSQL("ALTER TABLE plant_density_abaci ADD user");
-                database.execSQL("ALTER TABLE plant_density_abacus_items ADD user");
-                database.execSQL("ALTER TABLE plants ADD user");
+                database.execSQL("ALTER TABLE crumbs ADD user VARCHAR(255)");
+                database.execSQL("ALTER TABLE issues ADD user VARCHAR(255)");
+                database.execSQL("ALTER TABLE plant_countings ADD user VARCHAR(255)");
+                database.execSQL("ALTER TABLE plant_counting_items ADD user VARCHAR(255)");
+                database.execSQL("ALTER TABLE plant_density_abaci ADD user VARCHAR(255)");
+                database.execSQL("ALTER TABLE plant_density_abacus_items ADD user VARCHAR(255)");
+                database.execSQL("ALTER TABLE plants ADD user VARCHAR(255)");
+            case 6:
+                database.execSQL("ALTER TABLE plant_density_abacus_items ADD FK_ID INTEGER");
         }
     }
 }

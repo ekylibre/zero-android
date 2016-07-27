@@ -24,7 +24,7 @@ public class PlantDensityAbacus
     private double mGerminationPercentage;
     private String mSeedingDensityUnit;
     private String mSamplingLenghtUnit;
-    private List<PlantDensityAbacusItem> mItems;
+    public JSONArray mItems;
 
 
     public static List<PlantDensityAbacus> all(Instance instance, JSONObject attributes) throws JSONException, IOException, HTTPException
@@ -52,7 +52,7 @@ public class PlantDensityAbacus
         mGerminationPercentage = object.getDouble("germination_percentage");
         mSeedingDensityUnit = object.getString("seeding_density_unit");
         mSamplingLenghtUnit = object.getString("sampling_length_unit");
-        mItems = items;
+        mItems = object.getJSONArray("items");
     }
 
     public PlantDensityAbacus(int id, String name, String variety, double germinationPercentage, String seedingDensityUnit, String samplingLenghtUnit, List<PlantDensityAbacusItem> items )
@@ -63,7 +63,6 @@ public class PlantDensityAbacus
         mGerminationPercentage = germinationPercentage;
         mSeedingDensityUnit = seedingDensityUnit;
         mSamplingLenghtUnit = samplingLenghtUnit;
-        mItems = items;
     }
 
     public int getId() {
@@ -90,7 +89,27 @@ public class PlantDensityAbacus
         return mSamplingLenghtUnit;
     }
 
-    public List<PlantDensityAbacusItem> getItems() {
-        return mItems;
+    public double getItemDensityValue(int index)
+            throws JSONException
+    {
+        JSONObject object;
+        object = mItems.getJSONObject(index);
+        return (object.getDouble("seeding_density_value"));
+    }
+
+    public double getItemPlantCount(int index)
+            throws JSONException
+    {
+        JSONObject object;
+        object = mItems.getJSONObject(index);
+        return (object.getInt("plants_count"));
+    }
+
+    public double getItemID(int index)
+        throws JSONException
+    {
+        JSONObject object;
+        object = mItems.getJSONObject(index);
+        return (object.getInt("id"));
     }
 }
