@@ -121,5 +121,13 @@
             android:layout_alignBottom="@+id/textAverage"
             android:layout_alignParentEnd="true" />
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Plants Count"
+            android:id="@+id/plant_count_value"
+            android:layout_above="@+id/indicator"
+            android:layout_alignParentEnd="true" />
+
     </RelativeLayout>
 </ScrollView>

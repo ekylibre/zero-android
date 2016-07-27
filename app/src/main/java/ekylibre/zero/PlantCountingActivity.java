@@ -60,7 +60,10 @@ public class PlantCountingActivity extends AppCompatActivity {
     private Drawable mGreen;
     private Drawable mOrange;
     private Drawable mRed;
-
+    private int mPlantsCount = 0;
+    private int[]   mDensityTabID;
+    private int mGerminationPercentage = 0;
+    private TextView    mPlantCountValue;
     private int testColor = 0;
 
 
@@ -105,6 +108,7 @@ public class PlantCountingActivity extends AppCompatActivity {
         mAbaque = (Button) findViewById(R.id.Abaque);
         mDensityText = (Button) findViewById(R.id.densityValue);
         mAverageText = (TextView) findViewById(R.id.textAverage);
+        mPlantCountValue = (TextView) findViewById(R.id.plant_count_value);
         mAverageText.setText("");
         mIndicator = (ImageView) findViewById(R.id.indicator);
         mGreen = getResources().getDrawable(R.color.basic_green);
@@ -137,6 +141,7 @@ public class PlantCountingActivity extends AppCompatActivity {
         cursorPlantId.close();
         cursorPlantName.close();
         setHandlerAverageValue();
+        mPlantCountValue.setText("0");
     }
 
     private void fillAbacusTab(Cursor cursorAbacus) {
@@ -151,14 +156,16 @@ public class PlantCountingActivity extends AppCompatActivity {
         }
     }
 
-    private void fillDensityTab(Cursor cursorDensity) {
+    private void fillDensityTab(Cursor cursorDensity, String unit) {
         int itName = 0;
 
         mDensityTab = new CharSequence[cursorDensity.getCount()];
+        mDensityTabID = new int[cursorDensity.getCount()];
         while (cursorDensity.moveToNext())
         {
             Log.d("zero", "name : " + cursorDensity.getString(0));
-            mDensityTab[itName] = cursorDensity.getString(0);
+            mDensityTab[itName] = cursorDensity.getString(0) + " " + unit;
+            mDensityTabID[itName] = cursorDensity.getInt(1);
             Log.d("zero", "tablename[" + itName + "] : " + mAbaqueTab[itName]);
             itName++;
         }
@@ -207,14 +214,18 @@ public class PlantCountingActivity extends AppCompatActivity {
 
     public void setDensityList(CharSequence abacusSelected)
     {
+        String  unit;
         Cursor cursorDensity = queryDensityValue(abacusSelected);
+        Cursor cursorDensityUnit = queryDensityUnit(abacusSelected);
+        cursorDensityUnit.moveToFirst();
+        unit = cursorDensityUnit.getString(0);
 
         Log.d(TAG, "valeur récupérée : " + mPlantName.getText());
         Log.d("zero", "beginning abaque");
 
         if (cursorDensity != null) {
             Log.d(TAG, "data exists");
-            fillDensityTab(cursorDensity);
+            fillDensityTab(cursorDensity, unit);
             Log.d(TAG, "end Abaque");
             Log.d(TAG, "nb in cursor : " + cursorDensity.getCount());
         } else {
@@ -224,33 +235,46 @@ public class PlantCountingActivity extends AppCompatActivity {
         cursorDensity.close();
     }
 
-    private boolean averageIsOkay(float averageValue) {
-        //TODO here check if the average value is in the right interval from abacus
-        return (true);
+    public void setGerminationPercentage(CharSequence abacusSelected)
+    {
+        Cursor cursorGermPercentage = queryGerminationPercentage(abacusSelected);
+        cursorGermPercentage.moveToFirst();
+        mGerminationPercentage = cursorGermPercentage.getInt(0);
+    }
+
+    private void    setPlantsCount(int densityID)
+    {
+        Cursor cursorPlantsCount = queryPlantsCount(densityID);
+        cursorPlantsCount.moveToFirst();
+        mPlantsCount = cursorPlantsCount.getInt(0);
+    }
+
+    private void setIndicatorColor(float averageValue)
+    {
+        double minValueAccepted;
+
+        mPlantCountValue.setText(String.format("%d", mPlantsCount));
+        if (averageValue == 0 || mPlantsCount == 0 || mGerminationPercentage == 0)
+            return;
+
+        minValueAccepted = mPlantsCount * (mGerminationPercentage / 100.0);
+        if (averageValue < mPlantsCount && averageValue > minValueAccepted)
+            mIndicator.setBackground(mGreen);
+        else if (averageValue < minValueAccepted)
+            mIndicator.setBackground(mRed);
+        else
+            mIndicator.setBackground(mOrange);
     }
 
     private void setHandlerAverageValue() {
-/*
         final int     delay = 500;
-*/
-        //test value for color iteration
-        final int delay = 3000;
 
         final Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             @Override
-            public void run() {
-                float average = getAverage();
-                if (averageIsOkay(average)) {
-                    if (testColor % 3 == 0)
-                        mIndicator.setBackground(mGreen);
-                    else if (testColor % 3 == 1)
-                        mIndicator.setBackground(mOrange);
-                    else
-                        mIndicator.setBackground(mRed);
-                    testColor++;
-                }
-
+            public void run()
+            {
+                setIndicatorColor(getAverage());
                 handler.postDelayed(this, delay);
             }
         }, delay);
@@ -264,6 +288,12 @@ public class PlantCountingActivity extends AppCompatActivity {
                     public void onClick(DialogInterface dialog, int which) {
                         mPlantName.setText(mPlantNameTab[which]);
                         setAbacusList();
+                        mPlantsCount = 0;
+                        mGerminationPercentage = 0;
+                        if (mAbacusChooser != null)
+                            mAbaque.setText(getResources().getString(R.string.select_plant));
+                        if (mDensityChooser != null)
+                            mDensityText.setText(getResources().getString(R.string.chose_density));
                     }
                 });
     }
@@ -277,6 +307,10 @@ public class PlantCountingActivity extends AppCompatActivity {
                     public void onClick(DialogInterface dialog, int which) {
                         mAbaque.setText(mAbaqueTab[which]);
                         setDensityList(mAbaqueTab[which]);
+                        setGerminationPercentage(mAbaqueTab[which]);
+                        mPlantsCount = 0;
+                        if (mDensityChooser != null)
+                            mDensityText.setText(getResources().getString(R.string.chose_density));
                     }
                 });
     }
@@ -289,6 +323,7 @@ public class PlantCountingActivity extends AppCompatActivity {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         mDensityText.setText(mDensityTab[which]);
+                        setPlantsCount(mDensityTabID[which]);
                     }
                 });
     }
@@ -341,26 +376,95 @@ public class PlantCountingActivity extends AppCompatActivity {
                 ZeroContract.PlantDensityAbaci.CONTENT_URI,
                 projectionAbaque,
                 "\"" + ZeroContract.PlantDensityAbaciColumns.USER + "\"" + " LIKE " + "\"" + mAccount.name + "\""
-                + " AND " + "\"" + ZeroContract.PlantDensityAbaciColumns.NAME + "\"" + " LIKE " + "\"" + abacusSelected + "\"",
+                        + " AND " + "\"" + ZeroContract.PlantDensityAbaciColumns.NAME + "\"" + " LIKE " + "\"" + abacusSelected + "\"",
                 null,
                 null);
 
         if (cursorAbacus == null)
             return (null);
 
-        String[] projectionDensity = {ZeroContract.PlantDensityAbacusItems.SEEDING_DENSITY_VALUE};
+        String[] projectionDensity = {ZeroContract.PlantDensityAbacusItems.SEEDING_DENSITY_VALUE, ZeroContract.PlantDensityAbacusItems._ID};
+
+        cursorAbacus.moveToFirst();
+        Cursor cursorDensityValue = getContentResolver().query(
+                ZeroContract.PlantDensityAbacusItems.CONTENT_URI,
+                projectionDensity,
+                "\"" + ZeroContract.PlantDensityAbacusItemsColumns.USER + "\"" + " LIKE " + "\"" + mAccount.name + "\""
+                        + " AND " + ZeroContract.PlantDensityAbacusItemsColumns.FK_ID + " IS NOT NULL"
+                        + " AND " + ZeroContract.PlantDensityAbacusItemsColumns.FK_ID + " like \"" + cursorAbacus.getInt(0) + "\"",
+                null,
+                null);
+        cursorAbacus.close();
+        return (cursorDensityValue);
+    }
+
+    private Cursor queryDensityUnit(CharSequence abacusSelected) {
+        String[] projectionAbaque = {ZeroContract.PlantDensityAbaci._ID};
+
+        Cursor cursorAbacus = getContentResolver().query(
+                ZeroContract.PlantDensityAbaci.CONTENT_URI,
+                projectionAbaque,
+                "\"" + ZeroContract.PlantDensityAbaciColumns.USER + "\"" + " LIKE " + "\"" + mAccount.name + "\""
+                        + " AND " + "\"" + ZeroContract.PlantDensityAbaciColumns.NAME + "\"" + " LIKE " + "\"" + abacusSelected + "\"",
+                null,
+                null);
+
+        if (cursorAbacus == null)
+            return (null);
+
+        String[] projectionDensity = {ZeroContract.PlantDensityAbaci.SEEDING_DENSITY_UNIT};
 
         cursorAbacus.moveToFirst();
         Cursor cursorDensityUnit = getContentResolver().query(
-                    ZeroContract.PlantDensityAbacusItems.CONTENT_URI,
-                    projectionDensity,
-                    "\"" + ZeroContract.PlantDensityAbacusItemsColumns.USER + "\"" + " LIKE " + "\"" + mAccount.name + "\""
-                            + " AND " + ZeroContract.PlantDensityAbacusItemsColumns.FK_ID + " IS NOT NULL"
-                            + " AND " + ZeroContract.PlantDensityAbacusItemsColumns.FK_ID + " like \"" + cursorAbacus.getInt(0) + "\"",
-                    null,
-                    null);
+                ZeroContract.PlantDensityAbaci.CONTENT_URI,
+                projectionDensity,
+                "\"" + ZeroContract.PlantDensityAbaciColumns.USER + "\"" + " LIKE " + "\"" + mAccount.name + "\"" + " AND " +
+                        "\"" + ZeroContract.PlantDensityAbaciColumns._ID + "\"" + " == " + "\"" + cursorAbacus.getInt(0) + "\"",
+                null,
+                null);
         cursorAbacus.close();
         return (cursorDensityUnit);
+    }
+
+    private Cursor queryGerminationPercentage(CharSequence abacusSelected) {
+        String[] projectionAbaque = {ZeroContract.PlantDensityAbaci._ID};
+
+        Cursor cursorAbacus = getContentResolver().query(
+                ZeroContract.PlantDensityAbaci.CONTENT_URI,
+                projectionAbaque,
+                "\"" + ZeroContract.PlantDensityAbaciColumns.USER + "\"" + " LIKE " + "\"" + mAccount.name + "\""
+                        + " AND " + "\"" + ZeroContract.PlantDensityAbaciColumns.NAME + "\"" + " LIKE " + "\"" + abacusSelected + "\"",
+                null,
+                null);
+
+        if (cursorAbacus == null)
+            return (null);
+
+        String[] projectionDensity = {ZeroContract.PlantDensityAbaci.GERMINATION_PERCENTAGE};
+
+        cursorAbacus.moveToFirst();
+        Cursor cursorGermPerc = getContentResolver().query(
+                ZeroContract.PlantDensityAbaci.CONTENT_URI,
+                projectionDensity,
+                "\"" + ZeroContract.PlantDensityAbacusItemsColumns.USER + "\"" + " LIKE " + "\"" + mAccount.name + "\"" + " AND " +
+                        "\"" + ZeroContract.PlantDensityAbaciColumns._ID + "\"" + " == " + "\"" + cursorAbacus.getInt(0) + "\"",
+                null,
+                null);
+        cursorAbacus.close();
+        return (cursorGermPerc);
+    }
+
+    private Cursor queryPlantsCount(int densityID) {
+        String[] mProjectionPlantsCount = {ZeroContract.PlantDensityAbacusItems.PLANTS_COUNT};
+
+        Cursor cursorPlantsCount = getContentResolver().query(
+                ZeroContract.PlantDensityAbacusItems.CONTENT_URI,
+                mProjectionPlantsCount,
+                "\"" + ZeroContract.Plants.USER + "\"" + " LIKE " + "\"" + mAccount.name + "\""
+                        + " AND " + densityID + " == " + ZeroContract.PlantDensityAbacusItems._ID,
+                null,
+                null);
+        return (cursorPlantsCount);
     }
 
     private Cursor queryVariety() {
