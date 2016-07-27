@@ -53,6 +53,7 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+
         firstPass = true;
         if (!setAccount())
             return ;
@@ -61,6 +62,9 @@ public class MainActivity extends AppCompatActivity
         setDrawerLayout();
         setTodolist();
         startConnectionManager();
+        View headerLayout = mNavigationView.inflateHeaderView(R.layout.nav_header_main);
+        mNav_account = (TextView)headerLayout.findViewById(R.id.nav_accountName);
+        mNav_instance = (TextView)headerLayout.findViewById(R.id.nav_farmURL);
     }
 
     /*
@@ -74,7 +78,7 @@ public class MainActivity extends AppCompatActivity
         if (!AccountTool.isAnyAccountExist(this))
             AccountTool.askForAccount(this, this);
         mAccount = AccountTool.getCurrentAccount(MainActivity.this);
-        if (firstPass)
+        //if (firstPass)
             setAccountName(mNavigationView);
         firstPass = false;
     }
@@ -164,14 +168,9 @@ public class MainActivity extends AppCompatActivity
     */
     private void    setAccountName(NavigationView navigationView)
     {
-        View headerLayout = navigationView.inflateHeaderView(R.layout.nav_header_main);
-
-        AccountManager accManager = AccountManager.get(this);
-        mNav_account = (TextView)headerLayout.findViewById(R.id.nav_accountName);
-        mNav_account.setText(AccountTool.getAccountName(mAccount, this));
-        mNav_instance = (TextView)headerLayout.findViewById(R.id.nav_farmURL);
+        mAccount = AccountTool.getCurrentAccount(this);
         mNav_instance.setText(AccountTool.getAccountInstance(mAccount, this));
-
+        mNav_account.setText(AccountTool.getAccountName(mAccount, this));
     }
 
     /*

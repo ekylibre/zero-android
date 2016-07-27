@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.util.Log;
 
 import java.util.Objects;
 
@@ -22,6 +23,7 @@ import ekylibre.zero.SyncAdapter;
 public class AccountTool
 {
     private Context mContext;
+    private final static String TAG = "AccountTool";
 
     public AccountTool(Context context)
     {
@@ -75,6 +77,7 @@ public class AccountTool
             return (null);
         Account[] listAccount = AccountManager.get(context).getAccountsByType(SyncAdapter.ACCOUNT_TYPE);
         Account currAcc = findCurrentAccount(listAccount, accName, context);
+        Log.d(TAG, "Current account is ==> " + currAcc.name);
         return (currAcc);
     }
 

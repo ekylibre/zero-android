@@ -106,6 +106,7 @@ public class ConnectionManagerService extends Service
         boolean                 wifi;
         boolean                 mobile;
 
+        mAccount = AccountTool.getCurrentAccount(ConnectionManagerService.this);
         get_MobilePerm();
         connectivityManager = (ConnectivityManager)getSystemService(CONNECTIVITY_SERVICE);
         networkInfo = connectivityManager.getActiveNetworkInfo();
