@@ -76,6 +76,7 @@ public final class ZeroContract {
         String SEEDING_DENSITY_VALUE = "seeding_density_value";
         String PLANTS_COUNT = "plants_count";
         String USER = "user";
+        String FK_ID = "fk_id";
     }
 
     public interface PlantsColumns extends BaseColumns {

@@ -258,6 +258,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
                 mContentResolver.insert(ZeroContract.PlantDensityAbaci.CONTENT_URI, cv);
             }
             Log.d("zero", "fin parcours de liste plantDensityAbacus");
+            performPlantDensityAbacusItemSync(account, extras, authority, provider, syncResult, abacusList);
         }
         catch (JSONException j)
         {
@@ -271,9 +272,44 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
         catch (HTTPException h){
             Log.d("zero", "HTTP Exception : " + h.getMessage());
         }
-
         Log.i(TAG, "Finish network plant_density_abaci synchronization");
     }
+
+    public void performPlantDensityAbacusItemSync(Account account, Bundle extras, String authority, ContentProviderClient provider, SyncResult syncResult, List<PlantDensityAbacus> abacusList) throws JSONException
+    {
+
+        Log.i(TAG, "Destruction of the PlantDensityAbacusItem table");
+        mContentResolver.delete(ZeroContract.PlantDensityAbacusItems.CONTENT_URI,
+                null,
+                null);
+
+        Log.i(TAG, "Beginning network plant_density_abacus_items synchronization");
+        ContentValues cv = new ContentValues();
+
+        Log.d("zero", "Nombre d'abaque : " + abacusList.size() );
+        Iterator<PlantDensityAbacus> abacusIterator = abacusList.iterator();
+
+        Log.d("zero", "début parcours de liste plantDensityAbacus");
+
+        while(abacusIterator.hasNext())
+        {
+            PlantDensityAbacus plantDensityAbacus = abacusIterator.next();
+            int i = 0;
+            while (i < plantDensityAbacus.mItems.length())
+            {
+                cv.put(ZeroContract.PlantDensityAbacusItemsColumns._ID, plantDensityAbacus.getItemID(i));
+                cv.put(ZeroContract.PlantDensityAbacusItemsColumns.FK_ID, plantDensityAbacus.getId());
+                cv.put(ZeroContract.PlantDensityAbacusItemsColumns.PLANTS_COUNT, plantDensityAbacus.getItemPlantCount(i));
+                cv.put(ZeroContract.PlantDensityAbacusItemsColumns.SEEDING_DENSITY_VALUE, plantDensityAbacus.getItemDensityValue(i));
+                cv.put(ZeroContract.PlantDensityAbacusItemsColumns.USER, account.name);
+                mContentResolver.insert(ZeroContract.PlantDensityAbacusItems.CONTENT_URI, cv);
+                i++;
+            }
+        }
+        Log.d("zero", "fin parcours de liste plantDensityAbacus");
+    }
+
+
 
     public void performPlantsSync(Account account, Bundle extras, String authority, ContentProviderClient provider, SyncResult syncResult)
     {

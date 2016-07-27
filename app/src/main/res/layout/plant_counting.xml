@@ -47,6 +47,7 @@
             android:id="@+id/densityValue"
             android:padding="10dp"
             android:layout_below="@+id/Abaque"
+            android:onClick="choseDensity"
             android:textAppearance="?android:attr/textAppearanceLarge"/>
 
 
