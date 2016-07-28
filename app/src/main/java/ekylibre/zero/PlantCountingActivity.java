@@ -60,6 +60,7 @@ public class PlantCountingActivity extends AppCompatActivity {
     private Drawable mGreen;
     private Drawable mOrange;
     private Drawable mRed;
+    private Drawable mGrey;
     private int mPlantsCount = 0;
     private int[]   mDensityTabID;
     private int mGerminationPercentage = 0;
@@ -117,6 +118,7 @@ public class PlantCountingActivity extends AppCompatActivity {
         mGreen = getResources().getDrawable(R.color.basic_green);
         mOrange = getResources().getDrawable(R.color.basic_orange);
         mRed = getResources().getDrawable(R.color.basic_red);
+        mGrey = getResources().getDrawable(R.color.dark_grey);
         mObservationEditText = (EditText) findViewById(R.id.observationEditText);
         mAccount = AccountTool.getCurrentAccount(this);
 
@@ -147,12 +149,16 @@ public class PlantCountingActivity extends AppCompatActivity {
         mPlantCountValue.setText("0");
     }
 
-    public void switchCountingContext(View v)
+    public void newContextIsGermination(View v)
     {
-        if (currentContext == germination)
-            currentContext = seeding;
-        else
-            currentContext = germination;
+        Log.d(TAG, "Switching context ! ==>>> Context = Germination");
+        currentContext = germination;
+    }
+
+    public void newContextIsSeeding(View v)
+    {
+        Log.d(TAG, "Switching context ! ==>>> Context = Seeding");
+        currentContext = seeding;
     }
 
     private void fillAbacusTab(Cursor cursorAbacus) {
@@ -266,13 +272,16 @@ public class PlantCountingActivity extends AppCompatActivity {
 
         mPlantCountValue.setText(String.format("%d", mPlantsCount));
         if (averageValue == 0 || mPlantsCount == 0 || mGerminationPercentage == 0)
+        {
+            mIndicator.setBackground(mGrey);
             return;
+        }
 
         if (currentContext == germination)
             minValueAccepted = mPlantsCount * (mGerminationPercentage / 100.0);
         else
             minValueAccepted = mPlantsCount;
-        if (averageValue <= mPlantsCount && averageValue > minValueAccepted)
+        if (averageValue <= mPlantsCount && averageValue >= minValueAccepted)
             mIndicator.setBackground(mGreen);
         else if (averageValue < minValueAccepted)
             mIndicator.setBackground(mRed);
@@ -591,6 +600,7 @@ public class PlantCountingActivity extends AppCompatActivity {
         input.setPadding(0, 0, 0, 10);
         input.setLayoutParams(lp);
         input.setSingleLine(true);
+        input.setTextAlignment(View.TEXT_ALIGNMENT_GRAVITY);
         input.setInputType(InputType.TYPE_CLASS_NUMBER);
         input.setOnEditorActionListener(
             new EditText.OnEditorActionListener()

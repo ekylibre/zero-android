@@ -50,28 +50,56 @@
             android:onClick="choseDensity"
             android:textAppearance="?android:attr/textAppearanceLarge"/>
 
-        <Switch
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/switch_semi_germination"
-            android:checked="false"
-            android:layout_centerHorizontal="true"
-            android:layout_below="@+id/densityValue"
+        <RadioGroup
+            android:checkedButton="@+id/offer"
+            android:id="@+id/toggle"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:layout_marginBottom="12dp"
+            android:layout_marginLeft="50dp"
+            android:layout_marginRight="50dp"
             android:layout_marginTop="40dp"
-            android:focusable="true"
-            android:clickable="true"
-            android:onClick="switchCountingContext"
-            android:thumb="@drawable/custom_switch_inner_holo_light"
-            android:track="@drawable/custom_switch_track_holo_light"
-            android:textOn="@string/after_semis"
-            android:textOff="@string/germination"/>
+            android:background="@drawable/blue_out_line"
+            android:orientation="horizontal"
+            android:layout_below="@+id/densityValue">
+
+            <RadioButton
+                android:layout_marginTop="1dp"
+                android:layout_marginBottom="1dp"
+                android:layout_marginLeft="1dp"
+                android:id="@+id/search"
+                android:background="@drawable/toggle_widget_background"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:button="@null"
+                android:gravity="center"
+                android:text="@string/after_semis"
+                android:textColor="@color/white"
+                android:onClick="newContextIsSeeding"/>
+
+            <RadioButton
+                android:layout_marginRight="1dp"
+                android:layout_marginTop="1dp"
+                android:layout_marginBottom="1dp"
+                android:id="@+id/offer"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@drawable/toggle_widget_background"
+                android:button="@null"
+                android:gravity="center"
+                android:text="@string/germination"
+                android:textColor="@color/white"
+                android:onClick="newContextIsGermination"/>
+        </RadioGroup>
 
         <LinearLayout
             android:layout_width="100dp"
             android:layout_height="wrap_content"
             android:id="@+id/Valueslayout"
             android:orientation="vertical"
-            android:layout_below="@+id/switch_semi_germination"
+            android:layout_below="@+id/toggle"
             android:layout_centerHorizontal="true"
             android:paddingTop="5dp"
             android:layout_marginTop="50dp">
@@ -79,14 +107,14 @@
         </LinearLayout>
 
         <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="+"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
             android:id="@+id/button7"
             android:layout_gravity="center_horizontal"
             android:onClick="addValue"
             android:layout_below="@+id/Valueslayout"
-            android:layout_centerHorizontal="true" />
+            android:layout_centerHorizontal="true"
+            android:background="@drawable/plus"/>
 
         <Button
             android:layout_width="wrap_content"
