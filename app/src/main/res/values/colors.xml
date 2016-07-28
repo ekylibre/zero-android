@@ -4,10 +4,13 @@
     <color name="light_grey">#CCCCCC</color>
     <color name="dark_grey">#777777</color>
     <color name="basic_blue">#476BA8</color>
+    <color name="dark_blue">#284069</color>
+    <color name="transparent">#00000000</color>
     <color name="basic_green">#66A65E</color>
     <color name="brand_secondary">#66a65e</color>
     <color name="brand_secondary_dark">#4a7945</color>
     <color name="basic_red">#CC2525</color>
     <color name="basic_orange">#CC4325</color>
+    <color name="white">#FFFFFF</color>
 
 </resources>
