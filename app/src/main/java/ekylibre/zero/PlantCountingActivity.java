@@ -66,6 +66,9 @@ public class PlantCountingActivity extends AppCompatActivity {
     private TextView    mPlantCountValue;
     private int testColor = 0;
 
+    private final boolean seeding = false;
+    private final boolean germination = true;
+    private boolean       currentContext = false;
 
     private CharSequence[] mPlantID;
     private CharSequence[] mPlantNameTab;
@@ -142,6 +145,14 @@ public class PlantCountingActivity extends AppCompatActivity {
         cursorPlantName.close();
         setHandlerAverageValue();
         mPlantCountValue.setText("0");
+    }
+
+    public void switchCountingContext(View v)
+    {
+        if (currentContext == germination)
+            currentContext = seeding;
+        else
+            currentContext = germination;
     }
 
     private void fillAbacusTab(Cursor cursorAbacus) {
@@ -257,8 +268,11 @@ public class PlantCountingActivity extends AppCompatActivity {
         if (averageValue == 0 || mPlantsCount == 0 || mGerminationPercentage == 0)
             return;
 
-        minValueAccepted = mPlantsCount * (mGerminationPercentage / 100.0);
-        if (averageValue < mPlantsCount && averageValue > minValueAccepted)
+        if (currentContext == germination)
+            minValueAccepted = mPlantsCount * (mGerminationPercentage / 100.0);
+        else
+            minValueAccepted = mPlantsCount;
+        if (averageValue <= mPlantsCount && averageValue > minValueAccepted)
             mIndicator.setBackground(mGreen);
         else if (averageValue < minValueAccepted)
             mIndicator.setBackground(mRed);
@@ -291,9 +305,9 @@ public class PlantCountingActivity extends AppCompatActivity {
                         mPlantsCount = 0;
                         mGerminationPercentage = 0;
                         if (mAbacusChooser != null)
-                            mAbaque.setText(getResources().getString(R.string.select_plant));
+                            mAbaque.setText(getResources().getString(R.string.select_abacus));
                         if (mDensityChooser != null)
-                            mDensityText.setText(getResources().getString(R.string.chose_density));
+                            mDensityText.setText(getResources().getString(R.string.advocated_density));
                     }
                 });
     }
@@ -310,7 +324,7 @@ public class PlantCountingActivity extends AppCompatActivity {
                         setGerminationPercentage(mAbaqueTab[which]);
                         mPlantsCount = 0;
                         if (mDensityChooser != null)
-                            mDensityText.setText(getResources().getString(R.string.chose_density));
+                            mDensityText.setText(getResources().getString(R.string.advocated_density));
                     }
                 });
     }

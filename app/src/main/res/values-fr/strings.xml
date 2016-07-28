@@ -75,4 +75,6 @@
     <string name="chose_plant">Choix de la culture</string>
     <string name="chose_abacus">Choix de l\'abaque</string>
     <string name="chose_density">Choix de la densité</string>
+    <string name="after_semis">Semis</string>
+    <string name="germination">Germination</string>
 </resources>

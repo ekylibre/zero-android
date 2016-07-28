@@ -24,7 +24,7 @@
             android:id="@+id/plantName"
             android:onClick="chosePlant"
             android:padding="10dp"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="30dp"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:layout_alignEnd="@+id/Abaque" />
 
@@ -50,7 +50,33 @@
             android:onClick="choseDensity"
             android:textAppearance="?android:attr/textAppearanceLarge"/>
 
+        <Switch
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/switch_semi_germination"
+            android:checked="false"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@+id/densityValue"
+            android:layout_marginTop="40dp"
+            android:focusable="true"
+            android:clickable="true"
+            android:onClick="switchCountingContext"
+            android:thumb="@drawable/custom_switch_inner_holo_light"
+            android:track="@drawable/custom_switch_track_holo_light"
+            android:textOn="@string/after_semis"
+            android:textOff="@string/germination"/>
 
+        <LinearLayout
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/Valueslayout"
+            android:orientation="vertical"
+            android:layout_below="@+id/switch_semi_germination"
+            android:layout_centerHorizontal="true"
+            android:paddingTop="5dp"
+            android:layout_marginTop="50dp">
+
+        </LinearLayout>
 
         <Button
             android:layout_width="wrap_content"
@@ -61,19 +87,6 @@
             android:onClick="addValue"
             android:layout_below="@+id/Valueslayout"
             android:layout_centerHorizontal="true" />
-
-
-        <LinearLayout
-            android:layout_width="200dp"
-            android:layout_height="wrap_content"
-            android:id="@+id/Valueslayout"
-            android:orientation="vertical"
-            android:layout_below="@+id/densityValue"
-            android:layout_centerHorizontal="true"
-            android:paddingTop="5dp"
-            android:layout_marginTop="60dp">
-
-        </LinearLayout>
 
         <Button
             android:layout_width="wrap_content"
@@ -128,6 +141,10 @@
             android:id="@+id/plant_count_value"
             android:layout_above="@+id/indicator"
             android:layout_alignParentEnd="true" />
+
+
+
+
 
     </RelativeLayout>
 </ScrollView>

@@ -79,4 +79,6 @@
     <string name="chose_plant">Chose a plant</string>
     <string name="chose_abacus">Chose an abacus</string>
     <string name="chose_density">Chose a density</string>
+    <string name="after_semis">Seeding</string>
+    <string name="germination">Germination</string>
 </resources>
