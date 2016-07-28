@@ -12,11 +12,11 @@
         android:layout_height="wrap_content"
         android:text="Today's date"
         android:textSize="20dp"
-        android:textColor="#000000"
+        android:textColor="@color/ultraLight_grey"
         android:id="@+id/todayDate"
         android:gravity="center"
         android:layout_gravity="center_horizontal"
-        android:background="@color/light_grey"/>
+        android:background="@drawable/header"/>
 
     <ListView
         android:layout_width="match_parent"

@@ -26,10 +26,12 @@
             android:padding="10dp"
             android:layout_marginTop="30dp"
             android:textAppearance="?android:attr/textAppearanceLarge"
-            android:layout_alignEnd="@+id/Abaque" />
+            android:layout_alignEnd="@+id/Abaque"
+            android:background="@drawable/black_button"
+            android:textColor="@color/ultraLight_grey"/>
 
         <Button
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="15dp"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:text="@string/select_abacus"
@@ -37,10 +39,12 @@
             android:onClick="choseAbaque"
             android:padding="10dp"
             android:layout_below="@+id/plantName"
-            android:textAppearance="?android:attr/textAppearanceLarge"/>
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:background="@drawable/black_button"
+            android:textColor="@color/ultraLight_grey"/>
 
         <Button
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="15dp"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:text="@string/advocated_density"
@@ -48,7 +52,9 @@
             android:padding="10dp"
             android:layout_below="@+id/Abaque"
             android:onClick="choseDensity"
-            android:textAppearance="?android:attr/textAppearanceLarge"/>
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:background="@drawable/black_button"
+            android:textColor="@color/ultraLight_grey"/>
 
         <RadioGroup
             android:checkedButton="@+id/offer"
@@ -58,7 +64,7 @@
             android:layout_marginBottom="12dp"
             android:layout_marginLeft="50dp"
             android:layout_marginRight="50dp"
-            android:layout_marginTop="40dp"
+            android:layout_marginTop="50dp"
             android:background="@drawable/blue_out_line"
             android:orientation="horizontal"
             android:layout_below="@+id/densityValue">
@@ -102,12 +108,12 @@
             android:layout_below="@+id/toggle"
             android:layout_centerHorizontal="true"
             android:paddingTop="5dp"
-            android:layout_marginTop="50dp">
+            android:layout_marginTop="40dp">
 
         </LinearLayout>
 
         <Button
-            android:layout_width="50dp"
+            android:layout_width="47dp"
             android:layout_height="50dp"
             android:id="@+id/button7"
             android:layout_gravity="center_horizontal"
@@ -156,7 +162,7 @@
 
         <ImageView
             android:id="@+id/indicator"
-            android:layout_width="150dp"
+            android:layout_width="70dp"
             android:layout_height="25dp"
             android:background="@color/dark_grey"
             android:layout_alignBottom="@+id/textAverage"

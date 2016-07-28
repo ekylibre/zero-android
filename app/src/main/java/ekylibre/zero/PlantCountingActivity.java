@@ -19,6 +19,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.text.InputType;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -600,7 +601,7 @@ public class PlantCountingActivity extends AppCompatActivity {
         input.setPadding(0, 0, 0, 10);
         input.setLayoutParams(lp);
         input.setSingleLine(true);
-        input.setTextAlignment(View.TEXT_ALIGNMENT_GRAVITY);
+        input.setGravity(Gravity.CENTER);
         input.setInputType(InputType.TYPE_CLASS_NUMBER);
         input.setOnEditorActionListener(
             new EditText.OnEditorActionListener()
