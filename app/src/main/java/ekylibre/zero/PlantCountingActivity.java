@@ -148,6 +148,7 @@ public class PlantCountingActivity extends AppCompatActivity {
         cursorPlantName.close();
         setHandlerAverageValue();
         mPlantCountValue.setText("0");
+        addValue(null);
     }
 
     public void newContextIsGermination(View v)
@@ -603,6 +604,7 @@ public class PlantCountingActivity extends AppCompatActivity {
         input.setSingleLine(true);
         input.setGravity(Gravity.CENTER);
         input.setInputType(InputType.TYPE_CLASS_NUMBER);
+        input.setBackground(getResources().getDrawable(R.drawable.editbar));
         input.setOnEditorActionListener(
             new EditText.OnEditorActionListener()
             {

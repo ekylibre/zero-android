@@ -65,9 +65,9 @@
         <!-- Authenticator related activities and service needs to be declared here in order for the app to recognize them -->
         <activity
             android:name=".AuthenticatorActivity"
-            android:configChanges="orientation"
             android:icon="@mipmap/ic_ekylibre"
             android:label="@string/service_name"
+            android:configChanges="orientation"
             android:screenOrientation="portrait" />
         <activity
             android:name=".MainActivity"
@@ -168,7 +168,9 @@
         <activity
             android:name=".PlantCountingActivity"
             android:label="@string/title_activity_sorting"
-            android:parentActivityName=".MenuActivity"></activity>
+            android:parentActivityName=".MenuActivity"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait"/>
         <!--
  ATTENTION: This was auto-generated to add Google Play services to your project for
      App Indexing.  See https://g.co/AppIndexing/AndroidStudio for more information.

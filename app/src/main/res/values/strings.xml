@@ -81,4 +81,6 @@
     <string name="chose_density">Chose a density</string>
     <string name="after_semis">Seeding</string>
     <string name="germination">Germination</string>
+    <string name="average_obtained">Average obtained :</string>
+    <string name="expected_value">Expected value :</string>
 </resources>

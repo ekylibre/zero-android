@@ -77,4 +77,6 @@
     <string name="chose_density">Choix de la densité</string>
     <string name="after_semis">Semis</string>
     <string name="germination">Germination</string>
+    <string name="average_obtained">Moyenne obtenue :</string>
+    <string name="expected_value">Valeur attendue :</string>
 </resources>

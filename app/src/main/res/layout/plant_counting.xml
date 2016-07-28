@@ -28,7 +28,8 @@
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:layout_alignEnd="@+id/Abaque"
             android:background="@drawable/black_button"
-            android:textColor="@color/ultraLight_grey"/>
+            android:textColor="@color/ultraLight_grey"
+            android:layout_marginLeft="@dimen/fab_margin" />
 
         <Button
             android:layout_marginTop="15dp"
@@ -41,7 +42,9 @@
             android:layout_below="@+id/plantName"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:background="@drawable/black_button"
-            android:textColor="@color/ultraLight_grey"/>
+            android:textColor="@color/ultraLight_grey"
+            android:layout_marginLeft="@dimen/fab_margin"
+            android:layout_marginRight="@dimen/fab_margin"/>
 
         <Button
             android:layout_marginTop="15dp"
@@ -54,13 +57,15 @@
             android:onClick="choseDensity"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:background="@drawable/black_button"
-            android:textColor="@color/ultraLight_grey"/>
+            android:textColor="@color/ultraLight_grey"
+            android:layout_marginLeft="@dimen/fab_margin"
+            android:layout_marginRight="@dimen/fab_margin"/>
 
         <RadioGroup
-            android:checkedButton="@+id/offer"
+            android:checkedButton="@+id/seeding"
             android:id="@+id/toggle"
-            android:layout_width="match_parent"
-            android:layout_height="30dp"
+            android:layout_width="fill_parent"
+            android:layout_height="40dp"
             android:layout_marginBottom="12dp"
             android:layout_marginLeft="50dp"
             android:layout_marginRight="50dp"
@@ -73,7 +78,7 @@
                 android:layout_marginTop="1dp"
                 android:layout_marginBottom="1dp"
                 android:layout_marginLeft="1dp"
-                android:id="@+id/search"
+                android:id="@+id/seeding"
                 android:background="@drawable/toggle_widget_background"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
@@ -88,7 +93,7 @@
                 android:layout_marginRight="1dp"
                 android:layout_marginTop="1dp"
                 android:layout_marginBottom="1dp"
-                android:id="@+id/offer"
+                android:id="@+id/germination"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
@@ -108,19 +113,21 @@
             android:layout_below="@+id/toggle"
             android:layout_centerHorizontal="true"
             android:paddingTop="5dp"
-            android:layout_marginTop="40dp">
+            android:layout_marginTop="15dp">
 
         </LinearLayout>
 
         <Button
-            android:layout_width="47dp"
-            android:layout_height="50dp"
+            android:layout_width="37dp"
+            android:layout_height="40dp"
             android:id="@+id/button7"
             android:layout_gravity="center_horizontal"
             android:onClick="addValue"
             android:layout_below="@+id/Valueslayout"
             android:layout_centerHorizontal="true"
-            android:background="@drawable/plus"/>
+            android:background="@drawable/plus"
+            android:layout_marginTop="15dp"
+            android:layout_marginBottom="10dp"/>
 
         <Button
             android:layout_width="wrap_content"
@@ -135,14 +142,15 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Result calculus"
+            android:text="Result"
             android:id="@+id/textAverage"
             android:textAlignment="center"
             android:gravity="center"
-            android:layout_marginTop="29dp"
-            android:layout_below="@+id/button7"
+            android:layout_marginTop="34dp"
             android:textStyle="bold"
-            android:textColor="#000000"/>
+            android:textColor="#000000"
+            android:layout_below="@+id/button7"
+            android:layout_alignEnd="@+id/textView4" />
 
 
         <TextView
@@ -166,7 +174,8 @@
             android:layout_height="25dp"
             android:background="@color/dark_grey"
             android:layout_alignBottom="@+id/textAverage"
-            android:layout_alignParentEnd="true" />
+            android:layout_alignParentEnd="true"
+            android:layout_alignStart="@+id/textView2" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -176,8 +185,21 @@
             android:layout_above="@+id/indicator"
             android:layout_alignParentEnd="true" />
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/average_obtained"
+            android:id="@+id/textView"
+            android:layout_alignBottom="@+id/plant_count_value"
+            android:layout_alignParentStart="true" />
 
-
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/expected_value"
+            android:id="@+id/textView2"
+            android:layout_alignTop="@+id/plant_count_value"
+            android:layout_alignEnd="@+id/toggle" />
 
 
     </RelativeLayout>
