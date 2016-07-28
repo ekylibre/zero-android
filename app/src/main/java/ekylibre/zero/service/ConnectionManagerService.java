@@ -137,8 +137,8 @@ public class ConnectionManagerService extends Service
         extras.putBoolean(ContentResolver.SYNC_EXTRAS_EXPEDITED, true);
 
         ContentResolver.requestSync(mAccount, ZeroContract.AUTHORITY, extras);
-        Toast toast = Toast.makeText(getApplicationContext(), R.string.data_synced, Toast.LENGTH_SHORT);
-        toast.show();
+/*        Toast toast = Toast.makeText(getApplicationContext(), R.string.data_synced, Toast.LENGTH_SHORT);
+        toast.show();*/
     }
 
     public IBinder onBind(Intent intent)
