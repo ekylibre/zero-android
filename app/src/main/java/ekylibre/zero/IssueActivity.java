@@ -12,6 +12,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -37,7 +38,7 @@ import java.util.Date;
 import ekylibre.api.ZeroContract;
 import ekylibre.zero.util.AccountTool;
 
-public class IssueActivity extends Activity {
+public class IssueActivity extends AppCompatActivity {
 
     public static final int SHOW_PICTURE = 30;
 

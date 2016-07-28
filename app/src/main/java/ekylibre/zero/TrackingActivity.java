@@ -22,6 +22,7 @@ import android.os.SystemClock;
 import android.preference.PreferenceManager;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -48,7 +49,7 @@ import ekylibre.api.ZeroContract;
 import ekylibre.zero.util.AccountTool;
 
 
-public class TrackingActivity extends Activity implements TrackingListenerWriter
+public class TrackingActivity extends AppCompatActivity implements TrackingListenerWriter
 {
 
     public final static String KEY_ACCOUNT = "account";
