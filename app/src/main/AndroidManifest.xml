@@ -83,10 +83,7 @@
             android:name=".CalendarActivity"
             android:icon="@mipmap/ic_ekylibre"
             android:label="@string/calendar" />
-        <activity
-            android:name=".TodoListActivity"
-            android:icon="@mipmap/ic_ekylibre"
-            android:label="@string/todoList" />
+
 
         <service
             android:name=".service.AuthenticatorService"

@@ -58,7 +58,9 @@ public class MainActivity extends AppCompatActivity
         if (!setAccount())
             return ;
         setToolbar();
+/*
         setFloatingActBtn();
+*/
         setDrawerLayout();
         setTodolist();
         startConnectionManager();
@@ -114,7 +116,7 @@ public class MainActivity extends AppCompatActivity
     ** Setting the floating button which is use to access to
     ** different type of action buttons
     */
-    private void    setFloatingActBtn()
+/*    private void    setFloatingActBtn()
     {
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener()
@@ -126,7 +128,7 @@ public class MainActivity extends AppCompatActivity
                         .setAction("Action", null).show();
             }
         });
-    }
+    }*/
 
     /*
     ** Set toolbar which is the new version of th action bar
@@ -265,10 +267,7 @@ public class MainActivity extends AppCompatActivity
             Intent intent = new Intent(this, AccountManagerActivity.class);
             startActivity(intent);
         }
-        else if (id == R.id.nav_send)
-        {
 
-        }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return (true);

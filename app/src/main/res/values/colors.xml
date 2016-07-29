@@ -14,5 +14,6 @@
     <color name="white">#FFFFFF</color>
     <color name="ultraLight_grey">#EAEAEA</color>
     <color name="ultraLight_blue">#818fa7</color>
+    <color name="background_grey">#DCDCDC</color>
 
 </resources>
