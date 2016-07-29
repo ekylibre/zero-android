@@ -272,17 +272,22 @@ public class PlantCountingActivity extends AppCompatActivity {
     {
         double minValueAccepted;
 
-        mPlantCountValue.setText(String.format("%d", mPlantsCount));
-        if (averageValue == 0 || mPlantsCount == 0 || mGerminationPercentage == 0)
+        if (mPlantsCount == 0 || mGerminationPercentage == 0)
         {
             mIndicator.setBackground(mGrey);
             return;
         }
-
         if (currentContext == germination)
             minValueAccepted = mPlantsCount * (mGerminationPercentage / 100.0);
         else
             minValueAccepted = mPlantsCount;
+        mPlantCountValue.setText(String.format("%d", (int)minValueAccepted));
+
+        if (averageValue == 0)
+        {
+            mIndicator.setBackground(mGrey);
+            return;
+        }
         if (averageValue <= mPlantsCount && averageValue >= minValueAccepted)
             mIndicator.setBackground(mGreen);
         else if (averageValue < minValueAccepted)

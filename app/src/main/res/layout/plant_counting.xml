@@ -7,7 +7,8 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    android:id="@+id/rootViewPlantCounting">
+    android:id="@+id/rootViewPlantCounting"
+    android:background="@color/background_grey">
 
     <RelativeLayout
         android:layout_width="fill_parent"
