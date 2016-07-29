@@ -545,12 +545,22 @@ public class PlantCountingActivity extends AppCompatActivity {
         mDensityChooser.show();
     }
 
-    public void savePlantCounting(View v) {
-        insertNewValuesPlantCounting();
-        pushNewValue();
-        Toast toast = Toast.makeText(getApplicationContext(), "Plant Counting saved", Toast.LENGTH_SHORT);
-        toast.show();
-        this.finish();
+    public void savePlantCounting(View v)
+    {
+        if (mPlantsCount != 0 && mGerminationPercentage != 0 && getAverage() != 0.0)
+        {
+            insertNewValuesPlantCounting();
+            pushNewValue();
+            Toast toast = Toast.makeText(getApplicationContext(), "Plant Counting saved", Toast.LENGTH_SHORT);
+            toast.show();
+            this.finish();
+        }
+        else
+        {
+            Toast toast = Toast.makeText(getApplicationContext(), "Cannot save Plant counting, please finish your counting", Toast.LENGTH_SHORT);
+            toast.show();
+        }
+
     }
 
     private void pushNewValue()
@@ -577,6 +587,7 @@ public class PlantCountingActivity extends AppCompatActivity {
         getContentResolver().insert(
                 ZeroContract.PlantCountingItems.CONTENT_URI,
                 newValuePlantCountingItem);
+        Log.d(TAG, "NewValuesPlantCountingItem is now on the local data !");
     }
 
     private void insertNewValuesPlantCounting()
@@ -588,9 +599,12 @@ public class PlantCountingActivity extends AppCompatActivity {
         setLocation(newValuesPlantCounting);
         newValuesPlantCounting.put(ZeroContract.PlantCountingsColumns.OBSERVATION,
                 mObservationEditText.getText().toString());
+        newValuesPlantCounting.put(ZeroContract.PlantCountingsColumns.AVERAGE_VALUE, getAverage());
+        newValuesPlantCounting.put(ZeroContract.PlantCountingsColumns.USER, mAccount.name);
         getContentResolver().insert(
                 ZeroContract.PlantCountings.CONTENT_URI,
                 newValuesPlantCounting);
+        Log.d(TAG, "NewValuesPlantCounting is now on the local data !");
     }
 
     private void setLocation(ContentValues newValuesPlantCounting)

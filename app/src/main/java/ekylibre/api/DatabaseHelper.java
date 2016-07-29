@@ -8,7 +8,7 @@ import ekylibre.api.ZeroContract;
 
 public class DatabaseHelper extends SQLiteOpenHelper
 {
-    public static final int DATABASE_VERSION = 6;
+    public static final int DATABASE_VERSION = 7;
     public static final String DATABASE_NAME = "zero";
 
     public DatabaseHelper(Context context)
@@ -107,6 +107,9 @@ public class DatabaseHelper extends SQLiteOpenHelper
                 database.execSQL("ALTER TABLE plants ADD user VARCHAR(255)");
             case 6:
                 database.execSQL("ALTER TABLE plant_density_abacus_items ADD FK_ID INTEGER");
+            case 7:
+                database.execSQL("ALTER TABLE plant_countings ADD average_value FLOAT");
+
         }
     }
 }
