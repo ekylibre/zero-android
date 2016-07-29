@@ -191,8 +191,6 @@ public class PlantCountingActivity extends AppCompatActivity {
             srcUnit = getResources().getString(R.string.unity_per_hectare);
         else if (Objects.equals(srcUnit, UNITY_PER_SQUARE_METER))
             srcUnit = getResources().getString(R.string.unity_per_square_meter);
-        else
-        srcUnit = "--";
         return (srcUnit);
     }
 
@@ -629,6 +627,8 @@ public class PlantCountingActivity extends AppCompatActivity {
         input.setGravity(Gravity.CENTER);
         input.setInputType(InputType.TYPE_CLASS_NUMBER);
         input.setBackground(getResources().getDrawable(R.drawable.editbar));
+        if (view != null)
+            input.requestFocus();
         input.setOnEditorActionListener(
             new EditText.OnEditorActionListener()
             {
