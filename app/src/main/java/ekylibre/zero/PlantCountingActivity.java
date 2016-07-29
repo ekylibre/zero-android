@@ -38,6 +38,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.Objects;
 
 import ekylibre.api.ZeroContract;
 import ekylibre.zero.util.AccountTool;
@@ -67,6 +68,11 @@ public class PlantCountingActivity extends AppCompatActivity {
     private int mGerminationPercentage = 0;
     private TextView    mPlantCountValue;
     private int testColor = 0;
+
+    public final String  THOUSAND_PER_HECTARE = "thousand_per_hectare";
+    public final String  MILLION_PER_HECTARE = "million_per_hectare";
+    public final String  UNITY_PER_HECTARE = "unity_per_hectare";
+    public final String  UNITY_PER_SQUARE_METER = "unity_per_square_meter";
 
     private final boolean seeding = false;
     private final boolean germination = true;
@@ -175,6 +181,21 @@ public class PlantCountingActivity extends AppCompatActivity {
         }
     }
 
+    private String convertedUnit(String srcUnit)
+    {
+        if (Objects.equals(srcUnit, THOUSAND_PER_HECTARE))
+            srcUnit = getResources().getString(R.string.thousand_per_hectare);
+        else if (Objects.equals(srcUnit, MILLION_PER_HECTARE))
+            srcUnit = getResources().getString(R.string.million_per_hectare);
+        else if (Objects.equals(srcUnit, UNITY_PER_HECTARE))
+            srcUnit = getResources().getString(R.string.unity_per_hectare);
+        else if (Objects.equals(srcUnit, UNITY_PER_SQUARE_METER))
+            srcUnit = getResources().getString(R.string.unity_per_square_meter);
+        else
+        srcUnit = "--";
+        return (srcUnit);
+    }
+
     private void fillDensityTab(Cursor cursorDensity, String unit) {
         int itName = 0;
 
@@ -183,7 +204,7 @@ public class PlantCountingActivity extends AppCompatActivity {
         while (cursorDensity.moveToNext())
         {
             Log.d("zero", "name : " + cursorDensity.getString(0));
-            mDensityTab[itName] = cursorDensity.getString(0) + " " + unit;
+            mDensityTab[itName] = cursorDensity.getString(0) + " " + convertedUnit(unit);
             mDensityTabID[itName] = cursorDensity.getInt(1);
             Log.d("zero", "tablename[" + itName + "] : " + mAbaqueTab[itName]);
             itName++;
@@ -270,7 +291,7 @@ public class PlantCountingActivity extends AppCompatActivity {
 
     private void setIndicatorColor(float averageValue)
     {
-        double minValueAccepted;
+        double referenceValue;
 
         if (mPlantsCount == 0 || mGerminationPercentage == 0)
         {
@@ -278,22 +299,20 @@ public class PlantCountingActivity extends AppCompatActivity {
             return;
         }
         if (currentContext == germination)
-            minValueAccepted = mPlantsCount * (mGerminationPercentage / 100.0);
+            referenceValue = mPlantsCount * (mGerminationPercentage / 100.0);
         else
-            minValueAccepted = mPlantsCount;
-        mPlantCountValue.setText(String.format("%d", (int)minValueAccepted));
+            referenceValue = mPlantsCount;
+        mPlantCountValue.setText(String.format("%d", (int)referenceValue));
 
         if (averageValue == 0)
         {
             mIndicator.setBackground(mGrey);
             return;
         }
-        if (averageValue <= mPlantsCount && averageValue >= minValueAccepted)
+        if (averageValue <= referenceValue + ((5.0 / 100.0) * referenceValue) && averageValue >= referenceValue - ((5.0 / 100.0) * referenceValue))
             mIndicator.setBackground(mGreen);
-        else if (averageValue < minValueAccepted)
-            mIndicator.setBackground(mRed);
         else
-            mIndicator.setBackground(mOrange);
+            mIndicator.setBackground(mRed);
     }
 
     private void setHandlerAverageValue() {
