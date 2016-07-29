@@ -83,4 +83,8 @@
     <string name="germination">Germination</string>
     <string name="average_obtained">Average obtained :</string>
     <string name="expected_value">Expected value :</string>
+    <string name="thousand_per_hectare">Thousand per hectare</string>
+    <string name="million_per_hectare">Million per hectare</string>
+    <string name="unity_per_hectare">Unity per hectare</string>
+    <string name="unity_per_square_meter">Unity per square meter</string>
 </resources>

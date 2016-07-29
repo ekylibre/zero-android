@@ -94,7 +94,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
         // Get crumbs from tracking (content) provider
         Cursor cursor = mContentResolver.query(ZeroContract.Crumbs.CONTENT_URI,
                 ZeroContract.Crumbs.PROJECTION_ALL,
-                "\"" + ZeroContract.CrumbsColumns.USER + "\"" + "LIKE" + "\"" + account.name + "\""
+                "\"" + ZeroContract.CrumbsColumns.USER + "\" " + "LIKE" + " \"" + account.name + "\""
                         + " AND " + ZeroContract.CrumbsColumns.SYNCED + " IS NULL OR " + ZeroContract.CrumbsColumns.SYNCED + " <= 0",
                 null,
                 ZeroContract.Crumbs.SORT_ORDER_DEFAULT);
