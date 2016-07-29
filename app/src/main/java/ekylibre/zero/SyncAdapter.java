@@ -34,6 +34,7 @@ import java.util.List;
 import java.util.Set;
 
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -80,7 +81,6 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
         performPlantDensityAbaciSync(account, extras, authority, provider, syncResult);
         performPlantsSync(account, extras, authority, provider, syncResult);
         performPlantCounting(account, extras, authority, provider, syncResult);
-        performPlantCountingItem(account, extras, authority, provider, syncResult);
     }
 
     /*
@@ -356,10 +356,10 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
 
     public void performPlantCounting(Account account, Bundle extras, String authority, ContentProviderClient provider, SyncResult syncResult)
     {
-        Log.i(TAG, "Beginning network synchronization");
+        Log.i(TAG, "Beginning network plant counting synchronization");
         Cursor cursor = mContentResolver.query(ZeroContract.PlantCountings.CONTENT_URI,
                 ZeroContract.PlantCountings.PROJECTION_ALL,
-                "\"" + ZeroContract.PlantCountingsColumns.USER + "\"" + "LIKE" + "\"" + account.name + "\"",
+                "\"" + ZeroContract.PlantCountingsColumns.USER + "\"" + " LIKE " + "\"" + account.name + "\"",
                 null,
                 ZeroContract.PlantCountings.SORT_ORDER_DEFAULT);
         try
@@ -373,14 +373,16 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
                     Log.i(TAG, "New plantCounting");
                     // Post it to ekylibre
                     JSONObject attributes = new JSONObject();
-                    attributes.put("geolocation", "SRID=4326; POINT(" + Double.toString(cursor.getDouble(3)) + " " + Double.toString(cursor.getDouble(2)) + ")");
+                    //attributes.put("geolocation", "SRID=4326; POINT(" + Double.toString(cursor.getDouble(3)) + " " + Double.toString(cursor.getDouble(2)) + ")");
                     SimpleDateFormat parser = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
-                    attributes.put("observed_at", parser.format(new Date(cursor.getLong(1))));
-                    attributes.put("observation", cursor.getString(4));
+                    attributes.put("read_at", parser.format(new Date(cursor.getLong(1))));
+                    attributes.put("comment", cursor.getString(4));
                     attributes.put("plant_density_abacus_item_id", cursor.getString(5));
-                    attributes.put("plant_density_abacus_id", cursor.getString(7));
+                    //attributes.put("plant_density_abacus_id", cursor.getString(7));
                     attributes.put("plant_id", cursor.getString(8));
-                    attributes.put("device_uid", "android:" + Secure.getString(mContentResolver, Secure.ANDROID_ID));
+                    attributes.put("average_value", cursor.getFloat(9));
+                    attributes.put("items_attributes", createPlantCountingItemJSON(account, extras, authority, provider, syncResult, cursor.getInt(0)));
+                    //attributes.put("device_uid", "android:" + Secure.getString(mContentResolver, Secure.ANDROID_ID));
 
                     long id = PlantCounting.create(instance, attributes);
                 }
@@ -398,32 +400,33 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
         Log.i(TAG, "Finish network synchronization");
     }
 
-    public void performPlantCountingItem(Account account, Bundle extras, String authority, ContentProviderClient provider, SyncResult syncResult)
+    public JSONArray createPlantCountingItemJSON(Account account, Bundle extras, String authority, ContentProviderClient provider, SyncResult syncResult, int ID)
     {
         Log.i(TAG, "Beginning network synchronization");
         Cursor cursor = mContentResolver.query(ZeroContract.PlantCountingItems.CONTENT_URI,
                 ZeroContract.PlantCountingItems.PROJECTION_ALL,
-                "\"" + ZeroContract.PlantCountingItemsColumns.USER + "\"" + "LIKE" + "\"" + account.name + "\"",
+                "\"" + ZeroContract.PlantCountingItemsColumns.USER + "\"" + " LIKE " + "\"" + account.name + "\""
+                + " AND " + "\"" + String.valueOf(ID) + "\"" + " == " + "\"" + ZeroContract.PlantCountingItems.PLANT_COUNTING_ID + "\"",
                 null,
                 ZeroContract.PlantCountingItems.SORT_ORDER_DEFAULT);
         try
         {
             if (cursor != null && cursor.getCount() > 0)
             {
-                Instance instance = getInstance(account);
-
+                JSONArray arrayJSON = new JSONArray();
+                int i = 0;
                 while (cursor.moveToNext())
                 {
                     Log.i(TAG, "New plantCounting");
                     // Post it to ekylibre
                     JSONObject attributes = new JSONObject();
                     attributes.put("value", cursor.getInt(1));
-                    attributes.put("plant_id", cursor.getInt(2));
-                    attributes.put("device_uid", "android:" + Secure.getString(mContentResolver, Secure.ANDROID_ID));
-
-                    long id = PlantCountingItem.create(instance, attributes);
+                    /*attributes.put("plant_id", cursor.getInt(2));
+                    attributes.put("device_uid", "android:" + Secure.getString(mContentResolver, Secure.ANDROID_ID));*/
+                    arrayJSON.put(attributes);
                 }
                 cursor.close();
+                return (arrayJSON);
             }
             else
             {
@@ -435,6 +438,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
             e.printStackTrace();
         }
         Log.i(TAG, "Finish network synchronization");
+        return (null);
     }
 
 
