@@ -377,9 +377,9 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
                     SimpleDateFormat parser = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
                     attributes.put("read_at", parser.format(new Date(cursor.getLong(1))));
                     attributes.put("comment", cursor.getString(4));
-                    attributes.put("plant_density_abacus_item_id", cursor.getString(5));
+                    attributes.put("plant_density_abacus_item_id", cursor.getInt(5));
                     //attributes.put("plant_density_abacus_id", cursor.getString(7));
-                    attributes.put("plant_id", cursor.getString(8));
+                    attributes.put("plant_id", cursor.getInt(8));
                     attributes.put("average_value", cursor.getFloat(9));
                     attributes.put("items_attributes", createPlantCountingItemJSON(account, extras, authority, provider, syncResult, cursor.getInt(0)));
                     //attributes.put("device_uid", "android:" + Secure.getString(mContentResolver, Secure.ANDROID_ID));
@@ -406,7 +406,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
         Cursor cursor = mContentResolver.query(ZeroContract.PlantCountingItems.CONTENT_URI,
                 ZeroContract.PlantCountingItems.PROJECTION_ALL,
                 "\"" + ZeroContract.PlantCountingItemsColumns.USER + "\"" + " LIKE " + "\"" + account.name + "\""
-                + " AND " + "\"" + String.valueOf(ID) + "\"" + " == " + "\"" + ZeroContract.PlantCountingItems.PLANT_COUNTING_ID + "\"",
+                + " AND " + ID + " == " + ZeroContract.PlantCountingItems.PLANT_COUNTING_ID,
                 null,
                 ZeroContract.PlantCountingItems.SORT_ORDER_DEFAULT);
         try

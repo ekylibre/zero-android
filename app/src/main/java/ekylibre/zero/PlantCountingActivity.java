@@ -83,6 +83,10 @@ public class PlantCountingActivity extends AppCompatActivity {
     private CharSequence[] mAbaqueTab;
     private CharSequence[] mDensityTab;
 
+    private int     selectedPlantID;
+    private int     selectedPlantDensityAbacusItemID;
+
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
@@ -239,6 +243,8 @@ public class PlantCountingActivity extends AppCompatActivity {
         Log.d("zero", "beginning abaque");
 
         if (cursorAbacus != null) {
+            Log.d(TAG, "Plant ID => " + cursorVariety.getInt(1));
+            selectedPlantID = cursorVariety.getInt(1);
             Log.d(TAG, "data exists");
             fillAbacusTab(cursorAbacus);
             Log.d(TAG, "end Abaque");
@@ -284,6 +290,7 @@ public class PlantCountingActivity extends AppCompatActivity {
     {
         Cursor cursorPlantsCount = queryPlantsCount(densityID);
         cursorPlantsCount.moveToFirst();
+        selectedPlantDensityAbacusItemID = cursorPlantsCount.getInt(1);
         mPlantsCount = cursorPlantsCount.getInt(0);
     }
 
@@ -337,6 +344,7 @@ public class PlantCountingActivity extends AppCompatActivity {
                         setAbacusList();
                         mPlantsCount = 0;
                         mGerminationPercentage = 0;
+                        selectedPlantDensityAbacusItemID = 0;
                         if (mAbacusChooser != null)
                             mAbaque.setText(getResources().getString(R.string.select_abacus));
                         if (mDensityChooser != null)
@@ -356,6 +364,7 @@ public class PlantCountingActivity extends AppCompatActivity {
                         setDensityList(mAbaqueTab[which]);
                         setGerminationPercentage(mAbaqueTab[which]);
                         mPlantsCount = 0;
+                        selectedPlantDensityAbacusItemID = 0;
                         if (mDensityChooser != null)
                             mDensityText.setText(getResources().getString(R.string.advocated_density));
                     }
@@ -493,7 +502,7 @@ public class PlantCountingActivity extends AppCompatActivity {
         Cursor cursorGermPerc = getContentResolver().query(
                 ZeroContract.PlantDensityAbaci.CONTENT_URI,
                 projectionDensity,
-                "\"" + ZeroContract.PlantDensityAbacusItemsColumns.USER + "\"" + " LIKE " + "\"" + mAccount.name + "\"" + " AND " +
+                "\"" + ZeroContract.PlantDensityAbaciColumns.USER + "\"" + " LIKE " + "\"" + mAccount.name + "\"" + " AND " +
                         "\"" + ZeroContract.PlantDensityAbaciColumns._ID + "\"" + " == " + "\"" + cursorAbacus.getInt(0) + "\"",
                 null,
                 null);
@@ -502,7 +511,7 @@ public class PlantCountingActivity extends AppCompatActivity {
     }
 
     private Cursor queryPlantsCount(int densityID) {
-        String[] mProjectionPlantsCount = {ZeroContract.PlantDensityAbacusItems.PLANTS_COUNT};
+        String[] mProjectionPlantsCount = {ZeroContract.PlantDensityAbacusItems.PLANTS_COUNT,ZeroContract.PlantDensityAbacusItems._ID};
 
         Cursor cursorPlantsCount = getContentResolver().query(
                 ZeroContract.PlantDensityAbacusItems.CONTENT_URI,
@@ -515,7 +524,7 @@ public class PlantCountingActivity extends AppCompatActivity {
     }
 
     private Cursor queryVariety() {
-        String[] mProjectionVariety = {ZeroContract.Plants.VARIETY};
+        String[] mProjectionVariety = {ZeroContract.Plants.VARIETY, ZeroContract.Plants._ID};
 
         Cursor cursorVariety = getContentResolver().query(
                 ZeroContract.Plants.CONTENT_URI,
@@ -525,6 +534,21 @@ public class PlantCountingActivity extends AppCompatActivity {
                 null,
                 null);
         return (cursorVariety);
+    }
+
+    private Cursor queryPlantCountingID() {
+        String[] mProjectionID = {ZeroContract.PlantCountings._ID};
+
+        Cursor cursorID = getContentResolver().query(
+                ZeroContract.PlantCountings.CONTENT_URI,
+                mProjectionID,
+                "\"" + ZeroContract.PlantCountings.USER + "\"" + " LIKE " + "\"" + mAccount.name + "\"",
+                null,
+                null);
+        if (cursorID == null)
+            return (null);
+        cursorID.moveToLast();
+        return (cursorID);
     }
 
     public void chosePlant(View view) {
@@ -549,8 +573,8 @@ public class PlantCountingActivity extends AppCompatActivity {
     {
         if (mPlantsCount != 0 && mGerminationPercentage != 0 && getAverage() != 0.0)
         {
-            insertNewValuesPlantCounting();
-            pushNewValue();
+            int id = insertNewValuesPlantCounting();
+            pushNewValue(id);
             Toast toast = Toast.makeText(getApplicationContext(), "Plant Counting saved", Toast.LENGTH_SHORT);
             toast.show();
             this.finish();
@@ -563,7 +587,7 @@ public class PlantCountingActivity extends AppCompatActivity {
 
     }
 
-    private void pushNewValue()
+    private void pushNewValue(int plantCountingID)
     {
         ContentValues newValuePlantCountingItem = new ContentValues();
 
@@ -573,8 +597,9 @@ public class PlantCountingActivity extends AppCompatActivity {
             EditText et = mListIteratorValues.next();
             if (et.getText().toString() != null)
             {
-                newValuePlantCountingItem.put(ZeroContract.PlantCountingItemsColumns.VALUE, et.getText().toString());
+                newValuePlantCountingItem.put(ZeroContract.PlantCountingItemsColumns.VALUE, Integer.parseInt(et.getText().toString()));
                 newValuePlantCountingItem.put(ZeroContract.PlantCountingItemsColumns.USER, mAccount.name);
+                newValuePlantCountingItem.put(ZeroContract.PlantCountingItemsColumns.PLANT_COUNTING_ID, plantCountingID);
                 insertNewValuePlantCountingItems(newValuePlantCountingItem);
 
             }
@@ -590,7 +615,7 @@ public class PlantCountingActivity extends AppCompatActivity {
         Log.d(TAG, "NewValuesPlantCountingItem is now on the local data !");
     }
 
-    private void insertNewValuesPlantCounting()
+    private int insertNewValuesPlantCounting()
     {
         ContentValues newValuesPlantCounting = new ContentValues();
 
@@ -601,10 +626,20 @@ public class PlantCountingActivity extends AppCompatActivity {
                 mObservationEditText.getText().toString());
         newValuesPlantCounting.put(ZeroContract.PlantCountingsColumns.AVERAGE_VALUE, getAverage());
         newValuesPlantCounting.put(ZeroContract.PlantCountingsColumns.USER, mAccount.name);
+        newValuesPlantCounting.put(ZeroContract.PlantCountingsColumns.PLANT_ID, selectedPlantID);
+        newValuesPlantCounting.put(ZeroContract.PlantCountingsColumns.PLANT_DENSITY_ABACUS_ITEM_ID, selectedPlantDensityAbacusItemID);
         getContentResolver().insert(
                 ZeroContract.PlantCountings.CONTENT_URI,
                 newValuesPlantCounting);
+        Cursor curs = queryPlantCountingID();
         Log.d(TAG, "NewValuesPlantCounting is now on the local data !");
+        if (curs == null)
+            return (-1);
+        else
+        {
+            Log.d(TAG, "Plant counting ID is => " + curs.getInt(0));
+            return (curs.getInt(0));
+        }
     }
 
     private void setLocation(ContentValues newValuesPlantCounting)
