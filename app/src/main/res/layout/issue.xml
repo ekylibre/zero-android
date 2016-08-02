@@ -29,13 +29,6 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="35dp" />
 
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-        </LinearLayout>
-
         <TableLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
@@ -110,14 +103,18 @@
             android:text="@string/permlab_capture"
             android:id="@+id/takeAPicture"
             android:layout_gravity="center_horizontal"
-            android:onClick="takePicture" />
+            android:onClick="takePicture"
+            android:textColor="@color/ultraLight_grey"
+            android:background="@drawable/black_button"
+            android:layout_marginTop="10dp"/>
 
         <EditText
             android:id="@+id/description"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:hint="@string/notes"
-            android:maxLines="6" />
+            android:maxLines="6"
+            android:layout_marginTop="40dp"/>
 
 
     </LinearLayout>

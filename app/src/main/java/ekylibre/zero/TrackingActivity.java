@@ -155,7 +155,9 @@ public class TrackingActivity extends AppCompatActivity implements TrackingListe
                         mMasterChrono.setVisibility(View.VISIBLE);
                         mStopButton.setVisibility(View.VISIBLE);
                         mPauseButton.setVisibility(View.VISIBLE);
+/*
                         mScanButton.setVisibility(View.VISIBLE);
+*/
                         mSyncButton.setVisibility(View.GONE);
                         mPrecisionModeStartButton.setVisibility(View.VISIBLE);
                         //mProcedureNature.setVisibility(View.VISIBLE);
