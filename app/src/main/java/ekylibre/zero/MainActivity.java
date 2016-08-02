@@ -55,8 +55,9 @@ public class MainActivity extends AppCompatActivity
 
 
         firstPass = true;
-        if (!setAccount())
-            return ;
+        if (!AccountTool.isAnyAccountExist(this))
+            AccountTool.askForAccount(this, this);
+        mAccount = AccountTool.getCurrentAccount(MainActivity.this);
         setToolbar();
 /*
         setFloatingActBtn();
@@ -137,31 +138,6 @@ public class MainActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         mToolbar = toolbar;
-    }
-
-    /*
-    ** Get the preferred account which is the previous account used
-    ** If there is no account specified redirection to login activity is done
-    ** TODO ==> Select account in pref
-    */
-    private boolean    setAccount()
-    {
-        final Account[]   accounts;
-
-        final AccountManager manager = AccountManager.get(this);
-        accounts = manager.getAccountsByType(SyncAdapter.ACCOUNT_TYPE);
-        if (accounts.length <= 0)
-        {
-            Intent intent = new Intent(this, AuthenticatorActivity.class);
-            intent.putExtra(AccountManager.KEY_ACCOUNT_TYPE, SyncAdapter.ACCOUNT_TYPE);
-            intent.putExtra(AuthenticatorActivity.KEY_REDIRECT, AuthenticatorActivity.CHOICE_REDIRECT_TRACKING);
-            startActivity(intent);
-            finish();
-            return (false);
-        }
-        else
-            mAccount = AccountManager.get(this).getAccountsByType(SyncAdapter.ACCOUNT_TYPE)[0];
-        return (true);
     }
 
     /*
