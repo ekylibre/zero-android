@@ -64,6 +64,7 @@ public final class ZeroContract {
 
     public interface PlantDensityAbaciColumns extends BaseColumns {
         String TABLE_NAME = "plant_density_abaci";
+        String EK_ID = "ek_id";
         String NAME = "name";
         String VARIETY = "variety";
         String GERMINATION_PERCENTAGE = "germination_percentage";
@@ -74,6 +75,7 @@ public final class ZeroContract {
 
     public interface PlantDensityAbacusItemsColumns extends BaseColumns {
         String TABLE_NAME = "plant_density_abacus_items";
+        String EK_ID = "ek_id";
         String SEEDING_DENSITY_VALUE = "seeding_density_value";
         String PLANTS_COUNT = "plants_count";
         String USER = "user";
@@ -82,6 +84,7 @@ public final class ZeroContract {
 
     public interface PlantsColumns extends BaseColumns {
         String TABLE_NAME = "plants";
+        String EK_ID = "ek_id";
         String NAME = "name";
         String SHAPE = "shape";
         String VARIETY = "variety";

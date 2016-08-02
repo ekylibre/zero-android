@@ -102,14 +102,45 @@ public class DatabaseHelper extends SQLiteOpenHelper
                 database.execSQL("ALTER TABLE issues ADD user VARCHAR(255)");
                 database.execSQL("ALTER TABLE plant_countings ADD user VARCHAR(255)");
                 database.execSQL("ALTER TABLE plant_counting_items ADD user VARCHAR(255)");
-                database.execSQL("ALTER TABLE plant_density_abaci ADD user VARCHAR(255)");
-                database.execSQL("ALTER TABLE plant_density_abacus_items ADD user VARCHAR(255)");
-                database.execSQL("ALTER TABLE plants ADD user VARCHAR(255)");
             case 6:
-                database.execSQL("ALTER TABLE plant_density_abacus_items ADD FK_ID INTEGER");
-            case 7:
                 database.execSQL("ALTER TABLE plant_countings ADD average_value FLOAT");
-
+            case 7:
+                /*
+                ** Sorry for this part of code,
+                ** SQLITE doesn't implements ALTER COLUMN and I had to change ID to be in
+                ** autoincrement mode and add the ekylibre instance ID
+                ** to deal with multi account problems on IDs.
+                */
+                database.execSQL("DROP TABLE IF EXISTS plant_density_abaci");
+                database.execSQL("DROP TABLE IF EXISTS plant_density_abacus_items");
+                database.execSQL("DROP TABLE IF EXISTS plants");
+                database.execSQL("CREATE TABLE IF NOT EXISTS plant_density_abaci ("
+                        + ZeroContract.PlantDensityAbaciColumns._ID + " INTEGER PRIMARY KEY AUTOINCREMENT"
+                        + ", " + ZeroContract.PlantDensityAbaciColumns.EK_ID  + " INTEGER"
+                        + ", " + ZeroContract.PlantDensityAbaciColumns.NAME + " VARCHAR(255)"
+                        + ", " + ZeroContract.PlantDensityAbaciColumns.VARIETY + " VARCHAR(255)"
+                        + ", " + ZeroContract.PlantDensityAbaciColumns.GERMINATION_PERCENTAGE + " REAL"
+                        + ", " + ZeroContract.PlantDensityAbaciColumns.SAMPLING_LENGTH_UNIT + " VARCHAR(255)"
+                        + ", " + ZeroContract.PlantDensityAbaciColumns.SEEDING_DENSITY_UNIT + " VARCHAR(255)"
+                        + ", " + ZeroContract.PlantDensityAbaciColumns.USER + " VARCHAR(255)"
+                        + ")");
+                database.execSQL("CREATE TABLE IF NOT EXISTS plant_density_abacus_items ("
+                        + ZeroContract.PlantDensityAbacusItemsColumns._ID + " INTEGER PRIMARY KEY AUTOINCREMENT"
+                        + ", " + ZeroContract.PlantDensityAbacusItemsColumns.EK_ID + " INTEGER"
+                        + ", " + ZeroContract.PlantDensityAbacusItemsColumns.SEEDING_DENSITY_VALUE + " INTEGER"
+                        + ", " + ZeroContract.PlantDensityAbacusItemsColumns.PLANTS_COUNT + " INTEGER"
+                        + ", " + ZeroContract.PlantDensityAbacusItemsColumns.USER + " VARCHAR(255)"
+                        + ", " + ZeroContract.PlantDensityAbacusItemsColumns.FK_ID + " INTEGER"
+                        + ")");
+                database.execSQL("CREATE TABLE IF NOT EXISTS plants ("
+                        + ZeroContract.PlantsColumns._ID + " INTEGER PRIMARY KEY AUTOINCREMENT"
+                        + ", " + ZeroContract.Plants.EK_ID + " INTEGER"
+                        + ", " + ZeroContract.Plants.NAME + " VARCHAR(255)"
+                        + ", " + ZeroContract.Plants.SHAPE+ " TEXT"
+                        + ", " + ZeroContract.Plants.VARIETY + " VARCHAR(255)"
+                        + ", " + ZeroContract.Plants.ACTIVE + " BOOLEAN NOT NULL"
+                        + ", " + ZeroContract.PlantDensityAbacusItemsColumns.USER + " VARCHAR(255)"
+                        + ")");
         }
     }
 }

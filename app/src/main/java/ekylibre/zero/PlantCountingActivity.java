@@ -426,7 +426,7 @@ public class PlantCountingActivity extends AppCompatActivity {
     }
 
     private Cursor queryDensityValue(CharSequence abacusSelected) {
-        String[] projectionAbaque = {ZeroContract.PlantDensityAbaci._ID};
+        String[] projectionAbaque = {ZeroContract.PlantDensityAbaci.EK_ID};
 
         Cursor cursorAbacus = getContentResolver().query(
                 ZeroContract.PlantDensityAbaci.CONTENT_URI,
@@ -441,7 +441,8 @@ public class PlantCountingActivity extends AppCompatActivity {
 
         String[] projectionDensity = {ZeroContract.PlantDensityAbacusItems.SEEDING_DENSITY_VALUE, ZeroContract.PlantDensityAbacusItems._ID};
 
-        cursorAbacus.moveToFirst();
+        if (!cursorAbacus.moveToFirst())
+            return (null);
         Cursor cursorDensityValue = getContentResolver().query(
                 ZeroContract.PlantDensityAbacusItems.CONTENT_URI,
                 projectionDensity,
@@ -511,7 +512,7 @@ public class PlantCountingActivity extends AppCompatActivity {
     }
 
     private Cursor queryPlantsCount(int densityID) {
-        String[] mProjectionPlantsCount = {ZeroContract.PlantDensityAbacusItems.PLANTS_COUNT,ZeroContract.PlantDensityAbacusItems._ID};
+        String[] mProjectionPlantsCount = {ZeroContract.PlantDensityAbacusItems.PLANTS_COUNT,ZeroContract.PlantDensityAbacusItems.EK_ID};
 
         Cursor cursorPlantsCount = getContentResolver().query(
                 ZeroContract.PlantDensityAbacusItems.CONTENT_URI,
@@ -524,7 +525,7 @@ public class PlantCountingActivity extends AppCompatActivity {
     }
 
     private Cursor queryVariety() {
-        String[] mProjectionVariety = {ZeroContract.Plants.VARIETY, ZeroContract.Plants._ID};
+        String[] mProjectionVariety = {ZeroContract.Plants.VARIETY, ZeroContract.Plants.EK_ID};
 
         Cursor cursorVariety = getContentResolver().query(
                 ZeroContract.Plants.CONTENT_URI,

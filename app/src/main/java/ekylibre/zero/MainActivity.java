@@ -80,8 +80,7 @@ public class MainActivity extends AppCompatActivity
         if (!AccountTool.isAnyAccountExist(this))
             AccountTool.askForAccount(this, this);
         mAccount = AccountTool.getCurrentAccount(MainActivity.this);
-        //if (firstPass)
-            setAccountName(mNavigationView);
+        setAccountName(mNavigationView);
         firstPass = false;
     }
 

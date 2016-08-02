@@ -48,7 +48,8 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
     public static final String ACCOUNT_TYPE = "ekylibre.account.basic";
 
     ContentResolver mContentResolver;
-    AccountManager mAccountManager;
+    AccountManager  mAccountManager;
+    Context         mContext;
 
     /**
      * Set up the sync adapter
@@ -58,6 +59,8 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
         super(context, autoInitialize);
         mContentResolver = context.getContentResolver();
         mAccountManager = AccountManager.get(context);
+        mContext = context;
+
     }
 
     /**
@@ -70,17 +73,34 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
         super(context, autoInitialize, allowParallelSyncs);
         mContentResolver = context.getContentResolver();
         mAccountManager = AccountManager.get(context);
+        mContext = context;
     }
 
     @Override
     public void onPerformSync(Account account, Bundle extras, String authority, ContentProviderClient provider, SyncResult syncResult)
     {
+        Log.i(TAG, "Destruction of the table which will be resynced !");
+        mContentResolver.delete(ZeroContract.Plants.CONTENT_URI,
+                null,
+                null);
+        mContentResolver.delete(ZeroContract.PlantDensityAbacusItems.CONTENT_URI,
+                null,
+                null);
+
+        Account[] accountList = AccountTool.getListAccount(mContext);
         Log.d(TAG, "Performing Sync ! Pushing all the local data to Ekylibre instance");
-        performCrumbsSync(account, extras, authority, provider, syncResult);
-        performIssuesSync(account, extras, authority, provider, syncResult);
-        performPlantDensityAbaciSync(account, extras, authority, provider, syncResult);
-        performPlantsSync(account, extras, authority, provider, syncResult);
-        performPlantCounting(account, extras, authority, provider, syncResult);
+        int i = -1;
+        while (++i < accountList.length)
+        {
+            account = accountList[i];
+            Log.d(TAG, "... Sync new account ...");
+            Log.d(TAG, "... New account is " + account.name + " ...");
+            performPlantDensityAbaciSync(account, extras, authority, provider, syncResult);
+            performPlantsSync(account, extras, authority, provider, syncResult);
+            performCrumbsSync(account, extras, authority, provider, syncResult);
+            performIssuesSync(account, extras, authority, provider, syncResult);
+            performPlantCounting(account, extras, authority, provider, syncResult);
+        }
     }
 
     /*
@@ -248,7 +268,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
                 Log.d("zero", "boucle abaque");
 
                 PlantDensityAbacus plantDensityAbacus = abacusIterator.next();
-                cv.put(ZeroContract.PlantDensityAbaciColumns._ID, plantDensityAbacus.getId());
+                cv.put(ZeroContract.PlantDensityAbaciColumns.EK_ID, plantDensityAbacus.getId());
                 cv.put(ZeroContract.PlantDensityAbaciColumns.NAME, plantDensityAbacus.getName());
                 cv.put(ZeroContract.PlantDensityAbaciColumns.VARIETY, plantDensityAbacus.getVariety());
                 cv.put(ZeroContract.PlantDensityAbaciColumns.GERMINATION_PERCENTAGE, plantDensityAbacus.getGerminationPercentage());
@@ -278,10 +298,6 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
     public void performPlantDensityAbacusItemSync(Account account, Bundle extras, String authority, ContentProviderClient provider, SyncResult syncResult, List<PlantDensityAbacus> abacusList) throws JSONException
     {
 
-        Log.i(TAG, "Destruction of the PlantDensityAbacusItem table");
-        mContentResolver.delete(ZeroContract.PlantDensityAbacusItems.CONTENT_URI,
-                null,
-                null);
 
         Log.i(TAG, "Beginning network plant_density_abacus_items synchronization");
         ContentValues cv = new ContentValues();
@@ -297,7 +313,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
             int i = 0;
             while (i < plantDensityAbacus.mItems.length())
             {
-                cv.put(ZeroContract.PlantDensityAbacusItemsColumns._ID, plantDensityAbacus.getItemID(i));
+                cv.put(ZeroContract.PlantDensityAbacusItemsColumns.EK_ID, plantDensityAbacus.getItemID(i));
                 cv.put(ZeroContract.PlantDensityAbacusItemsColumns.FK_ID, plantDensityAbacus.getId());
                 cv.put(ZeroContract.PlantDensityAbacusItemsColumns.PLANTS_COUNT, plantDensityAbacus.getItemPlantCount(i));
                 cv.put(ZeroContract.PlantDensityAbacusItemsColumns.SEEDING_DENSITY_VALUE, plantDensityAbacus.getItemDensityValue(i));
@@ -313,8 +329,6 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
 
     public void performPlantsSync(Account account, Bundle extras, String authority, ContentProviderClient provider, SyncResult syncResult)
     {
-        Log.i(TAG, "Destruction of the Plant table");
-        int result = mContentResolver.delete(ZeroContract.Plants.CONTENT_URI, null, null);
         Log.i(TAG, "Beginning network plants synchronization");
         ContentValues cv = new ContentValues();
         Instance instance = getInstance(account);
@@ -329,7 +343,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
             {
                 Log.d(TAG, "boucle");
                 Plant plants = plantsIterator.next();
-                cv.put(ZeroContract.Plants._ID, plants.getId());
+                cv.put(ZeroContract.Plants.EK_ID, plants.getId());
                 cv.put(ZeroContract.Plants.NAME, plants.getName());
                 cv.put(ZeroContract.Plants.VARIETY, plants.getVariety());
                 cv.put(ZeroContract.Plants.ACTIVE, true);
