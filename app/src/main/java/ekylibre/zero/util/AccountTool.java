@@ -30,6 +30,12 @@ public class AccountTool
         mContext = context;
     }
 
+    public static Account[] getListAccount(Context context)
+    {
+        Account[] listAccount = AccountManager.get(context).getAccountsByType(SyncAdapter.ACCOUNT_TYPE);
+        return (listAccount);
+    }
+
     public static String getAccountName(Account account, Context context)
     {
         AccountManager accountManager = AccountManager.get(context);
