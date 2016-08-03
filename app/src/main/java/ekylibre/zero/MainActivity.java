@@ -249,8 +249,8 @@ public class MainActivity extends AppCompatActivity
     }
 
     /*
-    ** onClick metchod which is call when click on header of drawer layout is detected
-    ** actualy redirecting to the accout manager
+    ** onClick method which is call when click on header of drawer layout is detected
+    ** actually redirecting to the account manager
     */
     public void launchAccountManagerActivity(View v)
     {

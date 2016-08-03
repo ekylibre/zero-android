@@ -30,19 +30,18 @@ public class AccountTool
         mContext = context;
     }
 
+    /*
+    ** @return an account list of users from the current phone
+    */
     public static Account[] getListAccount(Context context)
     {
         Account[] listAccount = AccountManager.get(context).getAccountsByType(SyncAdapter.ACCOUNT_TYPE);
         return (listAccount);
     }
 
-    public static String getAccountName(Account account, Context context)
-    {
-        AccountManager accountManager = AccountManager.get(context);
-        String accName = accountManager.getUserData(account, Authenticator.KEY_ACCOUNT_NAME);
-        return (accName);
-    }
-
+    /*
+    ** @return TRUE if any account exists, else this return false
+    */
     public static boolean isAnyAccountExist(Context context)
     {
         AccountManager accMan = AccountManager.get(context);
@@ -53,6 +52,10 @@ public class AccountTool
             return (true);
     }
 
+    /*
+    ** This function start the login activity and finish activity passed in parameters
+    ** You can ask this function when you do not have any account  with isAnyAccountExist
+    */
     public static void  askForAccount(Context context, Activity activity)
     {
         Intent intent = new Intent(context, AuthenticatorActivity.class);
@@ -62,6 +65,21 @@ public class AccountTool
         activity.finish();
     }
 
+    /*
+    ** @return accountName (which is different from account.name) for account passed in parameters
+    ** Account name is the email of the user
+    */
+    public static String getAccountName(Account account, Context context)
+    {
+        AccountManager accountManager = AccountManager.get(context);
+        String accName = accountManager.getUserData(account, Authenticator.KEY_ACCOUNT_NAME);
+        return (accName);
+    }
+
+    /*
+    ** @return accountInstance for account passed in parameters
+    ** Account instance is the farm URL of the user
+    */
     public static String getAccountInstance(Account account, Context context)
     {
         AccountManager accountManager = AccountManager.get(context);
@@ -69,6 +87,9 @@ public class AccountTool
         return (accInstance);
     }
 
+    /*
+    ** @return instance of current account which is set in preferences
+    */
     public static Account getCurrentAccount(Context context)
     {
         SharedPreferences preference = PreferenceManager.getDefaultSharedPreferences(context);
@@ -87,6 +108,9 @@ public class AccountTool
         return (currAcc);
     }
 
+    /*
+    ** Method call first time you use the app to set the first account you signed in as current account
+    */
     private static void    setFirstAccountPref(SharedPreferences preferences, Context context)
     {
         Account newCurrAccount = AccountManager.get(context).getAccountsByType(SyncAdapter.ACCOUNT_TYPE)[0];
@@ -96,6 +120,10 @@ public class AccountTool
         editor.commit();
     }
 
+    /*
+    ** Bruteforce list account to find an account by his unique account.name
+    ** This method is viable because the list account should not be > 100 accounts
+    */
     private static Account findCurrentAccount(Account[] listAccount, String accName, Context context)
     {
         int i = -1;
