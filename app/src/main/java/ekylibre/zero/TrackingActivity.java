@@ -424,6 +424,7 @@ public class TrackingActivity extends AppCompatActivity implements TrackingListe
 
         ContentValues values = new ContentValues();
 
+        values.put(ZeroContract.CrumbsColumns.USER, AccountTool.getCurrentAccount(this).name);
         values.put(ZeroContract.CrumbsColumns.TYPE, type);
         values.put(ZeroContract.CrumbsColumns.LATITUDE, location.getLatitude());
         values.put(ZeroContract.CrumbsColumns.LONGITUDE, location.getLongitude());
