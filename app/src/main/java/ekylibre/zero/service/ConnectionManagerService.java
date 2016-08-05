@@ -44,7 +44,7 @@ public class ConnectionManagerService extends Service
     public void         onCreate()
     {
         // Final value is 300000 others values are just here to test sync
-        final int       hDelay = 40000;
+        final int       hDelay = 300000;
 
         handler = new Handler();
         handler.postDelayed(new Runnable()
