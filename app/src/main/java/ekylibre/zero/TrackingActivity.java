@@ -117,7 +117,7 @@ public class TrackingActivity extends AppCompatActivity implements TrackingListe
         mPrecisionModeStopButton = (Button) findViewById(R.id.stop_precision_mode_button);
 
         // Synchronize data
-        this.syncData();
+        //this.syncData();
 
         // Acquire a reference to the system Location Manager
         mTrackingListener = new TrackingListener(this);
@@ -319,7 +319,7 @@ public class TrackingActivity extends AppCompatActivity implements TrackingListe
         mPauseButton.setVisibility(View.VISIBLE);
         // mStartButton.setVisibility(View.VISIBLE);
         mStopButton.setVisibility(View.VISIBLE);
-        mScanButton.setVisibility(View.VISIBLE);
+        //mScanButton.setVisibility(View.VISIBLE);
         if (mPrecisionMode) {
             mPrecisionModeStart = SystemClock.elapsedRealtime();
             mPrecisionModeChrono.setBase(mPrecisionModeStart - mPrecisionModeDuration);
@@ -364,7 +364,7 @@ public class TrackingActivity extends AppCompatActivity implements TrackingListe
 
     // Call the sync service
     public void syncCrumbs(View view) {
-        this.syncData();
+        //this.syncData();
     }
 
 
@@ -460,7 +460,7 @@ public class TrackingActivity extends AppCompatActivity implements TrackingListe
 
         // Sync data is interesting moment
         if (type.equals("stop")) { //  || type.equals("pause")
-            this.syncData();
+            //this.syncData();
         }
 
         this.refreshDetails(location);
@@ -491,11 +491,22 @@ public class TrackingActivity extends AppCompatActivity implements TrackingListe
 
 
     // Call the sync service
-    private void syncData() {
+/*    private void syncData() {
         Log.d("zero", "syncData: " + mAccount.toString() + ", " + ZeroContract.AUTHORITY);
         Bundle extras = new Bundle();
         extras.putBoolean(ContentResolver.SYNC_EXTRAS_MANUAL, true);
         extras.putBoolean(ContentResolver.SYNC_EXTRAS_EXPEDITED, true);
         ContentResolver.requestSync(mAccount, ZeroContract.AUTHORITY, extras);
+    }*/
+
+    @Override
+    public void onDestroy()
+    {
+        mNotificationBuilder
+                .setSmallIcon(R.mipmap.ic_stat_notify)
+                .setContentTitle(getString(R.string.app_name))
+                .setContentText("");
+        mNotificationManager.cancel(mNotificationID);
+        super.onDestroy();
     }
 }

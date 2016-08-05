@@ -54,7 +54,7 @@
         <activity
             android:name=".TrackingActivity"
             android:label="@string/new_intervention"
-            android:launchMode="singleInstance"
+            android:launchMode="singleTask"
             android:parentActivityName=".MainActivity"
             android:screenOrientation="portrait">
             <meta-data
