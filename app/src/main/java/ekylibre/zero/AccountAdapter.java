@@ -14,7 +14,7 @@ import ekylibre.zero.util.AccountTool;
  * Created by pierre on 7/18/16.      *
  * ekylibre.zero for zero-android     *
  *************************************/
-public class AccountAdapter  extends ArrayAdapter<Account>
+public class AccountAdapter extends ArrayAdapter<Account>
 {
     Context mContext;
 
