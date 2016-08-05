@@ -87,4 +87,6 @@
     <string name="million_per_hectare">Million per hectare</string>
     <string name="unity_per_hectare">Unity per hectare</string>
     <string name="unity_per_square_meter">Unity per square meter</string>
+    <string name="pref_autoSync">Automatic synchronization</string>
+    <string name="pref_autoSync_summary">BETA | Allow application to automatically synchronize your data</string>
 </resources>

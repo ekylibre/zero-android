@@ -3,6 +3,7 @@ package ekylibre.zero;
 import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.accounts.AccountsException;
+import android.content.Intent;
 import android.database.Cursor;
 import android.content.AbstractThreadedSyncAdapter;
 import android.content.ContentProviderClient;
@@ -12,6 +13,7 @@ import android.content.Context;
 import android.content.SyncResult;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.provider.Settings.Secure;
 import android.util.Log;
 
@@ -25,6 +27,7 @@ import ekylibre.api.Plant;
 import ekylibre.api.ZeroContract;
 import ekylibre.exceptions.HTTPException;
 import ekylibre.zero.util.AccountTool;
+import ekylibre.zero.util.UpdatableActivity;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -46,6 +49,8 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
 {
     public static final String TAG = "SyncAdapter";
     public static final String ACCOUNT_TYPE = "ekylibre.account.basic";
+    public static final String SYNC_STARTED = "sync_started";
+    public static final String SYNC_FINISHED = "sync_finished";
 
     ContentResolver mContentResolver;
     AccountManager  mAccountManager;
@@ -79,6 +84,8 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
     @Override
     public void onPerformSync(Account account, Bundle extras, String authority, ContentProviderClient provider, SyncResult syncResult)
     {
+        getContext().sendBroadcast(new Intent(UpdatableActivity.ACTION_STARTED_SYNC));
+
         Log.i(TAG, "Destruction of the table which will be resynced !");
         mContentResolver.delete(ZeroContract.Plants.CONTENT_URI,
                 null,
@@ -89,6 +96,8 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
 
         Account[] accountList = AccountTool.getListAccount(mContext);
         Log.d(TAG, "Performing Sync ! Pushing all the local data to Ekylibre instance");
+        //TODO do not forget to kill this line !!
+        SystemClock.sleep(9000);
         int i = -1;
         while (++i < accountList.length)
         {
@@ -101,6 +110,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
             performIssuesSync(account, extras, authority, provider, syncResult);
             performPlantCounting(account, extras, authority, provider, syncResult);
         }
+        getContext().sendBroadcast(new Intent(UpdatableActivity.ACTION_FINISHED_SYNC));
     }
 
     /*

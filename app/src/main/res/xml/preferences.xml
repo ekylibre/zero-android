@@ -19,5 +19,12 @@
             android:summary="@string/pref_mobileNetwork_summary"
             android:persistent="true"
             android:defaultValue="false" />
+        <CheckBoxPreference
+            android:key="pref_AutoSync"
+            android:title="@string/pref_autoSync"
+            android:dialogTitle="@string/pref_autoSync"
+            android:summary="@string/pref_autoSync_summary"
+            android:persistent="true"
+            android:defaultValue="false" />
     </PreferenceCategory>
 </PreferenceScreen>

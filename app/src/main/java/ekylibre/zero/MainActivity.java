@@ -2,6 +2,7 @@ package ekylibre.zero;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
+import android.content.ContentResolver;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -12,12 +13,15 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import ekylibre.api.ZeroContract;
 import ekylibre.zero.service.ConnectionManagerService;
 import ekylibre.zero.util.AccountTool;
 
@@ -242,10 +246,28 @@ public class MainActivity extends AppCompatActivity
             Intent intent = new Intent(this, AccountManagerActivity.class);
             startActivity(intent);
         }
+        else if (id == R.id.nav_sync)
+        {
+            sync_data();
+        }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return (true);
+    }
+
+    private void    sync_data()
+    {
+        if (mAccount == null)
+            return ;
+        Log.d("zero", "syncData: " + mAccount.toString() + ", " + ZeroContract.AUTHORITY);
+        Bundle extras = new Bundle();
+        extras.putBoolean(ContentResolver.SYNC_EXTRAS_MANUAL, true);
+        extras.putBoolean(ContentResolver.SYNC_EXTRAS_EXPEDITED, true);
+
+        ContentResolver.requestSync(mAccount, ZeroContract.AUTHORITY, extras);
+        Toast toast = Toast.makeText(getApplicationContext(), R.string.data_synced, Toast.LENGTH_SHORT);
+        toast.show();
     }
 
     /*

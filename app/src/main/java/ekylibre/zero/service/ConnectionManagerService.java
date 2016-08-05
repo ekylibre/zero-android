@@ -32,6 +32,7 @@ public class ConnectionManagerService extends Service
     private Handler                 handler;
     private Account                 mAccount = null;
     public boolean                  mobile_permission = false;
+    public boolean                  auto_permission = false;
 
     /*
     **  Get the account which is currently used
@@ -43,7 +44,7 @@ public class ConnectionManagerService extends Service
     public void         onCreate()
     {
         // Final value is 300000 others values are just here to test sync
-        final int       hDelay = 100000;
+        final int       hDelay = 40000;
 
         handler = new Handler();
         handler.postDelayed(new Runnable()
@@ -80,6 +81,10 @@ public class ConnectionManagerService extends Service
     {
         this.mobile_permission = pref;
     }
+    public void     set_AutoPerm(boolean pref)
+    {
+        this.auto_permission = pref;
+    }
 
     /*
     ** Get mobilePerm from SharedPreference set on settings activity
@@ -96,6 +101,18 @@ public class ConnectionManagerService extends Service
         return (mobile_permission);
     }
 
+    public boolean          get_AutoPerm()
+    {
+        SharedPreferences   pref;
+        boolean             userPrefAuto;
+
+        pref = PreferenceManager.getDefaultSharedPreferences(this);
+        userPrefAuto = pref.getBoolean(SettingsActivity.PREF_MOBILE_NETWORK, false);
+        set_AutoPerm(userPrefAuto);
+        Log.d(TAG, "Auto sync is allowed : " + auto_permission);
+        return (auto_permission);
+    }
+
     /*
     ** Method to verify internet connection
     */
@@ -106,6 +123,8 @@ public class ConnectionManagerService extends Service
         boolean                 wifi;
         boolean                 mobile;
 
+        if (!get_AutoPerm())
+            return (false);
         mAccount = AccountTool.getCurrentAccount(ConnectionManagerService.this);
         get_MobilePerm();
         connectivityManager = (ConnectivityManager)getSystemService(CONNECTIVITY_SERVICE);

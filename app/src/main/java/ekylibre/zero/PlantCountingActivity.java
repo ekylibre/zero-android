@@ -4,9 +4,11 @@ package ekylibre.zero;
 import android.accounts.Account;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.BroadcastReceiver;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.drawable.Drawable;
@@ -14,6 +16,7 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.SystemClock;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.text.InputType;
@@ -42,9 +45,10 @@ import java.util.Objects;
 
 import ekylibre.api.ZeroContract;
 import ekylibre.zero.util.AccountTool;
+import ekylibre.zero.util.UpdatableActivity;
 
 
-public class PlantCountingActivity extends AppCompatActivity {
+public class PlantCountingActivity extends UpdatableActivity  {
     private final String TAG = "PlantCounting";
     private Account mAccount;
     private LinearLayout mLayout;
@@ -133,6 +137,21 @@ public class PlantCountingActivity extends AppCompatActivity {
         mObservationEditText = (EditText) findViewById(R.id.observationEditText);
         mAccount = AccountTool.getCurrentAccount(this);
 
+        setPlantData();
+
+        setHandlerAverageValue();
+        mPlantCountValue.setText("0");
+        addValue(null);
+    }
+
+    @Override
+    protected void onSyncFinish()
+    {
+        setPlantData();
+    }
+
+    private void setPlantData()
+    {
         Cursor cursorPlantName = queryPlantName();
         Cursor cursorPlantId = queryPlantId();
 
@@ -151,14 +170,10 @@ public class PlantCountingActivity extends AppCompatActivity {
             Toast.makeText(this, "Data does not exist", Toast.LENGTH_SHORT).show();
             Log.d(TAG, "Plant data does NOT exist");
         }
-
         createPlantChooser();
 
         cursorPlantId.close();
         cursorPlantName.close();
-        setHandlerAverageValue();
-        mPlantCountValue.setText("0");
-        addValue(null);
     }
 
     public void newContextIsGermination(View v)
@@ -234,7 +249,7 @@ public class PlantCountingActivity extends AppCompatActivity {
         }
     }
 
-    public void setAbacusList() {
+    private void setAbacusList() {
         Cursor cursorVariety = queryVariety();
         Cursor cursorAbacus = queryAbacus(cursorVariety);
 
@@ -256,7 +271,7 @@ public class PlantCountingActivity extends AppCompatActivity {
         cursorVariety.close();
     }
 
-    public void setDensityList(CharSequence abacusSelected)
+    private void setDensityList(CharSequence abacusSelected)
     {
         String  unit;
         Cursor cursorDensity = queryDensityValue(abacusSelected);
@@ -279,7 +294,7 @@ public class PlantCountingActivity extends AppCompatActivity {
         cursorDensity.close();
     }
 
-    public void setGerminationPercentage(CharSequence abacusSelected)
+    private void setGerminationPercentage(CharSequence abacusSelected)
     {
         Cursor cursorGermPercentage = queryGerminationPercentage(abacusSelected);
         cursorGermPercentage.moveToFirst();
@@ -314,7 +329,7 @@ public class PlantCountingActivity extends AppCompatActivity {
             mIndicator.setBackground(mGrey);
             return;
         }
-        if (averageValue <= referenceValue + ((5.0 / 100.0) * referenceValue) && averageValue >= referenceValue - ((5.0 / 100.0) * referenceValue))
+        if (averageValue <= referenceValue + ((23.0 / 100.0) * referenceValue) && averageValue >= referenceValue - ((23.0 / 100.0) * referenceValue))
             mIndicator.setBackground(mGreen);
         else
             mIndicator.setBackground(mRed);
@@ -553,25 +568,27 @@ public class PlantCountingActivity extends AppCompatActivity {
     }
 
     public void chosePlant(View view) {
-        if (mPlantChooser == null)
+        if (mPlantChooser == null || super.isSync)
             return;
         mPlantChooser.show();
     }
 
     public void choseAbaque(View view) {
-        if (mAbacusChooser == null)
+        if (mAbacusChooser == null || super.isSync)
             return;
         mAbacusChooser.show();
     }
 
     public void choseDensity(View view) {
-        if (mDensityChooser == null)
+        if (mDensityChooser == null || super.isSync)
             return;
         mDensityChooser.show();
     }
 
     public void savePlantCounting(View v)
     {
+        if (super.isSync)
+            return ;
         if (mPlantsCount != 0 && mGerminationPercentage != 0 && getAverage() != 0.0)
         {
             int id = insertNewValuesPlantCounting();
@@ -694,7 +711,7 @@ public class PlantCountingActivity extends AppCompatActivity {
         mListValues.add(input);
     }
 
-    public float getAverage()
+    private float getAverage()
     {
         float   total = 0;
         int     nbvalues = 0;
