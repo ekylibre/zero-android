@@ -19,6 +19,7 @@ import android.os.Handler;
 import android.os.SystemClock;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.text.InputFilter;
 import android.text.InputType;
 import android.text.TextUtils;
 import android.util.Log;
@@ -694,6 +695,7 @@ public class PlantCountingActivity extends UpdatableActivity  {
         input.setGravity(Gravity.CENTER);
         input.setInputType(InputType.TYPE_CLASS_NUMBER);
         input.setBackground(getResources().getDrawable(R.drawable.editbar));
+        input.setFilters(new InputFilter[] {new InputFilter.LengthFilter(8)});
         if (view != null)
             input.requestFocus();
         input.setOnEditorActionListener(
