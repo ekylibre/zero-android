@@ -263,6 +263,7 @@ public class IssueActivity extends AppCompatActivity {
         mTestArray = getResources().getStringArray(R.array.issueNatures_values);
 
         mNewValues.put(ZeroContract.IssuesColumns.USER, AccountTool.getCurrentAccount(this).name);
+        mNewValues.put(ZeroContract.IssuesColumns.SYNCED, 0);
         mNewValues.put(ZeroContract.IssuesColumns.NATURE, mTestArray[mIssueNatureSpinner.getSelectedItemPosition()]);
         mNewValues.put(ZeroContract.IssuesColumns.EMERGENCY, mEmergency.getValue());
         mNewValues.put(ZeroContract.IssuesColumns.SEVERITY, mSeverity.getValue());

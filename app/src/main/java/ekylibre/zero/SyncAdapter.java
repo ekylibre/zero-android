@@ -96,8 +96,6 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
 
         Account[] accountList = AccountTool.getListAccount(mContext);
         Log.d(TAG, "Performing Sync ! Pushing all the local data to Ekylibre instance");
-        //TODO do not forget to kill this line !!
-        SystemClock.sleep(9000);
         int i = -1;
         while (++i < accountList.length)
         {
@@ -125,7 +123,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
         Cursor cursor = mContentResolver.query(ZeroContract.Crumbs.CONTENT_URI,
                 ZeroContract.Crumbs.PROJECTION_ALL,
                 "\"" + ZeroContract.CrumbsColumns.USER + "\" " + "LIKE" + " \"" + account.name + "\""
-                        + " AND " + ZeroContract.CrumbsColumns.SYNCED + " IS NULL OR " + ZeroContract.CrumbsColumns.SYNCED + " <= 0",
+                        + " AND " + ZeroContract.CrumbsColumns.SYNCED + " == " + 0,
                 null,
                 ZeroContract.Crumbs.SORT_ORDER_DEFAULT);
 
@@ -187,7 +185,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
         long id = Crumb.create(instance, attributes);
         // Marks them as synced
         ContentValues values = new ContentValues();
-        values.put(ZeroContract.CrumbsColumns.SYNCED, id);
+        values.put(ZeroContract.CrumbsColumns.SYNCED, 1);
         mContentResolver.update(Uri.withAppendedPath(ZeroContract.Crumbs.CONTENT_URI, Long.toString(cursor.getLong(0))), values, null, null);
     }
 
@@ -198,8 +196,8 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
         // Get crumbs from Issue (content) provider
         Cursor cursor = mContentResolver.query(ZeroContract.Issues.CONTENT_URI,
                 ZeroContract.Issues.PROJECTION_ALL,
-                "\"" + ZeroContract.Issues.USER + "\"" + "LIKE" + "\"" + account.name + "\""
-                        + " AND " + ZeroContract.IssuesColumns.SYNCED + " IS NULL OR " + ZeroContract.IssuesColumns.SYNCED + " <= 0",
+                "\"" + ZeroContract.Issues.USER + "\"" + " LIKE " + "\"" + account.name + "\""
+                        + " AND " + ZeroContract.IssuesColumns.SYNCED + " == " + 0,
                 null,
                 ZeroContract.Issues.SORT_ORDER_DEFAULT);
 
@@ -251,7 +249,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
         long id = Issue.create(instance, attributes);
         // Marks them as synced
         ContentValues values = new ContentValues();
-        values.put(ZeroContract.IssuesColumns.SYNCED, id);
+        values.put(ZeroContract.IssuesColumns.SYNCED, 1);
         mContentResolver.update(Uri.withAppendedPath(ZeroContract.Issues.CONTENT_URI, Long.toString(cursor.getLong(0))), values, null, null);
     }
 
@@ -383,7 +381,8 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
         Log.i(TAG, "Beginning network plant counting synchronization");
         Cursor cursor = mContentResolver.query(ZeroContract.PlantCountings.CONTENT_URI,
                 ZeroContract.PlantCountings.PROJECTION_ALL,
-                "\"" + ZeroContract.PlantCountingsColumns.USER + "\"" + " LIKE " + "\"" + account.name + "\"",
+                "\"" + ZeroContract.PlantCountingsColumns.USER + "\"" + " LIKE " + "\"" + account.name + "\""
+                        + " AND " + ZeroContract.PlantCountingsColumns.SYNCED + " == " + 0,
                 null,
                 ZeroContract.PlantCountings.SORT_ORDER_DEFAULT);
         try
@@ -409,6 +408,9 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
                     //attributes.put("device_uid", "android:" + Secure.getString(mContentResolver, Secure.ANDROID_ID));
 
                     long id = PlantCounting.create(instance, attributes);
+                    ContentValues values = new ContentValues();
+                    values.put(ZeroContract.IssuesColumns.SYNCED, 1);
+                    mContentResolver.update(Uri.withAppendedPath(ZeroContract.PlantCountings.CONTENT_URI, Long.toString(cursor.getLong(0))), values, null, null);
                 }
                 cursor.close();
             }

@@ -104,6 +104,7 @@ public class DatabaseHelper extends SQLiteOpenHelper
                 database.execSQL("ALTER TABLE plant_counting_items ADD user VARCHAR(255)");
             case 6:
                 database.execSQL("ALTER TABLE plant_countings ADD average_value FLOAT");
+                database.execSQL("ALTER TABLE plant_countings ADD synced BOOLEAN NOT NULL DEFAULT 0");
             case 7:
                 /*
                 ** Sorry for this part of code,

@@ -24,6 +24,7 @@ import android.widget.Toast;
 import ekylibre.api.ZeroContract;
 import ekylibre.zero.service.ConnectionManagerService;
 import ekylibre.zero.util.AccountTool;
+import ekylibre.zero.util.UpdatableActivity;
 
 /**************************************
  * Created by pierre on 7/12/16.      *
@@ -39,7 +40,7 @@ import ekylibre.zero.util.AccountTool;
 **
 ** You can access all actions activity from the floating button
 */
-public class MainActivity extends AppCompatActivity
+public class MainActivity extends UpdatableActivity
         implements NavigationView.OnNavigationItemSelectedListener
 {
 
@@ -219,6 +220,8 @@ public class MainActivity extends AppCompatActivity
     @Override
     public boolean onNavigationItemSelected(MenuItem item)
     {
+        if (super.isSync)
+            return (true);
         int id = item.getItemId();
 
         if (id == R.id.nav_tracking)
@@ -264,10 +267,7 @@ public class MainActivity extends AppCompatActivity
         Bundle extras = new Bundle();
         extras.putBoolean(ContentResolver.SYNC_EXTRAS_MANUAL, true);
         extras.putBoolean(ContentResolver.SYNC_EXTRAS_EXPEDITED, true);
-
         ContentResolver.requestSync(mAccount, ZeroContract.AUTHORITY, extras);
-        Toast toast = Toast.makeText(getApplicationContext(), R.string.data_synced, Toast.LENGTH_SHORT);
-        toast.show();
     }
 
     /*
@@ -278,5 +278,12 @@ public class MainActivity extends AppCompatActivity
     {
         Intent intent = new Intent(this, AccountManagerActivity.class);
         startActivity(intent);
+    }
+
+    @Override
+    protected void onSyncFinish()
+    {
+        Toast toast = Toast.makeText(getApplicationContext(), R.string.data_synced, Toast.LENGTH_SHORT);
+        toast.show();
     }
 }

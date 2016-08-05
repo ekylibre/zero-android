@@ -647,6 +647,8 @@ public class PlantCountingActivity extends UpdatableActivity  {
         newValuesPlantCounting.put(ZeroContract.PlantCountingsColumns.USER, mAccount.name);
         newValuesPlantCounting.put(ZeroContract.PlantCountingsColumns.PLANT_ID, selectedPlantID);
         newValuesPlantCounting.put(ZeroContract.PlantCountingsColumns.PLANT_DENSITY_ABACUS_ITEM_ID, selectedPlantDensityAbacusItemID);
+        newValuesPlantCounting.put(ZeroContract.PlantCountingsColumns.SYNCED, 0);
+
         getContentResolver().insert(
                 ZeroContract.PlantCountings.CONTENT_URI,
                 newValuesPlantCounting);
