@@ -52,7 +52,8 @@ public abstract class UpdatableActivity extends AppCompatActivity
         registerReceiver(syncBroadcastReceiverStart, syncIntentFilterSTART);
     }
 
-    @Override protected void onPause()
+    @Override
+    protected void onPause()
     {
         unregisterReceiver(syncBroadcastReceiverFinish);
         unregisterReceiver(syncBroadcastReceiverStart);

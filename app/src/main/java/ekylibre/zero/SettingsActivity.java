@@ -11,6 +11,7 @@ public class SettingsActivity extends PreferenceActivity
     final private String TAG = "SETTINGS";
     public final static String PREF_SHOW_DETAILS = "pref_showDetails";
     public final static String PREF_MOBILE_NETWORK = "pref_MobileNetwork";
+    public final static String PREF_AUTO_SYNC = "pref_AutoSync";
 
     @Override
     public void onStart()

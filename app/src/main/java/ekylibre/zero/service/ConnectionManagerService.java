@@ -107,7 +107,7 @@ public class ConnectionManagerService extends Service
         boolean             userPrefAuto;
 
         pref = PreferenceManager.getDefaultSharedPreferences(this);
-        userPrefAuto = pref.getBoolean(SettingsActivity.PREF_MOBILE_NETWORK, false);
+        userPrefAuto = pref.getBoolean(SettingsActivity.PREF_AUTO_SYNC, false);
         set_AutoPerm(userPrefAuto);
         Log.d(TAG, "Auto sync is allowed : " + auto_permission);
         return (auto_permission);
