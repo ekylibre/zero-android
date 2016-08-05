@@ -47,6 +47,7 @@ import java.util.List;
 
 import ekylibre.api.ZeroContract;
 import ekylibre.zero.util.AccountTool;
+import ekylibre.zero.util.UpdatableActivity;
 
 
 public class TrackingActivity extends AppCompatActivity implements TrackingListenerWriter
@@ -497,6 +498,4 @@ public class TrackingActivity extends AppCompatActivity implements TrackingListe
         extras.putBoolean(ContentResolver.SYNC_EXTRAS_EXPEDITED, true);
         ContentResolver.requestSync(mAccount, ZeroContract.AUTHORITY, extras);
     }
-
-    
 }
