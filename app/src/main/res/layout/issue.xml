@@ -1,126 +1,126 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_height="match_parent"
-    android:background="@color/background_grey">
+    android:layout_width="match_parent"
+    android:background="@color/background_grey"
+    tools:context="ekylibre.zero.IssueActivity">
+
     <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context="ekylibre.zero.IssueActivity"
         android:fillViewport="false">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center_horizontal"
-        android:orientation="vertical"
-        android:paddingBottom="@dimen/activity_vertical_margin"
-        android:paddingLeft="@dimen/activity_horizontal_margin"
-        android:paddingRight="@dimen/activity_horizontal_margin"
-        android:paddingTop="@dimen/activity_vertical_margin"
-        android:weightSum="1"
-        android:focusable="true"
-        android:focusableInTouchMode="true">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center_horizontal"
+            android:orientation="vertical"
+            android:paddingBottom="@dimen/activity_vertical_margin"
+            android:paddingLeft="@dimen/activity_horizontal_margin"
+            android:paddingRight="@dimen/activity_horizontal_margin"
+            android:paddingTop="@dimen/activity_vertical_margin"
+            android:weightSum="1"
+            android:focusable="true"
+            android:focusableInTouchMode="true">
 
-        <Spinner
-            android:id="@+id/spinner"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="35dp" />
+            <Spinner
+                android:id="@+id/spinner"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="35dp" />
 
-        <TableLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+            <TableLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
 
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center">
-
-                <TextView
-                    android:id="@+id/severity"
+                <TableRow
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:text="@string/severity"
-                    android:textAlignment="center"
-                    android:textAppearance="?android:attr/textAppearanceMedium" />
+                    android:gravity="center">
 
-                <TextView
-                    android:id="@+id/emergency"
-                    android:layout_width="wrap_content"
+                    <TextView
+                        android:id="@+id/severity"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:text="@string/severity"
+                        android:textAlignment="center"
+                        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+                    <TextView
+                        android:id="@+id/emergency"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_column="1"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:text="@string/emergency"
+                        android:textAlignment="center"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:layout_gravity="center" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_column="1"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:text="@string/emergency"
-                    android:textAlignment="center"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:layout_gravity="center" />
-            </TableRow>
+                    android:layout_marginBottom="35dp"
+                    android:orientation="horizontal">
 
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginBottom="35dp"
-                android:orientation="horizontal">
+                    <NumberPicker
+                        android:id="@+id/numberPickerSeverity"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_column="0"
+                        android:layout_marginLeft="50dp"
+                        android:layout_marginRight="50dp"
+                        android:layout_marginTop="5dp"
+                        android:theme="@android:style/DeviceDefault.Light.ButtonBar.AlertDialog" />
 
-                <NumberPicker
-                    android:id="@+id/numberPickerSeverity"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_column="0"
-                    android:layout_marginLeft="50dp"
-                    android:layout_marginRight="50dp"
-                    android:layout_marginTop="5dp"
-                    android:theme="@android:style/DeviceDefault.Light.ButtonBar.AlertDialog" />
+                    <NumberPicker
+                        android:id="@+id/numberPickerEmergency"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_column="1"
+                        android:layout_marginLeft="50dp"
+                        android:layout_marginRight="50dp"
+                        android:layout_marginTop="5dp"
+                        android:gravity="center_horizontal" />
+                </TableRow>
 
-                <NumberPicker
-                    android:id="@+id/numberPickerEmergency"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_column="1"
-                    android:layout_marginLeft="50dp"
-                    android:layout_marginRight="50dp"
-                    android:layout_marginTop="5dp"
-                    android:gravity="center_horizontal" />
-            </TableRow>
-
-        </TableLayout>
+            </TableLayout>
 
 
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/imagePreview"
-            android:layout_gravity="center_horizontal" />
+            <Button
+                android:layout_width="204dp"
+                android:layout_height="wrap_content"
+                android:text="@string/permlab_capture"
+                android:id="@+id/takeAPicture"
+                android:layout_gravity="center_horizontal"
+                android:onClick="takePicture"
+                android:textColor="@color/ultraLight_grey"
+                android:background="@drawable/black_button"
+                android:layout_marginTop="10dp"/>
 
-        <Button
-            android:layout_width="204dp"
-            android:layout_height="wrap_content"
-            android:text="@string/permlab_capture"
-            android:id="@+id/takeAPicture"
-            android:layout_gravity="center_horizontal"
-            android:onClick="takePicture"
-            android:textColor="@color/ultraLight_grey"
-            android:background="@drawable/black_button"
-            android:layout_marginTop="10dp"/>
+            <ImageView
+                android:layout_width="200dp"
+                android:layout_height="200dp"
+                android:id="@+id/imagePreview"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="25dp"
+                android:visibility="gone"/>
 
-        <EditText
-            android:id="@+id/description"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/notes"
-            android:maxLines="6"
-            android:layout_marginTop="40dp"/>
+            <EditText
+                android:id="@+id/description"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/notes"
+                android:maxLines="6"
+                android:layout_marginTop="40dp" />
 
 
-    </LinearLayout>
+        </LinearLayout>
     </ScrollView>
 
 </RelativeLayout>
-
-
-
