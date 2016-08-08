@@ -151,6 +151,10 @@ public class PlantCountingActivity extends UpdatableActivity  {
         setPlantData();
     }
 
+    @Override
+    protected void onSyncStart()
+    {}
+
     private void setPlantData()
     {
         Cursor cursorPlantName = queryPlantName();

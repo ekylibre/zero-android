@@ -10,6 +10,7 @@ import ekylibre.exceptions.HTTPException;
 import ekylibre.exceptions.ServerErrorException;
 import ekylibre.exceptions.UnauthorizedException;
 import ekylibre.zero.Authenticator;
+import ekylibre.zero.BuildConfig;
 
 import java.io.BufferedReader; 
 import java.io.IOException;
@@ -109,8 +110,8 @@ public class Instance
         mUrl   = manager.getUserData(account, Authenticator.KEY_INSTANCE_URL);
         mEmail = manager.getUserData(account, Authenticator.KEY_ACCOUNT_NAME);
         mToken = manager.blockingGetAuthToken(account, Authenticator.AUTH_TOKEN_TYPE_GLOBAL, true);
-        Log.d("Instance URL", mUrl);
-        Log.d("Instance Token", mToken);
+        if (BuildConfig.DEBUG) Log.d("Instance URL", mUrl);
+        if (BuildConfig.DEBUG) Log.d("Instance Token", mToken);
     }
 
     // Send POST call to given instance
@@ -121,8 +122,8 @@ public class Instance
         Header[] headers = new Header[headersList.size()];
         headersList.toArray(headers);
 
-        Log.d("POST Instance URL", mUrl);
-        Log.d("POST parameters", params.toString());
+        if (BuildConfig.DEBUG) Log.d("POST Instance URL", mUrl);
+        if (BuildConfig.DEBUG) Log.d("POST parameters", params.toString());
         
         return Instance.post(mUrl + path, params, headers);
     }
@@ -132,7 +133,7 @@ public class Instance
     // Send POST call to given URL with given params
     public static JSONObject post(String url, JSONObject params, Header[] headers) throws JSONException, ClientProtocolException, IOException, HTTPException
     {
-        Log.d("zero", "POST " + url);
+        if (BuildConfig.DEBUG) Log.d("zero", "POST " + url);
 
         // Create a new HttpClient and Post Header
         HttpClient httpClient = new DefaultHttpClient();
@@ -230,8 +231,8 @@ public class Instance
         Header[] headers = new Header[headersList.size()];
         headersList.toArray(headers);
 
-        Log.d("POST Instance URL", mUrl);
-        Log.d("POST parameters", params.toString());
+        if (BuildConfig.DEBUG) Log.d("POST Instance URL", mUrl);
+        if (BuildConfig.DEBUG) Log.d("POST parameters", params.toString());
 
         return Instance.getJSONArray(mUrl + path, params, headers);
     }
@@ -241,12 +242,12 @@ public class Instance
     // Send POST call to given URL with given params
     public static JSONArray getJSONArray(String url, JSONObject params, Header[] headers) throws JSONException, ClientProtocolException, IOException, HTTPException
     {
-        Log.d("zero", "GET " + url);
+        if (BuildConfig.DEBUG) Log.d("zero", "GET " + url);
 
         // Create a new HttpClient and Get Header
         HttpClient httpClient = new DefaultHttpClient();
         HttpGet httpGet = new HttpGet(url);
-        Log.i(TAG, "Header => " + headers[0].toString());
+        if (BuildConfig.DEBUG) Log.i(TAG, "Header => " + headers[0].toString());
         if (headers != null)
         {
             httpGet.setHeaders(headers);

@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ekylibre.exceptions.HTTPException;
+import ekylibre.zero.BuildConfig;
 
 /**
  * Created by antoine on 22/04/16.
@@ -28,7 +29,7 @@ public class Plant
     {
         // JSONObject params = Instance.BundleToJSON(attributes);
         JSONObject params = attributes;
-        Log.d(TAG, "Get JSONArray => /api/v1/plants || params = " + params);
+        if (BuildConfig.DEBUG) Log.d(TAG, "Get JSONArray => /api/v1/plants || params = " + params);
         JSONArray json = instance.getJSONArray("/api/v1/plants", params);
         List<Plant> array = new ArrayList<>();
 
@@ -41,7 +42,7 @@ public class Plant
 
     public Plant(JSONObject object) throws JSONException
     {
-        Log.d("zero", "Object Plant : " + object.toString());
+        if (BuildConfig.DEBUG) Log.d("zero", "Object Plant : " + object.toString());
 
         mId = object.getInt("id");
         mName = object.getString("name");

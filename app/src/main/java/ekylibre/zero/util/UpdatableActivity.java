@@ -38,11 +38,14 @@ public abstract class UpdatableActivity extends AppCompatActivity
         public void onReceive(Context context, Intent intent)
         {
             Log.d(TAG, "I'm receiving start message from syncAdapter");
+            onSyncStart();
             isSync = true;
         }
     };
 
     protected abstract void onSyncFinish();
+
+    protected abstract void onSyncStart();
 
     @Override
     protected void onResume()

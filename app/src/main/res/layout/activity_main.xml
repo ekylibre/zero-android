@@ -14,6 +14,15 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
+    <ProgressBar
+        android:layout_width="5dip"
+        android:layout_height="5dip"
+        android:id="@+id/progress_bar"
+        android:visibility="gone"
+        android:maxHeight="10dip"
+        android:maxWidth="10dip"
+        style="?android:attr/progressBarStyle"/>
+
     <android.support.design.widget.NavigationView
         android:id="@+id/nav_view"
         android:layout_width="wrap_content"
