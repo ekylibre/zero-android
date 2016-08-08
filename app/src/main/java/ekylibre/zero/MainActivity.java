@@ -5,6 +5,7 @@ import android.accounts.AccountManager;
 import android.content.ContentResolver;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
@@ -18,6 +19,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -49,6 +51,7 @@ public class MainActivity extends UpdatableActivity
     private TextView        mNav_instance;
     private NavigationView  mNavigationView;
     private Toolbar         mToolbar;
+    private ProgressBar     mPrgressBar;
     private boolean         firstPass;
     private final String    TAG = "MainActivity";
 
@@ -73,6 +76,7 @@ public class MainActivity extends UpdatableActivity
         View headerLayout = mNavigationView.inflateHeaderView(R.layout.nav_header_main);
         mNav_account = (TextView)headerLayout.findViewById(R.id.nav_accountName);
         mNav_instance = (TextView)headerLayout.findViewById(R.id.nav_farmURL);
+        mPrgressBar = (ProgressBar)findViewById(R.id.progress_bar);
     }
 
     /*
@@ -283,7 +287,16 @@ public class MainActivity extends UpdatableActivity
     @Override
     protected void onSyncFinish()
     {
+        mPrgressBar.setVisibility(View.GONE);
         Toast toast = Toast.makeText(getApplicationContext(), R.string.data_synced, Toast.LENGTH_SHORT);
         toast.show();
+    }
+
+    @Override
+    protected void onSyncStart()
+    {
+        mPrgressBar.setVisibility(View.VISIBLE);
+        mPrgressBar.setScaleX((float) 0.15);
+        mPrgressBar.setScaleY((float) 0.15);
     }
 }

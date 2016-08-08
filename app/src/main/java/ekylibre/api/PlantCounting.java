@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ekylibre.exceptions.HTTPException;
+import ekylibre.zero.BuildConfig;
 
 /**
  * Created by antoine on 22/04/16.
@@ -47,7 +48,7 @@ public class PlantCounting
 
     public PlantCounting(JSONObject object) throws JSONException
     {
-        Log.d("zero", "Object Plant : " + object.toString());
+        if (BuildConfig.DEBUG) Log.d("zero", "Object Plant : " + object.toString());
 
         mId = object.getInt("id");
         mRead_at = object.getString("read_at");

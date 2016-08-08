@@ -70,7 +70,6 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity {
         }
     }
 
-
     public void signIn(View view) {
         mAccountName     = mAccountNameEdit.getText().toString();
         mAccountPassword = mAccountPasswordEdit.getText().toString();
@@ -121,14 +120,14 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity {
 
 
     private void finishLogin(Intent intent) {
-        Log.d("zero", TAG + "> finishLogin");
+        if (BuildConfig.DEBUG) Log.d("zero", TAG + "> finishLogin");
         String accountName = intent.getStringExtra(AccountManager.KEY_ACCOUNT_NAME) + " - " + intent.getStringExtra(KEY_INSTANCE_URL);
         String accountPassword = intent.getStringExtra(KEY_ACCOUNT_PASSWORD);
-        Log.d("zero", TAG + "> finishLogin(" + accountName + ", " + accountPassword + ", " + intent.getStringExtra(AccountManager.KEY_ACCOUNT_TYPE) + ")");
+        if (BuildConfig.DEBUG) Log.d("zero", TAG + "> finishLogin(" + accountName + ", " + accountPassword + ", " + intent.getStringExtra(AccountManager.KEY_ACCOUNT_TYPE) + ")");
         final Account account = new Account(accountName, intent.getStringExtra(AccountManager.KEY_ACCOUNT_TYPE));
         // if (getIntent().getBooleanExtra(KEY_IS_ADDING_NEW_ACCOUNT, false)) {
         String authToken = intent.getStringExtra(AccountManager.KEY_AUTHTOKEN);
-        Log.d("zero", TAG + "> finishLogin > addAccountExplicitly " + authToken);
+        if (BuildConfig.DEBUG) Log.d("zero", TAG + "> finishLogin > addAccountExplicitly " + authToken);
         // String authTokenType = mAuthTokenType;
         // Creating the account on the device and setting the auth token we got
         // (Not setting the auth token will cause another call to the server to authenticate the user)
@@ -137,9 +136,9 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity {
         userdata.putString(Authenticator.KEY_ACCOUNT_NAME, intent.getStringExtra(AccountManager.KEY_ACCOUNT_NAME));
 
         if (mAccountManager.addAccountExplicitly(account, accountPassword, userdata)) {
-            Log.d("zero", TAG + "> finishLogin > addAccountExplicitly: YES!");
+            if (BuildConfig.DEBUG) Log.d("zero", TAG + "> finishLogin > addAccountExplicitly: YES!");
         } else {
-            Log.d("zero", TAG + "> finishLogin > addAccountExplicitly: NO!");
+            if (BuildConfig.DEBUG) Log.d("zero", TAG + "> finishLogin > addAccountExplicitly: NO!");
         }
         mAccountManager.setAuthToken(account, mAuthTokenType, authToken);
         // } else {
@@ -158,6 +157,4 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity {
         }
         finish();
     }
-
-
 }

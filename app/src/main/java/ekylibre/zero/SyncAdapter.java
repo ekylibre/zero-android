@@ -86,7 +86,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
     {
         getContext().sendBroadcast(new Intent(UpdatableActivity.ACTION_STARTED_SYNC));
 
-        Log.i(TAG, "Destruction of the table which will be resynced !");
+        if (BuildConfig.DEBUG) Log.i(TAG, "Destruction of tables which will be resynced !");
         mContentResolver.delete(ZeroContract.Plants.CONTENT_URI,
                 null,
                 null);
@@ -95,13 +95,13 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
                 null);
 
         Account[] accountList = AccountTool.getListAccount(mContext);
-        Log.d(TAG, "Performing Sync ! Pushing all the local data to Ekylibre instance");
+        if (BuildConfig.DEBUG) Log.d(TAG, "Performing Sync ! Pushing all the local data to Ekylibre instance");
         int i = -1;
         while (++i < accountList.length)
         {
             account = accountList[i];
-            Log.d(TAG, "... Sync new account ...");
-            Log.d(TAG, "... New account is " + account.name + " ...");
+            if (BuildConfig.DEBUG) Log.d(TAG, "... Sync new account ...");
+            if (BuildConfig.DEBUG) Log.d(TAG, "... New account is " + account.name + " ...");
             performPlantDensityAbaciSync(account, extras, authority, provider, syncResult);
             performPlantsSync(account, extras, authority, provider, syncResult);
             performCrumbsSync(account, extras, authority, provider, syncResult);
@@ -117,7 +117,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
     */
     public void performCrumbsSync(Account account, Bundle extras, String authority, ContentProviderClient provider, SyncResult syncResult)
     {
-        Log.i(TAG, "Beginning network synchronization");
+        if (BuildConfig.DEBUG) Log.i(TAG, "Beginning network synchronization");
         
         // Get crumbs from tracking (content) provider
         Cursor cursor = mContentResolver.query(ZeroContract.Crumbs.CONTENT_URI,
@@ -141,7 +141,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
             }
             else
             {
-                Log.i(TAG, "Nothing to sync");
+                if (BuildConfig.DEBUG) Log.i(TAG, "Nothing to sync");
             }
         }
         catch (Exception e)
@@ -149,13 +149,13 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
             e.printStackTrace();
         }
 
-        Log.i(TAG, "Finish network synchronization");
+        if (BuildConfig.DEBUG) Log.i(TAG, "Finish network synchronization");
     }
 
     private void    postNewCrumb(Cursor cursor, Instance instance)
             throws JSONException, IOException, HTTPException
     {
-        Log.i(TAG, "New crumb");
+        if (BuildConfig.DEBUG) Log.i(TAG, "New crumb");
         // Post it to ekylibre
         JSONObject attributes = new JSONObject();
         attributes.put("nature", cursor.getString(1));
@@ -191,7 +191,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
 
     public void performIssuesSync(Account account, Bundle extras, String authority, ContentProviderClient provider, SyncResult syncResult)
     {
-        Log.i(TAG, "Beginning network issues synchronization");
+        if (BuildConfig.DEBUG) Log.i(TAG, "Beginning network issues synchronization");
 
         // Get crumbs from Issue (content) provider
         Cursor cursor = mContentResolver.query(ZeroContract.Issues.CONTENT_URI,
@@ -218,17 +218,15 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
             }
             else
             {
-                Log.i(TAG, "Nothing to sync");
+                if (BuildConfig.DEBUG) Log.i(TAG, "Nothing to sync");
             }
-
-
-        Log.i(TAG, "Finish network synchronization");
+        if (BuildConfig.DEBUG) Log.i(TAG, "Finish network synchronization");
     }
 
     private void    postNewIssue(Cursor cursor, Instance instance)
             throws JSONException, IOException, HTTPException
     {
-        Log.i(TAG, "New issue");
+        if (BuildConfig.DEBUG) Log.i(TAG, "New issue");
 
         // Post it to ekylibre
         JSONObject attributes = new JSONObject();
@@ -253,10 +251,10 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
     public void performPlantDensityAbaciSync(Account account, Bundle extras, String authority, ContentProviderClient provider, SyncResult syncResult)
     {
 
-        Log.i(TAG, "Destruction of the PlantDensityAbacus table");
+        if (BuildConfig.DEBUG) Log.i(TAG, "Destruction of the PlantDensityAbacus table");
         int result = mContentResolver.delete(ZeroContract.PlantDensityAbaci.CONTENT_URI, null, null);
 
-        Log.i(TAG, "Beginning network plant_density_abaci synchronization");
+        if (BuildConfig.DEBUG) Log.i(TAG, "Beginning network plant_density_abaci synchronization");
         ContentValues cv = new ContentValues();
         Instance instance = getInstance(account);
 
@@ -269,14 +267,14 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
         if (abacusList == null)
             return;
 
-        Log.d("zero", "Nombre d'abaque : " + abacusList.size() );
+        if (BuildConfig.DEBUG) Log.d("zero", "Nombre d'abaque : " + abacusList.size() );
             Iterator<PlantDensityAbacus> abacusIterator = abacusList.iterator();
 
-            Log.d("zero", "début parcours de liste plantDensityAbacus");
+        if (BuildConfig.DEBUG) Log.d("zero", "début parcours de liste plantDensityAbacus");
 
             while(abacusIterator.hasNext())
             {
-                Log.d("zero", "boucle abaque");
+                if (BuildConfig.DEBUG) Log.d("zero", "boucle abaque");
 
                 PlantDensityAbacus plantDensityAbacus = abacusIterator.next();
                 cv.put(ZeroContract.PlantDensityAbaciColumns.EK_ID, plantDensityAbacus.getId());
@@ -288,26 +286,26 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
                 cv.put(ZeroContract.PlantDensityAbaciColumns.USER, account.name);
                 mContentResolver.insert(ZeroContract.PlantDensityAbaci.CONTENT_URI, cv);
             }
-            Log.d("zero", "fin parcours de liste plantDensityAbacus");
+        if (BuildConfig.DEBUG) Log.d("zero", "fin parcours de liste plantDensityAbacus");
         try {
             performPlantDensityAbacusItemSync(account, extras, authority, provider, syncResult, abacusList);
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        Log.i(TAG, "Finish network plant_density_abaci synchronization");
+        if (BuildConfig.DEBUG) Log.i(TAG, "Finish network plant_density_abaci synchronization");
     }
 
     public void performPlantDensityAbacusItemSync(Account account, Bundle extras, String authority, ContentProviderClient provider, SyncResult syncResult, List<PlantDensityAbacus> abacusList) throws JSONException
     {
 
 
-        Log.i(TAG, "Beginning network plant_density_abacus_items synchronization");
+        if (BuildConfig.DEBUG) Log.i(TAG, "Beginning network plant_density_abacus_items synchronization");
         ContentValues cv = new ContentValues();
 
-        Log.d("zero", "Nombre d'abaque : " + abacusList.size() );
+        if (BuildConfig.DEBUG) Log.d("zero", "Nombre d'abaque : " + abacusList.size() );
         Iterator<PlantDensityAbacus> abacusIterator = abacusList.iterator();
 
-        Log.d("zero", "début parcours de liste plantDensityAbacus");
+        if (BuildConfig.DEBUG) Log.d("zero", "début parcours de liste plantDensityAbacus");
 
         while(abacusIterator.hasNext())
         {
@@ -324,14 +322,14 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
                 i++;
             }
         }
-        Log.d("zero", "fin parcours de liste plantDensityAbacus");
+        if (BuildConfig.DEBUG) Log.d("zero", "fin parcours de liste plantDensityAbacus");
     }
 
 
 
     public void performPlantsSync(Account account, Bundle extras, String authority, ContentProviderClient provider, SyncResult syncResult)
     {
-        Log.i(TAG, "Beginning network plants synchronization");
+        if (BuildConfig.DEBUG) Log.i(TAG, "Beginning network plants synchronization");
         ContentValues cv = new ContentValues();
         Instance instance = getInstance(account);
 
@@ -345,7 +343,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
         if (plantsList == null)
             return;
 
-        Log.d(TAG, "Nombre de plants : " + plantsList.size() );
+        if (BuildConfig.DEBUG) Log.d(TAG, "Nombre de plants : " + plantsList.size() );
             Iterator<Plant> plantsIterator = plantsList.iterator();
             while(plantsIterator.hasNext())
             {
@@ -357,12 +355,12 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
                 cv.put(ZeroContract.Plants.USER, account.name);
                 mContentResolver.insert(ZeroContract.Plants.CONTENT_URI, cv);
             }
-        Log.i(TAG, "Finish network plant synchronization");
+        if (BuildConfig.DEBUG) Log.i(TAG, "Finish network plant synchronization");
     }
 
     public void performPlantCounting(Account account, Bundle extras, String authority, ContentProviderClient provider, SyncResult syncResult)
     {
-        Log.i(TAG, "Beginning network plant counting synchronization");
+        if (BuildConfig.DEBUG) Log.i(TAG, "Beginning network plant counting synchronization");
         Cursor cursor = mContentResolver.query(ZeroContract.PlantCountings.CONTENT_URI,
                 ZeroContract.PlantCountings.PROJECTION_ALL,
                 "\"" + ZeroContract.PlantCountingsColumns.USER + "\"" + " LIKE " + "\"" + account.name + "\""
@@ -377,7 +375,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
                 {
                     try
                     {
-                        Log.i(TAG, "New plantCounting");
+                        if (BuildConfig.DEBUG) Log.i(TAG, "New plantCounting");
                         // Post it to ekylibre
                         JSONObject attributes = new JSONObject();
                         //attributes.put("geolocation", "SRID=4326; POINT(" + Double.toString(cursor.getDouble(3)) + " " + Double.toString(cursor.getDouble(2)) + ")");
@@ -405,14 +403,14 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
             }
             else
             {
-                Log.i(TAG, "Nothing to sync");
+                if (BuildConfig.DEBUG) Log.i(TAG, "Nothing to sync");
             }
-        Log.i(TAG, "Finish network synchronization");
+        if (BuildConfig.DEBUG) Log.i(TAG, "Finish network synchronization");
     }
 
     public JSONArray createPlantCountingItemJSON(Account account, Bundle extras, String authority, ContentProviderClient provider, SyncResult syncResult, int ID)
     {
-        Log.i(TAG, "Beginning network synchronization");
+        if (BuildConfig.DEBUG) Log.i(TAG, "Beginning network synchronization");
         Cursor cursor = mContentResolver.query(ZeroContract.PlantCountingItems.CONTENT_URI,
                 ZeroContract.PlantCountingItems.PROJECTION_ALL,
                 "\"" + ZeroContract.PlantCountingItemsColumns.USER + "\"" + " LIKE " + "\"" + account.name + "\""
@@ -427,7 +425,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
                 int i = 0;
                 while (cursor.moveToNext())
                 {
-                    Log.i(TAG, "New plantCounting");
+                    if (BuildConfig.DEBUG) Log.i(TAG, "New plantCounting");
                     // Post it to ekylibre
                     JSONObject attributes = new JSONObject();
                     attributes.put("value", cursor.getInt(1));
@@ -440,14 +438,14 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
             }
             else
             {
-                Log.i(TAG, "Nothing to sync");
+                if (BuildConfig.DEBUG) Log.i(TAG, "Nothing to sync");
             }
         }
         catch (Exception e)
         {
             e.printStackTrace();
         }
-        Log.i(TAG, "Finish network synchronization");
+        if (BuildConfig.DEBUG) Log.i(TAG, "Finish network synchronization");
         return (null);
     }
 
@@ -463,11 +461,11 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
             }
             catch(AccountsException e)
             {
-                Log.e(TAG, "Account manager or user cannot help. Cannot get token.");
+                if (BuildConfig.DEBUG) Log.e(TAG, "Account manager or user cannot help. Cannot get token.");
             }
             catch(IOException e)
             {
-                Log.w(TAG, "IO problem. Cannot get token.");
+                if (BuildConfig.DEBUG) Log.w(TAG, "IO problem. Cannot get token.");
             }
         return (instance);
     }
