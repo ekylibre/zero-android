@@ -230,6 +230,7 @@ public class IssueActivity extends AppCompatActivity {
             if (resultCode == RESULT_OK) {
                 Bitmap image = BitmapFactory.decodeFile(photoFile.getPath());
                 mImagePreview.setImageBitmap(image);
+                mImagePreview.setVisibility(View.VISIBLE);
                 Toast.makeText(this, "Image saved", Toast.LENGTH_LONG).show();
             } else if (resultCode == RESULT_CANCELED) {
                 // User cancelled the image capture
