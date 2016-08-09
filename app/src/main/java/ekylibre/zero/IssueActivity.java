@@ -296,7 +296,10 @@ public class IssueActivity extends AppCompatActivity {
     public void onStart() {
         super.onStart();
         if (!AccountTool.isAnyAccountExist(this))
+        {
             AccountTool.askForAccount(this, this);
+            return;
+        }
         // ATTENTION: This was auto-generated to implement the App Indexing API.
         // See https://g.co/AppIndexing/AndroidStudio for more information.
         client.connect();

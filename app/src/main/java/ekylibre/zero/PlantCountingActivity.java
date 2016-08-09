@@ -115,7 +115,10 @@ public class PlantCountingActivity extends UpdatableActivity  {
     {
         super.onStart();
         if (!AccountTool.isAnyAccountExist(this))
+        {
             AccountTool.askForAccount(this, this);
+            return;
+        }
     }
 
     @Override

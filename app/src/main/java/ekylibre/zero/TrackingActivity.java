@@ -83,7 +83,10 @@ public class TrackingActivity extends AppCompatActivity implements TrackingListe
     {
         super.onStart();
         if (!AccountTool.isAnyAccountExist(this))
+        {
             AccountTool.askForAccount(this, this);
+            return;
+        }
     }
 
     /** Called when the activity is first created. */

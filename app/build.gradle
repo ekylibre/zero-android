@@ -10,8 +10,8 @@ android {
         applicationId "ekylibre.zero"
         minSdkVersion 19
         targetSdkVersion 24
-        versionCode 6
-        versionName "0.2.0"
+        versionCode 7
+        versionName "0.2.1"
     }
     buildTypes {
         release {

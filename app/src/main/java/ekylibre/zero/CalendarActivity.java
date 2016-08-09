@@ -17,7 +17,10 @@ public class CalendarActivity extends Activity
     {
         super.onStart();
         if (!AccountTool.isAnyAccountExist(this))
+        {
             AccountTool.askForAccount(this, this);
+            return;
+        }
     }
 
     @Override
