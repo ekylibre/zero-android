@@ -33,7 +33,10 @@ public class AccountManagerActivity extends AppCompatActivity
     {
         super.onStart();
         if (!AccountTool.isAnyAccountExist(this))
+        {
             AccountTool.askForAccount(this, this);
+            return;
+        }
     }
 
     @Override

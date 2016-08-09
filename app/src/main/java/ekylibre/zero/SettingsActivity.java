@@ -18,7 +18,10 @@ public class SettingsActivity extends PreferenceActivity
     {
         super.onStart();
         if (!AccountTool.isAnyAccountExist(this))
+        {
             AccountTool.askForAccount(this, this);
+            return;
+        }
     }
 
     @Override

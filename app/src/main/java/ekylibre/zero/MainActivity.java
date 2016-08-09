@@ -64,7 +64,10 @@ public class MainActivity extends UpdatableActivity
 
         firstPass = true;
         if (!AccountTool.isAnyAccountExist(this))
+        {
             AccountTool.askForAccount(this, this);
+            return;
+        }
         mAccount = AccountTool.getCurrentAccount(MainActivity.this);
         setToolbar();
 /*
@@ -88,7 +91,10 @@ public class MainActivity extends UpdatableActivity
     {
         super.onStart();
         if (!AccountTool.isAnyAccountExist(this))
+        {
             AccountTool.askForAccount(this, this);
+            return;
+        }
         mAccount = AccountTool.getCurrentAccount(MainActivity.this);
         setAccountName(mNavigationView);
         firstPass = false;
