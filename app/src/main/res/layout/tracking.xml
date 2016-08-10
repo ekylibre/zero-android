@@ -12,7 +12,7 @@
 			android:visibility="invisible"
 			android:layout_width="fill_parent"
 			android:layout_height="wrap_content"
-      android:gravity="center"/>
+            android:gravity="center"/>
 	<Chronometer
 			android:id="@+id/master_chrono"
 			android:visibility="invisible"
@@ -109,17 +109,30 @@
 			android:layout_marginLeft="@dimen/activity_horizontal_margin"
 			android:layout_marginRight="@dimen/activity_horizontal_margin">
 
-		<Button 
-				android:id="@+id/scan_code_button"
-				android:layout_width="fill_parent"
-				android:layout_height="wrap_content"
-				android:visibility="gone"
-				android:drawableLeft="@android:drawable/ic_menu_info_details"
-				android:text="@string/scan_code"
-				android:background="@drawable/black_button"
-				android:textColor="@color/ultraLight_grey"
-				android:onClick="scanCode"
-				android:layout_marginBottom="10dp"/>
+        <Button
+            android:id="@+id/scan_code_button"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:drawableLeft="@android:drawable/ic_menu_info_details"
+            android:text="@string/scan_code"
+            android:background="@drawable/black_button"
+            android:textColor="@color/ultraLight_grey"
+            android:onClick="scanCode"
+            android:layout_marginBottom="10dp"/>
+
+        <Button
+            android:id="@+id/map_button"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:drawableLeft="@drawable/ic_map"
+            android:text="@string/open_map"
+            android:background="@drawable/black_button"
+            android:textColor="@color/ultraLight_grey"
+            android:onClick="openMap"
+            android:layout_marginBottom="10dp"/>
+
 		<Button 
 				android:id="@+id/start_precision_mode_button"
 				android:layout_width="fill_parent"

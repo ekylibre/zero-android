@@ -35,6 +35,8 @@ public class ZeroProvider extends ContentProvider {
     public static final int ROUTE_PLANT_DENSITY_ABACUS_ITEM_ITEM = 601;
     public static final int ROUTE_PLANT_LIST = 700;
     public static final int ROUTE_PLANT_ITEM = 701;
+    public static final int ROUTE_INTERVENTION_LIST = 800;
+    public static final int ROUTE_INTERVENTION_ITEM = 801;
     // UriMatcher, used to decode incoming URIs.
     private static final UriMatcher URI_MATCHER = new UriMatcher(UriMatcher.NO_MATCH);
 
@@ -53,6 +55,8 @@ public class ZeroProvider extends ContentProvider {
         URI_MATCHER.addURI(ZeroContract.AUTHORITY, "plant_density_abacus_items/#", ROUTE_PLANT_DENSITY_ABACUS_ITEM_ITEM);
         URI_MATCHER.addURI(ZeroContract.AUTHORITY, "plants", ROUTE_PLANT_LIST);
         URI_MATCHER.addURI(ZeroContract.AUTHORITY, "plants/#", ROUTE_PLANT_ITEM);
+        URI_MATCHER.addURI(ZeroContract.AUTHORITY, "interventions", ROUTE_INTERVENTION_LIST);
+        URI_MATCHER.addURI(ZeroContract.AUTHORITY, "interventions/#", ROUTE_INTERVENTION_ITEM);
     }
 
     private DatabaseHelper mDatabaseHelper;
@@ -95,6 +99,10 @@ public class ZeroProvider extends ContentProvider {
                 return ZeroContract.Plants.CONTENT_TYPE;
             case ROUTE_PLANT_ITEM:
                 return ZeroContract.Plants.CONTENT_TYPE;
+            case ROUTE_INTERVENTION_LIST:
+                return ZeroContract.Interventions.CONTENT_TYPE;
+            case ROUTE_INTERVENTION_ITEM:
+                return ZeroContract.Interventions.CONTENT_TYPE;
             default:
                 throw new UnsupportedOperationException("Unknown URI: " + uri);
         }
@@ -222,6 +230,22 @@ public class ZeroProvider extends ContentProvider {
                 cursor.setNotificationUri(context.getContentResolver(), uri);
                 return cursor;
 
+            case ROUTE_INTERVENTION_ITEM:
+                // Return a single ISSUE, by ID.
+                id = uri.getLastPathSegment();
+                builder.where(ZeroContract.InterventionsColumns._ID + "=?", id);
+            case ROUTE_INTERVENTION_LIST:
+                // Return all known Issue.
+                builder.table(ZeroContract.InterventionsColumns.TABLE_NAME)
+                        .where(selection, selectionArgs);
+                cursor = builder.query(database, projection, sortOrder);
+                // Note: Notification URI must be manually set here for loaders to correctly
+                // register ContentObservers.
+                context = getContext();
+                assert context != null;
+                cursor.setNotificationUri(context.getContentResolver(), uri);
+                return cursor;
+
 
             default:
                 throw new UnsupportedOperationException("Unknown URI: " + uri);
@@ -280,6 +304,12 @@ public class ZeroProvider extends ContentProvider {
                 result = Uri.parse(ZeroContract.Plants.CONTENT_URI + "/" + id);
                 break;
             case ROUTE_PLANT_ITEM:
+                throw new UnsupportedOperationException("Insert not supported on URI: " + uri);
+            case ROUTE_INTERVENTION_LIST:
+                id = database.insertOrThrow(ZeroContract.InterventionsColumns.TABLE_NAME, null, values);
+                result = Uri.parse(ZeroContract.Interventions.CONTENT_URI + "/" + id);
+                break;
+            case ROUTE_INTERVENTION_ITEM:
                 throw new UnsupportedOperationException("Insert not supported on URI: " + uri);
             default:
                 throw new UnsupportedOperationException("Unknown URI: " + uri);
@@ -374,7 +404,7 @@ public class ZeroProvider extends ContentProvider {
                         .where(selection, selectionArgs)
                         .delete(database);
                 break;
-           case ROUTE_PLANT_LIST:
+            case ROUTE_PLANT_LIST:
                 count = builder.table(ZeroContract.PlantsColumns.TABLE_NAME)
                         .where(selection, selectionArgs)
                         .delete(database);
@@ -383,6 +413,18 @@ public class ZeroProvider extends ContentProvider {
                 id = uri.getLastPathSegment();
                 count = builder.table(ZeroContract.PlantsColumns.TABLE_NAME)
                         .where(ZeroContract.PlantsColumns._ID + "=?", id)
+                        .where(selection, selectionArgs)
+                        .delete(database);
+                break;
+            case ROUTE_INTERVENTION_LIST:
+                count = builder.table(ZeroContract.InterventionsColumns.TABLE_NAME)
+                        .where(selection, selectionArgs)
+                        .delete(database);
+                break;
+            case ROUTE_INTERVENTION_ITEM:
+                id = uri.getLastPathSegment();
+                count = builder.table(ZeroContract.InterventionsColumns.TABLE_NAME)
+                        .where(ZeroContract.InterventionsColumns._ID + "=?", id)
                         .where(selection, selectionArgs)
                         .delete(database);
                 break;
@@ -490,6 +532,18 @@ public class ZeroProvider extends ContentProvider {
                 id = uri.getLastPathSegment();
                 count = builder.table(ZeroContract.PlantsColumns.TABLE_NAME)
                         .where(ZeroContract.PlantsColumns._ID + "=?", id)
+                        .where(selection, selectionArgs)
+                        .update(database, values);
+                break;
+            case ROUTE_INTERVENTION_LIST:
+                count = builder.table(ZeroContract.PlantsColumns.TABLE_NAME)
+                        .where(selection, selectionArgs)
+                        .update(database, values);
+                break;
+            case ROUTE_INTERVENTION_ITEM:
+                id = uri.getLastPathSegment();
+                count = builder.table(ZeroContract.InterventionsColumns.TABLE_NAME)
+                        .where(ZeroContract.InterventionsColumns._ID + "=?", id)
                         .where(selection, selectionArgs)
                         .update(database, values);
                 break;

@@ -23,6 +23,12 @@ public final class ZeroContract {
         String METADATA = "metadata";
         String SYNCED = "synced";
         String USER = "user";
+        String FK_INTERVENTION = "fk_intervention";
+    }
+
+    public interface InterventionsColumns extends BaseColumns {
+        String TABLE_NAME = "intervention";
+        String USER = "user";
     }
 
     public interface IssuesColumns extends BaseColumns {
@@ -100,7 +106,22 @@ public final class ZeroContract {
         // MIME type for individual record.
         public static final String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/vnd.ekylibre.zero.crumb";
 
-        public static final String[] PROJECTION_ALL = {_ID, TYPE, LATITUDE, LONGITUDE, READ_AT, ACCURACY, METADATA, SYNCED};
+        public static final String[] PROJECTION_ALL = {_ID, TYPE, LATITUDE, LONGITUDE, READ_AT, ACCURACY, METADATA, SYNCED, FK_INTERVENTION};
+        public static final String[] PROJECTION_NONE = {_ID};
+
+        public static final String SORT_ORDER_DEFAULT = _ID + " ASC";
+
+    }
+
+    public static final class Interventions implements InterventionsColumns {
+        // Content URI for this table
+        public static final Uri CONTENT_URI = Uri.withAppendedPath(ZeroContract.CONTENT_URI, "interventions");
+        // MIME type for lists of records.
+        public static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/vnd.ekylibre.zero.interventions";
+        // MIME type for individual record.
+        public static final String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/vnd.ekylibre.zero.intervention";
+
+        public static final String[] PROJECTION_ALL = {_ID};
         public static final String[] PROJECTION_NONE = {_ID};
 
         public static final String SORT_ORDER_DEFAULT = _ID + " ASC";
