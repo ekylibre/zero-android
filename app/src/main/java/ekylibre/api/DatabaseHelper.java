@@ -8,7 +8,7 @@ import ekylibre.api.ZeroContract;
 
 public class DatabaseHelper extends SQLiteOpenHelper
 {
-    public static final int DATABASE_VERSION = 7;
+    public static final int DATABASE_VERSION = 8;
     public static final String DATABASE_NAME = "zero";
 
     public DatabaseHelper(Context context)
@@ -142,6 +142,39 @@ public class DatabaseHelper extends SQLiteOpenHelper
                         + ", " + ZeroContract.Plants.ACTIVE + " BOOLEAN NOT NULL"
                         + ", " + ZeroContract.PlantDensityAbacusItemsColumns.USER + " VARCHAR(255)"
                         + ")");
+            case 8:
+                database.execSQL("CREATE TABLE IF NOT EXISTS intervention ("
+                        + ZeroContract.InterventionsColumns._ID + " INTEGER PRIMARY KEY AUTOINCREMENT"
+                        + ", " + ZeroContract.InterventionsColumns.USER + " VARCHAR(255)"
+                        + ")");
+                database.execSQL("ALTER TABLE crumbs RENAME TO TMP_TABLE");
+                database.execSQL("CREATE TABLE IF NOT EXISTS crumbs ("
+                        + ZeroContract.CrumbsColumns._ID + " INTEGER PRIMARY KEY AUTOINCREMENT"
+                        + ", " + ZeroContract.CrumbsColumns.FK_INTERVENTION + " INTEGER"
+                        + ", " + ZeroContract.CrumbsColumns.TYPE + " VARCHAR(32) NOT NULL"
+                        + ", " + ZeroContract.CrumbsColumns.LATITUDE + " DOUBLE NOT NULL"
+                        + ", " + ZeroContract.CrumbsColumns.LONGITUDE + " DOUBLE NOT NULL"
+                        + ", " + ZeroContract.CrumbsColumns.READ_AT + " BIGINT NOT NULL"
+                        + ", " + ZeroContract.CrumbsColumns.ACCURACY + " FLOAT"
+                        + ", " + ZeroContract.CrumbsColumns.SYNCED + " INTEGER NOT NULL DEFAULT 0"
+                        + ", " + ZeroContract.CrumbsColumns.METADATA + " TEXT"
+                        + ", " + ZeroContract.CrumbsColumns.USER + " VARCHAR(255)"
+                        + ", " + "FOREIGN KEY (" + ZeroContract.CrumbsColumns.FK_INTERVENTION + ") REFERENCES intervention(_id)"
+                        + ")");
+                database.execSQL("INSERT INTO crumbs ("
+                        + ZeroContract.CrumbsColumns._ID
+                        + ", " + ZeroContract.CrumbsColumns.TYPE
+                        + ", " + ZeroContract.CrumbsColumns.LATITUDE
+                        + ", " + ZeroContract.CrumbsColumns.LONGITUDE
+                        + ", " + ZeroContract.CrumbsColumns.READ_AT
+                        + ", " + ZeroContract.CrumbsColumns.ACCURACY
+                        + ", " + ZeroContract.CrumbsColumns.SYNCED
+                        + ", " + ZeroContract.CrumbsColumns.METADATA
+                        + ", " + ZeroContract.CrumbsColumns.USER
+                        + ") SELECT * FROM TMP_TABLE");
+                database.execSQL("DROP TABLE IF EXISTS TMP_TABLE");
+
+
         }
     }
 }

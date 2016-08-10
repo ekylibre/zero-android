@@ -89,4 +89,5 @@
     <string name="title_activity_camera">Caméra</string>
     <string name="navigation_drawer_open">Ouvre le menu flottant</string>
     <string name="navigation_drawer_close">Ferme le menu flottant</string>
+    <string name="open_map">Ouvrir la carte</string>
 </resources>

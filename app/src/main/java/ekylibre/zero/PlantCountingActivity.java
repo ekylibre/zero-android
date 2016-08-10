@@ -2,6 +2,7 @@ package ekylibre.zero;
 
 
 import android.accounts.Account;
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
@@ -14,10 +15,12 @@ import android.database.Cursor;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.location.LocationManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.text.InputFilter;
 import android.text.InputType;
@@ -535,7 +538,7 @@ public class PlantCountingActivity extends UpdatableActivity  {
     }
 
     private Cursor queryPlantsCount(int densityID) {
-        String[] mProjectionPlantsCount = {ZeroContract.PlantDensityAbacusItems.PLANTS_COUNT,ZeroContract.PlantDensityAbacusItems.EK_ID};
+        String[] mProjectionPlantsCount = {ZeroContract.PlantDensityAbacusItems.PLANTS_COUNT, ZeroContract.PlantDensityAbacusItems.EK_ID};
 
         Cursor cursorPlantsCount = getContentResolver().query(
                 ZeroContract.PlantDensityAbacusItems.CONTENT_URI,
@@ -670,26 +673,29 @@ public class PlantCountingActivity extends UpdatableActivity  {
         }
     }
 
+    @TargetApi(23)
     private void setLocation(ContentValues newValuesPlantCounting)
     {
-        LocationManager locationManager =
-                (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+        LocationManager locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
         String locationProvider = LocationManager.NETWORK_PROVIDER;
-        try
+
+        if ( Build.VERSION.SDK_INT >= 23 &&
+                ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION ) != PackageManager.PERMISSION_GRANTED &&
+                ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED)
         {
-            Location lastKnownLocation = locationManager.getLastKnownLocation(locationProvider);
-            if (lastKnownLocation != null)
-            {
-                newValuesPlantCounting.put(ZeroContract.PlantCountingsColumns.LATITUDE,
-                        lastKnownLocation.getLatitude());
-                newValuesPlantCounting.put(ZeroContract.PlantCountingsColumns.LONGITUDE,
-                        lastKnownLocation.getLongitude());
-            }
+            return  ;
         }
-        catch(SecurityException e)
+
+
+        Location lastKnownLocation = locationManager.getLastKnownLocation(locationProvider);
+        if (lastKnownLocation != null)
         {
-            Toast.makeText(this, getResources().getString(R.string.GPSissue), Toast.LENGTH_SHORT).show();
+            newValuesPlantCounting.put(ZeroContract.PlantCountingsColumns.LATITUDE,
+                    lastKnownLocation.getLatitude());
+            newValuesPlantCounting.put(ZeroContract.PlantCountingsColumns.LONGITUDE,
+                    lastKnownLocation.getLongitude());
         }
+
 
     }
 

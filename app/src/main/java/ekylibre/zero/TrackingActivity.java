@@ -35,6 +35,12 @@ import org.apache.http.NameValuePair;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.message.BasicNameValuePair;
 
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
@@ -78,6 +84,9 @@ public class TrackingActivity extends AppCompatActivity implements TrackingListe
     private int mNotificationID;
     //private Notification mNotification;
 
+    private Button mMapButton;
+    private int    mInterventionID;
+
     @Override
     public void onStart()
     {
@@ -102,22 +111,23 @@ public class TrackingActivity extends AppCompatActivity implements TrackingListe
         setContentView(R.layout.tracking);
 
         // Find view elements
-        mProcedureNature = (TextView) findViewById(R.id.procedure_nature);
-        mMasterChrono = (Chronometer) findViewById(R.id.master_chrono);
-        mPrecisionModeChrono = (Chronometer) findViewById(R.id.precision_mode_chrono);
-        mDetails = (HorizontalScrollView) findViewById(R.id.details);
-        mAccuracy = (TextView) findViewById(R.id.accuracy);
-        mLatitude = (TextView) findViewById(R.id.latitude);
-        mLongitude = (TextView) findViewById(R.id.longitude);
-        mCrumbsCount = (TextView) findViewById(R.id.crumbs_count);
-        mStartButton = (Button) findViewById(R.id.start_intervention_button);
-        mStopButton = (Button) findViewById(R.id.stop_intervention_button);
-        mPauseButton = (Button) findViewById(R.id.pause_intervention_button);
-        mResumeButton = (Button) findViewById(R.id.resume_intervention_button);
-        mScanButton = (Button) findViewById(R.id.scan_code_button);
-        mSyncButton = (Button) findViewById(R.id.sync_button);
-        mPrecisionModeStartButton = (Button) findViewById(R.id.start_precision_mode_button);
-        mPrecisionModeStopButton = (Button) findViewById(R.id.stop_precision_mode_button);
+        mDetails                  = (HorizontalScrollView) findViewById(R.id.details);
+        mProcedureNature          = (TextView)   findViewById(R.id.procedure_nature);
+        mMasterChrono             = (Chronometer)findViewById(R.id.master_chrono);
+        mPrecisionModeChrono      = (Chronometer)findViewById(R.id.precision_mode_chrono);
+        mAccuracy                 = (TextView)   findViewById(R.id.accuracy);
+        mLatitude                 = (TextView)   findViewById(R.id.latitude);
+        mLongitude                = (TextView)   findViewById(R.id.longitude);
+        mCrumbsCount              = (TextView)   findViewById(R.id.crumbs_count);
+        mStartButton              = (Button)     findViewById(R.id.start_intervention_button);
+        mStopButton               = (Button)     findViewById(R.id.stop_intervention_button);
+        mPauseButton              = (Button)     findViewById(R.id.pause_intervention_button);
+        mResumeButton             = (Button)     findViewById(R.id.resume_intervention_button);
+        mScanButton               = (Button)     findViewById(R.id.scan_code_button);
+        mSyncButton               = (Button)     findViewById(R.id.sync_button);
+        mMapButton                = (Button)     findViewById(R.id.map_button);
+        mPrecisionModeStartButton = (Button)     findViewById(R.id.start_precision_mode_button);
+        mPrecisionModeStopButton  = (Button)     findViewById(R.id.stop_precision_mode_button);
 
         // Synchronize data
         //this.syncData();
@@ -145,6 +155,17 @@ public class TrackingActivity extends AppCompatActivity implements TrackingListe
 
 
         // Procedure nature chooser for starting intervention
+        createProcedureChooser();
+        //  if (!mRunning) {
+        //      mProcedureChooser.show();
+        //  }
+
+
+
+    }
+
+    private void createProcedureChooser()
+    {
         mProcedureChooser = new AlertDialog.Builder(this)
                 .setTitle(R.string.procedure_nature)
                 .setNegativeButton(android.R.string.cancel, null)
@@ -157,6 +178,7 @@ public class TrackingActivity extends AppCompatActivity implements TrackingListe
 
                         mStartButton.setVisibility(View.GONE);
                         mMasterChrono.setVisibility(View.VISIBLE);
+                        mMapButton.setVisibility(View.VISIBLE);
                         mStopButton.setVisibility(View.VISIBLE);
                         mPauseButton.setVisibility(View.VISIBLE);
 /*
@@ -185,13 +207,24 @@ public class TrackingActivity extends AppCompatActivity implements TrackingListe
                                 .setContentTitle(mLastProcedureNatureName)
                                 .setContentText(getString(R.string.running));
                         mNotificationManager.notify(mNotificationID, mNotificationBuilder.build());
+                        createIntervention();
                     }
                 });
-        //  if (!mRunning) {
-        //      mProcedureChooser.show();
-        //  }
     }
-/*
+
+    private void createIntervention()
+    {
+        ContentValues values = new ContentValues();
+
+        values.put(ZeroContract.InterventionsColumns.USER, AccountTool.getCurrentAccount(this).name);
+        getContentResolver().insert(ZeroContract.Interventions.CONTENT_URI, values);
+        Cursor cursor = getContentResolver().query(ZeroContract.Interventions.CONTENT_URI, new String[]{ZeroContract.Interventions._ID}, null, null, null);
+        if (cursor == null || !cursor.moveToLast())
+            return;
+        mInterventionID = cursor.getInt(0);
+        cursor.close();
+    }
+    /*
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu items for use in the action bar
@@ -222,6 +255,11 @@ public class TrackingActivity extends AppCompatActivity implements TrackingListe
         mProcedureChooser.show();
     }
 
+    public void openMap(View view)
+    {
+        Intent intent = new Intent(this, MapsActivity.class);
+        startActivity(intent);
+    }
 
     public void stopIntervention(View view) {
         if (mPrecisionMode) {
@@ -231,6 +269,7 @@ public class TrackingActivity extends AppCompatActivity implements TrackingListe
         mMasterChrono.setVisibility(View.INVISIBLE);
         mStopButton.setVisibility(View.GONE);
         mPauseButton.setVisibility(View.GONE);
+        mMapButton.setVisibility(View.GONE);
         mScanButton.setVisibility(View.GONE);
         mPrecisionModeStartButton.setVisibility(View.GONE);
         mDetails.setVisibility(View.GONE);
@@ -297,6 +336,7 @@ public class TrackingActivity extends AppCompatActivity implements TrackingListe
         // mStartButton.setVisibility(View.GONE);
         mStopButton.setVisibility(View.GONE);
         mScanButton.setVisibility(View.GONE);
+
         mResumeButton.setVisibility(View.VISIBLE);
         if (mPrecisionMode) {
             mPrecisionModeStopButton.setVisibility(View.GONE);
@@ -437,6 +477,7 @@ public class TrackingActivity extends AppCompatActivity implements TrackingListe
         values.put(ZeroContract.CrumbsColumns.READ_AT, readAt);
         values.put(ZeroContract.CrumbsColumns.ACCURACY, location.getAccuracy());
         values.put(ZeroContract.CrumbsColumns.SYNCED, 0);
+        values.put(ZeroContract.CrumbsColumns.FK_INTERVENTION, mInterventionID);
         if (metadata != null) {
             try {
                 List<NameValuePair> pairs = new ArrayList<NameValuePair>();
@@ -501,6 +542,7 @@ public class TrackingActivity extends AppCompatActivity implements TrackingListe
         extras.putBoolean(ContentResolver.SYNC_EXTRAS_EXPEDITED, true);
         ContentResolver.requestSync(mAccount, ZeroContract.AUTHORITY, extras);
     }*/
+
 
     @Override
     public void onDestroy()

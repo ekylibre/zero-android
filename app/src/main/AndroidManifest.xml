@@ -4,7 +4,6 @@
     android:installLocation="auto"
     android:minSdkVersion="19">
 
-
     <uses-permission android:name="android.permission.READ_CALENDAR" />
     <uses-permission android:name="android.permission.WRITE_CALENDAR" />
 
@@ -24,7 +23,7 @@
 
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.AUTHENTICATE_ACCOUNTS" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
@@ -67,9 +66,9 @@
         <!-- Authenticator related activities and service needs to be declared here in order for the app to recognize them -->
         <activity
             android:name=".AuthenticatorActivity"
+            android:configChanges="orientation"
             android:icon="@mipmap/ic_ekylibre"
             android:label="@string/service_name"
-            android:configChanges="orientation"
             android:screenOrientation="portrait" />
         <activity
             android:name=".MainActivity"
@@ -86,7 +85,6 @@
             android:icon="@mipmap/ic_ekylibre"
             android:label="@string/calendar" />
 
-
         <service
             android:name=".service.AuthenticatorService"
             android:permission="ekylibre.zero.permission.AUTHENTICATE_ACCOUNTS">
@@ -100,7 +98,7 @@
         </service>
         <service
             android:name=".service.ConnectionManagerService"
-            android:permission="android.permission.ACCESS_NETWORK_STATE"></service>
+            android:permission="android.permission.ACCESS_NETWORK_STATE" />
 
         <!-- Content provider -->
         <provider
@@ -157,19 +155,19 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".TrackingActivity" />
         </activity>
-        <!--     android:parentActivityName=".TrackingActivity"> -->
+        <!-- android:parentActivityName=".TrackingActivity"> -->
 
         <activity
             android:name=".IssueActivity"
             android:label="@string/new_issue"
             android:parentActivityName=".MenuActivity" />
-        <activity android:name=".MenuActivity"></activity>
+        <activity android:name=".MenuActivity" />
         <activity
             android:name=".PlantCountingActivity"
+            android:configChanges="orientation"
             android:label="@string/title_activity_sorting"
             android:parentActivityName=".MenuActivity"
-            android:configChanges="orientation"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <!--
  ATTENTION: This was auto-generated to add Google Play services to your project for
      App Indexing.  See https://g.co/AppIndexing/AndroidStudio for more information.
@@ -180,12 +178,27 @@
 
         <activity
             android:name=".AccountManagerActivity"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:parentActivityName=".MainActivity">
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MainActivity" />
         </activity>
+        <!--
+             The API key for Google Maps-based APIs is defined as a string resource.
+             (See the file "res/values/google_maps_api.xml").
+             Note that the API key is linked to the encryption key used to sign the APK.
+             You need a different API key for each encryption key, including the release key that is used to
+             sign the APK for publishing.
+             You can define the keys for the debug and release targets in src/debug/ and src/release/. 
+        -->
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="@string/google_maps_key" />
+
+        <activity
+            android:name=".MapsActivity"
+            android:label="@string/title_activity_maps"></activity>
     </application>
 
 </manifest>
