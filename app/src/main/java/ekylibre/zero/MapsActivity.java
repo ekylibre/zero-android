@@ -1,7 +1,10 @@
 package ekylibre.zero;
 
+import android.accounts.Account;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Build;
@@ -17,9 +20,14 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback {
+import ekylibre.api.ZeroContract;
+import ekylibre.zero.util.AccountTool;
+import ekylibre.zero.util.UpdatableActivity;
+
+public class MapsActivity extends UpdatableActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
+    private Account mAccount;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,18 +37,9 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+        mAccount = AccountTool.getCurrentAccount(this);
     }
 
-
-    /**
-     * Manipulates the map once available.
-     * This callback is triggered when the map is ready to be used.
-     * This is where we can add markers or lines, add listeners or move the camera. In this case,
-     * we just add a marker near Sydney, Australia.
-     * If Google Play services is not installed on the device, the user will be prompted to install
-     * it inside the SupportMapFragment. This method will only be triggered once the user has
-     * installed Google Play services and returned to the app.
-     */
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
@@ -58,9 +57,43 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         Location lastKnownLocation = locationManager.getLastKnownLocation(locationProvider);
 
-        mMap.addMarker(new MarkerOptions()
-                .position(new LatLng(lastKnownLocation.getLatitude(), lastKnownLocation.getLongitude()))
-                .title("You are here !"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(new LatLng(lastKnownLocation.getLatitude(), lastKnownLocation.getLongitude())));
+        setMarker(lastKnownLocation.getLatitude(), lastKnownLocation.getLongitude());
     }
+
+    @Override
+    public void onPing(Intent intent)
+    {
+        Cursor cursor = queryMarkers(intent.getIntExtra(TrackingActivity._interventionID, 0));
+        if (cursor != null)
+        {
+            while (cursor.moveToNext())
+            {
+                setMarker(cursor.getDouble(0), cursor.getDouble(1));
+            }
+        }
+        setMarker(intent.getDoubleExtra(TrackingListenerWriter.LATITUDE, 0), intent.getDoubleExtra(TrackingListenerWriter.LONGITUDE, 0));
+    }
+
+    private Cursor queryMarkers(int interventionID) {
+        String[] mProjectionMarkers = {ZeroContract.Crumbs.LATITUDE, ZeroContract.Crumbs.LONGITUDE};
+
+        Cursor cursorMarkers = getContentResolver().query(
+                ZeroContract.Crumbs.CONTENT_URI,
+                mProjectionMarkers,
+                "\"" + ZeroContract.Plants.USER + "\"" + " LIKE " + "\"" + mAccount.name + "\""
+                        + " AND " + ZeroContract.Crumbs.FK_INTERVENTION + " == " + interventionID,
+                null,
+                null);
+        return (cursorMarkers);
+
+    }
+
+    private void setMarker(double latitude, double longitude)
+    {
+        mMap.addMarker(new MarkerOptions()
+                .position(new LatLng(latitude, longitude))
+                .title(""));
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(new LatLng(latitude, longitude)));
+    }
+
 }

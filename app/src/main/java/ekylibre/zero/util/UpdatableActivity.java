@@ -16,8 +16,10 @@ public abstract class UpdatableActivity extends AppCompatActivity
 {
     public static final String  ACTION_FINISHED_SYNC        = "ekylibre.zero.util.ACTION_FINISHED_SYNC";
     public static final String  ACTION_STARTED_SYNC         = "ekylibre.zero.util.ACTION_STARTED_SYNC";
+    public static final String  PING                        = "ekylibre.zero.util.PONG";
     private static IntentFilter syncIntentFilterFINISHED    = new IntentFilter(ACTION_FINISHED_SYNC);
     private static IntentFilter syncIntentFilterSTART       = new IntentFilter(ACTION_STARTED_SYNC);
+    private static IntentFilter pingIntentFilter            = new IntentFilter(PING);
     protected boolean isSync = false;
     private final String    TAG = "UpdatableActivity";
 
@@ -43,9 +45,21 @@ public abstract class UpdatableActivity extends AppCompatActivity
         }
     };
 
-    protected abstract void onSyncFinish();
+    private BroadcastReceiver   pingBroadcastReceiver  = new BroadcastReceiver()
+    {
+        @Override
+        public void onReceive(Context context, Intent intent)
+        {
+            Log.d(TAG, "I'm receiving ping message from" + context.toString());
+            onPing(intent);
+        }
+    };
 
-    protected abstract void onSyncStart();
+    protected void onSyncFinish(){}
+
+    protected void onSyncStart(){}
+
+    protected void onPing(Intent intent){}
 
     @Override
     protected void onResume()
@@ -53,6 +67,7 @@ public abstract class UpdatableActivity extends AppCompatActivity
         super.onResume();
         registerReceiver(syncBroadcastReceiverFinish, syncIntentFilterFINISHED);
         registerReceiver(syncBroadcastReceiverStart, syncIntentFilterSTART);
+        registerReceiver(pingBroadcastReceiver, pingIntentFilter);
     }
 
     @Override
@@ -60,6 +75,7 @@ public abstract class UpdatableActivity extends AppCompatActivity
     {
         unregisterReceiver(syncBroadcastReceiverFinish);
         unregisterReceiver(syncBroadcastReceiverStart);
+        unregisterReceiver(pingBroadcastReceiver);
         super.onPause();
     }
 }
