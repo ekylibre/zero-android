@@ -17,9 +17,11 @@ import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.location.Location;
 import android.location.LocationManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.preference.PreferenceManager;
+import android.support.v4.*;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -77,6 +79,7 @@ public class TrackingActivity extends AppCompatActivity implements TrackingListe
     private SharedPreferences mPreferences;
     private IntentIntegrator mScanIntegrator;
     private final int   REQUEST_CODE = 123;
+    public final String   _interventionID = "intervention_id";
 
     private LocationManager mLocationManager;
     private NotificationManager mNotificationManager;
@@ -86,6 +89,8 @@ public class TrackingActivity extends AppCompatActivity implements TrackingListe
 
     private Button mMapButton;
     private int    mInterventionID;
+
+    private final String TAG = "Tracking Activity";
 
     @Override
     public void onStart()
@@ -465,6 +470,15 @@ public class TrackingActivity extends AppCompatActivity implements TrackingListe
         if (location.getAccuracy() > 5 && type.equals("point")) {
             return;
         }
+
+        if (BuildConfig.DEBUG) Log.d(TAG, "I'm writing new crumb !");
+        Toast.makeText(this, "NEW CRUMB !!!", Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent(UpdatableActivity.PING);
+        intent.putExtra(TrackingListenerWriter.LATITUDE, location.getLatitude());
+        intent.putExtra(TrackingListenerWriter.LONGITUDE, location.getLongitude());
+        intent.putExtra(this._interventionID, mInterventionID);
+        sendBroadcast(intent);
+
 
         ContentValues values = new ContentValues();
 
