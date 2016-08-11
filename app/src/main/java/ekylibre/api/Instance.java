@@ -149,7 +149,7 @@ public class Instance
         // try {
         if (params != null)
         {
-            httpPost.setEntity(new StringEntity(params.toString()));
+            httpPost.setEntity(new StringEntity(params.toString(), "UTF-8"));
         }
             
         // // Execute HTTP Post Request
