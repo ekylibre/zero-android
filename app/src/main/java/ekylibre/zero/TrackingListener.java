@@ -27,9 +27,9 @@ public class TrackingListener implements LocationListener {
     public void onLocationChanged(Location location) {
         mWriter.writeCrumb(location, mType, mOptions);
     }
-    
+
     public void onStatusChanged(String provider, int status, Bundle extras) {}
-    
+
     public void onProviderEnabled(String provider) {}
     
     public void onProviderDisabled(String provider) {}
