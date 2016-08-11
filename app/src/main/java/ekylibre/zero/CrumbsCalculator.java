@@ -3,6 +3,7 @@ package ekylibre.zero;
 import android.location.Location;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 /**************************************
  * Created by pierre on 8/11/16.      *
@@ -13,7 +14,7 @@ public class CrumbsCalculator
     private final int pointPerMeter = 3;
     private float       averageSpeed;
     private ArrayList<Crumb> tmpCrumbList;
-    private Crumb finalCrumb = null;
+    private Crumb finalCrumb = new Crumb();
 
     public CrumbsCalculator()
     {
@@ -35,10 +36,42 @@ public class CrumbsCalculator
         return (false);
     }
 
+
+    //TODO TMP COMMENT POINT PAR SEC PAS CALC !! FINIR CETTE METHODE + METHODE DE CALCUL + WRITE CRUMB TRACKING ACTIVITY !!
     private void setFinalCrumb()
     {
         finalCrumb.speed = averageSpeed;
-        finalCrumb.
+        finalCrumb.date = new Date().getTime();
+        finalCrumb.latitude = averageLatitude();
+        finalCrumb.longitude = averageLongitude();
+    }
+
+    private double averageLatitude()
+    {
+        int i = -1;
+        double total = 0;
+        Crumb crumb;
+
+        while (++i < tmpCrumbList.size())
+        {
+            crumb = tmpCrumbList.get(i);
+            total += crumb.latitude;
+        }
+        return (total / i);
+    }
+
+    private double averageLongitude()
+    {
+        int i = -1;
+        double total = 0;
+        Crumb crumb;
+
+        while (++i < tmpCrumbList.size())
+        {
+            crumb = tmpCrumbList.get(i);
+            total += crumb.longitude;
+        }
+        return (total / i);
     }
 
     public Crumb getFinalCrumb()
