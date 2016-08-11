@@ -26,4 +26,13 @@ public class Crumb
         longitude = location.getLongitude();
         date = new Date().getTime();
     }
+
+    public Crumb()
+    {
+        speed = 0;
+        pos = null;
+        latitude = 0.0;
+        longitude = 0.0;
+        date = 0;
+    }
 }
