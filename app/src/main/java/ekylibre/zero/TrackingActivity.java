@@ -90,6 +90,8 @@ public class TrackingActivity extends AppCompatActivity implements TrackingListe
     private Button mMapButton;
     private int    mInterventionID;
 
+    private CrumbsCalculator crumbsCalculator = new CrumbsCalculator();
+
     private final String TAG = "Tracking Activity";
 
     @Override
@@ -468,6 +470,15 @@ public class TrackingActivity extends AppCompatActivity implements TrackingListe
 
     public void writeCrumb(Location location, String type, Bundle metadata) {
         // No point without a minimal accuracy
+        location.getSpeed();
+
+
+        if (crumbsCalculator.isSampleReady(location, type))
+
+
+
+
+
         if (location.getAccuracy() > 5 && type.equals("point")) {
             return;
         }
@@ -516,12 +527,6 @@ public class TrackingActivity extends AppCompatActivity implements TrackingListe
         }
 
         getContentResolver().insert(ZeroContract.Crumbs.CONTENT_URI, values);
-
-        // Sync data is interesting moment
-        if (type.equals("stop")) { //  || type.equals("pause")
-            //this.syncData();
-        }
-
         this.refreshDetails(location);
     }
 
@@ -547,17 +552,6 @@ public class TrackingActivity extends AppCompatActivity implements TrackingListe
             mDetails.setVisibility(View.GONE);
         }
     }
-
-
-    // Call the sync service
-/*    private void syncData() {
-        Log.d("zero", "syncData: " + mAccount.toString() + ", " + ZeroContract.AUTHORITY);
-        Bundle extras = new Bundle();
-        extras.putBoolean(ContentResolver.SYNC_EXTRAS_MANUAL, true);
-        extras.putBoolean(ContentResolver.SYNC_EXTRAS_EXPEDITED, true);
-        ContentResolver.requestSync(mAccount, ZeroContract.AUTHORITY, extras);
-    }*/
-
 
     @Override
     public void onDestroy()
