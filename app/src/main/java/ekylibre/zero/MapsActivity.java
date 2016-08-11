@@ -5,20 +5,25 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Build;
-import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.PolylineOptions;
+
+import java.util.ArrayList;
 
 import ekylibre.api.ZeroContract;
 import ekylibre.zero.util.AccountTool;
@@ -28,6 +33,7 @@ public class MapsActivity extends UpdatableActivity implements OnMapReadyCallbac
 
     private GoogleMap mMap;
     private Account mAccount;
+    private Marker  currentMarker = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,27 +60,23 @@ public class MapsActivity extends UpdatableActivity implements OnMapReadyCallbac
             return  ;
         }
 
-
         Location lastKnownLocation = locationManager.getLastKnownLocation(locationProvider);
-
-        setMarker(lastKnownLocation.getLatitude(), lastKnownLocation.getLongitude());
+        resetPrecedentMarkers(getIntent().getIntExtra(TrackingActivity._interventionID, 0));
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(new LatLng(lastKnownLocation.getLatitude(), lastKnownLocation.getLongitude())));
+        mMap.animateCamera( CameraUpdateFactory.zoomTo( 17.0f ) );
     }
+
 
     @Override
     public void onPing(Intent intent)
     {
-        Cursor cursor = queryMarkers(intent.getIntExtra(TrackingActivity._interventionID, 0));
-        if (cursor != null)
-        {
-            while (cursor.moveToNext())
-            {
-                setMarker(cursor.getDouble(0), cursor.getDouble(1));
-            }
-        }
-        setMarker(intent.getDoubleExtra(TrackingListenerWriter.LATITUDE, 0), intent.getDoubleExtra(TrackingListenerWriter.LONGITUDE, 0));
+        resetPrecedentMarkers(intent.getIntExtra(TrackingActivity._interventionID, 0));
+
     }
 
     private Cursor queryMarkers(int interventionID) {
+        if (interventionID == 0)
+            return (null);
         String[] mProjectionMarkers = {ZeroContract.Crumbs.LATITUDE, ZeroContract.Crumbs.LONGITUDE};
 
         Cursor cursorMarkers = getContentResolver().query(
@@ -85,15 +87,49 @@ public class MapsActivity extends UpdatableActivity implements OnMapReadyCallbac
                 null,
                 null);
         return (cursorMarkers);
+    }
 
+    private void resetPrecedentMarkers(int interventionID)
+    {
+        ArrayList<LatLng> pointList = new ArrayList<>();
+        Cursor cursor = queryMarkers(interventionID);
+
+        if (cursor != null)
+        {
+            while (cursor.moveToNext())
+            {
+                LatLng point = new LatLng(cursor.getDouble(0), cursor.getDouble(1));
+                pointList.add(point);
+            }
+            drawLines(pointList);
+            cursor.moveToLast();
+            setMarker(cursor.getDouble(0), cursor.getDouble(1));
+        }
+    }
+
+    private void drawLines(ArrayList<LatLng> pointList) {
+        PolylineOptions options = new PolylineOptions().width(5).color(Color.BLUE).geodesic(true);
+        int i = -1;
+        while (++i < pointList.size())
+        {
+            LatLng point = pointList.get(i);
+            options.add(point);
+        }
+        mMap.addPolyline(options);
+        LatLng currentPos = pointList.get(i - 1);
     }
 
     private void setMarker(double latitude, double longitude)
     {
-        mMap.addMarker(new MarkerOptions()
+        if (currentMarker != null)
+            currentMarker.remove();
+        currentMarker = mMap.addMarker(new MarkerOptions()
+                .icon(BitmapDescriptorFactory.fromBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.pos_marker)))
                 .position(new LatLng(latitude, longitude))
                 .title(""));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(new LatLng(latitude, longitude)));
+        //mMap.moveCamera(CameraUpdateFactory.newLatLng(new LatLng(latitude, longitude)));
+
+
     }
 
 }

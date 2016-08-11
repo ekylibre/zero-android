@@ -79,7 +79,7 @@ public class TrackingActivity extends AppCompatActivity implements TrackingListe
     private SharedPreferences mPreferences;
     private IntentIntegrator mScanIntegrator;
     private final int   REQUEST_CODE = 123;
-    public final String   _interventionID = "intervention_id";
+    public static final String   _interventionID = "intervention_id";
 
     private LocationManager mLocationManager;
     private NotificationManager mNotificationManager;
@@ -263,6 +263,7 @@ public class TrackingActivity extends AppCompatActivity implements TrackingListe
     public void openMap(View view)
     {
         Intent intent = new Intent(this, MapsActivity.class);
+        intent.putExtra(this._interventionID, mInterventionID);
         startActivity(intent);
     }
 
@@ -561,11 +562,7 @@ public class TrackingActivity extends AppCompatActivity implements TrackingListe
     @Override
     public void onDestroy()
     {
-        mNotificationBuilder
-                .setSmallIcon(R.mipmap.ic_stat_notify)
-                .setContentTitle(getString(R.string.app_name))
-                .setContentText("");
-        mNotificationManager.cancel(mNotificationID);
+        stopIntervention(null);
         super.onDestroy();
     }
 }

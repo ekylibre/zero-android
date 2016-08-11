@@ -20,8 +20,8 @@ public abstract class UpdatableActivity extends AppCompatActivity
     private static IntentFilter syncIntentFilterFINISHED    = new IntentFilter(ACTION_FINISHED_SYNC);
     private static IntentFilter syncIntentFilterSTART       = new IntentFilter(ACTION_STARTED_SYNC);
     private static IntentFilter pingIntentFilter            = new IntentFilter(PING);
-    protected boolean isSync = false;
-    private final String    TAG = "UpdatableActivity";
+    protected boolean           isSync                      = false;
+    private final String        TAG                         = "UpdatableActivity";
 
     private BroadcastReceiver   syncBroadcastReceiverFinish  = new BroadcastReceiver()
     {
