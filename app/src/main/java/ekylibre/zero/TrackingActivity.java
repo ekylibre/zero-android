@@ -24,6 +24,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Chronometer;
@@ -191,6 +192,7 @@ public class TrackingActivity extends AppCompatActivity implements TrackingListe
         //      mProcedureChooser.show();
         //  }
     }
+
 /*
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -501,6 +503,7 @@ public class TrackingActivity extends AppCompatActivity implements TrackingListe
         extras.putBoolean(ContentResolver.SYNC_EXTRAS_EXPEDITED, true);
         ContentResolver.requestSync(mAccount, ZeroContract.AUTHORITY, extras);
     }*/
+
 
     @Override
     public void onDestroy()
