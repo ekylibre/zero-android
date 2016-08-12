@@ -136,21 +136,16 @@ public class TrackingActivity extends AppCompatActivity implements TrackingListe
         mPrecisionModeStartButton = (Button)     findViewById(R.id.start_precision_mode_button);
         mPrecisionModeStopButton  = (Button)     findViewById(R.id.stop_precision_mode_button);
 
-        // Synchronize data
-        //this.syncData();
 
         // Acquire a reference to the system Location Manager
         mTrackingListener = new TrackingListener(this);
         mLocationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
         mLocationProvider = LocationManager.GPS_PROVIDER;
 
-        // Reference preferences
         mPreferences = PreferenceManager.getDefaultSharedPreferences(this);
 
-        // Reference scan integrator
         mScanIntegrator = new IntentIntegrator(this);
 
-        // Notification
         mNotificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         mNotificationID = 1;
         mNotificationBuilder = new Notification.Builder(this)
@@ -160,15 +155,7 @@ public class TrackingActivity extends AppCompatActivity implements TrackingListe
                 .setContentIntent(PendingIntent.getActivity(this, 0, new Intent(this, TrackingActivity.class), PendingIntent.FLAG_UPDATE_CURRENT))
                 .setSmallIcon(R.mipmap.ic_stat_notify);
 
-
-        // Procedure nature chooser for starting intervention
         createProcedureChooser();
-        //  if (!mRunning) {
-        //      mProcedureChooser.show();
-        //  }
-
-
-
     }
 
     private void createProcedureChooser()
@@ -188,11 +175,9 @@ public class TrackingActivity extends AppCompatActivity implements TrackingListe
                         mMapButton.setVisibility(View.VISIBLE);
                         mStopButton.setVisibility(View.VISIBLE);
                         mPauseButton.setVisibility(View.VISIBLE);
-/*
-                        mScanButton.setVisibility(View.VISIBLE);
-*/
+                        //mScanButton.setVisibility(View.VISIBLE);
                         mSyncButton.setVisibility(View.GONE);
-                        mPrecisionModeStartButton.setVisibility(View.VISIBLE);
+                        //mPrecisionModeStartButton.setVisibility(View.VISIBLE);
                         //mProcedureNature.setVisibility(View.VISIBLE);
                         mProcedureNature.setText(mLastProcedureNatureName);
 
@@ -231,32 +216,6 @@ public class TrackingActivity extends AppCompatActivity implements TrackingListe
         mInterventionID = cursor.getInt(0);
         cursor.close();
     }
-    /*
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu items for use in the action bar
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.tracking, menu);
-        return super.onCreateOptionsMenu(menu);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        Intent intent;
-        // Handle presses on the action bar items
-        switch (item.getItemId()) {
-            // case R.id.action_search:
-            //     // openSearch();
-            //     return true;
-        case R.id.action_settings:
-            intent = new Intent(this, SettingsActivity.class);
-            startActivity(intent);  
-            return true;
-        default:
-            return super.onOptionsItemSelected(item);
-        }
-    }
-*/
 
     public void startIntervention(View view) {
         mProcedureChooser.show();
@@ -270,20 +229,19 @@ public class TrackingActivity extends AppCompatActivity implements TrackingListe
     }
 
     public void stopIntervention(View view) {
-        if (mPrecisionMode) {
+/*        if (mPrecisionMode) {
             stopPrecisionMode(view);
-        }
+        }*/
         mMasterChrono.stop();
         mMasterChrono.setVisibility(View.INVISIBLE);
         mStopButton.setVisibility(View.GONE);
         mPauseButton.setVisibility(View.GONE);
         mMapButton.setVisibility(View.GONE);
         mScanButton.setVisibility(View.GONE);
-        mPrecisionModeStartButton.setVisibility(View.GONE);
+        //mPrecisionModeStartButton.setVisibility(View.GONE);
         mDetails.setVisibility(View.GONE);
         mProcedureNature.setVisibility(View.INVISIBLE);
         mStartButton.setVisibility(View.VISIBLE);
-        //mSyncButton.setVisibility(View.VISIBLE);
         this.stopTracking();
         this.addCrumb("stop");
 
@@ -295,7 +253,7 @@ public class TrackingActivity extends AppCompatActivity implements TrackingListe
         mNotificationManager.cancel(mNotificationID);
     }
 
-
+/*
     public void startPrecisionMode(View view) {
         mPrecisionMode = true;
 
@@ -315,10 +273,10 @@ public class TrackingActivity extends AppCompatActivity implements TrackingListe
                 .setSmallIcon(R.mipmap.ic_stat_notify_precision_mode)
                 .setContentText(getString(R.string.precision_mode));
         mNotificationManager.notify(mNotificationID, mNotificationBuilder.build());
-    }
+    }*/
 
 
-    public void stopPrecisionMode(View view) {
+/*    public void stopPrecisionMode(View view) {
         mPrecisionModeStopButton.setVisibility(View.GONE);
         mPrecisionModeStartButton.setVisibility(View.VISIBLE);
 
@@ -334,25 +292,24 @@ public class TrackingActivity extends AppCompatActivity implements TrackingListe
         mNotificationManager.notify(mNotificationID, mNotificationBuilder.build());
 
         mPrecisionMode = false;
-    }
+    }*/
 
 
     public void pauseIntervention(View view) {
         mMasterDuration += SystemClock.elapsedRealtime() - mMasterStart;
         mMasterChrono.stop();
         mPauseButton.setVisibility(View.GONE);
-        // mStartButton.setVisibility(View.GONE);
         mStopButton.setVisibility(View.GONE);
         mScanButton.setVisibility(View.GONE);
 
         mResumeButton.setVisibility(View.VISIBLE);
-        if (mPrecisionMode) {
+/*        if (mPrecisionMode) {
             mPrecisionModeStopButton.setVisibility(View.GONE);
             mPrecisionModeDuration += SystemClock.elapsedRealtime() - mPrecisionModeStart;
             mPrecisionModeChrono.stop();
         } else {
             mPrecisionModeStartButton.setVisibility(View.GONE);
-        }
+        }*/
         this.stopTracking();
         this.addCrumb("pause");
         mNotificationBuilder
@@ -371,7 +328,7 @@ public class TrackingActivity extends AppCompatActivity implements TrackingListe
         // mStartButton.setVisibility(View.VISIBLE);
         mStopButton.setVisibility(View.VISIBLE);
         //mScanButton.setVisibility(View.VISIBLE);
-        if (mPrecisionMode) {
+/*        if (mPrecisionMode) {
             mPrecisionModeStart = SystemClock.elapsedRealtime();
             mPrecisionModeChrono.setBase(mPrecisionModeStart - mPrecisionModeDuration);
             mPrecisionModeChrono.start();
@@ -384,7 +341,7 @@ public class TrackingActivity extends AppCompatActivity implements TrackingListe
                     .setSmallIcon(R.mipmap.ic_stat_notify_running)
                     .setContentText(getString(R.string.running));
             mPrecisionModeStartButton.setVisibility(View.VISIBLE);
-        }
+        }*/
         this.startTracking();
         this.addCrumb("resume");
 
@@ -410,17 +367,10 @@ public class TrackingActivity extends AppCompatActivity implements TrackingListe
                 this.addCrumb("scan", metadata);
             }
         }
-        // else continue with any other code you need in the method
     }
-
-    // Call the sync service
-    public void syncCrumbs(View view) {
-        //this.syncData();
-    }
-
 
     private void startTracking() {
-        startTracking(4000);
+        startTracking(100);
     }
 
     private void startTracking(long interval) {
@@ -454,13 +404,8 @@ public class TrackingActivity extends AppCompatActivity implements TrackingListe
     private void addCrumb(String type, Bundle metadata) {
         try
         {
-            // Location location = mLocationManager.getLastKnownLocation(mLocationProvider);
-            // if (location == null) {
             TrackingListener listener = new TrackingListener(this, type, metadata);
             mLocationManager.requestSingleUpdate(mLocationProvider, listener, null);
-            // } else {
-            //     writeCrumb(location, type, metadata);
-            // }
         }
         catch(SecurityException e)
         {
@@ -468,42 +413,51 @@ public class TrackingActivity extends AppCompatActivity implements TrackingListe
         }
     }
 
-    public void writeCrumb(Location location, String type, Bundle metadata) {
-        // No point without a minimal accuracy
-        location.getSpeed();
-
-
-        if (crumbsCalculator.isSampleReady(location, type))
-
-
-
-
-
-        if (location.getAccuracy() > 5 && type.equals("point")) {
+    public void writeCrumb(Location location, String type, Bundle metadata)
+    {
+        if (!crumbsCalculator.isSampleReady(location, type))
             return;
-        }
 
         if (BuildConfig.DEBUG) Log.d(TAG, "I'm writing new crumb !");
         Toast.makeText(this, "NEW CRUMB !!!", Toast.LENGTH_SHORT).show();
+        Crumb crumb = crumbsCalculator.getFinalCrumb();
+
+
+        putCrumbOnLocalDatabase(crumb, type, metadata);
+        startTracking(crumbsCalculator.getNexPointDelay());
+
+        sendBroadcastNewCrumb(location);
+
+    }
+
+    private void sendBroadcastNewCrumb(Location location)
+    {
         Intent intent = new Intent(UpdatableActivity.PING);
         intent.putExtra(TrackingListenerWriter.LATITUDE, location.getLatitude());
         intent.putExtra(TrackingListenerWriter.LONGITUDE, location.getLongitude());
         intent.putExtra(this._interventionID, mInterventionID);
         sendBroadcast(intent);
+    }
 
-
+    private void putCrumbOnLocalDatabase(Crumb crumb, String type, Bundle metadata)
+    {
         ContentValues values = new ContentValues();
 
         values.put(ZeroContract.CrumbsColumns.USER, AccountTool.getCurrentAccount(this).name);
         values.put(ZeroContract.CrumbsColumns.TYPE, type);
-        values.put(ZeroContract.CrumbsColumns.LATITUDE, location.getLatitude());
-        values.put(ZeroContract.CrumbsColumns.LONGITUDE, location.getLongitude());
-        // values.put(ZeroContract.CrumbsColumns.READ_AT, location.getTime());
-        long readAt = (new Date()).getTime();
-        values.put(ZeroContract.CrumbsColumns.READ_AT, readAt);
-        values.put(ZeroContract.CrumbsColumns.ACCURACY, location.getAccuracy());
+        values.put(ZeroContract.CrumbsColumns.LATITUDE, crumb.getLatitude());
+        values.put(ZeroContract.CrumbsColumns.LONGITUDE, crumb.getLongitude());
+        values.put(ZeroContract.CrumbsColumns.READ_AT, crumb.getDate());
+        values.put(ZeroContract.CrumbsColumns.ACCURACY, 0);
         values.put(ZeroContract.CrumbsColumns.SYNCED, 0);
         values.put(ZeroContract.CrumbsColumns.FK_INTERVENTION, mInterventionID);
+        putMetadata(metadata, values);
+
+        getContentResolver().insert(ZeroContract.Crumbs.CONTENT_URI, values);
+    }
+
+    private void putMetadata(Bundle metadata, ContentValues values)
+    {
         if (metadata != null) {
             try {
                 List<NameValuePair> pairs = new ArrayList<NameValuePair>();
@@ -523,33 +477,6 @@ public class TrackingActivity extends AppCompatActivity implements TrackingListe
             } catch(IOException e) {
                 e.printStackTrace();
             }
-            // values.put(ZeroContract.CrumbsColumns.METADATA, metadata.getString("procedureNature"));
-        }
-
-        getContentResolver().insert(ZeroContract.Crumbs.CONTENT_URI, values);
-        this.refreshDetails(location);
-    }
-
-    private void refreshDetails(Location location) {
-        Boolean aShow = mPreferences.getBoolean(SettingsActivity.PREF_SHOW_DETAILS, false);
-        if (aShow && mRunning) {
-            if (mDetails.getVisibility() != View.VISIBLE) {
-                mDetails.setVisibility(View.VISIBLE);
-            }
-            Cursor cursor = getContentResolver().query(ZeroContract.Crumbs.CONTENT_URI,
-                    ZeroContract.Crumbs.PROJECTION_NONE,
-                    "\"" + ZeroContract.Crumbs.USER + "\"" + " LIKE " + "\"" + mAccount.name + "\"",
-                    null,
-                    null);
-            int count = cursor.getCount();
-            // Called when a new location is found by the network location provider.
-            mAccuracy.setText(String.valueOf(location.getAccuracy()) + "m");
-            mLatitude.setText(String.valueOf(location.getLatitude()) + "°");
-            mLongitude.setText(String.valueOf(location.getLongitude()) + "°");
-            mCrumbsCount.setText(String.valueOf(count));
-
-        } else if (mDetails.getVisibility() == View.VISIBLE) {
-            mDetails.setVisibility(View.GONE);
         }
     }
 

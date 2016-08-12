@@ -5,6 +5,7 @@ import android.location.Location;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.util.Date;
+import java.util.concurrent.CancellationException;
 
 /**************************************
  * Created by pierre on 8/11/16.      *
@@ -35,4 +36,30 @@ public class Crumb
         longitude = 0.0;
         date = 0;
     }
+
+    public double getLatitude()
+    {
+        return (latitude);
+    }
+
+    public double getLongitude()
+    {
+        return (longitude);
+    }
+
+    public long getDate()
+    {
+        return (date);
+    }
+
+    public float getSpeed()
+    {
+        return (speed);
+    }
+
+    public LatLng getPos()
+    {
+        return (pos);
+    }
+
 }
