@@ -234,7 +234,6 @@ public class PlantCountingActivity extends UpdatableActivity  {
             Log.d("zero", "name : " + cursorDensity.getString(0));
             mDensityTab[itName] = cursorDensity.getString(0) + " " + convertedUnit(unit);
             mDensityTabID[itName] = cursorDensity.getInt(1);
-            Log.d("zero", "tablename[" + itName + "] : " + mAbaqueTab[itName]);
             itName++;
         }
     }

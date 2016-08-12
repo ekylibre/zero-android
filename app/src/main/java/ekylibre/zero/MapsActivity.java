@@ -102,8 +102,8 @@ public class MapsActivity extends UpdatableActivity implements OnMapReadyCallbac
                 pointList.add(point);
             }
             drawLines(pointList);
-            cursor.moveToLast();
-            setMarker(cursor.getDouble(0), cursor.getDouble(1));
+           if (cursor.moveToLast())
+               setMarker(cursor.getDouble(0), cursor.getDouble(1));
         }
     }
 
@@ -116,7 +116,10 @@ public class MapsActivity extends UpdatableActivity implements OnMapReadyCallbac
             options.add(point);
         }
         mMap.addPolyline(options);
-        LatLng currentPos = pointList.get(i - 1);
+        if (i > 0)
+        {
+            LatLng currentPos = pointList.get(i - 1);
+        }
     }
 
     private void setMarker(double latitude, double longitude)
