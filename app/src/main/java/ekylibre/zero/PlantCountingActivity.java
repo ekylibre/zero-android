@@ -203,7 +203,6 @@ public class PlantCountingActivity extends UpdatableActivity  {
         while (cursorAbacus.moveToNext()) {
             Log.d("zero", "name : " + cursorAbacus.getString(0));
             mAbaqueTab[itName] = cursorAbacus.getString(0);
-            Log.d("zero", "tablename[" + itName + "] : " + mAbaqueTab[itName]);
             itName++;
         }
     }
@@ -231,7 +230,6 @@ public class PlantCountingActivity extends UpdatableActivity  {
             Log.d("zero", "name : " + cursorDensity.getString(0));
             mDensityTab[itName] = cursorDensity.getString(0) + " " + convertedUnit(unit);
             mDensityTabID[itName] = cursorDensity.getInt(1);
-            Log.d("zero", "tablename[" + itName + "] : " + mAbaqueTab[itName]);
             itName++;
         }
     }
