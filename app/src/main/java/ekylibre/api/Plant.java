@@ -21,6 +21,7 @@ public class Plant
 {
     private static final String TAG = "Plant";
     int     mId;
+    int     mActivityID;
     String  mName;
     String  mVariety;
     //shape
@@ -47,11 +48,16 @@ public class Plant
         mId = object.getInt("id");
         mName = object.getString("name");
         mVariety =object.getString("variety");
+        mActivityID = object.getInt("activity_id");
         //mShape = (float)object.getDouble("shape");
     }
 
     public int getId() {
         return mId;
+    }
+
+    public int getActivityID() {
+        return mActivityID;
     }
 
     public String getName() {
