@@ -1,30 +1,23 @@
 package ekylibre.zero;
 
 import android.accounts.Account;
-import android.accounts.AccountManager;
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
-import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.preference.PreferenceManager;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Chronometer;
@@ -48,7 +41,6 @@ import java.util.List;
 
 import ekylibre.api.ZeroContract;
 import ekylibre.zero.util.AccountTool;
-import ekylibre.zero.util.UpdatableActivity;
 
 
 public class TrackingActivity extends AppCompatActivity implements TrackingListenerWriter
@@ -101,6 +93,8 @@ public class TrackingActivity extends AppCompatActivity implements TrackingListe
 
         // Set content view
         setContentView(R.layout.tracking);
+        turnOnGPS();
+
 
         // Find view elements
         mProcedureNature = (TextView) findViewById(R.id.procedure_nature);
@@ -191,6 +185,11 @@ public class TrackingActivity extends AppCompatActivity implements TrackingListe
         //  if (!mRunning) {
         //      mProcedureChooser.show();
         //  }
+    }
+
+    private void turnOnGPS()
+    {
+
     }
 
 /*
