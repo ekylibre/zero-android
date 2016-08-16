@@ -93,7 +93,6 @@ public class TrackingActivity extends AppCompatActivity implements TrackingListe
 
         // Set content view
         setContentView(R.layout.tracking);
-        turnOnGPS();
 
 
         // Find view elements
@@ -185,11 +184,6 @@ public class TrackingActivity extends AppCompatActivity implements TrackingListe
         //  if (!mRunning) {
         //      mProcedureChooser.show();
         //  }
-    }
-
-    private void turnOnGPS()
-    {
-
     }
 
 /*
