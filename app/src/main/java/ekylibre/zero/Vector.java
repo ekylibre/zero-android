@@ -4,20 +4,20 @@ package ekylibre.zero;
  * Created by pierre on 8/17/16.      *
  * ekylibre.zero for zero-android    *
  *************************************/
-public class vector
+public class Vector
 {
     public double x;
     public double y;
     public double absX;
     public double absY;
 
-    public vector(double x1, double x2, double y1, double y2)
+    public Vector(double x1, double x2, double y1, double y2)
     {
         setAbsValue();
         setVectorCoord(x1, x2, y1, y2);
     }
 
-    public vector()
+    public Vector()
     {
         this.x = 0;
         this.y = 0;
