@@ -10,6 +10,7 @@ public class Vector
     public double y;
     public double absX;
     public double absY;
+    public boolean set = false;
 
     public Vector(double x1, double x2, double y1, double y2)
     {
@@ -24,7 +25,15 @@ public class Vector
         setAbsValue();
     }
 
-    public void setAbsValue()
+    public void copyVector(Vector vector)
+    {
+        this.x = vector.x;
+        this.y = vector.y;
+        this.set = vector.set;
+        setAbsValue();
+    }
+
+    private void setAbsValue()
     {
         this.absX = Math.abs(this.x);
         this.absY = Math.abs(this.y);
@@ -34,5 +43,13 @@ public class Vector
     {
         this.x = x2 - x1;
         this.y = y2 - y1;
+        setAbsValue();
+    }
+
+    public void setVectorFinalCoord(double x, double y)
+    {
+        this.x = x;
+        this.y = y;
+        setAbsValue();
     }
 }
