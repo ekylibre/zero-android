@@ -1,4 +1,4 @@
-package ekylibre.zero;
+package ekylibre.zero.home;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -8,6 +8,10 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import java.util.List;
+
+import ekylibre.zero.R;
+import ekylibre.zero.home.TodoItem;
+import ekylibre.zero.home.TodoViewHolder;
 
 /**************************************
  * Created by pierre on 7/11/16.      *

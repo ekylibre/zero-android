@@ -1,4 +1,4 @@
-package ekylibre.zero;
+package ekylibre.zero.tracking;
 
 import android.accounts.Account;
 import android.content.Context;
@@ -26,6 +26,7 @@ import com.google.android.gms.maps.model.PolylineOptions;
 import java.util.ArrayList;
 
 import ekylibre.api.ZeroContract;
+import ekylibre.zero.R;
 import ekylibre.zero.util.AccountTool;
 import ekylibre.zero.util.UpdatableActivity;
 

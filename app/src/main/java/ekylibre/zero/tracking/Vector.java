@@ -1,4 +1,4 @@
-package ekylibre.zero;
+package ekylibre.zero.tracking;
 
 /**************************************
  * Created by pierre on 8/17/16.      *
@@ -10,6 +10,7 @@ public class Vector
     public double y;
     public double absX;
     public double absY;
+    public double norm;
     public boolean set = false;
 
     public Vector(double x1, double x2, double y1, double y2)

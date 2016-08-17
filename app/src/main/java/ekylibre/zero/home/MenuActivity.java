@@ -1,4 +1,4 @@
-package ekylibre.zero;
+package ekylibre.zero.home;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
@@ -19,7 +19,15 @@ import android.widget.Toast;
 
 
 import ekylibre.api.ZeroContract;
-import ekylibre.zero.service.ConnectionManagerService;
+import ekylibre.zero.AuthenticatorActivity;
+import ekylibre.zero.CalendarActivity;
+import ekylibre.zero.IssueActivity;
+import ekylibre.zero.PlantCountingActivity;
+import ekylibre.zero.R;
+import ekylibre.zero.SettingsActivity;
+import ekylibre.zero.SyncAdapter;
+import ekylibre.zero.tracking.TrackingActivity;
+import ekylibre.service.ConnectionManagerService;
 
 public class MenuActivity extends ActionBarActivity
 {

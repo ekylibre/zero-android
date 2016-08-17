@@ -1,12 +1,10 @@
-package ekylibre.zero;
+package ekylibre.zero.tracking;
 
 import android.location.Location;
-import android.util.Log;
 
 import com.google.android.gms.maps.model.LatLng;
 
 import java.util.Date;
-import java.util.concurrent.CancellationException;
 
 /**************************************
  * Created by pierre on 8/11/16.      *
