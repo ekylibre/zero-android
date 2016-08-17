@@ -1,4 +1,4 @@
-package ekylibre.zero;
+package ekylibre.zero.account;
 
 import android.widget.TextView;
 

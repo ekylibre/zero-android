@@ -9,7 +9,7 @@ import org.apache.http.client.ClientProtocolException;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class Crumb
+public class CrumbPoster
 {
     public static long create(Instance instance, JSONObject attributes) throws JSONException, ClientProtocolException, IOException, HTTPException
     {

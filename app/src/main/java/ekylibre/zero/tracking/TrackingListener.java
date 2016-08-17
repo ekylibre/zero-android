@@ -1,4 +1,4 @@
-package ekylibre.zero;
+package ekylibre.zero.tracking;
 
 import android.location.Location;
 import android.location.LocationListener;

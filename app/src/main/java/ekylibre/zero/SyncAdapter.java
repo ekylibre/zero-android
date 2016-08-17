@@ -3,31 +3,22 @@ package ekylibre.zero;
 import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.accounts.AccountsException;
-import android.content.Intent;
-import android.database.Cursor;
 import android.content.AbstractThreadedSyncAdapter;
 import android.content.ContentProviderClient;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SyncResult;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.SystemClock;
 import android.provider.Settings.Secure;
 import android.util.Log;
 
-import ekylibre.api.Crumb;
-import ekylibre.api.Instance;
-import ekylibre.api.Issue;
-import ekylibre.api.PlantCounting;
-import ekylibre.api.PlantCountingItem;
-import ekylibre.api.PlantDensityAbacus;
-import ekylibre.api.Plant;
-import ekylibre.api.ZeroContract;
-import ekylibre.exceptions.HTTPException;
-import ekylibre.zero.util.AccountTool;
-import ekylibre.zero.util.UpdatableActivity;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -36,10 +27,16 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
+import ekylibre.api.CrumbPoster;
+import ekylibre.api.Instance;
+import ekylibre.api.Issue;
+import ekylibre.api.Plant;
+import ekylibre.api.PlantCounting;
+import ekylibre.api.PlantDensityAbacus;
+import ekylibre.api.ZeroContract;
+import ekylibre.exceptions.HTTPException;
+import ekylibre.zero.util.AccountTool;
+import ekylibre.zero.util.UpdatableActivity;
 
 /**
  * Handle the transfer of data between a server and an
@@ -182,7 +179,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
             }
         }
 
-        long id = Crumb.create(instance, attributes);
+        long id = CrumbPoster.create(instance, attributes);
         // Marks them as synced
         ContentValues values = new ContentValues();
         values.put(ZeroContract.CrumbsColumns.SYNCED, 1);

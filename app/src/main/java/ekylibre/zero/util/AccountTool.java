@@ -11,7 +11,7 @@ import android.util.Log;
 
 import java.util.Objects;
 
-import ekylibre.zero.AccountManagerActivity;
+import ekylibre.zero.account.AccountManagerActivity;
 import ekylibre.zero.Authenticator;
 import ekylibre.zero.AuthenticatorActivity;
 import ekylibre.zero.SyncAdapter;

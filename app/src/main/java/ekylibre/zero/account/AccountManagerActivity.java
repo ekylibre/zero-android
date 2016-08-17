@@ -1,4 +1,4 @@
-package ekylibre.zero;
+package ekylibre.zero.account;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
@@ -10,21 +10,22 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.Menu;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
 import ekylibre.api.ZeroContract;
+import ekylibre.zero.AuthenticatorActivity;
+import ekylibre.zero.R;
+import ekylibre.zero.SyncAdapter;
 import ekylibre.zero.util.AccountTool;
 
 public class AccountManagerActivity extends AppCompatActivity
 {
     private Account[]               listAccount;
     private String                  TAG = "AccountManager";
-    private AccountAdapter          accountAdapter;
+    private AccountAdapter accountAdapter;
     public final static String      CURRENT_ACCOUNT_NAME = "Current account";
     public final static String      CURRENT_ACCOUNT_INSTANCE = "Current instance";
 

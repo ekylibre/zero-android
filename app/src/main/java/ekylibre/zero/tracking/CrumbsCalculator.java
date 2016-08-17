@@ -1,11 +1,9 @@
-package ekylibre.zero;
+package ekylibre.zero.tracking;
 
 import android.location.Location;
-import android.support.design.widget.TabLayout;
 import android.util.Log;
 
 import java.util.ArrayList;
-import java.util.Date;
 
 /**************************************
  * Created by pierre on 8/11/16.      *
@@ -13,7 +11,9 @@ import java.util.Date;
  *************************************/
 public class CrumbsCalculator
 {
-    private final int           maxAccuracy = 5;
+    private final int           MAX_ACCURACY = 5;
+    private final float         MAX_SPEED_ACCEPTED_WITHOUT_CHECK = 5;
+
     private Crumb               prevCrumb = new Crumb();
     private Crumb               currCrumb = new Crumb();
     private Crumb               finalCrumb = new Crumb();
@@ -21,6 +21,7 @@ public class CrumbsCalculator
     private Vector              prevVector = new Vector();
     private Vector              currVector = new Vector();
     private Vector              averageVector = new Vector();
+
     private ArrayList<Vector>   listVector = new ArrayList<>();
     private final String        TAG = "CrumbsCalculator";
     private boolean             firstPass = true;
@@ -29,25 +30,21 @@ public class CrumbsCalculator
     {
     }
 
-    public boolean isSampleReady(Location location, String type)
+    public boolean isCrumbAccurate(Location location, String type)
     {
-        if (location.getAccuracy() > maxAccuracy || !type.equals("point"))
+        if (location.getAccuracy() > MAX_ACCURACY || !type.equals("point"))
             return (false);
         Log.d(TAG, "====================================================================");
         Log.d(TAG, "ACCURACY =  = = = =  "  + location.getAccuracy());
         if (firstPass)
         {
-            firstPass = false;
-            currCrumb.setCrumb(location);
+            firstSet(location);
+            return (true);
         }
         else if (!currVector.set)
         {
-            currVector.set = true;
-            prevCrumb.copyCrumb(currCrumb);
-            currCrumb.setCrumb(location);
-            currVector.setVectorCoord(prevCrumb.getLongitude(), currCrumb.getLongitude(),
-                    prevCrumb.getLatitude(), currCrumb.getLatitude());
-            listVector.add(currVector);
+            firstVectorSet(location);
+            return (true);
         }
         else
         {
@@ -57,11 +54,51 @@ public class CrumbsCalculator
             currVector.setVectorCoord(prevCrumb.getLongitude(), currCrumb.getLongitude(),
                     prevCrumb.getLatitude(), currCrumb.getLatitude());
             listVector.add(currVector);
-
+            updateAverageVector();
+            if (checkCrumb())
+            {
+                setFinalCrumb();
+                return (true);
+            }
         }
-
-        updateAverageVector();
         return (false);
+    }
+
+    private void firstVectorSet(Location location)
+    {
+        currVector.set = true;
+        prevCrumb.copyCrumb(currCrumb);
+        currCrumb.setCrumb(location);
+        currVector.setVectorCoord(prevCrumb.getLongitude(), currCrumb.getLongitude(),
+                prevCrumb.getLatitude(), currCrumb.getLatitude());
+        listVector.add(currVector);
+        setFinalCrumb();
+    }
+
+    private void firstSet(Location location)
+    {
+        firstPass = false;
+        currCrumb.setCrumb(location);
+        setFinalCrumb();
+    }
+
+    private boolean checkCrumb()
+    {
+        if ((currVector.absX < averageVector.absX * (1 + 0.30) && currVector.absX > averageVector.absX * (1 - 0.30)
+                && currVector.absY < averageVector.absY * (1 + 0.30) && currVector.absY > averageVector.absY * (1 - 0.30)
+                && currCrumb.speed < prevCrumb.speed * (1 + 0.30) && currCrumb.speed > prevCrumb.speed * (1 - 0.30))
+             || currCrumb.speed < MAX_SPEED_ACCEPTED_WITHOUT_CHECK)
+        {
+            return (true);
+        }
+        else
+        {
+            // Here we should be able to make the vector smoother
+            // There is some work on the end of this algo because we'll don't ignore vector anymore
+            // ATM I will just ignore the vector and change variables as if he had never existed
+            currCrumb.copyCrumb(prevCrumb);
+            return (false);
+        }
     }
 
     private void updateAverageVector()

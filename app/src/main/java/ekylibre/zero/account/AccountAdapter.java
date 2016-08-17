@@ -1,4 +1,4 @@
-package ekylibre.zero;
+package ekylibre.zero.account;
 
 import android.accounts.Account;
 import android.content.Context;
@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import ekylibre.zero.R;
 import ekylibre.zero.util.AccountTool;
 
 /**************************************

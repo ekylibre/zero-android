@@ -1,4 +1,4 @@
-package ekylibre.zero.service;
+package ekylibre.service;
 
 import android.app.Service;
 import android.content.Intent;

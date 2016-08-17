@@ -1,18 +1,14 @@
-package ekylibre.zero;
+package ekylibre.zero.home;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.content.ContentResolver;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
-import android.support.design.widget.Snackbar;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
@@ -24,7 +20,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import ekylibre.api.ZeroContract;
-import ekylibre.zero.service.ConnectionManagerService;
+import ekylibre.zero.account.AccountManagerActivity;
+import ekylibre.zero.IssueActivity;
+import ekylibre.zero.PlantCountingActivity;
+import ekylibre.zero.R;
+import ekylibre.zero.SettingsActivity;
+import ekylibre.zero.tracking.MapsActivity;
+import ekylibre.zero.tracking.TrackingActivity;
+import ekylibre.service.ConnectionManagerService;
 import ekylibre.zero.util.AccountTool;
 import ekylibre.zero.util.UpdatableActivity;
 
