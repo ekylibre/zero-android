@@ -143,8 +143,8 @@ public class DatabaseHelper extends SQLiteOpenHelper
                         + ", " + ZeroContract.PlantDensityAbacusItemsColumns.USER + " VARCHAR(255)"
                         + ")");
             case 8:
-                database.execSQL("ALTER TABLE plants ADD activity_ID INTEGER");
-                database.execSQL("ALTER TABLE plant_density_abaci ADD activity_ID INTEGER");
+                database.execSQL("ALTER TABLE plants ADD activity_ID INTEGER DEFAULT 0");
+                database.execSQL("ALTER TABLE plant_density_abaci ADD activity_ID INTEGER DEFAULT 0");
         }
     }
 }

@@ -297,7 +297,8 @@ public class PlantCountingActivity extends UpdatableActivity  {
             Log.d(TAG, "abaque data does NOT exist");
         }
         createDensityChooser();
-        cursorDensity.close();
+        if (cursorDensity != null)
+            cursorDensity.close();
     }
 
     private void setGerminationPercentage(CharSequence abacusSelected)
@@ -363,6 +364,7 @@ public class PlantCountingActivity extends UpdatableActivity  {
                     public void onClick(DialogInterface dialog, int which) {
                         mPlantName.setText(mPlantNameTab[which]);
                         setAbacusList();
+
                         mPlantsCount = 0;
                         mGerminationPercentage = 0;
                         selectedPlantDensityAbacusItemID = 0;
@@ -370,6 +372,8 @@ public class PlantCountingActivity extends UpdatableActivity  {
                             mAbaque.setText(getResources().getString(R.string.select_abacus));
                         if (mDensityChooser != null)
                             mDensityText.setText(getResources().getString(R.string.advocated_density));
+                        mDensityTab = null;
+                        mDensityChooser = null;
                     }
                 });
     }

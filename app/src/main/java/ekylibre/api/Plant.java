@@ -47,8 +47,9 @@ public class Plant
 
         mId = object.getInt("id");
         mName = object.getString("name");
-        mVariety =object.getString("variety");
-        mActivityID = object.getInt("activity_id");
+        mVariety = object.getString("variety");
+        if (!object.isNull("activity_id"))
+            mActivityID = object.getInt("activity_id");
         //mShape = (float)object.getDouble("shape");
     }
 
