@@ -1,6 +1,7 @@
 package ekylibre.zero;
 
 import android.location.Location;
+import android.util.Log;
 
 import com.google.android.gms.maps.model.LatLng;
 
@@ -35,6 +36,24 @@ public class Crumb
         latitude = 0.0;
         longitude = 0.0;
         date = 0;
+    }
+
+    public void setCrumb(Location location)
+    {
+        speed = location.getSpeed();
+        pos = new LatLng(location.getLatitude(), location.getLongitude());
+        latitude = location.getLatitude();
+        longitude = location.getLongitude();
+        date = new Date().getTime();
+    }
+
+    public void copyCrumb(Crumb crumb)
+    {
+        speed = crumb.getSpeed();
+        pos = new LatLng(crumb.getLatitude(), crumb.getLongitude());
+        latitude = crumb.getLatitude();
+        longitude = crumb.getLongitude();
+        date = new Date().getTime();
     }
 
     public double getLatitude()
