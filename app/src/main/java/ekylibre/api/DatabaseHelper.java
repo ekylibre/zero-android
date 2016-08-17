@@ -8,7 +8,7 @@ import ekylibre.api.ZeroContract;
 
 public class DatabaseHelper extends SQLiteOpenHelper
 {
-    public static final int DATABASE_VERSION = 8;
+    public static final int DATABASE_VERSION = 9;
     public static final String DATABASE_NAME = "zero";
 
     public DatabaseHelper(Context context)
@@ -142,7 +142,7 @@ public class DatabaseHelper extends SQLiteOpenHelper
                         + ", " + ZeroContract.Plants.ACTIVE + " BOOLEAN NOT NULL"
                         + ", " + ZeroContract.PlantDensityAbacusItemsColumns.USER + " VARCHAR(255)"
                         + ")");
-            case 8:
+            case 9:
                 database.execSQL("CREATE TABLE IF NOT EXISTS intervention ("
                         + ZeroContract.InterventionsColumns._ID + " INTEGER PRIMARY KEY AUTOINCREMENT"
                         + ", " + ZeroContract.InterventionsColumns.USER + " VARCHAR(255)"
