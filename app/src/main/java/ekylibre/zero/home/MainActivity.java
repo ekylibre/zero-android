@@ -253,11 +253,6 @@ public class MainActivity extends UpdatableActivity
             Intent intent = new Intent(this, PlantCountingActivity.class);
             startActivity(intent);
         }
-        else if (id == R.id.nav_map)
-        {
-            Intent intent = new Intent(this, MapsActivity.class);
-            startActivity(intent);
-        }
         else if (id == R.id.nav_settings)
         {
             Intent intent = new Intent(this, SettingsActivity.class);
