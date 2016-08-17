@@ -16,11 +16,6 @@
             android:id="@+id/nav_counting"
             android:icon="@drawable/ic_count"
             android:title="@string/new_count" />
-        <item
-            android:id="@+id/nav_map"
-            android:icon="@drawable/ic_map"
-            android:title="@string/open_map" />
-
     </group>
 
     <item android:title="@string/parameters">
