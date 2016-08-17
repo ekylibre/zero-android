@@ -80,6 +80,7 @@ public class MainActivity extends UpdatableActivity
         mNav_account = (TextView)headerLayout.findViewById(R.id.nav_accountName);
         mNav_instance = (TextView)headerLayout.findViewById(R.id.nav_farmURL);
         mPrgressBar = (ProgressBar)findViewById(R.id.progress_bar);
+        sync_data();
     }
 
     /*

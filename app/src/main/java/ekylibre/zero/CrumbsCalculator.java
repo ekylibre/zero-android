@@ -13,11 +13,12 @@ import java.util.Date;
  *************************************/
 public class CrumbsCalculator
 {
-    private final int pointPerMeter = 3;
-    private float       averageSpeed = 1;
-    private ArrayList<Crumb> tmpCrumbList;
-    private Crumb finalCrumb = new Crumb();
-    private final String TAG = "CrumbsCalculator";
+    private final int           pointPerMeter = 1;
+    private final int           maxAccuracy = 5;
+    private float               averageSpeed = 1;
+    private ArrayList<Crumb>    tmpCrumbList;
+    private Crumb               finalCrumb = new Crumb();
+    private final String        TAG = "CrumbsCalculator";
 
     public CrumbsCalculator()
     {
@@ -26,7 +27,7 @@ public class CrumbsCalculator
 
     public boolean isSampleReady(Location location, String type)
     {
-        if (location.getAccuracy() > 5 || !type.equals("point"))
+        if (location.getAccuracy() > maxAccuracy || !type.equals("point"))
             return (false);
 
         Log.d(TAG, "====================================================================");
@@ -36,7 +37,7 @@ public class CrumbsCalculator
         Crumb newCrumb = new Crumb(location);
         tmpCrumbList.add(newCrumb);
         updateAverageSpeed();
-        if (tmpCrumbList.size() >= 3)
+        if (tmpCrumbList.size() >= pointPerMeter)
         {
             setFinalCrumb();
             Log.d(TAG, "==========");
@@ -56,6 +57,7 @@ public class CrumbsCalculator
         finalCrumb.date = getAverageDate();
         finalCrumb.latitude = averageLatitude();
         finalCrumb.longitude = averageLongitude();
+        Log.d(TAG, "LATITUDE > " + finalCrumb.latitude + " ## AND ## LONGITUDE > " + finalCrumb.longitude);
         clearTmpList();
         Log.d(TAG, "Final Crumb set => tmp list");
         Log.d(TAG, "SIZE = " + tmpCrumbList.size());
@@ -118,8 +120,9 @@ public class CrumbsCalculator
     {
         if (averageSpeed == 0)
             return (100);
-        Log.d(TAG, "DELAY FOR NEXT POINT =>" + (long)((1 / (averageSpeed * pointPerMeter)) *  100));
-        return ((long)((1 / (averageSpeed * pointPerMeter)) *  100));
+        Log.d(TAG, "DELAY FOR NEXT POINT =>" + ((1 / (averageSpeed * pointPerMeter)) *  100));
+        //return ((long)(((double)(1 / (averageSpeed * pointPerMeter))) *  100));
+        return (0);
     }
 
     public Crumb getFinalCrumb()

@@ -126,8 +126,8 @@
     <orderEntry type="library" exported="" name="appcompat-v7-24.1.1" level="project" />
     <orderEntry type="library" exported="" name="play-services-basement-9.4.0" level="project" />
     <orderEntry type="library" exported="" name="play-services-tasks-9.4.0" level="project" />
-    <orderEntry type="library" exported="" name="org.jbundle.util.osgi.wrapped.org.apache.http.client-4.1.2" level="project" />
     <orderEntry type="library" exported="" name="support-annotations-24.1.1" level="project" />
+    <orderEntry type="library" exported="" name="org.jbundle.util.osgi.wrapped.org.apache.http.client-4.1.2" level="project" />
     <orderEntry type="library" exported="" name="animated-vector-drawable-24.1.1" level="project" />
     <orderEntry type="library" exported="" name="support-vector-drawable-24.1.1" level="project" />
     <orderEntry type="library" exported="" name="design-24.1.1" level="project" />
