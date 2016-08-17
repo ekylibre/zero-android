@@ -19,6 +19,7 @@ import ekylibre.exceptions.HTTPException;
 public class PlantDensityAbacus
 {
     private int mid;
+    private int mActivityID;
     private String mName;
     private String mVariety;
     private double mGerminationPercentage;
@@ -47,6 +48,7 @@ public class PlantDensityAbacus
         Log.d("zero", "Object PlantDensityAbacus : " + object.toString());
 
         mid = object.getInt("id");
+        mActivityID = object.getInt("activity_id");
         mName = object.getString("name");
         mVariety = object.getString("variety_name");
         mGerminationPercentage = object.getDouble("germination_percentage");
@@ -67,6 +69,10 @@ public class PlantDensityAbacus
 
     public int getId() {
         return mid;
+    }
+
+    public int getActivityID() {
+        return mActivityID;
     }
 
     public String getName() {

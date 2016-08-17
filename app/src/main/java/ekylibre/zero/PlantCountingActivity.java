@@ -206,7 +206,6 @@ public class PlantCountingActivity extends UpdatableActivity  {
         while (cursorAbacus.moveToNext()) {
             Log.d("zero", "name : " + cursorAbacus.getString(0));
             mAbaqueTab[itName] = cursorAbacus.getString(0);
-            Log.d("zero", "tablename[" + itName + "] : " + mAbaqueTab[itName]);
             itName++;
         }
     }
@@ -260,16 +259,16 @@ public class PlantCountingActivity extends UpdatableActivity  {
     }
 
     private void setAbacusList() {
-        Cursor cursorVariety = queryVariety();
-        Cursor cursorAbacus = queryAbacus(cursorVariety);
+        Cursor cursorActivity = queryActivity();
+        Cursor cursorAbacus = queryAbacus(cursorActivity);
 
         Log.d(TAG, "valeur récupérée : " + mPlantName.getText());
-        Log.d(TAG, "Valeur du where : " + cursorVariety.getString(0));
+        Log.d(TAG, "Valeur du where : " + cursorActivity.getString(0));
         Log.d("zero", "beginning abaque");
 
         if (cursorAbacus != null) {
-            Log.d(TAG, "Plant ID => " + cursorVariety.getInt(1));
-            selectedPlantID = cursorVariety.getInt(1);
+            Log.d(TAG, "Plant ID => " + cursorActivity.getInt(1));
+            selectedPlantID = cursorActivity.getInt(1);
             Log.d(TAG, "data exists");
             fillAbacusTab(cursorAbacus);
             Log.d(TAG, "end Abaque");
@@ -278,7 +277,7 @@ public class PlantCountingActivity extends UpdatableActivity  {
             Log.d(TAG, "abaque data does NOT exist");
         }
         createAbacusChooser();
-        cursorVariety.close();
+        cursorActivity.close();
     }
 
     private void setDensityList(CharSequence abacusSelected)
@@ -301,7 +300,8 @@ public class PlantCountingActivity extends UpdatableActivity  {
             Log.d(TAG, "abaque data does NOT exist");
         }
         createDensityChooser();
-        cursorDensity.close();
+        if (cursorDensity != null)
+            cursorDensity.close();
     }
 
     private void setGerminationPercentage(CharSequence abacusSelected)
@@ -367,6 +367,7 @@ public class PlantCountingActivity extends UpdatableActivity  {
                     public void onClick(DialogInterface dialog, int which) {
                         mPlantName.setText(mPlantNameTab[which]);
                         setAbacusList();
+
                         mPlantsCount = 0;
                         mGerminationPercentage = 0;
                         selectedPlantDensityAbacusItemID = 0;
@@ -374,6 +375,8 @@ public class PlantCountingActivity extends UpdatableActivity  {
                             mAbaque.setText(getResources().getString(R.string.select_abacus));
                         if (mDensityChooser != null)
                             mDensityText.setText(getResources().getString(R.string.advocated_density));
+                        mDensityTab = null;
+                        mDensityChooser = null;
                     }
                 });
     }
@@ -433,16 +436,16 @@ public class PlantCountingActivity extends UpdatableActivity  {
         return (cursorPlantName);
     }
 
-    private Cursor queryAbacus(Cursor cursorVariety) {
+    private Cursor queryAbacus(Cursor cursorActivity) {
         String[] projectionAbaque = {ZeroContract.PlantDensityAbaci.NAME};
 
-        if (cursorVariety.moveToFirst()) {
+        if (cursorActivity.moveToFirst()) {
             Cursor cursorAbacus = getContentResolver().query(
                     ZeroContract.PlantDensityAbaci.CONTENT_URI,
                     projectionAbaque,
                     "\"" + ZeroContract.PlantDensityAbaciColumns.USER + "\"" + " LIKE " + "\"" + mAccount.name + "\""
-                            + " AND " + ZeroContract.PlantDensityAbaciColumns.VARIETY + " IS NOT NULL"
-                            + " AND " + ZeroContract.PlantDensityAbaciColumns.VARIETY + " like \"" + cursorVariety.getString(0) + "\"",
+                            + " AND " + ZeroContract.PlantDensityAbaciColumns.ACTIVITY_ID + " IS NOT NULL"
+                            + " AND " + ZeroContract.PlantDensityAbaciColumns.ACTIVITY_ID + " like \"" + cursorActivity.getString(0) + "\"",
                     null,
                     null);
             return (cursorAbacus);
@@ -549,17 +552,17 @@ public class PlantCountingActivity extends UpdatableActivity  {
         return (cursorPlantsCount);
     }
 
-    private Cursor queryVariety() {
-        String[] mProjectionVariety = {ZeroContract.Plants.VARIETY, ZeroContract.Plants.EK_ID};
+    private Cursor queryActivity() {
+        String[] mProjectionActivity = {ZeroContract.Plants.ACTIVITY_ID, ZeroContract.Plants.EK_ID};
 
-        Cursor cursorVariety = getContentResolver().query(
+        Cursor cursorActivity = getContentResolver().query(
                 ZeroContract.Plants.CONTENT_URI,
-                mProjectionVariety,
+                mProjectionActivity,
                 "\"" + ZeroContract.Plants.USER + "\"" + " LIKE " + "\"" + mAccount.name + "\""
                         + " AND " + ZeroContract.PlantsColumns.NAME + " like \"" + mPlantName.getText().toString() + "\"",
                 null,
                 null);
-        return (cursorVariety);
+        return (cursorActivity);
     }
 
     private Cursor queryPlantCountingID() {
