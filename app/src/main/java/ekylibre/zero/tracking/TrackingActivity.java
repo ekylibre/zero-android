@@ -45,7 +45,7 @@ import ekylibre.zero.util.AccountTool;
 import ekylibre.zero.util.UpdatableActivity;
 
 
-public class TrackingActivity extends AppCompatActivity implements TrackingListenerWriter
+public class TrackingActivity extends UpdatableActivity implements TrackingListenerWriter
 {
 
     public final static String KEY_ACCOUNT = "account";
@@ -103,6 +103,7 @@ public class TrackingActivity extends AppCompatActivity implements TrackingListe
 
         // Set content view
         setContentView(R.layout.tracking);
+
 
         // Find view elements
         mDetails                  = (HorizontalScrollView) findViewById(R.id.details);
@@ -189,7 +190,19 @@ public class TrackingActivity extends AppCompatActivity implements TrackingListe
                         createIntervention();
                     }
                 });
+
+        //  if (!mRunning) {
+        //      mProcedureChooser.show();
+        //  }
     }
+
+/*    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu items for use in the action bar
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.tracking, menu);
+        return super.onCreateOptionsMenu(menu);
+    }*/
 
     private void createIntervention()
     {
@@ -465,6 +478,18 @@ public class TrackingActivity extends AppCompatActivity implements TrackingListe
             }
         }
     }
+
+
+
+    // Call the sync service
+/*    private void syncData() {
+        Log.d("zero", "syncData: " + mAccount.toString() + ", " + ZeroContract.AUTHORITY);
+        Bundle extras = new Bundle();
+        extras.putBoolean(ContentResolver.SYNC_EXTRAS_MANUAL, true);
+        extras.putBoolean(ContentResolver.SYNC_EXTRAS_EXPEDITED, true);
+        ContentResolver.requestSync(mAccount, ZeroContract.AUTHORITY, extras);
+    }*/
+
 
     @Override
     public void onDestroy()

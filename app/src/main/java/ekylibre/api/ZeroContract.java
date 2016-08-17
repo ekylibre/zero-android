@@ -77,6 +77,7 @@ public final class ZeroContract {
         String SEEDING_DENSITY_UNIT = "seeding_density_unit";
         String SAMPLING_LENGTH_UNIT = "sampling_length_unit";
         String USER = "user";
+        String ACTIVITY_ID = "activity_id";
     }
 
     public interface PlantDensityAbacusItemsColumns extends BaseColumns {
@@ -96,6 +97,7 @@ public final class ZeroContract {
         String VARIETY = "variety";
         String ACTIVE = "active";
         String USER = "user";
+        String ACTIVITY_ID = "activity_id";
     }
 
     public static final class Crumbs implements CrumbsColumns {
@@ -178,7 +180,7 @@ public final class ZeroContract {
         // MIME type for individual record.
         public static final String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/vnd.ekylibre.zero.plant_density_abacus";
 
-        public static final String[] PROJECTION_ALL = {_ID, NAME, VARIETY, GERMINATION_PERCENTAGE, SEEDING_DENSITY_UNIT, SAMPLING_LENGTH_UNIT};
+        public static final String[] PROJECTION_ALL = {_ID, NAME, VARIETY, GERMINATION_PERCENTAGE, SEEDING_DENSITY_UNIT, SAMPLING_LENGTH_UNIT, ACTIVITY_ID};
         public static final String[] PROJECTION_NONE = {_ID};
 
         public static final String SORT_ORDER_DEFAULT = _ID + " ASC";
@@ -206,7 +208,7 @@ public final class ZeroContract {
         // MIME type for individual record.
         public static final String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/vnd.ekylibre.zero.plant";
 
-        public static final String[] PROJECTION_ALL = {_ID, NAME, SHAPE, VARIETY, ACTIVE};
+        public static final String[] PROJECTION_ALL = {_ID, NAME, SHAPE, VARIETY, ACTIVE, ACTIVITY_ID};
         public static final String[] PROJECTION_NONE = {_ID};
 
         public static final String SORT_ORDER_DEFAULT = _ID + " ASC";

@@ -9,6 +9,7 @@ import ekylibre.api.ZeroContract;
 public class DatabaseHelper extends SQLiteOpenHelper
 {
     public static final int DATABASE_VERSION = 9;
+
     public static final String DATABASE_NAME = "zero";
 
     public DatabaseHelper(Context context)
@@ -142,6 +143,9 @@ public class DatabaseHelper extends SQLiteOpenHelper
                         + ", " + ZeroContract.Plants.ACTIVE + " BOOLEAN NOT NULL"
                         + ", " + ZeroContract.PlantDensityAbacusItemsColumns.USER + " VARCHAR(255)"
                         + ")");
+            case 8:
+                database.execSQL("ALTER TABLE plants ADD activity_ID INTEGER DEFAULT 0");
+                database.execSQL("ALTER TABLE plant_density_abaci ADD activity_ID INTEGER DEFAULT 0");
             case 9:
                 database.execSQL("CREATE TABLE IF NOT EXISTS intervention ("
                         + ZeroContract.InterventionsColumns._ID + " INTEGER PRIMARY KEY AUTOINCREMENT"
@@ -173,8 +177,6 @@ public class DatabaseHelper extends SQLiteOpenHelper
                         + ", " + ZeroContract.CrumbsColumns.USER
                         + ") SELECT * FROM TMP_TABLE");
                 database.execSQL("DROP TABLE IF EXISTS TMP_TABLE");
-
-
         }
     }
 }
