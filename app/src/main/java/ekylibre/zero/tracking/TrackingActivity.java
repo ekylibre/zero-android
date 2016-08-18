@@ -415,6 +415,8 @@ public class TrackingActivity extends UpdatableActivity implements TrackingListe
 
     public void writeCrumb(Location location, String type, Bundle metadata)
     {
+
+
         if (!crumbsCalculator.isCrumbAccurate(location, type))
             return;
 

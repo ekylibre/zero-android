@@ -1,10 +1,12 @@
 package ekylibre.zero;
 
+import android.accounts.Account;
 import android.app.Activity;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.location.Location;
@@ -16,6 +18,7 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -47,12 +50,14 @@ public class IssueActivity extends AppCompatActivity {
 
     public static final int REQUEST_TAKE_PHOTO = 10;
 
+    private final String TAG = "ISSUE_DEBUG";
+
     File photoFile = null;
 
 
     private File picturesFile;
     private String appDirectoryName = "ZERO_ISSUE";
-    public static int count = 0;
+    public int count = 0;
 
     String mCurrentPhotoPath;
     Spinner mIssueNatureSpinner;
@@ -60,6 +65,7 @@ public class IssueActivity extends AppCompatActivity {
     NumberPicker mEmergency;
     EditText mDescription;
     ImageView mImagePreview;
+    Account mAccount;
     
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
@@ -73,6 +79,7 @@ public class IssueActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.issue);
 
+        mAccount = AccountTool.getCurrentAccount(this);
         mIssueNatureSpinner = (Spinner) findViewById(R.id.spinner);
         mSeverity = (NumberPicker) findViewById(R.id.numberPickerSeverity);
         mEmergency = (NumberPicker) findViewById(R.id.numberPickerEmergency);
@@ -101,19 +108,9 @@ public class IssueActivity extends AppCompatActivity {
         client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
 
         //create a new file for this issue
+
         picturesFile = new File(Environment.getExternalStoragePublicDirectory(
-                Environment.DIRECTORY_PICTURES), appDirectoryName);
-
-        while(picturesFile.exists()){
-            count += 1;
-            appDirectoryName += "_" + count;
-            picturesFile = new File(Environment.getExternalStoragePublicDirectory(
-                    Environment.DIRECTORY_PICTURES), appDirectoryName);
-            appDirectoryName = "ZERO_ISSUE";
-
-        }
-        picturesFile.mkdir();
-
+                Environment.DIRECTORY_PICTURES).toString());
     }
 
     @Override
@@ -150,8 +147,8 @@ public class IssueActivity extends AppCompatActivity {
             // Continue only if the File was successfully created
             if (photoFile != null) {
                 // Launch Intent to take picture
+                Log.d(TAG, "file name = " + photoFile.toString());
                 takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(photoFile));
-
                 startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO);
 
                 // mount file to the GalleryView
@@ -162,25 +159,46 @@ public class IssueActivity extends AppCompatActivity {
 
     public File createImageFile(File picturesFile) throws IOException {
 
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        String imageFileName = "ISSUE_" + timeStamp + "_";
+        //String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String imageFileName = query_last_issue_id() + "_ISSUE_" + count++;
+        Log.d(TAG, "image file name = " + imageFileName);
 
         File image_path = null;
         try {
             image_path = File.createTempFile(
-                    imageFileName,  /* prefix */
+                    "." + imageFileName + "-",  /* prefix */
                     ".jpg",         /* suffix */
                     picturesFile      /* directory */
             );
         } catch (IOException e) {
             e.printStackTrace();
         }
+        Log.d(TAG, "image path = " + image_path.toString());
 
         // Save a file: path for use with ACTION_VIEW intents
         mCurrentPhotoPath = "file:" + image_path.getAbsolutePath();
         return image_path;
     }
-/**
+
+    private int query_last_issue_id()
+    {
+        String[] projectionIssueID = {ZeroContract.IssuesColumns._ID};
+
+        Cursor cursorIssue = getContentResolver().query(
+                ZeroContract.Issues.CONTENT_URI,
+                projectionIssueID,
+                "\"" + ZeroContract.Issues.USER + "\"" + " LIKE " + "\"" + mAccount.name + "\"",
+                null,
+                ZeroContract.IssuesColumns._ID + " DESC LIMIT 1");
+        if (cursorIssue == null || cursorIssue.getCount() == 0)
+            return (0);
+        cursorIssue.moveToFirst();
+        int ret = cursorIssue.getInt(0);
+        cursorIssue.close();
+        return (ret);
+    }
+
+    /**
      // Finds the first image in the specified folder and uses it to open the devices native gallery app with all images in that folder.
     public void OpenGalleryFromPathToFolder(Context context, String folderPath) throws IOException{
 
