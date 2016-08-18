@@ -63,7 +63,8 @@ public class MapsActivity extends UpdatableActivity implements OnMapReadyCallbac
 
         Location lastKnownLocation = locationManager.getLastKnownLocation(locationProvider);
         resetPrecedentMarkers(getIntent().getIntExtra(TrackingActivity._interventionID, 0));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(new LatLng(lastKnownLocation.getLatitude(), lastKnownLocation.getLongitude())));
+        if (lastKnownLocation != null)
+            mMap.moveCamera(CameraUpdateFactory.newLatLng(new LatLng(lastKnownLocation.getLatitude(), lastKnownLocation.getLongitude())));
         mMap.animateCamera( CameraUpdateFactory.zoomTo( 17.0f ) );
     }
 

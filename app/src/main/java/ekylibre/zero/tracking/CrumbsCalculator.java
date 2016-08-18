@@ -11,8 +11,11 @@ import java.util.ArrayList;
  *************************************/
 public class CrumbsCalculator
 {
-    private final int           MAX_ACCURACY = 5;
+    private final int           MAX_ACCURACY = 6;
+    private final int           VALUES_FOR_AVERAGE = 8;
     private final float         MAX_SPEED_ACCEPTED_WITHOUT_CHECK = 5;
+
+    private double              vectorCoef = 1.0;
 
     private Crumb               prevCrumb = new Crumb();
     private Crumb               currCrumb = new Crumb();
@@ -33,7 +36,10 @@ public class CrumbsCalculator
     public boolean isCrumbAccurate(Location location, String type)
     {
         if (location.getAccuracy() > MAX_ACCURACY || !type.equals("point"))
+        {
+            vectorCoef++;
             return (false);
+        }
         Log.d(TAG, "====================================================================");
         Log.d(TAG, "ACCURACY =  = = = =  "  + location.getAccuracy());
         if (firstPass)
@@ -53,14 +59,19 @@ public class CrumbsCalculator
             prevVector.copyVector(currVector);
             currVector.setVectorCoord(prevCrumb.getLongitude(), currCrumb.getLongitude(),
                     prevCrumb.getLatitude(), currCrumb.getLatitude());
-            listVector.add(currVector);
+            currVector.applyCoef(vectorCoef);
+            vectorCoef = 1.0;
             updateAverageVector();
+            Log.d(TAG, "Average vector = " + averageVector.norm);
+            Log.d(TAG, "Curr vector = " + currVector.norm);
             if (checkCrumb())
             {
+                listVector.add(currVector.getInstance());
                 setFinalCrumb();
                 return (true);
             }
         }
+        vectorCoef++;
         return (false);
     }
 
@@ -71,8 +82,12 @@ public class CrumbsCalculator
         currCrumb.setCrumb(location);
         currVector.setVectorCoord(prevCrumb.getLongitude(), currCrumb.getLongitude(),
                 prevCrumb.getLatitude(), currCrumb.getLatitude());
-        listVector.add(currVector);
+        currVector.applyCoef(vectorCoef);
+        vectorCoef = 1.0;
+        listVector.add(currVector.getInstance());
         setFinalCrumb();
+        if (listVector.size() < VALUES_FOR_AVERAGE)
+            currVector.set = false;
     }
 
     private void firstSet(Location location)
@@ -84,10 +99,7 @@ public class CrumbsCalculator
 
     private boolean checkCrumb()
     {
-        if ((currVector.absX < averageVector.absX * (1 + 0.30) && currVector.absX > averageVector.absX * (1 - 0.30)
-                && currVector.absY < averageVector.absY * (1 + 0.30) && currVector.absY > averageVector.absY * (1 - 0.30)
-                && currCrumb.speed < prevCrumb.speed * (1 + 0.30) && currCrumb.speed > prevCrumb.speed * (1 - 0.30))
-             || currCrumb.speed < MAX_SPEED_ACCEPTED_WITHOUT_CHECK)
+        if ((currVector.norm < averageVector.norm * (1 + 4.00) && currVector.norm > averageVector.norm * (1 - 0.80)))
         {
             return (true);
         }
@@ -114,6 +126,7 @@ public class CrumbsCalculator
             Vector vector = listVector.get(i);
             newX += vector.x;
             newY += vector.y;
+            Log.d(TAG, "Norm[" + i + "] = " + vector.norm);
         }
         newX /= i;
         newY /= i;

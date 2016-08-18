@@ -24,6 +24,7 @@ public class Vector
         this.x = 0;
         this.y = 0;
         setAbsValue();
+        setNorm();
     }
 
     public void copyVector(Vector vector)
@@ -32,6 +33,7 @@ public class Vector
         this.y = vector.y;
         this.set = vector.set;
         setAbsValue();
+        setNorm();
     }
 
     private void setAbsValue()
@@ -45,6 +47,7 @@ public class Vector
         this.x = x2 - x1;
         this.y = y2 - y1;
         setAbsValue();
+        setNorm();
     }
 
     public void setVectorFinalCoord(double x, double y)
@@ -52,5 +55,23 @@ public class Vector
         this.x = x;
         this.y = y;
         setAbsValue();
+        setNorm();
+    }
+
+    private void setNorm()
+    {
+        norm = Math.sqrt((Math.pow(x, 2) + Math.pow(y, 2))) * 10000;
+    }
+
+    public Vector getInstance()
+    {
+        Vector vector = new Vector();
+        vector.copyVector(this);
+        return (vector);
+    }
+
+    public void applyCoef(double coef)
+    {
+        this.norm /= coef;
     }
 }
