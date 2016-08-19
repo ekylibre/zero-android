@@ -87,10 +87,12 @@ public class PlantCountingActivity extends UpdatableActivity  {
     private boolean       currentContext = false;
 
     private CharSequence[] mPlantID;
+    private int[]          mPlantEK_IDTab;
     private CharSequence[] mPlantNameTab;
     private CharSequence[] mAbaqueTab;
     private CharSequence[] mDensityTab;
 
+    private int     mPlantEK_ID;
     private int     selectedPlantID;
     private int     selectedPlantDensityAbacusItemID;
 
@@ -170,6 +172,7 @@ public class PlantCountingActivity extends UpdatableActivity  {
         if (cursorPlantName != null && cursorPlantId != null) {
             Log.d(TAG, "Data exists !");
             mPlantNameTab = new CharSequence[cursorPlantName.getCount()];
+            mPlantEK_IDTab = new int[cursorPlantName.getCount()];
             mPlantID = new CharSequence[cursorPlantId.getCount()];
 
             fillPlantName(cursorPlantName);
@@ -253,6 +256,7 @@ public class PlantCountingActivity extends UpdatableActivity  {
         while (cursorPlantName.moveToNext()) {
             Log.d(TAG, "name : " + cursorPlantName.getString(0));
             mPlantNameTab[itName] = cursorPlantName.getString(0);
+            mPlantEK_IDTab[itName] = cursorPlantName.getInt(1);
             Log.d(TAG, "tablename[" + itName + "] : " + mPlantNameTab[itName]);
             itName++;
         }
@@ -263,7 +267,7 @@ public class PlantCountingActivity extends UpdatableActivity  {
         Cursor cursorAbacus = queryAbacus(cursorActivity);
 
         Log.d(TAG, "valeur récupérée : " + mPlantName.getText());
-        Log.d(TAG, "Valeur du where : " + cursorActivity.getString(0));
+        Log.d(TAG, "Valeur du activityID : " + cursorActivity.getString(0));
         Log.d("zero", "beginning abaque");
 
         if (cursorAbacus != null) {
@@ -366,6 +370,7 @@ public class PlantCountingActivity extends UpdatableActivity  {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         mPlantName.setText(mPlantNameTab[which]);
+                        mPlantEK_ID = mPlantEK_IDTab[which];
                         setAbacusList();
 
                         mPlantsCount = 0;
@@ -375,8 +380,8 @@ public class PlantCountingActivity extends UpdatableActivity  {
                             mAbaque.setText(getResources().getString(R.string.select_abacus));
                         if (mDensityChooser != null)
                             mDensityText.setText(getResources().getString(R.string.advocated_density));
-                        mDensityTab = null;
                         mDensityChooser = null;
+
                     }
                 });
     }
@@ -425,7 +430,7 @@ public class PlantCountingActivity extends UpdatableActivity  {
     }
 
     private Cursor queryPlantName() {
-        String[] projectionPlantName = {ZeroContract.PlantsColumns.NAME};
+        String[] projectionPlantName = {ZeroContract.PlantsColumns.NAME, ZeroContract.Plants.EK_ID};
 
         Cursor cursorPlantName = getContentResolver().query(
                 ZeroContract.Plants.CONTENT_URI,
@@ -445,7 +450,7 @@ public class PlantCountingActivity extends UpdatableActivity  {
                     projectionAbaque,
                     "\"" + ZeroContract.PlantDensityAbaciColumns.USER + "\"" + " LIKE " + "\"" + mAccount.name + "\""
                             + " AND " + ZeroContract.PlantDensityAbaciColumns.ACTIVITY_ID + " IS NOT NULL"
-                            + " AND " + ZeroContract.PlantDensityAbaciColumns.ACTIVITY_ID + " like \"" + cursorActivity.getString(0) + "\"",
+                            + " AND " + ZeroContract.PlantDensityAbaciColumns.ACTIVITY_ID + " == " + cursorActivity.getString(0),
                     null,
                     null);
             return (cursorAbacus);
@@ -559,7 +564,7 @@ public class PlantCountingActivity extends UpdatableActivity  {
                 ZeroContract.Plants.CONTENT_URI,
                 mProjectionActivity,
                 "\"" + ZeroContract.Plants.USER + "\"" + " LIKE " + "\"" + mAccount.name + "\""
-                        + " AND " + ZeroContract.PlantsColumns.NAME + " like \"" + mPlantName.getText().toString() + "\"",
+                        + " AND " + ZeroContract.PlantsColumns.EK_ID + " == " + mPlantEK_ID,
                 null,
                 null);
         return (cursorActivity);
