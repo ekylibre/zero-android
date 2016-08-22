@@ -4,9 +4,12 @@ import android.Manifest;
 import android.annotation.TargetApi;
 import android.content.ContentResolver;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.os.Build;
+import android.preference.Preference;
+import android.preference.PreferenceManager;
 import android.provider.CalendarContract;
 import android.support.v4.app.ActivityCompat;
 import android.util.Log;
@@ -21,6 +24,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+
+import ekylibre.zero.SettingsActivity;
 
 /**************************************
  * Created by pierre on 7/8/16.       *
@@ -73,7 +78,7 @@ public class TodoListActivity {
         String startDateFormatted;
         String endDateFormatted;
 
-        curs = getEvents();
+        curs = getEventsFromLocal();
         if (curs == null)
             return (null);
         affEvents(curs);
@@ -188,7 +193,7 @@ public class TodoListActivity {
     ** setProjection (Selection of fields to request)
     */
     @TargetApi(23)
-    public Cursor getEvents() {
+    public Cursor getEventsFromLocal() {
         Context context;
         ContentResolver contentResolver;
         Calendar startTime;
@@ -197,6 +202,9 @@ public class TodoListActivity {
         String selection;
         Cursor returnCurs = null;
 
+        SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this.context);
+        if (!pref.getBoolean(SettingsActivity.PREF_SYNC_CALENDAR, false))
+            return (null);
         Log.d(TAG, "Getting events from local calendar");
         projection = setProjection();
         startTime = getDateOfDay();
@@ -227,7 +235,7 @@ public class TodoListActivity {
 
         it = 0;
         if (curs == null)
-            curs = getEvents();
+            curs = getEventsFromLocal();
         if (curs.moveToFirst())
         {
             do
