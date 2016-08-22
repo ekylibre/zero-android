@@ -12,6 +12,7 @@ public class SettingsActivity extends PreferenceActivity
     public final static String PREF_SHOW_DETAILS = "pref_showDetails";
     public final static String PREF_MOBILE_NETWORK = "pref_MobileNetwork";
     public final static String PREF_AUTO_SYNC = "pref_AutoSync";
+    public final static String PREF_SYNC_CALENDAR = "pref_syncCalendar";
 
     @Override
     public void onStart()

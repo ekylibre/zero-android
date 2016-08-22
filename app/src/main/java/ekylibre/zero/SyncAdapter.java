@@ -271,8 +271,6 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
 
             while(abacusIterator.hasNext())
             {
-                if (BuildConfig.DEBUG) Log.d("zero", "boucle abaque");
-
                 PlantDensityAbacus plantDensityAbacus = abacusIterator.next();
                 cv.put(ZeroContract.PlantDensityAbaciColumns.EK_ID, plantDensityAbacus.getId());
                 cv.put(ZeroContract.PlantDensityAbaciColumns.NAME, plantDensityAbacus.getName());
