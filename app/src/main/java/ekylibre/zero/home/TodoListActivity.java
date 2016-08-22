@@ -2,6 +2,7 @@ package ekylibre.zero.home;
 
 import android.Manifest;
 import android.annotation.TargetApi;
+import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -26,6 +27,7 @@ import java.util.List;
 import java.util.Locale;
 
 import ekylibre.zero.SettingsActivity;
+import ekylibre.zero.util.PermissionManager;
 
 /**************************************
  * Created by pierre on 7/8/16.       *
@@ -41,12 +43,13 @@ public class TodoListActivity {
     private final int ALL_DAY = 5;
     private final int EVENT_LOCATION = 6;
     private final String TAG = "TodoListAct";
+    private final int REQUEST_CALENDAR = 42;
 
     private ListView todoListView;
     private ArrayAdapter<String> adapter;
     private Context context;
     private TextView todayDate;
-
+    private Activity activity;
 
     /*
     ** This activity display all the tasks of the current day requesting the actual phone calendar
@@ -54,10 +57,11 @@ public class TodoListActivity {
     ** CONSTANTS are use to get the part of data you want from adapter
     */
 
-    public TodoListActivity(Context context, ListView foundListView, TextView foundTextView) {
+    public TodoListActivity(Context context, Activity activity, ListView foundListView, TextView foundTextView) {
         this.todoListView = foundListView;
         this.todayDate = foundTextView;
         this.context = context;
+        this.activity = activity;
         List<TodoItem> todolist = createList();
         if (todolist == null)
             return;
@@ -215,12 +219,9 @@ public class TodoListActivity {
 
         context = this.context;
         contentResolver = context.getContentResolver();
-        if (Build.VERSION.SDK_INT >= 23 &&
-                (ActivityCompat.checkSelfPermission(context, android.Manifest.permission.READ_CALENDAR) != PackageManager.PERMISSION_GRANTED
-                || ActivityCompat.checkSelfPermission(context, Manifest.permission.WRITE_CALENDAR) != PackageManager.PERMISSION_GRANTED))
-        {
+        if (!PermissionManager.calendarPermissions(context, this.activity))
             return (null);
-        }
+
         returnCurs = contentResolver.query(CalendarContract.Events.CONTENT_URI,
                 projection,
                 selection,
