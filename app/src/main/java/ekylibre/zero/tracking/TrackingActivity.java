@@ -42,6 +42,7 @@ import ekylibre.api.ZeroContract;
 import ekylibre.zero.BuildConfig;
 import ekylibre.zero.R;
 import ekylibre.zero.util.AccountTool;
+import ekylibre.zero.util.PermissionManager;
 import ekylibre.zero.util.UpdatableActivity;
 
 
@@ -373,44 +374,32 @@ public class TrackingActivity extends UpdatableActivity implements TrackingListe
         startTracking(0);
     }
 
-    private void startTracking(long interval) {
-        try
-        {
-            mLocationManager.requestLocationUpdates(mLocationProvider, interval, 0, mTrackingListener);
-            mRunning = true;
-        }
-        catch(SecurityException e)
-        {
-            Toast.makeText(this, getResources().getString(R.string.GPSissue), Toast.LENGTH_SHORT).show();
-        }
+    private void startTracking(long interval)
+    {
+        if (!PermissionManager.GPSPermissions(this, this))
+            return;
+        mLocationManager.requestLocationUpdates(mLocationProvider, interval, 0, mTrackingListener);
+        mRunning = true;
     }
 
-    private void stopTracking() {
-        try
-        {
-            mLocationManager.removeUpdates(mTrackingListener);
-            mRunning = false;
-        }
-        catch(SecurityException e)
-        {
-            Toast.makeText(this, getResources().getString(R.string.GPSissue), Toast.LENGTH_SHORT).show();
-        }
+    private void stopTracking()
+    {
+        if (!PermissionManager.GPSPermissions(this, this))
+            return;
+        mLocationManager.removeUpdates(mTrackingListener);
+        mRunning = false;
     }
 
     private void addCrumb(String type) {
         this.addCrumb(type, null);
     }
 
-    private void addCrumb(String type, Bundle metadata) {
-        try
-        {
-            TrackingListener listener = new TrackingListener(this, type, metadata);
-            mLocationManager.requestSingleUpdate(mLocationProvider, listener, null);
-        }
-        catch(SecurityException e)
-        {
-            Toast.makeText(this, getResources().getString(R.string.GPSissue), Toast.LENGTH_SHORT).show();
-        }
+    private void addCrumb(String type, Bundle metadata)
+    {
+        if (!PermissionManager.GPSPermissions(this, this))
+            return;
+        TrackingListener listener = new TrackingListener(this, type, metadata);
+        mLocationManager.requestSingleUpdate(mLocationProvider, listener, null);
     }
 
     public void writeCrumb(Location location, String type, Bundle metadata)
