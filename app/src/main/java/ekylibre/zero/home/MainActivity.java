@@ -176,7 +176,7 @@ public class MainActivity extends UpdatableActivity
     */
     private void    setTodolist()
     {
-        TodoListActivity todo = new TodoListActivity(MainActivity.this,
+        TodoListActivity todo = new TodoListActivity(MainActivity.this, this,
                 (ListView)findViewById(R.id.listView), (TextView)findViewById(R.id.todayDate));
     }
 
