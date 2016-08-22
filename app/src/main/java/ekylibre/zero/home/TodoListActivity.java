@@ -216,7 +216,6 @@ public class TodoListActivity {
         startTime.setTimeInMillis(startTime.getTimeInMillis() - 1000);
         selection = setSelection(startTime, endTime);
 
-
         context = this.context;
         contentResolver = context.getContentResolver();
         if (!PermissionManager.calendarPermissions(context, this.activity))

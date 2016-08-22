@@ -43,6 +43,7 @@ import java.util.Date;
 
 import ekylibre.api.ZeroContract;
 import ekylibre.zero.util.AccountTool;
+import ekylibre.zero.util.PermissionManager;
 
 public class IssueActivity extends AppCompatActivity {
 
@@ -135,12 +136,16 @@ public class IssueActivity extends AppCompatActivity {
 
     public void takePicture(View v) throws IOException{
 
+        if (!PermissionManager.storagePermissions(this, this))
+            return;
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         // Ensure that there's a camera activity to handle the intent
         if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
             // Create the File where the photo should go
             try{
                 photoFile = createImageFile(picturesFile);
+                if (photoFile == null)
+                    return;
             }catch (IOException e){
                 e.printStackTrace();
             }
@@ -173,6 +178,8 @@ public class IssueActivity extends AppCompatActivity {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        if (image_path == null)
+            return (null);
         Log.d(TAG, "image path = " + image_path.toString());
 
         // Save a file: path for use with ACTION_VIEW intents
