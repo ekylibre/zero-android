@@ -10,6 +10,13 @@
             android:summary="@string/pref_showDetails_summary"
             android:persistent="true"
             android:defaultValue="false" />
+        <CheckBoxPreference
+            android:key="pref_syncCalendar"
+            android:title="@string/pref_syncCalendar"
+            android:dialogTitle="@string/pref_syncCalendar"
+            android:summary="@string/pref_syncCalendar_summary"
+            android:persistent="true"
+            android:defaultValue="false" />
     </PreferenceCategory>
     <PreferenceCategory android:title="@string/network">
         <CheckBoxPreference

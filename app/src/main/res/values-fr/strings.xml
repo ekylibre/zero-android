@@ -90,4 +90,6 @@
     <string name="navigation_drawer_open">Ouvre le menu flottant</string>
     <string name="navigation_drawer_close">Ferme le menu flottant</string>
     <string name="open_map">Ouvrir la carte</string>
+    <string name="pref_syncCalendar">Synchronisation du calendrier local</string>
+    <string name="pref_syncCalendar_summary">Autoriser l\'application à synchroniser le calendrier du téléphone</string>
 </resources>
