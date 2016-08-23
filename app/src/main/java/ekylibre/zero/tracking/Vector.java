@@ -60,7 +60,7 @@ public class Vector
 
     private void setNorm()
     {
-        norm = Math.sqrt((Math.pow(x, 2) + Math.pow(y, 2))) * 10000;
+        norm = Math.sqrt((Math.pow(x, 2) + Math.pow(y, 2))) * 100000;
     }
 
     public Vector getInstance()

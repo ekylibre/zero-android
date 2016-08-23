@@ -11,7 +11,7 @@ import java.util.ArrayList;
  *************************************/
 public class CrumbsCalculator
 {
-    private final int           MAX_ACCURACY = 6;
+    private final int           MAX_ACCURACY = 8;
     private final int           VALUES_FOR_AVERAGE = 8;
     private final float         MAX_SPEED_ACCEPTED_WITHOUT_CHECK = 5;
 
@@ -21,7 +21,6 @@ public class CrumbsCalculator
     private Crumb               currCrumb = new Crumb();
     private Crumb               finalCrumb = new Crumb();
 
-    private Vector              prevVector = new Vector();
     private Vector              currVector = new Vector();
     private Vector              averageVector = new Vector();
 
@@ -54,24 +53,25 @@ public class CrumbsCalculator
         }
         else
         {
+            Vector newVector = new Vector();
+            newVector.set = true;
             prevCrumb.copyCrumb(currCrumb);
             currCrumb.setCrumb(location);
-            prevVector.copyVector(currVector);
-            currVector.setVectorCoord(prevCrumb.getLongitude(), currCrumb.getLongitude(),
+
+            newVector.setVectorCoord(prevCrumb.getLongitude(), currCrumb.getLongitude(),
                     prevCrumb.getLatitude(), currCrumb.getLatitude());
-            currVector.applyCoef(vectorCoef);
-            vectorCoef = 1.0;
+            newVector.applyCoef(vectorCoef);
+
             updateAverageVector();
             Log.d(TAG, "Average vector = " + averageVector.norm);
-            Log.d(TAG, "Curr vector = " + currVector.norm);
-            if (checkCrumb())
+            Log.d(TAG, "Curr vector = " + newVector.norm);
+            if (checkCrumb(newVector))
             {
                 listVector.add(currVector.getInstance());
                 setFinalCrumb();
                 return (true);
             }
         }
-        vectorCoef++;
         return (false);
     }
 
@@ -88,6 +88,8 @@ public class CrumbsCalculator
         setFinalCrumb();
         if (listVector.size() < VALUES_FOR_AVERAGE)
             currVector.set = false;
+        else
+            currVector.set = true;
     }
 
     private void firstSet(Location location)
@@ -97,10 +99,12 @@ public class CrumbsCalculator
         setFinalCrumb();
     }
 
-    private boolean checkCrumb()
+    private boolean checkCrumb(Vector vector)
     {
-        if ((currVector.norm < averageVector.norm * (1 + 4.00) && currVector.norm > averageVector.norm * (1 - 0.80)))
+        if ((vector.norm < averageVector.norm * (1 + 1.50) && vector.norm > averageVector.norm * (1 - 0.80)))
         {
+            currVector.copyVector(vector);
+            vectorCoef = 1.0;
             return (true);
         }
         else
@@ -108,6 +112,7 @@ public class CrumbsCalculator
             // Here we should be able to make the vector smoother
             // There is some work on the end of this algo because we'll don't ignore vector anymore
             // ATM I will just ignore the vector and change variables as if he had never existed
+            vectorCoef++;
             currCrumb.copyCrumb(prevCrumb);
             return (false);
         }

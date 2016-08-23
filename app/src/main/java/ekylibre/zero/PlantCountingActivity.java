@@ -646,66 +646,66 @@ public class PlantCountingActivity extends UpdatableActivity  {
     private void insertNewValuePlantCountingItems(ContentValues newValuePlantCountingItem)
     {
         getContentResolver().insert(
-                ZeroContract.PlantCountingItems.CONTENT_URI,
-                newValuePlantCountingItem);
+				    ZeroContract.PlantCountingItems.CONTENT_URI,
+				    newValuePlantCountingItem);
         Log.d(TAG, "NewValuesPlantCountingItem is now on the local data !");
     }
-
+    
     private int insertNewValuesPlantCounting()
     {
         ContentValues newValuesPlantCounting = new ContentValues();
-
+	
         newValuesPlantCounting.put(ZeroContract.PlantCountingsColumns.OBSERVED_AT,
-                (new java.util.Date()).getTime());
+				   (new java.util.Date()).getTime());
         setLocation(newValuesPlantCounting);
         newValuesPlantCounting.put(ZeroContract.PlantCountingsColumns.OBSERVATION,
-                mObservationEditText.getText().toString());
+				   mObservationEditText.getText().toString());
         newValuesPlantCounting.put(ZeroContract.PlantCountingsColumns.AVERAGE_VALUE, getAverage());
         newValuesPlantCounting.put(ZeroContract.PlantCountingsColumns.USER, mAccount.name);
         newValuesPlantCounting.put(ZeroContract.PlantCountingsColumns.PLANT_ID, selectedPlantID);
         newValuesPlantCounting.put(ZeroContract.PlantCountingsColumns.PLANT_DENSITY_ABACUS_ITEM_ID, selectedPlantDensityAbacusItemID);
         newValuesPlantCounting.put(ZeroContract.PlantCountingsColumns.SYNCED, 0);
-
+	
         getContentResolver().insert(
-                ZeroContract.PlantCountings.CONTENT_URI,
-                newValuesPlantCounting);
+				    ZeroContract.PlantCountings.CONTENT_URI,
+				    newValuesPlantCounting);
         Cursor curs = queryPlantCountingID();
         Log.d(TAG, "NewValuesPlantCounting is now on the local data !");
         if (curs == null)
             return (-1);
         else
-        {
-            Log.d(TAG, "Plant counting ID is => " + curs.getInt(0));
-            return (curs.getInt(0));
-        }
+	    {
+		Log.d(TAG, "Plant counting ID is => " + curs.getInt(0));
+		return (curs.getInt(0));
+	    }
     }
-
+    
     @TargetApi(23)
     private void setLocation(ContentValues newValuesPlantCounting)
     {
         LocationManager locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
         String locationProvider = LocationManager.NETWORK_PROVIDER;
-
+	
         if ( Build.VERSION.SDK_INT >= 23 &&
-                ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION ) != PackageManager.PERMISSION_GRANTED &&
-                ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED)
-        {
-            return  ;
-        }
-
-
+	     ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION ) != PackageManager.PERMISSION_GRANTED &&
+	     ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED)
+	    {
+		return  ;
+	    }
+	
+	
         Location lastKnownLocation = locationManager.getLastKnownLocation(locationProvider);
         if (lastKnownLocation != null)
-        {
-            newValuesPlantCounting.put(ZeroContract.PlantCountingsColumns.LATITUDE,
-                    lastKnownLocation.getLatitude());
-            newValuesPlantCounting.put(ZeroContract.PlantCountingsColumns.LONGITUDE,
-                    lastKnownLocation.getLongitude());
-        }
-
-
+	    {
+		newValuesPlantCounting.put(ZeroContract.PlantCountingsColumns.LATITUDE,
+					   lastKnownLocation.getLatitude());
+		newValuesPlantCounting.put(ZeroContract.PlantCountingsColumns.LONGITUDE,
+					   lastKnownLocation.getLongitude());
+	    }
+	
+	
     }
-
+    
     public void addValue(View view)
     {
         EditText input = new EditText(this);
@@ -734,26 +734,26 @@ public class PlantCountingActivity extends UpdatableActivity  {
         mLayout.addView(input);
         mListValues.add(input);
     }
-
+    
     private float getAverage()
     {
         float   total = 0;
         int     nbvalues = 0;
         float   averageScore = 0;
-
+	
         Iterator it = mListValues.iterator();
-
+	
         while(it.hasNext())
-        {
-            EditText editText = (EditText)it.next();
-            String txt = editText.getText().toString();
-
-            if (!TextUtils.isEmpty(editText.getText()))
-            {
-                total += Float.parseFloat(txt);
-                nbvalues++;
-            }
-        }
+	    {
+		EditText editText = (EditText)it.next();
+		String txt = editText.getText().toString();
+		
+		if (!TextUtils.isEmpty(editText.getText()))
+		    {
+			total += Float.parseFloat(txt);
+			nbvalues++;
+		    }
+	    }
         if (nbvalues == 0)
             averageScore = 0;
         else
