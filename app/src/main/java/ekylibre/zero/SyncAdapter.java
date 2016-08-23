@@ -13,6 +13,7 @@ import android.content.SyncResult;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.provider.Settings.Secure;
 import android.util.Log;
 
@@ -22,6 +23,7 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
@@ -36,6 +38,7 @@ import ekylibre.api.PlantDensityAbacus;
 import ekylibre.api.ZeroContract;
 import ekylibre.exceptions.HTTPException;
 import ekylibre.zero.util.AccountTool;
+import ekylibre.zero.util.ImageConverter;
 import ekylibre.zero.util.UpdatableActivity;
 
 /**
@@ -191,7 +194,8 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
         if (BuildConfig.DEBUG) Log.i(TAG, "Beginning network issues synchronization");
 
         // Get crumbs from Issue (content) provider
-        Cursor cursor = mContentResolver.query(ZeroContract.Issues.CONTENT_URI,
+        Cursor cursor = mContentResolver.query(
+                ZeroContract.Issues.CONTENT_URI,
                 ZeroContract.Issues.PROJECTION_ALL,
                 "\"" + ZeroContract.Issues.USER + "\"" + " LIKE " + "\"" + account.name + "\""
                         + " AND " + ZeroContract.IssuesColumns.SYNCED + " == " + 0,
@@ -199,7 +203,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
                 ZeroContract.Issues.SORT_ORDER_DEFAULT);
 
 
-            if (cursor.getCount() > 0)
+            if (cursor != null && cursor.getCount() > 0)
             {
                 Instance instance = getInstance(account);
                 cursor.moveToFirst();
@@ -230,9 +234,11 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
         attributes.put("nature", cursor.getString(1));
         attributes.put("gravity", cursor.getInt(2));
         attributes.put("priority", cursor.getInt(3));
-        attributes.put("description",cursor.getString(5) );
+        attributes.put("description", cursor.getString(5));
         SimpleDateFormat parser = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
         attributes.put("observed_at", parser.format(new Date(cursor.getLong(8))));
+        //TODO : send images to ekylibre api
+        //attributes.put("images", createImageJSONArray(cursor));
         if (cursor.getDouble(9) != 0 && cursor.getDouble(10) != 0)
         {
             attributes.put("geolocation", "SRID=4326; POINT(" + Double.toString(cursor.getDouble(10)) + " " + Double.toString(cursor.getDouble(9)) + ")");
@@ -243,6 +249,23 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
         ContentValues values = new ContentValues();
         values.put(ZeroContract.IssuesColumns.SYNCED, 1);
         mContentResolver.update(Uri.withAppendedPath(ZeroContract.Issues.CONTENT_URI, Long.toString(cursor.getLong(0))), values, null, null);
+    }
+
+    private JSONArray createImageJSONArray(Cursor cursor) throws JSONException
+    {
+        JSONArray imageJSON = new JSONArray();
+        int id = cursor.getInt(0);
+        ArrayList<String> imageBlock = ImageConverter.getImagesFromIssue(id);
+        int i = -1;
+
+        while (++i < imageBlock.size())
+        {
+            JSONObject jsonObject = new JSONObject();
+            String image = imageBlock.get(i);
+            jsonObject.put("value", image);
+            imageJSON.put(jsonObject);
+        }
+        return (imageJSON);
     }
 
     public void performPlantDensityAbaciSync(Account account, Bundle extras, String authority, ContentProviderClient provider, SyncResult syncResult)
