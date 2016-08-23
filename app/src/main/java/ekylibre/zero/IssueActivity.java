@@ -140,51 +140,37 @@ public class IssueActivity extends AppCompatActivity {
             return;
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         // Ensure that there's a camera activity to handle the intent
-        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+        if (takePictureIntent.resolveActivity(getPackageManager()) != null)
+        {
             // Create the File where the photo should go
-            try{
-                photoFile = createImageFile(picturesFile);
-                if (photoFile == null)
-                    return;
-            }catch (IOException e){
-                e.printStackTrace();
-            }
-            // Continue only if the File was successfully created
-            if (photoFile != null) {
-                // Launch Intent to take picture
-                Log.d(TAG, "file name = " + photoFile.toString());
-                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(photoFile));
-                startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO);
 
-                // mount file to the GalleryView
-                sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.fromFile(photoFile)));
-            }
+            photoFile = createImageFile(picturesFile);
+            if (photoFile == null)
+                return;
+
+            Log.d(TAG, "file name = " + photoFile.toString());
+            takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(photoFile));
+            startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO);
+
+            sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.fromFile(photoFile)));
         }
     }
 
     public File createImageFile(File picturesFile) throws IOException {
 
         //String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        String imageFileName = query_last_issue_id() + "_ISSUE_" + count++;
+        String imageFileName = (query_last_issue_id() + 1) + "_ISSUE_" + count++;
         Log.d(TAG, "image file name = " + imageFileName);
 
-        File image_path = null;
-        try {
-            image_path = File.createTempFile(
-                    "." + imageFileName + "-",  /* prefix */
-                    ".jpg",         /* suffix */
-                    picturesFile      /* directory */
-            );
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        if (image_path == null)
+        File image_path = new File(picturesFile, "." + imageFileName + ".jpg");
+        if (!image_path.createNewFile())
             return (null);
+
         Log.d(TAG, "image path = " + image_path.toString());
 
         // Save a file: path for use with ACTION_VIEW intents
         mCurrentPhotoPath = "file:" + image_path.getAbsolutePath();
-        return image_path;
+        return (image_path);
     }
 
     private int query_last_issue_id()
@@ -194,7 +180,7 @@ public class IssueActivity extends AppCompatActivity {
         Cursor cursorIssue = getContentResolver().query(
                 ZeroContract.Issues.CONTENT_URI,
                 projectionIssueID,
-                "\"" + ZeroContract.Issues.USER + "\"" + " LIKE " + "\"" + mAccount.name + "\"",
+                null,
                 null,
                 ZeroContract.IssuesColumns._ID + " DESC LIMIT 1");
         if (cursorIssue == null || cursorIssue.getCount() == 0)
@@ -261,6 +247,8 @@ public class IssueActivity extends AppCompatActivity {
                 mImagePreview.setVisibility(View.VISIBLE);
                 Toast.makeText(this, "Image saved", Toast.LENGTH_LONG).show();
             } else if (resultCode == RESULT_CANCELED) {
+                photoFile.delete();
+                count--;
                 // User cancelled the image capture
                 Toast.makeText(this, "Cancelled", Toast.LENGTH_LONG).show();
             } else {
