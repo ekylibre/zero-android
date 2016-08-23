@@ -101,7 +101,7 @@ public class CrumbsCalculator
 
     private boolean checkCrumb(Vector vector)
     {
-        if ((vector.norm < averageVector.norm * (1 + 1.50) && vector.norm > averageVector.norm * (1 - 0.80)))
+        if ((vector.norm < averageVector.norm * (1 + 0.90) && vector.norm > averageVector.norm * (1 - 0.80)))
         {
             currVector.copyVector(vector);
             vectorCoef = 1.0;
