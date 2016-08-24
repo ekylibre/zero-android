@@ -93,6 +93,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
         mContentResolver.delete(ZeroContract.PlantDensityAbacusItems.CONTENT_URI,
                 null,
                 null);
+        mContentResolver.delete(ZeroContract.PlantDensityAbaci.CONTENT_URI, null, null);
 
         Account[] accountList = AccountTool.getListAccount(mContext);
         if (BuildConfig.DEBUG) Log.d(TAG, "Performing Sync ! Pushing all the local data to Ekylibre instance");
@@ -271,8 +272,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
     public void performPlantDensityAbaciSync(Account account, Bundle extras, String authority, ContentProviderClient provider, SyncResult syncResult)
     {
 
-        if (BuildConfig.DEBUG) Log.i(TAG, "Destruction of the PlantDensityAbacus table");
-        int result = mContentResolver.delete(ZeroContract.PlantDensityAbaci.CONTENT_URI, null, null);
+
 
         if (BuildConfig.DEBUG) Log.i(TAG, "Beginning network plant_density_abaci synchronization");
         ContentValues cv = new ContentValues();

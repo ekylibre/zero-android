@@ -200,13 +200,15 @@ public class TrackingActivity extends UpdatableActivity implements TrackingListe
         //  }
     }
 
-/*    @Override
+/*
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu items for use in the action bar
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.tracking, menu);
         return super.onCreateOptionsMenu(menu);
-    }*/
+    }
+*/
 
     private void createIntervention()
     {
@@ -378,8 +380,6 @@ public class TrackingActivity extends UpdatableActivity implements TrackingListe
         if (!crumbsCalculator.isCrumbAccurate(location, type, metadata))
             return;
 
-        if (BuildConfig.DEBUG) Log.d(TAG, "I'm writing new crumb !");
-        Toast.makeText(this, "NEW CRUMB !!!", Toast.LENGTH_SHORT).show();
         Crumb crumb = crumbsCalculator.getFinalCrumb();
 
 

@@ -450,7 +450,7 @@ public class PlantCountingActivity extends UpdatableActivity  {
                     projectionAbaque,
                     "\"" + ZeroContract.PlantDensityAbaciColumns.USER + "\"" + " LIKE " + "\"" + mAccount.name + "\""
                             + " AND " + ZeroContract.PlantDensityAbaciColumns.ACTIVITY_ID + " IS NOT NULL"
-                            + " AND " + ZeroContract.PlantDensityAbaciColumns.ACTIVITY_ID + " == " + cursorActivity.getString(0),
+                            + " AND " + ZeroContract.PlantDensityAbaciColumns.ACTIVITY_ID + " == " + cursorActivity.getInt(0),
                     null,
                     null);
             return (cursorAbacus);
