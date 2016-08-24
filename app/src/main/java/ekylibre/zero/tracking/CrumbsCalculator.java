@@ -6,6 +6,8 @@ import android.util.Log;
 
 import java.util.ArrayList;
 
+import ekylibre.zero.BuildConfig;
+
 /**************************************
  * Created by pierre on 8/11/16.      *
  * ekylibre.zero for zero-android    *
@@ -37,7 +39,6 @@ public class CrumbsCalculator
 
     public boolean isCrumbAccurate(Location location, String type, Bundle metadata)
     {
-        //todo : there are no pints like start and stop I must look at this cuz this is needed for the api
         if (location.getAccuracy() > MAX_ACCURACY && type.equals("point"))
         {
             vectorCoef++;
@@ -48,8 +49,8 @@ public class CrumbsCalculator
             setLast(location, metadata, type);
             return (true);
         }
-        Log.d(TAG, "====================================================================");
-        Log.d(TAG, "ACCURACY =  = = = =  "  + location.getAccuracy());
+        if (BuildConfig.DEBUG) Log.d(TAG, "====================================================================");
+        if (BuildConfig.DEBUG) Log.d(TAG, "ACCURACY =  = = = =  "  + location.getAccuracy());
         if (firstPass)
         {
             firstSet(location, metadata, type);
@@ -72,8 +73,8 @@ public class CrumbsCalculator
             newVector.applyCoef(vectorCoef);
 
             updateAverageVector();
-            Log.d(TAG, "Average vector = " + averageVector.norm);
-            Log.d(TAG, "Curr vector = " + newVector.norm);
+            if (BuildConfig.DEBUG) Log.d(TAG, "Average vector = " + averageVector.norm);
+            if (BuildConfig.DEBUG) Log.d(TAG, "Curr vector = " + newVector.norm);
             if (checkCrumb(newVector))
             {
                 listVector.add(currVector.getInstance());
@@ -114,7 +115,7 @@ public class CrumbsCalculator
         metadata.putString("procedure_nature", lastProcedureNature);
         currCrumb.setCrumb(location, metadata, "start");
         setFinalCrumb();
-        Log.d(TAG, "TYPE => " + type);
+        if (BuildConfig.DEBUG) Log.d(TAG, "TYPE => " + type);
     }
 
     private boolean checkCrumb(Vector vector)
@@ -149,7 +150,7 @@ public class CrumbsCalculator
             Vector vector = listVector.get(i);
             newX += vector.x;
             newY += vector.y;
-            Log.d(TAG, "Norm[" + i + "] = " + vector.norm);
+            if (BuildConfig.DEBUG) Log.d(TAG, "Norm[" + i + "] = " + vector.norm);
         }
         newX /= i;
         newY /= i;
@@ -159,8 +160,8 @@ public class CrumbsCalculator
     private void setFinalCrumb()
     {
         finalCrumb.copyCrumb(currCrumb);
-        Log.d(TAG, "LATITUDE > " + finalCrumb.latitude + " ## AND ## LONGITUDE > " + finalCrumb.longitude);
-        Log.d(TAG, "Final Crumb set => tmp list");
+        if (BuildConfig.DEBUG) Log.d(TAG, "LATITUDE > " + finalCrumb.latitude + " ## AND ## LONGITUDE > " + finalCrumb.longitude);
+        if (BuildConfig.DEBUG) Log.d(TAG, "Final Crumb set => tmp list");
     }
 
     public Crumb getFinalCrumb()
