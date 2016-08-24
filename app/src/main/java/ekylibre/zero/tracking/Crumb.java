@@ -1,6 +1,7 @@
 package ekylibre.zero.tracking;
 
 import android.location.Location;
+import android.os.Bundle;
 
 import com.google.android.gms.maps.model.LatLng;
 
@@ -17,14 +18,17 @@ public class Crumb
     public double   latitude;
     public double   longitude;
     public long     date;
+    public Bundle   metadata;
+    public String   type;
 
-    public Crumb(Location location)
+    public Crumb(Location location, Bundle metadata, String type)
     {
         speed = location.getSpeed();
         pos = new LatLng(location.getLatitude(), location.getLongitude());
         latitude = location.getLatitude();
         longitude = location.getLongitude();
         date = new Date().getTime();
+        this.type = type;
     }
 
     public Crumb()
@@ -34,15 +38,19 @@ public class Crumb
         latitude = 0.0;
         longitude = 0.0;
         date = 0;
+        metadata = null;
+        type = "point";
     }
 
-    public void setCrumb(Location location)
+    public void setCrumb(Location location, Bundle metadata, String type)
     {
         speed = location.getSpeed();
         pos = new LatLng(location.getLatitude(), location.getLongitude());
         latitude = location.getLatitude();
         longitude = location.getLongitude();
         date = new Date().getTime();
+        this.metadata = metadata;
+        this.type = type;
     }
 
     public void copyCrumb(Crumb crumb)
@@ -52,6 +60,8 @@ public class Crumb
         latitude = crumb.getLatitude();
         longitude = crumb.getLongitude();
         date = new Date().getTime();
+        metadata = crumb.metadata;
+        type = crumb.type;
     }
 
     public double getLatitude()
@@ -72,6 +82,16 @@ public class Crumb
     public float getSpeed()
     {
         return (speed);
+    }
+
+    public Bundle getMetadata()
+    {
+        return (metadata);
+    }
+
+    public String getType()
+    {
+        return (type);
     }
 
     public LatLng getPos()

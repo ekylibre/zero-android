@@ -78,7 +78,7 @@ public class TrackingActivity extends UpdatableActivity implements TrackingListe
     private Button mMapButton;
     private int    mInterventionID;
 
-    private CrumbsCalculator crumbsCalculator = new CrumbsCalculator();
+    private CrumbsCalculator crumbsCalculator;
 
     private final String TAG = "Tracking Activity";
 
@@ -158,6 +158,7 @@ public class TrackingActivity extends UpdatableActivity implements TrackingListe
                         mLastProcedureNature = getResources().getStringArray(R.array.procedures_values)[which];
                         mLastProcedureNatureName = getResources().getStringArray(R.array.procedures_entries)[which];
                         Log.d("zero", "Start a new " + mLastProcedureNature);
+                        crumbsCalculator = new CrumbsCalculator(mLastProcedureNature);
 
                         mStartButton.setVisibility(View.GONE);
                         mMasterChrono.setVisibility(View.VISIBLE);
@@ -179,9 +180,11 @@ public class TrackingActivity extends UpdatableActivity implements TrackingListe
 
                         startTracking();
 
+/*
                         final Bundle metadata = new Bundle();
                         metadata.putString("procedure_nature", mLastProcedureNature);
                         addCrumb("start", metadata);
+*/
 
                         mNotificationBuilder
                                 .setSmallIcon(R.mipmap.ic_stat_notify_running)
@@ -244,8 +247,19 @@ public class TrackingActivity extends UpdatableActivity implements TrackingListe
         mProcedureNature.setVisibility(View.INVISIBLE);
         mStartButton.setVisibility(View.VISIBLE);
         this.stopTracking();
-        this.addCrumb("stop");
+        //this.addCrumb("stop");
 
+
+        int lastCrumbID = query_last_crumb_id();
+        if (lastCrumbID != 0)
+        {
+            ContentValues values = new ContentValues();
+            values.put(ZeroContract.Crumbs.TYPE, "stop");
+            getContentResolver().update(ZeroContract.Crumbs.CONTENT_URI,
+                    values,
+                    ZeroContract.CrumbsColumns._ID + " == " + lastCrumbID,
+                    null);
+        }
         setTitle(R.string.new_intervention);
         mNotificationBuilder
                 .setSmallIcon(R.mipmap.ic_stat_notify)
@@ -254,47 +268,23 @@ public class TrackingActivity extends UpdatableActivity implements TrackingListe
         mNotificationManager.cancel(mNotificationID);
     }
 
-/*
-    public void startPrecisionMode(View view) {
-        mPrecisionMode = true;
+    private int query_last_crumb_id()
+    {
+        String[] projectionCrumbID = {ZeroContract.CrumbsColumns._ID};
 
-        mPrecisionModeStopButton.setVisibility(View.VISIBLE);
-        mPrecisionModeStartButton.setVisibility(View.GONE);
-
-        mPrecisionModeStart = SystemClock.elapsedRealtime();
-        mPrecisionModeDuration = 0;
-        mPrecisionModeChrono.setBase(mPrecisionModeStart);
-        mPrecisionModeChrono.start();
-        mPrecisionModeChrono.setVisibility(View.VISIBLE);
-
-        this.startTracking(800);
-        this.addCrumb("hard_start");
-
-        mNotificationBuilder
-                .setSmallIcon(R.mipmap.ic_stat_notify_precision_mode)
-                .setContentText(getString(R.string.precision_mode));
-        mNotificationManager.notify(mNotificationID, mNotificationBuilder.build());
-    }*/
-
-
-/*    public void stopPrecisionMode(View view) {
-        mPrecisionModeStopButton.setVisibility(View.GONE);
-        mPrecisionModeStartButton.setVisibility(View.VISIBLE);
-
-        mPrecisionModeChrono.stop();
-        mPrecisionModeChrono.setVisibility(View.INVISIBLE);
-
-        this.startTracking();
-        this.addCrumb("hard_stop");
-
-        mNotificationBuilder
-                .setSmallIcon(R.mipmap.ic_stat_notify_running)
-                .setContentText(getString(R.string.running));
-        mNotificationManager.notify(mNotificationID, mNotificationBuilder.build());
-
-        mPrecisionMode = false;
-    }*/
-
+        Cursor cursorCrumb = getContentResolver().query(
+                ZeroContract.Crumbs.CONTENT_URI,
+                projectionCrumbID,
+                null,
+                null,
+                ZeroContract.CrumbsColumns._ID + " DESC LIMIT 1");
+        if (cursorCrumb == null || cursorCrumb.getCount() == 0)
+            return (0);
+        cursorCrumb.moveToFirst();
+        int ret = cursorCrumb.getInt(0);
+        cursorCrumb.close();
+        return (ret);
+    }
 
     public void pauseIntervention(View view) {
         mMasterDuration += SystemClock.elapsedRealtime() - mMasterStart;
@@ -304,13 +294,7 @@ public class TrackingActivity extends UpdatableActivity implements TrackingListe
         mScanButton.setVisibility(View.GONE);
 
         mResumeButton.setVisibility(View.VISIBLE);
-/*        if (mPrecisionMode) {
-            mPrecisionModeStopButton.setVisibility(View.GONE);
-            mPrecisionModeDuration += SystemClock.elapsedRealtime() - mPrecisionModeStart;
-            mPrecisionModeChrono.stop();
-        } else {
-            mPrecisionModeStartButton.setVisibility(View.GONE);
-        }*/
+
         this.stopTracking();
         this.addCrumb("pause");
         mNotificationBuilder
@@ -326,23 +310,8 @@ public class TrackingActivity extends UpdatableActivity implements TrackingListe
 
         mResumeButton.setVisibility(View.GONE);
         mPauseButton.setVisibility(View.VISIBLE);
-        // mStartButton.setVisibility(View.VISIBLE);
         mStopButton.setVisibility(View.VISIBLE);
-        //mScanButton.setVisibility(View.VISIBLE);
-/*        if (mPrecisionMode) {
-            mPrecisionModeStart = SystemClock.elapsedRealtime();
-            mPrecisionModeChrono.setBase(mPrecisionModeStart - mPrecisionModeDuration);
-            mPrecisionModeChrono.start();
-            mNotificationBuilder
-                    .setSmallIcon(R.mipmap.ic_stat_notify_precision_mode)
-                    .setContentText(getString(R.string.precision_mode));
-            mPrecisionModeStopButton.setVisibility(View.VISIBLE);
-        } else {
-            mNotificationBuilder
-                    .setSmallIcon(R.mipmap.ic_stat_notify_running)
-                    .setContentText(getString(R.string.running));
-            mPrecisionModeStartButton.setVisibility(View.VISIBLE);
-        }*/
+
         this.startTracking();
         this.addCrumb("resume");
 
@@ -406,7 +375,7 @@ public class TrackingActivity extends UpdatableActivity implements TrackingListe
     {
 
 
-        if (!crumbsCalculator.isCrumbAccurate(location, type))
+        if (!crumbsCalculator.isCrumbAccurate(location, type, metadata))
             return;
 
         if (BuildConfig.DEBUG) Log.d(TAG, "I'm writing new crumb !");
@@ -414,7 +383,7 @@ public class TrackingActivity extends UpdatableActivity implements TrackingListe
         Crumb crumb = crumbsCalculator.getFinalCrumb();
 
 
-        putCrumbOnLocalDatabase(crumb, type, metadata);
+        putCrumbOnLocalDatabase(crumb);
 
         sendBroadcastNewCrumb(location);
 
@@ -429,19 +398,19 @@ public class TrackingActivity extends UpdatableActivity implements TrackingListe
         sendBroadcast(intent);
     }
 
-    private void putCrumbOnLocalDatabase(Crumb crumb, String type, Bundle metadata)
+    private void putCrumbOnLocalDatabase(Crumb crumb)
     {
         ContentValues values = new ContentValues();
 
         values.put(ZeroContract.CrumbsColumns.USER, AccountTool.getCurrentAccount(this).name);
-        values.put(ZeroContract.CrumbsColumns.TYPE, type);
+        values.put(ZeroContract.CrumbsColumns.TYPE, crumb.getType());
         values.put(ZeroContract.CrumbsColumns.LATITUDE, crumb.getLatitude());
         values.put(ZeroContract.CrumbsColumns.LONGITUDE, crumb.getLongitude());
         values.put(ZeroContract.CrumbsColumns.READ_AT, crumb.getDate());
         values.put(ZeroContract.CrumbsColumns.ACCURACY, 0);
         values.put(ZeroContract.CrumbsColumns.SYNCED, 0);
         values.put(ZeroContract.CrumbsColumns.FK_INTERVENTION, mInterventionID);
-        putMetadata(metadata, values);
+        putMetadata(crumb.getMetadata(), values);
 
         getContentResolver().insert(ZeroContract.Crumbs.CONTENT_URI, values);
     }
@@ -469,18 +438,6 @@ public class TrackingActivity extends UpdatableActivity implements TrackingListe
             }
         }
     }
-
-
-
-    // Call the sync service
-/*    private void syncData() {
-        Log.d("zero", "syncData: " + mAccount.toString() + ", " + ZeroContract.AUTHORITY);
-        Bundle extras = new Bundle();
-        extras.putBoolean(ContentResolver.SYNC_EXTRAS_MANUAL, true);
-        extras.putBoolean(ContentResolver.SYNC_EXTRAS_EXPEDITED, true);
-        ContentResolver.requestSync(mAccount, ZeroContract.AUTHORITY, extras);
-    }*/
-
 
     @Override
     public void onDestroy()
