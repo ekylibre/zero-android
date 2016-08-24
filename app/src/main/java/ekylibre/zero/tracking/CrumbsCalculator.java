@@ -1,6 +1,7 @@
 package ekylibre.zero.tracking;
 
 import android.location.Location;
+import android.os.Bundle;
 import android.util.Log;
 
 import java.util.ArrayList;
@@ -11,9 +12,10 @@ import java.util.ArrayList;
  *************************************/
 public class CrumbsCalculator
 {
-    private final int           MAX_ACCURACY = 8;
+    private final int           MAX_ACCURACY = 10;
     private final int           VALUES_FOR_AVERAGE = 8;
     private final float         MAX_SPEED_ACCEPTED_WITHOUT_CHECK = 5;
+    private String              lastProcedureNature;
 
     private double              vectorCoef = 1.0;
 
@@ -28,27 +30,34 @@ public class CrumbsCalculator
     private final String        TAG = "CrumbsCalculator";
     private boolean             firstPass = true;
 
-    public CrumbsCalculator()
+    public CrumbsCalculator(String lastProcedureNature)
     {
+        this.lastProcedureNature = lastProcedureNature;
     }
 
-    public boolean isCrumbAccurate(Location location, String type)
+    public boolean isCrumbAccurate(Location location, String type, Bundle metadata)
     {
-        if (location.getAccuracy() > MAX_ACCURACY || !type.equals("point"))
+        //todo : there are no pints like start and stop I must look at this cuz this is needed for the api
+        if (location.getAccuracy() > MAX_ACCURACY && type.equals("point"))
         {
             vectorCoef++;
             return (false);
+        }
+        else if (type.equals("stop"))
+        {
+            setLast(location, metadata, type);
+            return (true);
         }
         Log.d(TAG, "====================================================================");
         Log.d(TAG, "ACCURACY =  = = = =  "  + location.getAccuracy());
         if (firstPass)
         {
-            firstSet(location);
+            firstSet(location, metadata, type);
             return (true);
         }
         else if (!currVector.set)
         {
-            firstVectorSet(location);
+            firstVectorSet(location, metadata, type);
             return (true);
         }
         else
@@ -56,7 +65,7 @@ public class CrumbsCalculator
             Vector newVector = new Vector();
             newVector.set = true;
             prevCrumb.copyCrumb(currCrumb);
-            currCrumb.setCrumb(location);
+            currCrumb.setCrumb(location, metadata, type);
 
             newVector.setVectorCoord(prevCrumb.getLongitude(), currCrumb.getLongitude(),
                     prevCrumb.getLatitude(), currCrumb.getLatitude());
@@ -75,11 +84,17 @@ public class CrumbsCalculator
         return (false);
     }
 
-    private void firstVectorSet(Location location)
+    public void setLast(Location location, Bundle metadata, String type)
+    {
+        currCrumb.setCrumb(location, metadata, type);
+        setFinalCrumb();
+    }
+
+    private void firstVectorSet(Location location, Bundle metadata, String type)
     {
         currVector.set = true;
         prevCrumb.copyCrumb(currCrumb);
-        currCrumb.setCrumb(location);
+        currCrumb.setCrumb(location, metadata, type);
         currVector.setVectorCoord(prevCrumb.getLongitude(), currCrumb.getLongitude(),
                 prevCrumb.getLatitude(), currCrumb.getLatitude());
         currVector.applyCoef(vectorCoef);
@@ -92,11 +107,14 @@ public class CrumbsCalculator
             currVector.set = true;
     }
 
-    private void firstSet(Location location)
+    private void firstSet(Location location, Bundle metadata, String type)
     {
+        metadata = new Bundle();
         firstPass = false;
-        currCrumb.setCrumb(location);
+        metadata.putString("procedure_nature", lastProcedureNature);
+        currCrumb.setCrumb(location, metadata, "start");
         setFinalCrumb();
+        Log.d(TAG, "TYPE => " + type);
     }
 
     private boolean checkCrumb(Vector vector)
@@ -140,10 +158,7 @@ public class CrumbsCalculator
 
     private void setFinalCrumb()
     {
-        finalCrumb.speed = currCrumb.speed;
-        finalCrumb.date = currCrumb.date;
-        finalCrumb.latitude = currCrumb.latitude;
-        finalCrumb.longitude = currCrumb.longitude;
+        finalCrumb.copyCrumb(currCrumb);
         Log.d(TAG, "LATITUDE > " + finalCrumb.latitude + " ## AND ## LONGITUDE > " + finalCrumb.longitude);
         Log.d(TAG, "Final Crumb set => tmp list");
     }
