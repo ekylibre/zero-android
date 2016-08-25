@@ -28,6 +28,7 @@ import java.util.ArrayList;
 import ekylibre.api.ZeroContract;
 import ekylibre.zero.R;
 import ekylibre.zero.util.AccountTool;
+import ekylibre.zero.util.PermissionManager;
 import ekylibre.zero.util.UpdatableActivity;
 
 public class MapsActivity extends UpdatableActivity implements OnMapReadyCallback {
@@ -51,15 +52,13 @@ public class MapsActivity extends UpdatableActivity implements OnMapReadyCallbac
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
+        if (mMap == null)
+            this.finish();
         LocationManager locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
         String locationProvider = LocationManager.NETWORK_PROVIDER;
 
-        if ( Build.VERSION.SDK_INT >= 23 &&
-                ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION ) != PackageManager.PERMISSION_GRANTED &&
-                ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED)
-        {
-            return  ;
-        }
+        if (!PermissionManager.GPSPermissions(this, this))
+            return;
 
         Location lastKnownLocation = locationManager.getLastKnownLocation(locationProvider);
         resetPrecedentMarkers(getIntent().getIntExtra(TrackingActivity._interventionID, 0));
@@ -128,6 +127,8 @@ public class MapsActivity extends UpdatableActivity implements OnMapReadyCallbac
     {
         if (currentMarker != null)
             currentMarker.remove();
+        if (mMap == null)
+            return;
         currentMarker = mMap.addMarker(new MarkerOptions()
                 .icon(BitmapDescriptorFactory.fromBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.pos_marker)))
                 .position(new LatLng(latitude, longitude))
