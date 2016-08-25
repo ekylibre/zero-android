@@ -129,6 +129,7 @@ public class CrumbsCalculator
         else
         {
             // Here we should be able to make the vector smoother
+            // to place a non-real crumb which will match well with the global path
             // There is some work on the end of this algo because we'll don't ignore vector anymore
             // ATM I will just ignore the vector and change variables as if he had never existed
             vectorCoef++;

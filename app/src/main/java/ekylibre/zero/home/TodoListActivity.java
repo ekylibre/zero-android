@@ -62,15 +62,21 @@ public class TodoListActivity {
         this.todayDate = foundTextView;
         this.context = context;
         this.activity = activity;
+        Log.d(TAG, "Set the today's date");
+        String date = DateFormat.getDateInstance(DateFormat.LONG,
+                Locale.getDefault()).format(getDateOfDay().getTime());
+        Log.d(TAG, "Today's date :: " + date);
+
+        todayDate.setText(date);
+
         List<TodoItem> todolist = createList();
         if (todolist == null)
             return;
 
         TodoAdapter adapter = new TodoAdapter(context, todolist);
+
         todoListView.setAdapter(adapter);
-        String date = DateFormat.getDateInstance(DateFormat.LONG,
-                Locale.getDefault()).format(getDateOfDay().getTime());
-        todayDate.setText(date);
+
     }
 
     public void setListView(ListView listView) {

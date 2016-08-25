@@ -22,14 +22,21 @@ public class PermissionManager
     public static boolean calendarPermissions(Context context, Activity activity)
     {
         if (Build.VERSION.SDK_INT >= 23 &&
-                (ActivityCompat.checkSelfPermission(context, android.Manifest.permission.READ_CALENDAR) != PackageManager.PERMISSION_GRANTED
-                        || ActivityCompat.checkSelfPermission(context, Manifest.permission.WRITE_CALENDAR) != PackageManager.PERMISSION_GRANTED))
+                (ActivityCompat.checkSelfPermission(context, android.Manifest.permission.READ_CALENDAR)
+                        != PackageManager.PERMISSION_GRANTED
+                        || ActivityCompat.checkSelfPermission(context, Manifest.permission.WRITE_CALENDAR)
+                        != PackageManager.PERMISSION_GRANTED))
         {
             Log.d(TAG, "REQUESTING PERMISSIONS");
-            ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.READ_CALENDAR, Manifest.permission.WRITE_CALENDAR}, REQUEST_CALENDAR);
+            ActivityCompat.requestPermissions(activity,
+                    new String[]{Manifest.permission.READ_CALENDAR, Manifest.permission.WRITE_CALENDAR},
+                    REQUEST_CALENDAR);
+
             if (Build.VERSION.SDK_INT >= 23 &&
-                    (ActivityCompat.checkSelfPermission(context, android.Manifest.permission.READ_CALENDAR) != PackageManager.PERMISSION_GRANTED
-                            || ActivityCompat.checkSelfPermission(context, Manifest.permission.WRITE_CALENDAR) != PackageManager.PERMISSION_GRANTED))
+                    (ActivityCompat.checkSelfPermission(context, android.Manifest.permission.READ_CALENDAR)
+                            != PackageManager.PERMISSION_GRANTED
+                            || ActivityCompat.checkSelfPermission(context, Manifest.permission.WRITE_CALENDAR)
+                            != PackageManager.PERMISSION_GRANTED))
                 return (false);
         }
         Log.d(TAG, "PERMISSIONS GRANTED");
@@ -39,14 +46,21 @@ public class PermissionManager
     public static boolean GPSPermissions(Context context, Activity activity)
     {
         if (Build.VERSION.SDK_INT >= 23 &&
-                (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED
-                        || ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED))
+                (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION)
+                        != PackageManager.PERMISSION_GRANTED
+                        || ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION)
+                        != PackageManager.PERMISSION_GRANTED))
         {
             Log.d(TAG, "REQUESTING PERMISSIONS");
-            ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_GPS);
+            ActivityCompat.requestPermissions(activity,
+                    new String[]{Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION},
+                    REQUEST_GPS);
+
             if (Build.VERSION.SDK_INT >= 23 &&
-		(ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED
-                || ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED))
+		(ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED
+                || ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED))
                 return (false);
         }
         Log.d(TAG, "PERMISSIONS GRANTED");
@@ -56,17 +70,48 @@ public class PermissionManager
     public static boolean storagePermissions(Context context, Activity activity)
     {
         if (Build.VERSION.SDK_INT >= 23 &&
-                (ActivityCompat.checkSelfPermission(context, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED
-                        || ActivityCompat.checkSelfPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED))
+                (ActivityCompat.checkSelfPermission(context, Manifest.permission.READ_EXTERNAL_STORAGE)
+                        != PackageManager.PERMISSION_GRANTED
+                        || ActivityCompat.checkSelfPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                        != PackageManager.PERMISSION_GRANTED))
         {
             Log.d(TAG, "REQUESTING PERMISSIONS");
-            ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_STORAGE);
+            ActivityCompat.requestPermissions(activity,
+                    new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                    REQUEST_STORAGE);
+
             if (Build.VERSION.SDK_INT >= 23 &&
-                    (ActivityCompat.checkSelfPermission(context, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED
-                            || ActivityCompat.checkSelfPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED))
+                    (ActivityCompat.checkSelfPermission(context, Manifest.permission.READ_EXTERNAL_STORAGE)
+                            != PackageManager.PERMISSION_GRANTED
+                            || ActivityCompat.checkSelfPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                            != PackageManager.PERMISSION_GRANTED))
                 return (false);
         }
         Log.d(TAG, "PERMISSIONS GRANTED");
         return (true);
     }
+
+    public static boolean internetPermissions(Context context, Activity activity)
+    {
+        if (Build.VERSION.SDK_INT >= 23 &&
+                (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_NETWORK_STATE)
+                        != PackageManager.PERMISSION_GRANTED
+                        || ActivityCompat.checkSelfPermission(context, Manifest.permission.INTERNET)
+                        != PackageManager.PERMISSION_GRANTED))
+        {
+            Log.d(TAG, "REQUESTING PERMISSIONS");
+            ActivityCompat.requestPermissions(activity,
+                    new String[]{Manifest.permission.ACCESS_NETWORK_STATE, Manifest.permission.INTERNET},
+                    REQUEST_STORAGE);
+
+            if (Build.VERSION.SDK_INT >= 23 &&
+                    (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_NETWORK_STATE)
+                            != PackageManager.PERMISSION_GRANTED
+                            || ActivityCompat.checkSelfPermission(context, Manifest.permission.INTERNET)
+                            != PackageManager.PERMISSION_GRANTED))
+                return (false);
+        }
+        Log.d(TAG, "PERMISSIONS GRANTED");
+        return (true);
+}
 }

@@ -29,6 +29,7 @@ import ekylibre.zero.tracking.MapsActivity;
 import ekylibre.zero.tracking.TrackingActivity;
 import ekylibre.service.ConnectionManagerService;
 import ekylibre.zero.util.AccountTool;
+import ekylibre.zero.util.PermissionManager;
 import ekylibre.zero.util.UpdatableActivity;
 
 /**************************************
@@ -64,6 +65,7 @@ public class MainActivity extends UpdatableActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        PermissionManager.calendarPermissions(this, this);
 
         firstPass = true;
         if (!AccountTool.isAnyAccountExist(this))
