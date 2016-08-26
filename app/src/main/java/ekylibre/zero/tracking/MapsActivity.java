@@ -130,7 +130,7 @@ public class MapsActivity extends UpdatableActivity implements OnMapReadyCallbac
         if (mMap == null)
             return;
         currentMarker = mMap.addMarker(new MarkerOptions()
-                .icon(BitmapDescriptorFactory.fromBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.pos_marker)))
+                //.icon(BitmapDescriptorFactory.fromBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.pos_marker)))
                 .position(new LatLng(latitude, longitude))
                 .title(""));
         //mMap.moveCamera(CameraUpdateFactory.newLatLng(new LatLng(latitude, longitude)));
