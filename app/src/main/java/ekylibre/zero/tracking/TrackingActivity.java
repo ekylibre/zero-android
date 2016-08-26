@@ -229,7 +229,8 @@ public class TrackingActivity extends UpdatableActivity implements TrackingListe
 
     public void openMap(View view)
     {
-        if (!PermissionManager.internetPermissions(this, this))
+        if (!PermissionManager.internetPermissions(this, this)
+                || !PermissionManager.storagePermissions(this, this))
             return;
         Intent intent = new Intent(this, MapsActivity.class);
         intent.putExtra(this._interventionID, mInterventionID);
