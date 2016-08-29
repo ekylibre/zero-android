@@ -48,7 +48,6 @@ public class TodoListActivity {
     private ListView todoListView;
     private ArrayAdapter<String> adapter;
     private Context context;
-    private TextView todayDate;
     private Activity activity;
 
     /*
@@ -57,17 +56,10 @@ public class TodoListActivity {
     ** CONSTANTS are use to get the part of data you want from adapter
     */
 
-    public TodoListActivity(Context context, Activity activity, ListView foundListView, TextView foundTextView) {
+    public TodoListActivity(Context context, Activity activity, ListView foundListView) {
         this.todoListView = foundListView;
-        this.todayDate = foundTextView;
         this.context = context;
         this.activity = activity;
-        Log.d(TAG, "Set the today's date");
-        String date = DateFormat.getDateInstance(DateFormat.LONG,
-                Locale.getDefault()).format(getDateOfDay().getTime());
-        Log.d(TAG, "Today's date :: " + date);
-
-        todayDate.setText(date);
 
         List<TodoItem> todolist = createList();
         if (todolist == null)
@@ -98,8 +90,18 @@ public class TodoListActivity {
         DateFormat formatterSTART = new SimpleDateFormat("HH:mm - ");
         DateFormat formatterEND = new SimpleDateFormat("HH:mm");
 
-        if (curs.moveToFirst()) {
-            do {
+        
+        Calendar currentDate = Calendar.getInstance();
+        currentDate.setTimeInMillis(0);
+        if (curs.moveToFirst())
+        {
+            do
+            {
+                if (newDay(curs.getLong(DTSTART), currentDate))
+                {
+                    currentDate.setTimeInMillis(curs.getLong(DTSTART));
+                    todoList.add(new TodoItem(true, currentDate));
+                }
                 Date startDate = new Date(curs.getLong(DTSTART));
                 Date endDate = new Date(curs.getLong(DTEND));
                 startDateFormatted = formatterSTART.format(startDate);
@@ -110,7 +112,18 @@ public class TodoListActivity {
                 todoList.add(new TodoItem(startDateFormatted, endDateFormatted, curs.getString(TITLE), curs.getString(DESCRIPTION)));
             } while (curs.moveToNext());
         }
+        else
+            todoList.add(new TodoItem(true, getDateOfDay()));
         return (todoList);
+    }
+
+    private boolean newDay(long date, Calendar currentDate)
+    {
+        if (currentDate.getTimeInMillis() == 0
+                || getDayFromMillis(date) != currentDate.get(Calendar.DAY_OF_YEAR))
+            return (true);
+        else
+            return (false);
     }
 
     /*
@@ -159,6 +172,28 @@ public class TodoListActivity {
         calendar.set(year, month, day, hour, minute, second);
         calendar.add(Calendar.DAY_OF_YEAR, 1);
         Log.d(TAG, "TOMORROW DATE = " + calendar.getTime());
+        return (calendar);
+    }
+
+    public Calendar getDateOfNextMonth() {
+        Calendar calendar = Calendar.getInstance();
+        int year;
+        int month;
+        int day;
+        int hour;
+        int minute;
+        int second;
+
+        year = calendar.get(Calendar.YEAR);
+        month = calendar.get(Calendar.MONTH);
+        day = calendar.get(Calendar.DAY_OF_MONTH);
+        hour = 0;
+        minute = 0;
+        second = 0;
+
+        calendar.set(year, month, day, hour, minute, second);
+        calendar.add(Calendar.MONTH, 1);
+        Log.d(TAG, "NEXT MONTH DATE = " + calendar.getTime().toString());
         return (calendar);
     }
 
@@ -218,7 +253,7 @@ public class TodoListActivity {
         Log.d(TAG, "Getting events from local calendar");
         projection = setProjection();
         startTime = getDateOfDay();
-        endTime = getDateOfTomorrow();
+        endTime = getDateOfNextMonth();
         startTime.setTimeInMillis(startTime.getTimeInMillis() - 1000);
         selection = setSelection(startTime, endTime);
 
@@ -258,6 +293,13 @@ public class TodoListActivity {
                 Log.d(TAG, "==========");
             } while (curs.moveToNext());
         }
+    }
+
+    public int getDayFromMillis(long time)
+    {
+        Calendar cal = Calendar.getInstance();
+        cal.setTimeInMillis(time);
+        return (cal.get(Calendar.DAY_OF_YEAR));
     }
 }
 

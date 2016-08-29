@@ -43,14 +43,23 @@ public class TodoAdapter extends ArrayAdapter<TodoItem>
             viewHolder.desc = (TextView)convertView.findViewById(R.id.desc);
             viewHolder.hours = (TextView)convertView.findViewById(R.id.startDate);
             viewHolder.minutes = (TextView)convertView.findViewById(R.id.endDate);
+            viewHolder.header = (TextView)convertView.findViewById(R.id.todayDate);
             convertView.setTag(viewHolder);
         }
         TodoItem    item = getItem(position);
-        viewHolder.event.setText(item.getEvent());
-        viewHolder.hours.setText(item.getStartDate());
-        viewHolder.minutes.setText(item.getEndDate());
-        viewHolder.desc.setText(item.getDesc());
-
+        if (!item.getHeaderState())
+        {
+            viewHolder.event.setText(item.getEvent());
+            viewHolder.hours.setText(item.getStartDate());
+            viewHolder.minutes.setText(item.getEndDate());
+            viewHolder.desc.setText(item.getDesc());
+            viewHolder.header.setVisibility(View.GONE);
+        }
+        else
+        {
+            viewHolder.header.setText(item.getDay());
+            viewHolder.header.setVisibility(View.VISIBLE);
+        }
         return (convertView);
     }
 }
