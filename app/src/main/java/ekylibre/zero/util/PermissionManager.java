@@ -3,10 +3,14 @@ package ekylibre.zero.util;
 import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Build;
+import android.preference.PreferenceManager;
 import android.support.v4.app.ActivityCompat;
 import android.util.Log;
+
+import ekylibre.zero.SettingsActivity;
 
 /**************************************
  * Created by pierre on 8/22/16.      *
@@ -45,6 +49,8 @@ public class PermissionManager
 
     public static boolean GPSPermissions(Context context, Activity activity)
     {
+        if (!localGPSPerm(context))
+            return (false);
         if (Build.VERSION.SDK_INT >= 23 &&
                 (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION)
                         != PackageManager.PERMISSION_GRANTED
@@ -65,6 +71,14 @@ public class PermissionManager
         }
         Log.d(TAG, "PERMISSIONS GRANTED");
         return (true);
+    }
+
+    private static boolean localGPSPerm(Context context)
+    {
+        SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
+        boolean prefGPS = pref.getBoolean(SettingsActivity.PREF_GPS, false);
+
+        return (prefGPS);
     }
 
     public static boolean storagePermissions(Context context, Activity activity)

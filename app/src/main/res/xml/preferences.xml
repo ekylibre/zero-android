@@ -17,6 +17,13 @@
             android:summary="@string/pref_syncCalendar_summary"
             android:persistent="true"
             android:defaultValue="false" />
+        <CheckBoxPreference
+            android:key="pref_GPS"
+            android:title="@string/pref_GPS"
+            android:dialogTitle="@string/pref_GPS"
+            android:summary="@string/pref_GPS_summary"
+            android:persistent="true"
+            android:defaultValue="false" />
     </PreferenceCategory>
     <PreferenceCategory android:title="@string/network">
         <CheckBoxPreference
