@@ -93,4 +93,6 @@
     <string name="open_map">Ouvrir la carte</string>
     <string name="pref_syncCalendar">Synchronisation du calendrier local</string>
     <string name="pref_syncCalendar_summary">Autoriser l\'application à synchroniser le calendrier du téléphone</string>
+    <string name="pref_GPS">Activer le GPS</string>
+    <string name="pref_GPS_summary">Laisser Zero utiliser vos donées de localisation</string>
 </resources>
