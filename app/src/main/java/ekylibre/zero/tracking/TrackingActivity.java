@@ -230,7 +230,8 @@ public class TrackingActivity extends UpdatableActivity implements TrackingListe
     public void openMap(View view)
     {
         if (!PermissionManager.internetPermissions(this, this)
-                || !PermissionManager.storagePermissions(this, this))
+                || !PermissionManager.storagePermissions(this, this)
+                || !PermissionManager.GPSPermissions(this, this))
             return;
         Intent intent = new Intent(this, MapsActivity.class);
         intent.putExtra(this._interventionID, mInterventionID);
@@ -256,7 +257,7 @@ public class TrackingActivity extends UpdatableActivity implements TrackingListe
 
 
         int lastCrumbID = query_last_crumb_id();
-        if (lastCrumbID != 0)
+        if (PermissionManager.GPSPermissions(this, this) && lastCrumbID != 0)
         {
             ContentValues values = new ContentValues();
             values.put(ZeroContract.Crumbs.TYPE, "stop");
