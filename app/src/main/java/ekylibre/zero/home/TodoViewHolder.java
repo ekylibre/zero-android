@@ -14,4 +14,5 @@ public class TodoViewHolder
     public TextView hours;
     public TextView minutes;
     public TextView const_h;
+    public TextView header;
 }

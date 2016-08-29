@@ -7,17 +7,6 @@
     tools:context=".home.TodoListActivity">
 
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Today's date"
-        android:textSize="20dp"
-        android:textColor="@color/ultraLight_grey"
-        android:id="@+id/todayDate"
-        android:gravity="center"
-        android:layout_gravity="center_horizontal"
-        android:background="@drawable/header"/>
-
     <ListView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
