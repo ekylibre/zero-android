@@ -1,10 +1,8 @@
-package ekylibre.api;
+package ekylibre.database;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-
-import ekylibre.api.ZeroContract;
 
 public class DatabaseHelper extends SQLiteOpenHelper
 {

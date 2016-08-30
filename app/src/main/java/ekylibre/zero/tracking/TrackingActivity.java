@@ -16,14 +16,12 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.preference.PreferenceManager;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Chronometer;
 import android.widget.HorizontalScrollView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
@@ -38,8 +36,7 @@ import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 
-import ekylibre.api.ZeroContract;
-import ekylibre.zero.BuildConfig;
+import ekylibre.database.ZeroContract;
 import ekylibre.zero.R;
 import ekylibre.zero.util.AccountTool;
 import ekylibre.zero.util.PermissionManager;
@@ -48,9 +45,9 @@ import ekylibre.zero.util.UpdatableActivity;
 
 public class TrackingActivity extends UpdatableActivity implements TrackingListenerWriter
 {
-
     public final static String KEY_ACCOUNT = "account";
     public final static double MAXIMAL_ACCURACY = 4.0;
+    public final static String NEW = "new_intervention";
 
     private long mMasterDuration, mMasterStart;
     private long mPrecisionModeDuration, mPrecisionModeStart;
@@ -79,6 +76,7 @@ public class TrackingActivity extends UpdatableActivity implements TrackingListe
     private int    mInterventionID;
 
     private CrumbsCalculator crumbsCalculator;
+    private boolean mNewIntervention;
 
     private final String TAG = "Tracking Activity";
 
@@ -105,6 +103,7 @@ public class TrackingActivity extends UpdatableActivity implements TrackingListe
         // Set content view
         setContentView(R.layout.tracking);
 
+        mNewIntervention = getIntent().getBooleanExtra(TrackingActivity.NEW, false);
 
         // Find view elements
         mDetails                  = (HorizontalScrollView) findViewById(R.id.details);

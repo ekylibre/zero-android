@@ -1,4 +1,4 @@
-package ekylibre.api;
+package ekylibre.APICaller;
 
 import org.apache.http.client.ClientProtocolException;
 import org.json.JSONException;
@@ -7,6 +7,7 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.util.List;
 
+import ekylibre.APICaller.Instance;
 import ekylibre.exceptions.HTTPException;
 
 /**

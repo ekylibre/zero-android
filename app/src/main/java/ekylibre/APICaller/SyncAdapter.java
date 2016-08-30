@@ -1,4 +1,4 @@
-package ekylibre.zero;
+package ekylibre.APICaller;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
@@ -13,7 +13,6 @@ import android.content.SyncResult;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.SystemClock;
 import android.provider.Settings.Secure;
 import android.util.Log;
 
@@ -29,14 +28,15 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-import ekylibre.api.CrumbPoster;
-import ekylibre.api.Instance;
-import ekylibre.api.Issue;
-import ekylibre.api.Plant;
-import ekylibre.api.PlantCounting;
-import ekylibre.api.PlantDensityAbacus;
-import ekylibre.api.ZeroContract;
+import ekylibre.APICaller.CrumbPoster;
+import ekylibre.APICaller.Instance;
+import ekylibre.APICaller.Issue;
+import ekylibre.APICaller.Plant;
+import ekylibre.APICaller.PlantCounting;
+import ekylibre.APICaller.PlantDensityAbacus;
+import ekylibre.database.ZeroContract;
 import ekylibre.exceptions.HTTPException;
+import ekylibre.zero.BuildConfig;
 import ekylibre.zero.util.AccountTool;
 import ekylibre.zero.util.ImageConverter;
 import ekylibre.zero.util.UpdatableActivity;

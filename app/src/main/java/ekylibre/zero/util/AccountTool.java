@@ -14,7 +14,7 @@ import java.util.Objects;
 import ekylibre.zero.account.AccountManagerActivity;
 import ekylibre.zero.Authenticator;
 import ekylibre.zero.AuthenticatorActivity;
-import ekylibre.zero.SyncAdapter;
+import ekylibre.APICaller.SyncAdapter;
 
 /**************************************
  * Created by pierre on 7/18/16.      *

@@ -1,4 +1,4 @@
-package ekylibre.api;
+package ekylibre.APICaller;
 
 public class User {
 

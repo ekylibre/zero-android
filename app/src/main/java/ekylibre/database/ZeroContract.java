@@ -1,4 +1,4 @@
-package ekylibre.api;
+package ekylibre.database;
 
 import android.content.ContentResolver;
 import android.net.Uri;

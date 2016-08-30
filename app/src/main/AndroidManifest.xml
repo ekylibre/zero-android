@@ -106,7 +106,7 @@
 
         <!-- Content provider -->
         <provider
-            android:name="ekylibre.api.ZeroProvider"
+            android:name="ekylibre.database.ZeroProvider"
             android:authorities="ekylibre.zero"
             android:exported="false"
             android:syncable="true" />

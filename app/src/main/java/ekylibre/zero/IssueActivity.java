@@ -1,7 +1,6 @@
 package ekylibre.zero;
 
 import android.accounts.Account;
-import android.app.Activity;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
@@ -38,10 +37,9 @@ import com.google.android.gms.common.api.GoogleApiClient;
 
 import java.io.File;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import ekylibre.api.ZeroContract;
+import ekylibre.database.ZeroContract;
 import ekylibre.zero.util.AccountTool;
 import ekylibre.zero.util.PermissionManager;
 
