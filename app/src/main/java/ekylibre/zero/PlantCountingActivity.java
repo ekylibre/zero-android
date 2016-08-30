@@ -3,13 +3,10 @@ package ekylibre.zero;
 
 import android.accounts.Account;
 import android.annotation.TargetApi;
-import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.BroadcastReceiver;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.drawable.Drawable;
@@ -18,10 +15,7 @@ import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.SystemClock;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.text.InputFilter;
 import android.text.InputType;
 import android.text.TextUtils;
@@ -47,7 +41,7 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.Objects;
 
-import ekylibre.api.ZeroContract;
+import ekylibre.database.ZeroContract;
 import ekylibre.zero.util.AccountTool;
 import ekylibre.zero.util.UpdatableActivity;
 

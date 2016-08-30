@@ -1,4 +1,4 @@
-package ekylibre.api;
+package ekylibre.APICaller;
 
 import android.util.Log;
 

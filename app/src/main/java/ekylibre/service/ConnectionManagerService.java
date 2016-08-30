@@ -16,7 +16,7 @@ import android.util.Log;
 
 import ekylibre.zero.util.AccountTool;
 import ekylibre.zero.SettingsActivity;
-import ekylibre.api.ZeroContract;
+import ekylibre.database.ZeroContract;
 
 /*************************************
  * Created by PierreBougon on 7/6/16.*

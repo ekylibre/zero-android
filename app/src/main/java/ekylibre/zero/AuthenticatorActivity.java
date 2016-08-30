@@ -11,7 +11,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import ekylibre.api.Token;
+import ekylibre.APICaller.Token;
 import ekylibre.exceptions.UnauthorizedException;
 import ekylibre.zero.home.MainActivity;
 

@@ -1,5 +1,6 @@
-package ekylibre.api;
+package ekylibre.APICaller;
 
+import ekylibre.APICaller.Instance;
 import ekylibre.exceptions.HTTPException;
 
 import java.io.IOException;

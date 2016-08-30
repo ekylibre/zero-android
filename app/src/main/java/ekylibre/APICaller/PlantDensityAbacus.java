@@ -1,8 +1,7 @@
-package ekylibre.api;
+package ekylibre.APICaller;
 
 import android.util.Log;
 
-import org.apache.http.client.ClientProtocolException;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;

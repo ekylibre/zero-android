@@ -19,13 +19,12 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import ekylibre.api.ZeroContract;
+import ekylibre.database.ZeroContract;
 import ekylibre.zero.account.AccountManagerActivity;
 import ekylibre.zero.IssueActivity;
 import ekylibre.zero.PlantCountingActivity;
 import ekylibre.zero.R;
 import ekylibre.zero.SettingsActivity;
-import ekylibre.zero.tracking.MapsActivity;
 import ekylibre.zero.tracking.TrackingActivity;
 import ekylibre.service.ConnectionManagerService;
 import ekylibre.zero.util.AccountTool;
@@ -273,6 +272,13 @@ public class MainActivity extends UpdatableActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return (true);
+    }
+
+    public void launchIntervention(View v)
+    {
+        Intent intent = new Intent(this, TrackingActivity.class);
+        intent.putExtra(TrackingActivity.NEW, true);
+        startActivity(intent);
     }
 
     private void    sync_data()

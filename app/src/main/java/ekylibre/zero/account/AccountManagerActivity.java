@@ -15,10 +15,10 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import ekylibre.api.ZeroContract;
+import ekylibre.database.ZeroContract;
 import ekylibre.zero.AuthenticatorActivity;
 import ekylibre.zero.R;
-import ekylibre.zero.SyncAdapter;
+import ekylibre.APICaller.SyncAdapter;
 import ekylibre.zero.util.AccountTool;
 
 public class AccountManagerActivity extends AppCompatActivity

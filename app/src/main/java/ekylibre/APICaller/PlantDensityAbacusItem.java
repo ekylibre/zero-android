@@ -1,4 +1,4 @@
-package ekylibre.api;
+package ekylibre.APICaller;
 
 /**
  * Created by antoine on 21/04/16.
