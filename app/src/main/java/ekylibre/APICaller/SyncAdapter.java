@@ -28,18 +28,12 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-import ekylibre.APICaller.CrumbPoster;
-import ekylibre.APICaller.Instance;
-import ekylibre.APICaller.Issue;
-import ekylibre.APICaller.Plant;
-import ekylibre.APICaller.PlantCounting;
-import ekylibre.APICaller.PlantDensityAbacus;
 import ekylibre.database.ZeroContract;
 import ekylibre.exceptions.HTTPException;
 import ekylibre.zero.BuildConfig;
-import ekylibre.zero.util.AccountTool;
-import ekylibre.zero.util.ImageConverter;
-import ekylibre.zero.util.UpdatableActivity;
+import ekylibre.util.AccountTool;
+import ekylibre.util.ImageConverter;
+import ekylibre.util.UpdatableActivity;
 
 /**
  * Handle the transfer of data between a server and an

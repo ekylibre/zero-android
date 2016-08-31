@@ -20,7 +20,7 @@
  * -Changed package name
  */
 
-package ekylibre.zero.util;
+package ekylibre.util;
 
 import android.content.ContentValues;
 import android.database.Cursor;

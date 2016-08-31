@@ -38,9 +38,9 @@ import java.util.List;
 
 import ekylibre.database.ZeroContract;
 import ekylibre.zero.R;
-import ekylibre.zero.util.AccountTool;
-import ekylibre.zero.util.PermissionManager;
-import ekylibre.zero.util.UpdatableActivity;
+import ekylibre.util.AccountTool;
+import ekylibre.util.PermissionManager;
+import ekylibre.util.UpdatableActivity;
 
 
 public class TrackingActivity extends UpdatableActivity implements TrackingListenerWriter

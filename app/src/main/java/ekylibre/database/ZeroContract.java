@@ -31,6 +31,13 @@ public final class ZeroContract {
         String USER = "user";
     }
 
+    public interface RequestedInterventionsColumns extends BaseColumns {
+        String TABLE_NAME = "requested_interventions";
+        String USER = "user";
+        String Parameters = "parameters";
+        String EK_ID = "ek_id";
+    }
+
     public interface IssuesColumns extends BaseColumns {
         String TABLE_NAME = "issues";
         String NATURE = "nature";

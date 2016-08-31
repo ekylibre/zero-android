@@ -19,7 +19,7 @@ import ekylibre.database.ZeroContract;
 import ekylibre.zero.AuthenticatorActivity;
 import ekylibre.zero.R;
 import ekylibre.APICaller.SyncAdapter;
-import ekylibre.zero.util.AccountTool;
+import ekylibre.util.AccountTool;
 
 public class AccountManagerActivity extends AppCompatActivity
 {

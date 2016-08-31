@@ -3,7 +3,7 @@ package ekylibre.zero;
 import android.app.Activity;
 import android.os.Bundle;
 
-import ekylibre.zero.util.AccountTool;
+import ekylibre.util.AccountTool;
 
 /**************************************
  * Created by pierre on 7/7/16.       *
