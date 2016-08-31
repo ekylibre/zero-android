@@ -31,11 +31,13 @@ public final class ZeroContract {
         String USER = "user";
     }
 
-    public interface RequestedInterventionsColumns extends BaseColumns {
-        String TABLE_NAME = "requested_interventions";
-        String USER = "user";
-        String Parameters = "parameters";
+    public interface InterventionParametersColumns extends BaseColumns {
+        String TABLE_NAME = "intervention_parameters";
+        String FK_INTERVENTION = "fk_intervention";
         String EK_ID = "ek_id";
+        String ROLE = "role";
+        String LABEL = "label";
+        String NAME = "name";
     }
 
     public interface IssuesColumns extends BaseColumns {
@@ -129,6 +131,21 @@ public final class ZeroContract {
         public static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/vnd.ekylibre.zero.interventions";
         // MIME type for individual record.
         public static final String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/vnd.ekylibre.zero.intervention";
+
+        public static final String[] PROJECTION_ALL = {_ID};
+        public static final String[] PROJECTION_NONE = {_ID};
+
+        public static final String SORT_ORDER_DEFAULT = _ID + " ASC";
+
+    }
+
+    public static final class InterventionParameters implements InterventionParametersColumns {
+        // Content URI for this table
+        public static final Uri CONTENT_URI = Uri.withAppendedPath(ZeroContract.CONTENT_URI, "intervention_parameters");
+        // MIME type for lists of records.
+        public static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/vnd.ekylibre.zero.intervention_parameters";
+        // MIME type for individual record.
+        public static final String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/vnd.ekylibre.zero.intervention_parameter";
 
         public static final String[] PROJECTION_ALL = {_ID};
         public static final String[] PROJECTION_NONE = {_ID};
