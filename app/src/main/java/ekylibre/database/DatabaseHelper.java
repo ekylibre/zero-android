@@ -107,7 +107,7 @@ public class DatabaseHelper extends SQLiteOpenHelper
             case 7:
                 /*
                 ** Sorry for this part of code,
-                ** SQLITE doesn't implements ALTER COLUMN and I had to change ID to be in
+                ** SQLITE doesn't implement ALTER COLUMN and I had to change ID to be in
                 ** autoincrement mode and add the ekylibre instance ID
                 ** to deal with multi account problems on IDs.
                 */
@@ -173,11 +173,37 @@ public class DatabaseHelper extends SQLiteOpenHelper
                         + ", " + ZeroContract.CrumbsColumns.SYNCED
                         + ", " + ZeroContract.CrumbsColumns.METADATA
                         + ", " + ZeroContract.CrumbsColumns.USER
-                        + ") SELECT * FROM TMP_TABLE");
+                        + ") SELECT "
+                        + ZeroContract.CrumbsColumns._ID
+                        + ", " + ZeroContract.CrumbsColumns.TYPE
+                        + ", " + ZeroContract.CrumbsColumns.LATITUDE
+                        + ", " + ZeroContract.CrumbsColumns.LONGITUDE
+                        + ", " + ZeroContract.CrumbsColumns.READ_AT
+                        + ", " + ZeroContract.CrumbsColumns.ACCURACY
+                        + ", " + ZeroContract.CrumbsColumns.SYNCED
+                        + ", " + ZeroContract.CrumbsColumns.METADATA
+                        + ", " + ZeroContract.CrumbsColumns.USER
+                        +" FROM TMP_TABLE");
                 database.execSQL("DROP TABLE IF EXISTS TMP_TABLE");
             case 10:
-                database.execSQL("CREATE TABLE IF NOT EXISTS requested_interventions(" +
-                        " )");
+                database.execSQL("ALTER TABLE intervention ADD EK_ID INTEGER");
+                database.execSQL("ALTER TABLE intervention ADD type VARCHAR(255) DEFAULT NULL");
+                database.execSQL("ALTER TABLE intervention ADD procedure_name VARCHAR(255) DEFAULT NULL");
+                database.execSQL("ALTER TABLE intervention ADD name VARCHAR(255) DEFAULT NULL");
+                database.execSQL("ALTER TABLE intervention ADD number INTEGER DEFAULT 0");
+                database.execSQL("ALTER TABLE intervention ADD started_at VARCHAR(255) DEFAULT NULL");
+                database.execSQL("ALTER TABLE intervention ADD stopped_at VARCHAR(255) DEFAULT NULL");
+                database.execSQL("ALTER TABLE intervention ADD description TEXT DEFAULT NULL");
+                database.execSQL("CREATE TABLE IF NOT EXISTS intervention_parameters ("
+                        + ZeroContract.InterventionParametersColumns._ID + " INTEGER PRIMARY KEY AUTOINCREMENT"
+                        + ", " + ZeroContract.InterventionParametersColumns.FK_INTERVENTION + " INTEGER"
+                        + ", " + ZeroContract.InterventionParametersColumns.EK_ID + " INTEGER"
+                        + ", " + ZeroContract.InterventionParametersColumns.ROLE + " VARCHAR(255)"
+                        + ", " + ZeroContract.InterventionParametersColumns.LABEL + " VARCHAR(255)"
+                        + ", " + ZeroContract.InterventionParametersColumns.NAME + " VARCHAR(255)"
+                        + ", " + "FOREIGN KEY (" + ZeroContract.CrumbsColumns.FK_INTERVENTION + ") REFERENCES intervention(_id)"
+                        + ")");
+
         }
     }
 }

@@ -87,7 +87,9 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
         mContentResolver.delete(ZeroContract.PlantDensityAbacusItems.CONTENT_URI,
                 null,
                 null);
-        mContentResolver.delete(ZeroContract.PlantDensityAbaci.CONTENT_URI, null, null);
+        mContentResolver.delete(ZeroContract.PlantDensityAbaci.CONTENT_URI,
+                null,
+                null);
 
         Account[] accountList = AccountTool.getListAccount(mContext);
         if (BuildConfig.DEBUG) Log.d(TAG, "Performing Sync ! Pushing all the local data to Ekylibre instance");
@@ -357,18 +359,18 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
             return;
 
         if (BuildConfig.DEBUG) Log.d(TAG, "Nombre de plants : " + plantsList.size() );
-            Iterator<Plant> plantsIterator = plantsList.iterator();
-            while(plantsIterator.hasNext())
-            {
-                Plant plants = plantsIterator.next();
-                cv.put(ZeroContract.Plants.EK_ID, plants.getId());
-                cv.put(ZeroContract.Plants.NAME, plants.getName());
-                cv.put(ZeroContract.Plants.VARIETY, plants.getVariety());
-                cv.put(ZeroContract.Plants.ACTIVITY_ID, plants.getActivityID());
-                cv.put(ZeroContract.Plants.ACTIVE, true);
-                cv.put(ZeroContract.Plants.USER, account.name);
-                mContentResolver.insert(ZeroContract.Plants.CONTENT_URI, cv);
-            }
+        Iterator<Plant> plantsIterator = plantsList.iterator();
+        while(plantsIterator.hasNext())
+        {
+            Plant plants = plantsIterator.next();
+            cv.put(ZeroContract.Plants.EK_ID, plants.getId());
+            cv.put(ZeroContract.Plants.NAME, plants.getName());
+            cv.put(ZeroContract.Plants.VARIETY, plants.getVariety());
+            cv.put(ZeroContract.Plants.ACTIVITY_ID, plants.getActivityID());
+            cv.put(ZeroContract.Plants.ACTIVE, true);
+            cv.put(ZeroContract.Plants.USER, account.name);
+            mContentResolver.insert(ZeroContract.Plants.CONTENT_URI, cv);
+        }
         if (BuildConfig.DEBUG) Log.i(TAG, "Finish network plant synchronization");
     }
 
