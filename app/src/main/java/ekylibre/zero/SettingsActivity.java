@@ -2,9 +2,8 @@ package ekylibre.zero;
 
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
-import android.preference.PreferenceFragment;
 
-import ekylibre.zero.util.AccountTool;
+import ekylibre.util.AccountTool;
 
 public class SettingsActivity extends PreferenceActivity
 {

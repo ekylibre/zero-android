@@ -42,8 +42,8 @@ import java.util.ListIterator;
 import java.util.Objects;
 
 import ekylibre.database.ZeroContract;
-import ekylibre.zero.util.AccountTool;
-import ekylibre.zero.util.UpdatableActivity;
+import ekylibre.util.AccountTool;
+import ekylibre.util.UpdatableActivity;
 
 
 public class PlantCountingActivity extends UpdatableActivity  {

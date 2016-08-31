@@ -9,7 +9,7 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import ekylibre.zero.R;
-import ekylibre.zero.util.AccountTool;
+import ekylibre.util.AccountTool;
 
 /**************************************
  * Created by pierre on 7/18/16.      *

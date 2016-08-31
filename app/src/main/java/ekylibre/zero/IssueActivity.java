@@ -40,8 +40,8 @@ import java.io.IOException;
 import java.util.Date;
 
 import ekylibre.database.ZeroContract;
-import ekylibre.zero.util.AccountTool;
-import ekylibre.zero.util.PermissionManager;
+import ekylibre.util.AccountTool;
+import ekylibre.util.PermissionManager;
 
 public class IssueActivity extends AppCompatActivity {
 

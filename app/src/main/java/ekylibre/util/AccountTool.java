@@ -1,4 +1,4 @@
-package ekylibre.zero.util;
+package ekylibre.util;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;

@@ -6,7 +6,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 public class DatabaseHelper extends SQLiteOpenHelper
 {
-    public static final int DATABASE_VERSION = 9;
+    public static final int DATABASE_VERSION = 10;
 
     public static final String DATABASE_NAME = "zero";
 
@@ -175,6 +175,9 @@ public class DatabaseHelper extends SQLiteOpenHelper
                         + ", " + ZeroContract.CrumbsColumns.USER
                         + ") SELECT * FROM TMP_TABLE");
                 database.execSQL("DROP TABLE IF EXISTS TMP_TABLE");
+            case 10:
+                database.execSQL("CREATE TABLE IF NOT EXISTS requested_interventions(" +
+                        " )");
         }
     }
 }

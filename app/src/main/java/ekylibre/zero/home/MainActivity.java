@@ -27,9 +27,9 @@ import ekylibre.zero.R;
 import ekylibre.zero.SettingsActivity;
 import ekylibre.zero.tracking.TrackingActivity;
 import ekylibre.service.ConnectionManagerService;
-import ekylibre.zero.util.AccountTool;
-import ekylibre.zero.util.PermissionManager;
-import ekylibre.zero.util.UpdatableActivity;
+import ekylibre.util.AccountTool;
+import ekylibre.util.PermissionManager;
+import ekylibre.util.UpdatableActivity;
 
 /**************************************
  * Created by pierre on 7/12/16.      *

@@ -14,7 +14,7 @@ import android.os.IBinder;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
-import ekylibre.zero.util.AccountTool;
+import ekylibre.util.AccountTool;
 import ekylibre.zero.SettingsActivity;
 import ekylibre.database.ZeroContract;
 

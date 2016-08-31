@@ -1,22 +1,16 @@
 package ekylibre.zero.home;
 
-import android.Manifest;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
 import android.database.Cursor;
-import android.os.Build;
-import android.preference.Preference;
 import android.preference.PreferenceManager;
 import android.provider.CalendarContract;
-import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -24,10 +18,9 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 import ekylibre.zero.SettingsActivity;
-import ekylibre.zero.util.PermissionManager;
+import ekylibre.util.PermissionManager;
 
 /**************************************
  * Created by pierre on 7/8/16.       *
