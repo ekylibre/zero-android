@@ -20,6 +20,11 @@ import ekylibre.zero.BuildConfig;
 public class Intervention
 {
     private static final String TAG = "Intervention";
+    public static final String REQUESTED = "request";
+    public static final String RECORDED = "record";
+    public static final String REQUEST = "request";
+    public static final String RECORD = "record";
+
     private int         mId;
     private String      mType;
     private String      mProcedureName;

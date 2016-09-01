@@ -13,12 +13,18 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
+import ekylibre.APICaller.Intervention;
+import ekylibre.database.ZeroContract;
+import ekylibre.util.DateConstant;
 import ekylibre.zero.SettingsActivity;
 import ekylibre.util.PermissionManager;
 
@@ -36,7 +42,8 @@ public class TodoListActivity {
     private final int ALL_DAY = 5;
     private final int EVENT_LOCATION = 6;
     private final String TAG = "TodoListAct";
-    private final int REQUEST_CALENDAR = 42;
+
+
 
     private ListView todoListView;
     private ArrayAdapter<String> adapter;
@@ -72,29 +79,42 @@ public class TodoListActivity {
 
     public List<TodoItem> createList() {
         Cursor          cursLocal, cursRequested;
-        String          startDateFormatted;
-        String          endDateFormatted;
+
         List<TodoItem>  todoList = new ArrayList<TodoItem>();
 
         cursLocal = getEventsFromLocal();
         cursRequested = getEventsFromEK();
         affEvents(cursLocal);
 
-
-        DateFormat formatterSTART = new SimpleDateFormat("HH:mm - ");
-        DateFormat formatterEND = new SimpleDateFormat("HH:mm");
-
-        
         Calendar currentDate = Calendar.getInstance();
         currentDate.setTimeInMillis(0);
-        while (cursLocal != null && cursLocal.moveToNext())
-                || ())
+        ArrayList<TodoItem> compiledList = getListCompact(cursLocal, cursRequested);
+        int i = -1;
+        while (++i < compiledList.size())
         {
             if (newDay(cursLocal.getLong(DTSTART), currentDate))
             {
                 currentDate.setTimeInMillis(cursLocal.getLong(DTSTART));
-                todoList.add(new TodoItem(true, currentDate));
+                compiledList.add(i, new TodoItem(true, currentDate));
             }
+        }
+        if (todoList.size() == 0)
+            todoList.add(new TodoItem(true, getDateOfDay()));
+        return (todoList);
+    }
+
+    //TODO :: REFACTORING THIS IS IMPORTANT TO KEEP THIS READABLE
+    private ArrayList<TodoItem> getListCompact(Cursor cursLocal, Cursor cursRequested)
+    {
+        String          startDateFormatted;
+        String          endDateFormatted;
+        ArrayList<TodoItem> list = new ArrayList<>();
+        DateFormat formatterSTART = new SimpleDateFormat("HH:mm - ");
+        DateFormat formatterEND = new SimpleDateFormat("HH:mm");
+        DateFormat dateParser = new SimpleDateFormat(DateConstant.ISO_8601);
+
+        while (cursLocal != null && cursLocal.moveToNext())
+        {
             Date startDate = new Date(cursLocal.getLong(DTSTART));
             Date endDate = new Date(cursLocal.getLong(DTEND));
             startDateFormatted = formatterSTART.format(startDate);
@@ -102,17 +122,56 @@ public class TodoListActivity {
                 endDateFormatted = formatterEND.format(endDate);
             else
                 endDateFormatted = "00h00";
-            todoList.add(new TodoItem(startDateFormatted, endDateFormatted, cursLocal.getString(TITLE), cursLocal.getString(DESCRIPTION)));
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(startDate);
+            list.add(new TodoItem(startDateFormatted, endDateFormatted, cursLocal.getString(TITLE),
+                    cursLocal.getString(DESCRIPTION), cal));
         }
-        if (todoList.size() == 0)
-            todoList.add(new TodoItem(true, getDateOfDay()));
-        return (todoList);
+
+        try
+        {
+            while (cursRequested != null && cursRequested.moveToNext())
+            {
+                Date startDate = dateParser.parse(cursRequested.getString(DTSTART));
+                Date endDate = dateParser.parse(cursRequested.getString(DTEND));
+                startDateFormatted = formatterSTART.format(startDate);
+                endDateFormatted = formatterEND.format(endDate);
+                Calendar cal = Calendar.getInstance();
+                cal.setTime(startDate);
+                list.add(new TodoItem(startDateFormatted, endDateFormatted, cursRequested.getString(TITLE),
+                        cursRequested.getString(DESCRIPTION), cal, cursRequested.getInt(0)));
+            }
+        }
+        catch (ParseException e)
+        {
+            Log.i(TAG, "Error while parsing date from requested intervention.");
+        }
+        Collections.sort(list, new Comparator<TodoItem>()
+        {
+            @Override
+            public int compare(TodoItem t1, TodoItem t2)
+            {
+                if (t1.getDate().getTimeInMillis() > t2.getDate().getTimeInMillis())
+                    return (1);
+                else if (t1.getDate().getTimeInMillis() < t2.getDate().getTimeInMillis())
+                    return (-1);
+                else
+                    return (0);
+            }
+        });
+        return (list);
     }
 
     private Cursor getEventsFromEK()
     {
         Cursor curs;
+        ContentResolver contentResolver = context.getContentResolver();
 
+        curs = contentResolver.query(ZeroContract.Interventions.CONTENT_URI,
+                ZeroContract.Interventions.PROJECTION_BASIC,
+                ZeroContract.Interventions.TYPE + " LIKE " + "\"" + Intervention.REQUESTED + "\"",
+                null,
+                "datetime(started_at)");
 
         return (curs);
     }
@@ -277,7 +336,7 @@ public class TodoListActivity {
         it = 0;
         if (curs == null)
             curs = getEventsFromLocal();
-        if (curs.moveToFirst())
+        if (curs != null && curs.moveToFirst())
         {
             do
             {
