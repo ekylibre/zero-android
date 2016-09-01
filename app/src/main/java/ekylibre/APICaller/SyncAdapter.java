@@ -104,6 +104,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
             performCrumbsSync(account, extras, authority, provider, syncResult);
             performIssuesSync(account, extras, authority, provider, syncResult);
             performPlantCounting(account, extras, authority, provider, syncResult);
+            performIntervention(account, extras, authority, provider, syncResult);
         }
         getContext().sendBroadcast(new Intent(UpdatableActivity.ACTION_FINISHED_SYNC));
     }
@@ -465,8 +466,91 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
         return (null);
     }
 
+    public void performIntervention(Account account, Bundle extras, String authority, ContentProviderClient provider, SyncResult syncResult)
+    {
+        if (BuildConfig.DEBUG) Log.i(TAG, "Beginning network intervention synchronization");
+        Instance instance = getInstance(account);
 
+        List<Intervention> interventionList = null;
+        try {
+            interventionList = Intervention.all(instance, new JSONObject());
+        } catch (JSONException | IOException | HTTPException e) {
+            e.printStackTrace();
+        }
 
+        if (interventionList == null)
+            return;
+
+        if (BuildConfig.DEBUG) Log.d(TAG, "Nombre de plants : " + interventionList.size() );
+        Iterator<Intervention> interventionIterator = interventionList.iterator();
+        while(interventionIterator.hasNext())
+        {
+            Intervention intervention = interventionIterator.next();
+            insertIntervention(intervention, account);
+            insertInterventionParams(intervention, account);
+        }
+        if (BuildConfig.DEBUG) Log.i(TAG, "Finish network plant synchronization");
+    }
+
+    private void insertInterventionParams(Intervention intervention, Account account)
+    {
+        ContentValues cv = new ContentValues();
+        int interventionID = getInterventionID();
+        int i = -1;
+        int paramLength = intervention.getParamLength();
+
+        if (interventionID == 0)
+            return;
+        while (++i < paramLength)
+        {
+            try
+            {
+                cv.put(ZeroContract.InterventionParameters.EK_ID, intervention.getParamID(i));
+                cv.put(ZeroContract.InterventionParameters.NAME, intervention.getParamName(i));
+                cv.put(ZeroContract.InterventionParameters.FK_INTERVENTION, interventionID);
+                cv.put(ZeroContract.InterventionParameters.ROLE, intervention.getParamRole(i));
+                cv.put(ZeroContract.InterventionParameters.LABEL, intervention.getParamLabel(i));
+                cv.put(ZeroContract.InterventionParameters.PRODUCT_NAME, intervention.getProductName(i));
+                cv.put(ZeroContract.InterventionParameters.PRODUCT_ID, intervention.getProductID(i));
+                mContentResolver.insert(ZeroContract.InterventionParameters.CONTENT_URI, cv);
+            }
+            catch (JSONException jsonex)
+            {
+                jsonex.printStackTrace();
+            }
+        }
+    }
+
+    private int getInterventionID()
+    {
+        Cursor cursor = mContentResolver.query(ZeroContract.Interventions.CONTENT_URI,
+                ZeroContract.Interventions.PROJECTION_NONE,
+                null,
+                null,
+                ZeroContract.Interventions.SORT_ORDER_LAST);
+        if (cursor == null || cursor.getCount() == 0)
+            return (0);
+        cursor.moveToFirst();
+        int ret = cursor.getInt(0);
+        cursor.close();
+        return (ret);
+    }
+
+    private void insertIntervention(Intervention intervention, Account account)
+    {
+        ContentValues cv = new ContentValues();
+
+        cv.put(ZeroContract.Interventions.EK_ID, intervention.getId());
+        cv.put(ZeroContract.Interventions.NAME, intervention.getName());
+        cv.put(ZeroContract.Interventions.TYPE, intervention.getType());
+        cv.put(ZeroContract.Interventions.PROCEDURE_NAME, intervention.getProcedureName());
+        cv.put(ZeroContract.Interventions.NUMBER, intervention.getNumber());
+        cv.put(ZeroContract.Interventions.STARTED_AT, intervention.getStartedAt());
+        cv.put(ZeroContract.Interventions.STOPPED_AT, intervention.getStoppedAt());
+        cv.put(ZeroContract.Interventions.DESCRIPTION, intervention.getDescription());
+        cv.put(ZeroContract.Interventions.USER, account.name);
+        mContentResolver.insert(ZeroContract.Interventions.CONTENT_URI, cv);
+    }
 
     protected Instance getInstance(Account account)
     {

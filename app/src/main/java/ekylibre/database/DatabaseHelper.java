@@ -6,7 +6,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 public class DatabaseHelper extends SQLiteOpenHelper
 {
-    public static final int DATABASE_VERSION = 10;
+    public static final int DATABASE_VERSION = 11;
 
     public static final String DATABASE_NAME = "zero";
 
@@ -203,7 +203,9 @@ public class DatabaseHelper extends SQLiteOpenHelper
                         + ", " + ZeroContract.InterventionParametersColumns.NAME + " VARCHAR(255)"
                         + ", " + "FOREIGN KEY (" + ZeroContract.CrumbsColumns.FK_INTERVENTION + ") REFERENCES intervention(_id)"
                         + ")");
-
+            case 11:
+                database.execSQL("ALTER TABLE intervention_parameters ADD product_name VARCHAR(255) DEFAULT NULL");
+                database.execSQL("ALTER TABLE intervention_parameters ADD product_id INTEGER DEFAULT 0");
         }
     }
 }
