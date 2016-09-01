@@ -34,12 +34,24 @@ public class TodoItem
         this.desc = null;
     }
 
-    public TodoItem(String startdate, String endDate, String event, String desc)
+    public TodoItem(String startdate, String endDate, String event, String desc, Calendar calendar)
     {
         this.startDate = startdate;
         this.endDate = endDate;
         this.event = event;
         this.desc = desc;
+        this.date = calendar;
+        this.id = -1;
+    }
+
+    public TodoItem(String startdate, String endDate, String event, String desc, Calendar calendar, int _id)
+    {
+        this.startDate = startdate;
+        this.endDate = endDate;
+        this.event = event;
+        this.desc = desc;
+        this.date = calendar;
+        this.id = _id;
     }
 
     public void setStartDate(String newDate)
@@ -96,6 +108,10 @@ public class TodoItem
     {
         String date = DateFormat.getDateInstance(DateFormat.LONG,
                 Locale.getDefault()).format(day.getTime());
+        return (date);
+    }
+    public Calendar getDate()
+    {
         return (date);
     }
 }
