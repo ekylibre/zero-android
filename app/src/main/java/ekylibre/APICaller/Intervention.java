@@ -30,7 +30,6 @@ public class Intervention
     private String      mDescription;
     private JSONArray   params;
 
-
     public static List<Intervention> all(Instance instance, JSONObject attributes) throws JSONException, IOException, HTTPException
     {
         // JSONObject params = Instance.BundleToJSON(attributes);
@@ -61,12 +60,14 @@ public class Intervention
         params = object.getJSONArray("parameters");
     }
 
-    public int getId() {
-            return mId;
-        }
-    public String getName() {
-            return mName;
-        }
+    public int getId()
+    {
+        return mId;
+    }
+    public String getName()
+    {
+        return mName;
+    }
     public int getmId()
     {
         return (mId);
@@ -113,5 +114,32 @@ public class Intervention
 
         return (object.getInt("role"));
     }
+    public String getParamName(int index)
+            throws JSONException
+    {
+        JSONObject object = params.getJSONObject(index);
 
+        return (object.getString("name"));
+    }
+    public String getParamLabel(int index)
+            throws JSONException
+    {
+        JSONObject object = params.getJSONObject(index);
+
+        return (object.getString("label"));
+    }
+    public int getProductID(int index)
+            throws JSONException
+    {
+        JSONObject product = params.getJSONObject(index).getJSONObject("product");
+
+        return (product.getInt("id"));
+    }
+    public String getProductName(int index)
+            throws JSONException
+    {
+        JSONObject product = params.getJSONObject(index).getJSONObject("product");
+
+        return (product.getString("name"));
+    }
 }
