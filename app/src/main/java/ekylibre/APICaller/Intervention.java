@@ -62,41 +62,33 @@ public class Intervention
 
     public int getId()
     {
-        return mId;
+        return (mId);
     }
     public String getName()
     {
-        return mName;
+        return (mName);
     }
-    public int getmId()
-    {
-        return (mId);
-    }
-    public int getmNumber()
+    public int getNumber()
     {
         return (mNumber);
     }
-    public String getmType()
+    public String getType()
     {
         return (mType);
     }
-    public String getmProcedureName()
+    public String getProcedureName()
     {
         return (mProcedureName);
     }
-    public String getmName()
-    {
-        return (mName);
-    }
-    public String getmStartedAt()
+    public String getStartedAt()
     {
         return (mStartedAt);
     }
-    public String getmStoppedAt()
+    public String getStoppedAt()
     {
         return (mStoppedAt);
     }
-    public String getmDescription()
+    public String getDescription()
     {
         return (mDescription);
     }
@@ -107,12 +99,12 @@ public class Intervention
 
         return (object.getInt("id"));
     }
-    public int getParamRole(int index)
+    public String getParamRole(int index)
             throws JSONException
     {
         JSONObject object = params.getJSONObject(index);
 
-        return (object.getInt("role"));
+        return (object.getString("role"));
     }
     public String getParamName(int index)
             throws JSONException
@@ -141,5 +133,10 @@ public class Intervention
         JSONObject product = params.getJSONObject(index).getJSONObject("product");
 
         return (product.getString("name"));
+    }
+
+    public int getParamLength()
+    {
+        return (params.length());
     }
 }

@@ -29,6 +29,14 @@ public final class ZeroContract {
     public interface InterventionsColumns extends BaseColumns {
         String TABLE_NAME = "intervention";
         String USER = "user";
+        String EK_ID = "ek_id";
+        String TYPE = "type";
+        String PROCEDURE_NAME = "procedure_name";
+        String NAME = "name";
+        String NUMBER = "number";
+        String STARTED_AT = "started_at";
+        String STOPPED_AT = "stopped_at";
+        String DESCRIPTION = "description";
     }
 
     public interface InterventionParametersColumns extends BaseColumns {
@@ -38,6 +46,8 @@ public final class ZeroContract {
         String ROLE = "role";
         String LABEL = "label";
         String NAME = "name";
+        String PRODUCT_NAME = "product_name";
+        String PRODUCT_ID = "product_id";
     }
 
     public interface IssuesColumns extends BaseColumns {
@@ -136,6 +146,7 @@ public final class ZeroContract {
         public static final String[] PROJECTION_NONE = {_ID};
 
         public static final String SORT_ORDER_DEFAULT = _ID + " ASC";
+        public static final String SORT_ORDER_LAST = _ID + " DESC LIMIT 1";
 
     }
 

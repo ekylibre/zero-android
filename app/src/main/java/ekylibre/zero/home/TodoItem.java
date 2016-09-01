@@ -20,6 +20,8 @@ public class TodoItem
     private String  desc;
     private boolean headerState = false;
     private Calendar day;
+    private int     id;
+    private Calendar date;
 
     public TodoItem(boolean headerState, Calendar day)
     {

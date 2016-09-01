@@ -55,8 +55,10 @@ public class TodoListActivity {
         this.activity = activity;
 
         List<TodoItem> todolist = createList();
+
         if (todolist == null)
             return;
+
 
         TodoAdapter adapter = new TodoAdapter(context, todolist);
 
@@ -69,16 +71,15 @@ public class TodoListActivity {
     }
 
     public List<TodoItem> createList() {
-        Cursor curs;
-        String startDateFormatted;
-        String endDateFormatted;
+        Cursor          cursLocal, cursRequested;
+        String          startDateFormatted;
+        String          endDateFormatted;
+        List<TodoItem>  todoList = new ArrayList<TodoItem>();
 
-        curs = getEventsFromLocal();
-        if (curs == null)
-            return (null);
-        affEvents(curs);
+        cursLocal = getEventsFromLocal();
+        cursRequested = getEventsFromEK();
+        affEvents(cursLocal);
 
-        List<TodoItem> todoList = new ArrayList<TodoItem>();
 
         DateFormat formatterSTART = new SimpleDateFormat("HH:mm - ");
         DateFormat formatterEND = new SimpleDateFormat("HH:mm");
@@ -86,28 +87,34 @@ public class TodoListActivity {
         
         Calendar currentDate = Calendar.getInstance();
         currentDate.setTimeInMillis(0);
-        if (curs.moveToFirst())
+        while (cursLocal != null && cursLocal.moveToNext())
+                || ())
         {
-            do
+            if (newDay(cursLocal.getLong(DTSTART), currentDate))
             {
-                if (newDay(curs.getLong(DTSTART), currentDate))
-                {
-                    currentDate.setTimeInMillis(curs.getLong(DTSTART));
-                    todoList.add(new TodoItem(true, currentDate));
-                }
-                Date startDate = new Date(curs.getLong(DTSTART));
-                Date endDate = new Date(curs.getLong(DTEND));
-                startDateFormatted = formatterSTART.format(startDate);
-                if (curs.getInt(ALL_DAY) == 0)
-                    endDateFormatted = formatterEND.format(endDate);
-                else
-                    endDateFormatted = "00h00";
-                todoList.add(new TodoItem(startDateFormatted, endDateFormatted, curs.getString(TITLE), curs.getString(DESCRIPTION)));
-            } while (curs.moveToNext());
+                currentDate.setTimeInMillis(cursLocal.getLong(DTSTART));
+                todoList.add(new TodoItem(true, currentDate));
+            }
+            Date startDate = new Date(cursLocal.getLong(DTSTART));
+            Date endDate = new Date(cursLocal.getLong(DTEND));
+            startDateFormatted = formatterSTART.format(startDate);
+            if (cursLocal.getInt(ALL_DAY) == 0)
+                endDateFormatted = formatterEND.format(endDate);
+            else
+                endDateFormatted = "00h00";
+            todoList.add(new TodoItem(startDateFormatted, endDateFormatted, cursLocal.getString(TITLE), cursLocal.getString(DESCRIPTION)));
         }
-        else
+        if (todoList.size() == 0)
             todoList.add(new TodoItem(true, getDateOfDay()));
         return (todoList);
+    }
+
+    private Cursor getEventsFromEK()
+    {
+        Cursor curs;
+
+
+        return (curs);
     }
 
     private boolean newDay(long date, Calendar currentDate)
