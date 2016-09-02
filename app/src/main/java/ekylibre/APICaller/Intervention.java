@@ -35,10 +35,10 @@ public class Intervention
     private String      mDescription;
     private JSONArray   params;
 
-    public static List<Intervention> all(Instance instance, JSONObject attributes) throws JSONException, IOException, HTTPException
+    public static List<Intervention> all(Instance instance, String attributes) throws JSONException, IOException, HTTPException
     {
         // JSONObject params = Instance.BundleToJSON(attributes);
-        JSONObject params = attributes;
+        String params = attributes;
         if (BuildConfig.DEBUG) Log.d(TAG, "Get JSONArray => /api/v1/interventions || params = " + params);
         JSONArray json = instance.getJSONArray("/api/v1/interventions", params);
         List<Intervention> array = new ArrayList<>();

@@ -280,7 +280,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
 
         List<PlantDensityAbacus> abacusList = null;
         try {
-            abacusList = PlantDensityAbacus.all(instance, new JSONObject());
+            abacusList = PlantDensityAbacus.all(instance, null);
         } catch (JSONException | IOException | HTTPException e) {
             e.printStackTrace();
         }
@@ -354,7 +354,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
 
         List<Plant> plantsList = null;
         try {
-            plantsList = Plant.all(instance, new JSONObject());
+            plantsList = Plant.all(instance, null);
         } catch (JSONException | IOException | HTTPException e) {
             e.printStackTrace();
         }
@@ -476,7 +476,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
 
         List<Intervention> interventionList = null;
         try {
-            interventionList = Intervention.all(instance, new JSONObject());
+            interventionList = Intervention.all(instance, "?nature=request");
         } catch (JSONException | IOException | HTTPException e) {
             e.printStackTrace();
         }
@@ -484,7 +484,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
         if (interventionList == null)
             return;
 
-        if (BuildConfig.DEBUG) Log.d(TAG, "Nombre de plants : " + interventionList.size() );
+        if (BuildConfig.DEBUG) Log.d(TAG, "Number of interventions : " + interventionList.size() );
         Iterator<Intervention> interventionIterator = interventionList.iterator();
         while(interventionIterator.hasNext())
         {
@@ -492,7 +492,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
             insertIntervention(intervention, account);
             insertInterventionParams(intervention, account);
         }
-        if (BuildConfig.DEBUG) Log.i(TAG, "Finish network plant synchronization");
+        if (BuildConfig.DEBUG) Log.i(TAG, "Finish network intervention synchronization");
     }
 
     private void insertInterventionParams(Intervention intervention, Account account)

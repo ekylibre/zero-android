@@ -220,23 +220,25 @@ public class Instance
 
 
 // Send GET call to given instance
-    public JSONArray getJSONArray(String path, JSONObject params) throws JSONException, ClientProtocolException, IOException, HTTPException
+    public JSONArray getJSONArray(String path, String params) throws JSONException, ClientProtocolException, IOException, HTTPException
     {
+        if (params == null)
+            params = "";
         List<Header> headersList = new ArrayList<Header>();
         headersList.add(new BasicHeader("Authorization", "simple-token " + mEmail + " " + mToken));
         Header[] headers = new Header[headersList.size()];
         headersList.toArray(headers);
 
         if (BuildConfig.DEBUG) Log.d("POST Instance URL", mUrl);
-        if (BuildConfig.DEBUG) Log.d("POST parameters", params.toString());
+        if (BuildConfig.DEBUG) Log.d("POST parameters", params);
 
-        return Instance.getJSONArray(mUrl + path, params, headers);
+        return Instance.getJSONArray(mUrl + path + params, headers);
     }
 
 
 
     // Send POST call to given URL with given params
-    public static JSONArray getJSONArray(String url, JSONObject params, Header[] headers) throws JSONException, ClientProtocolException, IOException, HTTPException
+    public static JSONArray getJSONArray(String url, Header[] headers) throws JSONException, ClientProtocolException, IOException, HTTPException
     {
         if (BuildConfig.DEBUG) Log.d("zero", "GET " + url);
 
@@ -253,10 +255,10 @@ public class Instance
         InputStream inputStream = null;
         String result = null;
         // try {
-        if (params != null)
+/*        if (params != null)
         {
-            //httpGet.setEntity(new StringEntity(params.toString()));
-        }
+            httpGet.setParams(new HTT);
+        }*/
 
         // // Execute HTTP Get Request
         HttpResponse response = httpClient.execute(httpGet);

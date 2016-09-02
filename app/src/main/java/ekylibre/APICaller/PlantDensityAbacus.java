@@ -27,10 +27,10 @@ public class PlantDensityAbacus
     public JSONArray mItems;
 
 
-    public static List<PlantDensityAbacus> all(Instance instance, JSONObject attributes) throws JSONException, IOException, HTTPException
+    public static List<PlantDensityAbacus> all(Instance instance, String attributes) throws JSONException, IOException, HTTPException
     {
         // JSONObject params = Instance.BundleToJSON(attributes);
-        JSONObject params = attributes;
+        String params = attributes;
         JSONArray json = instance.getJSONArray("/api/v1/plant_density_abaci", params);
         List<PlantDensityAbacus> array = new ArrayList<>();
 
