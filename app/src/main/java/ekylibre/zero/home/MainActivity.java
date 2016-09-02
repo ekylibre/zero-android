@@ -276,6 +276,8 @@ public class MainActivity extends UpdatableActivity
 
     public void launchIntervention(View v)
     {
+        if (super.isSync)
+            return ;
         Intent intent = new Intent(this, TrackingActivity.class);
         intent.putExtra(TrackingActivity.NEW, true);
         startActivity(intent);
@@ -305,6 +307,7 @@ public class MainActivity extends UpdatableActivity
     @Override
     protected void onSyncFinish()
     {
+        setTodolist();
         mPrgressBar.setVisibility(View.GONE);
         Toast toast = Toast.makeText(getApplicationContext(), R.string.data_synced, Toast.LENGTH_SHORT);
         toast.show();

@@ -56,8 +56,8 @@ public class TodoAdapter extends ArrayAdapter<TodoItem>
             viewHolder.header.setVisibility(View.GONE);
             viewHolder.event.setVisibility(View.VISIBLE);
             viewHolder.hours.setVisibility(View.VISIBLE);
-            viewHolder.minutes.setVisibility(View.VISIBLE);
-            viewHolder.desc.setVisibility(View.VISIBLE);
+            viewHolder.minutes.setVisibility(View.GONE);
+            viewHolder.desc.setVisibility(View.GONE);
         }
         else
         {
