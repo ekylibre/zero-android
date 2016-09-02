@@ -15,6 +15,6 @@
     <color name="ultraLight_grey">#DFDFDF</color>
     <color name="ultraLight_blue">#818fa7</color>
     <color name="background_grey">#DCDCDC</color>
-    <color name="normal_state_grey">#555555</color>
-    <color name="pressed_state_grey">#333333</color>
+    <color name="normal_state_grey">#333333</color>
+    <color name="pressed_state_grey">#222222</color>
 </resources>

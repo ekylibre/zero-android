@@ -84,7 +84,6 @@ public class TodoListActivity {
 
         cursLocal = getEventsFromLocal();
         cursRequested = getEventsFromEK();
-        affEvents(cursLocal);
 
         Calendar currentDate = Calendar.getInstance();
         currentDate.setTimeInMillis(0);
@@ -92,26 +91,28 @@ public class TodoListActivity {
         int i = -1;
         while (++i < compiledList.size())
         {
-            if (newDay(cursLocal.getLong(DTSTART), currentDate))
+            if (newDay(compiledList.get(i).getDate().getTimeInMillis(), currentDate))
             {
-                currentDate.setTimeInMillis(cursLocal.getLong(DTSTART));
+                currentDate.setTimeInMillis(compiledList.get(i).getDate().getTimeInMillis());
                 compiledList.add(i, new TodoItem(true, currentDate));
             }
         }
-        if (todoList.size() == 0)
-            todoList.add(new TodoItem(true, getDateOfDay()));
-        return (todoList);
+        if (compiledList.size() == 0)
+            compiledList.add(new TodoItem(true, getDateOfDay()));
+        return (compiledList);
     }
 
     //TODO :: REFACTORING THIS IS IMPORTANT TO KEEP THIS READABLE
     private ArrayList<TodoItem> getListCompact(Cursor cursLocal, Cursor cursRequested)
     {
-        String          startDateFormatted;
-        String          endDateFormatted;
+        Log.d(TAG, "===============");
+        Log.d(TAG, "===============");
+        String startDateFormatted;
+        String endDateFormatted;
         ArrayList<TodoItem> list = new ArrayList<>();
         DateFormat formatterSTART = new SimpleDateFormat("HH:mm - ");
         DateFormat formatterEND = new SimpleDateFormat("HH:mm");
-        DateFormat dateParser = new SimpleDateFormat(DateConstant.ISO_8601);
+        SimpleDateFormat dateParser = new SimpleDateFormat(DateConstant.ISO_8601);
 
         while (cursLocal != null && cursLocal.moveToNext())
         {
@@ -128,10 +129,12 @@ public class TodoListActivity {
                     cursLocal.getString(DESCRIPTION), cal));
         }
 
-        try
+
+        while (cursRequested != null && cursRequested.moveToNext())
         {
-            while (cursRequested != null && cursRequested.moveToNext())
+            try
             {
+                Log.d(TAG, "DATES => " + dateParser.toPattern() + "  " + cursRequested.getString(DTSTART) + "   " + cursRequested.getString(DTEND));
                 Date startDate = dateParser.parse(cursRequested.getString(DTSTART));
                 Date endDate = dateParser.parse(cursRequested.getString(DTEND));
                 startDateFormatted = formatterSTART.format(startDate);
@@ -141,11 +144,12 @@ public class TodoListActivity {
                 list.add(new TodoItem(startDateFormatted, endDateFormatted, cursRequested.getString(TITLE),
                         cursRequested.getString(DESCRIPTION), cal, cursRequested.getInt(0)));
             }
+            catch (ParseException e)
+            {
+                Log.i(TAG, "Error while parsing date from requested intervention  " + e.getMessage());
+            }
         }
-        catch (ParseException e)
-        {
-            Log.i(TAG, "Error while parsing date from requested intervention.");
-        }
+
         Collections.sort(list, new Comparator<TodoItem>()
         {
             @Override
@@ -205,7 +209,7 @@ public class TodoListActivity {
         second = 0;
 
         calendar.set(year, month, day, hour, minute, second);
-        Log.d(TAG, "TODAY DATE = " + calendar.getTime());
+        //Log.d(TAG, "TODAY DATE = " + calendar.getTime());
         return (calendar);
     }
 
@@ -230,7 +234,7 @@ public class TodoListActivity {
 
         calendar.set(year, month, day, hour, minute, second);
         calendar.add(Calendar.DAY_OF_YEAR, 1);
-        Log.d(TAG, "TOMORROW DATE = " + calendar.getTime());
+        //Log.d(TAG, "TOMORROW DATE = " + calendar.getTime());
         return (calendar);
     }
 

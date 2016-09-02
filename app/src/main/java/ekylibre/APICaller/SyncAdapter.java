@@ -93,6 +93,9 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
         mContentResolver.delete(ZeroContract.Interventions.CONTENT_URI,
                 null,
                 null);
+        mContentResolver.delete(ZeroContract.InterventionParameters.CONTENT_URI,
+                null,
+                null);
 
         Account[] accountList = AccountTool.getListAccount(mContext);
         if (BuildConfig.DEBUG) Log.d(TAG, "Performing Sync ! Pushing all the local data to Ekylibre instance");

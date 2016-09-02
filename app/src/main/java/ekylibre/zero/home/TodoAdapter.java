@@ -54,11 +54,19 @@ public class TodoAdapter extends ArrayAdapter<TodoItem>
             viewHolder.minutes.setText(item.getEndDate());
             viewHolder.desc.setText(item.getDesc());
             viewHolder.header.setVisibility(View.GONE);
+            viewHolder.event.setVisibility(View.VISIBLE);
+            viewHolder.hours.setVisibility(View.VISIBLE);
+            viewHolder.minutes.setVisibility(View.VISIBLE);
+            viewHolder.desc.setVisibility(View.VISIBLE);
         }
         else
         {
             viewHolder.header.setText(item.getDay());
             viewHolder.header.setVisibility(View.VISIBLE);
+            viewHolder.event.setVisibility(View.GONE);
+            viewHolder.hours.setVisibility(View.GONE);
+            viewHolder.minutes.setVisibility(View.GONE);
+            viewHolder.desc.setVisibility(View.GONE);
         }
         return (convertView);
     }
