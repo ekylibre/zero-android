@@ -12,8 +12,8 @@
         android:layout_height="wrap_content"
         android:textColor="@android:color/black"
         android:layout_marginLeft="10dp"
-        android:textStyle="bold"
         tools:text="00h00"
+        android:textSize="18sp"
         />
 
 
@@ -38,6 +38,7 @@
         android:layout_toRightOf="@+id/endDate"
         android:layout_alignTop="@+id/endDate"
         android:textStyle="bold"
+        android:textSize="18sp"
         tools:text="Event"
         />
 

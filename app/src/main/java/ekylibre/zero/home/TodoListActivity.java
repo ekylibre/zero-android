@@ -24,6 +24,7 @@ import java.util.List;
 
 import ekylibre.APICaller.Intervention;
 import ekylibre.database.ZeroContract;
+import ekylibre.util.AccountTool;
 import ekylibre.util.DateConstant;
 import ekylibre.zero.SettingsActivity;
 import ekylibre.util.PermissionManager;
@@ -141,6 +142,7 @@ public class TodoListActivity {
                 endDateFormatted = formatterEND.format(endDate);
                 Calendar cal = Calendar.getInstance();
                 cal.setTime(startDate);
+                String desc = getDescription(cursRequested);
                 list.add(new TodoItem(startDateFormatted, endDateFormatted, cursRequested.getString(TITLE),
                         cursRequested.getString(DESCRIPTION), cal, cursRequested.getInt(0)));
             }
@@ -166,6 +168,15 @@ public class TodoListActivity {
         return (list);
     }
 
+    private String getDescription(Cursor cursRequested)
+    {
+        String str = new String();
+        int id = cursRequested.getInt(0);
+
+
+        return (str);
+    }
+
     private Cursor getEventsFromEK()
     {
         Cursor curs;
@@ -173,7 +184,8 @@ public class TodoListActivity {
 
         curs = contentResolver.query(ZeroContract.Interventions.CONTENT_URI,
                 ZeroContract.Interventions.PROJECTION_BASIC,
-                ZeroContract.Interventions.TYPE + " LIKE " + "\"" + Intervention.REQUESTED + "\"",
+                ZeroContract.Interventions.TYPE + " LIKE " + "\"" + Intervention.REQUESTED + "\" AND "
+                + ZeroContract.Interventions.USER + " LIKE " + "\"" + AccountTool.getCurrentAccount(this.context).name + "\"",
                 null,
                 "datetime(started_at)");
 
