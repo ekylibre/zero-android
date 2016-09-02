@@ -22,10 +22,10 @@ public class PlantCounting
     int     mId;
     String  mRead_at;
 
-    public static List<PlantCounting> all(Instance instance, JSONObject attributes) throws JSONException, IOException, HTTPException
+    public static List<PlantCounting> all(Instance instance, String attributes) throws JSONException, IOException, HTTPException
     {
         // JSONObject params = Instance.BundleToJSON(attributes);
-        JSONObject params = attributes;
+        String params = attributes;
         JSONArray json = instance.getJSONArray("/api/v1/plant_countings", params);
         List<PlantCounting> array = new ArrayList<>();
 

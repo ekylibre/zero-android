@@ -26,10 +26,10 @@ public class Plant
     String  mVariety;
     //shape
 
-    public static List<Plant> all(Instance instance, JSONObject attributes) throws JSONException, IOException, HTTPException
+    public static List<Plant> all(Instance instance, String attributes) throws JSONException, IOException, HTTPException
     {
         // JSONObject params = Instance.BundleToJSON(attributes);
-        JSONObject params = attributes;
+        String params = attributes;
         if (BuildConfig.DEBUG) Log.d(TAG, "Get JSONArray => /api/v1/plants || params = " + params);
         JSONArray json = instance.getJSONArray("/api/v1/plants", params);
         List<Plant> array = new ArrayList<>();
