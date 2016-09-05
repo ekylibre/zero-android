@@ -4,7 +4,7 @@
                 android:id="@+id/todoItemLayout"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@drawable/event"
+                android:background="@drawable/event_green"
                 android:paddingRight="5dp"
                 android:paddingLeft="5dp"
                 android:paddingTop="5dp"
