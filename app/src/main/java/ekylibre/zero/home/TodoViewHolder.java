@@ -10,11 +10,12 @@ import android.widget.TextView;
 
 public class TodoViewHolder
 {
-    public TextView event;
-    public TextView desc;
-    public TextView hours;
-    public TextView minutes;
-    public TextView const_h;
-    public TextView header;
-    public RelativeLayout layout;
+    public TextView         event;
+    public TextView         desc;
+    public TextView         hours;
+    public TextView         minutes;
+    public TextView         const_h;
+    public TextView         header;
+    public RelativeLayout   layout;
+    public int              source;
 }
