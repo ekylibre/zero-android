@@ -11,8 +11,6 @@ import android.widget.TextView;
 import java.util.List;
 
 import ekylibre.zero.R;
-import ekylibre.zero.home.TodoItem;
-import ekylibre.zero.home.TodoViewHolder;
 
 /**************************************
  * Created by pierre on 7/11/16.      *
@@ -60,9 +58,9 @@ public class TodoAdapter extends ArrayAdapter<TodoItem>
             viewHolder.hours.setVisibility(View.VISIBLE);
             viewHolder.minutes.setVisibility(View.GONE);
             viewHolder.desc.setVisibility(View.VISIBLE);
-            viewHolder.layout.setBackground(getContext().getResources().getDrawable(R.color.basic_green));
+            viewHolder.layout.setBackground(getContext().getResources().getDrawable(R.drawable.event_green));
             if (item.getSource() == TodoListActivity.LOCAL_CALENDAR)
-                viewHolder.layout.setBackground(getContext().getResources().getDrawable(R.color.basic_blue));
+                viewHolder.layout.setBackground(getContext().getResources().getDrawable(R.drawable.event_blue));
 
         }
         else
