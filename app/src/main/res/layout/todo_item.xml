@@ -1,17 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:padding="10dp"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:id="@+id/todoItemLayout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/event"
+                android:paddingRight="5dp"
+                android:paddingLeft="5dp"
+                android:paddingTop="5dp"
+                android:paddingBottom="7dp"
     >
 
     <TextView
         android:id="@+id/startDate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="@android:color/black"
+        android:textColor="@color/background_grey"
         android:layout_marginLeft="10dp"
+        android:layout_marginEnd="3dp"
         tools:text="00h00"
         android:textSize="18sp"
         />
@@ -33,7 +39,7 @@
         android:id="@+id/event"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="@android:color/black"
+        android:textColor="@color/background_grey"
         android:layout_marginLeft="10dp"
         android:layout_toRightOf="@+id/endDate"
         android:layout_alignTop="@+id/endDate"
@@ -46,7 +52,7 @@
         android:id="@+id/desc"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="@android:color/black"
+        android:textColor="@color/background_grey"
         android:layout_alignLeft="@+id/event"
         android:layout_below="@+id/event"
         tools:text="Description"
@@ -57,11 +63,10 @@
         android:layout_height="wrap_content"
         android:text="Date"
         android:textSize="20sp"
-        android:textColor="@color/ultraLight_grey"
+        android:textColor="@color/ultra_dark_grey"
         android:id="@+id/todayDate"
-        android:gravity="center"
-        android:layout_gravity="center_horizontal"
-        android:background="@drawable/header"
-        android:visibility="gone"/>
+        android:visibility="gone"
+        android:layout_marginStart="20dp"
+        />
 
 </RelativeLayout>

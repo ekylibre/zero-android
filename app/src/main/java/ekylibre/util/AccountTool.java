@@ -133,4 +133,22 @@ public class AccountTool
             return (listAccount[0]);
         return (listAccount[i]);
     }
+
+    public static String getEmail(Account account)
+    {
+        String email;
+
+        email = account.name;
+        email = email.split(" - ")[0];
+        return (email);
+    }
+
+    public static String getInstance(Account account)
+    {
+        String instance;
+
+        instance = account.name;
+        instance = instance.split(" - ")[1];
+        return (instance);
+    }
 }

@@ -22,6 +22,7 @@ public class TodoItem
     private Calendar day;
     private int     id;
     private Calendar date;
+    private int number;
 
     public TodoItem(boolean headerState, Calendar day)
     {
@@ -79,6 +80,11 @@ public class TodoItem
         this.headerState = state;
     }
 
+    public void setNumber(int nb)
+    {
+        this.number = nb;
+    }
+
     public String   getStartDate()
     {
         return (this.startDate);
@@ -113,5 +119,10 @@ public class TodoItem
     public Calendar getDate()
     {
         return (date);
+    }
+
+    public int getNumber()
+    {
+        return (number);
     }
 }

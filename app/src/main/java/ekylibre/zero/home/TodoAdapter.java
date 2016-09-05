@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.util.List;
@@ -39,6 +40,7 @@ public class TodoAdapter extends ArrayAdapter<TodoItem>
         if (viewHolder == null)
         {
             viewHolder = new TodoViewHolder();
+            viewHolder.layout = (RelativeLayout)convertView.findViewById(R.id.todoItemLayout);
             viewHolder.event = (TextView)convertView.findViewById(R.id.event);
             viewHolder.desc = (TextView)convertView.findViewById(R.id.desc);
             viewHolder.hours = (TextView)convertView.findViewById(R.id.startDate);
@@ -47,6 +49,7 @@ public class TodoAdapter extends ArrayAdapter<TodoItem>
             convertView.setTag(viewHolder);
         }
         TodoItem    item = getItem(position);
+        int number = item.getNumber();
         if (!item.getHeaderState())
         {
             viewHolder.event.setText(item.getEvent());
@@ -57,7 +60,13 @@ public class TodoAdapter extends ArrayAdapter<TodoItem>
             viewHolder.event.setVisibility(View.VISIBLE);
             viewHolder.hours.setVisibility(View.VISIBLE);
             viewHolder.minutes.setVisibility(View.GONE);
-            viewHolder.desc.setVisibility(View.GONE);
+            viewHolder.desc.setVisibility(View.VISIBLE);
+            //if (number % 2 == 0)
+                viewHolder.layout.setBackground(getContext().getResources().getDrawable(R.color.basic_green));
+            //else
+            //    viewHolder.layout.setBackground(getContext().getResources().getDrawable(R.color.dark_green));
+
+
         }
         else
         {
@@ -67,6 +76,7 @@ public class TodoAdapter extends ArrayAdapter<TodoItem>
             viewHolder.hours.setVisibility(View.GONE);
             viewHolder.minutes.setVisibility(View.GONE);
             viewHolder.desc.setVisibility(View.GONE);
+            viewHolder.layout.setBackground(null);
         }
         return (convertView);
     }

@@ -1,5 +1,6 @@
 package ekylibre.zero.home;
 
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 /**************************************
@@ -15,4 +16,5 @@ public class TodoViewHolder
     public TextView minutes;
     public TextView const_h;
     public TextView header;
+    public RelativeLayout layout;
 }

@@ -479,7 +479,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
 
         List<Intervention> interventionList = null;
         try {
-            interventionList = Intervention.all(instance, "?nature=request");
+            interventionList = Intervention.all(instance, "?nature=request&user_email=" + AccountTool.getEmail(account));
         } catch (JSONException | IOException | HTTPException e) {
             e.printStackTrace();
         }

@@ -10,9 +10,12 @@
     <ListView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginBottom="50dp"
         android:id="@+id/listView"
-        android:layout_gravity="center_horizontal" />
+        android:layout_gravity="center_horizontal"
+        android:dividerHeight="14dp"
+        android:divider="@color/invisible"
+        android:paddingRight="8dp"
+        android:paddingLeft="8dp"/>
 
     <Button
         android:layout_width="300dp"
@@ -27,6 +30,7 @@
         android:textColor="@color/white"
         android:textSize="15sp"
         android:drawableStart="@drawable/ic_add_white"
-        android:onClick="launchIntervention"/>
+        android:onClick="launchIntervention"
+        android:visibility="gone"/>
 
 </RelativeLayout>

@@ -4,8 +4,11 @@ import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.content.ContentResolver;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.Snackbar;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -74,9 +77,9 @@ public class MainActivity extends UpdatableActivity
         }
         mAccount = AccountTool.getCurrentAccount(MainActivity.this);
         setToolbar();
-/*
+
         setFloatingActBtn();
-*/
+
         setDrawerLayout();
         setTodolist();
         startConnectionManager();
@@ -136,7 +139,7 @@ public class MainActivity extends UpdatableActivity
     ** Setting the floating button which is use to access to
     ** different type of action buttons
     */
-/*    private void    setFloatingActBtn()
+    private void    setFloatingActBtn()
     {
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener()
@@ -144,11 +147,10 @@ public class MainActivity extends UpdatableActivity
             @Override
             public void onClick(View view)
             {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                launchIntervention(null);
             }
         });
-    }*/
+    }
 
     /*
     ** Set toolbar which is the new version of th action bar
