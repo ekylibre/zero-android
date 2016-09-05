@@ -21,6 +21,8 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
+import java.util.TimeZone;
 
 import ekylibre.APICaller.Intervention;
 import ekylibre.database.ZeroContract;
@@ -111,9 +113,11 @@ public class TodoListActivity {
         String startDateFormatted;
         String endDateFormatted;
         ArrayList<TodoItem> list = new ArrayList<>();
-        DateFormat formatterSTART = new SimpleDateFormat("HH:mm - ");
+        DateFormat formatterSTART = new SimpleDateFormat("HH:mm");
         DateFormat formatterEND = new SimpleDateFormat("HH:mm");
         SimpleDateFormat dateParser = new SimpleDateFormat(DateConstant.ISO_8601);
+
+        Calendar dateOfDay = getDateOfDay();
 
         while (cursLocal != null && cursLocal.moveToNext())
         {
@@ -135,16 +139,22 @@ public class TodoListActivity {
         {
             try
             {
-                Log.d(TAG, "DATES => " + dateParser.toPattern() + "  " + cursRequested.getString(DTSTART) + "   " + cursRequested.getString(DTEND));
-                Date startDate = dateParser.parse(cursRequested.getString(DTSTART));
-                Date endDate = dateParser.parse(cursRequested.getString(DTEND));
-                startDateFormatted = formatterSTART.format(startDate);
-                endDateFormatted = formatterEND.format(endDate);
-                Calendar cal = Calendar.getInstance();
-                cal.setTime(startDate);
-                String desc = getDescription(cursRequested);
-                list.add(new TodoItem(startDateFormatted, endDateFormatted, cursRequested.getString(TITLE),
-                        cursRequested.getString(DESCRIPTION), cal, cursRequested.getInt(0)));
+                Log.d(TAG, "DATES => " + dateParser.toPattern() + "  "
+                        + cursRequested.getString(DTSTART).replaceAll("Z$", "+00:00") + "   "
+                        + cursRequested.getString(DTEND).replaceAll("Z$", "+00:00"));
+                Date startDate = dateParser.parse(cursRequested.getString(DTSTART).replaceAll("Z$", "+00:00"));
+
+                if (startDate.getTime() > dateOfDay.getTimeInMillis())
+                {
+                    Date endDate = dateParser.parse(cursRequested.getString(DTEND).replaceAll("Z$", "+00:00"));
+                    startDateFormatted = formatterSTART.format(startDate);
+                    endDateFormatted = formatterEND.format(endDate);
+                    Calendar cal = Calendar.getInstance();
+                    cal.setTime(startDate);
+                    String desc = getDescription(cursRequested);
+                    list.add(new TodoItem(startDateFormatted, endDateFormatted, cursRequested.getString(TITLE),
+                            desc, cal, cursRequested.getInt(0)));
+                }
             }
             catch (ParseException e)
             {
@@ -165,16 +175,52 @@ public class TodoListActivity {
                     return (0);
             }
         });
+
+        int i = -1;
+        while (++i < list.size())
+            list.get(i).setNumber(i);
         return (list);
+    }
+
+    public static String getTimeZone()
+    {
+        Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("GMT"), Locale.getDefault());
+        String   timeZone = new SimpleDateFormat("Z").format(calendar.getTime());
+        return (timeZone.substring(0, 3) + ":"+ timeZone.substring(3, 5));
     }
 
     private String getDescription(Cursor cursRequested)
     {
-        String str = new String();
+        String str = "";
         int id = cursRequested.getInt(0);
 
-
+        Cursor curs = getInfoForIntervention(id);
+        int i = -1;
+        if (curs == null || curs.getCount() == 0)
+            return (str);
+        while (curs.moveToNext())
+        {
+            str += "\u2022 ";
+            str += curs.getString(1);
+            if (!curs.isLast())
+                str += "\n";
+        }
         return (str);
+    }
+
+    private Cursor getInfoForIntervention(int id)
+    {
+        Cursor curs;
+        ContentResolver contentResolver = context.getContentResolver();
+
+        curs = contentResolver.query(ZeroContract.InterventionParameters.CONTENT_URI,
+                ZeroContract.InterventionParameters.PROJECTION_TARGET,
+                ZeroContract.InterventionParameters.ROLE + " LIKE " + "\"" + Intervention.TARGET + "\" AND "
+                + ZeroContract.InterventionParameters.FK_INTERVENTION + " == " + id,
+                null,
+                null);
+
+        return (curs);
     }
 
     private Cursor getEventsFromEK()
@@ -185,7 +231,7 @@ public class TodoListActivity {
         curs = contentResolver.query(ZeroContract.Interventions.CONTENT_URI,
                 ZeroContract.Interventions.PROJECTION_BASIC,
                 ZeroContract.Interventions.TYPE + " LIKE " + "\"" + Intervention.REQUESTED + "\" AND "
-                + ZeroContract.Interventions.USER + " LIKE " + "\"" + AccountTool.getCurrentAccount(this.context).name + "\"",
+                        + ZeroContract.Interventions.USER + " LIKE " + "\"" + AccountTool.getCurrentAccount(this.context).name + "\"",
                 null,
                 "datetime(started_at)");
 

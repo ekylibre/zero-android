@@ -5,6 +5,8 @@ import android.database.DatabaseErrorHandler;
 import android.net.Uri;
 import android.provider.BaseColumns;
 
+import java.lang.annotation.Target;
+
 public final class ZeroContract {
 
     // Authority name for this provider
@@ -162,6 +164,7 @@ public final class ZeroContract {
 
         public static final String[] PROJECTION_ALL = {_ID};
         public static final String[] PROJECTION_NONE = {_ID};
+        public static final String[] PROJECTION_TARGET = {_ID, PRODUCT_NAME};
 
         public static final String SORT_ORDER_DEFAULT = _ID + " ASC";
 
