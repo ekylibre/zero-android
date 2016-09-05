@@ -23,6 +23,7 @@ public class TodoItem
     private int     id;
     private Calendar date;
     private int number;
+    private int source;
 
     public TodoItem(boolean headerState, Calendar day)
     {
@@ -33,9 +34,10 @@ public class TodoItem
         this.endDate = null;
         this.event = null;
         this.desc = null;
+        this.source = TodoListActivity.NONE_CALENDAR;
     }
 
-    public TodoItem(String startdate, String endDate, String event, String desc, Calendar calendar)
+    public TodoItem(String startdate, String endDate, String event, String desc, Calendar calendar, int source)
     {
         this.startDate = startdate;
         this.endDate = endDate;
@@ -43,9 +45,10 @@ public class TodoItem
         this.desc = desc;
         this.date = calendar;
         this.id = -1;
+        this.source = source;
     }
 
-    public TodoItem(String startdate, String endDate, String event, String desc, Calendar calendar, int _id)
+    public TodoItem(String startdate, String endDate, String event, String desc, Calendar calendar, int _id, int source)
     {
         this.startDate = startdate;
         this.endDate = endDate;
@@ -53,6 +56,7 @@ public class TodoItem
         this.desc = desc;
         this.date = calendar;
         this.id = _id;
+        this.source = source;
     }
 
     public void setStartDate(String newDate)
@@ -124,5 +128,10 @@ public class TodoItem
     public int getNumber()
     {
         return (number);
+    }
+
+    public int getSource()
+    {
+        return (source);
     }
 }

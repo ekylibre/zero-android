@@ -49,7 +49,6 @@ public class TodoAdapter extends ArrayAdapter<TodoItem>
             convertView.setTag(viewHolder);
         }
         TodoItem    item = getItem(position);
-        int number = item.getNumber();
         if (!item.getHeaderState())
         {
             viewHolder.event.setText(item.getEvent());
@@ -61,11 +60,9 @@ public class TodoAdapter extends ArrayAdapter<TodoItem>
             viewHolder.hours.setVisibility(View.VISIBLE);
             viewHolder.minutes.setVisibility(View.GONE);
             viewHolder.desc.setVisibility(View.VISIBLE);
-            //if (number % 2 == 0)
-                viewHolder.layout.setBackground(getContext().getResources().getDrawable(R.color.basic_green));
-            //else
-            //    viewHolder.layout.setBackground(getContext().getResources().getDrawable(R.color.dark_green));
-
+            viewHolder.layout.setBackground(getContext().getResources().getDrawable(R.color.basic_green));
+            if (item.getSource() == TodoListActivity.LOCAL_CALENDAR)
+                viewHolder.layout.setBackground(getContext().getResources().getDrawable(R.color.basic_blue));
 
         }
         else

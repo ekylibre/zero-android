@@ -47,6 +47,10 @@ public class TodoListActivity {
     private final String TAG = "TodoListAct";
 
 
+    public final static int NONE_CALENDAR = 0;
+    public final static int LOCAL_CALENDAR = 1;
+    public final static int EKYLIBRE_CALENDAR = 2;
+
 
     private ListView todoListView;
     private ArrayAdapter<String> adapter;
@@ -131,7 +135,7 @@ public class TodoListActivity {
             Calendar cal = Calendar.getInstance();
             cal.setTime(startDate);
             list.add(new TodoItem(startDateFormatted, endDateFormatted, cursLocal.getString(TITLE),
-                    cursLocal.getString(DESCRIPTION), cal));
+                    cursLocal.getString(DESCRIPTION), cal, LOCAL_CALENDAR));
         }
 
 
@@ -153,7 +157,7 @@ public class TodoListActivity {
                     cal.setTime(startDate);
                     String desc = getDescription(cursRequested);
                     list.add(new TodoItem(startDateFormatted, endDateFormatted, cursRequested.getString(TITLE),
-                            desc, cal, cursRequested.getInt(0)));
+                            desc, cal, cursRequested.getInt(0), EKYLIBRE_CALENDAR));
                 }
             }
             catch (ParseException e)
