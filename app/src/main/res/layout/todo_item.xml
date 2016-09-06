@@ -8,8 +8,7 @@
                 android:paddingRight="5dp"
                 android:paddingLeft="5dp"
                 android:paddingTop="5dp"
-                android:paddingBottom="7dp"
-    >
+                android:paddingBottom="7dp">
 
     <TextView
         android:id="@+id/startDate"
