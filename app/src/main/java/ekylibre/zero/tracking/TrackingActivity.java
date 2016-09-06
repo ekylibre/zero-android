@@ -143,7 +143,16 @@ public class TrackingActivity extends UpdatableActivity implements TrackingListe
                 .setContentIntent(PendingIntent.getActivity(this, 0, new Intent(this, TrackingActivity.class), PendingIntent.FLAG_UPDATE_CURRENT))
                 .setSmallIcon(R.mipmap.ic_stat_notify);
 
-        createProcedureChooser();
+        if (!mNewIntervention)
+            disableInterface();
+        else
+            createProcedureChooser();
+
+    }
+
+    private void disableInterface()
+    {
+        mStartButton.setVisibility(View.GONE);
     }
 
     private void createProcedureChooser()
