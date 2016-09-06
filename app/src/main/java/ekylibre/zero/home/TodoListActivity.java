@@ -109,35 +109,50 @@ public class TodoListActivity {
         return (compiledList);
     }
 
-    //TODO :: REFACTORING THIS IS IMPORTANT TO KEEP THIS READABLE
     private ArrayList<TodoItem> getListCompact(Cursor cursLocal, Cursor cursRequested)
     {
-        Log.d(TAG, "===============");
-        Log.d(TAG, "===============");
-        String startDateFormatted;
-        String endDateFormatted;
         ArrayList<TodoItem> list = new ArrayList<>();
         DateFormat formatterSTART = new SimpleDateFormat("HH:mm");
         DateFormat formatterEND = new SimpleDateFormat("HH:mm");
-        SimpleDateFormat dateParser = new SimpleDateFormat(DateConstant.ISO_8601);
 
-        Calendar dateOfDay = getDateOfDay();
+        Log.d(TAG, "===============");
+        Log.d(TAG, "===============");
 
-        while (cursLocal != null && cursLocal.moveToNext())
+        addLocalEvents(list, cursLocal, formatterSTART, formatterEND);
+        addEkylibreEvents(list, cursRequested, formatterSTART, formatterEND);
+
+        sortList(list);
+
+        return (list);
+    }
+
+    private void sortList(ArrayList<TodoItem> list)
+    {
+        Collections.sort(list, new Comparator<TodoItem>()
         {
-            Date startDate = new Date(cursLocal.getLong(DTSTART));
-            Date endDate = new Date(cursLocal.getLong(DTEND));
-            startDateFormatted = formatterSTART.format(startDate);
-            if (cursLocal.getInt(ALL_DAY) == 0)
-                endDateFormatted = formatterEND.format(endDate);
-            else
-                endDateFormatted = "00h00";
-            Calendar cal = Calendar.getInstance();
-            cal.setTime(startDate);
-            list.add(new TodoItem(startDateFormatted, endDateFormatted, cursLocal.getString(TITLE),
-                    cursLocal.getString(DESCRIPTION), cal, LOCAL_CALENDAR));
-        }
+            @Override
+            public int compare(TodoItem t1, TodoItem t2)
+            {
+                if (t1.getDate().getTimeInMillis() > t2.getDate().getTimeInMillis())
+                    return (1);
+                else if (t1.getDate().getTimeInMillis() < t2.getDate().getTimeInMillis())
+                    return (-1);
+                else
+                    return (0);
+            }
+        });
 
+        int i = -1;
+        while (++i < list.size())
+            list.get(i).setNumber(i);
+    }
+
+    private void addEkylibreEvents(ArrayList<TodoItem> list, Cursor cursRequested, DateFormat formatterSTART, DateFormat formatterEND)
+    {
+        Calendar dateOfDay = getDateOfDay();
+        SimpleDateFormat dateParser = new SimpleDateFormat(DateConstant.ISO_8601);
+        String startDateFormatted;
+        String endDateFormatted;
 
         while (cursRequested != null && cursRequested.moveToNext())
         {
@@ -166,24 +181,27 @@ public class TodoListActivity {
             }
         }
 
-        Collections.sort(list, new Comparator<TodoItem>()
-        {
-            @Override
-            public int compare(TodoItem t1, TodoItem t2)
-            {
-                if (t1.getDate().getTimeInMillis() > t2.getDate().getTimeInMillis())
-                    return (1);
-                else if (t1.getDate().getTimeInMillis() < t2.getDate().getTimeInMillis())
-                    return (-1);
-                else
-                    return (0);
-            }
-        });
+    }
 
-        int i = -1;
-        while (++i < list.size())
-            list.get(i).setNumber(i);
-        return (list);
+    private void addLocalEvents(ArrayList<TodoItem> list, Cursor cursLocal, DateFormat formatterSTART, DateFormat formatterEND)
+    {
+        String startDateFormatted;
+        String endDateFormatted;
+
+        while (cursLocal != null && cursLocal.moveToNext())
+        {
+            Date startDate = new Date(cursLocal.getLong(DTSTART));
+            Date endDate = new Date(cursLocal.getLong(DTEND));
+            startDateFormatted = formatterSTART.format(startDate);
+            if (cursLocal.getInt(ALL_DAY) == 0)
+                endDateFormatted = formatterEND.format(endDate);
+            else
+                endDateFormatted = "00h00";
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(startDate);
+            list.add(new TodoItem(startDateFormatted, endDateFormatted, cursLocal.getString(TITLE),
+                    cursLocal.getString(DESCRIPTION), cal, LOCAL_CALENDAR));
+        }
     }
 
     public static String getTimeZone()
