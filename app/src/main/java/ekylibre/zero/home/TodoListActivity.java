@@ -28,6 +28,7 @@ import ekylibre.APICaller.Intervention;
 import ekylibre.database.ZeroContract;
 import ekylibre.util.AccountTool;
 import ekylibre.util.DateConstant;
+import ekylibre.zero.BuildConfig;
 import ekylibre.zero.R;
 import ekylibre.zero.SettingsActivity;
 import ekylibre.util.PermissionManager;
@@ -121,8 +122,8 @@ public class TodoListActivity {
         DateFormat formatterSTART = new SimpleDateFormat("HH:mm");
         DateFormat formatterEND = new SimpleDateFormat("HH:mm");
 
-        Log.d(TAG, "===============");
-        Log.d(TAG, "===============");
+        if (BuildConfig.DEBUG) Log.d(TAG, "===============");
+        if (BuildConfig.DEBUG) Log.d(TAG, "===============");
 
         addLocalEvents(list, cursLocal, formatterSTART, formatterEND);
         addEkylibreEvents(list, cursRequested, formatterSTART, formatterEND);
@@ -164,7 +165,7 @@ public class TodoListActivity {
         {
             try
             {
-                Log.d(TAG, "DATES => " + dateParser.toPattern() + "  "
+                if (BuildConfig.DEBUG) Log.d(TAG, "DATES => " + dateParser.toPattern() + "  "
                         + cursRequested.getString(DTSTART).replaceAll("Z$", "+00:00") + "   "
                         + cursRequested.getString(DTEND).replaceAll("Z$", "+00:00"));
                 Date startDate = dateParser.parse(cursRequested.getString(DTSTART).replaceAll("Z$", "+00:00"));
@@ -344,7 +345,7 @@ public class TodoListActivity {
 
         calendar.set(year, month, day, hour, minute, second);
         calendar.add(Calendar.MONTH, 1);
-        Log.d(TAG, "NEXT MONTH DATE = " + calendar.getTime().toString());
+        if (BuildConfig.DEBUG) Log.d(TAG, "NEXT MONTH DATE = " + calendar.getTime().toString());
         return (calendar);
     }
 
@@ -401,7 +402,7 @@ public class TodoListActivity {
         SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this.context);
         if (!pref.getBoolean(SettingsActivity.PREF_SYNC_CALENDAR, false))
             return (null);
-        Log.d(TAG, "Getting events from local calendar");
+        if (BuildConfig.DEBUG) Log.d(TAG, "Getting events from local calendar");
         projection = setProjection();
         startTime = getDateOfDay();
         endTime = getDateOfNextMonth();
@@ -425,6 +426,8 @@ public class TodoListActivity {
     {
         int             it;
 
+        if (!BuildConfig.DEBUG)
+            return;
         it = 0;
         if (curs == null)
             curs = getEventsFromLocal();
