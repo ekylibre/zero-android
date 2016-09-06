@@ -4,11 +4,14 @@ import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.preference.PreferenceManager;
 import android.provider.CalendarContract;
 import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
@@ -32,6 +35,8 @@ import ekylibre.zero.BuildConfig;
 import ekylibre.zero.R;
 import ekylibre.zero.SettingsActivity;
 import ekylibre.util.PermissionManager;
+import ekylibre.zero.account.AccountManagerActivity;
+import ekylibre.zero.tracking.TrackingActivity;
 
 /**************************************
  * Created by pierre on 7/8/16.       *
@@ -65,7 +70,7 @@ public class TodoListActivity {
     ** CONSTANTS are use to get the part of data you want from adapter
     */
 
-    public TodoListActivity(Context context, Activity activity, ListView foundListView) {
+    public TodoListActivity(final Context context, Activity activity, ListView foundListView) {
         this.todoListView = foundListView;
         this.context = context;
         this.activity = activity;
@@ -76,10 +81,22 @@ public class TodoListActivity {
             return;
 
 
-        TodoAdapter adapter = new TodoAdapter(context, todolist);
+        final TodoAdapter adapter = new TodoAdapter(context, todolist);
 
         todoListView.setAdapter(adapter);
-
+        todoListView.setClickable(true);
+        todoListView.setOnItemClickListener(
+                new AdapterView.OnItemClickListener()
+                {
+                    @Override
+                    public void onItemClick(AdapterView<?> adapterView, View view, int position, long id)
+                    {
+                        TodoItem item = (TodoItem) adapterView.getItemAtPosition(position);
+                        Log.d(TAG, item.getEvent());
+                        Intent intent = new Intent(context, TrackingActivity.class);
+                        context.startActivity(intent);
+                    }
+                });
     }
 
     public void setListView(ListView listView) {
