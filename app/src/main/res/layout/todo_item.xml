@@ -59,14 +59,24 @@
         />
 
     <TextView
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Date"
         android:textSize="20sp"
         android:textColor="@color/ultra_dark_grey"
         android:id="@+id/todayDate"
         android:visibility="gone"
-        android:layout_marginStart="20dp"
-        />
+        android:layout_alignParentEnd="false"/>
+
+    <TextView
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="message"
+    android:textSize="14sp"
+    android:textColor="@color/dark_grey"
+    android:id="@+id/message"
+    android:visibility="gone"
+    android:layout_centerHorizontal="true"
+    android:layout_centerVertical="true"/>
 
 </RelativeLayout>

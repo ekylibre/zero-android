@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
-    <item>
+    <item android:state_pressed="true">
         <shape>
-            <gradient
-                android:startColor="@color/basic_green"
-                android:endColor="@color/basic_green"
-                />
+            <solid
+                android:color="@color/dark_green"/>
 
             <corners
                 android:radius="4dp" />
@@ -16,4 +14,19 @@
                 android:bottom="10dp" />
         </shape>
     </item>
+
+    <item>
+    <shape>
+        <solid
+            android:color="@color/basic_green"/>
+
+        <corners
+            android:radius="4dp" />
+        <padding
+            android:left="10dp"
+            android:top="10dp"
+            android:right="10dp"
+            android:bottom="10dp" />
+    </shape>
+</item>
 </selector>

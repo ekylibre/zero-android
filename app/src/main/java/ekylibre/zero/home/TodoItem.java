@@ -19,6 +19,8 @@ public class TodoItem
     private String  event;
     private String  desc;
     private boolean headerState = false;
+    private boolean messageState = false;
+    private String messageString = "";
     private Calendar day;
     private int     id;
     private Calendar date;
@@ -35,6 +37,18 @@ public class TodoItem
         this.event = null;
         this.desc = null;
         this.source = TodoListActivity.NONE_CALENDAR;
+    }
+
+    public TodoItem(boolean msg, String message)
+    {
+        this.messageState = msg;
+        this.day = null;
+        this.startDate = null;
+        this.endDate = null;
+        this.event = null;
+        this.desc = null;
+        this.source = TodoListActivity.NONE_CALENDAR;
+        this.messageString = message;
     }
 
     public TodoItem(String startdate, String endDate, String event, String desc, Calendar calendar, int source)
@@ -116,7 +130,7 @@ public class TodoItem
 
     public String getDay()
     {
-        String date = DateFormat.getDateInstance(DateFormat.LONG,
+        String date = DateFormat.getDateInstance(DateFormat.FULL,
                 Locale.getDefault()).format(day.getTime());
         return (date);
     }
@@ -133,5 +147,15 @@ public class TodoItem
     public int getSource()
     {
         return (source);
+    }
+
+    public boolean getMessageState()
+    {
+        return (messageState);
+    }
+
+    public String getMessageString()
+    {
+        return (this.messageString);
     }
 }

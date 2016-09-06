@@ -44,10 +44,11 @@ public class TodoAdapter extends ArrayAdapter<TodoItem>
             viewHolder.hours = (TextView)convertView.findViewById(R.id.startDate);
             viewHolder.minutes = (TextView)convertView.findViewById(R.id.endDate);
             viewHolder.header = (TextView)convertView.findViewById(R.id.todayDate);
+            viewHolder.message = (TextView)convertView.findViewById(R.id.message);
             convertView.setTag(viewHolder);
         }
         TodoItem    item = getItem(position);
-        if (!item.getHeaderState())
+        if (!item.getHeaderState() && !item.getMessageState())
         {
             viewHolder.event.setText(item.getEvent());
             viewHolder.hours.setText(item.getStartDate());
@@ -61,9 +62,10 @@ public class TodoAdapter extends ArrayAdapter<TodoItem>
             viewHolder.layout.setBackground(getContext().getResources().getDrawable(R.drawable.event_green));
             if (item.getSource() == TodoListActivity.LOCAL_CALENDAR)
                 viewHolder.layout.setBackground(getContext().getResources().getDrawable(R.drawable.event_blue));
-
+            viewHolder.layout.setFocusable(false);
+            viewHolder.message.setVisibility(View.GONE);
         }
-        else
+        else if (!item.getMessageState())
         {
             viewHolder.header.setText(item.getDay());
             viewHolder.header.setVisibility(View.VISIBLE);
@@ -72,6 +74,20 @@ public class TodoAdapter extends ArrayAdapter<TodoItem>
             viewHolder.minutes.setVisibility(View.GONE);
             viewHolder.desc.setVisibility(View.GONE);
             viewHolder.layout.setBackground(null);
+            viewHolder.layout.setFocusable(true);
+            viewHolder.message.setVisibility(View.GONE);
+        }
+        else
+        {
+            viewHolder.header.setVisibility(View.GONE);
+            viewHolder.event.setVisibility(View.GONE);
+            viewHolder.hours.setVisibility(View.GONE);
+            viewHolder.minutes.setVisibility(View.GONE);
+            viewHolder.desc.setVisibility(View.GONE);
+            viewHolder.layout.setBackground(null);
+            viewHolder.layout.setFocusable(true);
+            viewHolder.message.setVisibility(View.VISIBLE);
+            viewHolder.message.setText(item.getMessageString());
         }
         return (convertView);
     }

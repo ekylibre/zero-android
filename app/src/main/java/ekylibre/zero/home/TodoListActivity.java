@@ -28,6 +28,7 @@ import ekylibre.APICaller.Intervention;
 import ekylibre.database.ZeroContract;
 import ekylibre.util.AccountTool;
 import ekylibre.util.DateConstant;
+import ekylibre.zero.R;
 import ekylibre.zero.SettingsActivity;
 import ekylibre.util.PermissionManager;
 
@@ -84,10 +85,9 @@ public class TodoListActivity {
         todoListView = listView;
     }
 
-    public List<TodoItem> createList() {
+    public List<TodoItem> createList()
+    {
         Cursor          cursLocal, cursRequested;
-
-        List<TodoItem>  todoList = new ArrayList<TodoItem>();
 
         cursLocal = getEventsFromLocal();
         cursRequested = getEventsFromEK();
@@ -95,7 +95,15 @@ public class TodoListActivity {
         Calendar currentDate = Calendar.getInstance();
         currentDate.setTimeInMillis(0);
         ArrayList<TodoItem> compiledList = getListCompact(cursLocal, cursRequested);
-        int i = -1;
+        int i = 0;
+        compiledList.add(0, new TodoItem(true, getDateOfDay()));
+        if (compiledList.get(1).getDate().getTimeInMillis() >= getDateOfTomorrow().getTimeInMillis())
+        {
+            i++;
+            compiledList.add(1, new TodoItem(true, context.getResources().getString(R.string.no_event_today)));
+        }
+
+
         while (++i < compiledList.size())
         {
             if (newDay(compiledList.get(i).getDate().getTimeInMillis(), currentDate))
@@ -104,8 +112,6 @@ public class TodoListActivity {
                 compiledList.add(i, new TodoItem(true, currentDate));
             }
         }
-        if (compiledList.size() == 0)
-            compiledList.add(new TodoItem(true, getDateOfDay()));
         return (compiledList);
     }
 
@@ -262,6 +268,8 @@ public class TodoListActivity {
 
     private boolean newDay(long date, Calendar currentDate)
     {
+        if (date < getDateOfTomorrow().getTimeInMillis())
+            return (false);
         if (currentDate.getTimeInMillis() == 0
                 || getDayFromMillis(date) != currentDate.get(Calendar.DAY_OF_YEAR))
             return (true);
