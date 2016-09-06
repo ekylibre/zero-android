@@ -22,7 +22,7 @@ public class TodoItem
     private boolean messageState = false;
     private String messageString = "";
     private Calendar day;
-    private int     id;
+    private int     intervention_id;
     private Calendar date;
     private int number;
     private int source;
