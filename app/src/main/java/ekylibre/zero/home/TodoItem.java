@@ -58,7 +58,7 @@ public class TodoItem
         this.event = event;
         this.desc = desc;
         this.date = calendar;
-        this.id = -1;
+        this.intervention_id = -1;
         this.source = source;
     }
 
@@ -69,7 +69,7 @@ public class TodoItem
         this.event = event;
         this.desc = desc;
         this.date = calendar;
-        this.id = _id;
+        this.intervention_id = _id;
         this.source = source;
     }
 
@@ -157,5 +157,10 @@ public class TodoItem
     public String getMessageString()
     {
         return (this.messageString);
+    }
+
+    public int getIntervention_id()
+    {
+        return (intervention_id);
     }
 }

@@ -153,6 +153,8 @@ public class TrackingActivity extends UpdatableActivity implements TrackingListe
     private void disableInterface()
     {
         mStartButton.setVisibility(View.GONE);
+        Intent intent = getIntent();
+        mInterventionID = intent.getIntExtra(ZeroContract.Interventions._ID, 0);
     }
 
     private void createProcedureChooser()
