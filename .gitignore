@@ -4,7 +4,9 @@
 /local.properties
 /tmp
 release.*
+app/app-release.apk
 *.img
 /.gradle
 /build
 /.idea
+/studio
