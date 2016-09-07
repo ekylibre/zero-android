@@ -94,6 +94,7 @@ public class TodoListActivity {
                         TodoItem item = (TodoItem) adapterView.getItemAtPosition(position);
                         Log.d(TAG, item.getEvent());
                         Intent intent = new Intent(context, TrackingActivity.class);
+                        intent.putExtra(ZeroContract.Interventions._ID, item.getIntervention_id());
                         context.startActivity(intent);
                     }
                 });
