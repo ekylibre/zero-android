@@ -98,7 +98,8 @@ public class TodoListActivity {
         ArrayList<TodoItem> compiledList = getListCompact(cursLocal, cursRequested);
         int i = 0;
         compiledList.add(0, new TodoItem(true, getDateOfDay()));
-        if (compiledList.get(1).getDate().getTimeInMillis() >= getDateOfTomorrow().getTimeInMillis())
+        if ((compiledList.size() > 1 && compiledList.get(1).getDate().getTimeInMillis() >= getDateOfTomorrow().getTimeInMillis())
+                || compiledList.size() == 1)
         {
             i++;
             compiledList.add(1, new TodoItem(true, context.getResources().getString(R.string.no_event_today)));
