@@ -226,7 +226,6 @@ public class TrackingActivity extends UpdatableActivity implements TrackingListe
                 titleRef = curs.getString(NAME);
             }
             str += curs.getString(PRODUCT_NAME) + "\n";
-            Log.d(TAG, str);
         }
         botId = flushBlock(str, botId);
         return (botId);
