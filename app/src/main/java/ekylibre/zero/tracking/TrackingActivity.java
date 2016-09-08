@@ -85,7 +85,7 @@ public class TrackingActivity extends UpdatableActivity implements TrackingListe
     private CrumbsCalculator crumbsCalculator;
     private boolean mNewIntervention;
 
-    private final String TAG = "Tracking Activity";
+    private final String TAG = "TrackingActivity";
 
     @Override
     public void onStart()
@@ -210,21 +210,23 @@ public class TrackingActivity extends UpdatableActivity implements TrackingListe
 
     private int writeCursor(Cursor curs, int botId)
     {
-        String str = null;
+        String str = "";
         String titleRef = "";
 
         while (curs.moveToNext())
         {
             if (!curs.getString(NAME).equals(titleRef))
             {
+                if (!str.equals(""))
+                {
+                    botId = flushBlock(str, botId);
+                    str = "";
+                }
                 botId = createTitle(curs, botId);
                 titleRef = curs.getString(NAME);
-
-                if (str != null)
-                    botId = flushBlock(str, botId);
-                str = "";
             }
             str += curs.getString(PRODUCT_NAME) + "\n";
+            Log.d(TAG, str);
         }
         botId = flushBlock(str, botId);
         return (botId);
