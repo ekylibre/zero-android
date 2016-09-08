@@ -7,27 +7,35 @@
 	android:background="@color/background_grey"
 	>
 
-	<TextView
-        android:id="@+id/procedure_nature"
-        android:visibility="invisible"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"/>
-
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="250dp"
         android:id="@+id/interventionInfo"
-        android:layout_gravity="center_horizontal"
+        android:background="@drawable/white_square"
+        android:layout_marginEnd="10dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="5dp"
         >
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="20dp">
+            android:id="@+id/infoLayout"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:layout_marginRight="40dp"
+            android:layout_marginLeft="40dp"
+            >
 
         </RelativeLayout>
     </ScrollView>
+
+    <TextView
+        android:id="@+id/procedure_nature"
+        android:visibility="invisible"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"/>
 
     <Chronometer
         android:id="@+id/master_chrono"
@@ -36,6 +44,7 @@
         android:layout_height="wrap_content"
         android:textSize="@dimen/chrono_font_size"
         android:gravity="center"/>
+
     <Chronometer
         android:id="@+id/precision_mode_chrono"
         android:visibility="invisible"

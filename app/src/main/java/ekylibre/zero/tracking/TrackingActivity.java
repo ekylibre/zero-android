@@ -11,16 +11,24 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
+import android.graphics.Color;
+import android.graphics.Typeface;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.preference.PreferenceManager;
+import android.print.PrintAttributes;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Chronometer;
 import android.widget.HorizontalScrollView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+import android.widget.TableLayout;
 import android.widget.TextView;
 
 import org.apache.http.NameValuePair;
@@ -45,26 +53,25 @@ import ekylibre.util.UpdatableActivity;
 
 public class TrackingActivity extends UpdatableActivity implements TrackingListenerWriter
 {
-    public final static String KEY_ACCOUNT = "account";
-    public final static double MAXIMAL_ACCURACY = 4.0;
+    protected final int PRODUCT_NAME = 1;
+    protected final int LABEL = 2;
+    protected final int NAME = 3;
     public final static String NEW = "new_intervention";
 
     private long mMasterDuration, mMasterStart;
-    private long mPrecisionModeDuration, mPrecisionModeStart;
-    private boolean mRunning, mPrecisionMode;
     private String mLastProcedureNature, mLastProcedureNatureName;
     private Chronometer mMasterChrono, mPrecisionModeChrono;
     private Button mScanButton, mStartButton, mStopButton, mPauseButton, mResumeButton, mPrecisionModeStartButton, mPrecisionModeStopButton, mSyncButton;
     private HorizontalScrollView mDetails;
-    private TextView mProcedureNature, mAccuracy, mLatitude, mLongitude, mCrumbsCount, mCoordinates, mBarcode;
+    private TextView mProcedureNature, mAccuracy, mLatitude, mLongitude, mCrumbsCount;
     private String mLocationProvider;
     private TrackingListener mTrackingListener;
     private Account mAccount;
     private AlertDialog.Builder mProcedureChooser;
     private SharedPreferences mPreferences;
     private IntentIntegrator mScanIntegrator;
-    private final int   REQUEST_CODE = 123;
     public static final String   _interventionID = "intervention_id";
+    private RelativeLayout infoLayout;
 
     private LocationManager mLocationManager;
     private NotificationManager mNotificationManager;
@@ -123,7 +130,7 @@ public class TrackingActivity extends UpdatableActivity implements TrackingListe
         mMapButton                = (Button)     findViewById(R.id.map_button);
         mPrecisionModeStartButton = (Button)     findViewById(R.id.start_precision_mode_button);
         mPrecisionModeStopButton  = (Button)     findViewById(R.id.stop_precision_mode_button);
-
+        infoLayout                = (RelativeLayout) findViewById(R.id.infoLayout);
 
         // Acquire a reference to the system Location Manager
         mTrackingListener = new TrackingListener(this);
@@ -155,7 +162,169 @@ public class TrackingActivity extends UpdatableActivity implements TrackingListe
         mStartButton.setVisibility(View.GONE);
         Intent intent = getIntent();
         mInterventionID = intent.getIntExtra(ZeroContract.Interventions._ID, 0);
+        writeInterventionInfo();
     }
+
+    // TODO => Il faut trier par name dans la requete puis des qu'on a un nouveau name on
+    // TODO => affiche le label en tant que titre et on enregistre le titre ref
+    private void writeInterventionInfo()
+    {
+        int botId;
+
+        botId = writeTarget(View.NO_ID);
+        botId = writeInput(botId);
+        botId = writeTool(botId);
+
+
+
+    }
+
+
+
+    private int writeTarget(int botId)
+    {
+        Cursor cursTarget = queryTarget();
+
+        if (cursTarget == null || cursTarget.getCount() == 0)
+            return (0);
+        return (writeCursor(cursTarget, botId));
+    }
+
+    private int writeInput(int botId)
+    {
+        Cursor cursInput = queryInput();
+
+        if (cursInput == null || cursInput.getCount() == 0)
+            return (0);
+        return (writeCursor(cursInput, botId));
+    }
+
+    private int writeTool(int botId)
+    {
+        Cursor cursTool = queryTool();
+
+        if (cursTool == null || cursTool.getCount() == 0)
+            return (0);
+        return (writeCursor(cursTool, botId));
+    }
+
+    private int writeCursor(Cursor curs, int botId)
+    {
+        String str = null;
+        String titleRef = "";
+
+        while (curs.moveToNext())
+        {
+            if (!curs.getString(NAME).equals(titleRef))
+            {
+                botId = createTitle(curs, botId);
+                titleRef = curs.getString(NAME);
+
+                if (str != null)
+                    botId = flushBlock(str, botId);
+                str = "";
+            }
+            str += curs.getString(PRODUCT_NAME) + "\n";
+        }
+        botId = flushBlock(str, botId);
+        return (botId);
+    }
+
+    private int createTitle(Cursor curs, int id)
+    {
+        TextView title = new TextView(this);
+
+        title.setText("• " + curs.getString(LABEL));
+        title.setTextColor(Color.BLACK);
+        title.setTypeface(null, Typeface.BOLD);
+        title.setId(View.generateViewId());
+        RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        lp.addRule(RelativeLayout.BELOW, id);
+
+        title.setLayoutParams(lp);
+        title.setTextSize(18);
+        infoLayout.addView(title);
+        return (title.getId());
+    }
+
+    private int flushBlock(String str, int id)
+    {
+        TextView text = new TextView(this);
+
+        text.setText(str);
+        text.setId(View.generateViewId());
+        RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        lp.setMarginStart(40);
+        lp.addRule(RelativeLayout.BELOW, id);
+
+        text.setLayoutParams(lp);
+        text.setGravity(Gravity.LEFT);
+        text.setTextColor(Color.parseColor("#454545"));
+        text.setTextSize(15);
+
+        infoLayout.addView(text);
+        return (text.getId());
+    }
+
+    private Cursor queryTarget()
+    {
+        String[] projectionTarget = ZeroContract.InterventionParameters.PROJECTION_TARGET_FULL;
+
+        Cursor curs = getContentResolver().query(
+                ZeroContract.InterventionParameters.CONTENT_URI,
+                projectionTarget,
+                ZeroContract.InterventionParameters.ROLE + " LIKE " + "\"target\"" + " AND "
+                        + mInterventionID + " == " + ZeroContract.InterventionParameters.FK_INTERVENTION,
+                null,
+                ZeroContract.InterventionParameters.NAME);
+        return (curs);
+    }
+
+    private Cursor queryInput()
+    {
+        String[] projectionInput = ZeroContract.InterventionParameters.PROJECTION_INPUT_FULL;
+
+        Cursor curs = getContentResolver().query(
+                ZeroContract.InterventionParameters.CONTENT_URI,
+                projectionInput,
+                ZeroContract.InterventionParameters.ROLE + " LIKE " + "\"input\"" + " AND "
+                        + mInterventionID + " == " + ZeroContract.InterventionParameters.FK_INTERVENTION,
+                null,
+                ZeroContract.InterventionParameters.NAME);
+        return (curs);
+    }
+
+    private Cursor queryTool()
+    {
+        String[] projectionTool = ZeroContract.InterventionParameters.PROJECTION_TOOL_FULL;
+
+        Cursor curs = getContentResolver().query(
+                ZeroContract.InterventionParameters.CONTENT_URI,
+                projectionTool,
+                ZeroContract.InterventionParameters.ROLE + " LIKE " + "\"tool\"" + " AND "
+                        + mInterventionID + " == " + ZeroContract.InterventionParameters.FK_INTERVENTION,
+                null,
+                ZeroContract.InterventionParameters.NAME);
+        return (curs);
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+    // |========================================|
+    // |============                ============|
+    // |=========== OLD WAY TRACKING ===========|
+    // |============                ============|
+    // |========================================|
+
 
     private void createProcedureChooser()
     {
@@ -364,7 +533,6 @@ public class TrackingActivity extends UpdatableActivity implements TrackingListe
         if (!PermissionManager.GPSPermissions(this, this))
             return;
         mLocationManager.requestLocationUpdates(mLocationProvider, interval, 0, mTrackingListener);
-        mRunning = true;
     }
 
     private void stopTracking()
@@ -372,7 +540,6 @@ public class TrackingActivity extends UpdatableActivity implements TrackingListe
         if (!PermissionManager.GPSPermissions(this, this))
             return;
         mLocationManager.removeUpdates(mTrackingListener);
-        mRunning = false;
     }
 
     private void addCrumb(String type) {

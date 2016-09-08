@@ -2,6 +2,7 @@ package ekylibre.zero.home;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.content.BroadcastReceiver;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
@@ -31,6 +32,7 @@ import ekylibre.APICaller.Intervention;
 import ekylibre.database.ZeroContract;
 import ekylibre.util.AccountTool;
 import ekylibre.util.DateConstant;
+import ekylibre.util.UpdatableClass;
 import ekylibre.zero.BuildConfig;
 import ekylibre.zero.R;
 import ekylibre.zero.SettingsActivity;
@@ -43,7 +45,8 @@ import ekylibre.zero.tracking.TrackingActivity;
  * ekylibre.zero for zero-android     *
  *************************************/
 
-public class TodoListActivity {
+public class TodoListActivity extends UpdatableClass
+{
     private final int CALENDAR_ID = 0;
     private final int TITLE = 1;
     private final int DESCRIPTION = 2;
@@ -66,16 +69,18 @@ public class TodoListActivity {
 
     /*
     ** This activity display all the tasks of the current day requesting the actual phone calendar
-    ** Events are stock in ArrayAdapter between today 00h00 tomorrow 00h00
+    ** AND ekylibre calendar
+    ** Events are stock in ArrayAdapter between today 00h00 & tomorrow 00h00
     ** CONSTANTS are use to get the part of data you want from adapter
     */
 
-    public TodoListActivity(final Context context, Activity activity, ListView foundListView) {
+    public TodoListActivity(final Context context, final Activity activity, ListView foundListView) {
         this.todoListView = foundListView;
         this.context = context;
         this.activity = activity;
 
-        List<TodoItem> todolist = createList();
+        startListening(context);
+        final List<TodoItem> todolist = createList();
 
         if (todolist == null)
             return;
@@ -91,6 +96,8 @@ public class TodoListActivity {
                     @Override
                     public void onItemClick(AdapterView<?> adapterView, View view, int position, long id)
                     {
+                        if (isSync)
+                            return;
                         TodoItem item = (TodoItem) adapterView.getItemAtPosition(position);
                         Log.d(TAG, item.getEvent());
                         Intent intent = new Intent(context, TrackingActivity.class);
