@@ -47,6 +47,14 @@ import ekylibre.util.UpdatableActivity;
 ** - Some management activity
 **
 ** You can access all actions activity from the floating button
+**
+** //!\\ WARNING //!\\ You must block all actions during sync by using boolean isSync of super class
+**                 __Example__ : private void foo()
+**                               {
+**                                    if (super.isSync)
+**                                       return ;
+**                                    // do what you want
+**                               }
 */
 public class MainActivity extends UpdatableActivity
         implements NavigationView.OnNavigationItemSelectedListener
@@ -60,6 +68,7 @@ public class MainActivity extends UpdatableActivity
     private ProgressBar     mPrgressBar;
     private boolean         firstPass;
     private final String    TAG = "MainActivity";
+    private TodoListActivity todoListActivity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -179,7 +188,7 @@ public class MainActivity extends UpdatableActivity
     */
     private void    setTodolist()
     {
-        TodoListActivity todo = new TodoListActivity(MainActivity.this, this,
+        todoListActivity = new TodoListActivity(MainActivity.this, this,
                 (ListView)findViewById(R.id.listView));
     }
 
@@ -322,4 +331,12 @@ public class MainActivity extends UpdatableActivity
         mPrgressBar.setScaleX((float) 0.15);
         mPrgressBar.setScaleY((float) 0.15);
     }
+
+    @Override
+    protected void onPause()
+    {
+        super.onPause();
+        todoListActivity.onDestroy(this);
+    }
+
 }
