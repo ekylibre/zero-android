@@ -318,6 +318,7 @@ public class MainActivity extends UpdatableActivity
     @Override
     protected void onSyncFinish()
     {
+        todoListActivity.onSyncFinish();
         setTodolist();
         mPrgressBar.setVisibility(View.GONE);
         Toast toast = Toast.makeText(getApplicationContext(), R.string.data_synced, Toast.LENGTH_SHORT);
@@ -327,6 +328,7 @@ public class MainActivity extends UpdatableActivity
     @Override
     protected void onSyncStart()
     {
+        todoListActivity.onSyncStart();
         mPrgressBar.setVisibility(View.VISIBLE);
         mPrgressBar.setScaleX((float) 0.15);
         mPrgressBar.setScaleY((float) 0.15);
@@ -336,7 +338,11 @@ public class MainActivity extends UpdatableActivity
     protected void onPause()
     {
         super.onPause();
-        todoListActivity.onDestroy(this);
+    }
+    @Override
+    protected void onResume()
+    {
+        super.onResume();
     }
 
 }

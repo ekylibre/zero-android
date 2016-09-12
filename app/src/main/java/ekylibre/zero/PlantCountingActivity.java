@@ -27,10 +27,14 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Adapter;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Spinner;
 import android.widget.TableLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -52,15 +56,15 @@ public class PlantCountingActivity extends UpdatableActivity  {
     private LinearLayout mLayout;
     private EditText mObservationEditText;
     private TextView mAverageText;
-    private TextView mPlantName;
-    private TextView mAbaque;
-    private TextView mDensityText;
+    private Spinner plantChooser;
+    private Spinner abacusChooser;
+    private Spinner densityChooser;
+    private boolean abacusActivated = false;
+    private boolean densityActivated = false;
     private ImageView mIndicator;
     private List<EditText> mListValues = new ArrayList();
     private ListIterator<EditText> mListIteratorValues;
-    private AlertDialog.Builder mPlantChooser = null;
-    private AlertDialog.Builder mAbacusChooser = null;
-    private AlertDialog.Builder mDensityChooser = null;
+
     private Drawable mGreen;
     private Drawable mOrange;
     private Drawable mRed;
@@ -80,7 +84,7 @@ public class PlantCountingActivity extends UpdatableActivity  {
     private final boolean germination = true;
     private boolean       currentContext = false;
 
-    private CharSequence[] mPlantID;
+    private int[] mPlantID;
     private int[]          mPlantEK_IDTab;
     private CharSequence[] mPlantNameTab;
     private CharSequence[] mAbaqueTab;
@@ -119,16 +123,15 @@ public class PlantCountingActivity extends UpdatableActivity  {
             return;
         }
     }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.plant_counting);
 
         mLayout = (LinearLayout) findViewById(R.id.Valueslayout);
-        mPlantName = (Button) findViewById(R.id.plantName);
-        mAbaque = (Button) findViewById(R.id.Abaque);
-        mDensityText = (Button) findViewById(R.id.densityValue);
+        plantChooser = (Spinner) findViewById(R.id.plantName);
+        abacusChooser = (Spinner) findViewById(R.id.Abaque);
+        densityChooser = (Spinner) findViewById(R.id.densityValue);
         mAverageText = (TextView) findViewById(R.id.textAverage);
         mPlantCountValue = (TextView) findViewById(R.id.plant_count_value);
         mAverageText.setText("");
@@ -165,9 +168,9 @@ public class PlantCountingActivity extends UpdatableActivity  {
         Log.d(TAG, "plant name count :" + cursorPlantName.getCount());
         if (cursorPlantName != null && cursorPlantId != null) {
             Log.d(TAG, "Data exists !");
-            mPlantNameTab = new CharSequence[cursorPlantName.getCount()];
-            mPlantEK_IDTab = new int[cursorPlantName.getCount()];
-            mPlantID = new CharSequence[cursorPlantId.getCount()];
+            mPlantNameTab = new CharSequence[cursorPlantName.getCount() + 1];
+            mPlantEK_IDTab = new int[cursorPlantName.getCount() + 1];
+            mPlantID = new int[cursorPlantId.getCount() + 1];
 
             fillPlantName(cursorPlantName);
             fillPlantId(cursorPlantId);
@@ -197,9 +200,10 @@ public class PlantCountingActivity extends UpdatableActivity  {
     }
 
     private void fillAbacusTab(Cursor cursorAbacus) {
-        int itName = 0;
+        int itName = 1;
 
-        mAbaqueTab = new CharSequence[cursorAbacus.getCount()];
+        mAbaqueTab = new CharSequence[cursorAbacus.getCount() + 1];
+        mAbaqueTab[0] = getResources().getString(R.string.select_abacus);
         while (cursorAbacus.moveToNext()) {
             Log.d("zero", "name : " + cursorAbacus.getString(0));
             mAbaqueTab[itName] = cursorAbacus.getString(0);
@@ -221,10 +225,12 @@ public class PlantCountingActivity extends UpdatableActivity  {
     }
 
     private void fillDensityTab(Cursor cursorDensity, String unit) {
-        int itName = 0;
+        int itName = 1;
 
-        mDensityTab = new CharSequence[cursorDensity.getCount()];
-        mDensityTabID = new int[cursorDensity.getCount()];
+        mDensityTab = new CharSequence[cursorDensity.getCount() + 1];
+        mDensityTabID = new int[cursorDensity.getCount() + 1];
+        mDensityTab[0] = getResources().getString(R.string.select_density);
+        mDensityTabID[0] = 0;
         while (cursorDensity.moveToNext())
         {
             Log.d("zero", "name : " + cursorDensity.getString(0));
@@ -235,18 +241,21 @@ public class PlantCountingActivity extends UpdatableActivity  {
     }
 
     private void fillPlantId(Cursor cursorPlantId) {
-        int itId = 0;
+        int itId = 1;
 
+        mPlantID[0] = 0;
         while (cursorPlantId.moveToNext()) {
             Log.d(TAG, "id : " + cursorPlantId.getString(0));
-            mPlantID[itId] = cursorPlantId.getString(0);
+            mPlantID[itId] = cursorPlantId.getInt(0);
             itId++;
         }
     }
 
     private void fillPlantName(Cursor cursorPlantName) {
-        int itName = 0;
+        int itName = 1;
 
+        mPlantNameTab[0] = getResources().getString(R.string.select_plant);
+        mPlantEK_IDTab[0] = 0;
         while (cursorPlantName.moveToNext()) {
             Log.d(TAG, "name : " + cursorPlantName.getString(0));
             mPlantNameTab[itName] = cursorPlantName.getString(0);
@@ -260,7 +269,7 @@ public class PlantCountingActivity extends UpdatableActivity  {
         Cursor cursorActivity = queryActivity();
         Cursor cursorAbacus = queryAbacus(cursorActivity);
 
-        Log.d(TAG, "valeur récupérée : " + mPlantName.getText());
+        //Log.d(TAG, "valeur récupérée : " + mPlantName.getText());
         Log.d(TAG, "Valeur du activityID : " + cursorActivity.getString(0));
         Log.d("zero", "beginning abaque");
 
@@ -286,7 +295,7 @@ public class PlantCountingActivity extends UpdatableActivity  {
         cursorDensityUnit.moveToFirst();
         unit = cursorDensityUnit.getString(0);
 
-        Log.d(TAG, "valeur récupérée : " + mPlantName.getText());
+        //Log.d(TAG, "valeur récupérée : " + mPlantName.getText());
         Log.d("zero", "beginning abaque");
 
         if (cursorDensity != null) {
@@ -323,6 +332,7 @@ public class PlantCountingActivity extends UpdatableActivity  {
 
         if (mPlantsCount == 0 || mGerminationPercentage == 0)
         {
+            mPlantCountValue.setText("0");
             mIndicator.setBackground(mGrey);
             return;
         }
@@ -357,58 +367,93 @@ public class PlantCountingActivity extends UpdatableActivity  {
         }, delay);
     }
 
+    private void resetSelector(String baseMessage, Spinner chooser)
+    {
+        CharSequence[] tab = new CharSequence[1];
+        tab[0] = baseMessage;
+        ArrayAdapter<CharSequence> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, tab);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        chooser.setAdapter(adapter);
+    }
+
     private void createPlantChooser() {
-        mPlantChooser = new AlertDialog.Builder(this)
-                .setTitle(getResources().getString(R.string.chose_plant))
-                .setItems(mPlantNameTab, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        mPlantName.setText(mPlantNameTab[which]);
-                        mPlantEK_ID = mPlantEK_IDTab[which];
-                        setAbacusList();
+        ArrayAdapter<CharSequence> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, mPlantNameTab);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        plantChooser.setAdapter(adapter);
+        plantChooser.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
+        {
+            @Override
+            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id)
+            {
+                resetSelector(getResources().getString(R.string.select_abacus), abacusChooser);
+                resetSelector(getResources().getString(R.string.select_density), densityChooser);
+                if (id == 0)
+                    return;
+                mPlantEK_ID = mPlantEK_IDTab[(int)id];
+                setAbacusList();
 
-                        mPlantsCount = 0;
-                        mGerminationPercentage = 0;
-                        selectedPlantDensityAbacusItemID = 0;
-                        if (mAbacusChooser != null)
-                            mAbaque.setText(getResources().getString(R.string.select_abacus));
-                        if (mDensityChooser != null)
-                            mDensityText.setText(getResources().getString(R.string.advocated_density));
-                        mDensityChooser = null;
+                mPlantsCount = 0;
+                mGerminationPercentage = 0;
+                selectedPlantDensityAbacusItemID = 0;
 
-                    }
-                });
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parentView)
+            {
+            }
+        });
     }
 
-    private void createAbacusChooser() {
-        mAbacusChooser = new AlertDialog.Builder(this)
-                .setTitle(getResources().getString(R.string.chose_abacus))
-                .setNegativeButton(android.R.string.cancel, null)
-                .setItems(mAbaqueTab, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        mAbaque.setText(mAbaqueTab[which]);
-                        setDensityList(mAbaqueTab[which]);
-                        setGerminationPercentage(mAbaqueTab[which]);
-                        mPlantsCount = 0;
-                        selectedPlantDensityAbacusItemID = 0;
-                        if (mDensityChooser != null)
-                            mDensityText.setText(getResources().getString(R.string.advocated_density));
-                    }
-                });
+    private void createAbacusChooser()
+    {
+        ArrayAdapter<CharSequence> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, mAbaqueTab);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        abacusChooser.setAdapter(adapter);
+        abacusChooser.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
+        {
+            @Override
+            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id)
+            {
+                resetSelector(getResources().getString(R.string.select_density), densityChooser);
+                if (id == 0)
+                    return;
+                setDensityList(mAbaqueTab[(int)id]);
+                setGerminationPercentage(mAbaqueTab[(int)id]);
+                mPlantsCount = 0;
+                selectedPlantDensityAbacusItemID = 0;
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parentView)
+            {
+            }
+        });
     }
 
-    private void createDensityChooser() {
-        mDensityChooser = new AlertDialog.Builder(this)
-                .setTitle(getResources().getString(R.string.chose_density))
-                .setNegativeButton(android.R.string.cancel, null)
-                .setItems(mDensityTab, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        mDensityText.setText(mDensityTab[which]);
-                        setPlantsCount(mDensityTabID[which]);
-                    }
-                });
+    private void createDensityChooser()
+    {
+
+        ArrayAdapter<CharSequence> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, mDensityTab);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        densityChooser.setAdapter(adapter);
+        densityChooser.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
+        {
+            @Override
+            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id)
+            {
+                if (id == 0)
+                {
+                    return;
+                }
+                setPlantsCount(mDensityTabID[(int)id]);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parentView)
+            {
+            }
+        });
     }
 
     private Cursor queryPlantId() {
@@ -577,24 +622,6 @@ public class PlantCountingActivity extends UpdatableActivity  {
             return (null);
         cursorID.moveToLast();
         return (cursorID);
-    }
-
-    public void chosePlant(View view) {
-        if (mPlantChooser == null || super.isSync)
-            return;
-        mPlantChooser.show();
-    }
-
-    public void choseAbaque(View view) {
-        if (mAbacusChooser == null || super.isSync)
-            return;
-        mAbacusChooser.show();
-    }
-
-    public void choseDensity(View view) {
-        if (mDensityChooser == null || super.isSync)
-            return;
-        mDensityChooser.show();
     }
 
     public void savePlantCounting(View v)

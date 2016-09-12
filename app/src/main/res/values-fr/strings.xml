@@ -84,7 +84,7 @@
     <string name="unity_per_hectare">Unité par hectare</string>
     <string name="unity_per_square_meter">Unité par mètre carré</string>
     <string name="pref_autoSync">Synchronisation automatique</string>
-    <string name="pref_autoSync_summary">BETA | Autoriser l\'application à synchroniser automatiquement vos donées</string>
+    <string name="pref_autoSync_summary">BETA | Autoriser l\'application à synchroniser automatiquement vos données</string>
     <string name="title_activity_capture">Capture</string>
     <string name="title_activity_camera">Caméra</string>
     <string name="navigation_drawer_open">Ouvre le menu flottant</string>
@@ -94,6 +94,6 @@
     <string name="pref_syncCalendar">Synchronisation du calendrier local</string>
     <string name="pref_syncCalendar_summary">Autoriser l\'application à synchroniser le calendrier du téléphone</string>
     <string name="pref_GPS">Activer le GPS</string>
-    <string name="pref_GPS_summary">Laisser Zero utiliser vos donées de localisation</string>
+    <string name="pref_GPS_summary">Laisser Zero utiliser vos données de localisation</string>
     <string name="no_event_today">Il n\'y a pas d\'événement aujourd\'hui</string>
 </resources>

@@ -17,6 +17,7 @@
         android:layout_marginTop="5dp"
         android:layout_marginBottom="5dp"
         android:paddingBottom="2dp"
+        android:scrollbarDefaultDelayBeforeFade="@android:integer/config_longAnimTime"
         >
 
         <RelativeLayout
@@ -143,7 +144,7 @@
             android:visibility="gone"
             android:drawableLeft="@android:drawable/ic_menu_info_details"
             android:text="@string/scan_code"
-            android:background="@drawable/black_button"
+            android:background="@drawable/basic_button"
             android:textColor="@color/ultraLight_grey"
             android:onClick="scanCode"
             android:layout_marginBottom="10dp"/>
@@ -155,7 +156,7 @@
             android:visibility="gone"
             android:drawableLeft="@drawable/ic_map"
             android:text="@string/open_map"
-            android:background="@drawable/black_button"
+            android:background="@drawable/basic_button"
             android:textColor="@color/ultraLight_grey"
             android:onClick="openMap"
             android:layout_marginBottom="10dp"/>
@@ -167,7 +168,7 @@
             android:drawableLeft="@android:drawable/btn_star_big_off"
             android:visibility="gone"
             android:text="@string/precision_mode"
-            android:background="@drawable/black_button"
+            android:background="@drawable/basic_button"
             android:textColor="@color/ultraLight_grey"
             android:onClick="startPrecisionMode"
             android:layout_marginBottom="10dp"/>
@@ -178,7 +179,7 @@
             android:drawableLeft="@android:drawable/btn_star_big_on"
             android:visibility="gone"
             android:text="@string/precision_mode"
-            android:background="@drawable/black_button"
+            android:background="@drawable/basic_button"
             android:textColor="@color/ultraLight_grey"
             android:onClick="stopPrecisionMode"
             android:layout_marginBottom="10dp"/>
@@ -187,10 +188,10 @@
             android:layout_gravity="center_horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:drawableLeft="@android:drawable/ic_input_add"
+            android:drawableLeft="@drawable/ic_add_white"
             android:text="@string/start"
             android:onClick="startIntervention"
-            android:background="@drawable/black_button"
+            android:background="@drawable/basic_button"
             android:textColor="@color/ultraLight_grey"
             />
         <Button
@@ -200,7 +201,7 @@
             android:drawableLeft="@android:drawable/ic_input_delete"
             android:visibility="gone"
             android:text="@string/stop"
-            android:background="@drawable/black_button"
+            android:background="@drawable/basic_button"
             android:textColor="@color/ultraLight_grey"
             android:onClick="stopIntervention"
             android:layout_marginBottom="10dp"/>
@@ -211,7 +212,7 @@
             android:drawableLeft="@android:drawable/ic_media_play"
             android:visibility="gone"
             android:text="@string/resume"
-            android:background="@drawable/black_button"
+            android:background="@drawable/basic_button"
             android:textColor="@color/ultraLight_grey"
             android:onClick="resumeIntervention"
             android:layout_marginBottom="10dp"/>
@@ -222,7 +223,7 @@
             android:drawableLeft="@android:drawable/ic_media_pause"
             android:visibility="gone"
             android:text="@string/pause"
-            android:background="@drawable/black_button"
+            android:background="@drawable/basic_button"
             android:textColor="@color/ultraLight_grey"
             android:onClick="pauseIntervention"
             android:layout_marginBottom="10dp"/>
@@ -234,7 +235,7 @@
             android:drawableLeft="@android:drawable/ic_popup_sync"
             android:text="@string/sync"
             android:onClick="syncCrumbs"
-            android:background="@drawable/black_button"
+            android:background="@drawable/basic_button"
             android:textColor="@color/ultraLight_grey"
             android:visibility="gone"
             android:layout_marginBottom="10dp"/>
