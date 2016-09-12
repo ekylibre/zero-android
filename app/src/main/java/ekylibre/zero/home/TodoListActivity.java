@@ -74,12 +74,12 @@ public class TodoListActivity extends UpdatableClass
     ** CONSTANTS are use to get the part of data you want from adapter
     */
 
-    public TodoListActivity(final Context context, final Activity activity, ListView foundListView) {
+    public TodoListActivity(final Context context, final Activity activity, ListView foundListView)
+    {
         this.todoListView = foundListView;
         this.context = context;
         this.activity = activity;
 
-        startListening(context);
         final List<TodoItem> todolist = createList();
 
         if (todolist == null)

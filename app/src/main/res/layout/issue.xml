@@ -100,7 +100,7 @@
                 android:layout_gravity="center_horizontal"
                 android:onClick="takePicture"
                 android:textColor="@color/ultraLight_grey"
-                android:background="@drawable/black_button"
+                android:background="@drawable/basic_button"
                 android:layout_marginTop="10dp"/>
 
             <ImageView

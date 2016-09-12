@@ -28,6 +28,7 @@ import android.widget.Chronometer;
 import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.TableLayout;
 import android.widget.TextView;
 
@@ -72,6 +73,7 @@ public class TrackingActivity extends UpdatableActivity implements TrackingListe
     private IntentIntegrator mScanIntegrator;
     public static final String   _interventionID = "intervention_id";
     private RelativeLayout infoLayout;
+    private ScrollView infoScroll;
 
     private LocationManager mLocationManager;
     private NotificationManager mNotificationManager;
@@ -131,6 +133,7 @@ public class TrackingActivity extends UpdatableActivity implements TrackingListe
         mPrecisionModeStartButton = (Button)     findViewById(R.id.start_precision_mode_button);
         mPrecisionModeStopButton  = (Button)     findViewById(R.id.stop_precision_mode_button);
         infoLayout                = (RelativeLayout) findViewById(R.id.infoLayout);
+        infoScroll                = (ScrollView) findViewById(R.id.interventionInfo);
 
         // Acquire a reference to the system Location Manager
         mTrackingListener = new TrackingListener(this);
@@ -329,6 +332,7 @@ public class TrackingActivity extends UpdatableActivity implements TrackingListe
 
     private void createProcedureChooser()
     {
+        infoScroll.setVisibility(View.GONE);
         mProcedureChooser = new AlertDialog.Builder(this)
                 .setTitle(R.string.procedure_nature)
                 .setNegativeButton(android.R.string.cancel, null)
