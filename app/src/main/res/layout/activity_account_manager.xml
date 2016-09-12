@@ -12,14 +12,17 @@
     <Button
         android:layout_width="240dp"
         android:layout_height="wrap_content"
+        android:background="@drawable/basic_button"
         android:text="@string/add_account"
         android:id="@+id/add_account_button"
         android:layout_gravity="bottom"
         android:onClick="addAccount"
         android:drawableLeft="@drawable/account_add"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:textColor="#000000"
-        android:textStyle="bold" />
+        android:textColor="@color/ultraLight_grey"
+        android:textStyle="bold"
+        android:layout_marginBottom="16dp"
+        />
 
     <include
         layout="@layout/account_list"

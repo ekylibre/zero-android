@@ -632,13 +632,13 @@ public class PlantCountingActivity extends UpdatableActivity  {
         {
             int id = insertNewValuesPlantCounting();
             pushNewValue(id);
-            Toast toast = Toast.makeText(getApplicationContext(), "Plant Counting saved", Toast.LENGTH_SHORT);
+            Toast toast = Toast.makeText(getApplicationContext(), getString(R.string.plant_counting_saved), Toast.LENGTH_SHORT);
             toast.show();
             this.finish();
         }
         else
         {
-            Toast toast = Toast.makeText(getApplicationContext(), "Cannot save Plant counting, please finish your counting", Toast.LENGTH_SHORT);
+            Toast toast = Toast.makeText(getApplicationContext(), getString(R.string.plant_counting_cannot_save), Toast.LENGTH_SHORT);
             toast.show();
         }
 
@@ -771,8 +771,8 @@ public class PlantCountingActivity extends UpdatableActivity  {
 		
 		if (!TextUtils.isEmpty(editText.getText()))
 		    {
-			total += Float.parseFloat(txt);
-			nbvalues++;
+                total += Float.parseFloat(txt);
+                nbvalues++;
 		    }
 	    }
         if (nbvalues == 0)
