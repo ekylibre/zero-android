@@ -1,6 +1,7 @@
 package ekylibre.zero.home;
 
 import android.content.Context;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -73,7 +74,7 @@ public class TodoAdapter extends ArrayAdapter<TodoItem>
             viewHolder.hours.setVisibility(View.GONE);
             viewHolder.minutes.setVisibility(View.GONE);
             viewHolder.desc.setVisibility(View.GONE);
-            viewHolder.layout.setBackground(null);
+            viewHolder.layout.setBackground(getContext().getResources().getDrawable(R.color.invisible));
             viewHolder.layout.setFocusable(true);
             viewHolder.message.setVisibility(View.GONE);
         }
@@ -84,7 +85,7 @@ public class TodoAdapter extends ArrayAdapter<TodoItem>
             viewHolder.hours.setVisibility(View.GONE);
             viewHolder.minutes.setVisibility(View.GONE);
             viewHolder.desc.setVisibility(View.GONE);
-            viewHolder.layout.setBackground(null);
+            viewHolder.layout.setBackground(getContext().getResources().getDrawable(R.color.invisible));
             viewHolder.layout.setFocusable(true);
             viewHolder.message.setVisibility(View.VISIBLE);
             viewHolder.message.setText(item.getMessageString());

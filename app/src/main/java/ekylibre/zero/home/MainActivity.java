@@ -229,6 +229,8 @@ public class MainActivity extends UpdatableActivity
         int     id = item.getItemId();
         Intent  intent;
 
+        if (super.isSync)
+            return (true);
         if (id == R.id.action_settings)
         {
             intent = new Intent(this, SettingsActivity.class);
@@ -247,13 +249,12 @@ public class MainActivity extends UpdatableActivity
     public boolean onNavigationItemSelected(MenuItem item)
     {
         if (super.isSync)
-            return (true);
+            return (false);
         int id = item.getItemId();
 
         if (id == R.id.nav_tracking)
         {
-            Intent intent = new Intent(this, TrackingActivity.class);
-            startActivity(intent);
+            launchIntervention(null);
         }
         else if (id == R.id.nav_issue)
         {
@@ -282,7 +283,7 @@ public class MainActivity extends UpdatableActivity
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
-        return (true);
+        return (false);
     }
 
     public void launchIntervention(View v)

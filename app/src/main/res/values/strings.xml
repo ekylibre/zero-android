@@ -89,11 +89,13 @@
     <string name="unity_per_square_meter">Unity per square meter</string>
     <string name="pref_autoSync">Automatic synchronization</string>
     <string name="pref_autoSync_summary">BETA | Allow application to automatically synchronize your data</string>
-    <string name="title_activity_maps">Map</string>
+    <string name="title_activity_maps" translatable="false">Map</string>
     <string name="open_map">Open map</string>
     <string name="pref_syncCalendar">Synchronize local calendar</string>
     <string name="pref_syncCalendar_summary">Allow application to automatically synchronize your phone calendar</string>
     <string name="pref_GPS">Enable GPS</string>
     <string name="pref_GPS_summary">Let Zero use your location information</string>
     <string name="no_event_today">There is no event today</string>
+    <string name="plant_counting_saved">Plant Counting saved</string>
+    <string name="plant_counting_cannot_save">Cannot save Plant counting, please finish your counting</string>
 </resources>

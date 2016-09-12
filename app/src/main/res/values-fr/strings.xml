@@ -96,4 +96,6 @@
     <string name="pref_GPS">Activer le GPS</string>
     <string name="pref_GPS_summary">Laisser Zero utiliser vos données de localisation</string>
     <string name="no_event_today">Il n\'y a pas d\'événement aujourd\'hui</string>
+    <string name="plant_counting_saved">Plant Counting sauvegardé</string>
+    <string name="plant_counting_cannot_save">Impossible de sauvegarder le comptage, finissez le avant de continuer</string>
 </resources>

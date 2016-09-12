@@ -48,10 +48,12 @@ public class AccountManagerActivity extends AppCompatActivity
         ListView accountListView = (ListView)findViewById(R.id.account_list);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setHomeButtonEnabled(true);
-        getSupportActionBar().setTitle(R.string.accountManager);
-
+        if (getSupportActionBar() != null)
+        {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setHomeButtonEnabled(true);
+            getSupportActionBar().setTitle(R.string.accountManager);
+        }
         listAccount = AccountManager.get(this).getAccountsByType(SyncAdapter.ACCOUNT_TYPE);
 
         accountAdapter = new AccountAdapter(this, listAccount);

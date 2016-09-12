@@ -12,10 +12,10 @@
         android:layout_height="match_parent"
         android:id="@+id/listView"
         android:layout_gravity="center_horizontal"
-        android:dividerHeight="14dp"
+        android:dividerHeight="10dp"
         android:divider="@color/invisible"
-        android:paddingRight="8dp"
-        android:paddingLeft="8dp"/>
+        android:layout_marginStart="9dp"
+        android:layout_marginEnd="9dp"/>
 
     <Button
         android:layout_width="300dp"
