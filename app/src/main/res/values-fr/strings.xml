@@ -54,7 +54,7 @@
     <string name="severity">Gravité</string>
     <string name="sign_in">Se connecter</string>
     <string name="start">Commencer</string>
-    <string name="stop">Arrêter</string>
+    <string name="stop">Stop</string>
     <string name="sync">Synchroniser</string>
     <string name="sync_all">Tout synchroniser</string>
     <string name="test_demo">Tester la démonstration</string>
@@ -98,4 +98,5 @@
     <string name="no_event_today">Il n\'y a pas d\'événement aujourd\'hui</string>
     <string name="plant_counting_saved">Plant Counting sauvegardé</string>
     <string name="plant_counting_cannot_save">Impossible de sauvegarder le comptage, finissez le avant de continuer</string>
+    <string name="diff_stuff">Matériel différent</string>
 </resources>

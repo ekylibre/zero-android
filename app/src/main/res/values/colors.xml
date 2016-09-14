@@ -11,6 +11,7 @@
     <color name="transparent">#00000000</color>
     <color name="invisible">#00000000</color>
     <color name="basic_green">#66A65E</color>
+    <color name="gradient_green">#5d9755</color>
     <color name="brand_secondary">#66a65e</color>
     <color name="brand_secondary_dark">#4a7945</color>
     <color name="basic_red">#CC2525</color>

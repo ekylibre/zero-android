@@ -9,7 +9,8 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="250dp"
+        android:layout_height="0dp"
+        android:layout_weight="0.5"
         android:id="@+id/interventionInfo"
         android:background="@drawable/white_square"
         android:layout_marginEnd="10dp"
@@ -25,7 +26,6 @@
             android:layout_height="wrap_content"
             android:id="@+id/infoLayout"
             android:layout_marginTop="10dp"
-            android:layout_marginBottom="10dp"
             android:layout_marginRight="40dp"
             android:layout_marginLeft="40dp"
             >
@@ -33,121 +33,20 @@
         </RelativeLayout>
     </ScrollView>
 
-    <TextView
-        android:id="@+id/procedure_nature"
-        android:visibility="invisible"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"/>
 
-    <Chronometer
-        android:id="@+id/master_chrono"
-        android:visibility="invisible"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:textSize="@dimen/chrono_font_size"
-        android:gravity="center"/>
 
-    <Chronometer
-        android:id="@+id/precision_mode_chrono"
-        android:visibility="invisible"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:textSize="@dimen/small_chrono_font_size"
-        android:gravity="center"/>
-    <HorizontalScrollView
-        android:id="@+id/details"
-        android:visibility="gone"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content">
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content">
-            <LinearLayout
-                android:orientation="vertical"
-                android:paddingLeft="16dp"
-                android:paddingRight="16dp"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content">
-                <TextView
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/accuracy"/>
-                <TextView
-                    android:id="@+id/accuracy"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"/>
-            </LinearLayout>
-            <LinearLayout
-                android:orientation="vertical"
-                android:paddingLeft="16dp"
-                android:paddingRight="16dp"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content">
-                <TextView
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/latitude"/>
-                <TextView
-                    android:id="@+id/latitude"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"/>
-            </LinearLayout>
-            <LinearLayout
-                android:orientation="vertical"
-                android:paddingLeft="16dp"
-                android:paddingRight="16dp"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content">
-                <TextView
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/longitude"/>
-                <TextView
-                    android:id="@+id/longitude"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"/>
-            </LinearLayout>
-            <LinearLayout
-                android:orientation="vertical"
-                android:paddingLeft="16dp"
-                android:paddingRight="16dp"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content">
-                <TextView
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/count"/>
-                <TextView
-                    android:id="@+id/crumbs_count"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"/>
-            </LinearLayout>
-        </LinearLayout>
-    </HorizontalScrollView>
 
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.4"
         android:gravity="bottom"
         android:layout_marginBottom="3dp"
         android:layout_marginTop="@dimen/activity_vertical_margin"
         android:layout_marginLeft="@dimen/activity_horizontal_margin"
         android:layout_marginRight="@dimen/activity_horizontal_margin">
 
-        <Button
-            android:id="@+id/scan_code_button"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:visibility="gone"
-            android:drawableLeft="@android:drawable/ic_menu_info_details"
-            android:text="@string/scan_code"
-            android:background="@drawable/basic_button"
-            android:textColor="@color/ultraLight_grey"
-            android:onClick="scanCode"
-            android:layout_marginBottom="10dp"/>
 
         <Button
             android:id="@+id/map_button"
@@ -161,28 +60,8 @@
             android:onClick="openMap"
             android:layout_marginBottom="10dp"/>
 
-        <Button
-            android:id="@+id/start_precision_mode_button"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:drawableLeft="@android:drawable/btn_star_big_off"
-            android:visibility="gone"
-            android:text="@string/precision_mode"
-            android:background="@drawable/basic_button"
-            android:textColor="@color/ultraLight_grey"
-            android:onClick="startPrecisionMode"
-            android:layout_marginBottom="10dp"/>
-        <Button
-            android:id="@+id/stop_precision_mode_button"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:drawableLeft="@android:drawable/btn_star_big_on"
-            android:visibility="gone"
-            android:text="@string/precision_mode"
-            android:background="@drawable/basic_button"
-            android:textColor="@color/ultraLight_grey"
-            android:onClick="stopPrecisionMode"
-            android:layout_marginBottom="10dp"/>
+
+
         <Button
             android:id="@+id/start_intervention_button"
             android:layout_gravity="center_horizontal"
@@ -193,53 +72,149 @@
             android:onClick="startIntervention"
             android:background="@drawable/basic_button"
             android:textColor="@color/ultraLight_grey"
+
+
+
+            android:visibility="gone"
             />
-        <Button
-            android:id="@+id/stop_intervention_button"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:drawableLeft="@android:drawable/ic_input_delete"
-            android:visibility="gone"
-            android:text="@string/stop"
-            android:background="@drawable/basic_button"
-            android:textColor="@color/ultraLight_grey"
-            android:onClick="stopIntervention"
-            android:layout_marginBottom="10dp"/>
-        <Button
-            android:id="@+id/resume_intervention_button"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:drawableLeft="@android:drawable/ic_media_play"
-            android:visibility="gone"
-            android:text="@string/resume"
-            android:background="@drawable/basic_button"
-            android:textColor="@color/ultraLight_grey"
-            android:onClick="resumeIntervention"
-            android:layout_marginBottom="10dp"/>
-        <Button
-            android:id="@+id/pause_intervention_button"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:drawableLeft="@android:drawable/ic_media_pause"
-            android:visibility="gone"
-            android:text="@string/pause"
-            android:background="@drawable/basic_button"
-            android:textColor="@color/ultraLight_grey"
-            android:onClick="pauseIntervention"
-            android:layout_marginBottom="10dp"/>
 
-        <Button
-            android:id="@+id/sync_button"
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="90dp"
+            android:layout_gravity="center_horizontal">
+            <FrameLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.30"
+                >
+                <Button
+                    android:id="@+id/preparation"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/button_disabled"
+                    android:text="Prépa"
+                    android:textStyle="bold"
+                    android:textColor="@color/dark_grey"
+                    android:textSize="20sp"
+                    android:layout_marginStart="0dp"
+                    android:onClick="newPhase"
+                    android:paddingBottom="40dp"/>
+                <TextView
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:text="00:00"
+                    android:textColor="@android:color/black"
+                    android:textSize="20sp"
+                    android:gravity="center"
+                    android:layout_gravity="bottom"
+                    />
+
+
+
+            </FrameLayout>
+
+            <Button
+                android:id="@+id/active_preparation"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.30"
+                android:background="@drawable/state_enabled"
+                android:paddingTop="15dp"
+                android:text="Prépa"
+                android:textStyle="bold"
+                android:textColor="@color/ultraLight_grey"
+                android:textSize="20sp"
+                android:layout_marginStart="0dp"
+                android:clickable="false"
+                android:visibility="gone"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                />
+            <Button
+                android:id="@+id/traveling"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.30"
+                android:background="@drawable/button_disabled"
+                android:paddingTop="15dp"
+                android:text="Dépl"
+                android:textStyle="bold"
+                android:textColor="@color/dark_grey"
+                android:textSize="20sp"
+                android:layout_marginStart="10dp"
+                android:onClick="newPhase"
+                />
+            <Button
+                android:id="@+id/active_traveling"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.30"
+                android:background="@drawable/state_enabled"
+                android:paddingTop="15dp"
+                android:text="Dépl"
+                android:textStyle="bold"
+                android:textColor="@color/ultraLight_grey"
+                android:textSize="20sp"
+                android:layout_marginStart="10dp"
+                android:clickable="false"
+                android:visibility="gone"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                />
+            <Button
+                android:id="@+id/intervention"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.30"
+                android:background="@drawable/button_disabled"
+                android:paddingTop="15dp"
+                android:text="Interv"
+                android:textStyle="bold"
+                android:textColor="@color/dark_grey"
+                android:textSize="20sp"
+                android:layout_marginStart="10dp"
+                android:onClick="newPhase"
+                />
+
+
+            <Button
+                android:id="@+id/active_intervention"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.30"
+                android:background="@drawable/state_enabled"
+                android:paddingTop="15dp"
+                android:text="Interv"
+                android:textStyle="bold"
+                android:textColor="@color/ultraLight_grey"
+                android:textSize="20sp"
+                android:layout_marginStart="10dp"
+                android:clickable="false"
+                android:visibility="gone"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                />
+
+        </LinearLayout>
+
+
+
+        <TextView
+            android:id="@+id/procedure_nature"
+            android:visibility="invisible"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:drawableLeft="@android:drawable/ic_popup_sync"
-            android:text="@string/sync"
-            android:onClick="syncCrumbs"
-            android:background="@drawable/basic_button"
-            android:textColor="@color/ultraLight_grey"
-            android:visibility="gone"
-            android:layout_marginBottom="10dp"/>
-
+            android:gravity="center"
+            android:layout_below="@+id/map_button"
+            android:layout_alignParentStart="true"/>
     </LinearLayout>
 </LinearLayout>
 
+<!--
+<CheckBox
+android:layout_width="wrap_content"
+android:layout_height="wrap_content"
+android:text="@string/diff_stuff"
+android:id="@+id/diff_stuff"
+android:layout_marginStart="20dp"/>-->
