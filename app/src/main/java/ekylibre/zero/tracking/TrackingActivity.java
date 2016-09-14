@@ -57,14 +57,15 @@ public class TrackingActivity extends UpdatableActivity implements TrackingListe
     protected final int PRODUCT_NAME = 1;
     protected final int LABEL = 2;
     protected final int NAME = 3;
+    protected final int PREPARATION = 0;
+    protected final int TRAVELING = 1;
+    protected final int INTERVENTION = 2;
+    protected int       state = -1;
     public final static String NEW = "new_intervention";
 
-    private long mMasterDuration, mMasterStart;
     private String mLastProcedureNature, mLastProcedureNatureName;
-    private Chronometer mMasterChrono, mPrecisionModeChrono;
-    private Button mScanButton, mStartButton, mStopButton, mPauseButton, mResumeButton, mPrecisionModeStartButton, mPrecisionModeStopButton, mSyncButton;
-    private HorizontalScrollView mDetails;
-    private TextView mProcedureNature, mAccuracy, mLatitude, mLongitude, mCrumbsCount;
+    private Button mStartButton;
+    private TextView mProcedureNature;
     private String mLocationProvider;
     private TrackingListener mTrackingListener;
     private Account mAccount;
@@ -80,6 +81,8 @@ public class TrackingActivity extends UpdatableActivity implements TrackingListe
     private Notification.Builder mNotificationBuilder;
     private int mNotificationID;
     //private Notification mNotification;
+
+    private View activePreparation, activeTraveling, activeIntervention, preparation, traveling, intervention;
 
     private Button mMapButton;
     private int    mInterventionID;
@@ -114,24 +117,17 @@ public class TrackingActivity extends UpdatableActivity implements TrackingListe
 
         mNewIntervention = getIntent().getBooleanExtra(TrackingActivity.NEW, false);
 
+        preparation = findViewById(R.id.preparation);
+        traveling = findViewById(R.id.traveling);
+        intervention = findViewById(R.id.intervention);
+        activePreparation = findViewById(R.id.active_preparation);
+        activeTraveling = findViewById(R.id.active_traveling);
+        activeIntervention = findViewById(R.id.active_intervention);
+
         // Find view elements
-        mDetails                  = (HorizontalScrollView) findViewById(R.id.details);
         mProcedureNature          = (TextView)   findViewById(R.id.procedure_nature);
-        mMasterChrono             = (Chronometer)findViewById(R.id.master_chrono);
-        mPrecisionModeChrono      = (Chronometer)findViewById(R.id.precision_mode_chrono);
-        mAccuracy                 = (TextView)   findViewById(R.id.accuracy);
-        mLatitude                 = (TextView)   findViewById(R.id.latitude);
-        mLongitude                = (TextView)   findViewById(R.id.longitude);
-        mCrumbsCount              = (TextView)   findViewById(R.id.crumbs_count);
         mStartButton              = (Button)     findViewById(R.id.start_intervention_button);
-        mStopButton               = (Button)     findViewById(R.id.stop_intervention_button);
-        mPauseButton              = (Button)     findViewById(R.id.pause_intervention_button);
-        mResumeButton             = (Button)     findViewById(R.id.resume_intervention_button);
-        mScanButton               = (Button)     findViewById(R.id.scan_code_button);
-        mSyncButton               = (Button)     findViewById(R.id.sync_button);
         mMapButton                = (Button)     findViewById(R.id.map_button);
-        mPrecisionModeStartButton = (Button)     findViewById(R.id.start_precision_mode_button);
-        mPrecisionModeStopButton  = (Button)     findViewById(R.id.stop_precision_mode_button);
         infoLayout                = (RelativeLayout) findViewById(R.id.infoLayout);
         infoScroll                = (ScrollView) findViewById(R.id.interventionInfo);
 
@@ -168,8 +164,6 @@ public class TrackingActivity extends UpdatableActivity implements TrackingListe
         writeInterventionInfo();
     }
 
-    // TODO => Il faut trier par name dans la requete puis des qu'on a un nouveau name on
-    // TODO => affiche le label en tant que titre et on enregistre le titre ref
     private void writeInterventionInfo()
     {
         int botId;
@@ -189,7 +183,7 @@ public class TrackingActivity extends UpdatableActivity implements TrackingListe
         Cursor cursTarget = queryTarget();
 
         if (cursTarget == null || cursTarget.getCount() == 0)
-            return (0);
+            return (botId);
         return (writeCursor(cursTarget, botId));
     }
 
@@ -198,7 +192,7 @@ public class TrackingActivity extends UpdatableActivity implements TrackingListe
         Cursor cursInput = queryInput();
 
         if (cursInput == null || cursInput.getCount() == 0)
-            return (0);
+            return (botId);
         return (writeCursor(cursInput, botId));
     }
 
@@ -207,7 +201,7 @@ public class TrackingActivity extends UpdatableActivity implements TrackingListe
         Cursor cursTool = queryTool();
 
         if (cursTool == null || cursTool.getCount() == 0)
-            return (0);
+            return (botId);
         return (writeCursor(cursTool, botId));
     }
 
@@ -345,22 +339,14 @@ public class TrackingActivity extends UpdatableActivity implements TrackingListe
                         crumbsCalculator = new CrumbsCalculator(mLastProcedureNature);
 
                         mStartButton.setVisibility(View.GONE);
-                        mMasterChrono.setVisibility(View.VISIBLE);
                         mMapButton.setVisibility(View.VISIBLE);
-                        mStopButton.setVisibility(View.VISIBLE);
-                        mPauseButton.setVisibility(View.VISIBLE);
                         //mScanButton.setVisibility(View.VISIBLE);
-                        mSyncButton.setVisibility(View.GONE);
                         //mPrecisionModeStartButton.setVisibility(View.VISIBLE);
                         //mProcedureNature.setVisibility(View.VISIBLE);
                         mProcedureNature.setText(mLastProcedureNatureName);
 
                         setTitle(mLastProcedureNatureName);
 
-                        mMasterStart = SystemClock.elapsedRealtime();
-                        mMasterDuration = 0;
-                        mMasterChrono.setBase(mMasterStart);
-                        mMasterChrono.start();
 
                         startTracking();
 
@@ -426,14 +412,8 @@ public class TrackingActivity extends UpdatableActivity implements TrackingListe
 /*        if (mPrecisionMode) {
             stopPrecisionMode(view);
         }*/
-        mMasterChrono.stop();
-        mMasterChrono.setVisibility(View.INVISIBLE);
-        mStopButton.setVisibility(View.GONE);
-        mPauseButton.setVisibility(View.GONE);
         mMapButton.setVisibility(View.GONE);
-        mScanButton.setVisibility(View.GONE);
         //mPrecisionModeStartButton.setVisibility(View.GONE);
-        mDetails.setVisibility(View.GONE);
         mProcedureNature.setVisibility(View.INVISIBLE);
         mStartButton.setVisibility(View.VISIBLE);
         this.stopTracking();
@@ -477,13 +457,7 @@ public class TrackingActivity extends UpdatableActivity implements TrackingListe
     }
 
     public void pauseIntervention(View view) {
-        mMasterDuration += SystemClock.elapsedRealtime() - mMasterStart;
-        mMasterChrono.stop();
-        mPauseButton.setVisibility(View.GONE);
-        mStopButton.setVisibility(View.GONE);
-        mScanButton.setVisibility(View.GONE);
 
-        mResumeButton.setVisibility(View.VISIBLE);
 
         this.stopTracking();
         this.addCrumb("pause");
@@ -494,13 +468,7 @@ public class TrackingActivity extends UpdatableActivity implements TrackingListe
     }
 
     public void resumeIntervention(View view) {
-        mMasterStart = SystemClock.elapsedRealtime();
-        mMasterChrono.setBase(mMasterStart - mMasterDuration);
-        mMasterChrono.start();
 
-        mResumeButton.setVisibility(View.GONE);
-        mPauseButton.setVisibility(View.VISIBLE);
-        mStopButton.setVisibility(View.VISIBLE);
 
         this.startTracking();
         this.addCrumb("resume");
@@ -622,6 +590,51 @@ public class TrackingActivity extends UpdatableActivity implements TrackingListe
             } catch(IOException e) {
                 e.printStackTrace();
             }
+        }
+    }
+
+    public void newPhase(View view)
+    {
+        view.setVisibility(View.GONE);
+        if (state == -1)
+        {
+/*            findViewById(R.id.disabled_pause).setVisibility(View.GONE);
+            findViewById(R.id.disabled_stop).setVisibility(View.GONE);
+            findViewById(R.id.pause).setVisibility(View.VISIBLE);
+            findViewById(R.id.stop).setVisibility(View.VISIBLE);*/
+        }
+        if (view == preparation)
+        {
+            state = PREPARATION;
+            activePreparation.setVisibility(View.VISIBLE);
+            activePreparation.setFocusableInTouchMode(true);
+            activePreparation.requestFocus();
+            activeTraveling.setVisibility(View.GONE);
+            activeIntervention.setVisibility(View.GONE);
+            traveling.setVisibility(View.VISIBLE);
+            intervention.setVisibility(View.VISIBLE);
+        }
+        else if (view == traveling)
+        {
+            state = TRAVELING;
+            activeTraveling.setVisibility(View.VISIBLE);
+            activeTraveling.setFocusableInTouchMode(true);
+            activeTraveling.requestFocus();
+            activePreparation.setVisibility(View.GONE);
+            activeIntervention.setVisibility(View.GONE);
+            preparation.setVisibility(View.VISIBLE);
+            intervention.setVisibility(View.VISIBLE);
+        }
+        else if (view == intervention)
+        {
+            state = INTERVENTION;
+            activeIntervention.setVisibility(View.VISIBLE);
+            activeIntervention.setFocusableInTouchMode(true);
+            activeIntervention.requestFocus();
+            activePreparation.setVisibility(View.GONE);
+            activeTraveling.setVisibility(View.GONE);
+            preparation.setVisibility(View.VISIBLE);
+            traveling.setVisibility(View.VISIBLE);
         }
     }
 
