@@ -189,7 +189,7 @@ public class TrackingActivity extends UpdatableActivity implements TrackingListe
         Cursor cursTarget = queryTarget();
 
         if (cursTarget == null || cursTarget.getCount() == 0)
-            return (0);
+            return (botId);
         return (writeCursor(cursTarget, botId));
     }
 
@@ -198,7 +198,7 @@ public class TrackingActivity extends UpdatableActivity implements TrackingListe
         Cursor cursInput = queryInput();
 
         if (cursInput == null || cursInput.getCount() == 0)
-            return (0);
+            return (botId);
         return (writeCursor(cursInput, botId));
     }
 
@@ -207,7 +207,7 @@ public class TrackingActivity extends UpdatableActivity implements TrackingListe
         Cursor cursTool = queryTool();
 
         if (cursTool == null || cursTool.getCount() == 0)
-            return (0);
+            return (botId);
         return (writeCursor(cursTool, botId));
     }
 
