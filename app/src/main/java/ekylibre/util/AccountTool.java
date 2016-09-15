@@ -122,7 +122,7 @@ public class AccountTool
 
     /*
     ** Bruteforce list account to find an account by his unique account.name
-    ** This method is viable because the list account should not be > 100 accounts
+    ** This method is viable because the list account should not be > 1xx accounts
     */
     private static Account findCurrentAccount(Account[] listAccount, String accName, Context context)
     {

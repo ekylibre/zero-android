@@ -306,10 +306,7 @@ public class IssueActivity extends AppCompatActivity {
                 ZeroContract.Issues.CONTENT_URI,   // the user dictionary content URI
                 mNewValues                          // the values to insert
         );
-
-        //est censé fermer l'activity
         this.finish();
-
     }
 
     @Override
