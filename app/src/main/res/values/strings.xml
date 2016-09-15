@@ -99,4 +99,5 @@
     <string name="plant_counting_saved">Plant Counting saved</string>
     <string name="plant_counting_cannot_save">Cannot save Plant counting, please finish your counting</string>
     <string name="diff_stuff">Different stuff</string>
+    <string name="send">Send</string>
 </resources>

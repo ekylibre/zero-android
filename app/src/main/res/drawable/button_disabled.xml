@@ -4,7 +4,7 @@
     <item android:state_pressed="true">
         <shape>
             <solid
-                android:color="#888888"/>
+                android:color="#c866a65e"/>
             <corners
                 android:radius="4dp" />
             <padding
@@ -17,7 +17,11 @@
     <item>
         <shape>
             <solid
-                android:color="@color/basic_grey"/>
+                android:color="#c8d8dcd7"/>
+            <stroke
+                android:width="1dp"
+                android:color="#c866a65e"
+                />
             <corners
                 android:radius="4dp" />
             <padding
@@ -26,6 +30,6 @@
                 android:right="10dp"
                 android:bottom="10dp" />
         </shape>
-</item>
+    </item>
 
 </selector>

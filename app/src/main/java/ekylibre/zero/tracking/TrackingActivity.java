@@ -21,6 +21,9 @@ import android.preference.PreferenceManager;
 import android.print.PrintAttributes;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -31,6 +34,7 @@ import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TableLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
@@ -51,6 +55,7 @@ import ekylibre.zero.R;
 import ekylibre.util.AccountTool;
 import ekylibre.util.PermissionManager;
 import ekylibre.util.UpdatableActivity;
+import ekylibre.zero.SettingsActivity;
 
 
 public class TrackingActivity extends UpdatableActivity implements TrackingListenerWriter
@@ -384,15 +389,31 @@ public class TrackingActivity extends UpdatableActivity implements TrackingListe
         //  }
     }
 
-/*
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
+    public boolean onCreateOptionsMenu(Menu menu)
+    {
         // Inflate the menu items for use in the action bar
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.tracking, menu);
-        return super.onCreateOptionsMenu(menu);
+        inflater.inflate(R.menu.sender, menu);
+        return (super.onCreateOptionsMenu(menu));
     }
-*/
+
+    /*
+    ** Actions on toolbar items
+    ** Items are identified by their view id
+    */
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
+        int     id = item.getItemId();
+        Intent  intent;
+
+        if (id == R.id.sender)
+        {
+            Toast.makeText(this, "I'm sending intervention !", Toast.LENGTH_SHORT).show();
+        }
+        return (super.onOptionsItemSelected(item));
+    }
 
     private void createIntervention()
     {
@@ -607,87 +628,84 @@ public class TrackingActivity extends UpdatableActivity implements TrackingListe
         }
     }
 
-    public void newPhase(View view)
+    public void phasePreparation(View view)
     {
         chronoGeneral.startTimer();
-        if (state == -1)
-        {
-/*            findViewById(R.id.disabled_pause).setVisibility(View.GONE);
-            findViewById(R.id.disabled_stop).setVisibility(View.GONE);
-            findViewById(R.id.pause).setVisibility(View.VISIBLE);
-            findViewById(R.id.stop).setVisibility(View.VISIBLE);*/
-        }
-        Log.d(TAG, "==============");
-        if (view == preparation)
-        {
-            state = PREPARATION;
-            Log.d(TAG, "Activating preparation !  State => " + state);
-            layoutPreparation.setVisibility(View.GONE);
-            layoutActivePreparation.setVisibility(View.VISIBLE);
-            layoutActiveTraveling.setVisibility(View.GONE);
-            layoutActiveIntervention.setVisibility(View.GONE);
-            layoutTraveling.setVisibility(View.VISIBLE);
-            layoutIntervention.setVisibility(View.VISIBLE);
 
-            chronoActivePreparation.startTimer();
-            chronoActiveTraveling.stopTimer();
-            chronoActiveIntervention.stopTimer();
-            chronoTraveling.setTime(chronoActiveTraveling.getTime());
-            chronoIntervention.setTime(chronoActiveIntervention.getTime());
-        }
-        else if (view == traveling)
-        {
-            state = TRAVELING;
-            Log.d(TAG, "Activating traveling !  State => " + state);
-            layoutTraveling.setVisibility(View.GONE);
-            layoutActiveTraveling.setVisibility(View.VISIBLE);
-            layoutActivePreparation.setVisibility(View.GONE);
-            layoutActiveIntervention.setVisibility(View.GONE);
-            layoutPreparation.setVisibility(View.VISIBLE);
-            layoutIntervention.setVisibility(View.VISIBLE);
+        state = PREPARATION;
+        Log.d(TAG, "Activating preparation !  State => " + state);
+        layoutPreparation.setVisibility(View.GONE);
+        layoutActivePreparation.setVisibility(View.VISIBLE);
+        layoutActiveTraveling.setVisibility(View.GONE);
+        layoutActiveIntervention.setVisibility(View.GONE);
+        layoutTraveling.setVisibility(View.VISIBLE);
+        layoutIntervention.setVisibility(View.VISIBLE);
 
-            chronoActiveTraveling.startTimer();
-            chronoActivePreparation.stopTimer();
-            chronoActiveIntervention.stopTimer();
-            chronoPreparation.setTime(chronoActivePreparation.getTime());
-            chronoIntervention.setTime(chronoActiveIntervention.getTime());
-        }
-        else if (view == intervention)
-        {
-            state = INTERVENTION;
-            Log.d(TAG, "Activating intervention !  State => " + state);
-            layoutIntervention.setVisibility(View.GONE);
-            layoutActiveIntervention.setVisibility(View.VISIBLE);
-            layoutActivePreparation.setVisibility(View.GONE);
-            layoutActiveTraveling.setVisibility(View.GONE);
-            layoutPreparation.setVisibility(View.VISIBLE);
-            layoutTraveling.setVisibility(View.VISIBLE);
+        chronoActivePreparation.startTimer();
+        chronoActiveTraveling.stopTimer();
+        chronoActiveIntervention.stopTimer();
+        chronoTraveling.setTime(chronoActiveTraveling.getTime());
+        chronoIntervention.setTime(chronoActiveIntervention.getTime());
+    }
 
-            chronoActiveIntervention.startTimer();
-            chronoActiveTraveling.stopTimer();
-            chronoActivePreparation.stopTimer();
-            chronoTraveling.setTime(chronoActiveTraveling.getTime());
-            chronoPreparation.setTime(chronoActivePreparation.getTime());
-        }
-        else
-        {
-            state = PAUSE;
-            Log.d(TAG, "PAUSE !!  State => " + state);
-            layoutActivePreparation.setVisibility(View.GONE);
-            layoutActiveTraveling.setVisibility(View.GONE);
-            layoutActiveIntervention.setVisibility(View.GONE);
-            layoutPreparation.setVisibility(View.VISIBLE);
-            layoutTraveling.setVisibility(View.VISIBLE);
-            layoutIntervention.setVisibility(View.VISIBLE);
+    public void phaseTraveling(View view)
+    {
+        chronoGeneral.startTimer();
 
-            chronoGeneral.stopTimer();
-            chronoActivePreparation.stopTimer();
-            chronoActiveTraveling.stopTimer();
-            chronoActiveIntervention.stopTimer();
-            chronoPreparation.setTime(chronoActivePreparation.getTime());
-            chronoTraveling.setTime(chronoActiveTraveling.getTime());
-            chronoIntervention.setTime(chronoActiveIntervention.getTime());
-        }
+        state = TRAVELING;
+        Log.d(TAG, "Activating traveling !  State => " + state);
+        layoutTraveling.setVisibility(View.GONE);
+        layoutActiveTraveling.setVisibility(View.VISIBLE);
+        layoutActivePreparation.setVisibility(View.GONE);
+        layoutActiveIntervention.setVisibility(View.GONE);
+        layoutPreparation.setVisibility(View.VISIBLE);
+        layoutIntervention.setVisibility(View.VISIBLE);
+
+        chronoActiveTraveling.startTimer();
+        chronoActivePreparation.stopTimer();
+        chronoActiveIntervention.stopTimer();
+        chronoPreparation.setTime(chronoActivePreparation.getTime());
+        chronoIntervention.setTime(chronoActiveIntervention.getTime());
+    }
+
+    public void phaseIntervention(View view)
+    {
+        chronoGeneral.startTimer();
+
+        state = INTERVENTION;
+        Log.d(TAG, "Activating intervention !  State => " + state);
+        layoutIntervention.setVisibility(View.GONE);
+        layoutActiveIntervention.setVisibility(View.VISIBLE);
+        layoutActivePreparation.setVisibility(View.GONE);
+        layoutActiveTraveling.setVisibility(View.GONE);
+        layoutPreparation.setVisibility(View.VISIBLE);
+        layoutTraveling.setVisibility(View.VISIBLE);
+
+        chronoActiveIntervention.startTimer();
+        chronoActiveTraveling.stopTimer();
+        chronoActivePreparation.stopTimer();
+        chronoTraveling.setTime(chronoActiveTraveling.getTime());
+        chronoPreparation.setTime(chronoActivePreparation.getTime());
+    }
+
+    public void phasePause(View view)
+    {
+        state = PAUSE;
+        Log.d(TAG, "PAUSE !!  State => " + state);
+        layoutActivePreparation.setVisibility(View.GONE);
+        layoutActiveTraveling.setVisibility(View.GONE);
+        layoutActiveIntervention.setVisibility(View.GONE);
+        layoutPreparation.setVisibility(View.VISIBLE);
+        layoutTraveling.setVisibility(View.VISIBLE);
+        layoutIntervention.setVisibility(View.VISIBLE);
+
+        chronoGeneral.stopTimer();
+        chronoActivePreparation.stopTimer();
+        chronoActiveTraveling.stopTimer();
+        chronoActiveIntervention.stopTimer();
+        chronoPreparation.setTime(chronoActivePreparation.getTime());
+        chronoTraveling.setTime(chronoActiveTraveling.getTime());
+        chronoIntervention.setTime(chronoActiveIntervention.getTime());
     }
 
     @Override
