@@ -6,6 +6,7 @@ android {
     compileSdkVersion 24
     buildToolsVersion "24.0.0"
     defaultConfig {
+        vectorDrawables.useSupportLibrary = true
         applicationId "ekylibre.zero"
         minSdkVersion 19
         targetSdkVersion 24

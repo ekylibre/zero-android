@@ -6,8 +6,8 @@
 	android:layout_height="fill_parent"
 	android:background="@color/background_grey"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
-
     >
+
     <TextView
         android:id="@+id/procedure_nature"
         android:visibility="gone"
@@ -21,7 +21,7 @@
         android:layout_gravity="center"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="0.5"
+        android:layout_weight="0.4"
         card_view:cardCornerRadius="2dp"
         android:layout_marginEnd="10dp"
         android:layout_marginStart="10dp"
@@ -52,6 +52,12 @@
             </RelativeLayout>
         </ScrollView>
     </android.support.v7.widget.CardView>
+    <CheckBox
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/diff_stuff"
+        android:id="@+id/diff_stuff"
+        android:layout_marginStart="20dp"/>
 
 
 
@@ -59,14 +65,15 @@
 
     <LinearLayout
         android:orientation="vertical"
-        android:layout_width="fill_parent"
-        android:layout_height="0dp"
-        android:layout_weight="0.4"
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
         android:gravity="bottom"
-        android:layout_marginBottom="3dp"
+        android:layout_marginBottom="16dp"
         android:layout_marginTop="@dimen/activity_vertical_margin"
         android:layout_marginLeft="@dimen/activity_horizontal_margin"
-        android:layout_marginRight="@dimen/activity_horizontal_margin">
+        android:layout_marginRight="@dimen/activity_horizontal_margin"
+        >
+
 
 
         <Button
@@ -80,20 +87,6 @@
             android:textColor="@color/ultraLight_grey"
             android:onClick="openMap"
             android:layout_marginBottom="10dp"/>
-
-
-        <ekylibre.util.ExtendedChronometer
-            android:id="@+id/chrono_general"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="08:27:44"
-            android:textStyle="bold"
-            android:textSize="30sp"
-            android:textColor="@color/ultra_dark_grey"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginBottom="10dp"/>
-
         <Button
             android:id="@+id/start_intervention_button"
             android:layout_gravity="center_horizontal"
@@ -111,15 +104,65 @@
             />
 
 
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="bottom"
+            >
+            <Button
+                android:layout_width="0dp"
+                android:layout_height="70dp"
+                android:layout_weight="0.2"
+                android:drawableTop="@drawable/cancel"
+                android:paddingTop="10dp"
+                android:background="@color/invisible"
+                android:gravity="center"
+                android:scaleType="fitXY"
+                android:visibility="gone"
+                />
+
+            <ekylibre.util.ExtendedChronometer
+                android:id="@+id/chrono_general"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.4"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="08:27:44"
+                android:textStyle="bold"
+                android:textSize="30sp"
+                android:textColor="@color/ultra_dark_grey"
+                android:layout_gravity="bottom"
+                android:gravity="center"
+                android:layout_marginBottom="10dp"/>
+
+            <Button
+                android:layout_width="0dp"
+                android:layout_height="70dp"
+                android:layout_weight="0.2"
+                android:paddingTop="10dp"
+                android:drawableTop="@drawable/send"
+                android:background="@color/invisible"
+                android:gravity="center"
+                android:visibility="gone"
+                />
+
+        </LinearLayout>
+
+
+
+
+
+
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="100dp"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginBottom="10dp">
+            android:layout_gravity="center_horizontal">
             <RelativeLayout
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="0.30"
+                android:layout_weight="0.3"
                 android:id="@+id/layout_preparation">
                 <Button
                     android:id="@+id/preparation"
@@ -128,12 +171,12 @@
                     android:background="@drawable/button_disabled"
                     android:text="Prépa"
                     android:textStyle="bold"
-                    android:textColor="@color/dark_grey"
+                    android:textColor="@color/ultra_dark_grey"
                     android:textSize="20sp"
                     android:layout_marginStart="0dp"
-                    android:onClick="newPhase"
+                    android:onClick="phasePreparation"
                     android:paddingBottom="40dp"
-                    android:layout_marginBottom="20dp"
+                    android:layout_marginBottom="0dp"
                     />
 
                 <ekylibre.util.ExtendedChronometer
@@ -170,8 +213,8 @@
                     android:textSize="20sp"
                     android:layout_marginStart="0dp"
                     android:paddingBottom="40dp"
-                    android:layout_marginBottom="20dp"
-                    android:onClick="newPhase"
+                    android:layout_marginBottom="0dp"
+                    android:onClick="phasePause"
                     />
                 <ekylibre.util.ExtendedChronometer
                     android:id="@+id/chrono_active_preparation"
@@ -202,11 +245,11 @@
                     android:paddingTop="15dp"
                     android:text="Dépl"
                     android:textStyle="bold"
-                    android:textColor="@color/dark_grey"
+                    android:textColor="@color/ultra_dark_grey"
                     android:textSize="20sp"
-                    android:onClick="newPhase"
+                    android:onClick="phaseTraveling"
                     android:paddingBottom="40dp"
-                    android:layout_marginBottom="20dp"
+                    android:layout_marginBottom="0dp"
                     />
                 <ekylibre.util.ExtendedChronometer
                     android:id="@+id/chrono_traveling"
@@ -242,8 +285,8 @@
                     android:textColor="@color/ultraLight_grey"
                     android:textSize="20sp"
                     android:paddingBottom="40dp"
-                    android:layout_marginBottom="20dp"
-                    android:onClick="newPhase"
+                    android:layout_marginBottom="0dp"
+                    android:onClick="phasePause"
                     />
                 <ekylibre.util.ExtendedChronometer
                     android:id="@+id/chrono_active_traveling"
@@ -274,11 +317,11 @@
                     android:paddingTop="15dp"
                     android:text="Interv"
                     android:textStyle="bold"
-                    android:textColor="@color/dark_grey"
+                    android:textColor="@color/ultra_dark_grey"
                     android:textSize="20sp"
-                    android:onClick="newPhase"
+                    android:onClick="phaseIntervention"
                     android:paddingBottom="40dp"
-                    android:layout_marginBottom="20dp"
+                    android:layout_marginBottom="0dp"
                     />
                 <ekylibre.util.ExtendedChronometer
                     android:id="@+id/chrono_intervention"
@@ -314,8 +357,8 @@
                     android:textColor="@color/ultraLight_grey"
                     android:textSize="20sp"
                     android:paddingBottom="40dp"
-                    android:layout_marginBottom="20dp"
-                    android:onClick="newPhase"
+                    android:layout_marginBottom="0dp"
+                    android:onClick="phasePause"
                     />
                 <ekylibre.util.ExtendedChronometer
                     android:id="@+id/chrono_active_intervention"
@@ -339,12 +382,4 @@
 
     </LinearLayout>
 </LinearLayout>
-
-<!--
-<CheckBox
-android:layout_width="wrap_content"
-android:layout_height="wrap_content"
-android:text="@string/diff_stuff"
-android:id="@+id/diff_stuff"
-android:layout_marginStart="20dp"/>-->
 
