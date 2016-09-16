@@ -4,8 +4,12 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
+
+import ekylibre.zero.R;
 
 /**************************************
  * Created by pierre on 8/4/16.       *
@@ -23,6 +27,7 @@ public abstract class UpdatableActivity extends AppCompatActivity
     protected boolean           isSync                      = false;
     private final String        TAG                         = "UpdatableActivity";
 
+    protected Toolbar mToolbar;
     private BroadcastReceiver   syncBroadcastReceiverFinish  = new BroadcastReceiver()
     {
         @Override
@@ -54,6 +59,24 @@ public abstract class UpdatableActivity extends AppCompatActivity
             onPing(intent);
         }
     };
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState)
+    {
+        super.onCreate(savedInstanceState);
+    }
+
+    protected void setToolBar()
+    {
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+
+        setSupportActionBar(toolbar);
+        if (toolbar == null || getSupportActionBar() == null)
+            return;
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        mToolbar = toolbar;
+    }
 
     protected void onSyncFinish(){}
 

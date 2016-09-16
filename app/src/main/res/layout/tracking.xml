@@ -1,385 +1,399 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-	xmlns:android="http://schemas.android.com/apk/res/android"
-	android:orientation="vertical"
-	android:layout_width="fill_parent"
-	android:layout_height="fill_parent"
-	android:background="@color/background_grey"
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@color/background_grey"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:fitsSystemWindows="true"
+    tools:context=".tracking.TrackingActivity"
+
     >
-
-    <TextView
-        android:id="@+id/procedure_nature"
-        android:visibility="gone"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"/>
-
-    <android.support.v7.widget.CardView
-        xmlns:card_view="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/card_view"
-        android:layout_gravity="center"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="0.4"
-        card_view:cardCornerRadius="2dp"
-        android:layout_marginEnd="10dp"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="5dp"
-        android:layout_marginBottom="5dp"
-        card_view:cardElevation="3dp"
-        card_view:cardBackgroundColor="@color/ultraLight_grey_plus"
-        >
-
-        <ScrollView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:id="@+id/interventionInfo"
-            android:background="@color/invisible"
-            android:paddingBottom="2dp"
-            android:scrollbarDefaultDelayBeforeFade="@android:integer/config_longAnimTime"
-            >
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/infoLayout"
-                android:layout_marginTop="10dp"
-                android:layout_marginRight="40dp"
-                android:layout_marginLeft="40dp"
-                >
-
-            </RelativeLayout>
-        </ScrollView>
-    </android.support.v7.widget.CardView>
-    <CheckBox
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/diff_stuff"
-        android:id="@+id/diff_stuff"
-        android:layout_marginStart="20dp"/>
-
-
-
-
-
     <LinearLayout
-        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="150dp"
-        android:gravity="bottom"
-        android:layout_marginBottom="16dp"
-        android:layout_marginTop="@dimen/activity_vertical_margin"
-        android:layout_marginLeft="@dimen/activity_horizontal_margin"
-        android:layout_marginRight="@dimen/activity_horizontal_margin"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
         >
 
+        <include
+            layout="@layout/toolbar"
+            android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
 
-
-        <Button
-            android:id="@+id/map_button"
+        <TextView
+            android:id="@+id/procedure_nature"
+            android:visibility="gone"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:visibility="gone"
-            android:drawableLeft="@drawable/ic_map"
-            android:text="@string/open_map"
-            android:background="@drawable/basic_button"
-            android:textColor="@color/ultraLight_grey"
-            android:onClick="openMap"
-            android:layout_marginBottom="10dp"/>
-        <Button
-            android:id="@+id/start_intervention_button"
-            android:layout_gravity="center_horizontal"
+            android:gravity="center"/>
+
+        <android.support.v7.widget.CardView
+            xmlns:card_view="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/card_view"
+            android:layout_gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            card_view:cardCornerRadius="2dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
+            card_view:cardElevation="3dp"
+            card_view:cardBackgroundColor="@color/ultraLight_grey_plus"
+            >
+
+            <ScrollView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/interventionInfo"
+                android:background="@color/invisible"
+                android:paddingBottom="2dp"
+                android:scrollbarDefaultDelayBeforeFade="@android:integer/config_longAnimTime"
+                >
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/infoLayout"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginRight="40dp"
+                    android:layout_marginLeft="40dp"
+                    >
+
+                </RelativeLayout>
+            </ScrollView>
+        </android.support.v7.widget.CardView>
+        <CheckBox
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/diff_stuff"
+            android:id="@+id/diff_stuff"
+            android:layout_marginStart="20dp"/>
+
+
+        <ekylibre.util.ExtendedChronometer
+            android:id="@+id/chrono_general"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:drawableLeft="@drawable/ic_add_white"
-            android:text="@string/start"
-            android:onClick="startIntervention"
-            android:background="@drawable/basic_button"
-            android:textColor="@color/ultraLight_grey"
-
-
-
-            android:visibility="gone"
-            />
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textStyle="bold"
+            android:textSize="35sp"
+            android:textColor="@color/ultra_dark_grey"
+            android:layout_gravity="bottom"
+            android:gravity="center"/>
 
 
 
         <LinearLayout
+            android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="115dp"
             android:gravity="bottom"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:layout_marginRight="@dimen/activity_horizontal_margin"
             >
-            <Button
-                android:layout_width="0dp"
-                android:layout_height="70dp"
-                android:layout_weight="0.2"
-                android:drawableTop="@drawable/cancel"
-                android:paddingTop="10dp"
-                android:background="@color/invisible"
-                android:gravity="center"
-                android:scaleType="fitXY"
-                android:visibility="gone"
-                />
 
-            <ekylibre.util.ExtendedChronometer
-                android:id="@+id/chrono_general"
-                android:layout_width="0dp"
+
+
+            <Button
+                android:id="@+id/map_button"
+                android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="0.4"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:text="08:27:44"
-                android:textStyle="bold"
-                android:textSize="30sp"
-                android:textColor="@color/ultra_dark_grey"
-                android:layout_gravity="bottom"
-                android:gravity="center"
+                android:visibility="gone"
+                android:drawableLeft="@drawable/ic_map"
+                android:text="@string/open_map"
+                android:background="@drawable/basic_button"
+                android:textColor="@color/ultraLight_grey"
+                android:onClick="openMap"
                 android:layout_marginBottom="10dp"/>
-
             <Button
-                android:layout_width="0dp"
-                android:layout_height="70dp"
-                android:layout_weight="0.2"
-                android:paddingTop="10dp"
-                android:drawableTop="@drawable/send"
-                android:background="@color/invisible"
-                android:gravity="center"
+                android:id="@+id/start_intervention_button"
+                android:layout_gravity="center_horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:drawableLeft="@drawable/ic_add_white"
+                android:text="@string/start"
+                android:onClick="startIntervention"
+                android:background="@drawable/basic_button"
+                android:textColor="@color/ultraLight_grey"
+
+
+
                 android:visibility="gone"
                 />
 
+
+
+
+
+
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:layout_gravity="center_horizontal">
+                <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.30"
+                    android:id="@+id/layout_preparation">
+                    <Button
+                        android:id="@+id/preparation"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/button_disabled"
+                        android:text="Prépa"
+                        android:textStyle="bold"
+                        android:textColor="@color/ultra_dark_grey"
+                        android:textSize="20sp"
+                        android:layout_marginStart="0dp"
+                        android:onClick="phasePreparation"
+                        android:paddingBottom="40dp"
+                        android:layout_marginBottom="16dp"
+                        />
+
+                    <ekylibre.util.ExtendedChronometer
+                        android:id="@+id/chrono_preparation"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:elevation="200dp"
+                        android:textColor="@color/ultra_dark_grey"
+                        android:textSize="16sp"
+                        android:gravity="center"
+                        android:layout_gravity="bottom"
+                        android:background="@color/invisible"
+                        android:layout_alignBottom="@+id/preparation"
+                        android:layout_marginBottom="4dp"
+                        />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.30"
+                    android:id="@+id/layout_active_preparation"
+                    android:visibility="gone">
+
+                    <Button
+                        android:id="@+id/active_preparation"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/state_enabled"
+                        android:paddingTop="15dp"
+                        android:text="Prépa"
+                        android:textStyle="bold"
+                        android:textColor="@color/ultraLight_grey"
+                        android:textSize="20sp"
+                        android:layout_marginStart="0dp"
+                        android:paddingBottom="40dp"
+                        android:layout_marginBottom="16dp"
+                        android:onClick="phasePause"
+                        />
+                    <ekylibre.util.ExtendedChronometer
+                        android:id="@+id/chrono_active_preparation"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:elevation="200dp"
+                        android:textColor="@color/ultraLight_grey"
+                        android:textSize="16sp"
+                        android:gravity="center"
+                        android:layout_gravity="bottom"
+                        android:background="@color/invisible"
+                        android:layout_alignBottom="@+id/active_preparation"
+                        android:layout_marginBottom="4dp"
+                        />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.30"
+                    android:id="@+id/layout_traveling"
+                    android:layout_marginStart="10dp">
+                    <Button
+                        android:id="@+id/traveling"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/button_disabled"
+                        android:paddingTop="15dp"
+                        android:text="Dépl"
+                        android:textStyle="bold"
+                        android:textColor="@color/ultra_dark_grey"
+                        android:textSize="20sp"
+                        android:onClick="phaseTraveling"
+                        android:paddingBottom="40dp"
+                        android:layout_marginBottom="16dp"
+                        />
+                    <ekylibre.util.ExtendedChronometer
+                        android:id="@+id/chrono_traveling"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:elevation="200dp"
+                        android:textColor="@color/ultra_dark_grey"
+                        android:textSize="16sp"
+                        android:gravity="center"
+                        android:layout_gravity="bottom"
+                        android:background="@color/invisible"
+                        android:layout_alignBottom="@+id/traveling"
+                        android:layout_marginBottom="4dp"
+                        />
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.30"
+                    android:id="@+id/layout_active_traveling"
+                    android:layout_marginStart="10dp"
+                    android:visibility="gone">
+                    <Button
+                        android:id="@+id/active_traveling"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/state_enabled"
+                        android:paddingTop="15dp"
+                        android:text="Dépl"
+                        android:textStyle="bold"
+                        android:textColor="@color/ultraLight_grey"
+                        android:textSize="20sp"
+                        android:paddingBottom="40dp"
+                        android:layout_marginBottom="16dp"
+                        android:onClick="phasePause"
+                        />
+                    <ekylibre.util.ExtendedChronometer
+                        android:id="@+id/chrono_active_traveling"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:elevation="200dp"
+                        android:textColor="@color/ultraLight_grey"
+                        android:textSize="16sp"
+                        android:gravity="center"
+                        android:layout_gravity="bottom"
+                        android:background="@color/invisible"
+                        android:layout_alignBottom="@+id/active_traveling"
+                        android:layout_marginBottom="4dp"
+                        />
+
+                </RelativeLayout>
+                <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.30"
+                    android:id="@+id/layout_intervention"
+                    android:layout_marginStart="10dp">
+                    <Button
+                        android:id="@+id/intervention"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/button_disabled"
+                        android:paddingTop="15dp"
+                        android:text="Interv"
+                        android:textStyle="bold"
+                        android:textColor="@color/ultra_dark_grey"
+                        android:textSize="20sp"
+                        android:onClick="phaseIntervention"
+                        android:paddingBottom="40dp"
+                        android:layout_marginBottom="16dp"
+                        />
+                    <ekylibre.util.ExtendedChronometer
+                        android:id="@+id/chrono_intervention"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:elevation="200dp"
+                        android:textColor="@color/ultra_dark_grey"
+                        android:textSize="16sp"
+                        android:gravity="center"
+                        android:layout_gravity="bottom"
+                        android:background="@color/invisible"
+                        android:layout_alignBottom="@+id/intervention"
+                        android:layout_marginBottom="4dp"
+                        />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.30"
+                    android:id="@+id/layout_active_intervention"
+                    android:layout_marginStart="10dp"
+                    android:visibility="gone">
+
+                    <Button
+                        android:id="@+id/active_intervention"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/state_enabled"
+                        android:paddingTop="15dp"
+                        android:text="Interv"
+                        android:textStyle="bold"
+                        android:textColor="@color/ultraLight_grey"
+                        android:textSize="20sp"
+                        android:paddingBottom="40dp"
+                        android:layout_marginBottom="16dp"
+                        android:onClick="phasePause"
+                        />
+                    <ekylibre.util.ExtendedChronometer
+                        android:id="@+id/chrono_active_intervention"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:elevation="200dp"
+                        android:textColor="@color/ultraLight_grey"
+                        android:textSize="16sp"
+                        android:gravity="center"
+                        android:layout_gravity="bottom"
+                        android:background="@color/invisible"
+                        android:layout_alignBottom="@+id/active_intervention"
+                        android:layout_marginBottom="4dp"
+                        />
+                </RelativeLayout>
+
+            </LinearLayout>
+
+
+
+
         </LinearLayout>
-
-
-
-
-
-
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="100dp"
-            android:layout_gravity="center_horizontal">
-            <RelativeLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="0.3"
-                android:id="@+id/layout_preparation">
-                <Button
-                    android:id="@+id/preparation"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="@drawable/button_disabled"
-                    android:text="Prépa"
-                    android:textStyle="bold"
-                    android:textColor="@color/ultra_dark_grey"
-                    android:textSize="20sp"
-                    android:layout_marginStart="0dp"
-                    android:onClick="phasePreparation"
-                    android:paddingBottom="40dp"
-                    android:layout_marginBottom="0dp"
-                    />
-
-                <ekylibre.util.ExtendedChronometer
-                    android:id="@+id/chrono_preparation"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:elevation="200dp"
-                    android:textColor="@color/ultra_dark_grey"
-                    android:textSize="16sp"
-                    android:gravity="center"
-                    android:layout_gravity="bottom"
-                    android:background="@color/invisible"
-                    android:layout_alignBottom="@+id/preparation"
-                    android:layout_marginBottom="4dp"
-                    />
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="0.30"
-                android:id="@+id/layout_active_preparation"
-                android:visibility="gone">
-
-                <Button
-                    android:id="@+id/active_preparation"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="@drawable/state_enabled"
-                    android:paddingTop="15dp"
-                    android:text="Prépa"
-                    android:textStyle="bold"
-                    android:textColor="@color/ultraLight_grey"
-                    android:textSize="20sp"
-                    android:layout_marginStart="0dp"
-                    android:paddingBottom="40dp"
-                    android:layout_marginBottom="0dp"
-                    android:onClick="phasePause"
-                    />
-                <ekylibre.util.ExtendedChronometer
-                    android:id="@+id/chrono_active_preparation"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:elevation="200dp"
-                    android:textColor="@color/ultraLight_grey"
-                    android:textSize="16sp"
-                    android:gravity="center"
-                    android:layout_gravity="bottom"
-                    android:background="@color/invisible"
-                    android:layout_alignBottom="@+id/active_preparation"
-                    android:layout_marginBottom="4dp"
-                    />
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="0.30"
-                android:id="@+id/layout_traveling"
-                android:layout_marginStart="10dp">
-                <Button
-                    android:id="@+id/traveling"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="@drawable/button_disabled"
-                    android:paddingTop="15dp"
-                    android:text="Dépl"
-                    android:textStyle="bold"
-                    android:textColor="@color/ultra_dark_grey"
-                    android:textSize="20sp"
-                    android:onClick="phaseTraveling"
-                    android:paddingBottom="40dp"
-                    android:layout_marginBottom="0dp"
-                    />
-                <ekylibre.util.ExtendedChronometer
-                    android:id="@+id/chrono_traveling"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:elevation="200dp"
-                    android:textColor="@color/ultra_dark_grey"
-                    android:textSize="16sp"
-                    android:gravity="center"
-                    android:layout_gravity="bottom"
-                    android:background="@color/invisible"
-                    android:layout_alignBottom="@+id/traveling"
-                    android:layout_marginBottom="4dp"
-                    />
-
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="0.30"
-                android:id="@+id/layout_active_traveling"
-                android:layout_marginStart="10dp"
-                android:visibility="gone">
-                <Button
-                    android:id="@+id/active_traveling"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="@drawable/state_enabled"
-                    android:paddingTop="15dp"
-                    android:text="Dépl"
-                    android:textStyle="bold"
-                    android:textColor="@color/ultraLight_grey"
-                    android:textSize="20sp"
-                    android:paddingBottom="40dp"
-                    android:layout_marginBottom="0dp"
-                    android:onClick="phasePause"
-                    />
-                <ekylibre.util.ExtendedChronometer
-                    android:id="@+id/chrono_active_traveling"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:elevation="200dp"
-                    android:textColor="@color/ultraLight_grey"
-                    android:textSize="16sp"
-                    android:gravity="center"
-                    android:layout_gravity="bottom"
-                    android:background="@color/invisible"
-                    android:layout_alignBottom="@+id/active_traveling"
-                    android:layout_marginBottom="4dp"
-                    />
-
-            </RelativeLayout>
-            <RelativeLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="0.30"
-                android:id="@+id/layout_intervention"
-                android:layout_marginStart="10dp">
-                <Button
-                    android:id="@+id/intervention"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="@drawable/button_disabled"
-                    android:paddingTop="15dp"
-                    android:text="Interv"
-                    android:textStyle="bold"
-                    android:textColor="@color/ultra_dark_grey"
-                    android:textSize="20sp"
-                    android:onClick="phaseIntervention"
-                    android:paddingBottom="40dp"
-                    android:layout_marginBottom="0dp"
-                    />
-                <ekylibre.util.ExtendedChronometer
-                    android:id="@+id/chrono_intervention"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:elevation="200dp"
-                    android:textColor="@color/ultra_dark_grey"
-                    android:textSize="16sp"
-                    android:gravity="center"
-                    android:layout_gravity="bottom"
-                    android:background="@color/invisible"
-                    android:layout_alignBottom="@+id/intervention"
-                    android:layout_marginBottom="4dp"
-                    />
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="0.30"
-                android:id="@+id/layout_active_intervention"
-                android:layout_marginStart="10dp"
-                android:visibility="gone">
-
-                <Button
-                    android:id="@+id/active_intervention"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="@drawable/state_enabled"
-                    android:paddingTop="15dp"
-                    android:text="Interv"
-                    android:textStyle="bold"
-                    android:textColor="@color/ultraLight_grey"
-                    android:textSize="20sp"
-                    android:paddingBottom="40dp"
-                    android:layout_marginBottom="0dp"
-                    android:onClick="phasePause"
-                    />
-                <ekylibre.util.ExtendedChronometer
-                    android:id="@+id/chrono_active_intervention"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:elevation="200dp"
-                    android:textColor="@color/ultraLight_grey"
-                    android:textSize="16sp"
-                    android:gravity="center"
-                    android:layout_gravity="bottom"
-                    android:background="@color/invisible"
-                    android:layout_alignBottom="@+id/active_intervention"
-                    android:layout_marginBottom="4dp"
-                    />
-            </RelativeLayout>
-
-        </LinearLayout>
-
-
-
-
     </LinearLayout>
+
+</android.support.design.widget.CoordinatorLayout>
+
+    <!--
+<LinearLayout
+android:layout_width="match_parent"
+android:layout_height="0dp"
+android:gravity="bottom"
+android:layout_weight="1"
+    >
+<Button
+    android:layout_width="0dp"
+    android:layout_height="70dp"
+    android:layout_weight="0.2"
+    android:drawableTop="@drawable/cancel"
+    android:paddingTop="10dp"
+    android:background="@color/invisible"
+    android:gravity="center"
+    android:scaleType="fitXY"
+    android:visibility="gone"
+    />
+
+
+<Button
+    android:layout_width="0dp"
+    android:layout_height="70dp"
+    android:layout_weight="0.2"
+    android:paddingTop="10dp"
+    android:drawableTop="@drawable/send"
+    android:background="@color/invisible"
+    android:gravity="center"
+    android:visibility="gone"
+    />
+
 </LinearLayout>
+
+-->
 

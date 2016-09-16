@@ -60,7 +60,8 @@
             android:label="@string/new_intervention"
             android:launchMode="singleTask"
             android:parentActivityName=".home.MainActivity"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".home.MainActivity" />
@@ -73,7 +74,8 @@
             android:configChanges="orientation"
             android:icon="@mipmap/ic_ekylibre"
             android:label="@string/service_name"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            />
         <activity
             android:name=".home.MainActivity"
             android:label="@string/app_name"
@@ -148,7 +150,8 @@
         <!-- Settings -->
         <activity
             android:name=".SettingsActivity"
-            android:label="@string/settings">
+            android:label="@string/settings"
+            android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 
@@ -164,13 +167,15 @@
         <activity
             android:name=".IssueActivity"
             android:label="@string/new_issue"
-            android:parentActivityName=".home.MainActivity" />
+            android:parentActivityName=".home.MainActivity"
+            android:theme="@style/AppTheme.NoActionBar"            />
         <activity
             android:name=".PlantCountingActivity"
             android:configChanges="orientation"
             android:label="@string/title_activity_sorting"
             android:parentActivityName=".home.MainActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar"            />
         <!--
  ATTENTION: This was auto-generated to add Google Play services to your project for
      App Indexing.  See https://g.co/AppIndexing/AndroidStudio for more information.
@@ -182,7 +187,7 @@
         <activity
             android:name=".account.AccountManagerActivity"
             android:parentActivityName=".home.MainActivity"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/AppTheme.NoActionBar"            >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".home.MainActivity" />
@@ -201,7 +206,8 @@
 
         <activity
             android:name=".tracking.MapsActivity"
-            android:label="@string/title_activity_maps"/>
+            android:label="@string/title_activity_maps"
+            android:theme="@style/AppTheme.NoActionBar"            />
     </application>
 
 </manifest>
