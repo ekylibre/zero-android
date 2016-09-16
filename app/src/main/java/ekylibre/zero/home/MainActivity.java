@@ -13,6 +13,7 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
+import android.text.format.Time;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -21,6 +22,8 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import java.util.Calendar;
 
 import ekylibre.database.ZeroContract;
 import ekylibre.zero.account.AccountManagerActivity;
@@ -48,7 +51,7 @@ import ekylibre.util.UpdatableActivity;
 **
 ** You can access all actions activity from the floating button
 **
-** //!\\ WARNING //!\\ You must block all actions during sync by using boolean isSync of super class
+** //!\\ WARNING //!\\ You must block all user's actions during sync by using the boolean isSync of super class
 **                 __Example__ : private void foo()
 **                               {
 **                                    if (super.isSync)
@@ -59,7 +62,6 @@ import ekylibre.util.UpdatableActivity;
 public class MainActivity extends UpdatableActivity
         implements NavigationView.OnNavigationItemSelectedListener
 {
-
     private Account         mAccount;
     private TextView        mNav_account;
     private TextView        mNav_instance;
@@ -69,6 +71,7 @@ public class MainActivity extends UpdatableActivity
     private boolean         firstPass;
     private final String    TAG = "MainActivity";
     private TodoListActivity todoListActivity;
+    private Calendar        syncTime = Calendar.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -96,7 +99,7 @@ public class MainActivity extends UpdatableActivity
         mNav_account = (TextView)headerLayout.findViewById(R.id.nav_accountName);
         mNav_instance = (TextView)headerLayout.findViewById(R.id.nav_farmURL);
         mPrgressBar = (ProgressBar)findViewById(R.id.progress_bar);
-        sync_data();
+        forceSync_data();
     }
 
     /*
@@ -116,6 +119,8 @@ public class MainActivity extends UpdatableActivity
         setAccountName(mNavigationView);
         firstPass = false;
     }
+
+    // TODO :: SYNC ON FIRST
 
     /*
     ** Start service which auto sync when internet is detected
@@ -297,6 +302,16 @@ public class MainActivity extends UpdatableActivity
 
     private void    sync_data()
     {
+        if (mAccount == null || syncedInLastMinutes())
+            return ;
+        Log.d("zero", "syncData: " + mAccount.toString() + ", " + ZeroContract.AUTHORITY);
+        Bundle extras = new Bundle();
+        extras.putBoolean(ContentResolver.SYNC_EXTRAS_MANUAL, true);
+        extras.putBoolean(ContentResolver.SYNC_EXTRAS_EXPEDITED, true);
+        ContentResolver.requestSync(mAccount, ZeroContract.AUTHORITY, extras);
+    }
+    private void    forceSync_data()
+    {
         if (mAccount == null)
             return ;
         Log.d("zero", "syncData: " + mAccount.toString() + ", " + ZeroContract.AUTHORITY);
@@ -304,6 +319,18 @@ public class MainActivity extends UpdatableActivity
         extras.putBoolean(ContentResolver.SYNC_EXTRAS_MANUAL, true);
         extras.putBoolean(ContentResolver.SYNC_EXTRAS_EXPEDITED, true);
         ContentResolver.requestSync(mAccount, ZeroContract.AUTHORITY, extras);
+        syncTime.setTimeInMillis(Calendar.getInstance().getTimeInMillis());
+    }
+
+    private boolean syncedInLastMinutes()
+    {
+        Calendar currentTime = Calendar.getInstance();
+        if (syncTime.getTimeInMillis() + ConnectionManagerService.TIME_TO_NEXT_SYNC < currentTime.getTimeInMillis())
+        {
+            syncTime.setTimeInMillis(currentTime.getTimeInMillis());
+            return (false);
+        }
+        return (true);
     }
 
     /*

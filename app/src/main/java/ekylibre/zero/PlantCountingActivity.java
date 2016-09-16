@@ -127,6 +127,7 @@ public class PlantCountingActivity extends UpdatableActivity  {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.plant_counting);
+        super.setToolBar();
 
         mLayout = (LinearLayout) findViewById(R.id.Valueslayout);
         plantChooser = (Spinner) findViewById(R.id.plantName);

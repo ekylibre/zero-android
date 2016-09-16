@@ -19,6 +19,7 @@ import android.os.Bundle;
 import android.os.SystemClock;
 import android.preference.PreferenceManager;
 import android.print.PrintAttributes;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
@@ -27,6 +28,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.Chronometer;
 import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
@@ -60,6 +62,9 @@ import ekylibre.zero.SettingsActivity;
 
 public class TrackingActivity extends UpdatableActivity implements TrackingListenerWriter
 {
+    /* ****************************
+    **      CONSTANT VALUES
+    ** ***************************/
     protected final int PRODUCT_NAME = 1;
     protected final int LABEL = 2;
     protected final int NAME = 3;
@@ -67,39 +72,45 @@ public class TrackingActivity extends UpdatableActivity implements TrackingListe
     protected final int TRAVELING = 1;
     protected final int INTERVENTION = 2;
     protected final int PAUSE = 3;
-    protected int       state = -1;
     public final static String NEW = "new_intervention";
+    public static final String   _interventionID = "intervention_id";
+    private final String TAG = "TrackingActivity";
 
-    private String mLastProcedureNature, mLastProcedureNatureName;
-    private Button mStartButton;
+    /* ****************************
+    ** Notification builder and variables
+    ** ***************************/
+    private NotificationManager mNotificationManager;
+    private Notification.Builder mNotificationBuilder;
+    private int mNotificationID;
+
+    /* ****************************
+    ** Interface elements variables
+    ** ***************************/
+    private ScrollView infoScroll;
+    private RelativeLayout layoutActivePreparation, layoutActiveTraveling, layoutActiveIntervention, layoutPreparation, layoutTraveling, layoutIntervention;
+    private View preparation, traveling, intervention;
+    private ExtendedChronometer chronoGeneral, chronoPreparation, chronoTraveling, chronoIntervention, chronoActivePreparation, chronoActiveTraveling, chronoActiveIntervention;
+    private CheckBox diffStuff;
+    private Button mStartButton, mMapButton;
     private TextView mProcedureNature;
+
+    /* ****************************
+    **      Class variables
+    ** ***************************/
+    private int    mInterventionID;
+    protected int       state = -1;
+    private String mLastProcedureNature, mLastProcedureNatureName;
     private String mLocationProvider;
     private TrackingListener mTrackingListener;
     private Account mAccount;
     private AlertDialog.Builder mProcedureChooser;
     private SharedPreferences mPreferences;
     private IntentIntegrator mScanIntegrator;
-    public static final String   _interventionID = "intervention_id";
     private RelativeLayout infoLayout;
-    private ScrollView infoScroll;
-
     private LocationManager mLocationManager;
-    private NotificationManager mNotificationManager;
-    private Notification.Builder mNotificationBuilder;
-    private int mNotificationID;
-    //private Notification mNotification;
-
-    private RelativeLayout layoutActivePreparation, layoutActiveTraveling, layoutActiveIntervention, layoutPreparation, layoutTraveling, layoutIntervention;
-    private View preparation, traveling, intervention;
-    private ExtendedChronometer chronoGeneral, chronoPreparation, chronoTraveling, chronoIntervention, chronoActivePreparation, chronoActiveTraveling, chronoActiveIntervention;
-
-    private Button mMapButton;
-    private int    mInterventionID;
-
     private CrumbsCalculator crumbsCalculator;
     private boolean mNewIntervention;
 
-    private final String TAG = "TrackingActivity";
 
     @Override
     public void onStart()
@@ -123,7 +134,7 @@ public class TrackingActivity extends UpdatableActivity implements TrackingListe
 
         // Set content view
         setContentView(R.layout.tracking);
-
+        super.setToolBar();
         mNewIntervention = getIntent().getBooleanExtra(TrackingActivity.NEW, false);
 
         layoutPreparation = (RelativeLayout) findViewById(R.id.layout_preparation);
@@ -142,13 +153,21 @@ public class TrackingActivity extends UpdatableActivity implements TrackingListe
         chronoActiveTraveling = (ExtendedChronometer) findViewById(R.id.chrono_active_traveling);
         chronoActiveIntervention = (ExtendedChronometer) findViewById(R.id.chrono_active_intervention);
         chronoGeneral = (ExtendedChronometer) findViewById(R.id.chrono_general);
-
-        // Find view elements
         mProcedureNature          = (TextView)   findViewById(R.id.procedure_nature);
         mStartButton              = (Button)     findViewById(R.id.start_intervention_button);
         mMapButton                = (Button)     findViewById(R.id.map_button);
         infoLayout                = (RelativeLayout) findViewById(R.id.infoLayout);
         infoScroll                = (ScrollView) findViewById(R.id.interventionInfo);
+        diffStuff                 = (CheckBox) findViewById(R.id.diff_stuff);
+        diffStuff.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                CheckBox box =  (CheckBox) view;
+                Log.d(TAG, "CheckBox state => " + box.isChecked());
+            }
+        });
 
         // Acquire a reference to the system Location Manager
         mTrackingListener = new TrackingListener(this);
@@ -172,8 +191,8 @@ public class TrackingActivity extends UpdatableActivity implements TrackingListe
             disableInterface();
         else
             createProcedureChooser();
-
     }
+
 
     private void disableInterface()
     {
@@ -394,7 +413,7 @@ public class TrackingActivity extends UpdatableActivity implements TrackingListe
     {
         // Inflate the menu items for use in the action bar
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.sender, menu);
+        inflater.inflate(R.menu.form, menu);
         return (super.onCreateOptionsMenu(menu));
     }
 
@@ -406,11 +425,10 @@ public class TrackingActivity extends UpdatableActivity implements TrackingListe
     public boolean onOptionsItemSelected(MenuItem item)
     {
         int     id = item.getItemId();
-        Intent  intent;
 
-        if (id == R.id.sender)
+        if (id == R.id.action_save)
         {
-            Toast.makeText(this, "I'm sending intervention !", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "I'm saving intervention !", Toast.LENGTH_SHORT).show();
         }
         return (super.onOptionsItemSelected(item));
     }

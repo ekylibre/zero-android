@@ -17,6 +17,7 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -42,8 +43,11 @@ import java.util.Date;
 import ekylibre.database.ZeroContract;
 import ekylibre.util.AccountTool;
 import ekylibre.util.PermissionManager;
+import ekylibre.util.UpdatableActivity;
+import ekylibre.util.UpdatableClass;
 
-public class IssueActivity extends AppCompatActivity {
+public class IssueActivity extends UpdatableActivity
+{
 
     public static final int SHOW_PICTURE = 30;
 
@@ -77,6 +81,7 @@ public class IssueActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.issue);
+        super.setToolBar();
 
         mAccount = AccountTool.getCurrentAccount(this);
         mIssueNatureSpinner = (Spinner) findViewById(R.id.spinner);

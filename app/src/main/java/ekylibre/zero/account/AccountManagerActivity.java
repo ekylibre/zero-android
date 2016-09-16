@@ -16,12 +16,13 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import ekylibre.database.ZeroContract;
+import ekylibre.util.UpdatableActivity;
 import ekylibre.zero.AuthenticatorActivity;
 import ekylibre.zero.R;
 import ekylibre.APICaller.SyncAdapter;
 import ekylibre.util.AccountTool;
 
-public class AccountManagerActivity extends AppCompatActivity
+public class AccountManagerActivity extends UpdatableActivity
 {
     private Account[]               listAccount;
     private String                  TAG = "AccountManager";
@@ -45,6 +46,8 @@ public class AccountManagerActivity extends AppCompatActivity
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_account_manager);
+        super.setToolBar();
+
         ListView accountListView = (ListView)findViewById(R.id.account_list);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
