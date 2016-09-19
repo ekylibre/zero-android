@@ -26,6 +26,7 @@ import android.widget.Toast;
 import java.util.Calendar;
 
 import ekylibre.database.ZeroContract;
+import ekylibre.service.GeneralHandler;
 import ekylibre.zero.account.AccountManagerActivity;
 import ekylibre.zero.IssueActivity;
 import ekylibre.zero.PlantCountingActivity;
@@ -72,6 +73,7 @@ public class MainActivity extends UpdatableActivity
     private final String    TAG = "MainActivity";
     private TodoListActivity todoListActivity;
     private Calendar        syncTime = Calendar.getInstance();
+    private DrawerLayout    mDrawer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -88,18 +90,19 @@ public class MainActivity extends UpdatableActivity
             return;
         }
         mAccount = AccountTool.getCurrentAccount(MainActivity.this);
-        setToolbar();
+        super.setToolBar();
 
         setFloatingActBtn();
 
         setDrawerLayout();
         setTodolist();
         startConnectionManager();
+        startGeneralHandler();
         View headerLayout = mNavigationView.inflateHeaderView(R.layout.nav_header_main);
         mNav_account = (TextView)headerLayout.findViewById(R.id.nav_accountName);
         mNav_instance = (TextView)headerLayout.findViewById(R.id.nav_farmURL);
         mPrgressBar = (ProgressBar)findViewById(R.id.progress_bar);
-        forceSync_data();
+        sync_data();
     }
 
     /*
@@ -133,15 +136,24 @@ public class MainActivity extends UpdatableActivity
     }
 
     /*
+    ** Start service which call function every 5 minutes to do some useful stuff
+    */
+    private void    startGeneralHandler()
+    {
+        Intent connectIntent = new Intent(MainActivity.this, GeneralHandler.class);
+        startService(connectIntent);
+    }
+
+    /*
     ** Setting the navigation view on drawer layout
     ** This is the slide menu on the left
     */
     private void    setDrawerLayout()
     {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        mDrawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, mToolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.setDrawerListener(toggle);
+                this, mDrawer, mToolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        mDrawer.setDrawerListener(toggle);
         toggle.syncState();
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
@@ -164,16 +176,6 @@ public class MainActivity extends UpdatableActivity
                 launchIntervention(null);
             }
         });
-    }
-
-    /*
-    ** Set toolbar which is the new version of th action bar
-    */
-    private void    setToolbar()
-    {
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        mToolbar = toolbar;
     }
 
     /*
@@ -203,10 +205,9 @@ public class MainActivity extends UpdatableActivity
     @Override
     public void onBackPressed()
     {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        if (drawer.isDrawerOpen(GravityCompat.START))
+        if (mDrawer.isDrawerOpen(GravityCompat.START))
         {
-            drawer.closeDrawer(GravityCompat.START);
+            mDrawer.closeDrawer(GravityCompat.START);
         }
         else
         {
@@ -242,7 +243,11 @@ public class MainActivity extends UpdatableActivity
             startActivity(intent);
             return (true);
         }
-        return super.onOptionsItemSelected(item);
+        else if (id == android.R.id.home)
+        {
+            mDrawer.openDrawer(GravityCompat.START);
+        }
+        return (super.onOptionsItemSelected(item));
     }
 
     /*
@@ -283,7 +288,7 @@ public class MainActivity extends UpdatableActivity
         }
         else if (id == R.id.nav_sync)
         {
-            sync_data();
+            forceSync_data();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

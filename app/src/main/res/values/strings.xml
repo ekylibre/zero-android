@@ -100,4 +100,6 @@
     <string name="plant_counting_cannot_save">Cannot save Plant counting, please finish your counting</string>
     <string name="diff_stuff">Different stuff</string>
     <string name="send">Send</string>
+    <string name="pref_poke">Reminder every 5 minutes</string>
+    <string name="pref_poke_summary">Send a poke every 5 minutes that will make the phone vibrate to remind you the application is running</string>
 </resources>
