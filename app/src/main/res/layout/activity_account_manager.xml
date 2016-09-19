@@ -17,7 +17,6 @@
         android:id="@+id/add_account_button"
         android:layout_gravity="bottom"
         android:onClick="addAccount"
-        android:drawableLeft="@drawable/account_add"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:textColor="@color/ultraLight_grey"
         android:textStyle="bold"

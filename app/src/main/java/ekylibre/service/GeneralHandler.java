@@ -9,7 +9,9 @@ import android.os.IBinder;
 import android.os.Vibrator;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
+import android.util.Log;
 
+import ekylibre.util.PermissionManager;
 import ekylibre.zero.SettingsActivity;
 
 /**************************************
@@ -19,7 +21,7 @@ import ekylibre.zero.SettingsActivity;
 public class GeneralHandler extends Service
 {
     private static final String     TAG = "GeneralHandler";
-    public static final int         TIME_TO_NEXT_SYNC = 300000;
+    public static final int         TIME_TO_NEXT_SYNC = 600000;
     private Handler handler;
 
 

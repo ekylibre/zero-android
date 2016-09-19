@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.design.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:layout_width="fill_parent"
@@ -103,7 +104,7 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:visibility="gone"
-                android:drawableLeft="@drawable/ic_map"
+                app:srcCompat="@drawable/ic_map"
                 android:text="@string/open_map"
                 android:background="@drawable/basic_button"
                 android:textColor="@color/ultraLight_grey"
@@ -114,7 +115,7 @@
                 android:layout_gravity="center_horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:drawableLeft="@drawable/ic_add_white"
+                app:srcCompat="@drawable/ic_add_white"
                 android:text="@string/start"
                 android:onClick="startIntervention"
                 android:background="@drawable/basic_button"

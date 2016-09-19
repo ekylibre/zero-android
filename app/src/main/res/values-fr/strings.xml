@@ -100,6 +100,6 @@
     <string name="plant_counting_cannot_save">Impossible de sauvegarder le comptage, finissez le avant de continuer</string>
     <string name="diff_stuff">Matériel différent</string>
     <string name="send">Envoyer</string>
-    <string name="pref_poke">Rappel toutes les 5 minutes</string>
-    <string name="pref_poke_summary">Envoyer une vibration toutes les 5 minutes qui rappelera que l\'application est en cours d\'execution</string>
+    <string name="pref_poke">Rappel toutes les 10 minutes</string>
+    <string name="pref_poke_summary">Envoyer une vibration toutes les 10 minutes qui rappelera que l\'application est en cours d\'execution</string>
 </resources>
