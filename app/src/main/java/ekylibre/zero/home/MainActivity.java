@@ -140,8 +140,11 @@ public class MainActivity extends UpdatableActivity
     */
     private void    startGeneralHandler()
     {
-        Intent connectIntent = new Intent(MainActivity.this, GeneralHandler.class);
-        startService(connectIntent);
+        if (PermissionManager.vibrationPermissions(this, this))
+        {
+            Intent connectIntent = new Intent(MainActivity.this, GeneralHandler.class);
+            startService(connectIntent);
+        }
     }
 
     /*

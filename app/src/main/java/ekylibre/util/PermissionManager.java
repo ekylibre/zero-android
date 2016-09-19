@@ -127,5 +127,25 @@ public class PermissionManager
         }
         Log.d(TAG, "PERMISSIONS GRANTED");
         return (true);
-}
+    }
+
+    public static boolean vibrationPermissions(Context context, Activity activity)
+    {
+        if (Build.VERSION.SDK_INT >= 23 &&
+                (ActivityCompat.checkSelfPermission(context, Manifest.permission.VIBRATE)
+                        != PackageManager.PERMISSION_GRANTED))
+        {
+            Log.d(TAG, "REQUESTING PERMISSIONS");
+            ActivityCompat.requestPermissions(activity,
+                    new String[]{Manifest.permission.ACCESS_NETWORK_STATE, Manifest.permission.INTERNET},
+                    REQUEST_STORAGE);
+
+            if (Build.VERSION.SDK_INT >= 23 &&
+                    (ActivityCompat.checkSelfPermission(context, Manifest.permission.VIBRATE)
+                            != PackageManager.PERMISSION_GRANTED))
+                return (false);
+        }
+        Log.d(TAG, "PERMISSIONS GRANTED");
+        return (true);
+    }
 }
