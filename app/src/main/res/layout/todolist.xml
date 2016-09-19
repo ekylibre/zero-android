@@ -16,21 +16,4 @@
         android:divider="@color/invisible"
         android:layout_marginStart="9dp"
         android:layout_marginEnd="9dp"/>
-
-    <Button
-        android:layout_width="300dp"
-        android:layout_height="50dp"
-        android:text="@string/new_intervention"
-        android:id="@+id/new_intervention"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginBottom="2dp"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:theme="@style/RaisedButton"
-        android:textColor="@color/white"
-        android:textSize="15sp"
-        android:drawableStart="@drawable/ic_add_white"
-        android:onClick="launchIntervention"
-        android:visibility="gone"/>
-
 </RelativeLayout>
