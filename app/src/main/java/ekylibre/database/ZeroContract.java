@@ -53,6 +53,14 @@ public final class ZeroContract {
         String PRODUCT_ID = "product_id";
     }
 
+    public interface WorkingPeriodsColumns extends BaseColumns {
+        String TABLE_NAME = "working_parameters";
+        String FK_INTERVENTION = "fk_intervention";
+        String NATURE = "nature";
+        String STARTED_AT = "started_at";
+        String STOPPED_AT = "stopped_at";
+    }
+
     public interface IssuesColumns extends BaseColumns {
         String TABLE_NAME = "issues";
         String NATURE = "nature";
@@ -168,6 +176,21 @@ public final class ZeroContract {
         public static final String[] PROJECTION_TARGET_FULL = {_ID, PRODUCT_NAME, LABEL, NAME};
         public static final String[] PROJECTION_INPUT_FULL = {_ID, PRODUCT_NAME, LABEL, NAME};
         public static final String[] PROJECTION_TOOL_FULL = {_ID, PRODUCT_NAME, LABEL, NAME};
+
+        public static final String SORT_ORDER_DEFAULT = _ID + " ASC";
+
+    }
+
+    public static final class WorkingPeriods implements WorkingPeriodsColumns {
+        // Content URI for this table
+        public static final Uri CONTENT_URI = Uri.withAppendedPath(ZeroContract.CONTENT_URI, "working_periods");
+        // MIME type for lists of records.
+        public static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/vnd.ekylibre.zero.working_periods";
+        // MIME type for individual record.
+        public static final String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/vnd.ekylibre.zero.working_periods";
+
+        public static final String[] PROJECTION_ALL = {_ID};
+        public static final String[] PROJECTION_NONE = {_ID};
 
         public static final String SORT_ORDER_DEFAULT = _ID + " ASC";
 

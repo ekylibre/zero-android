@@ -318,6 +318,7 @@ public class MainActivity extends UpdatableActivity
         extras.putBoolean(ContentResolver.SYNC_EXTRAS_EXPEDITED, true);
         ContentResolver.requestSync(mAccount, ZeroContract.AUTHORITY, extras);
     }
+
     private void    forceSync_data()
     {
         if (mAccount == null)

@@ -20,6 +20,7 @@ import android.os.SystemClock;
 import android.preference.PreferenceManager;
 import android.print.PrintAttributes;
 import android.support.v7.widget.Toolbar;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
@@ -48,10 +49,13 @@ import com.google.zxing.integration.android.IntentResult;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import ekylibre.database.ZeroContract;
+import ekylibre.util.DateConstant;
 import ekylibre.util.ExtendedChronometer;
 import ekylibre.zero.R;
 import ekylibre.util.AccountTool;
@@ -110,6 +114,9 @@ public class TrackingActivity extends UpdatableActivity implements TrackingListe
     private LocationManager mLocationManager;
     private CrumbsCalculator crumbsCalculator;
     private boolean mNewIntervention;
+    private String started_at;
+    private String stopped_at;
+    SimpleDateFormat dateFormatter = new SimpleDateFormat(DateConstant.ISO_8601);
 
 
     @Override
@@ -644,6 +651,41 @@ public class TrackingActivity extends UpdatableActivity implements TrackingListe
         chronoActiveIntervention.stopTimer();
         chronoTraveling.setTime(chronoActiveTraveling.getTime());
         chronoIntervention.setTime(chronoActiveIntervention.getTime());
+
+        updateWorkingPeriods(PREPARATION);
+    }
+
+    private void updateWorkingPeriods(int currentState)
+    {
+        if (currentState == PAUSE)
+        {
+            Calendar cal = Calendar.getInstance();
+            stopped_at = dateFormatter.format(cal.getTime());
+            addWorkingPeriodsToLocalDatabase();
+        }
+        else
+        {
+            Calendar cal = Calendar.getInstance();
+            started_at = dateFormatter.format(cal.getTime());
+        }
+    }
+
+    private void addWorkingPeriodsToLocalDatabase()
+    {
+        ContentValues values = new ContentValues();
+
+        values.put(ZeroContract.WorkingPeriodsColumns.FK_INTERVENTION, mInterventionID);
+        if (state == PREPARATION)
+            values.put(ZeroContract.WorkingPeriodsColumns.NATURE, "preparation");
+        else if (state == TRAVELING)
+            values.put(ZeroContract.WorkingPeriodsColumns.NATURE, "traveling");
+        else
+            values.put(ZeroContract.WorkingPeriodsColumns.NATURE, "intervention");
+
+        values.put(ZeroContract.WorkingPeriodsColumns.STARTED_AT, started_at);
+        values.put(ZeroContract.WorkingPeriodsColumns.STARTED_AT, stopped_at);
+
+        getContentResolver().insert(ZeroContract.Crumbs.CONTENT_URI, values);
     }
 
     public void phaseTraveling(View view)
@@ -704,6 +746,38 @@ public class TrackingActivity extends UpdatableActivity implements TrackingListe
         chronoPreparation.setTime(chronoActivePreparation.getTime());
         chronoTraveling.setTime(chronoActiveTraveling.getTime());
         chronoIntervention.setTime(chronoActiveIntervention.getTime());
+    }
+
+    @Override
+    public void onBackPressed()
+    {
+        final AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+        dialog.setTitle("Et coucou !!");
+        dialog.setPositiveButton("Button 1", new DialogInterface.OnClickListener()
+        {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i)
+            {
+                Toast.makeText(getApplicationContext(), "Button 1 clicked !", Toast.LENGTH_SHORT).show();
+            }
+        });
+        dialog.setPositiveButton("Button 2", new DialogInterface.OnClickListener()
+        {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i)
+            {
+                Toast.makeText(getApplicationContext(), "Button 2 clicked !", Toast.LENGTH_SHORT).show();
+            }
+        });
+        dialog.setNegativeButton("Canacel", new DialogInterface.OnClickListener()
+        {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i)
+            {
+                dialogInterface.cancel();
+            }
+        });
+        dialog.create();
     }
 
     @Override
