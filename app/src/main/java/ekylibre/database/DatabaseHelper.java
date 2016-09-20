@@ -3,10 +3,12 @@ package ekylibre.database;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.nfc.Tag;
+import android.util.Log;
 
 public class DatabaseHelper extends SQLiteOpenHelper
 {
-    public static final int DATABASE_VERSION = 11;
+    public static final int DATABASE_VERSION = 12;
 
     public static final String DATABASE_NAME = "zero";
 
@@ -18,13 +20,15 @@ public class DatabaseHelper extends SQLiteOpenHelper
     @Override
     public void onCreate(SQLiteDatabase database)
     {
-        onUpgrade(database, 0, DATABASE_VERSION);
+        Log.d("databaseHelper", "Create");
+        onUpgrade(database, -1, DATABASE_VERSION);
     }
 
-    // newVersion is ignored because always the same
     @Override
     public void onUpgrade(SQLiteDatabase database, int oldVersion, int newVersion)
     {
+        Log.d("DatabaseHelper", "OLD VERSION => " + oldVersion);
+        oldVersion += 1;
         switch (oldVersion)
         {
             case 0:
@@ -38,6 +42,8 @@ public class DatabaseHelper extends SQLiteOpenHelper
                         + ", " + ZeroContract.CrumbsColumns.SYNCED + " INTEGER NOT NULL DEFAULT 0"
                         + ", " + ZeroContract.CrumbsColumns.METADATA + " TEXT"
                         + ")");
+                if (newVersion == 0)
+                    break;
             case 1:
                 database.execSQL("CREATE TABLE IF NOT EXISTS issues ("
                         + ZeroContract.IssuesColumns._ID + " INTEGER PRIMARY KEY AUTOINCREMENT"
@@ -52,6 +58,8 @@ public class DatabaseHelper extends SQLiteOpenHelper
                         + ", " + ZeroContract.IssuesColumns.LATITUDE + " REAL"
                         + ", " + ZeroContract.IssuesColumns.LONGITUDE + " REAL"
                         + ")");
+                if (newVersion == 1)
+                    break;
             case 2:
                 database.execSQL("CREATE TABLE IF NOT EXISTS plant_countings ("
                         + ZeroContract.PlantCountingsColumns._ID + " INTEGER PRIMARY KEY AUTOINCREMENT"
@@ -74,6 +82,8 @@ public class DatabaseHelper extends SQLiteOpenHelper
                         + ", " + ZeroContract.PlantCountingItemsColumns.PLANT_COUNTING_ID + " INTEGER"
                         + ", FOREIGN KEY(" + ZeroContract.PlantCountingItemsColumns.PLANT_COUNTING_ID +") REFERENCES " + ZeroContract.PlantCountingsColumns.TABLE_NAME + "(" + ZeroContract.PlantCountingsColumns._ID + ") ON DELETE CASCADE"
                         + ")");
+                if (newVersion == 2)
+                    break;
             case 3:
                 database.execSQL("CREATE TABLE IF NOT EXISTS plant_density_abaci ("
                         + ZeroContract.PlantDensityAbaciColumns._ID + " INTEGER PRIMARY KEY"
@@ -88,6 +98,8 @@ public class DatabaseHelper extends SQLiteOpenHelper
                         + ", " + ZeroContract.PlantDensityAbacusItemsColumns.SEEDING_DENSITY_VALUE + " INTEGER"
                         + ", " + ZeroContract.PlantDensityAbacusItemsColumns.PLANTS_COUNT + " INTEGER"
                         + ")");
+                if (newVersion == 3)
+                    break;
             case 4:
                 database.execSQL("CREATE TABLE IF NOT EXISTS plants ("
                         + ZeroContract.PlantsColumns._ID + " INTEGER PRIMARY KEY"
@@ -96,14 +108,20 @@ public class DatabaseHelper extends SQLiteOpenHelper
                         + ", " + ZeroContract.Plants.VARIETY + " VARCHAR(255)"
                         + ", " + ZeroContract.Plants.ACTIVE + " BOOLEAN NOT NULL"
                         + ")");
+                if (newVersion == 4)
+                    break;
             case 5:
                 database.execSQL("ALTER TABLE crumbs ADD user VARCHAR(255)");
                 database.execSQL("ALTER TABLE issues ADD user VARCHAR(255)");
                 database.execSQL("ALTER TABLE plant_countings ADD user VARCHAR(255)");
                 database.execSQL("ALTER TABLE plant_counting_items ADD user VARCHAR(255)");
+                if (newVersion == 5)
+                    break;
             case 6:
                 database.execSQL("ALTER TABLE plant_countings ADD average_value FLOAT");
                 database.execSQL("ALTER TABLE plant_countings ADD synced BOOLEAN NOT NULL DEFAULT 0");
+                if (newVersion == 6)
+                    break;
             case 7:
                 /*
                 ** Sorry for this part of code,
@@ -141,9 +159,13 @@ public class DatabaseHelper extends SQLiteOpenHelper
                         + ", " + ZeroContract.Plants.ACTIVE + " BOOLEAN NOT NULL"
                         + ", " + ZeroContract.PlantDensityAbacusItemsColumns.USER + " VARCHAR(255)"
                         + ")");
+                if (newVersion == 7)
+                    break;
             case 8:
                 database.execSQL("ALTER TABLE plants ADD activity_ID INTEGER DEFAULT 0");
                 database.execSQL("ALTER TABLE plant_density_abaci ADD activity_ID INTEGER DEFAULT 0");
+                if (newVersion == 8)
+                    break;
             case 9:
                 database.execSQL("CREATE TABLE IF NOT EXISTS intervention ("
                         + ZeroContract.InterventionsColumns._ID + " INTEGER PRIMARY KEY AUTOINCREMENT"
@@ -185,6 +207,8 @@ public class DatabaseHelper extends SQLiteOpenHelper
                         + ", " + ZeroContract.CrumbsColumns.USER
                         +" FROM TMP_TABLE");
                 database.execSQL("DROP TABLE IF EXISTS TMP_TABLE");
+                if (newVersion == 9)
+                    break;
             case 10:
                 database.execSQL("ALTER TABLE intervention ADD EK_ID INTEGER");
                 database.execSQL("ALTER TABLE intervention ADD type VARCHAR(255) DEFAULT NULL");
@@ -203,9 +227,33 @@ public class DatabaseHelper extends SQLiteOpenHelper
                         + ", " + ZeroContract.InterventionParametersColumns.NAME + " VARCHAR(255)"
                         + ", " + "FOREIGN KEY (" + ZeroContract.CrumbsColumns.FK_INTERVENTION + ") REFERENCES intervention(_id)"
                         + ")");
+                if (newVersion == 10)
+                    break;
             case 11:
                 database.execSQL("ALTER TABLE intervention_parameters ADD product_name VARCHAR(255) DEFAULT NULL");
                 database.execSQL("ALTER TABLE intervention_parameters ADD product_id INTEGER DEFAULT 0");
+                if (newVersion == 11)
+                    break;
+            case 12:
+                database.execSQL("CREATE TABLE IF NOT EXISTS working_periods ("
+                        + ZeroContract.WorkingPeriodsColumns._ID + " INTEGER PRIMARY KEY AUTOINCREMENT"
+                        + ", " + ZeroContract.WorkingPeriodsColumns.FK_INTERVENTION + " INTEGER"
+                        + ", " + ZeroContract.WorkingPeriodsColumns.NATURE + " VARCHAR(255)"
+                        + ", " + ZeroContract.WorkingPeriodsColumns.STARTED_AT + " VARCHAR(255)"
+                        + ", " + ZeroContract.WorkingPeriodsColumns.STOPPED_AT + " VARCHAR(255)"
+                        + ", " + "FOREIGN KEY (" + ZeroContract.WorkingPeriodsColumns.FK_INTERVENTION + ") REFERENCES intervention(_id)"
+                        + ")");
+                Log.d("ejoezjkljzelfkjzelkfj", "zemlfkzelmfkezlmkfezlmkfmlzekfmlzkeflkzefmkzeflkfzelmfkzelfmzemlfkzemlfkzelmfkml");
+                Log.d("ejoezjkljzelfkjzelkfj", "zemlfkzelmfkezlmkfezlmkfmlzekfmlzkeflkzefmkzeflkfzelmfkzelfmzemlfkzemlfkzelmfkml");
+                Log.d("ejoezjkljzelfkjzelkfj", "zemlfkzelmfkezlmkfezlmkfmlzekfmlzkeflkzefmkzeflkfzelmfkzelfmzemlfkzemlfkzelmfkml");
+                Log.d("ejoezjkljzelfkjzelkfj", "zemlfkzelmfkezlmkfezlmkfmlzekfmlzkeflkzefmkzeflkfzelmfkzelfmzemlfkzemlfkzelmfkml");
+                Log.d("ejoezjkljzelfkjzelkfj", "zemlfkzelmfkezlmkfezlmkfmlzekfmlzkeflkzefmkzeflkfzelmfkzelfmzemlfkzemlfkzelmfkml");
+                Log.d("ejoezjkljzelfkjzelkfj", "zemlfkzelmfkezlmkfezlmkfmlzekfmlzkeflkzefmkzeflkfzelmfkzelfmzemlfkzemlfkzelmfkml");
+                Log.d("ejoezjkljzelfkjzelkfj", "zemlfkzelmfkezlmkfezlmkfmlzekfmlzkeflkzefmkzeflkfzelmfkzelfmzemlfkzemlfkzelmfkml");
+                Log.d("ejoezjkljzelfkjzelkfj", "zemlfkzelmfkezlmkfezlmkfmlzekfmlzkeflkzefmkzeflkfzelmfkzelfmzemlfkzemlfkzelmfkml");
+                Log.d("ejoezjkljzelfkjzelkfj", "zemlfkzelmfkezlmkfezlmkfmlzekfmlzkeflkzefmkzeflkfzelmfkzelfmzemlfkzemlfkzelmfkml");
+                if (newVersion == 12)
+                    break;
         }
     }
 }

@@ -46,9 +46,9 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
     public static final String SYNC_STARTED = "sync_started";
     public static final String SYNC_FINISHED = "sync_finished";
 
-    ContentResolver mContentResolver;
-    AccountManager  mAccountManager;
-    Context         mContext;
+    private ContentResolver mContentResolver;
+    private AccountManager  mAccountManager;
+    private Context         mContext;
 
     /**
      * Set up the sync adapter
