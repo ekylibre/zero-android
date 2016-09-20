@@ -4,30 +4,45 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.nfc.Tag;
+import android.os.Build;
+import android.os.Debug;
+import android.support.design.BuildConfig;
 import android.util.Log;
 
 public class DatabaseHelper extends SQLiteOpenHelper
 {
-    public static final int DATABASE_VERSION = 12;
+    private static final int DATABASE_VERSION = 12;
 
-    public static final String DATABASE_NAME = "zero";
+    private static final String DATABASE_NAME = "zero";
+
+    private static final int NO_VERSION = -1;
 
     public DatabaseHelper(Context context)
     {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
+
+
+    /*
+    ** Called on the first creation of the DB if there is no DB with the same DATABASE_NAME
+    ** Parameters NO_VERSION is used to say there isn't any version at the creation
+    */
     @Override
     public void onCreate(SQLiteDatabase database)
     {
-        Log.d("databaseHelper", "Create");
-        onUpgrade(database, -1, DATABASE_VERSION);
+        onUpgrade(database, NO_VERSION, DATABASE_VERSION);
     }
 
+    /*
+    ** Called when the newVersion is > than oldVersion
+    ** Execute migration from oldVersion + 1 to DATABASE_VERSION
+    ** note : +1 is applied to oldVersion to start at the next migration that is needed by current device
+    */
     @Override
     public void onUpgrade(SQLiteDatabase database, int oldVersion, int newVersion)
     {
-        Log.d("DatabaseHelper", "OLD VERSION => " + oldVersion);
+        if (BuildConfig.DEBUG) Log.d("DatabaseHelper", "OLD VERSION => " + oldVersion);
         oldVersion += 1;
         switch (oldVersion)
         {
@@ -243,15 +258,6 @@ public class DatabaseHelper extends SQLiteOpenHelper
                         + ", " + ZeroContract.WorkingPeriodsColumns.STOPPED_AT + " VARCHAR(255)"
                         + ", " + "FOREIGN KEY (" + ZeroContract.WorkingPeriodsColumns.FK_INTERVENTION + ") REFERENCES intervention(_id)"
                         + ")");
-                Log.d("ejoezjkljzelfkjzelkfj", "zemlfkzelmfkezlmkfezlmkfmlzekfmlzkeflkzefmkzeflkfzelmfkzelfmzemlfkzemlfkzelmfkml");
-                Log.d("ejoezjkljzelfkjzelkfj", "zemlfkzelmfkezlmkfezlmkfmlzekfmlzkeflkzefmkzeflkfzelmfkzelfmzemlfkzemlfkzelmfkml");
-                Log.d("ejoezjkljzelfkjzelkfj", "zemlfkzelmfkezlmkfezlmkfmlzekfmlzkeflkzefmkzeflkfzelmfkzelfmzemlfkzemlfkzelmfkml");
-                Log.d("ejoezjkljzelfkjzelkfj", "zemlfkzelmfkezlmkfezlmkfmlzekfmlzkeflkzefmkzeflkfzelmfkzelfmzemlfkzemlfkzelmfkml");
-                Log.d("ejoezjkljzelfkjzelkfj", "zemlfkzelmfkezlmkfezlmkfmlzekfmlzkeflkzefmkzeflkfzelmfkzelfmzemlfkzemlfkzelmfkml");
-                Log.d("ejoezjkljzelfkjzelkfj", "zemlfkzelmfkezlmkfezlmkfmlzekfmlzkeflkzefmkzeflkfzelmfkzelfmzemlfkzemlfkzelmfkml");
-                Log.d("ejoezjkljzelfkjzelkfj", "zemlfkzelmfkezlmkfezlmkfmlzekfmlzkeflkzefmkzeflkfzelmfkzelfmzemlfkzemlfkzelmfkml");
-                Log.d("ejoezjkljzelfkjzelkfj", "zemlfkzelmfkezlmkfezlmkfmlzekfmlzkeflkzefmkzeflkfzelmfkzelfmzemlfkzemlfkzelmfkml");
-                Log.d("ejoezjkljzelfkjzelkfj", "zemlfkzelmfkezlmkfezlmkfmlzekfmlzkeflkzefmkzeflkfzelmfkzelfmzemlfkzemlfkzelmfkml");
                 if (newVersion == 12)
                     break;
         }
