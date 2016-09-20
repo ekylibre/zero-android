@@ -123,7 +123,6 @@ public class TrackingActivity extends UpdatableActivity implements TrackingListe
         }
     }
 
-    /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -222,7 +221,9 @@ public class TrackingActivity extends UpdatableActivity implements TrackingListe
 
         if (cursTarget == null || cursTarget.getCount() == 0)
             return (botId);
-        return (writeCursor(cursTarget, botId));
+        botId = writeCursor(cursTarget, botId);
+        cursTarget.close();
+        return (botId);
     }
 
     private int writeInput(int botId)
@@ -231,7 +232,9 @@ public class TrackingActivity extends UpdatableActivity implements TrackingListe
 
         if (cursInput == null || cursInput.getCount() == 0)
             return (botId);
-        return (writeCursor(cursInput, botId));
+        botId = writeCursor(cursInput, botId);
+        cursInput.close();
+        return (botId);
     }
 
     private int writeTool(int botId)
@@ -240,7 +243,9 @@ public class TrackingActivity extends UpdatableActivity implements TrackingListe
 
         if (cursTool == null || cursTool.getCount() == 0)
             return (botId);
-        return (writeCursor(cursTool, botId));
+        botId = writeCursor(cursTool, botId);
+        cursTool.close();
+        return (botId);
     }
 
     private int writeCursor(Cursor curs, int botId)
@@ -509,31 +514,6 @@ public class TrackingActivity extends UpdatableActivity implements TrackingListe
         return (ret);
     }
 
-    public void pauseIntervention(View view) {
-
-
-        this.stopTracking();
-        this.addCrumb("pause");
-        mNotificationBuilder
-                .setSmallIcon(R.mipmap.ic_stat_notify_paused)
-                .setContentText(getString(R.string.paused));
-        mNotificationManager.notify(mNotificationID, mNotificationBuilder.build());
-    }
-
-    public void resumeIntervention(View view) {
-
-
-        this.startTracking();
-        this.addCrumb("resume");
-
-        mNotificationManager.notify(mNotificationID, mNotificationBuilder.build());
-    }
-
-
-    public void scanCode(View view) {
-        mScanIntegrator.initiateScan();
-    }
-
     public void onActivityResult(int requestCode, int resultCode, Intent intent) {
         IntentResult aScanResult = mScanIntegrator.parseActivityResult(requestCode, resultCode, intent);
         if (aScanResult != null) {
@@ -617,7 +597,7 @@ public class TrackingActivity extends UpdatableActivity implements TrackingListe
         values.put(ZeroContract.CrumbsColumns.ACCURACY, 0);
         values.put(ZeroContract.CrumbsColumns.SYNCED, 0);
         values.put(ZeroContract.CrumbsColumns.FK_INTERVENTION, mInterventionID);
-        putMetadata(crumb.getMetadata(), values);
+        //putMetadata(crumb.getMetadata(), values);
 
         getContentResolver().insert(ZeroContract.Crumbs.CONTENT_URI, values);
     }
