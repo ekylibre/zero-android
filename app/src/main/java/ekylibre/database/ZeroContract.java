@@ -54,7 +54,7 @@ public final class ZeroContract {
     }
 
     public interface WorkingPeriodsColumns extends BaseColumns {
-        String TABLE_NAME = "working_parameters";
+        String TABLE_NAME = "working_periods";
         String FK_INTERVENTION = "fk_intervention";
         String NATURE = "nature";
         String STARTED_AT = "started_at";
