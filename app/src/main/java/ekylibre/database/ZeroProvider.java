@@ -171,124 +171,96 @@ public class ZeroProvider extends ContentProvider {
                 return cursor;
 
             case ROUTE_PLANT_COUNTING_ITEM:
-                // Return a single ISSUE, by ID.
                 id = uri.getLastPathSegment();
                 builder.where(ZeroContract.PlantCountingsColumns._ID + "=?", id);
             case ROUTE_PLANT_COUNTING_LIST:
-                // Return all known Issue.
                 builder.table(ZeroContract.PlantCountingsColumns.TABLE_NAME)
                         .where(selection, selectionArgs);
                 cursor = builder.query(database, projection, sortOrder);
-                // Note: Notification URI must be manually set here for loaders to correctly
-                // register ContentObservers.
                 context = getContext();
                 assert context != null;
                 cursor.setNotificationUri(context.getContentResolver(), uri);
                 return cursor;
 
             case ROUTE_PLANT_COUNTING_ITEM_ITEM:
-                // Return a single ISSUE, by ID.
                 id = uri.getLastPathSegment();
                 builder.where(ZeroContract.PlantCountingItemsColumns._ID + "=?", id);
             case ROUTE_PLANT_COUNTING_ITEM_LIST:                // Return all known Issue.
                 builder.table(ZeroContract.PlantCountingItemsColumns.TABLE_NAME)
                         .where(selection, selectionArgs);
                 cursor = builder.query(database, projection, sortOrder);
-                // Note: Notification URI must be manually set here for loaders to correctly
-                // register ContentObservers.
                 context = getContext();
                 assert context != null;
                 cursor.setNotificationUri(context.getContentResolver(), uri);
                 return cursor;
 
             case ROUTE_PLANT_DENSITY_ABACUS_ITEM:
-                // Return a single ISSUE, by ID.
                 id = uri.getLastPathSegment();
                 builder.where(ZeroContract.PlantDensityAbaciColumns._ID + "=?", id);
             case ROUTE_PLANT_DENSITY_ABACUS_LIST:                // Return all known Issue.
                 builder.table(ZeroContract.PlantDensityAbaciColumns.TABLE_NAME)
                         .where(selection, selectionArgs);
                 cursor = builder.query(database, projection, sortOrder);
-                // Note: Notification URI must be manually set here for loaders to correctly
-                // register ContentObservers.
                 context = getContext();
                 assert context != null;
                 cursor.setNotificationUri(context.getContentResolver(), uri);
                 return cursor;
 
             case ROUTE_PLANT_DENSITY_ABACUS_ITEM_ITEM:
-                // Return a single ISSUE, by ID.
                 id = uri.getLastPathSegment();
                 builder.where(ZeroContract.PlantDensityAbacusItemsColumns._ID + "=?", id);
             case ROUTE_PLANT_DENSITY_ABACUS_ITEM_LIST:                // Return all known Issue.
                 builder.table(ZeroContract.PlantDensityAbacusItemsColumns.TABLE_NAME)
                         .where(selection, selectionArgs);
                 cursor = builder.query(database, projection, sortOrder);
-                // Note: Notification URI must be manually set here for loaders to correctly
-                // register ContentObservers.
                 context = getContext();
                 assert context != null;
                 cursor.setNotificationUri(context.getContentResolver(), uri);
                 return cursor;
 
             case ROUTE_PLANT_ITEM:
-                // Return a single ISSUE, by ID.
                 id = uri.getLastPathSegment();
                 builder.where(ZeroContract.PlantsColumns._ID + "=?", id);
             case ROUTE_PLANT_LIST:                // Return all known Issue.
                 builder.table(ZeroContract.PlantsColumns.TABLE_NAME)
                         .where(selection, selectionArgs);
                 cursor = builder.query(database, projection, sortOrder);
-                // Note: Notification URI must be manually set here for loaders to correctly
-                // register ContentObservers.
                 context = getContext();
                 assert context != null;
                 cursor.setNotificationUri(context.getContentResolver(), uri);
                 return cursor;
 
             case ROUTE_INTERVENTION_ITEM:
-                // Return a single ISSUE, by ID.
                 id = uri.getLastPathSegment();
                 builder.where(ZeroContract.InterventionsColumns._ID + "=?", id);
             case ROUTE_INTERVENTION_LIST:
-                // Return all known Issue.
                 builder.table(ZeroContract.InterventionsColumns.TABLE_NAME)
                         .where(selection, selectionArgs);
                 cursor = builder.query(database, projection, sortOrder);
-                // Note: Notification URI must be manually set here for loaders to correctly
-                // register ContentObservers.
                 context = getContext();
                 assert context != null;
                 cursor.setNotificationUri(context.getContentResolver(), uri);
                 return cursor;
 
             case ROUTE_INTERVENTION_PARAMETERS_ITEM:
-                // Return a single ISSUE, by ID.
                 id = uri.getLastPathSegment();
                 builder.where(ZeroContract.InterventionParametersColumns._ID + "=?", id);
             case ROUTE_INTERVENTION_PARAMETERS_LIST:
-                // Return all known Issue.
                 builder.table(ZeroContract.InterventionParametersColumns.TABLE_NAME)
                         .where(selection, selectionArgs);
                 cursor = builder.query(database, projection, sortOrder);
-                // Note: Notification URI must be manually set here for loaders to correctly
-                // register ContentObservers.
                 context = getContext();
                 assert context != null;
                 cursor.setNotificationUri(context.getContentResolver(), uri);
                 return cursor;
 
             case ROUTE_WORKING_PERIODS_ITEM:
-                // Return a single ISSUE, by ID.
                 id = uri.getLastPathSegment();
                 builder.where(ZeroContract.WorkingPeriodsColumns._ID + "=?", id);
             case ROUTE_WORKING_PERIODS_LIST:
-                // Return all known Issue.
                 builder.table(ZeroContract.WorkingPeriodsColumns.TABLE_NAME)
                         .where(selection, selectionArgs);
                 cursor = builder.query(database, projection, sortOrder);
-                // Note: Notification URI must be manually set here for loaders to correctly
-                // register ContentObservers.
                 context = getContext();
                 assert context != null;
                 cursor.setNotificationUri(context.getContentResolver(), uri);
