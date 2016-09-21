@@ -53,6 +53,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.zip.ZipError;
 
 import ekylibre.database.ZeroContract;
 import ekylibre.util.DateConstant;
@@ -62,9 +63,11 @@ import ekylibre.util.AccountTool;
 import ekylibre.util.PermissionManager;
 import ekylibre.util.UpdatableActivity;
 import ekylibre.zero.SettingsActivity;
+import ekylibre.zero.home.Zero;
 
 
-public class TrackingActivity extends UpdatableActivity implements TrackingListenerWriter
+public class TrackingActivity extends UpdatableActivity
+        implements TrackingListenerWriter
 {
     /* ****************************
     **      CONSTANT VALUES
@@ -131,6 +134,36 @@ public class TrackingActivity extends UpdatableActivity implements TrackingListe
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu)
+    {
+        // Inflate the menu items for use in the action bar
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.form, menu);
+        return (super.onCreateOptionsMenu(menu));
+    }
+
+    /*
+    ** Actions on toolbar items
+    ** Items are identified by their view id
+    */
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
+        int     id = item.getItemId();
+
+        if (id == R.id.action_save)
+        {
+            Toast.makeText(this, "I'm saving intervention !", Toast.LENGTH_SHORT).show();
+        }
+        else if (id == android.R.id.home)
+        {
+            exitInterface();
+            return (true);
+        }
+        return (super.onOptionsItemSelected(item));
+    }
+
+    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
@@ -194,18 +227,43 @@ public class TrackingActivity extends UpdatableActivity implements TrackingListe
                 .setSmallIcon(R.mipmap.ic_stat_notify);
 
         if (!mNewIntervention)
-            disableInterface();
+            prepareRequest();
         else
             createProcedureChooser();
     }
 
 
-    private void disableInterface()
+    private void prepareRequest()
     {
         mStartButton.setVisibility(View.GONE);
         Intent intent = getIntent();
         mInterventionID = intent.getIntExtra(ZeroContract.Interventions._ID, 0);
         writeInterventionInfo();
+        setPausedValues();
+    }
+
+    private void setPausedValues()
+    {
+        Cursor curs = getContentResolver().query(
+                ZeroContract.Interventions.CONTENT_URI,
+                ZeroContract.Interventions.PROJECTION_PAUSED,
+                ZeroContract.Interventions._ID + " == " + mInterventionID,
+                null,
+                null);
+        if (curs == null || curs.getCount() == 0)
+            return;
+        curs.moveToFirst();
+        if (curs.getString(0) != null && !curs.getString(0).equals("PAUSE"))
+            return;
+        diffStuff.setChecked(curs.getInt(1) == 0 ? false : true);
+        chronoGeneral.setTime(curs.getInt(2));
+        chronoPreparation.setTime(curs.getInt(3));
+        chronoActivePreparation.setTime(chronoPreparation.getTime());
+        chronoTraveling.setTime(curs.getInt(4));
+        chronoActiveTraveling.setTime(chronoTraveling.getTime());
+        chronoIntervention.setTime(curs.getInt(5));
+        chronoActiveIntervention.setTime(chronoIntervention.getTime());
+        curs.close();
     }
 
     private void writeInterventionInfo()
@@ -215,9 +273,6 @@ public class TrackingActivity extends UpdatableActivity implements TrackingListe
         botId = writeTarget(View.NO_ID);
         botId = writeInput(botId);
         botId = writeTool(botId);
-
-
-
     }
 
 
@@ -356,6 +411,229 @@ public class TrackingActivity extends UpdatableActivity implements TrackingListe
         return (curs);
     }
 
+    private void updateWorkingPeriods(int currentState)
+    {
+        if (started_at == null)
+        {
+            Calendar cal = Calendar.getInstance();
+            started_at = dateFormatter.format(cal.getTime());
+        }
+        else if (currentState == PAUSE)
+        {
+            Calendar cal = Calendar.getInstance();
+            stopped_at = dateFormatter.format(cal.getTime());
+            addWorkingPeriodsToLocalDatabase();
+            started_at = null;
+        }
+        else
+        {
+            Calendar cal = Calendar.getInstance();
+            stopped_at = dateFormatter.format(cal.getTime());
+            addWorkingPeriodsToLocalDatabase();
+            started_at = stopped_at;
+        }
+    }
+
+    private void addWorkingPeriodsToLocalDatabase()
+    {
+        ContentValues values = new ContentValues();
+
+        values.put(ZeroContract.WorkingPeriodsColumns.FK_INTERVENTION, mInterventionID);
+        if (state == PREPARATION)
+            values.put(ZeroContract.WorkingPeriodsColumns.NATURE, "preparation");
+        else if (state == TRAVELING)
+            values.put(ZeroContract.WorkingPeriodsColumns.NATURE, "traveling");
+        else
+            values.put(ZeroContract.WorkingPeriodsColumns.NATURE, "intervention");
+
+        values.put(ZeroContract.WorkingPeriodsColumns.STARTED_AT, started_at);
+        values.put(ZeroContract.WorkingPeriodsColumns.STOPPED_AT, stopped_at);
+
+        getContentResolver().insert(ZeroContract.WorkingPeriods.CONTENT_URI, values);
+    }
+
+    public void phasePreparation(View view)
+    {
+        updateWorkingPeriods(PREPARATION);
+
+        chronoGeneral.startTimer();
+
+        state = PREPARATION;
+        Log.d(TAG, "Activating preparation !  State => " + state);
+        layoutPreparation.setVisibility(View.GONE);
+        layoutActivePreparation.setVisibility(View.VISIBLE);
+        layoutActiveTraveling.setVisibility(View.GONE);
+        layoutActiveIntervention.setVisibility(View.GONE);
+        layoutTraveling.setVisibility(View.VISIBLE);
+        layoutIntervention.setVisibility(View.VISIBLE);
+
+        chronoActivePreparation.startTimer();
+        chronoActiveTraveling.stopTimer();
+        chronoActiveIntervention.stopTimer();
+        chronoTraveling.setTime(chronoActiveTraveling.getTime());
+        chronoIntervention.setTime(chronoActiveIntervention.getTime());
+
+    }
+
+
+    public void phaseTraveling(View view)
+    {
+        updateWorkingPeriods(TRAVELING);
+
+        chronoGeneral.startTimer();
+
+        state = TRAVELING;
+        Log.d(TAG, "Activating traveling !  State => " + state);
+        layoutTraveling.setVisibility(View.GONE);
+        layoutActiveTraveling.setVisibility(View.VISIBLE);
+        layoutActivePreparation.setVisibility(View.GONE);
+        layoutActiveIntervention.setVisibility(View.GONE);
+        layoutPreparation.setVisibility(View.VISIBLE);
+        layoutIntervention.setVisibility(View.VISIBLE);
+
+        chronoActiveTraveling.startTimer();
+        chronoActivePreparation.stopTimer();
+        chronoActiveIntervention.stopTimer();
+        chronoPreparation.setTime(chronoActivePreparation.getTime());
+        chronoIntervention.setTime(chronoActiveIntervention.getTime());
+
+
+    }
+
+    public void phaseIntervention(View view)
+    {
+        updateWorkingPeriods(INTERVENTION);
+
+        chronoGeneral.startTimer();
+
+        state = INTERVENTION;
+        Log.d(TAG, "Activating intervention !  State => " + state);
+        layoutIntervention.setVisibility(View.GONE);
+        layoutActiveIntervention.setVisibility(View.VISIBLE);
+        layoutActivePreparation.setVisibility(View.GONE);
+        layoutActiveTraveling.setVisibility(View.GONE);
+        layoutPreparation.setVisibility(View.VISIBLE);
+        layoutTraveling.setVisibility(View.VISIBLE);
+
+        chronoActiveIntervention.startTimer();
+        chronoActiveTraveling.stopTimer();
+        chronoActivePreparation.stopTimer();
+        chronoTraveling.setTime(chronoActiveTraveling.getTime());
+        chronoPreparation.setTime(chronoActivePreparation.getTime());
+
+
+    }
+
+    public void phasePause(View view)
+    {
+        updateWorkingPeriods(PAUSE);
+
+        state = PAUSE;
+        Log.d(TAG, "PAUSE !!  State => " + state);
+        layoutActivePreparation.setVisibility(View.GONE);
+        layoutActiveTraveling.setVisibility(View.GONE);
+        layoutActiveIntervention.setVisibility(View.GONE);
+        layoutPreparation.setVisibility(View.VISIBLE);
+        layoutTraveling.setVisibility(View.VISIBLE);
+        layoutIntervention.setVisibility(View.VISIBLE);
+
+        chronoGeneral.stopTimer();
+        chronoActivePreparation.stopTimer();
+        chronoActiveTraveling.stopTimer();
+        chronoActiveIntervention.stopTimer();
+        chronoPreparation.setTime(chronoActivePreparation.getTime());
+        chronoTraveling.setTime(chronoActiveTraveling.getTime());
+        chronoIntervention.setTime(chronoActiveIntervention.getTime());
+
+
+    }
+
+    @Override
+    public void onBackPressed()
+    {
+        exitInterface();
+    }
+
+    private void exitInterface()
+    {
+        phasePause(null);
+        final AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+        dialog.setTitle("Que voulez vous faire ?");
+        dialog.setPositiveButton("Terminer", new DialogInterface.OnClickListener()
+        {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i)
+            {
+                switchStateToFinished();
+                TrackingActivity.super.onBackPressed();
+            }
+        });
+        dialog.setNegativeButton("Supprimer", new DialogInterface.OnClickListener()
+        {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i)
+            {
+                //cleanCurrentSave();
+                TrackingActivity.super.onBackPressed();
+            }
+        });
+        dialog.setNeutralButton("Pause", new DialogInterface.OnClickListener()
+        {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i)
+            {
+                saveCurrentStateOfIntervention();
+                TrackingActivity.super.onBackPressed();
+            }
+        });
+        dialog.create();
+        dialog.show();
+    }
+
+    private void switchStateToFinished()
+    {
+        ContentValues values = new ContentValues();
+
+        values.put(ZeroContract.Interventions.STATE, "FINISHED");
+        values.put(ZeroContract.Interventions.REQUEST_COMPLIANT, diffStuff.isChecked());
+
+        getContentResolver().update(ZeroContract.Interventions.CONTENT_URI,
+                values,
+                ZeroContract.Interventions._ID + " == " + mInterventionID,
+                null);
+    }
+
+    private void saveCurrentStateOfIntervention()
+    {
+        ContentValues values = new ContentValues();
+
+        values.put(ZeroContract.Interventions.GENERAL_CHRONO, chronoGeneral.getTime());
+        values.put(ZeroContract.Interventions.PREPARATION_CHRONO, chronoPreparation.getTime());
+        values.put(ZeroContract.Interventions.TRAVELING_CHRONO, chronoTraveling.getTime());
+        values.put(ZeroContract.Interventions.INTERVENTION_CHRONO, chronoIntervention.getTime());
+        values.put(ZeroContract.Interventions.STATE, "PAUSE");
+        values.put(ZeroContract.Interventions.REQUEST_COMPLIANT, diffStuff.isChecked());
+
+        getContentResolver().update(ZeroContract.Interventions.CONTENT_URI,
+                values,
+                ZeroContract.Interventions._ID + " == " + mInterventionID,
+                null);
+    }
+
+    @Override
+    public void onDestroy()
+    {
+        stopIntervention(null);
+        super.onDestroy();
+    }
+
+
+
+
+
+
+
+
 
 
 
@@ -420,30 +698,6 @@ public class TrackingActivity extends UpdatableActivity implements TrackingListe
         //  }
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu)
-    {
-        // Inflate the menu items for use in the action bar
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.form, menu);
-        return (super.onCreateOptionsMenu(menu));
-    }
-
-    /*
-    ** Actions on toolbar items
-    ** Items are identified by their view id
-    */
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item)
-    {
-        int     id = item.getItemId();
-
-        if (id == R.id.action_save)
-        {
-            Toast.makeText(this, "I'm saving intervention !", Toast.LENGTH_SHORT).show();
-        }
-        return (super.onOptionsItemSelected(item));
-    }
 
     private void createIntervention()
     {
@@ -633,185 +887,5 @@ public class TrackingActivity extends UpdatableActivity implements TrackingListe
         }
     }
 
-    private void updateWorkingPeriods(int currentState)
-    {
-        if (started_at == null)
-        {
-            Calendar cal = Calendar.getInstance();
-            started_at = dateFormatter.format(cal.getTime());
-        }
-        else if (currentState == PAUSE)
-        {
-            Calendar cal = Calendar.getInstance();
-            stopped_at = dateFormatter.format(cal.getTime());
-            addWorkingPeriodsToLocalDatabase();
-            started_at = null;
-        }
-        else
-        {
-            Calendar cal = Calendar.getInstance();
-            stopped_at = dateFormatter.format(cal.getTime());
-            addWorkingPeriodsToLocalDatabase();
-            started_at = stopped_at;
-        }
-    }
 
-    private void addWorkingPeriodsToLocalDatabase()
-    {
-        ContentValues values = new ContentValues();
-
-        values.put(ZeroContract.WorkingPeriodsColumns.FK_INTERVENTION, mInterventionID);
-        if (state == PREPARATION)
-            values.put(ZeroContract.WorkingPeriodsColumns.NATURE, "preparation");
-        else if (state == TRAVELING)
-            values.put(ZeroContract.WorkingPeriodsColumns.NATURE, "traveling");
-        else
-            values.put(ZeroContract.WorkingPeriodsColumns.NATURE, "intervention");
-
-        values.put(ZeroContract.WorkingPeriodsColumns.STARTED_AT, started_at);
-        values.put(ZeroContract.WorkingPeriodsColumns.STOPPED_AT, stopped_at);
-
-        getContentResolver().insert(ZeroContract.WorkingPeriods.CONTENT_URI, values);
-    }
-
-    public void phasePreparation(View view)
-    {
-        updateWorkingPeriods(PREPARATION);
-
-        chronoGeneral.startTimer();
-
-        state = PREPARATION;
-        Log.d(TAG, "Activating preparation !  State => " + state);
-        layoutPreparation.setVisibility(View.GONE);
-        layoutActivePreparation.setVisibility(View.VISIBLE);
-        layoutActiveTraveling.setVisibility(View.GONE);
-        layoutActiveIntervention.setVisibility(View.GONE);
-        layoutTraveling.setVisibility(View.VISIBLE);
-        layoutIntervention.setVisibility(View.VISIBLE);
-
-        chronoActivePreparation.startTimer();
-        chronoActiveTraveling.stopTimer();
-        chronoActiveIntervention.stopTimer();
-        chronoTraveling.setTime(chronoActiveTraveling.getTime());
-        chronoIntervention.setTime(chronoActiveIntervention.getTime());
-
-    }
-
-
-    public void phaseTraveling(View view)
-    {
-        updateWorkingPeriods(TRAVELING);
-
-        chronoGeneral.startTimer();
-
-        state = TRAVELING;
-        Log.d(TAG, "Activating traveling !  State => " + state);
-        layoutTraveling.setVisibility(View.GONE);
-        layoutActiveTraveling.setVisibility(View.VISIBLE);
-        layoutActivePreparation.setVisibility(View.GONE);
-        layoutActiveIntervention.setVisibility(View.GONE);
-        layoutPreparation.setVisibility(View.VISIBLE);
-        layoutIntervention.setVisibility(View.VISIBLE);
-
-        chronoActiveTraveling.startTimer();
-        chronoActivePreparation.stopTimer();
-        chronoActiveIntervention.stopTimer();
-        chronoPreparation.setTime(chronoActivePreparation.getTime());
-        chronoIntervention.setTime(chronoActiveIntervention.getTime());
-
-
-    }
-
-    public void phaseIntervention(View view)
-    {
-        updateWorkingPeriods(INTERVENTION);
-
-        chronoGeneral.startTimer();
-
-        state = INTERVENTION;
-        Log.d(TAG, "Activating intervention !  State => " + state);
-        layoutIntervention.setVisibility(View.GONE);
-        layoutActiveIntervention.setVisibility(View.VISIBLE);
-        layoutActivePreparation.setVisibility(View.GONE);
-        layoutActiveTraveling.setVisibility(View.GONE);
-        layoutPreparation.setVisibility(View.VISIBLE);
-        layoutTraveling.setVisibility(View.VISIBLE);
-
-        chronoActiveIntervention.startTimer();
-        chronoActiveTraveling.stopTimer();
-        chronoActivePreparation.stopTimer();
-        chronoTraveling.setTime(chronoActiveTraveling.getTime());
-        chronoPreparation.setTime(chronoActivePreparation.getTime());
-
-
-    }
-
-    public void phasePause(View view)
-    {
-        updateWorkingPeriods(PAUSE);
-
-        state = PAUSE;
-        Log.d(TAG, "PAUSE !!  State => " + state);
-        layoutActivePreparation.setVisibility(View.GONE);
-        layoutActiveTraveling.setVisibility(View.GONE);
-        layoutActiveIntervention.setVisibility(View.GONE);
-        layoutPreparation.setVisibility(View.VISIBLE);
-        layoutTraveling.setVisibility(View.VISIBLE);
-        layoutIntervention.setVisibility(View.VISIBLE);
-
-        chronoGeneral.stopTimer();
-        chronoActivePreparation.stopTimer();
-        chronoActiveTraveling.stopTimer();
-        chronoActiveIntervention.stopTimer();
-        chronoPreparation.setTime(chronoActivePreparation.getTime());
-        chronoTraveling.setTime(chronoActiveTraveling.getTime());
-        chronoIntervention.setTime(chronoActiveIntervention.getTime());
-
-
-    }
-
-    @Override
-    public void onBackPressed()
-    {
-        phasePause(null);
-        final AlertDialog.Builder dialog = new AlertDialog.Builder(this);
-        dialog.setTitle("Que voulez vous faire ?");
-        dialog.setPositiveButton("Terminer", new DialogInterface.OnClickListener()
-        {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i)
-            {
-                Toast.makeText(getApplicationContext(), "Bravo intervention finie !", Toast.LENGTH_SHORT).show();
-                TrackingActivity.super.onBackPressed();
-            }
-        });
-        dialog.setNeutralButton("Supprimer", new DialogInterface.OnClickListener()
-        {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i)
-            {
-                Toast.makeText(getApplicationContext(), "On ferme !", Toast.LENGTH_SHORT).show();
-                //cleanCurrentSave();
-                TrackingActivity.super.onBackPressed();
-            }
-        });
-        dialog.setNegativeButton("Pause", new DialogInterface.OnClickListener()
-        {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i)
-            {
-                // Save current intervention ID as pause state
-                TrackingActivity.super.onBackPressed();
-            }
-        });
-        dialog.create();
-        dialog.show();
-    }
-
-    @Override
-    public void onDestroy()
-    {
-        stopIntervention(null);
-        super.onDestroy();
-    }
 }

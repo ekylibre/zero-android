@@ -16,19 +16,6 @@ public final class ZeroContract {
     // Content URI for this provider
     public static final Uri CONTENT_URI = Uri.parse("content://" + AUTHORITY);
 
-    public interface CrumbsColumns extends BaseColumns {
-        String TABLE_NAME = "crumbs";
-        String TYPE = "type";
-        String LATITUDE = "latitude";
-        String LONGITUDE = "longitude";
-        String READ_AT = "read_at";
-        String ACCURACY = "accuracy";
-        String METADATA = "metadata";
-        String SYNCED = "synced";
-        String USER = "user";
-        String FK_INTERVENTION = "fk_intervention";
-    }
-
     public interface InterventionsColumns extends BaseColumns {
         String TABLE_NAME = "intervention";
         String USER = "user";
@@ -40,6 +27,12 @@ public final class ZeroContract {
         String STARTED_AT = "started_at";
         String STOPPED_AT = "stopped_at";
         String DESCRIPTION = "description";
+        String STATE = "state";
+        String REQUEST_COMPLIANT = "request_compliant";
+        String GENERAL_CHRONO = "general_chrono";
+        String PREPARATION_CHRONO = "preparation_chrono";
+        String TRAVELING_CHRONO = "traveling_chrono";
+        String INTERVENTION_CHRONO = "intervention_chrono";
     }
 
     public interface InterventionParametersColumns extends BaseColumns {
@@ -59,6 +52,19 @@ public final class ZeroContract {
         String NATURE = "nature";
         String STARTED_AT = "started_at";
         String STOPPED_AT = "stopped_at";
+    }
+
+    public interface CrumbsColumns extends BaseColumns {
+        String TABLE_NAME = "crumbs";
+        String TYPE = "type";
+        String LATITUDE = "latitude";
+        String LONGITUDE = "longitude";
+        String READ_AT = "read_at";
+        String ACCURACY = "accuracy";
+        String METADATA = "metadata";
+        String SYNCED = "synced";
+        String USER = "user";
+        String FK_INTERVENTION = "fk_intervention";
     }
 
     public interface IssuesColumns extends BaseColumns {
@@ -155,6 +161,8 @@ public final class ZeroContract {
 
         public static final String[] PROJECTION_ALL = {_ID};
         public static final String[] PROJECTION_BASIC = {_ID, NAME, DESCRIPTION, STARTED_AT, STOPPED_AT};
+        public static final String[] PROJECTION_PAUSED = {STATE, REQUEST_COMPLIANT,
+                GENERAL_CHRONO, PREPARATION_CHRONO, TRAVELING_CHRONO, INTERVENTION_CHRONO};
         public static final String[] PROJECTION_NONE = {_ID};
 
         public static final String SORT_ORDER_DEFAULT = _ID + " ASC";

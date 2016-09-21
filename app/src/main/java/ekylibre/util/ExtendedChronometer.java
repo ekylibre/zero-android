@@ -7,7 +7,7 @@ import android.widget.Chronometer;
 
 /**************************************
  * Created by pierre on 9/15/16.      *
- * ekylibre.util for zero-android    *
+ * ekylibre.util for zero-android     *
  *************************************/
 public class ExtendedChronometer extends Chronometer
 {
