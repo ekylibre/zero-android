@@ -114,8 +114,8 @@ public class TrackingActivity extends UpdatableActivity implements TrackingListe
     private LocationManager mLocationManager;
     private CrumbsCalculator crumbsCalculator;
     private boolean mNewIntervention;
-    private String started_at;
-    private String stopped_at;
+    private String started_at = null;
+    private String stopped_at = null;
     SimpleDateFormat dateFormatter = new SimpleDateFormat(DateConstant.ISO_8601);
 
 
@@ -633,8 +633,51 @@ public class TrackingActivity extends UpdatableActivity implements TrackingListe
         }
     }
 
+    private void updateWorkingPeriods(int currentState)
+    {
+        if (started_at == null)
+        {
+            Calendar cal = Calendar.getInstance();
+            started_at = dateFormatter.format(cal.getTime());
+        }
+        else if (currentState == PAUSE)
+        {
+            Calendar cal = Calendar.getInstance();
+            stopped_at = dateFormatter.format(cal.getTime());
+            addWorkingPeriodsToLocalDatabase();
+            started_at = null;
+        }
+        else
+        {
+            Calendar cal = Calendar.getInstance();
+            stopped_at = dateFormatter.format(cal.getTime());
+            addWorkingPeriodsToLocalDatabase();
+            started_at = stopped_at;
+        }
+    }
+
+    private void addWorkingPeriodsToLocalDatabase()
+    {
+        ContentValues values = new ContentValues();
+
+        values.put(ZeroContract.WorkingPeriodsColumns.FK_INTERVENTION, mInterventionID);
+        if (state == PREPARATION)
+            values.put(ZeroContract.WorkingPeriodsColumns.NATURE, "preparation");
+        else if (state == TRAVELING)
+            values.put(ZeroContract.WorkingPeriodsColumns.NATURE, "traveling");
+        else
+            values.put(ZeroContract.WorkingPeriodsColumns.NATURE, "intervention");
+
+        values.put(ZeroContract.WorkingPeriodsColumns.STARTED_AT, started_at);
+        values.put(ZeroContract.WorkingPeriodsColumns.STOPPED_AT, stopped_at);
+
+        getContentResolver().insert(ZeroContract.WorkingPeriods.CONTENT_URI, values);
+    }
+
     public void phasePreparation(View view)
     {
+        updateWorkingPeriods(PREPARATION);
+
         chronoGeneral.startTimer();
 
         state = PREPARATION;
@@ -652,44 +695,13 @@ public class TrackingActivity extends UpdatableActivity implements TrackingListe
         chronoTraveling.setTime(chronoActiveTraveling.getTime());
         chronoIntervention.setTime(chronoActiveIntervention.getTime());
 
-        updateWorkingPeriods(PREPARATION);
     }
 
-    private void updateWorkingPeriods(int currentState)
-    {
-        if (currentState == PAUSE)
-        {
-            Calendar cal = Calendar.getInstance();
-            stopped_at = dateFormatter.format(cal.getTime());
-            addWorkingPeriodsToLocalDatabase();
-        }
-        else
-        {
-            Calendar cal = Calendar.getInstance();
-            started_at = dateFormatter.format(cal.getTime());
-        }
-    }
-
-    private void addWorkingPeriodsToLocalDatabase()
-    {
-        ContentValues values = new ContentValues();
-
-        values.put(ZeroContract.WorkingPeriodsColumns.FK_INTERVENTION, mInterventionID);
-        if (state == PREPARATION)
-            values.put(ZeroContract.WorkingPeriodsColumns.NATURE, "preparation");
-        else if (state == TRAVELING)
-            values.put(ZeroContract.WorkingPeriodsColumns.NATURE, "traveling");
-        else
-            values.put(ZeroContract.WorkingPeriodsColumns.NATURE, "intervention");
-
-        values.put(ZeroContract.WorkingPeriodsColumns.STARTED_AT, started_at);
-        values.put(ZeroContract.WorkingPeriodsColumns.STARTED_AT, stopped_at);
-
-        getContentResolver().insert(ZeroContract.Crumbs.CONTENT_URI, values);
-    }
 
     public void phaseTraveling(View view)
     {
+        updateWorkingPeriods(TRAVELING);
+
         chronoGeneral.startTimer();
 
         state = TRAVELING;
@@ -706,10 +718,14 @@ public class TrackingActivity extends UpdatableActivity implements TrackingListe
         chronoActiveIntervention.stopTimer();
         chronoPreparation.setTime(chronoActivePreparation.getTime());
         chronoIntervention.setTime(chronoActiveIntervention.getTime());
+
+
     }
 
     public void phaseIntervention(View view)
     {
+        updateWorkingPeriods(INTERVENTION);
+
         chronoGeneral.startTimer();
 
         state = INTERVENTION;
@@ -726,10 +742,14 @@ public class TrackingActivity extends UpdatableActivity implements TrackingListe
         chronoActivePreparation.stopTimer();
         chronoTraveling.setTime(chronoActiveTraveling.getTime());
         chronoPreparation.setTime(chronoActivePreparation.getTime());
+
+
     }
 
     public void phasePause(View view)
     {
+        updateWorkingPeriods(PAUSE);
+
         state = PAUSE;
         Log.d(TAG, "PAUSE !!  State => " + state);
         layoutActivePreparation.setVisibility(View.GONE);
@@ -746,38 +766,46 @@ public class TrackingActivity extends UpdatableActivity implements TrackingListe
         chronoPreparation.setTime(chronoActivePreparation.getTime());
         chronoTraveling.setTime(chronoActiveTraveling.getTime());
         chronoIntervention.setTime(chronoActiveIntervention.getTime());
+
+
     }
 
     @Override
     public void onBackPressed()
     {
+        phasePause(null);
         final AlertDialog.Builder dialog = new AlertDialog.Builder(this);
-        dialog.setTitle("Et coucou !!");
-        dialog.setPositiveButton("Button 1", new DialogInterface.OnClickListener()
+        dialog.setTitle("Que voulez vous faire ?");
+        dialog.setPositiveButton("Terminer", new DialogInterface.OnClickListener()
         {
             @Override
             public void onClick(DialogInterface dialogInterface, int i)
             {
-                Toast.makeText(getApplicationContext(), "Button 1 clicked !", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "Bravo intervention finie !", Toast.LENGTH_SHORT).show();
+                TrackingActivity.super.onBackPressed();
             }
         });
-        dialog.setPositiveButton("Button 2", new DialogInterface.OnClickListener()
+        dialog.setNeutralButton("Supprimer", new DialogInterface.OnClickListener()
         {
             @Override
             public void onClick(DialogInterface dialogInterface, int i)
             {
-                Toast.makeText(getApplicationContext(), "Button 2 clicked !", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "On ferme !", Toast.LENGTH_SHORT).show();
+                //cleanCurrentSave();
+                TrackingActivity.super.onBackPressed();
             }
         });
-        dialog.setNegativeButton("Canacel", new DialogInterface.OnClickListener()
+        dialog.setNegativeButton("Pause", new DialogInterface.OnClickListener()
         {
             @Override
             public void onClick(DialogInterface dialogInterface, int i)
             {
-                dialogInterface.cancel();
+                // Save current intervention ID as pause state
+                TrackingActivity.super.onBackPressed();
             }
         });
         dialog.create();
+        dialog.show();
     }
 
     @Override
