@@ -26,6 +26,7 @@ public class TodoItem
     private Calendar date;
     private int number;
     private int source;
+    private String state = "";
 
     public TodoItem(boolean headerState, Calendar day)
     {
@@ -62,7 +63,8 @@ public class TodoItem
         this.source = source;
     }
 
-    public TodoItem(String startdate, String endDate, String event, String desc, Calendar calendar, int _id, int source)
+    public TodoItem(String startdate, String endDate, String event, String desc, Calendar
+            calendar, int _id, int source, String state)
     {
         this.startDate = startdate;
         this.endDate = endDate;
@@ -71,6 +73,8 @@ public class TodoItem
         this.date = calendar;
         this.intervention_id = _id;
         this.source = source;
+        if (state != null)
+            this.state = state;
     }
 
     public void setStartDate(String newDate)
@@ -162,5 +166,10 @@ public class TodoItem
     public int getIntervention_id()
     {
         return (intervention_id);
+    }
+
+    public String getState()
+    {
+        return (state);
     }
 }

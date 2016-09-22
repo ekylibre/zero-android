@@ -40,7 +40,7 @@ public class SettingsActivity extends PreferenceActivity
     /*@Override
     protected void onStop(){
         super.onStop();
-        Intent intent = new Intent(this,TrackingActivity.class);
+        Intent intent = new Intent(this,InterventionActivity.class);
         super.startActivity(intent);
     }*/
 }

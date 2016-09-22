@@ -58,7 +58,7 @@
         android:theme="@style/AppTheme"
         android:name="ekylibre.zero.home.Zero">
         <activity
-            android:name=".tracking.TrackingActivity"
+            android:name=".intervention.InterventionActivity"
             android:label="@string/new_intervention"
             android:launchMode="singleTask"
             android:parentActivityName=".home.MainActivity"
@@ -137,7 +137,7 @@
 <!--        <activity
             android:name="com.google.zxing.client.android.CaptureActivity"
             android:configChanges="orientation|keyboardHidden"
-            android:parentActivityName=".tracking.TrackingActivity"
+            android:parentActivityName=".tracking.InterventionActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
             android:windowSoftInputMode="stateAlwaysHidden">
@@ -149,7 +149,7 @@
 
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".tracking.TrackingActivity" />
+                android:value=".tracking.InterventionActivity" />
         </activity>-->
 
         <!-- Settings -->
@@ -165,9 +165,9 @@
 
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".tracking.TrackingActivity" />
+                android:value=".intervention.InterventionActivity" />
         </activity>
-        <!-- android:parentActivityName=".TrackingActivity"> -->
+        <!-- android:parentActivityName=".InterventionActivity"> -->
 
         <activity
             android:name=".IssueActivity"
@@ -210,7 +210,7 @@
             android:value="@string/google_maps_key" />
 
         <activity
-            android:name=".tracking.MapsActivity"
+            android:name=".intervention.MapsActivity"
             android:label="@string/title_activity_maps"
             android:theme="@style/AppTheme.NoActionBar"            />
     </application>

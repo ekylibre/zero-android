@@ -1,4 +1,4 @@
-package ekylibre.zero.tracking;
+package ekylibre.zero.intervention;
 
 import android.accounts.Account;
 import android.content.Context;
@@ -56,7 +56,7 @@ public class MapsActivity extends UpdatableActivity implements OnMapReadyCallbac
             return;
 
         Location lastKnownLocation = locationManager.getLastKnownLocation(locationProvider);
-        resetPrecedentMarkers(getIntent().getIntExtra(TrackingActivity._interventionID, 0));
+        resetPrecedentMarkers(getIntent().getIntExtra(InterventionActivity._interventionID, 0));
         if (lastKnownLocation != null)
             mMap.moveCamera(CameraUpdateFactory.newLatLng(new LatLng(lastKnownLocation.getLatitude(), lastKnownLocation.getLongitude())));
         mMap.animateCamera( CameraUpdateFactory.zoomTo( 17.0f ) );
@@ -66,7 +66,7 @@ public class MapsActivity extends UpdatableActivity implements OnMapReadyCallbac
     @Override
     public void onPing(Intent intent)
     {
-        resetPrecedentMarkers(intent.getIntExtra(TrackingActivity._interventionID, 0));
+        resetPrecedentMarkers(intent.getIntExtra(InterventionActivity._interventionID, 0));
 
     }
 

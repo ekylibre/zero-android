@@ -2,7 +2,6 @@ package ekylibre.zero.home;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
-import android.content.BroadcastReceiver;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
@@ -37,8 +36,7 @@ import ekylibre.zero.BuildConfig;
 import ekylibre.zero.R;
 import ekylibre.zero.SettingsActivity;
 import ekylibre.util.PermissionManager;
-import ekylibre.zero.account.AccountManagerActivity;
-import ekylibre.zero.tracking.TrackingActivity;
+import ekylibre.zero.intervention.InterventionActivity;
 
 /**************************************
  * Created by pierre on 7/8/16.       *
@@ -100,7 +98,9 @@ public class TodoListActivity extends UpdatableClass
                             return;
                         TodoItem item = (TodoItem) adapterView.getItemAtPosition(position);
                         Log.d(TAG, item.getEvent());
-                        Intent intent = new Intent(context, TrackingActivity.class);
+                        if (item.getState().equals(InterventionActivity.STATUS_FINISHED))
+                            return;
+                        Intent intent = new Intent(context, InterventionActivity.class);
                         intent.putExtra(ZeroContract.Interventions._ID, item.getIntervention_id());
                         context.startActivity(intent);
                     }
@@ -205,7 +205,8 @@ public class TodoListActivity extends UpdatableClass
                     cal.setTime(startDate);
                     String desc = getDescription(cursRequested);
                     list.add(new TodoItem(startDateFormatted, endDateFormatted, cursRequested.getString(TITLE),
-                            desc, cal, cursRequested.getInt(0), EKYLIBRE_CALENDAR));
+                            desc, cal, cursRequested.getInt(0), EKYLIBRE_CALENDAR, cursRequested
+                            .getString(5)));
                 }
             }
             catch (ParseException e)

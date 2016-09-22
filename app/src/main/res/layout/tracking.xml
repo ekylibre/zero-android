@@ -9,7 +9,7 @@
     android:background="@color/background_grey"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
     android:fitsSystemWindows="true"
-    tools:context=".tracking.TrackingActivity"
+    tools:context=".intervention.InterventionActivity"
 
     >
     <LinearLayout
