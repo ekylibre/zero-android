@@ -105,7 +105,8 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
             account = accountList[i];
             if (BuildConfig.DEBUG) Log.d(TAG, "... Sync new account ...");
             if (BuildConfig.DEBUG) Log.d(TAG, "... New account is " + account.name + " ...");
-            performPlantDensityAbaciSync(account, extras, authority, provider, syncResult);
+            performPlantDensityAbaciSync(account,
+                extras, authority, provider, syncResult);
             performPlantsSync(account, extras, authority, provider, syncResult);
             performCrumbsSync(account, extras, authority, provider, syncResult);
             performIssuesSync(account, extras, authority, provider, syncResult);

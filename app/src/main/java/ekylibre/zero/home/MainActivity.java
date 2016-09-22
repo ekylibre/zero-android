@@ -4,16 +4,13 @@ import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.content.ContentResolver;
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
-import android.support.design.widget.Snackbar;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
-import android.text.format.Time;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -32,7 +29,7 @@ import ekylibre.zero.IssueActivity;
 import ekylibre.zero.PlantCountingActivity;
 import ekylibre.zero.R;
 import ekylibre.zero.SettingsActivity;
-import ekylibre.zero.tracking.TrackingActivity;
+import ekylibre.zero.intervention.InterventionActivity;
 import ekylibre.service.ConnectionManagerService;
 import ekylibre.util.AccountTool;
 import ekylibre.util.PermissionManager;
@@ -95,7 +92,6 @@ public class MainActivity extends UpdatableActivity
         setFloatingActBtn();
 
         setDrawerLayout();
-        setTodolist();
         startConnectionManager();
         startGeneralHandler();
         View headerLayout = mNavigationView.inflateHeaderView(R.layout.nav_header_main);
@@ -121,6 +117,7 @@ public class MainActivity extends UpdatableActivity
         mAccount = AccountTool.getCurrentAccount(MainActivity.this);
         setAccountName(mNavigationView);
         firstPass = false;
+        setTodolist();
     }
 
     // TODO :: SYNC ON FIRST
@@ -303,8 +300,8 @@ public class MainActivity extends UpdatableActivity
     {
         if (super.isSync)
             return ;
-        Intent intent = new Intent(this, TrackingActivity.class);
-        intent.putExtra(TrackingActivity.NEW, true);
+        Intent intent = new Intent(this, InterventionActivity.class);
+        intent.putExtra(InterventionActivity.NEW, true);
         startActivity(intent);
     }
 

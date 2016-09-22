@@ -1,5 +1,6 @@
 package ekylibre.zero.home;
 
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -16,5 +17,6 @@ public class TodoViewHolder
     public TextView         minutes;
     public TextView         header;
     public TextView         message;
+    public ImageView        imageState;
     public RelativeLayout   layout;
 }

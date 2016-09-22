@@ -1,4 +1,4 @@
-package ekylibre.zero.tracking;
+package ekylibre.zero.intervention;
 
 import android.accounts.Account;
 import android.app.AlertDialog;
@@ -16,11 +16,7 @@ import android.graphics.Typeface;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
-import android.os.SystemClock;
 import android.preference.PreferenceManager;
-import android.print.PrintAttributes;
-import android.support.v7.widget.Toolbar;
-import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
@@ -30,12 +26,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.Chronometer;
-import android.widget.HorizontalScrollView;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
-import android.widget.TableLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -53,7 +45,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
-import java.util.zip.ZipError;
 
 import ekylibre.database.ZeroContract;
 import ekylibre.util.DateConstant;
@@ -62,11 +53,9 @@ import ekylibre.zero.R;
 import ekylibre.util.AccountTool;
 import ekylibre.util.PermissionManager;
 import ekylibre.util.UpdatableActivity;
-import ekylibre.zero.SettingsActivity;
-import ekylibre.zero.home.Zero;
 
 
-public class TrackingActivity extends UpdatableActivity
+public class InterventionActivity extends UpdatableActivity
         implements TrackingListenerWriter
 {
     /* ****************************
@@ -81,7 +70,9 @@ public class TrackingActivity extends UpdatableActivity
     protected final int PAUSE = 3;
     public final static String NEW = "new_intervention";
     public static final String   _interventionID = "intervention_id";
-    private final String TAG = "TrackingActivity";
+    private final String TAG = "InterventionActivity";
+    public final static String STATUS_PAUSE = "PAUSE";
+    public final static String STATUS_FINISHED = "FINISHED";
 
     /* ****************************
     ** Notification builder and variables
@@ -174,7 +165,7 @@ public class TrackingActivity extends UpdatableActivity
         // Set content view
         setContentView(R.layout.tracking);
         super.setToolBar();
-        mNewIntervention = getIntent().getBooleanExtra(TrackingActivity.NEW, false);
+        mNewIntervention = getIntent().getBooleanExtra(InterventionActivity.NEW, false);
 
         layoutPreparation = (RelativeLayout) findViewById(R.id.layout_preparation);
         layoutTraveling = (RelativeLayout) findViewById(R.id.layout_traveling);
@@ -223,7 +214,7 @@ public class TrackingActivity extends UpdatableActivity
                 .setOngoing(true)
                 .setContentTitle(getString(R.string.app_name))
                 .setContentText("")
-                .setContentIntent(PendingIntent.getActivity(this, 0, new Intent(this, TrackingActivity.class), PendingIntent.FLAG_UPDATE_CURRENT))
+                .setContentIntent(PendingIntent.getActivity(this, 0, new Intent(this, InterventionActivity.class), PendingIntent.FLAG_UPDATE_CURRENT))
                 .setSmallIcon(R.mipmap.ic_stat_notify);
 
         if (!mNewIntervention)
@@ -565,7 +556,7 @@ public class TrackingActivity extends UpdatableActivity
             public void onClick(DialogInterface dialogInterface, int i)
             {
                 switchStateToFinished();
-                TrackingActivity.super.onBackPressed();
+                InterventionActivity.super.onBackPressed();
             }
         });
         dialog.setNegativeButton("Supprimer", new DialogInterface.OnClickListener()
@@ -574,7 +565,7 @@ public class TrackingActivity extends UpdatableActivity
             public void onClick(DialogInterface dialogInterface, int i)
             {
                 //cleanCurrentSave();
-                TrackingActivity.super.onBackPressed();
+                InterventionActivity.super.onBackPressed();
             }
         });
         dialog.setNeutralButton("Pause", new DialogInterface.OnClickListener()
@@ -583,7 +574,7 @@ public class TrackingActivity extends UpdatableActivity
             public void onClick(DialogInterface dialogInterface, int i)
             {
                 saveCurrentStateOfIntervention();
-                TrackingActivity.super.onBackPressed();
+                InterventionActivity.super.onBackPressed();
             }
         });
         dialog.create();
@@ -594,7 +585,7 @@ public class TrackingActivity extends UpdatableActivity
     {
         ContentValues values = new ContentValues();
 
-        values.put(ZeroContract.Interventions.STATE, "FINISHED");
+        values.put(ZeroContract.Interventions.STATE, STATUS_FINISHED);
         values.put(ZeroContract.Interventions.REQUEST_COMPLIANT, diffStuff.isChecked());
 
         getContentResolver().update(ZeroContract.Interventions.CONTENT_URI,
@@ -611,7 +602,7 @@ public class TrackingActivity extends UpdatableActivity
         values.put(ZeroContract.Interventions.PREPARATION_CHRONO, chronoPreparation.getTime());
         values.put(ZeroContract.Interventions.TRAVELING_CHRONO, chronoTraveling.getTime());
         values.put(ZeroContract.Interventions.INTERVENTION_CHRONO, chronoIntervention.getTime());
-        values.put(ZeroContract.Interventions.STATE, "PAUSE");
+        values.put(ZeroContract.Interventions.STATE, STATUS_PAUSE);
         values.put(ZeroContract.Interventions.REQUEST_COMPLIANT, diffStuff.isChecked());
 
         getContentResolver().update(ZeroContract.Interventions.CONTENT_URI,

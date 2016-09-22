@@ -160,7 +160,8 @@ public final class ZeroContract {
         public static final String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/vnd.ekylibre.zero.intervention";
 
         public static final String[] PROJECTION_ALL = {_ID};
-        public static final String[] PROJECTION_BASIC = {_ID, NAME, DESCRIPTION, STARTED_AT, STOPPED_AT};
+        public static final String[] PROJECTION_BASIC = {_ID, NAME, DESCRIPTION, STARTED_AT,
+                STOPPED_AT, STATE};
         public static final String[] PROJECTION_PAUSED = {STATE, REQUEST_COMPLIANT,
                 GENERAL_CHRONO, PREPARATION_CHRONO, TRAVELING_CHRONO, INTERVENTION_CHRONO};
         public static final String[] PROJECTION_NONE = {_ID};

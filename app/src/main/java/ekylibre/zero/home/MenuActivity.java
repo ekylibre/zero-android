@@ -26,7 +26,7 @@ import ekylibre.zero.PlantCountingActivity;
 import ekylibre.zero.R;
 import ekylibre.zero.SettingsActivity;
 import ekylibre.APICaller.SyncAdapter;
-import ekylibre.zero.tracking.TrackingActivity;
+import ekylibre.zero.intervention.InterventionActivity;
 import ekylibre.service.ConnectionManagerService;
 
 public class MenuActivity extends ActionBarActivity
@@ -115,7 +115,7 @@ public class MenuActivity extends ActionBarActivity
 
 
     public void gotoNewIntervention(View v) {
-        Intent intent = new Intent(this,TrackingActivity.class);
+        Intent intent = new Intent(this,InterventionActivity.class);
         startActivity(intent);
 
     }
