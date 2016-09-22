@@ -246,7 +246,7 @@ public class InterventionActivity extends UpdatableActivity
         curs.moveToFirst();
         if (curs.getString(0) != null && !curs.getString(0).equals("PAUSE"))
             return;
-        diffStuff.setChecked(curs.getInt(1) == 0 ? false : true);
+        diffStuff.setChecked(curs.getInt(1) == 0 ? true : false);
         chronoGeneral.setTime(curs.getInt(2));
         chronoPreparation.setTime(curs.getInt(3));
         chronoActivePreparation.setTime(chronoPreparation.getTime());
@@ -586,7 +586,7 @@ public class InterventionActivity extends UpdatableActivity
         ContentValues values = new ContentValues();
 
         values.put(ZeroContract.Interventions.STATE, STATUS_FINISHED);
-        values.put(ZeroContract.Interventions.REQUEST_COMPLIANT, diffStuff.isChecked());
+        values.put(ZeroContract.Interventions.REQUEST_COMPLIANT, !diffStuff.isChecked());
 
         getContentResolver().update(ZeroContract.Interventions.CONTENT_URI,
                 values,
@@ -603,7 +603,7 @@ public class InterventionActivity extends UpdatableActivity
         values.put(ZeroContract.Interventions.TRAVELING_CHRONO, chronoTraveling.getTime());
         values.put(ZeroContract.Interventions.INTERVENTION_CHRONO, chronoIntervention.getTime());
         values.put(ZeroContract.Interventions.STATE, STATUS_PAUSE);
-        values.put(ZeroContract.Interventions.REQUEST_COMPLIANT, diffStuff.isChecked());
+        values.put(ZeroContract.Interventions.REQUEST_COMPLIANT, !diffStuff.isChecked());
 
         getContentResolver().update(ZeroContract.Interventions.CONTENT_URI,
                 values,

@@ -121,14 +121,17 @@ public class TodoListActivity extends UpdatableClass
         Calendar currentDate = Calendar.getInstance();
         currentDate.setTimeInMillis(0);
         ArrayList<TodoItem> compiledList = getListCompact(cursLocal, cursRequested);
-        int i = 0;
-        compiledList.add(0, new TodoItem(true, getDateOfDay()));
-        if ((compiledList.size() > 1 && compiledList.get(1).getDate().getTimeInMillis() >= getDateOfTomorrow().getTimeInMillis())
-                || compiledList.size() == 1)
+        int i = -1;
+
+
+        if (compiledList.size() == 0)
         {
-            i++;
-            compiledList.add(1, new TodoItem(true, context.getResources().getString(R.string.no_event_today)));
+            i += 2;
+            compiledList.add(0, new TodoItem(true, getDateOfDay()));
+
+            compiledList.add(1, new TodoItem(true, context.getResources().getString(R.string.no_event)));
         }
+
 
 
         while (++i < compiledList.size())
@@ -196,18 +199,15 @@ public class TodoListActivity extends UpdatableClass
                         + cursRequested.getString(DTEND).replaceAll("Z$", "+00:00"));
                 Date startDate = dateParser.parse(cursRequested.getString(DTSTART).replaceAll("Z$", "+00:00"));
 
-                if (startDate.getTime() > dateOfDay.getTimeInMillis())
-                {
-                    Date endDate = dateParser.parse(cursRequested.getString(DTEND).replaceAll("Z$", "+00:00"));
-                    startDateFormatted = formatterSTART.format(startDate);
-                    endDateFormatted = formatterEND.format(endDate);
-                    Calendar cal = Calendar.getInstance();
-                    cal.setTime(startDate);
-                    String desc = getDescription(cursRequested);
-                    list.add(new TodoItem(startDateFormatted, endDateFormatted, cursRequested.getString(TITLE),
-                            desc, cal, cursRequested.getInt(0), EKYLIBRE_CALENDAR, cursRequested
-                            .getString(5)));
-                }
+                Date endDate = dateParser.parse(cursRequested.getString(DTEND).replaceAll("Z$", "+00:00"));
+                startDateFormatted = formatterSTART.format(startDate);
+                endDateFormatted = formatterEND.format(endDate);
+                Calendar cal = Calendar.getInstance();
+                cal.setTime(startDate);
+                String desc = getDescription(cursRequested);
+                list.add(new TodoItem(startDateFormatted, endDateFormatted, cursRequested.getString(TITLE),
+                        desc, cal, cursRequested.getInt(0), EKYLIBRE_CALENDAR, cursRequested
+                        .getString(5)));
             }
             catch (ParseException e)
             {
@@ -296,8 +296,6 @@ public class TodoListActivity extends UpdatableClass
 
     private boolean newDay(long date, Calendar currentDate)
     {
-        if (date < getDateOfTomorrow().getTimeInMillis())
-            return (false);
         if (currentDate.getTimeInMillis() == 0
                 || getDayFromMillis(date) != currentDate.get(Calendar.DAY_OF_YEAR))
             return (true);
