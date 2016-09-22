@@ -95,10 +95,10 @@
     <string name="pref_syncCalendar_summary">Allow application to automatically synchronize your phone calendar</string>
     <string name="pref_GPS">Enable GPS</string>
     <string name="pref_GPS_summary">Let Zero use your location information</string>
-    <string name="no_event_today">There is no event today</string>
+    <string name="no_event">There is no request intervention</string>
     <string name="plant_counting_saved">Plant Counting saved</string>
     <string name="plant_counting_cannot_save">Cannot save Plant counting, please finish your counting</string>
-    <string name="diff_stuff">Different stuff</string>
+    <string name="diff_stuff">Request compliant</string>
     <string name="send">Send</string>
     <string name="pref_poke">Reminder every 10 minutes</string>
     <string name="pref_poke_summary">Send a poke every 10 minutes that will make the phone vibrate to remind you the application is running</string>

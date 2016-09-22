@@ -23,6 +23,23 @@ public class DatabaseHelper extends SQLiteOpenHelper
     }
 
 
+    /*
+    ** Use this to enable constraint on foreign key, but it's actually not working
+    ** Crash on the onDelete dunno why => FOREIGN KEY constraint failed (code 787)
+    */
+
+/*
+    @Override
+    public void onOpen(SQLiteDatabase db)
+    {
+        super.onOpen(db);
+        if (!db.isReadOnly())
+        {
+            db.setForeignKeyConstraintsEnabled(true);
+        }
+    }
+*/
+
 
     /*
     ** Called on the first creation of the DB if there is no DB with the same DATABASE_NAME
@@ -292,7 +309,7 @@ public class DatabaseHelper extends SQLiteOpenHelper
             {
                 database.execSQL("ALTER TABLE intervention ADD state VARCHAR(255) DEFAULT NULL");
                 database.execSQL("ALTER TABLE intervention ADD request_compliant BOOLEAN " +
-                        "DEFAULT NULL");
+                        "DEFAULT 1");
                 database.execSQL("ALTER TABLE intervention ADD general_chrono BIGINT " +
                         "DEFAULT NULL");
                 database.execSQL("ALTER TABLE intervention ADD preparation_chrono BIGINT " +
