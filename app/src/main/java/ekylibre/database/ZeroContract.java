@@ -163,7 +163,7 @@ public final class ZeroContract {
         public static final String[] PROJECTION_BASIC = {_ID, NAME, DESCRIPTION, STARTED_AT,
                 STOPPED_AT, STATE};
         public static final String[] PROJECTION_PAUSED = {STATE, REQUEST_COMPLIANT,
-                GENERAL_CHRONO, PREPARATION_CHRONO, TRAVELING_CHRONO, INTERVENTION_CHRONO};
+                GENERAL_CHRONO, PREPARATION_CHRONO, TRAVELING_CHRONO, INTERVENTION_CHRONO, NAME};
         public static final String[] PROJECTION_NONE = {_ID};
 
         public static final String SORT_ORDER_DEFAULT = _ID + " ASC";
