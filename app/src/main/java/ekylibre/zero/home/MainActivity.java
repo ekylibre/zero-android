@@ -78,6 +78,7 @@ public class MainActivity extends UpdatableActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        setTitle("Planning");
         PermissionManager.calendarPermissions(this, this);
 
         firstPass = true;

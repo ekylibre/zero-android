@@ -17,6 +17,7 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.v7.widget.CardView;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
@@ -91,6 +92,7 @@ public class InterventionActivity extends UpdatableActivity
     private CheckBox diffStuff;
     private Button mStartButton, mMapButton;
     private TextView mProcedureNature;
+    private CardView cardView;
 
     /* ****************************
     **      Class variables
@@ -144,7 +146,9 @@ public class InterventionActivity extends UpdatableActivity
 
         if (id == R.id.action_save)
         {
-            Toast.makeText(this, "I'm saving intervention !", Toast.LENGTH_SHORT).show();
+            phasePause(null);
+            switchStateToFinished();
+            InterventionActivity.super.onBackPressed();
         }
         else if (id == android.R.id.home)
         {
@@ -188,6 +192,7 @@ public class InterventionActivity extends UpdatableActivity
         mMapButton                = (Button)     findViewById(R.id.map_button);
         infoLayout                = (RelativeLayout) findViewById(R.id.infoLayout);
         infoScroll                = (ScrollView) findViewById(R.id.interventionInfo);
+        cardView                  = (CardView) findViewById(R.id.card_view);
         diffStuff                 = (CheckBox) findViewById(R.id.diff_stuff);
         diffStuff.setOnClickListener(new View.OnClickListener()
         {
@@ -220,7 +225,21 @@ public class InterventionActivity extends UpdatableActivity
         if (!mNewIntervention)
             prepareRequest();
         else
+        {
             createProcedureChooser();
+            prepareSimpleIntervention();
+        }
+    }
+
+    private void prepareSimpleIntervention()
+    {
+        cardView.setVisibility(View.INVISIBLE);
+        diffStuff.setVisibility(View.GONE);
+        chronoGeneral.setVisibility(View.GONE);
+        layoutPreparation.setVisibility(View.GONE);
+        layoutTraveling.setVisibility(View.GONE);
+        layoutIntervention.setVisibility(View.GONE);
+        mStartButton.setVisibility(View.VISIBLE);
     }
 
 
@@ -244,9 +263,10 @@ public class InterventionActivity extends UpdatableActivity
         if (curs == null || curs.getCount() == 0)
             return;
         curs.moveToFirst();
+        setTitle(curs.getString(6));
         if (curs.getString(0) != null && !curs.getString(0).equals("PAUSE"))
             return;
-        diffStuff.setChecked(curs.getInt(1) == 0 ? true : false);
+        diffStuff.setChecked(curs.getInt(1) == 0 ? false : true);
         chronoGeneral.setTime(curs.getInt(2));
         chronoPreparation.setTime(curs.getInt(3));
         chronoActivePreparation.setTime(chronoPreparation.getTime());
@@ -559,7 +579,7 @@ public class InterventionActivity extends UpdatableActivity
                 InterventionActivity.super.onBackPressed();
             }
         });
-        dialog.setNegativeButton("Supprimer", new DialogInterface.OnClickListener()
+        dialog.setNegativeButton("Annuler", new DialogInterface.OnClickListener()
         {
             @Override
             public void onClick(DialogInterface dialogInterface, int i)
@@ -586,7 +606,7 @@ public class InterventionActivity extends UpdatableActivity
         ContentValues values = new ContentValues();
 
         values.put(ZeroContract.Interventions.STATE, STATUS_FINISHED);
-        values.put(ZeroContract.Interventions.REQUEST_COMPLIANT, !diffStuff.isChecked());
+        values.put(ZeroContract.Interventions.REQUEST_COMPLIANT, diffStuff.isChecked());
 
         getContentResolver().update(ZeroContract.Interventions.CONTENT_URI,
                 values,
@@ -603,7 +623,7 @@ public class InterventionActivity extends UpdatableActivity
         values.put(ZeroContract.Interventions.TRAVELING_CHRONO, chronoTraveling.getTime());
         values.put(ZeroContract.Interventions.INTERVENTION_CHRONO, chronoIntervention.getTime());
         values.put(ZeroContract.Interventions.STATE, STATUS_PAUSE);
-        values.put(ZeroContract.Interventions.REQUEST_COMPLIANT, !diffStuff.isChecked());
+        values.put(ZeroContract.Interventions.REQUEST_COMPLIANT, diffStuff.isChecked());
 
         getContentResolver().update(ZeroContract.Interventions.CONTENT_URI,
                 values,
@@ -649,16 +669,23 @@ public class InterventionActivity extends UpdatableActivity
         mProcedureChooser = new AlertDialog.Builder(this)
                 .setTitle(R.string.procedure_nature)
                 .setNegativeButton(android.R.string.cancel, null)
-                .setItems(R.array.procedures_entries, new DialogInterface.OnClickListener() {
+                .setItems(R.array.procedures_entries, new DialogInterface.OnClickListener()
+                {
                     @Override
-                    public void onClick(DialogInterface dialog, int which) {
+                    public void onClick(DialogInterface dialog, int which)
+                    {
                         mLastProcedureNature = getResources().getStringArray(R.array.procedures_values)[which];
                         mLastProcedureNatureName = getResources().getStringArray(R.array.procedures_entries)[which];
                         Log.d("zero", "Start a new " + mLastProcedureNature);
                         crumbsCalculator = new CrumbsCalculator(mLastProcedureNature);
 
                         mStartButton.setVisibility(View.GONE);
-                        mMapButton.setVisibility(View.VISIBLE);
+                        mMapButton.setVisibility(View.GONE);
+
+                        chronoGeneral.setVisibility(View.VISIBLE);
+                        layoutPreparation.setVisibility(View.VISIBLE);
+                        layoutTraveling.setVisibility(View.VISIBLE);
+                        layoutIntervention.setVisibility(View.VISIBLE);
                         //mScanButton.setVisibility(View.VISIBLE);
                         //mPrecisionModeStartButton.setVisibility(View.VISIBLE);
                         //mProcedureNature.setVisibility(View.VISIBLE);
