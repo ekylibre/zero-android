@@ -30,10 +30,12 @@ import java.util.Set;
 
 import ekylibre.database.ZeroContract;
 import ekylibre.exceptions.HTTPException;
+import ekylibre.util.DateConstant;
 import ekylibre.zero.BuildConfig;
 import ekylibre.util.AccountTool;
 import ekylibre.util.ImageConverter;
 import ekylibre.util.UpdatableActivity;
+import ekylibre.zero.intervention.InterventionActivity;
 
 /**
  * Handle the transfer of data between a server and an
@@ -105,13 +107,15 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
             account = accountList[i];
             if (BuildConfig.DEBUG) Log.d(TAG, "... Sync new account ...");
             if (BuildConfig.DEBUG) Log.d(TAG, "... New account is " + account.name + " ...");
-            performPlantDensityAbaciSync(account,
+            pullPlantDensityAbaci(account,
                 extras, authority, provider, syncResult);
-            performPlantsSync(account, extras, authority, provider, syncResult);
-            performCrumbsSync(account, extras, authority, provider, syncResult);
-            performIssuesSync(account, extras, authority, provider, syncResult);
-            performPlantCounting(account, extras, authority, provider, syncResult);
-            performIntervention(account, extras, authority, provider, syncResult);
+            pullPlants(account, extras, authority, provider, syncResult);
+            pushCrumbs(account, extras, authority, provider, syncResult);
+            pushIssues(account, extras, authority, provider, syncResult);
+            pushPlantCounting(account, extras, authority, provider, syncResult);
+            pullIntervention(account, extras, authority, provider, syncResult);
+
+            //pushIntervention(account, extras, authority, provider, syncResult);
         }
         getContext().sendBroadcast(new Intent(UpdatableActivity.ACTION_FINISHED_SYNC));
     }
@@ -120,7 +124,8 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
     ** Following methods are used to transfer data between zero and ekylibre instance
     ** There are POST and GET call
     */
-    public void performCrumbsSync(Account account, Bundle extras, String authority, ContentProviderClient provider, SyncResult syncResult)
+    public void pushCrumbs(Account account, Bundle extras, String authority,
+                            ContentProviderClient provider, SyncResult syncResult)
     {
         if (BuildConfig.DEBUG) Log.i(TAG, "Beginning network synchronization");
         
@@ -194,7 +199,8 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
         mContentResolver.update(Uri.withAppendedPath(ZeroContract.Crumbs.CONTENT_URI, Long.toString(cursor.getLong(0))), values, null, null);
     }
 
-    public void performIssuesSync(Account account, Bundle extras, String authority, ContentProviderClient provider, SyncResult syncResult)
+    public void pushIssues(Account account, Bundle extras, String authority, ContentProviderClient
+            provider, SyncResult syncResult)
     {
         if (BuildConfig.DEBUG) Log.i(TAG, "Beginning network issues synchronization");
 
@@ -273,7 +279,8 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
         return (imageJSON);
     }
 
-    public void performPlantDensityAbaciSync(Account account, Bundle extras, String authority, ContentProviderClient provider, SyncResult syncResult)
+    public void pullPlantDensityAbaci(Account account, Bundle extras, String authority,
+                                       ContentProviderClient provider, SyncResult syncResult)
     {
 
 
@@ -311,14 +318,15 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
             }
         if (BuildConfig.DEBUG) Log.d("zero", "fin parcours de liste plantDensityAbacus");
         try {
-            performPlantDensityAbacusItemSync(account, extras, authority, provider, syncResult, abacusList);
+            pullPlantDensityAbacusItem(account, extras, authority, provider, syncResult, abacusList);
         } catch (JSONException e) {
             e.printStackTrace();
         }
         if (BuildConfig.DEBUG) Log.i(TAG, "Finish network plant_density_abaci synchronization");
     }
 
-    public void performPlantDensityAbacusItemSync(Account account, Bundle extras, String authority, ContentProviderClient provider, SyncResult syncResult, List<PlantDensityAbacus> abacusList) throws JSONException
+    public void pullPlantDensityAbacusItem(Account account, Bundle extras, String authority,
+                                         ContentProviderClient provider, SyncResult syncResult, List<PlantDensityAbacus> abacusList) throws JSONException
     {
 
 
@@ -350,7 +358,8 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
 
 
 
-    public void performPlantsSync(Account account, Bundle extras, String authority, ContentProviderClient provider, SyncResult syncResult)
+    public void pullPlants(Account account, Bundle extras, String authority, ContentProviderClient
+            provider, SyncResult syncResult)
     {
         if (BuildConfig.DEBUG) Log.i(TAG, "Beginning network plants synchronization");
         ContentValues cv = new ContentValues();
@@ -382,7 +391,8 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
         if (BuildConfig.DEBUG) Log.i(TAG, "Finish network plant synchronization");
     }
 
-    public void performPlantCounting(Account account, Bundle extras, String authority, ContentProviderClient provider, SyncResult syncResult)
+    public void pushPlantCounting(Account account, Bundle extras, String authority,
+                               ContentProviderClient provider, SyncResult syncResult)
     {
         if (BuildConfig.DEBUG) Log.i(TAG, "Beginning network plant counting synchronization");
         Cursor cursor = mContentResolver.query(ZeroContract.PlantCountings.CONTENT_URI,
@@ -473,7 +483,8 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
         return (null);
     }
 
-    public void performIntervention(Account account, Bundle extras, String authority, ContentProviderClient provider, SyncResult syncResult)
+    public void pullIntervention(Account account, Bundle extras, String authority,
+                              ContentProviderClient provider, SyncResult syncResult)
     {
         if (BuildConfig.DEBUG) Log.i(TAG, "Beginning network intervention synchronization");
         Instance instance = getInstance(account);
@@ -558,6 +569,114 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
         cv.put(ZeroContract.Interventions.DESCRIPTION, intervention.getDescription());
         cv.put(ZeroContract.Interventions.USER, account.name);
         mContentResolver.insert(ZeroContract.Interventions.CONTENT_URI, cv);
+    }
+
+    private void pushIntervention(Account account, Bundle extras, String authority, ContentProviderClient provider, SyncResult syncResult)
+    {
+        if (BuildConfig.DEBUG) Log.i(TAG, "Beginning network intervention synchronization");
+
+        Cursor cursorIntervention = mContentResolver.query(
+                ZeroContract.Interventions.CONTENT_URI,
+                ZeroContract.Interventions.PROJECTION_POST,
+                "\"" + ZeroContract.Interventions.USER + "\"" + " LIKE " + "\"" + account.name + "\""
+                        + " AND " + ZeroContract.Interventions.STATE + " LIKE " +
+                        InterventionActivity.STATUS_FINISHED,
+                null,
+                ZeroContract.Interventions.SORT_ORDER_DEFAULT);
+
+
+        if (cursorIntervention != null && cursorIntervention.getCount() > 0)
+        {
+            Instance instance = getInstance(account);
+            while (cursorIntervention.moveToNext())
+            {
+                try
+                {
+                    Cursor cursorWorkingPeriods = mContentResolver.query(
+                            ZeroContract.WorkingPeriods.CONTENT_URI,
+                            ZeroContract.WorkingPeriods.PROJECTION_ALL,
+                            ZeroContract.WorkingPeriods.FK_INTERVENTION + " == " +
+                                    cursorIntervention.getInt(0),
+                            null,
+                            null);
+
+                    postNewIntervention(cursorIntervention, cursorWorkingPeriods, instance);
+                }
+                catch (JSONException | IOException | HTTPException e)
+                {
+                    e.printStackTrace();
+                }
+            }
+        }
+        else
+        {
+            if (BuildConfig.DEBUG) Log.i(TAG, "Nothing to sync");
+        }
+        if (BuildConfig.DEBUG) Log.i(TAG, "Finish network synchronization");
+    }
+
+    private void    postNewIntervention(Cursor cursorIntervention, Cursor cursorWorkingPeriods,
+                                        Instance instance)
+            throws JSONException, IOException, HTTPException
+    {
+        if (BuildConfig.DEBUG) Log.i(TAG, "New intervention");
+
+        // Post it to ekylibre
+        JSONObject attributes = new JSONObject();
+        if (cursorIntervention.getInt(1) > 0)
+        {
+            attributes.put("request_intervention_id", cursorIntervention.getInt(1));
+            attributes.put("request_compliant", cursorIntervention.getInt(3));
+        }
+        attributes.put("procedure_name", cursorIntervention.getString(2));
+        attributes.put("device_uid", "android:" + Secure.getString(mContentResolver, Secure.ANDROID_ID));
+
+        attributes.put("working_periods", createWorkingPeriods(cursorIntervention.getInt(0)));
+
+        // TODO :: put crumbs here
+
+
+        long id = Intervention.create(instance, attributes);
+        // Marks them as synced
+        ContentValues values = new ContentValues();
+        values.put(ZeroContract.Interventions.STATE, "SYNCED");
+        mContentResolver.update(Uri.withAppendedPath(ZeroContract.Issues.CONTENT_URI, Long
+                .toString(cursorIntervention.getLong(0))), values, null, null);
+    }
+
+    private JSONArray createWorkingPeriods(int interventionID)
+    {
+        Cursor cursor = mContentResolver.query(ZeroContract.WorkingPeriods.CONTENT_URI,
+                ZeroContract.WorkingPeriods.PROJECTION_POST,
+                interventionID + " == " + ZeroContract.WorkingPeriods.FK_INTERVENTION,
+                null,
+                ZeroContract.PlantCountingItems.SORT_ORDER_DEFAULT);
+        try
+        {
+            if (cursor != null && cursor.getCount() > 0)
+            {
+                JSONArray arrayJSON = new JSONArray();
+                while (cursor.moveToNext())
+                {
+                    JSONObject attributes = new JSONObject();
+                    attributes.put("started_at", cursor.getString(1));
+                    attributes.put("stopped_at", cursor.getString(2));
+                    attributes.put("nature", cursor.getString(3));
+                    arrayJSON.put(attributes);
+                }
+                cursor.close();
+                return (arrayJSON);
+            }
+            else
+            {
+                if (BuildConfig.DEBUG) Log.i(TAG, "Nothing to sync");
+            }
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        return (null);
     }
 
     protected Instance getInstance(Account account)
