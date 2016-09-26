@@ -164,6 +164,8 @@ public final class ZeroContract {
                 STOPPED_AT, STATE};
         public static final String[] PROJECTION_PAUSED = {STATE, REQUEST_COMPLIANT,
                 GENERAL_CHRONO, PREPARATION_CHRONO, TRAVELING_CHRONO, INTERVENTION_CHRONO, NAME};
+        public static final String[] PROJECTION_POST = {_ID, EK_ID, PROCEDURE_NAME,
+                REQUEST_COMPLIANT};
         public static final String[] PROJECTION_NONE = {_ID};
 
         public static final String SORT_ORDER_DEFAULT = _ID + " ASC";
@@ -199,6 +201,7 @@ public final class ZeroContract {
         public static final String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/vnd.ekylibre.zero.working_periods";
 
         public static final String[] PROJECTION_ALL = {_ID};
+        public static final String[] PROJECTION_POST = {_ID, STARTED_AT, STOPPED_AT, NATURE};
         public static final String[] PROJECTION_NONE = {_ID};
 
         public static final String SORT_ORDER_DEFAULT = _ID + " ASC";

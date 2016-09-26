@@ -227,6 +227,7 @@ public class InterventionActivity extends UpdatableActivity
         else
         {
             createProcedureChooser();
+            createIntervention();
             prepareSimpleIntervention();
         }
     }
@@ -670,7 +671,6 @@ public class InterventionActivity extends UpdatableActivity
                                 .setContentTitle(mLastProcedureNatureName)
                                 .setContentText(getString(R.string.running));
                         mNotificationManager.notify(mNotificationID, mNotificationBuilder.build());
-                        createIntervention();
                     }
                 });
     }
@@ -681,6 +681,7 @@ public class InterventionActivity extends UpdatableActivity
         ContentValues values = new ContentValues();
 
         values.put(ZeroContract.InterventionsColumns.USER, AccountTool.getCurrentAccount(this).name);
+        values.put(ZeroContract.InterventionsColumns.EK_ID, -1);
         getContentResolver().insert(ZeroContract.Interventions.CONTENT_URI, values);
         Cursor cursor = getContentResolver().query(ZeroContract.Interventions.CONTENT_URI, new String[]{ZeroContract.Interventions._ID}, null, null, null);
         if (cursor == null || !cursor.moveToLast())

@@ -2,6 +2,7 @@ package ekylibre.APICaller;
 
 import android.util.Log;
 
+import org.apache.http.client.ClientProtocolException;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -35,6 +36,18 @@ public class Intervention
     private String      mStoppedAt;
     private String      mDescription;
     private JSONArray   params;
+
+    public static long create(Instance instance, JSONObject attributes)
+            throws JSONException, IOException, HTTPException
+    {
+        // JSONObject params = Instance.BundleToJSON(attributes);
+        JSONObject params = attributes;
+        //TODO :: Update path to API
+        JSONObject json = instance.post("/api/v1/interventions", params);
+        long id = json.getLong("id");
+
+        return (id);
+    }
 
     public static List<Intervention> all(Instance instance, String attributes) throws JSONException, IOException, HTTPException
     {
