@@ -638,31 +638,6 @@ public class InterventionActivity extends UpdatableActivity
         super.onDestroy();
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    // |========================================|
-    // |============                ============|
-    // |=========== OLD WAY TRACKING ===========|
-    // |============                ============|
-    // |========================================|
-
-
     private void createProcedureChooser()
     {
         infoScroll.setVisibility(View.GONE);
@@ -686,22 +661,10 @@ public class InterventionActivity extends UpdatableActivity
                         layoutPreparation.setVisibility(View.VISIBLE);
                         layoutTraveling.setVisibility(View.VISIBLE);
                         layoutIntervention.setVisibility(View.VISIBLE);
-                        //mScanButton.setVisibility(View.VISIBLE);
-                        //mPrecisionModeStartButton.setVisibility(View.VISIBLE);
-                        //mProcedureNature.setVisibility(View.VISIBLE);
                         mProcedureNature.setText(mLastProcedureNatureName);
 
                         setTitle(mLastProcedureNatureName);
-
-
                         startTracking();
-
-/*
-                        final Bundle metadata = new Bundle();
-                        metadata.putString("procedure_nature", mLastProcedureNature);
-                        addCrumb("start", metadata);
-*/
-
                         mNotificationBuilder
                                 .setSmallIcon(R.mipmap.ic_stat_notify_running)
                                 .setContentTitle(mLastProcedureNatureName)
@@ -710,10 +673,6 @@ public class InterventionActivity extends UpdatableActivity
                         createIntervention();
                     }
                 });
-
-        //  if (!mRunning) {
-        //      mProcedureChooser.show();
-        //  }
     }
 
 
@@ -746,16 +705,10 @@ public class InterventionActivity extends UpdatableActivity
     }
 
     public void stopIntervention(View view) {
-/*        if (mPrecisionMode) {
-            stopPrecisionMode(view);
-        }*/
         mMapButton.setVisibility(View.GONE);
-        //mPrecisionModeStartButton.setVisibility(View.GONE);
         mProcedureNature.setVisibility(View.INVISIBLE);
         mStartButton.setVisibility(View.VISIBLE);
         this.stopTracking();
-        //this.addCrumb("stop");
-
 
         int lastCrumbID = query_last_crumb_id();
         if (PermissionManager.GPSPermissions(this, this) && lastCrumbID != 0)
@@ -876,11 +829,11 @@ public class InterventionActivity extends UpdatableActivity
         values.put(ZeroContract.CrumbsColumns.ACCURACY, 0);
         values.put(ZeroContract.CrumbsColumns.SYNCED, 0);
         values.put(ZeroContract.CrumbsColumns.FK_INTERVENTION, mInterventionID);
-        //putMetadata(crumb.getMetadata(), values);
 
         getContentResolver().insert(ZeroContract.Crumbs.CONTENT_URI, values);
     }
 
+/*
     private void putMetadata(Bundle metadata, ContentValues values)
     {
         if (metadata != null) {
@@ -904,6 +857,7 @@ public class InterventionActivity extends UpdatableActivity
             }
         }
     }
+*/
 
 
 }
