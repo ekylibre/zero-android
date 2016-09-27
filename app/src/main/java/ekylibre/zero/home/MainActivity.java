@@ -306,6 +306,11 @@ public class MainActivity extends UpdatableActivity
         startActivity(intent);
     }
 
+    /*
+    ** This method will sync the data if it's needed
+    ** You can call this every where since the maximum sync for this is
+    ** 1 every TIME_TO_NEXT_SYNC
+    */
     private void    sync_data()
     {
         if (mAccount == null || (syncedInLastMinutes() && !firstPass))
@@ -317,6 +322,11 @@ public class MainActivity extends UpdatableActivity
         ContentResolver.requestSync(mAccount, ZeroContract.AUTHORITY, extras);
     }
 
+    /*
+    ** Force sync
+    ** If you need to be sure that data will be sync use this method
+    ** Do not abuse of this method because sync will block every actions from users
+    */
     private void    forceSync_data()
     {
         if (mAccount == null)
@@ -329,6 +339,9 @@ public class MainActivity extends UpdatableActivity
         syncTime.setTimeInMillis(Calendar.getInstance().getTimeInMillis());
     }
 
+    /*
+    ** Return true if there is no sync since TIME_TO_NEXT_SYNC
+    */
     private boolean syncedInLastMinutes()
     {
         Calendar currentTime = Calendar.getInstance();

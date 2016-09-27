@@ -1,6 +1,7 @@
 package ekylibre.zero.home;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,6 +29,14 @@ public class TodoAdapter extends ArrayAdapter<TodoItem>
         super(context, 0, todoList);
     }
 
+    /*
+    ** Dynamic set of todoList which is use in mainActivity
+    ** Read android documentation to understand how convertView works
+    **
+    ** headerState => it's a date block
+    ** messageState => it's a special message block
+    */
+    @NonNull
     @Override
     public View getView(int position, View convertView, ViewGroup parent)
     {

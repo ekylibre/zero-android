@@ -111,6 +111,11 @@ public class TodoListActivity extends UpdatableClass
         todoListView = listView;
     }
 
+    /*
+    ** This method will create the todoList as list with an item element
+    ** Item element contain the block information which will be interpreted
+    ** by the adapter.
+    */
     public List<TodoItem> createList()
     {
         Cursor          cursLocal, cursRequested;
@@ -121,18 +126,14 @@ public class TodoListActivity extends UpdatableClass
         Calendar currentDate = Calendar.getInstance();
         currentDate.setTimeInMillis(0);
         ArrayList<TodoItem> compiledList = getListCompact(cursLocal, cursRequested);
+
         int i = -1;
-
-
         if (compiledList.size() == 0)
         {
             i += 2;
             compiledList.add(0, new TodoItem(true, getDateOfDay()));
-
             compiledList.add(1, new TodoItem(true, context.getResources().getString(R.string.no_event)));
         }
-
-
 
         while (++i < compiledList.size())
         {
@@ -145,6 +146,11 @@ public class TodoListActivity extends UpdatableClass
         return (compiledList);
     }
 
+    /*
+    ** Create a list,
+    ** add events from local / ekylibre,
+    ** sort events by date asc
+    */
     private ArrayList<TodoItem> getListCompact(Cursor cursLocal, Cursor cursRequested)
     {
         ArrayList<TodoItem> list = new ArrayList<>();
@@ -162,6 +168,11 @@ public class TodoListActivity extends UpdatableClass
         return (list);
     }
 
+    /*
+    ** Implementation of sort
+    ** That will compare dates from events and sort them
+    ** Events wil be ordered by asc
+    */
     private void sortList(ArrayList<TodoItem> list)
     {
         Collections.sort(list, new Comparator<TodoItem>()
@@ -183,6 +194,10 @@ public class TodoListActivity extends UpdatableClass
             list.get(i).setNumber(i);
     }
 
+    /*
+    ** Add events registered in local database which are link with ekylibre
+    ** to the list
+    */
     private void addEkylibreEvents(ArrayList<TodoItem> list, Cursor cursRequested, DateFormat formatterSTART, DateFormat formatterEND)
     {
         Calendar dateOfDay = getDateOfDay();
@@ -217,6 +232,10 @@ public class TodoListActivity extends UpdatableClass
 
     }
 
+    /*
+    ** Add events registered in local phone calendar
+    ** to the list
+    */
     private void addLocalEvents(ArrayList<TodoItem> list, Cursor cursLocal, DateFormat formatterSTART, DateFormat formatterEND)
     {
         String startDateFormatted;
@@ -238,6 +257,9 @@ public class TodoListActivity extends UpdatableClass
         }
     }
 
+    /*
+    ** @return: timeZone
+    */
     public static String getTimeZone()
     {
         Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("GMT"), Locale.getDefault());
@@ -245,6 +267,10 @@ public class TodoListActivity extends UpdatableClass
         return (timeZone.substring(0, 3) + ":"+ timeZone.substring(3, 5));
     }
 
+    /*
+    ** Create a string that indent information below envent's title
+    ** into a block event
+    */
     private String getDescription(Cursor cursRequested)
     {
         String str = "";
@@ -256,7 +282,7 @@ public class TodoListActivity extends UpdatableClass
             return (str);
         while (curs.moveToNext())
         {
-            str += "\u2022 ";
+            str += "• ";
             str += curs.getString(1);
             if (!curs.isLast())
                 str += "\n";
@@ -294,6 +320,11 @@ public class TodoListActivity extends UpdatableClass
         return (curs);
     }
 
+    /*
+    ** check if date is a new day compared to current reference which is currentDate
+    ** if it's return true you should update currentDate then it will be able to
+    ** tell you if this is a new day compared to previous one
+    */
     private boolean newDay(long date, Calendar currentDate)
     {
         if (currentDate.getTimeInMillis() == 0
@@ -447,6 +478,10 @@ public class TodoListActivity extends UpdatableClass
         return (returnCurs);
     }
 
+    /*
+    ** Pure log of local events
+    ** Use this to debug
+    */
     public void         affEvents(Cursor curs)
     {
         int             it;
