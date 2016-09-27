@@ -98,7 +98,8 @@ public class TodoListActivity extends UpdatableClass
                             return;
                         TodoItem item = (TodoItem) adapterView.getItemAtPosition(position);
                         Log.d(TAG, item.getEvent());
-                        if (item.getState().equals(InterventionActivity.STATUS_FINISHED))
+                        if (item.getState().equals(InterventionActivity.STATUS_FINISHED)
+                                || item.getSource() == TodoListActivity.LOCAL_CALENDAR)
                             return;
                         Intent intent = new Intent(context, InterventionActivity.class);
                         intent.putExtra(ZeroContract.Interventions._ID, item.getIntervention_id());
