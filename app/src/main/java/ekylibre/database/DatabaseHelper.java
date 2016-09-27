@@ -314,7 +314,7 @@ public class DatabaseHelper extends SQLiteOpenHelper
                         "DEFAULT NULL");
                 database.execSQL("ALTER TABLE intervention ADD preparation_chrono BIGINT " +
                         "DEFAULT NULL");
-                database.execSQL("ALTER TABLE intervention ADD traveling_chrono BIGINT " +
+                database.execSQL("ALTER TABLE intervention ADD travel_chrono BIGINT " +
                         "DEFAULT NULL");
                 database.execSQL("ALTER TABLE intervention ADD intervention_chrono BIGINT " +
                         "DEFAULT NULL");

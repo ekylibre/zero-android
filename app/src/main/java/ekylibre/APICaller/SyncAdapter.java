@@ -129,7 +129,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
     {
         if (BuildConfig.DEBUG) Log.i(TAG, "Beginning network synchronization");
         
-        // Get crumbs from tracking (content) provider
+        // Get crumbs from intervention (content) provider
         Cursor cursor = mContentResolver.query(ZeroContract.Crumbs.CONTENT_URI,
                 ZeroContract.Crumbs.PROJECTION_ALL,
                 "\"" + ZeroContract.CrumbsColumns.USER + "\" " + "LIKE" + " \"" + account.name + "\""

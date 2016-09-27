@@ -137,7 +137,7 @@
 <!--        <activity
             android:name="com.google.zxing.client.android.CaptureActivity"
             android:configChanges="orientation|keyboardHidden"
-            android:parentActivityName=".tracking.InterventionActivity"
+            android:parentActivityName=".intervention.InterventionActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
             android:windowSoftInputMode="stateAlwaysHidden">
@@ -149,7 +149,7 @@
 
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".tracking.InterventionActivity" />
+                android:value=".intervention.InterventionActivity" />
         </activity>-->
 
         <!-- Settings -->

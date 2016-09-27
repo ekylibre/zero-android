@@ -31,7 +31,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity {
     public final static String KEY_ACCOUNT_NAME        = "accountName";
     public final static String KEY_REDIRECT            = "redirect";
 
-    public final static String CHOICE_REDIRECT_TRACKING  = "tracking";
+    public final static String CHOICE_REDIRECT_TRACKING  = "intervention";
 
     private final String TAG = this.getClass().getSimpleName();
     private AccountManager mAccountManager;

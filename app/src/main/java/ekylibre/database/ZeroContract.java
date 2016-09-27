@@ -31,7 +31,7 @@ public final class ZeroContract {
         String REQUEST_COMPLIANT = "request_compliant";
         String GENERAL_CHRONO = "general_chrono";
         String PREPARATION_CHRONO = "preparation_chrono";
-        String TRAVELING_CHRONO = "traveling_chrono";
+        String TRAVEL_CHRONO = "travel_chrono";
         String INTERVENTION_CHRONO = "intervention_chrono";
     }
 
@@ -163,7 +163,7 @@ public final class ZeroContract {
         public static final String[] PROJECTION_BASIC = {_ID, NAME, DESCRIPTION, STARTED_AT,
                 STOPPED_AT, STATE};
         public static final String[] PROJECTION_PAUSED = {STATE, REQUEST_COMPLIANT,
-                GENERAL_CHRONO, PREPARATION_CHRONO, TRAVELING_CHRONO, INTERVENTION_CHRONO, NAME};
+                GENERAL_CHRONO, PREPARATION_CHRONO, TRAVEL_CHRONO, INTERVENTION_CHRONO, NAME};
         public static final String[] PROJECTION_POST = {_ID, EK_ID, PROCEDURE_NAME,
                 REQUEST_COMPLIANT};
         public static final String[] PROJECTION_NONE = {_ID};
