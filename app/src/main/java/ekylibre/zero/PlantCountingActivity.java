@@ -108,6 +108,11 @@ public class PlantCountingActivity extends UpdatableActivity  {
             case R.id.action_save:
                 savePlantCounting(item.getActionView());
                 return true;
+            case android.R.id.home:
+            {
+                onBackPressed();
+                return (true);
+            }
             default:
                 return super.onOptionsItemSelected(item);
         }

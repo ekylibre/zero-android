@@ -66,7 +66,7 @@ public class MainActivity extends UpdatableActivity
     private NavigationView  mNavigationView;
     private Toolbar         mToolbar;
     private ProgressBar     mPrgressBar;
-    private boolean         firstPass;
+    private boolean         firstPass = true;
     private final String    TAG = "MainActivity";
     private TodoListActivity todoListActivity;
     private Calendar        syncTime = Calendar.getInstance();
@@ -81,7 +81,6 @@ public class MainActivity extends UpdatableActivity
         setTitle("Planning");
         PermissionManager.calendarPermissions(this, this);
 
-        firstPass = true;
         if (!AccountTool.isAnyAccountExist(this))
         {
             AccountTool.askForAccount(this, this);
@@ -100,6 +99,7 @@ public class MainActivity extends UpdatableActivity
         mNav_instance = (TextView)headerLayout.findViewById(R.id.nav_farmURL);
         mPrgressBar = (ProgressBar)findViewById(R.id.progress_bar);
         sync_data();
+        firstPass = false;
     }
 
     /*
@@ -117,8 +117,8 @@ public class MainActivity extends UpdatableActivity
         }
         mAccount = AccountTool.getCurrentAccount(MainActivity.this);
         setAccountName(mNavigationView);
-        firstPass = false;
         setTodolist();
+        sync_data();
     }
 
     // TODO :: SYNC ON FIRST
@@ -308,7 +308,7 @@ public class MainActivity extends UpdatableActivity
 
     private void    sync_data()
     {
-        if (mAccount == null || syncedInLastMinutes())
+        if (mAccount == null || (syncedInLastMinutes() && !firstPass))
             return ;
         Log.d("zero", "syncData: " + mAccount.toString() + ", " + ZeroContract.AUTHORITY);
         Bundle extras = new Bundle();
