@@ -70,7 +70,6 @@ public class ConnectionManagerService extends Service
         accountName = intent.getStringExtra(AccountManager.KEY_ACCOUNT_NAME);
         Log.d(TAG, "accountName = " + accountName);
         mAccount = AccountTool.getCurrentAccount(ConnectionManagerService.this);
-        //TODO Chose the better choice to let the service run when we need to
         return (START_NOT_STICKY);
     }
 

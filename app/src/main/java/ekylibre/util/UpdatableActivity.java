@@ -66,6 +66,11 @@ public abstract class UpdatableActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
     }
 
+    /*
+    ** Use this method to apply the application toolbar
+    ** You MUST have called onCreate() AND setContentView()
+    ** to use this method
+    */
     protected void setToolBar()
     {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
