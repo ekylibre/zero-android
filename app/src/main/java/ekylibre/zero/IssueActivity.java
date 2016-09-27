@@ -132,6 +132,11 @@ public class IssueActivity extends UpdatableActivity
             case R.id.action_save:
                 saveIssue(item.getActionView());
                 return true;
+            case android.R.id.home:
+            {
+                onBackPressed();
+                return (true);
+            }
             default:
                 return super.onOptionsItemSelected(item);
         }
