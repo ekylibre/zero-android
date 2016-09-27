@@ -10,8 +10,8 @@
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
     android:fitsSystemWindows="true"
     tools:context=".intervention.InterventionActivity"
-
     >
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -175,10 +175,10 @@
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="0.30"
-                    android:id="@+id/layout_traveling"
+                    android:id="@+id/layout_travel"
                     android:layout_marginStart="10dp">
                     <Button
-                        android:id="@+id/traveling"
+                        android:id="@+id/travel"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:background="@drawable/button_disabled"
@@ -187,12 +187,12 @@
                         android:textStyle="bold"
                         android:textColor="@color/ultra_dark_grey"
                         android:textSize="20sp"
-                        android:onClick="phaseTraveling"
+                        android:onClick="phaseTravel"
                         android:paddingBottom="40dp"
                         android:layout_marginBottom="16dp"
                         />
                     <ekylibre.util.ExtendedChronometer
-                        android:id="@+id/chrono_traveling"
+                        android:id="@+id/chrono_travel"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:elevation="200dp"
@@ -201,7 +201,7 @@
                         android:gravity="center"
                         android:layout_gravity="bottom"
                         android:background="@color/invisible"
-                        android:layout_alignBottom="@+id/traveling"
+                        android:layout_alignBottom="@+id/travel"
                         android:layout_marginBottom="4dp"
                         />
 
@@ -211,11 +211,11 @@
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="0.30"
-                    android:id="@+id/layout_active_traveling"
+                    android:id="@+id/layout_active_travel"
                     android:layout_marginStart="10dp"
                     android:visibility="gone">
                     <Button
-                        android:id="@+id/active_traveling"
+                        android:id="@+id/active_travel"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:background="@drawable/state_enabled"
@@ -229,7 +229,7 @@
                         android:onClick="phasePause"
                         />
                     <ekylibre.util.ExtendedChronometer
-                        android:id="@+id/chrono_active_traveling"
+                        android:id="@+id/chrono_active_travel"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:elevation="200dp"
@@ -238,7 +238,7 @@
                         android:gravity="center"
                         android:layout_gravity="bottom"
                         android:background="@color/invisible"
-                        android:layout_alignBottom="@+id/active_traveling"
+                        android:layout_alignBottom="@+id/active_travel"
                         android:layout_marginBottom="4dp"
                         />
 

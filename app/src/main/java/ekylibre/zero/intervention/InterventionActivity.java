@@ -30,30 +30,20 @@ import android.widget.CheckBox;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import org.apache.http.NameValuePair;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.message.BasicNameValuePair;
 
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.List;
 
 import ekylibre.database.ZeroContract;
+import ekylibre.util.AccountTool;
 import ekylibre.util.DateConstant;
 import ekylibre.util.ExtendedChronometer;
-import ekylibre.zero.R;
-import ekylibre.util.AccountTool;
 import ekylibre.util.PermissionManager;
 import ekylibre.util.UpdatableActivity;
+import ekylibre.zero.R;
 
 
 public class InterventionActivity extends UpdatableActivity
@@ -66,7 +56,7 @@ public class InterventionActivity extends UpdatableActivity
     protected final int LABEL = 2;
     protected final int NAME = 3;
     protected final int PREPARATION = 0;
-    protected final int TRAVELING = 1;
+    protected final int TRAVEL = 1;
     protected final int INTERVENTION = 2;
     protected final int PAUSE = 3;
     public final static String NEW = "new_intervention";
@@ -86,9 +76,9 @@ public class InterventionActivity extends UpdatableActivity
     ** Interface elements variables
     ** ***************************/
     private ScrollView infoScroll;
-    private RelativeLayout layoutActivePreparation, layoutActiveTraveling, layoutActiveIntervention, layoutPreparation, layoutTraveling, layoutIntervention;
-    private View preparation, traveling, intervention;
-    private ExtendedChronometer chronoGeneral, chronoPreparation, chronoTraveling, chronoIntervention, chronoActivePreparation, chronoActiveTraveling, chronoActiveIntervention;
+    private RelativeLayout layoutActivePreparation, layoutActiveTravel, layoutActiveIntervention, layoutPreparation, layoutTravel, layoutIntervention;
+    private View preparation, travel, intervention;
+    private ExtendedChronometer chronoGeneral, chronoPreparation, chronoTravel, chronoIntervention, chronoActivePreparation, chronoActiveTravel, chronoActiveIntervention;
     private CheckBox diffStuff;
     private Button mStartButton, mMapButton;
     private TextView mProcedureNature;
@@ -167,24 +157,24 @@ public class InterventionActivity extends UpdatableActivity
 
 
         // Set content view
-        setContentView(R.layout.tracking);
+        setContentView(R.layout.intervention);
         super.setToolBar();
         mNewIntervention = getIntent().getBooleanExtra(InterventionActivity.NEW, false);
 
         layoutPreparation = (RelativeLayout) findViewById(R.id.layout_preparation);
-        layoutTraveling = (RelativeLayout) findViewById(R.id.layout_traveling);
+        layoutTravel = (RelativeLayout) findViewById(R.id.layout_travel);
         layoutIntervention = (RelativeLayout) findViewById(R.id.layout_intervention);
         layoutActivePreparation = (RelativeLayout) findViewById(R.id.layout_active_preparation);
-        layoutActiveTraveling = (RelativeLayout) findViewById(R.id.layout_active_traveling);
+        layoutActiveTravel = (RelativeLayout) findViewById(R.id.layout_active_travel);
         layoutActiveIntervention = (RelativeLayout) findViewById(R.id.layout_active_intervention);
         preparation =  findViewById(R.id.preparation);
-        traveling =  findViewById(R.id.traveling);
+        travel =  findViewById(R.id.travel);
         intervention =  findViewById(R.id.intervention);
         chronoPreparation = (ExtendedChronometer) findViewById(R.id.chrono_preparation);
-        chronoTraveling = (ExtendedChronometer) findViewById(R.id.chrono_traveling);
+        chronoTravel = (ExtendedChronometer) findViewById(R.id.chrono_travel);
         chronoIntervention = (ExtendedChronometer) findViewById(R.id.chrono_intervention);
         chronoActivePreparation = (ExtendedChronometer) findViewById(R.id.chrono_active_preparation);
-        chronoActiveTraveling = (ExtendedChronometer) findViewById(R.id.chrono_active_traveling);
+        chronoActiveTravel = (ExtendedChronometer) findViewById(R.id.chrono_active_travel);
         chronoActiveIntervention = (ExtendedChronometer) findViewById(R.id.chrono_active_intervention);
         chronoGeneral = (ExtendedChronometer) findViewById(R.id.chrono_general);
         mProcedureNature          = (TextView)   findViewById(R.id.procedure_nature);
@@ -238,7 +228,7 @@ public class InterventionActivity extends UpdatableActivity
         diffStuff.setVisibility(View.GONE);
         chronoGeneral.setVisibility(View.GONE);
         layoutPreparation.setVisibility(View.GONE);
-        layoutTraveling.setVisibility(View.GONE);
+        layoutTravel.setVisibility(View.GONE);
         layoutIntervention.setVisibility(View.GONE);
         mStartButton.setVisibility(View.VISIBLE);
     }
@@ -271,8 +261,8 @@ public class InterventionActivity extends UpdatableActivity
         chronoGeneral.setTime(curs.getInt(2));
         chronoPreparation.setTime(curs.getInt(3));
         chronoActivePreparation.setTime(chronoPreparation.getTime());
-        chronoTraveling.setTime(curs.getInt(4));
-        chronoActiveTraveling.setTime(chronoTraveling.getTime());
+        chronoTravel.setTime(curs.getInt(4));
+        chronoActiveTravel.setTime(chronoTravel.getTime());
         chronoIntervention.setTime(curs.getInt(5));
         chronoActiveIntervention.setTime(chronoIntervention.getTime());
         curs.close();
@@ -453,8 +443,8 @@ public class InterventionActivity extends UpdatableActivity
         values.put(ZeroContract.WorkingPeriodsColumns.FK_INTERVENTION, mInterventionID);
         if (state == PREPARATION)
             values.put(ZeroContract.WorkingPeriodsColumns.NATURE, "preparation");
-        else if (state == TRAVELING)
-            values.put(ZeroContract.WorkingPeriodsColumns.NATURE, "traveling");
+        else if (state == TRAVEL)
+            values.put(ZeroContract.WorkingPeriodsColumns.NATURE, "travel");
         else
             values.put(ZeroContract.WorkingPeriodsColumns.NATURE, "intervention");
 
@@ -474,36 +464,36 @@ public class InterventionActivity extends UpdatableActivity
         Log.d(TAG, "Activating preparation !  State => " + state);
         layoutPreparation.setVisibility(View.GONE);
         layoutActivePreparation.setVisibility(View.VISIBLE);
-        layoutActiveTraveling.setVisibility(View.GONE);
+        layoutActiveTravel.setVisibility(View.GONE);
         layoutActiveIntervention.setVisibility(View.GONE);
-        layoutTraveling.setVisibility(View.VISIBLE);
+        layoutTravel.setVisibility(View.VISIBLE);
         layoutIntervention.setVisibility(View.VISIBLE);
 
         chronoActivePreparation.startTimer();
-        chronoActiveTraveling.stopTimer();
+        chronoActiveTravel.stopTimer();
         chronoActiveIntervention.stopTimer();
-        chronoTraveling.setTime(chronoActiveTraveling.getTime());
+        chronoTravel.setTime(chronoActiveTravel.getTime());
         chronoIntervention.setTime(chronoActiveIntervention.getTime());
 
     }
 
 
-    public void phaseTraveling(View view)
+    public void phaseTravel(View view)
     {
-        updateWorkingPeriods(TRAVELING);
+        updateWorkingPeriods(TRAVEL);
 
         chronoGeneral.startTimer();
 
-        state = TRAVELING;
-        Log.d(TAG, "Activating traveling !  State => " + state);
-        layoutTraveling.setVisibility(View.GONE);
-        layoutActiveTraveling.setVisibility(View.VISIBLE);
+        state = TRAVEL;
+        Log.d(TAG, "Activating travel !  State => " + state);
+        layoutTravel.setVisibility(View.GONE);
+        layoutActiveTravel.setVisibility(View.VISIBLE);
         layoutActivePreparation.setVisibility(View.GONE);
         layoutActiveIntervention.setVisibility(View.GONE);
         layoutPreparation.setVisibility(View.VISIBLE);
         layoutIntervention.setVisibility(View.VISIBLE);
 
-        chronoActiveTraveling.startTimer();
+        chronoActiveTravel.startTimer();
         chronoActivePreparation.stopTimer();
         chronoActiveIntervention.stopTimer();
         chronoPreparation.setTime(chronoActivePreparation.getTime());
@@ -523,14 +513,14 @@ public class InterventionActivity extends UpdatableActivity
         layoutIntervention.setVisibility(View.GONE);
         layoutActiveIntervention.setVisibility(View.VISIBLE);
         layoutActivePreparation.setVisibility(View.GONE);
-        layoutActiveTraveling.setVisibility(View.GONE);
+        layoutActiveTravel.setVisibility(View.GONE);
         layoutPreparation.setVisibility(View.VISIBLE);
-        layoutTraveling.setVisibility(View.VISIBLE);
+        layoutTravel.setVisibility(View.VISIBLE);
 
         chronoActiveIntervention.startTimer();
-        chronoActiveTraveling.stopTimer();
+        chronoActiveTravel.stopTimer();
         chronoActivePreparation.stopTimer();
-        chronoTraveling.setTime(chronoActiveTraveling.getTime());
+        chronoTravel.setTime(chronoActiveTravel.getTime());
         chronoPreparation.setTime(chronoActivePreparation.getTime());
 
 
@@ -543,18 +533,18 @@ public class InterventionActivity extends UpdatableActivity
         state = PAUSE;
         Log.d(TAG, "PAUSE !!  State => " + state);
         layoutActivePreparation.setVisibility(View.GONE);
-        layoutActiveTraveling.setVisibility(View.GONE);
+        layoutActiveTravel.setVisibility(View.GONE);
         layoutActiveIntervention.setVisibility(View.GONE);
         layoutPreparation.setVisibility(View.VISIBLE);
-        layoutTraveling.setVisibility(View.VISIBLE);
+        layoutTravel.setVisibility(View.VISIBLE);
         layoutIntervention.setVisibility(View.VISIBLE);
 
         chronoGeneral.stopTimer();
         chronoActivePreparation.stopTimer();
-        chronoActiveTraveling.stopTimer();
+        chronoActiveTravel.stopTimer();
         chronoActiveIntervention.stopTimer();
         chronoPreparation.setTime(chronoActivePreparation.getTime());
-        chronoTraveling.setTime(chronoActiveTraveling.getTime());
+        chronoTravel.setTime(chronoActiveTravel.getTime());
         chronoIntervention.setTime(chronoActiveIntervention.getTime());
 
 
@@ -621,7 +611,7 @@ public class InterventionActivity extends UpdatableActivity
 
         values.put(ZeroContract.Interventions.GENERAL_CHRONO, chronoGeneral.getTime());
         values.put(ZeroContract.Interventions.PREPARATION_CHRONO, chronoPreparation.getTime());
-        values.put(ZeroContract.Interventions.TRAVELING_CHRONO, chronoTraveling.getTime());
+        values.put(ZeroContract.Interventions.TRAVEL_CHRONO, chronoTravel.getTime());
         values.put(ZeroContract.Interventions.INTERVENTION_CHRONO, chronoIntervention.getTime());
         values.put(ZeroContract.Interventions.STATE, STATUS_PAUSE);
         values.put(ZeroContract.Interventions.REQUEST_COMPLIANT, diffStuff.isChecked());
@@ -660,7 +650,7 @@ public class InterventionActivity extends UpdatableActivity
 
                         chronoGeneral.setVisibility(View.VISIBLE);
                         layoutPreparation.setVisibility(View.VISIBLE);
-                        layoutTraveling.setVisibility(View.VISIBLE);
+                        layoutTravel.setVisibility(View.VISIBLE);
                         layoutIntervention.setVisibility(View.VISIBLE);
                         mProcedureNature.setText(mLastProcedureNatureName);
 
@@ -833,32 +823,4 @@ public class InterventionActivity extends UpdatableActivity
 
         getContentResolver().insert(ZeroContract.Crumbs.CONTENT_URI, values);
     }
-
-/*
-    private void putMetadata(Bundle metadata, ContentValues values)
-    {
-        if (metadata != null) {
-            try {
-                List<NameValuePair> pairs = new ArrayList<NameValuePair>();
-                Object[] keys = metadata.keySet().toArray();
-                String key;
-                for(int i = 0; i < keys.length; i++) {
-                    key = (String) keys[i];
-                    metadata.getString(key);
-                    pairs.add(new BasicNameValuePair(key, metadata.getString(key)));
-                }
-                UrlEncodedFormEntity params  = new UrlEncodedFormEntity(pairs);
-                ByteArrayOutputStream stream = new ByteArrayOutputStream(4096);
-                params.writeTo(stream);
-                values.put(ZeroContract.CrumbsColumns.METADATA, stream.toString());
-            } catch(UnsupportedEncodingException e) {
-                e.printStackTrace();
-            } catch(IOException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-*/
-
-
 }
