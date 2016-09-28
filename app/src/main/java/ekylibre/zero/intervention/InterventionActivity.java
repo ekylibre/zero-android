@@ -44,6 +44,7 @@ import ekylibre.util.ExtendedChronometer;
 import ekylibre.util.PermissionManager;
 import ekylibre.util.UpdatableActivity;
 import ekylibre.zero.R;
+import ekylibre.zero.home.Zero;
 
 
 public class InterventionActivity extends UpdatableActivity
@@ -255,9 +256,10 @@ public class InterventionActivity extends UpdatableActivity
             return;
         curs.moveToFirst();
         setTitle(curs.getString(6));
-        if (curs.getString(0) != null && !curs.getString(0).equals("PAUSE"))
-            return;
         diffStuff.setChecked(curs.getInt(1) == 0 ? false : true);
+
+        if (curs.getString(0) == null || !curs.getString(0).equals("PAUSE"))
+            return;
         chronoGeneral.setTime(curs.getInt(2));
         chronoPreparation.setTime(curs.getInt(3));
         chronoActivePreparation.setTime(chronoPreparation.getTime());
@@ -576,7 +578,7 @@ public class InterventionActivity extends UpdatableActivity
             @Override
             public void onClick(DialogInterface dialogInterface, int i)
             {
-                //cleanCurrentSave();
+                cleanCurrentSave();
                 InterventionActivity.super.onBackPressed();
             }
         });
@@ -594,6 +596,27 @@ public class InterventionActivity extends UpdatableActivity
         }
         dialog.create();
         dialog.show();
+    }
+
+    private void cleanCurrentSave()
+    {
+        ContentValues values = new ContentValues();
+
+        getContentResolver().delete(
+                ZeroContract.WorkingPeriods.CONTENT_URI,
+                ZeroContract.WorkingPeriods.FK_INTERVENTION + " == " + mInterventionID,
+                null);
+        values.put(ZeroContract.Interventions.GENERAL_CHRONO, 0);
+        values.put(ZeroContract.Interventions.INTERVENTION_CHRONO, 0);
+        values.put(ZeroContract.Interventions.PREPARATION_CHRONO, 0);
+        values.put(ZeroContract.Interventions.TRAVEL_CHRONO, 0);
+        values.put(ZeroContract.Interventions.REQUEST_COMPLIANT, 1);
+        values.put(ZeroContract.Interventions.STATE, "");
+        getContentResolver().update(
+                ZeroContract.Interventions.CONTENT_URI,
+                values,
+                mInterventionID + " == " + ZeroContract.Interventions._ID,
+                null);
     }
 
     private void switchStateToFinished()
