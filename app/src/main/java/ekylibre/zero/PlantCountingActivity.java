@@ -49,6 +49,10 @@ import ekylibre.database.ZeroContract;
 import ekylibre.util.AccountTool;
 import ekylibre.util.UpdatableActivity;
 
+/**************************************
+ * Created by pierre on 7/7/16.       *
+ * ekylibre.zero for zero-android     *
+ *************************************/
 
 public class PlantCountingActivity extends UpdatableActivity  {
     private final String TAG = "PlantCounting";
