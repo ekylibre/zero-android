@@ -102,4 +102,7 @@
     <string name="send">Send</string>
     <string name="pref_poke">Reminder every 10 minutes</string>
     <string name="pref_poke_summary">Send a poke every 10 minutes that will make the phone vibrate to remind you the application is running</string>
+    <string name="what_to_do">What do you want to do ?</string>
+    <string name="finish">Finish</string>
+    <string name="cancel">Cancel</string>
 </resources>

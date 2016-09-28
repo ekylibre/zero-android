@@ -102,4 +102,7 @@
     <string name="send">Envoyer</string>
     <string name="pref_poke">Rappel toutes les 10 minutes</string>
     <string name="pref_poke_summary">Envoyer une vibration toutes les 10 minutes qui rappelera que l\'application est en cours d\'execution</string>
+    <string name="what_to_do">Que voulez vous faire ?</string>
+    <string name="finish">Terminer</string>
+    <string name="cancel">Annuler</string>
 </resources>

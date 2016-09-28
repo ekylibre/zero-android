@@ -560,8 +560,8 @@ public class InterventionActivity extends UpdatableActivity
     {
         phasePause(null);
         final AlertDialog.Builder dialog = new AlertDialog.Builder(this);
-        dialog.setTitle("Que voulez vous faire ?");
-        dialog.setPositiveButton("Terminer", new DialogInterface.OnClickListener()
+        dialog.setTitle(R.string.what_to_do);
+        dialog.setPositiveButton(R.string.finish, new DialogInterface.OnClickListener()
         {
             @Override
             public void onClick(DialogInterface dialogInterface, int i)
@@ -570,7 +570,8 @@ public class InterventionActivity extends UpdatableActivity
                 InterventionActivity.super.onBackPressed();
             }
         });
-        dialog.setNegativeButton("Annuler", new DialogInterface.OnClickListener()
+
+        dialog.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener()
         {
             @Override
             public void onClick(DialogInterface dialogInterface, int i)
@@ -579,15 +580,18 @@ public class InterventionActivity extends UpdatableActivity
                 InterventionActivity.super.onBackPressed();
             }
         });
-        dialog.setNeutralButton("Pause", new DialogInterface.OnClickListener()
+        if (!mNewIntervention)
         {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i)
+            dialog.setNeutralButton(R.string.pause, new DialogInterface.OnClickListener()
             {
-                saveCurrentStateOfIntervention();
-                InterventionActivity.super.onBackPressed();
-            }
-        });
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i)
+                {
+                    saveCurrentStateOfIntervention();
+                    InterventionActivity.super.onBackPressed();
+                }
+            });
+        }
         dialog.create();
         dialog.show();
     }
