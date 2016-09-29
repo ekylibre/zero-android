@@ -106,8 +106,8 @@ public class Instance
         mUrl   = manager.getUserData(account, Authenticator.KEY_INSTANCE_URL);
         mEmail = manager.getUserData(account, Authenticator.KEY_ACCOUNT_NAME);
         mToken = manager.blockingGetAuthToken(account, Authenticator.AUTH_TOKEN_TYPE_GLOBAL, true);
-        if (BuildConfig.DEBUG) Log.d("Instance URL", mUrl);
-        if (BuildConfig.DEBUG) Log.d("Instance Token", mToken);
+        if (BuildConfig.DEBUG) Log.d("Instance URL", "URL = " + mUrl);
+        if (BuildConfig.DEBUG) Log.d("Instance Token", "TOKEN = " + mToken);
     }
 
     // Send POST call to given instance
@@ -228,7 +228,7 @@ public class Instance
         Header[] headers = new Header[headersList.size()];
         headersList.toArray(headers);
 
-        if (BuildConfig.DEBUG) Log.d("POST Instance URL", mUrl);
+        if (BuildConfig.DEBUG) Log.d("POST Instance URL", "URL = " + mUrl);
         if (BuildConfig.DEBUG) Log.d("POST parameters", params);
 
         return Instance.getJSONArray(mUrl + path + params, headers);

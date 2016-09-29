@@ -16,6 +16,9 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 import ekylibre.database.ZeroContract;
 import ekylibre.util.UpdatableActivity;
 import ekylibre.zero.AuthenticatorActivity;
@@ -25,7 +28,7 @@ import ekylibre.util.AccountTool;
 
 public class AccountManagerActivity extends UpdatableActivity
 {
-    private Account[]               listAccount;
+    private ArrayList<Account> listAccount;
     private String                  TAG = "AccountManager";
     private AccountAdapter accountAdapter;
     public final static String      CURRENT_ACCOUNT_NAME = "Current account";
@@ -72,8 +75,10 @@ public class AccountManagerActivity extends UpdatableActivity
             getSupportActionBar().setHomeButtonEnabled(true);
             getSupportActionBar().setTitle(R.string.accountManager);
         }
-        listAccount = AccountManager.get(this).getAccountsByType(SyncAdapter.ACCOUNT_TYPE);
+        Account[] arrayAccount = AccountManager.get(this).getAccountsByType(SyncAdapter
+                .ACCOUNT_TYPE);
 
+        listAccount = new ArrayList<>(Arrays.asList(arrayAccount));
         accountAdapter = new AccountAdapter(this, listAccount);
         accountListView.setAdapter(accountAdapter);
         accountListView.setOnItemClickListener(new AdapterView.OnItemClickListener()
