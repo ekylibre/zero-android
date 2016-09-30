@@ -35,6 +35,7 @@ import ekylibre.zero.BuildConfig;
 import ekylibre.util.AccountTool;
 import ekylibre.util.ImageConverter;
 import ekylibre.util.UpdatableActivity;
+import ekylibre.zero.home.Zero;
 import ekylibre.zero.intervention.InterventionActivity;
 
 /**
@@ -90,9 +91,6 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
                 null,
                 null);
         mContentResolver.delete(ZeroContract.PlantDensityAbaci.CONTENT_URI,
-                null,
-                null);
-        mContentResolver.delete(ZeroContract.Interventions.CONTENT_URI,
                 null,
                 null);
         mContentResolver.delete(ZeroContract.InterventionParameters.CONTENT_URI,
@@ -514,7 +512,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
     private void insertInterventionParams(Intervention intervention, Account account)
     {
         ContentValues cv = new ContentValues();
-        int interventionID = getInterventionID();
+        int interventionID = getInterventionID(account, intervention.getId());
         int i = -1;
         int paramLength = intervention.getParamLength();
 
@@ -540,13 +538,14 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
         }
     }
 
-    private int getInterventionID()
+    private int getInterventionID(Account account, int refID)
     {
         Cursor cursor = mContentResolver.query(ZeroContract.Interventions.CONTENT_URI,
                 ZeroContract.Interventions.PROJECTION_NONE,
+                refID + " == " + ZeroContract.Interventions.EK_ID + " AND "
+                        + "\"" + account.name + "\"" + " LIKE " + ZeroContract.Interventions.USER,
                 null,
-                null,
-                ZeroContract.Interventions.SORT_ORDER_LAST);
+                null);
         if (cursor == null || cursor.getCount() == 0)
             return (0);
         cursor.moveToFirst();
@@ -568,7 +567,31 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
         cv.put(ZeroContract.Interventions.STOPPED_AT, intervention.getStoppedAt());
         cv.put(ZeroContract.Interventions.DESCRIPTION, intervention.getDescription());
         cv.put(ZeroContract.Interventions.USER, account.name);
-        mContentResolver.insert(ZeroContract.Interventions.CONTENT_URI, cv);
+        if (idExists(intervention.getId(), account))
+            mContentResolver.update(ZeroContract.Interventions.CONTENT_URI,
+                    cv,
+                    intervention.getId() + " == " + ZeroContract.Interventions.EK_ID,
+                    null);
+        else
+            mContentResolver.insert(ZeroContract.Interventions.CONTENT_URI, cv);
+    }
+
+    private boolean idExists(int refID, Account account)
+    {
+        Cursor curs = mContentResolver.query(
+                ZeroContract.Interventions.CONTENT_URI,
+                ZeroContract.Interventions.PROJECTION_NONE,
+                refID + " == " + ZeroContract.Interventions.EK_ID + " AND "
+                + "\"" + account.name + "\"" + " LIKE " + ZeroContract.Interventions.USER,
+                null,
+                null);
+        if (curs == null || curs.getCount() == 0)
+            return (false);
+        else
+        {
+            curs.close();
+            return (true);
+        }
     }
 
     private void pushIntervention(Account account, Bundle extras, String authority, ContentProviderClient provider, SyncResult syncResult)
