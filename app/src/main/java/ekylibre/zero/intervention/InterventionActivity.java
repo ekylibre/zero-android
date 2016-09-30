@@ -36,6 +36,7 @@ import com.google.zxing.integration.android.IntentResult;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.UUID;
 
 import ekylibre.database.ZeroContract;
 import ekylibre.util.AccountTool;
@@ -65,6 +66,7 @@ public class InterventionActivity extends UpdatableActivity
     private final String TAG = "InterventionActivity";
     public final static String STATUS_PAUSE = "PAUSE";
     public final static String STATUS_FINISHED = "FINISHED";
+    public final static String STATUS_IN_PROGRESS = "IN_PROGRESS";
 
     /* ****************************
     ** Notification builder and variables
@@ -104,7 +106,7 @@ public class InterventionActivity extends UpdatableActivity
     private String started_at = null;
     private String stopped_at = null;
     SimpleDateFormat dateFormatter = new SimpleDateFormat(DateConstant.ISO_8601);
-
+    private boolean inProgress = false;
 
     @Override
     public void onStart()
@@ -221,6 +223,21 @@ public class InterventionActivity extends UpdatableActivity
             createIntervention();
             prepareSimpleIntervention();
         }
+    }
+
+    private void setInProgressState()
+    {
+        if (!inProgress)
+        {
+            ContentValues cv = new ContentValues();
+
+            cv.put(ZeroContract.Interventions.STATE, STATUS_IN_PROGRESS);
+            getContentResolver().update(ZeroContract.Interventions.CONTENT_URI,
+                    cv,
+                    ZeroContract.Interventions._ID + " == " + mInterventionID,
+                    null);
+        }
+        inProgress = true;
     }
 
     private void prepareSimpleIntervention()
@@ -417,6 +434,7 @@ public class InterventionActivity extends UpdatableActivity
 
     private void updateWorkingPeriods(int currentState)
     {
+        setInProgressState();
         if (started_at == null)
         {
             Calendar cal = Calendar.getInstance();
@@ -699,6 +717,7 @@ public class InterventionActivity extends UpdatableActivity
 
         values.put(ZeroContract.InterventionsColumns.USER, AccountTool.getCurrentAccount(this).name);
         values.put(ZeroContract.InterventionsColumns.EK_ID, -1);
+        values.put(ZeroContract.Interventions.UUID, UUID.randomUUID().toString());
         getContentResolver().insert(ZeroContract.Interventions.CONTENT_URI, values);
         Cursor cursor = getContentResolver().query(ZeroContract.Interventions.CONTENT_URI, new String[]{ZeroContract.Interventions._ID}, null, null, null);
         if (cursor == null || !cursor.moveToLast())

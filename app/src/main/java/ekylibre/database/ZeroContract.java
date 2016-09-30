@@ -6,6 +6,7 @@ import android.net.Uri;
 import android.provider.BaseColumns;
 
 import java.lang.annotation.Target;
+import java.util.UUID;
 
 public final class ZeroContract {
 
@@ -33,6 +34,7 @@ public final class ZeroContract {
         String PREPARATION_CHRONO = "preparation_chrono";
         String TRAVEL_CHRONO = "travel_chrono";
         String INTERVENTION_CHRONO = "intervention_chrono";
+        String UUID = "uuid";
     }
 
     public interface InterventionParametersColumns extends BaseColumns {
@@ -165,7 +167,7 @@ public final class ZeroContract {
         public static final String[] PROJECTION_PAUSED = {STATE, REQUEST_COMPLIANT,
                 GENERAL_CHRONO, PREPARATION_CHRONO, TRAVEL_CHRONO, INTERVENTION_CHRONO, NAME};
         public static final String[] PROJECTION_POST = {_ID, EK_ID, PROCEDURE_NAME,
-                REQUEST_COMPLIANT};
+                REQUEST_COMPLIANT, STATE, UUID};
         public static final String[] PROJECTION_NONE = {_ID};
 
         public static final String SORT_ORDER_DEFAULT = _ID + " ASC";
