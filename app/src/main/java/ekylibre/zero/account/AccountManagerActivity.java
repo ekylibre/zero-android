@@ -66,15 +66,18 @@ public class AccountManagerActivity extends UpdatableActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_account_manager);
         super.setToolBar();
+        setTitle(R.string.accountManager);
 
         ListView accountListView = (ListView)findViewById(R.id.account_list);
+        setAccountList(accountListView);
+    }
 
-        if (getSupportActionBar() != null)
-        {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            getSupportActionBar().setHomeButtonEnabled(true);
-            getSupportActionBar().setTitle(R.string.accountManager);
-        }
+    /*
+    ** Set the listView with ekylibre accounts
+    ** Click on account make it the current account
+    */
+    private void setAccountList(ListView accountListView)
+    {
         Account[] arrayAccount = AccountManager.get(this).getAccountsByType(SyncAdapter
                 .ACCOUNT_TYPE);
 
