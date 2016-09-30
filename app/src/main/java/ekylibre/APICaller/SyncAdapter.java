@@ -27,6 +27,7 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 
 import ekylibre.database.ZeroContract;
 import ekylibre.exceptions.HTTPException;
@@ -573,7 +574,10 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
                     intervention.getId() + " == " + ZeroContract.Interventions.EK_ID,
                     null);
         else
+        {
+            cv.put(ZeroContract.Interventions.UUID, UUID.randomUUID().toString());
             mContentResolver.insert(ZeroContract.Interventions.CONTENT_URI, cv);
+        }
     }
 
     private boolean idExists(int refID, Account account)
@@ -651,6 +655,11 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
             attributes.put("request_intervention_id", cursorIntervention.getInt(1));
             attributes.put("request_compliant", cursorIntervention.getInt(3));
         }
+        attributes.put("uuid", cursorIntervention.getString(5));
+        if (cursorIntervention.getString(4).equals(InterventionActivity.STATUS_IN_PROGRESS))
+            attributes.put("state", "in_progress");
+        else if (cursorIntervention.getString(4).equals(InterventionActivity.STATUS_FINISHED))
+            attributes.put("state", "done");
         attributes.put("procedure_name", cursorIntervention.getString(2));
         attributes.put("device_uid", "android:" + Secure.getString(mContentResolver, Secure.ANDROID_ID));
 
@@ -663,7 +672,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
         // Marks them as synced
         ContentValues values = new ContentValues();
         values.put(ZeroContract.Interventions.STATE, "SYNCED");
-        mContentResolver.update(Uri.withAppendedPath(ZeroContract.Issues.CONTENT_URI, Long
+        mContentResolver.update(Uri.withAppendedPath(ZeroContract.Interventions.CONTENT_URI, Long
                 .toString(cursorIntervention.getLong(0))), values, null, null);
     }
 
