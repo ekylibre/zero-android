@@ -82,7 +82,7 @@ public class AccountManagerActivity extends UpdatableActivity
                 .ACCOUNT_TYPE);
 
         listAccount = new ArrayList<>(Arrays.asList(arrayAccount));
-        accountAdapter = new AccountAdapter(this, listAccount);
+        accountAdapter = new AccountAdapter(this, listAccount, this);
         accountListView.setAdapter(accountAdapter);
         accountListView.setOnItemClickListener(new AdapterView.OnItemClickListener()
         {
@@ -104,7 +104,7 @@ public class AccountManagerActivity extends UpdatableActivity
         });
     }
 
-    private void syncAll(Account account)
+    protected void syncAll(Account account)
     {
         if (account == null)
             return ;
