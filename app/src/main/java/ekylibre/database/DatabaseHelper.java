@@ -327,6 +327,12 @@ public class DatabaseHelper extends SQLiteOpenHelper
                 if (newVersion == 14)
                     break;
             }
+            case 15:
+            {
+                database.execSQL("ALTER TABLE intervention ADD updated_at VARCHAR(255)");
+                if (newVersion == 15)
+                    break;
+            }
         }
     }
 }
