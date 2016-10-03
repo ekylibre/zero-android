@@ -3,20 +3,27 @@ package ekylibre.zero.account;
 import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
 
 import ekylibre.zero.R;
 import ekylibre.util.AccountTool;
+
+import static ekylibre.zero.account.AccountManagerActivity.CURRENT_ACCOUNT_NAME;
 
 /**************************************
  * Created by pierre on 7/18/16.      *
@@ -25,11 +32,14 @@ import ekylibre.util.AccountTool;
 public class AccountAdapter extends ArrayAdapter<Account>
 {
     Context mContext;
+    AccountManagerActivity mAccountManagerActivity;
 
-    public AccountAdapter(Context context, ArrayList<Account> accountList)
+    public AccountAdapter(Context context, ArrayList<Account> accountList, AccountManagerActivity
+            accountManagerActivity)
     {
         super(context, 0, accountList);
         mContext = context;
+        mAccountManagerActivity = accountManagerActivity;
     }
 
     @NonNull
@@ -50,9 +60,10 @@ public class AccountAdapter extends ArrayAdapter<Account>
             viewHolder.accountInstance = (TextView)convertView.findViewById(R.id.accountInstance);
             viewHolder.delete = (ImageButton) convertView.findViewById(R.id.deleteAccount);
             viewHolder.avatar = (ImageView) convertView.findViewById(R.id.avatar_account);
+            viewHolder.layout = (RelativeLayout) convertView.findViewById(R.id.account_item);
             convertView.setTag(viewHolder);
         }
-        Account     item = getItem(position);
+        final Account     item = getItem(position);
         viewHolder.accountName.setText(AccountTool.getAccountName(item, mContext));
         viewHolder.accountInstance.setText(AccountTool.getAccountInstance(item, mContext));
         viewHolder.delete.setVisibility(View.VISIBLE);
@@ -70,5 +81,23 @@ public class AccountAdapter extends ArrayAdapter<Account>
             }
         });
 
+        viewHolder.layout.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                Account newCurrAccount;
+                AccountManager accManager = AccountManager.get(getContext());
+
+                newCurrAccount = item;
+                SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getContext());
+                SharedPreferences.Editor editor = preferences.edit();
+                editor.putString(CURRENT_ACCOUNT_NAME, newCurrAccount.name);
+                editor.commit();
+                Log.d("Account manager", "New current account is ==> " + newCurrAccount.name);
+                mAccountManagerActivity.syncAll(newCurrAccount);
+                mAccountManagerActivity.finish();
+            }
+        });
         return (convertView);
     }}
