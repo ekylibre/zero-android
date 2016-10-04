@@ -118,7 +118,7 @@ public class TodoAdapter extends ArrayAdapter<TodoItem>
     private void drawStatusIcon(TodoViewHolder viewHolder, TodoItem item)
     {
         if (item.getState() == null)
-            viewHolder.imageState.setVisibility(View.GONE);
+            viewHolder.imageState.setVisibility(View.INVISIBLE);
         else if (item.getState().equals(InterventionActivity.STATUS_PAUSE))
         {
             viewHolder.imageState.setVisibility(View.VISIBLE);
@@ -132,7 +132,7 @@ public class TodoAdapter extends ArrayAdapter<TodoItem>
                     .drawable.check));
         }
         else
-            viewHolder.imageState.setVisibility(View.GONE);
+            viewHolder.imageState.setVisibility(View.INVISIBLE);
     }
 
     private void getViews(TodoViewHolder viewHolder, View convertView)
