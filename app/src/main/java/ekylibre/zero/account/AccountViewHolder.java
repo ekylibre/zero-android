@@ -1,8 +1,10 @@
 package ekylibre.zero.account;
 
+import android.text.Layout;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 /**************************************
@@ -15,4 +17,5 @@ public class AccountViewHolder
     public TextView     accountInstance;
     public ImageButton  delete;
     public ImageView    avatar;
+    public RelativeLayout layout;
 }
