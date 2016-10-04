@@ -115,8 +115,16 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
             pullIntervention(account, extras, authority, provider, syncResult);
 
             //pushIntervention(account, extras, authority, provider, syncResult);
+            //cleanLocalDb();
         }
         getContext().sendBroadcast(new Intent(UpdatableActivity.ACTION_FINISHED_SYNC));
+    }
+
+    private void cleanLocalDb()
+    {
+        mContentResolver.delete(ZeroContract.Interventions.CONTENT_URI,
+                ZeroContract.Interventions.STATE + " LIKE " + InterventionActivity.STATUS_FINISHED,
+                null);
     }
 
     /*
