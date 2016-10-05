@@ -27,7 +27,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.TimeZone;
 
-import ekylibre.APICaller.Intervention;
+import ekylibre.APICaller.InterventionCaller;
 import ekylibre.database.ZeroContract;
 import ekylibre.util.AccountTool;
 import ekylibre.util.DateConstant;
@@ -298,7 +298,7 @@ public class TodoListActivity extends UpdatableClass
 
         curs = contentResolver.query(ZeroContract.InterventionParameters.CONTENT_URI,
                 ZeroContract.InterventionParameters.PROJECTION_TARGET,
-                ZeroContract.InterventionParameters.ROLE + " LIKE " + "\"" + Intervention.TARGET + "\" AND "
+                ZeroContract.InterventionParameters.ROLE + " LIKE " + "\"" + InterventionCaller.TARGET + "\" AND "
                 + ZeroContract.InterventionParameters.FK_INTERVENTION + " == " + id,
                 null,
                 null);
@@ -313,7 +313,7 @@ public class TodoListActivity extends UpdatableClass
 
         curs = contentResolver.query(ZeroContract.Interventions.CONTENT_URI,
                 ZeroContract.Interventions.PROJECTION_BASIC,
-                ZeroContract.Interventions.TYPE + " LIKE " + "\"" + Intervention.REQUESTED + "\" AND "
+                ZeroContract.Interventions.TYPE + " LIKE " + "\"" + InterventionCaller.REQUESTED + "\" AND "
                         + ZeroContract.Interventions.USER + " LIKE " + "\"" + AccountTool.getCurrentAccount(this.context).name + "\"",
                 null,
                 "datetime(started_at)");

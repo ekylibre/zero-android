@@ -58,7 +58,7 @@
         android:theme="@style/AppTheme"
         android:name="ekylibre.zero.home.Zero">
         <activity
-            android:name=".intervention.InterventionActivity"
+            android:name=".interventionCaller.InterventionActivity"
             android:label="@string/new_intervention"
             android:launchMode="singleTask"
             android:parentActivityName=".home.MainActivity"
@@ -137,7 +137,7 @@
 <!--        <activity
             android:name="com.google.zxing.client.android.CaptureActivity"
             android:configChanges="orientation|keyboardHidden"
-            android:parentActivityName=".intervention.InterventionActivity"
+            android:parentActivityName=".interventionCaller.InterventionActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
             android:windowSoftInputMode="stateAlwaysHidden">
@@ -149,7 +149,7 @@
 
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".intervention.InterventionActivity" />
+                android:value=".interventionCaller.InterventionActivity" />
         </activity>-->
 
         <!-- Settings -->
@@ -165,7 +165,7 @@
 
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".intervention.InterventionActivity" />
+                android:value=".interventionCaller.InterventionActivity" />
         </activity>
         <!-- android:parentActivityName=".InterventionActivity"> -->
 
@@ -210,7 +210,7 @@
             android:value="@string/google_maps_key" />
 
         <activity
-            android:name=".intervention.MapsActivity"
+            android:name=".interventionCaller.MapsActivity"
             android:label="@string/title_activity_maps"
             android:theme="@style/AppTheme.NoActionBar"            />
     </application>

@@ -31,12 +31,10 @@ import java.util.UUID;
 
 import ekylibre.database.ZeroContract;
 import ekylibre.exceptions.HTTPException;
-import ekylibre.util.DateConstant;
 import ekylibre.zero.BuildConfig;
 import ekylibre.util.AccountTool;
 import ekylibre.util.ImageConverter;
 import ekylibre.util.UpdatableActivity;
-import ekylibre.zero.home.Zero;
 import ekylibre.zero.intervention.InterventionActivity;
 
 /**
@@ -485,37 +483,38 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
     public void pullIntervention(Account account, Bundle extras, String authority,
                               ContentProviderClient provider, SyncResult syncResult)
     {
+        InterventionCaller interventionCaller = new InterventionCaller();
         if (BuildConfig.DEBUG) Log.i(TAG, "Beginning network intervention synchronization");
         Instance instance = getInstance(account);
 
-        List<Intervention> interventionList = null;
+        List<InterventionCaller> interventionCallerList = null;
         try {
-            interventionList = Intervention.all(instance, "?nature=request&user_email=" +
+            interventionCallerList = InterventionCaller.get(instance, "?nature=request&user_email=" +
                     AccountTool.getEmail(account) + "&without_interventions=true");
         } catch (JSONException | IOException | HTTPException e) {
             e.printStackTrace();
         }
 
-        if (interventionList == null)
+        if (interventionCallerList == null)
             return;
 
-        if (BuildConfig.DEBUG) Log.d(TAG, "Number of interventions : " + interventionList.size() );
-        Iterator<Intervention> interventionIterator = interventionList.iterator();
+        if (BuildConfig.DEBUG) Log.d(TAG, "Number of interventions : " + interventionCallerList.size() );
+        Iterator<InterventionCaller> interventionIterator = interventionCallerList.iterator();
         while(interventionIterator.hasNext())
         {
-            Intervention intervention = interventionIterator.next();
-            insertIntervention(intervention, account);
-            insertInterventionParams(intervention, account);
+            InterventionCaller interventionCaller = interventionIterator.next();
+            insertIntervention(interventionCaller, account);
+            insertInterventionParams(interventionCaller, account);
         }
         if (BuildConfig.DEBUG) Log.i(TAG, "Finish network intervention synchronization");
     }
 
-    private void insertInterventionParams(Intervention intervention, Account account)
+    private void insertInterventionParams(InterventionCaller interventionCaller, Account account)
     {
         ContentValues cv = new ContentValues();
-        int interventionID = getInterventionID(account, intervention.getId());
+        int interventionID = getInterventionID(account, interventionCaller.getId());
         int i = -1;
-        int paramLength = intervention.getParamLength();
+        int paramLength = interventionCaller.getParamLength();
 
         if (interventionID == 0)
             return;
@@ -523,13 +522,13 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
         {
             try
             {
-                cv.put(ZeroContract.InterventionParameters.EK_ID, intervention.getParamID(i));
-                cv.put(ZeroContract.InterventionParameters.NAME, intervention.getParamName(i));
+                cv.put(ZeroContract.InterventionParameters.EK_ID, interventionCaller.getParamID(i));
+                cv.put(ZeroContract.InterventionParameters.NAME, interventionCaller.getParamName(i));
                 cv.put(ZeroContract.InterventionParameters.FK_INTERVENTION, interventionID);
-                cv.put(ZeroContract.InterventionParameters.ROLE, intervention.getParamRole(i));
-                cv.put(ZeroContract.InterventionParameters.LABEL, intervention.getParamLabel(i));
-                cv.put(ZeroContract.InterventionParameters.PRODUCT_NAME, intervention.getProductName(i));
-                cv.put(ZeroContract.InterventionParameters.PRODUCT_ID, intervention.getProductID(i));
+                cv.put(ZeroContract.InterventionParameters.ROLE, interventionCaller.getParamRole(i));
+                cv.put(ZeroContract.InterventionParameters.LABEL, interventionCaller.getParamLabel(i));
+                cv.put(ZeroContract.InterventionParameters.PRODUCT_NAME, interventionCaller.getProductName(i));
+                cv.put(ZeroContract.InterventionParameters.PRODUCT_ID, interventionCaller.getProductID(i));
                 mContentResolver.insert(ZeroContract.InterventionParameters.CONTENT_URI, cv);
             }
             catch (JSONException jsonex)
@@ -555,23 +554,23 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
         return (ret);
     }
 
-    private void insertIntervention(Intervention intervention, Account account)
+    private void insertIntervention(InterventionCaller interventionCaller, Account account)
     {
         ContentValues cv = new ContentValues();
 
-        cv.put(ZeroContract.Interventions.EK_ID, intervention.getId());
-        cv.put(ZeroContract.Interventions.NAME, intervention.getName());
-        cv.put(ZeroContract.Interventions.TYPE, intervention.getType());
-        cv.put(ZeroContract.Interventions.PROCEDURE_NAME, intervention.getProcedureName());
-        cv.put(ZeroContract.Interventions.NUMBER, intervention.getNumber());
-        cv.put(ZeroContract.Interventions.STARTED_AT, intervention.getStartedAt());
-        cv.put(ZeroContract.Interventions.STOPPED_AT, intervention.getStoppedAt());
-        cv.put(ZeroContract.Interventions.DESCRIPTION, intervention.getDescription());
+        cv.put(ZeroContract.Interventions.EK_ID, interventionCaller.getId());
+        cv.put(ZeroContract.Interventions.NAME, interventionCaller.getName());
+        cv.put(ZeroContract.Interventions.TYPE, interventionCaller.getType());
+        cv.put(ZeroContract.Interventions.PROCEDURE_NAME, interventionCaller.getProcedureName());
+        cv.put(ZeroContract.Interventions.NUMBER, interventionCaller.getNumber());
+        cv.put(ZeroContract.Interventions.STARTED_AT, interventionCaller.getStartedAt());
+        cv.put(ZeroContract.Interventions.STOPPED_AT, interventionCaller.getStoppedAt());
+        cv.put(ZeroContract.Interventions.DESCRIPTION, interventionCaller.getDescription());
         cv.put(ZeroContract.Interventions.USER, account.name);
-        if (idExists(intervention.getId(), account))
+        if (idExists(interventionCaller.getId(), account))
             mContentResolver.update(ZeroContract.Interventions.CONTENT_URI,
                     cv,
-                    intervention.getId() + " == " + ZeroContract.Interventions.EK_ID,
+                    interventionCaller.getId() + " == " + ZeroContract.Interventions.EK_ID,
                     null);
         else
         {
@@ -600,7 +599,8 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
 
     private void pushIntervention(Account account, Bundle extras, String authority, ContentProviderClient provider, SyncResult syncResult)
     {
-        if (BuildConfig.DEBUG) Log.i(TAG, "Beginning network intervention synchronization");
+        InterventionCaller interventionCaller = new InterventionCaller();
+        if (BuildConfig.DEBUG) Log.i(TAG, "Beginning network interventionCaller synchronization");
 
         Cursor cursorIntervention = mContentResolver.query(
                 ZeroContract.Interventions.CONTENT_URI,
@@ -668,7 +668,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
         // TODO :: put crumbs here
 
 
-        long id = Intervention.create(instance, attributes);
+        long id = InterventionCaller.post(instance, attributes);
         // Marks them as synced
         ContentValues values = new ContentValues();
         values.put(ZeroContract.Interventions.STATE, "SYNCED");
