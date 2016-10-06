@@ -483,17 +483,15 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
     public void pullIntervention(Account account, Bundle extras, String authority,
                               ContentProviderClient provider, SyncResult syncResult)
     {
-        InterventionCaller interventionCaller = new InterventionCaller();
+        InterventionCaller interventionCaller = new InterventionCaller(account, getContext());
         if (BuildConfig.DEBUG) Log.i(TAG, "Beginning network intervention synchronization");
         Instance instance = getInstance(account);
 
         List<InterventionCaller> interventionCallerList = null;
-        try {
-            interventionCallerList = InterventionCaller.get(instance, "?nature=request&user_email=" +
-                    AccountTool.getEmail(account) + "&without_interventions=true");
-        } catch (JSONException | IOException | HTTPException e) {
-            e.printStackTrace();
-        }
+
+        interventionCaller.get(instance, "?nature=request&user_email=" +
+                AccountTool.getEmail(account) + "&without_interventions=true");
+
 
         if (interventionCallerList == null)
             return;
@@ -556,46 +554,9 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
 
     private void insertIntervention(InterventionCaller interventionCaller, Account account)
     {
-        ContentValues cv = new ContentValues();
 
-        cv.put(ZeroContract.Interventions.EK_ID, interventionCaller.getId());
-        cv.put(ZeroContract.Interventions.NAME, interventionCaller.getName());
-        cv.put(ZeroContract.Interventions.TYPE, interventionCaller.getType());
-        cv.put(ZeroContract.Interventions.PROCEDURE_NAME, interventionCaller.getProcedureName());
-        cv.put(ZeroContract.Interventions.NUMBER, interventionCaller.getNumber());
-        cv.put(ZeroContract.Interventions.STARTED_AT, interventionCaller.getStartedAt());
-        cv.put(ZeroContract.Interventions.STOPPED_AT, interventionCaller.getStoppedAt());
-        cv.put(ZeroContract.Interventions.DESCRIPTION, interventionCaller.getDescription());
-        cv.put(ZeroContract.Interventions.USER, account.name);
-        if (idExists(interventionCaller.getId(), account))
-            mContentResolver.update(ZeroContract.Interventions.CONTENT_URI,
-                    cv,
-                    interventionCaller.getId() + " == " + ZeroContract.Interventions.EK_ID,
-                    null);
-        else
-        {
-            cv.put(ZeroContract.Interventions.UUID, UUID.randomUUID().toString());
-            mContentResolver.insert(ZeroContract.Interventions.CONTENT_URI, cv);
-        }
     }
 
-    private boolean idExists(int refID, Account account)
-    {
-        Cursor curs = mContentResolver.query(
-                ZeroContract.Interventions.CONTENT_URI,
-                ZeroContract.Interventions.PROJECTION_NONE,
-                refID + " == " + ZeroContract.Interventions.EK_ID + " AND "
-                + "\"" + account.name + "\"" + " LIKE " + ZeroContract.Interventions.USER,
-                null,
-                null);
-        if (curs == null || curs.getCount() == 0)
-            return (false);
-        else
-        {
-            curs.close();
-            return (true);
-        }
-    }
 
     private void pushIntervention(Account account, Bundle extras, String authority, ContentProviderClient provider, SyncResult syncResult)
     {

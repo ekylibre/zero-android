@@ -1,10 +1,17 @@
 package ekylibre.database;
 
+import android.accounts.Account;
+import android.content.ContentResolver;
+import android.content.ContentValues;
+import android.content.Context;
+import android.database.Cursor;
 import android.util.Log;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.UUID;
 
 import ekylibre.zero.BuildConfig;
 
@@ -23,9 +30,18 @@ public class InterventionORM implements BasicORM
     private String      mStartedAt;
     private String      mStoppedAt;
     private String      mDescription;
-    private JSONArray params;
+    private JSONArray   params;
+    private Account     account;
+    private ContentResolver contentResolver;
 
-    public InterventionORM(JSONObject object) throws JSONException
+    public InterventionORM(Account account, Context context)
+    {
+        reset();
+        this.account = account;
+        contentResolver = context.getContentResolver();
+    }
+
+    public InterventionORM(JSONObject object, Account account, Context context) throws JSONException
     {
         if (BuildConfig.DEBUG) Log.d("zero", "Object InterventionCaller : " + object.toString());
 
@@ -38,7 +54,119 @@ public class InterventionORM implements BasicORM
         mStoppedAt = object.getString("stopped_at");
         mDescription = object.getString("description");
         params = object.getJSONArray("parameters");
+        this.account = account;
+        contentResolver = context.getContentResolver();
     }
+
+    @Override
+    public void reset()
+    {
+        mId = 0;
+        mName = null;
+        mType = null;
+        mProcedureName = null;
+        mNumber = 0;
+        mStartedAt = null;
+        mStoppedAt = null;
+        mDescription = null;
+        params = null;
+    }
+
+    @Override
+    public void setFromJson(JSONObject object) throws JSONException
+    {
+        if (BuildConfig.DEBUG) Log.d("zero", "Object InterventionCaller : " + object.toString());
+
+            mId = object.getInt("id");
+            mName = object.getString("name");
+            mType = object.getString("nature");
+            mProcedureName = object.getString("procedure_name");
+            mNumber = object.getInt("number");
+            mStartedAt = object.getString("started_at");
+            mStoppedAt = object.getString("stopped_at");
+            mDescription = object.getString("description");
+            params = object.getJSONArray("parameters");
+    }
+
+    @Override
+    public void saveInDataBase()
+    {
+        insertIntervention();
+        int i = -1;
+        while (++i < params.length())
+        {
+
+        }
+    }
+
+    @Override
+    public void setFromBase()
+    {
+
+    }
+
+    // TODO Use this to put interv param in base
+    private void putInBase(InterventionParametersORM orm)
+    {
+        int i = -1;
+        while (++i < jsonFromAPI.length())
+        {
+            orm.reset();
+            try
+            {
+                orm.setFromJson(jsonFromAPI.getJSONObject(i));
+                orm.saveInDataBase();
+            }
+            catch (JSONException e)
+            {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private void insertIntervention()
+    {
+        ContentValues cv = new ContentValues();
+
+        cv.put(ZeroContract.Interventions.EK_ID, getId());
+        cv.put(ZeroContract.Interventions.NAME, getName());
+        cv.put(ZeroContract.Interventions.TYPE, getType());
+        cv.put(ZeroContract.Interventions.PROCEDURE_NAME, getProcedureName());
+        cv.put(ZeroContract.Interventions.NUMBER, getNumber());
+        cv.put(ZeroContract.Interventions.STARTED_AT, getStartedAt());
+        cv.put(ZeroContract.Interventions.STOPPED_AT, getStoppedAt());
+        cv.put(ZeroContract.Interventions.DESCRIPTION, getDescription());
+        cv.put(ZeroContract.Interventions.USER, account.name);
+        if (idExists(this.getId(), account))
+            contentResolver.update(ZeroContract.Interventions.CONTENT_URI,
+                    cv,
+                    this.getId() + " == " + ZeroContract.Interventions.EK_ID,
+                    null);
+        else
+        {
+            cv.put(ZeroContract.Interventions.UUID, UUID.randomUUID().toString());
+            contentResolver.insert(ZeroContract.Interventions.CONTENT_URI, cv);
+        }
+    }
+
+    private boolean idExists(int refID, Account account)
+    {
+        Cursor curs = contentResolver.query(
+                ZeroContract.Interventions.CONTENT_URI,
+                ZeroContract.Interventions.PROJECTION_NONE,
+                refID + " == " + ZeroContract.Interventions.EK_ID + " AND "
+                        + "\"" + account.name + "\"" + " LIKE " + ZeroContract.Interventions.USER,
+                null,
+                null);
+        if (curs == null || curs.getCount() == 0)
+            return (false);
+        else
+        {
+            curs.close();
+            return (true);
+        }
+    }
+
 
     public int getId()
     {
@@ -131,17 +259,5 @@ public class InterventionORM implements BasicORM
     public int getParamLength()
     {
         return (params.length());
-    }
-
-    @Override
-    public void saveInDataBase()
-    {
-
-    }
-
-    @Override
-    public void setFromBase()
-    {
-
     }
 }

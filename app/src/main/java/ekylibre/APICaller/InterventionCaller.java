@@ -1,5 +1,8 @@
 package ekylibre.APICaller;
 
+import android.accounts.Account;
+import android.content.ContentResolver;
+import android.content.Context;
 import android.util.Log;
 
 import org.apache.http.client.ClientProtocolException;
@@ -28,29 +31,25 @@ public class InterventionCaller extends BaseCaller
     public static final String REQUEST = "request";
     public static final String RECORD = "record";
 
-    List<InterventionORM> listIntervention;
+    private Account account;
+    private Context context;
 
+    InterventionCaller(Account account, Context context)
+    {
+        //TODO :: Update path to API
+        APIPath += "interventions";
+        this.account = account;
+        this.context = context;
+    }
 
     public void post(Instance instance, JSONObject attributes)
     {
-        JSONObject params = attributes;
-        //TODO :: Update path to API
-        JSONObject json = instance.post("/api/v1/interventions", params);
+        super.post(instance, attributes);
     }
 
-    public void get(Instance instance, String attributes) throws
-            JSONException, IOException, HTTPException
+    public void get(Instance instance, String attributes)
     {
-        // JSONObject params = Instance.BundleToJSON(attributes);
-        String params = attributes;
-        if (BuildConfig.DEBUG) Log.d(TAG, "Get JSONArray => /api/v1/interventions || params = " + params);
-        JSONArray json = instance.getJSONArray("/api/v1/interventions", params);
-        listIntervention = new ArrayList<>();
-
-        for(int i = 0 ; i < json.length() ; i++ )
-        {
-            listIntervention.add(new InterventionORM(json.getJSONObject(i)));
-        }
+        super.get(instance, attributes);
+        putInBase(new InterventionORM(account, context));
     }
-
 }
