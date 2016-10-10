@@ -24,7 +24,7 @@
     <string name="longitude">Longitude</string>
     <string name="new_count">Count</string>
     <string name="new_issue">Issue</string>
-    <string name="new_intervention">New interventionCaller</string>
+    <string name="new_intervention">New intervention</string>
     <string name="notes">Notes</string>
     <string name="notif_invalidPasswordOrEmail">Invalid password or e-mail</string>
     <string name="notif_loginSucceeded">Login succeeded</string>
@@ -39,7 +39,7 @@
     <string name="plant_name">Plant</string>
     <string name="precision_mode">Precision mode</string>
     <string name="pref_showDetails">Show details</string>
-    <string name="pref_showDetails_summary">Show coordinates and crumbs count during an interventionCaller</string>
+    <string name="pref_showDetails_summary">Show coordinates and crumbs count during an intervention</string>
     <string name="procedure_nature">Procedure nature</string>
     <string name="resume">Resume</string>
     <string name="running">Running…</string>
@@ -95,7 +95,7 @@
     <string name="pref_syncCalendar_summary">Allow application to automatically synchronize your phone calendar</string>
     <string name="pref_GPS">Enable GPS</string>
     <string name="pref_GPS_summary">Let Zero use your location information</string>
-    <string name="no_event">There is no request interventionCaller</string>
+    <string name="no_event">There is no request intervention</string>
     <string name="plant_counting_saved">Plant Counting saved</string>
     <string name="plant_counting_cannot_save">Cannot save Plant counting, please finish your counting</string>
     <string name="diff_stuff">Request compliant</string>

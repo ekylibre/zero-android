@@ -25,7 +25,7 @@
     <string name="longitude">Longitude</string>
     <string name="new_count">Comptage</string>
     <string name="new_issue">Incident</string>
-    <string name="new_intervention">Nouvelle interventionCaller</string>
+    <string name="new_intervention">Nouvelle intervention</string>
     <string name="notes">Notes</string>
     <string name="notif_invalidPasswordOrEmail">Mot de passe ou e-mail invalide</string>
     <string name="notif_loginSucceeded">Connexion réussie</string>
@@ -40,8 +40,8 @@
     <string name="plant_variety_label">Variété de plant</string>
     <string name="precision_mode">Mode précis</string>
     <string name="pref_showDetails">Afficher les détails</string>
-    <string name="pref_showDetails_summary">Afficher les coordonnées et le nombre de miettes durant une interventionCaller</string>
-    <string name="procedure_nature">Type d’interventionCaller</string>
+    <string name="pref_showDetails_summary">Afficher les coordonnées et le nombre de miettes durant une intervention</string>
+    <string name="procedure_nature">Type d’intervention</string>
     <string name="resume">Continuer</string>
     <string name="running">En cours…</string>
     <string name="save">Sauvegarder</string>
@@ -95,7 +95,7 @@
     <string name="pref_syncCalendar_summary">Autoriser l\'application à synchroniser le calendrier du téléphone</string>
     <string name="pref_GPS">Activer le GPS</string>
     <string name="pref_GPS_summary">Laisser Zero utiliser vos données de localisation</string>
-    <string name="no_event">Il n\'y a pas de demande d\'interventionCaller</string>
+    <string name="no_event">Il n\'y a pas de demande d\'intervention</string>
     <string name="plant_counting_saved">Plant Counting sauvegardé</string>
     <string name="plant_counting_cannot_save">Impossible de sauvegarder le comptage, finissez le avant de continuer</string>
     <string name="diff_stuff">Conforme à la demande</string>

@@ -20,7 +20,7 @@ import ekylibre.zero.BuildConfig;
  * ekylibre.database for zero-android    *
  *************************************/
 
-public class InterventionORM implements BasicORM
+public class InterventionORM extends BaseORM
 {
     private int         mId;
     private String      mType;
@@ -31,18 +31,17 @@ public class InterventionORM implements BasicORM
     private String      mStoppedAt;
     private String      mDescription;
     private JSONArray   params;
-    private Account     account;
-    private ContentResolver contentResolver;
+    private Context     context;
 
     public InterventionORM(Account account, Context context)
     {
-        reset();
-        this.account = account;
-        contentResolver = context.getContentResolver();
+        super(account, context);
+        this.context = context;
     }
 
     public InterventionORM(JSONObject object, Account account, Context context) throws JSONException
     {
+        super(account, context);
         if (BuildConfig.DEBUG) Log.d("zero", "Object InterventionCaller : " + object.toString());
 
         mId = object.getInt("id");
@@ -54,8 +53,7 @@ public class InterventionORM implements BasicORM
         mStoppedAt = object.getString("stopped_at");
         mDescription = object.getString("description");
         params = object.getJSONArray("parameters");
-        this.account = account;
-        contentResolver = context.getContentResolver();
+        this.context = context;
     }
 
     @Override
@@ -92,29 +90,24 @@ public class InterventionORM implements BasicORM
     public void saveInDataBase()
     {
         insertIntervention();
-        int i = -1;
-        while (++i < params.length())
-        {
-
-        }
+        putParamsInBase(new InterventionParametersORM(account, context, getId()), params);
     }
 
     @Override
     public void setFromBase()
     {
-
+        //TODO create this object from base with parameter ???
     }
 
-    // TODO Use this to put interv param in base
-    private void putInBase(InterventionParametersORM orm)
+    private void putParamsInBase(InterventionParametersORM orm, JSONArray jsonArray)
     {
         int i = -1;
-        while (++i < jsonFromAPI.length())
+        while (++i < jsonArray.length())
         {
             orm.reset();
             try
             {
-                orm.setFromJson(jsonFromAPI.getJSONObject(i));
+                orm.setFromJson(jsonArray.getJSONObject(i));
                 orm.saveInDataBase();
             }
             catch (JSONException e)
@@ -168,6 +161,10 @@ public class InterventionORM implements BasicORM
     }
 
 
+
+    /* ****************
+    **     Getters
+    ** ****************/
     public int getId()
     {
         return (mId);
@@ -208,56 +205,4 @@ public class InterventionORM implements BasicORM
         return (mDescription);
     }
 
-    public int getParamID(int index)
-            throws JSONException
-    {
-        JSONObject object = params.getJSONObject(index);
-
-        return (object.getInt("id"));
-    }
-
-    public String getParamRole(int index)
-            throws JSONException
-    {
-        JSONObject object = params.getJSONObject(index);
-
-        return (object.getString("role"));
-    }
-
-    public String getParamName(int index)
-            throws JSONException
-    {
-        JSONObject object = params.getJSONObject(index);
-
-        return (object.getString("name"));
-    }
-
-    public String getParamLabel(int index)
-            throws JSONException
-    {
-        JSONObject object = params.getJSONObject(index);
-
-        return (object.getString("label"));
-    }
-
-    public int getProductID(int index)
-            throws JSONException
-    {
-        JSONObject product = params.getJSONObject(index).getJSONObject("product");
-
-        return (product.getInt("id"));
-    }
-
-    public String getProductName(int index)
-            throws JSONException
-    {
-        JSONObject product = params.getJSONObject(index).getJSONObject("product");
-
-        return (product.getString("name"));
-    }
-
-    public int getParamLength()
-    {
-        return (params.length());
-    }
 }
