@@ -43,10 +43,9 @@ public class Intervention
         // JSONObject params = Instance.BundleToJSON(attributes);
         JSONObject params = attributes;
         //TODO :: Update path to API
-        JSONObject json = instance.post("/api/v1/interventions", params);
-        long id = json.getLong("id");
+        JSONObject json = instance.post("/api/v1/intervention_participations", params);
 
-        return (id);
+        return (0);
     }
 
     public static List<Intervention> all(Instance instance, String attributes) throws JSONException, IOException, HTTPException
