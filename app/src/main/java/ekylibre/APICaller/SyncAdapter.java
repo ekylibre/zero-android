@@ -114,7 +114,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
             pushPlantCounting(account, extras, authority, provider, syncResult);
             pullIntervention(account, extras, authority, provider, syncResult);
 
-            //pushIntervention(account, extras, authority, provider, syncResult);
+            pushIntervention(account, extras, authority, provider, syncResult);
             //cleanLocalDb();
         }
         getContext().sendBroadcast(new Intent(UpdatableActivity.ACTION_FINISHED_SYNC));
@@ -615,7 +615,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
                 ZeroContract.Interventions.PROJECTION_POST,
                 "\"" + ZeroContract.Interventions.USER + "\"" + " LIKE " + "\"" + account.name + "\""
                         + " AND " + ZeroContract.Interventions.STATE + " LIKE " +
-                        InterventionActivity.STATUS_FINISHED,
+                        "\"" + InterventionActivity.STATUS_FINISHED + "\"",
                 null,
                 ZeroContract.Interventions.SORT_ORDER_DEFAULT);
 
