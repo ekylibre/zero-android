@@ -678,10 +678,11 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
 
         long id = Intervention.create(instance, attributes);
         // Marks them as synced
-        ContentValues values = new ContentValues();
+        //ContentValues values = new ContentValues();
         //values.put(ZeroContract.Interventions.STATE, "SYNCED");
-        mContentResolver.update(Uri.withAppendedPath(ZeroContract.Interventions.CONTENT_URI, Long
-                .toString(cursorIntervention.getLong(0))), values, null, null);
+
+        //mContentResolver.update(Uri.withAppendedPath(ZeroContract.Interventions.CONTENT_URI, Long
+        //        .toString(cursorIntervention.getLong(0))), values, null, null);
     }
 
     private JSONArray createWorkingPeriods(int interventionID)
