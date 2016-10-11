@@ -101,6 +101,8 @@ public class InterventionORM extends BaseORM
 
     private void putParamsInBase(InterventionParametersORM orm, JSONArray jsonArray)
     {
+        if (jsonArray == null)
+            return;
         int i = -1;
         while (++i < jsonArray.length())
         {

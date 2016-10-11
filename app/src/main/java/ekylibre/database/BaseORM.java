@@ -7,7 +7,7 @@ import android.support.annotation.CallSuper;
 
 /**************************************
  * Created by pierre on 10/7/16.      *
- * ekylibre.database for zero-android    *
+ * ekylibre.database for zero-android *
  *************************************/
 
 public abstract class BaseORM implements BasicORM

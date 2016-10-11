@@ -31,27 +31,25 @@ public class InterventionCaller extends BaseCaller
     public static final String REQUEST = "request";
     public static final String RECORD = "record";
 
-    private Account account;
-    private Context context;
-
     InterventionCaller(Account account, Context context)
     {
-        //TODO :: Update path to API
         APIPath += "interventions";
-        this.account = account;
-        this.context = context;
+        super.account = account;
+        super.context = context;
     }
 
     @Override
     public void post(Instance instance, JSONObject attributes)
     {
+        APIPath = "/api/v1/intervention_participations";
         super.post(instance, attributes);
+        APIPath = "/api/v1/interventions";
     }
 
     @Override
-    public void get(Instance instance, String attributes)
+    public void get(String attributes)
     {
-        super.get(instance, attributes);
+        super.get(attributes);
         putInBase(new InterventionORM(account, context));
     }
 }

@@ -11,5 +11,5 @@ public interface BasicCaller
 {
     void post(Instance instance, JSONObject attributes);
 
-    void get(Instance instance, String attributes);
+    void get(String attributes);
 }

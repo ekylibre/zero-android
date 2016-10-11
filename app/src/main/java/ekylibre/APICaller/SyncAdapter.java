@@ -252,7 +252,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
             attributes.put("geolocation", "SRID=4326; POINT(" + Double.toString(cursor.getDouble(10)) + " " + Double.toString(cursor.getDouble(9)) + ")");
         }
 
-        long id = Issue.create(instance, attributes);
+        long id = IssueCaller.create(instance, attributes);
         // Marks them as synced
         ContentValues values = new ContentValues();
         values.put(ZeroContract.IssuesColumns.SYNCED, 1);
@@ -483,58 +483,18 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
     public void pullIntervention(Account account, Bundle extras, String authority,
                               ContentProviderClient provider, SyncResult syncResult)
     {
-        InterventionCaller interventionCaller = new InterventionCaller(account, getContext());
         if (BuildConfig.DEBUG) Log.i(TAG, "Beginning network intervention synchronization");
-        Instance instance = getInstance(account);
 
-        List<InterventionCaller> interventionCallerList = null;
 
-        interventionCaller.get(instance, "?nature=request&user_email=" +
+        InterventionCaller interventionCaller = new InterventionCaller(account, getContext());
+        interventionCaller.get("?nature=request&user_email=" +
                 AccountTool.getEmail(account) + "&without_interventions=true");
 
 
-        if (interventionCallerList == null)
-            return;
 
-        if (BuildConfig.DEBUG) Log.d(TAG, "Number of interventions : " + interventionCallerList.size() );
-        Iterator<InterventionCaller> interventionIterator = interventionCallerList.iterator();
-        while(interventionIterator.hasNext())
-        {
-            InterventionCaller interventionCaller = interventionIterator.next();
-            insertIntervention(interventionCaller, account);
-            insertInterventionParams(interventionCaller, account);
-        }
         if (BuildConfig.DEBUG) Log.i(TAG, "Finish network intervention synchronization");
     }
 
-    private void insertInterventionParams(InterventionCaller interventionCaller, Account account)
-    {
-        ContentValues cv = new ContentValues();
-        int interventionID = getInterventionID(account, interventionCaller.getId());
-        int i = -1;
-        int paramLength = interventionCaller.getParamLength();
-
-        if (interventionID == 0)
-            return;
-        while (++i < paramLength)
-        {
-            try
-            {
-                cv.put(ZeroContract.InterventionParameters.EK_ID, interventionCaller.getParamID(i));
-                cv.put(ZeroContract.InterventionParameters.NAME, interventionCaller.getParamName(i));
-                cv.put(ZeroContract.InterventionParameters.FK_INTERVENTION, interventionID);
-                cv.put(ZeroContract.InterventionParameters.ROLE, interventionCaller.getParamRole(i));
-                cv.put(ZeroContract.InterventionParameters.LABEL, interventionCaller.getParamLabel(i));
-                cv.put(ZeroContract.InterventionParameters.PRODUCT_NAME, interventionCaller.getProductName(i));
-                cv.put(ZeroContract.InterventionParameters.PRODUCT_ID, interventionCaller.getProductID(i));
-                mContentResolver.insert(ZeroContract.InterventionParameters.CONTENT_URI, cv);
-            }
-            catch (JSONException jsonex)
-            {
-                jsonex.printStackTrace();
-            }
-        }
-    }
 
     private int getInterventionID(Account account, int refID)
     {
@@ -552,16 +512,10 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
         return (ret);
     }
 
-    private void insertIntervention(InterventionCaller interventionCaller, Account account)
-    {
-
-    }
-
-
     private void pushIntervention(Account account, Bundle extras, String authority, ContentProviderClient provider, SyncResult syncResult)
     {
-        InterventionCaller interventionCaller = new InterventionCaller();
         if (BuildConfig.DEBUG) Log.i(TAG, "Beginning network interventionCaller synchronization");
+        InterventionCaller interventionCaller = new InterventionCaller(account, getContext());
 
         Cursor cursorIntervention = mContentResolver.query(
                 ZeroContract.Interventions.CONTENT_URI,
@@ -629,7 +583,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
         // TODO :: put crumbs here
 
 
-        long id = InterventionCaller.post(instance, attributes);
+//        long id = InterventionCaller.post(instance, attributes);
         // Marks them as synced
         ContentValues values = new ContentValues();
         values.put(ZeroContract.Interventions.STATE, "SYNCED");

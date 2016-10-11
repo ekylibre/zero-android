@@ -13,7 +13,7 @@ import org.json.JSONObject;
 /**
  * Created by antoine on 29/03/16.
  */
-public class Issue
+public class IssueCaller
 {
     public static long create(Instance instance, JSONObject attributes) throws JSONException, ClientProtocolException, IOException, HTTPException
     {
