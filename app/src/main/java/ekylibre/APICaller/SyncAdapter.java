@@ -664,10 +664,10 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
             attributes.put("request_compliant", cursorIntervention.getInt(3));
         }
         attributes.put("uuid", cursorIntervention.getString(5));
-        if (cursorIntervention.getString(4).equals(InterventionActivity.STATUS_IN_PROGRESS))
-            attributes.put("state", "in_progress");
-        else if (cursorIntervention.getString(4).equals(InterventionActivity.STATUS_FINISHED))
+        if (cursorIntervention.getString(4).equals(InterventionActivity.STATUS_FINISHED))
             attributes.put("state", "done");
+        else
+            attributes.put("state", "in_progress");
         attributes.put("procedure_name", cursorIntervention.getString(2));
         attributes.put("device_uid", "android:" + Secure.getString(mContentResolver, Secure.ANDROID_ID));
 
@@ -679,7 +679,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
         long id = Intervention.create(instance, attributes);
         // Marks them as synced
         ContentValues values = new ContentValues();
-        values.put(ZeroContract.Interventions.STATE, "SYNCED");
+        //values.put(ZeroContract.Interventions.STATE, "SYNCED");
         mContentResolver.update(Uri.withAppendedPath(ZeroContract.Interventions.CONTENT_URI, Long
                 .toString(cursorIntervention.getLong(0))), values, null, null);
     }
