@@ -16,9 +16,10 @@ import ekylibre.database.PlantORM;
 import ekylibre.exceptions.HTTPException;
 import ekylibre.zero.BuildConfig;
 
-/**
- * Created by antoine on 22/04/16.
- */
+/**************************************
+ * Created by pierre on 10/10/16.     *
+ * ekylibre.database for zero-android *
+ *************************************/
 
 public class PlantCaller extends BaseCaller
 {

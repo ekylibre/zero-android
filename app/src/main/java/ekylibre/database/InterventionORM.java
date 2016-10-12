@@ -15,6 +15,7 @@ import java.util.UUID;
 
 import ekylibre.zero.BuildConfig;
 
+
 /**************************************
  * Created by pierre on 10/5/16.      *
  * ekylibre.database for zero-android    *
@@ -22,14 +23,16 @@ import ekylibre.zero.BuildConfig;
 
 public class InterventionORM extends BaseORM
 {
-    private int         mId;
-    private String      mType;
-    private String      mProcedureName;
-    private int         mNumber;
-    private String      mName;
-    private String      mStartedAt;
-    private String      mStoppedAt;
-    private String      mDescription;
+    private int         id;
+    private String      type;
+    private String      procedureName;
+    private int         number;
+    private boolean     requestCompliant;
+    private String      state;
+    private String      name;
+    private String      startedAt;
+    private String      stoppedAt;
+    private String      description;
     private JSONArray   params;
     private Context     context;
 
@@ -44,14 +47,14 @@ public class InterventionORM extends BaseORM
         super(account, context);
         if (BuildConfig.DEBUG) Log.d("zero", "Object InterventionCaller : " + object.toString());
 
-        mId = object.getInt("id");
-        mName = object.getString("name");
-        mType = object.getString("nature");
-        mProcedureName = object.getString("procedure_name");
-        mNumber = object.getInt("number");
-        mStartedAt = object.getString("started_at");
-        mStoppedAt = object.getString("stopped_at");
-        mDescription = object.getString("description");
+        id = object.getInt("id");
+        name = object.getString("name");
+        type = object.getString("nature");
+        procedureName = object.getString("procedure_name");
+        number = object.getInt("number");
+        startedAt = object.getString("started_at");
+        stoppedAt = object.getString("stopped_at");
+        description = object.getString("description");
         params = object.getJSONArray("parameters");
         this.context = context;
     }
@@ -59,14 +62,14 @@ public class InterventionORM extends BaseORM
     @Override
     public void reset()
     {
-        mId = 0;
-        mName = null;
-        mType = null;
-        mProcedureName = null;
-        mNumber = 0;
-        mStartedAt = null;
-        mStoppedAt = null;
-        mDescription = null;
+        id = 0;
+        name = null;
+        type = null;
+        procedureName = null;
+        number = 0;
+        startedAt = null;
+        stoppedAt = null;
+        description = null;
         params = null;
     }
 
@@ -75,14 +78,14 @@ public class InterventionORM extends BaseORM
     {
         if (BuildConfig.DEBUG) Log.d("zero", "Object InterventionCaller : " + object.toString());
 
-            mId = object.getInt("id");
-            mName = object.getString("name");
-            mType = object.getString("nature");
-            mProcedureName = object.getString("procedure_name");
-            mNumber = object.getInt("number");
-            mStartedAt = object.getString("started_at");
-            mStoppedAt = object.getString("stopped_at");
-            mDescription = object.getString("description");
+            id = object.getInt("id");
+            name = object.getString("name");
+            type = object.getString("nature");
+            procedureName = object.getString("procedure_name");
+            number = object.getInt("number");
+            startedAt = object.getString("started_at");
+            stoppedAt = object.getString("stopped_at");
+            description = object.getString("description");
             params = object.getJSONArray("parameters");
     }
 
@@ -94,9 +97,20 @@ public class InterventionORM extends BaseORM
     }
 
     @Override
-    public void setFromBase()
+    public void setFromBase(int id)
     {
-        //TODO create this object from base with parameter ???
+        Cursor curs = contentResolver.query(ZeroContract.Interventions.CONTENT_URI,
+                ZeroContract.Interventions.PROJECTION_ALL,
+                id + " == " + ZeroContract.Interventions._ID,
+                null,
+                null);
+        if (curs == null)
+            return;
+        this.id = curs.getInt(0);
+        procedureName = curs.getString(2);
+        requestCompliant = curs.getInt(3) == 0 ? false : true;
+        this.state = curs.getString(4);
+
     }
 
     private void putParamsInBase(InterventionParametersORM orm, JSONArray jsonArray)
@@ -169,42 +183,42 @@ public class InterventionORM extends BaseORM
     ** ****************/
     public int getId()
     {
-        return (mId);
+        return (id);
     }
 
     public String getName()
     {
-        return (mName);
+        return (name);
     }
 
     public int getNumber()
     {
-        return (mNumber);
+        return (number);
     }
 
     public String getType()
     {
-        return (mType);
+        return (type);
     }
 
     public String getProcedureName()
     {
-        return (mProcedureName);
+        return (procedureName);
     }
 
     public String getStartedAt()
     {
-        return (mStartedAt);
+        return (startedAt);
     }
 
     public String getStoppedAt()
     {
-        return (mStoppedAt);
+        return (stoppedAt);
     }
 
     public String getDescription()
     {
-        return (mDescription);
+        return (description);
     }
 
 }

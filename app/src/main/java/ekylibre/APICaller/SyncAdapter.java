@@ -359,32 +359,10 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
             provider, SyncResult syncResult)
     {
         if (BuildConfig.DEBUG) Log.i(TAG, "Beginning network plants synchronization");
-        ContentValues cv = new ContentValues();
-        Instance instance = getInstance(account);
 
-        List<Plant> plantsList = null;
-        try {
-            plantsList = Plant.all(instance, null);
-        } catch (JSONException | IOException | HTTPException e) {
-            e.printStackTrace();
-        }
+        PlantCaller plantCaller = new PlantCaller(account, getContext());
+        plantCaller.get(null);
 
-        if (plantsList == null)
-            return;
-
-        if (BuildConfig.DEBUG) Log.d(TAG, "Nombre de plants : " + plantsList.size() );
-        Iterator<Plant> plantsIterator = plantsList.iterator();
-        while(plantsIterator.hasNext())
-        {
-            Plant plants = plantsIterator.next();
-            cv.put(ZeroContract.Plants.EK_ID, plants.getId());
-            cv.put(ZeroContract.Plants.NAME, plants.getName());
-            cv.put(ZeroContract.Plants.VARIETY, plants.getVariety());
-            cv.put(ZeroContract.Plants.ACTIVITY_ID, plants.getActivityID());
-            cv.put(ZeroContract.Plants.ACTIVE, true);
-            cv.put(ZeroContract.Plants.USER, account.name);
-            mContentResolver.insert(ZeroContract.Plants.CONTENT_URI, cv);
-        }
         if (BuildConfig.DEBUG) Log.i(TAG, "Finish network plant synchronization");
     }
 

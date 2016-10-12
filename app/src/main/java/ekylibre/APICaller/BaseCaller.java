@@ -34,11 +34,11 @@ abstract class BaseCaller implements BasicCaller
 
     @CallSuper
     @Override
-    public void post(Instance instance, JSONObject attributes)
+    public void post(Instance instance, JSONObject json)
     {
         try
         {
-            JSONObject json = instance.post(APIPath, attributes);
+            instance.post(APIPath, json);
         }
         catch (JSONException | IOException | HTTPException e)
         {

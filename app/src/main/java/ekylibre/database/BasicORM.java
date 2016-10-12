@@ -14,7 +14,7 @@ public interface BasicORM
 
     void saveInDataBase();
 
-    void setFromBase();
+    void setFromBase(int id);
 
     void setFromJson(JSONObject object) throws JSONException;
 }

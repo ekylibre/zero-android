@@ -39,10 +39,10 @@ public class InterventionCaller extends BaseCaller
     }
 
     @Override
-    public void post(Instance instance, JSONObject attributes)
+    public void post(Instance instance, JSONObject json)
     {
         APIPath = "/api/v1/intervention_participations";
-        super.post(instance, attributes);
+        super.post(instance, json);
         APIPath = "/api/v1/interventions";
     }
 

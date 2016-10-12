@@ -161,7 +161,8 @@ public final class ZeroContract {
         // MIME type for individual record.
         public static final String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/vnd.ekylibre.zero.intervention";
 
-        public static final String[] PROJECTION_ALL = {_ID};
+        public static final String[] PROJECTION_ALL = {_ID, EK_ID, PROCEDURE_NAME,
+                REQUEST_COMPLIANT, STATE, UUID};
         public static final String[] PROJECTION_BASIC = {_ID, NAME, DESCRIPTION, STARTED_AT,
                 STOPPED_AT, STATE};
         public static final String[] PROJECTION_PAUSED = {STATE, REQUEST_COMPLIANT,
