@@ -42,6 +42,12 @@ public class PlantORM extends BaseORM
     }
 
     @Override
+    public JSONObject createJson() throws JSONException
+    {
+        return null;
+    }
+
+    @Override
     public void saveInDataBase()
     {
         ContentValues cv = new ContentValues();

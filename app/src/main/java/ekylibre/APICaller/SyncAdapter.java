@@ -104,15 +104,15 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
             account = accountList[i];
             if (BuildConfig.DEBUG) Log.d(TAG, "... Sync new account ...");
             if (BuildConfig.DEBUG) Log.d(TAG, "... New account is " + account.name + " ...");
-            pullPlantDensityAbaci(account,
-                extras, authority, provider, syncResult);
-            pullPlants(account, extras, authority, provider, syncResult);
-            pushCrumbs(account, extras, authority, provider, syncResult);
-            pushIssues(account, extras, authority, provider, syncResult);
-            pushPlantCounting(account, extras, authority, provider, syncResult);
+            //pullPlantDensityAbaci(account,
+            //    extras, authority, provider, syncResult);
+            //pullPlants(account, extras, authority, provider, syncResult);
+            //pushCrumbs(account, extras, authority, provider, syncResult);
+            //pushIssues(account, extras, authority, provider, syncResult);
+            //pushPlantCounting(account, extras, authority, provider, syncResult);
             pullIntervention(account, extras, authority, provider, syncResult);
 
-            //pushIntervention(account, extras, authority, provider, syncResult);
+            pushIntervention(account, extras, authority, provider, syncResult);
         }
         getContext().sendBroadcast(new Intent(UpdatableActivity.ACTION_FINISHED_SYNC));
     }
@@ -473,135 +473,14 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
         if (BuildConfig.DEBUG) Log.i(TAG, "Finish network intervention synchronization");
     }
 
-
-    private int getInterventionID(Account account, int refID)
-    {
-        Cursor cursor = mContentResolver.query(ZeroContract.Interventions.CONTENT_URI,
-                ZeroContract.Interventions.PROJECTION_NONE,
-                refID + " == " + ZeroContract.Interventions.EK_ID + " AND "
-                        + "\"" + account.name + "\"" + " LIKE " + ZeroContract.Interventions.USER,
-                null,
-                null);
-        if (cursor == null || cursor.getCount() == 0)
-            return (0);
-        cursor.moveToFirst();
-        int ret = cursor.getInt(0);
-        cursor.close();
-        return (ret);
-    }
-
     private void pushIntervention(Account account, Bundle extras, String authority, ContentProviderClient provider, SyncResult syncResult)
     {
         if (BuildConfig.DEBUG) Log.i(TAG, "Beginning network interventionCaller synchronization");
+
         InterventionCaller interventionCaller = new InterventionCaller(account, getContext());
+        interventionCaller.postUserData(account);
 
-        Cursor cursorIntervention = mContentResolver.query(
-                ZeroContract.Interventions.CONTENT_URI,
-                ZeroContract.Interventions.PROJECTION_POST,
-                "\"" + ZeroContract.Interventions.USER + "\"" + " LIKE " + "\"" + account.name + "\""
-                        + " AND " + ZeroContract.Interventions.STATE + " LIKE " +
-                        InterventionActivity.STATUS_FINISHED,
-                null,
-                ZeroContract.Interventions.SORT_ORDER_DEFAULT);
-
-
-        if (cursorIntervention != null && cursorIntervention.getCount() > 0)
-        {
-            Instance instance = getInstance(account);
-            while (cursorIntervention.moveToNext())
-            {
-                try
-                {
-                    Cursor cursorWorkingPeriods = mContentResolver.query(
-                            ZeroContract.WorkingPeriods.CONTENT_URI,
-                            ZeroContract.WorkingPeriods.PROJECTION_ALL,
-                            ZeroContract.WorkingPeriods.FK_INTERVENTION + " == " +
-                                    cursorIntervention.getInt(0),
-                            null,
-                            null);
-
-                    postNewIntervention(cursorIntervention, cursorWorkingPeriods, instance);
-                }
-                catch (JSONException | IOException | HTTPException e)
-                {
-                    e.printStackTrace();
-                }
-            }
-        }
-        else
-        {
-            if (BuildConfig.DEBUG) Log.i(TAG, "Nothing to sync");
-        }
         if (BuildConfig.DEBUG) Log.i(TAG, "Finish network synchronization");
-    }
-
-    private void    postNewIntervention(Cursor cursorIntervention, Cursor cursorWorkingPeriods,
-                                        Instance instance)
-            throws JSONException, IOException, HTTPException
-    {
-        if (BuildConfig.DEBUG) Log.i(TAG, "New intervention");
-
-        // Post it to ekylibre
-        JSONObject attributes = new JSONObject();
-        if (cursorIntervention.getInt(1) > 0)
-        {
-            attributes.put("request_intervention_id", cursorIntervention.getInt(1));
-            attributes.put("request_compliant", cursorIntervention.getInt(3));
-        }
-        attributes.put("uuid", cursorIntervention.getString(5));
-        if (cursorIntervention.getString(4).equals(InterventionActivity.STATUS_IN_PROGRESS))
-            attributes.put("state", "in_progress");
-        else if (cursorIntervention.getString(4).equals(InterventionActivity.STATUS_FINISHED))
-            attributes.put("state", "done");
-        attributes.put("procedure_name", cursorIntervention.getString(2));
-        attributes.put("device_uid", "android:" + Secure.getString(mContentResolver, Secure.ANDROID_ID));
-
-        attributes.put("working_periods", createWorkingPeriods(cursorIntervention.getInt(0)));
-
-        // TODO :: put crumbs here
-
-
-//        long id = InterventionCaller.post(instance, attributes);
-        // Marks them as synced
-        ContentValues values = new ContentValues();
-        values.put(ZeroContract.Interventions.STATE, "SYNCED");
-        mContentResolver.update(Uri.withAppendedPath(ZeroContract.Interventions.CONTENT_URI, Long
-                .toString(cursorIntervention.getLong(0))), values, null, null);
-    }
-
-    private JSONArray createWorkingPeriods(int interventionID)
-    {
-        Cursor cursor = mContentResolver.query(ZeroContract.WorkingPeriods.CONTENT_URI,
-                ZeroContract.WorkingPeriods.PROJECTION_POST,
-                interventionID + " == " + ZeroContract.WorkingPeriods.FK_INTERVENTION,
-                null,
-                ZeroContract.PlantCountingItems.SORT_ORDER_DEFAULT);
-        try
-        {
-            if (cursor != null && cursor.getCount() > 0)
-            {
-                JSONArray arrayJSON = new JSONArray();
-                while (cursor.moveToNext())
-                {
-                    JSONObject attributes = new JSONObject();
-                    attributes.put("started_at", cursor.getString(1));
-                    attributes.put("stopped_at", cursor.getString(2));
-                    attributes.put("nature", cursor.getString(3));
-                    arrayJSON.put(attributes);
-                }
-                cursor.close();
-                return (arrayJSON);
-            }
-            else
-            {
-                if (BuildConfig.DEBUG) Log.i(TAG, "Nothing to sync");
-            }
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-        }
-        return (null);
     }
 
     protected Instance getInstance(Account account)

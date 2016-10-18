@@ -4,6 +4,7 @@ import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.accounts.AccountsException;
 import android.content.Context;
+import android.database.Cursor;
 import android.support.annotation.CallSuper;
 import android.util.Log;
 
@@ -13,7 +14,9 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 
+import ekylibre.database.BaseORM;
 import ekylibre.database.BasicORM;
+import ekylibre.database.InterventionORM;
 import ekylibre.exceptions.HTTPException;
 import ekylibre.zero.BuildConfig;
 
@@ -31,10 +34,18 @@ abstract class BaseCaller implements BasicCaller
     protected JSONArray jsonFromAPI;
     protected Account account;
     protected Context context;
+    protected Instance instance;
+
+    public BaseCaller(Account account, Context context)
+    {
+        this.account = account;
+        this.context = context;
+        instance = getInstance(account);
+    }
 
     @CallSuper
     @Override
-    public void post(Instance instance, JSONObject json)
+    public void post(JSONObject json)
     {
         try
         {
@@ -81,6 +92,40 @@ abstract class BaseCaller implements BasicCaller
                 e.printStackTrace();
             }
         }
+    }
+
+    /*
+    ** @param: listId => list of ids for interventions
+    **         orm    => Instantiated orm object
+    */
+    protected void postFromId(Cursor listId, BasicORM orm)
+    {
+        JSONObject json;
+        if (listId == null || listId.getCount() == 0)
+            return;
+
+        while (listId.moveToNext())
+        {
+            json = createJsonFromOrm(orm, listId.getInt(0));
+            post(json);
+        }
+    }
+
+    protected JSONObject createJsonFromOrm(BasicORM orm, int id)
+    {
+        JSONObject json;
+
+        orm.reset();
+        orm.setFromBase(id);
+        try
+        {
+            json = orm.createJson();
+        } catch (JSONException e)
+        {
+            e.printStackTrace();
+            return (null);
+        }
+        return (json);
     }
 
     protected Instance getInstance(Account account)

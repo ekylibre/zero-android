@@ -27,9 +27,15 @@ public class PlantCaller extends BaseCaller
 
     public PlantCaller(Account account, Context context)
     {
+        super(account, context);
         APIPath += "plants";
         super.account = account;
         super.context = context;
+    }
+
+    @Override
+    public void postUserData(Account account)
+    {
     }
 
     @Override

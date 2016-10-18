@@ -5,6 +5,7 @@ import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.provider.Settings;
 import android.util.Log;
 
 import org.json.JSONArray;
@@ -14,6 +15,7 @@ import org.json.JSONObject;
 import java.util.UUID;
 
 import ekylibre.zero.BuildConfig;
+import ekylibre.zero.intervention.InterventionActivity;
 
 
 /**************************************
@@ -23,6 +25,8 @@ import ekylibre.zero.BuildConfig;
 
 public class InterventionORM extends BaseORM
 {
+    private final String TAG = "InterventionORM";
+
     private int         id;
     private String      type;
     private String      procedureName;
@@ -35,6 +39,8 @@ public class InterventionORM extends BaseORM
     private String      description;
     private JSONArray   params;
     private Context     context;
+    private String      uuid;
+    private int         ek_id;
 
     public InterventionORM(Account account, Context context)
     {
@@ -63,14 +69,74 @@ public class InterventionORM extends BaseORM
     public void reset()
     {
         id = 0;
-        name = null;
         type = null;
         procedureName = null;
         number = 0;
+        requestCompliant = true;
+        state = null;
+        name = null;
         startedAt = null;
         stoppedAt = null;
         description = null;
         params = null;
+        uuid = null;
+        ek_id = 0;
+    }
+
+    @Override
+    public JSONObject createJson() throws JSONException
+    {
+        JSONObject json = new JSONObject();
+
+        if (ek_id > 0)
+        {
+            json.put("request_intervention_id", ek_id);
+            json.put("request_compliant", requestCompliant);
+        }
+        json.put("uuid", uuid);
+        if (state.equals(InterventionActivity.STATUS_IN_PROGRESS))
+            json.put("state", "in_progress");
+        else if (state.equals(InterventionActivity.STATUS_FINISHED))
+            json.put("state", "done");
+        json.put("procedure_name", procedureName);
+        json.put("device_uid", "android:" +
+                Settings.Secure.getString(contentResolver,
+                        Settings.Secure.ANDROID_ID));
+
+        json.put("working_periods", createWorkingPeriods());
+
+        return (json);
+    }
+
+    private JSONArray createWorkingPeriods()
+    {
+        Cursor cursor = queryWorkingPeriods();
+        try
+        {
+            if (cursor != null && cursor.getCount() > 0)
+            {
+                JSONArray arrayJSON = new JSONArray();
+                while (cursor.moveToNext())
+                {
+                    JSONObject attributes = new JSONObject();
+                    attributes.put("started_at", cursor.getString(1));
+                    attributes.put("stopped_at", cursor.getString(2));
+                    attributes.put("nature", cursor.getString(3));
+                    arrayJSON.put(attributes);
+                }
+                cursor.close();
+                return (arrayJSON);
+            }
+            else
+            {
+                if (BuildConfig.DEBUG) Log.i(TAG, "Nothing to sync");
+            }
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        return (null);
     }
 
     @Override
@@ -106,11 +172,14 @@ public class InterventionORM extends BaseORM
                 null);
         if (curs == null)
             return;
+        curs.moveToFirst();
         this.id = curs.getInt(0);
+        ek_id = curs.getInt(1);
         procedureName = curs.getString(2);
         requestCompliant = curs.getInt(3) == 0 ? false : true;
         this.state = curs.getString(4);
-
+        uuid = curs.getString(5);
+        Log.d(TAG, "=======================================================\nState = " + state);
     }
 
     private void putParamsInBase(InterventionParametersORM orm, JSONArray jsonArray)
@@ -156,6 +225,21 @@ public class InterventionORM extends BaseORM
             cv.put(ZeroContract.Interventions.UUID, UUID.randomUUID().toString());
             contentResolver.insert(ZeroContract.Interventions.CONTENT_URI, cv);
         }
+    }
+
+
+    /* ****************
+    **   Requests
+    ** ****************/
+
+    private Cursor queryWorkingPeriods()
+    {
+        Cursor cursor = contentResolver.query(ZeroContract.WorkingPeriods.CONTENT_URI,
+                ZeroContract.WorkingPeriods.PROJECTION_POST,
+                id + " == " + ZeroContract.WorkingPeriods.FK_INTERVENTION,
+                null,
+                ZeroContract.PlantCountingItems.SORT_ORDER_DEFAULT);
+        return (cursor);
     }
 
     private boolean idExists(int refID, Account account)

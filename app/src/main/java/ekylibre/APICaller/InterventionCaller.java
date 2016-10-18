@@ -3,6 +3,7 @@ package ekylibre.APICaller;
 import android.accounts.Account;
 import android.content.ContentResolver;
 import android.content.Context;
+import android.database.Cursor;
 import android.util.Log;
 
 import org.apache.http.client.ClientProtocolException;
@@ -15,8 +16,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ekylibre.database.InterventionORM;
+import ekylibre.database.ZeroContract;
 import ekylibre.exceptions.HTTPException;
 import ekylibre.zero.BuildConfig;
+import ekylibre.zero.intervention.InterventionActivity;
 
 /**************************************
  * Created by pierre on 8/31/16.      *
@@ -33,16 +36,27 @@ public class InterventionCaller extends BaseCaller
 
     InterventionCaller(Account account, Context context)
     {
+        super(account, context);
         APIPath += "interventions";
-        super.account = account;
-        super.context = context;
     }
 
     @Override
-    public void post(Instance instance, JSONObject json)
+    public void post(JSONObject json)
     {
         APIPath = "/api/v1/intervention_participations";
-        super.post(instance, json);
+        super.post(json);
+        APIPath = "/api/v1/interventions";
+    }
+
+    @Override
+    public void postUserData(Account account)
+    {
+        APIPath = "/api/v1/intervention_participations";
+
+        InterventionORM orm = new InterventionORM(account, context);
+        Cursor listId = getInterventionId(account);
+
+        postFromId(listId, orm);
         APIPath = "/api/v1/interventions";
     }
 
@@ -52,4 +66,23 @@ public class InterventionCaller extends BaseCaller
         super.get(attributes);
         putInBase(new InterventionORM(account, context));
     }
+
+    private Cursor getInterventionId(Account account)
+    {
+        //TODO :: VERIFIER QUE LE OR MARCHE BIEN !!!!!!!
+        ContentResolver contentResolver = context.getContentResolver();
+
+        Cursor curs = contentResolver.query(
+                ZeroContract.Interventions.CONTENT_URI,
+                ZeroContract.Interventions.PROJECTION_NONE,
+                "\"" + account.name + "\"" + " LIKE " + ZeroContract.Interventions.USER
+                + " AND " + "(" + ZeroContract.Interventions.STATE + " LIKE "
+                        + "\"" + InterventionActivity.STATUS_FINISHED + "\""
+                        + " OR " + ZeroContract.Interventions.STATE + " LIKE "
+                        + "\"" + InterventionActivity.STATUS_IN_PROGRESS + "\"" + ")",
+                null,
+                null);
+        return (curs);
+    }
+
 }

@@ -1,5 +1,7 @@
 package ekylibre.APICaller;
 
+import android.accounts.Account;
+
 import org.json.JSONObject;
 
 /**************************************
@@ -9,7 +11,9 @@ import org.json.JSONObject;
 
 public interface BasicCaller
 {
-    void post(Instance instance, JSONObject attributes);
+    void post(JSONObject attributes);
+
+    void postUserData(Account account);
 
     void get(String attributes);
 }

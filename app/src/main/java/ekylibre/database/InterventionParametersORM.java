@@ -42,6 +42,12 @@ public class InterventionParametersORM extends BaseORM
     }
 
     @Override
+    public JSONObject createJson() throws JSONException
+    {
+        return null;
+    }
+
+    @Override
     public void saveInDataBase()
     {
         ContentValues cv = new ContentValues();
@@ -57,7 +63,7 @@ public class InterventionParametersORM extends BaseORM
     }
 
     @Override
-    public void setFromBase()
+    public void setFromBase(int id)
     {
 
     }
