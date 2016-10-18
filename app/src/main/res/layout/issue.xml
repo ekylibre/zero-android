@@ -132,7 +132,7 @@
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="bottom"
-                    android:hint="@string/notes"
+                    android:hint="@string/observations"
                     android:maxLines="6"
                     android:layout_marginTop="40dp" />
 
