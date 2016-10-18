@@ -48,7 +48,7 @@
     <string name="scan_code">Scanner un code-barre</string>
     <string name="select_plant">Sélectionner une culture</string>
     <string name="select_abacus">Sélectionner une abaque</string>
-    <string name="select_density">Densité recomendée</string>
+    <string name="select_density">Densité du semoir</string>
     <string name="service_name">Ekylibre</string>
     <string name="settings">Paramètres</string>
     <string name="severity">Gravité</string>
