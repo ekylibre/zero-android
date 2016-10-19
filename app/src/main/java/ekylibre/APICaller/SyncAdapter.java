@@ -115,15 +115,17 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
             pullIntervention(account, extras, authority, provider, syncResult);
 
             pushIntervention(account, extras, authority, provider, syncResult);
-            //cleanLocalDb();
+            cleanLocalDb(account);
         }
         getContext().sendBroadcast(new Intent(UpdatableActivity.ACTION_FINISHED_SYNC));
     }
 
-    private void cleanLocalDb()
+    private void cleanLocalDb(Account account)
     {
         mContentResolver.delete(ZeroContract.Interventions.CONTENT_URI,
-                ZeroContract.Interventions.STATE + " LIKE " + InterventionActivity.STATUS_FINISHED,
+                ZeroContract.CrumbsColumns.USER + "LIKE" + " \"" + account.name + "\"" +
+                ZeroContract.Interventions.STATE + " LIKE " +
+                        "\"" + InterventionActivity.STATUS_FINISHED + "\"",
                 null);
     }
 
@@ -139,7 +141,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
         // Get crumbs from intervention (content) provider
         Cursor cursor = mContentResolver.query(ZeroContract.Crumbs.CONTENT_URI,
                 ZeroContract.Crumbs.PROJECTION_ALL,
-                "\"" + ZeroContract.CrumbsColumns.USER + "\" " + "LIKE" + " \"" + account.name + "\""
+                ZeroContract.CrumbsColumns.USER + "LIKE" + " \"" + account.name + "\""
                         + " AND " + ZeroContract.CrumbsColumns.SYNCED + " == " + 0,
                 null,
                 ZeroContract.Crumbs.SORT_ORDER_DEFAULT);
@@ -215,7 +217,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
         Cursor cursor = mContentResolver.query(
                 ZeroContract.Issues.CONTENT_URI,
                 ZeroContract.Issues.PROJECTION_ALL,
-                "\"" + ZeroContract.Issues.USER + "\"" + " LIKE " + "\"" + account.name + "\""
+                ZeroContract.Issues.USER + " LIKE " + "\"" + account.name + "\""
                         + " AND " + ZeroContract.IssuesColumns.SYNCED + " == " + 0,
                 null,
                 ZeroContract.Issues.SORT_ORDER_DEFAULT);
@@ -404,7 +406,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
         if (BuildConfig.DEBUG) Log.i(TAG, "Beginning network plant counting synchronization");
         Cursor cursor = mContentResolver.query(ZeroContract.PlantCountings.CONTENT_URI,
                 ZeroContract.PlantCountings.PROJECTION_ALL,
-                "\"" + ZeroContract.PlantCountingsColumns.USER + "\"" + " LIKE " + "\"" + account.name + "\""
+                ZeroContract.PlantCountingsColumns.USER + " LIKE " + "\"" + account.name + "\""
                         + " AND " + ZeroContract.PlantCountingsColumns.SYNCED + " == " + 0,
                 null,
                 ZeroContract.PlantCountings.SORT_ORDER_DEFAULT);
@@ -454,7 +456,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
         if (BuildConfig.DEBUG) Log.i(TAG, "Beginning network synchronization");
         Cursor cursor = mContentResolver.query(ZeroContract.PlantCountingItems.CONTENT_URI,
                 ZeroContract.PlantCountingItems.PROJECTION_ALL,
-                "\"" + ZeroContract.PlantCountingItemsColumns.USER + "\"" + " LIKE " + "\"" + account.name + "\""
+                ZeroContract.PlantCountingItemsColumns.USER + " LIKE " + "\"" + account.name + "\""
                 + " AND " + ID + " == " + ZeroContract.PlantCountingItems.PLANT_COUNTING_ID,
                 null,
                 ZeroContract.PlantCountingItems.SORT_ORDER_DEFAULT);
@@ -613,7 +615,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
         Cursor cursorIntervention = mContentResolver.query(
                 ZeroContract.Interventions.CONTENT_URI,
                 ZeroContract.Interventions.PROJECTION_POST,
-                "\"" + ZeroContract.Interventions.USER + "\"" + " LIKE " + "\"" + account.name + "\""
+                ZeroContract.Interventions.USER + " LIKE " + "\"" + account.name + "\""
                         + " AND " + ZeroContract.Interventions.STATE + " LIKE " +
                         "\"" + InterventionActivity.STATUS_FINISHED + "\"",
                 null,
