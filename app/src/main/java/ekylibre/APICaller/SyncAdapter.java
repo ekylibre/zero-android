@@ -123,7 +123,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
     private void cleanLocalDb(Account account)
     {
         mContentResolver.delete(ZeroContract.Interventions.CONTENT_URI,
-                ZeroContract.CrumbsColumns.USER + "LIKE" + " \"" + account.name + "\"" +
+                ZeroContract.Interventions.USER + " LIKE " + " \"" + account.name + "\"" + " AND " +
                 ZeroContract.Interventions.STATE + " LIKE " +
                         "\"" + InterventionActivity.STATUS_FINISHED + "\"",
                 null);
@@ -141,7 +141,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
         // Get crumbs from intervention (content) provider
         Cursor cursor = mContentResolver.query(ZeroContract.Crumbs.CONTENT_URI,
                 ZeroContract.Crumbs.PROJECTION_ALL,
-                ZeroContract.CrumbsColumns.USER + "LIKE" + " \"" + account.name + "\""
+                ZeroContract.CrumbsColumns.USER + " LIKE" + " \"" + account.name + "\""
                         + " AND " + ZeroContract.CrumbsColumns.SYNCED + " == " + 0,
                 null,
                 ZeroContract.Crumbs.SORT_ORDER_DEFAULT);
