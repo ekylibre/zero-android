@@ -38,6 +38,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.UUID;
 
+import ekylibre.APICaller.Intervention;
 import ekylibre.database.ZeroContract;
 import ekylibre.util.AccountTool;
 import ekylibre.util.DateConstant;
@@ -139,9 +140,7 @@ public class InterventionActivity extends UpdatableActivity
 
         if (id == R.id.action_save)
         {
-            phasePause(null);
-            switchStateToFinished();
-            InterventionActivity.super.onBackPressed();
+            saveAndExit();
         }
         else if (id == android.R.id.home)
         {
@@ -576,7 +575,7 @@ public class InterventionActivity extends UpdatableActivity
         exitInterface();
     }
 
-    private void exitInterface()
+    private void saveAndExit()
     {
         phasePause(null);
         final AlertDialog.Builder dialog = new AlertDialog.Builder(this);
@@ -591,18 +590,17 @@ public class InterventionActivity extends UpdatableActivity
             }
         });
 
-        dialog.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener()
+        dialog.setNeutralButton(R.string.cancel, new DialogInterface.OnClickListener()
         {
             @Override
             public void onClick(DialogInterface dialogInterface, int i)
             {
-                cleanCurrentSave();
-                InterventionActivity.super.onBackPressed();
+                dialogInterface.cancel();
             }
         });
         if (!mNewIntervention)
         {
-            dialog.setNeutralButton(R.string.pause, new DialogInterface.OnClickListener()
+            dialog.setNegativeButton(R.string.pause, new DialogInterface.OnClickListener()
             {
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i)
@@ -612,6 +610,33 @@ public class InterventionActivity extends UpdatableActivity
                 }
             });
         }
+        dialog.create();
+        dialog.show();
+    }
+
+    private void exitInterface()
+    {
+        phasePause(null);
+        final AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+        dialog.setTitle(R.string.what_to_do);
+        dialog.setPositiveButton("Abandonner", new DialogInterface.OnClickListener()
+        {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i)
+            {
+                cleanCurrentSave();
+                InterventionActivity.super.onBackPressed();
+            }
+        });
+        dialog.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener()
+        {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i)
+            {
+                dialogInterface.cancel();
+            }
+        });
+
         dialog.create();
         dialog.show();
     }
