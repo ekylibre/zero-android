@@ -222,6 +222,7 @@ public class InterventionActivity extends UpdatableActivity
             createIntervention();
             prepareSimpleIntervention();
         }
+        getSupportActionBar().setHomeAsUpIndicator(R.drawable.close);
     }
 
     private void setInProgressState()
@@ -619,7 +620,7 @@ public class InterventionActivity extends UpdatableActivity
         phasePause(null);
         final AlertDialog.Builder dialog = new AlertDialog.Builder(this);
         dialog.setTitle(R.string.what_to_do);
-        dialog.setPositiveButton("Abandonner", new DialogInterface.OnClickListener()
+        dialog.setPositiveButton(R.string.abort, new DialogInterface.OnClickListener()
         {
             @Override
             public void onClick(DialogInterface dialogInterface, int i)
