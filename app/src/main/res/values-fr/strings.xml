@@ -105,4 +105,5 @@
     <string name="what_to_do">Que voulez vous faire ?</string>
     <string name="finish">Terminer</string>
     <string name="cancel">Annuler</string>
+    <string name="abort">Abandonner</string>
 </resources>
