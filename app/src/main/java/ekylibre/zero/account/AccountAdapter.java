@@ -74,6 +74,9 @@ public class AccountAdapter extends ArrayAdapter<Account>
             public void onClick(View view)
             {
                 Account selectedAccount = getItem(position);
+                if (selectedAccount.equals(AccountTool.getCurrentAccount(getContext())))
+                    AccountTool.setFirstAccountPref(PreferenceManager.getDefaultSharedPreferences
+                            (getContext()), getContext());
                 AccountManager manager = AccountManager.get(getContext());
                 remove(selectedAccount);
                 manager.removeAccount(selectedAccount, null, null);

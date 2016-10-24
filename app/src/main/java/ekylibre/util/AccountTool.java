@@ -100,8 +100,6 @@ public class AccountTool
             preference = PreferenceManager.getDefaultSharedPreferences(context);
             accName = preference.getString(AccountManagerActivity.CURRENT_ACCOUNT_NAME, null);
         }
-        if (accName == null)
-            return (null);
         Account[] listAccount = AccountManager.get(context).getAccountsByType(SyncAdapter.ACCOUNT_TYPE);
         Account currAcc = findCurrentAccount(listAccount, accName, context);
         Log.d(TAG, "Current account is ==> " + currAcc.name);
@@ -111,7 +109,7 @@ public class AccountTool
     /*
     ** Method call first time you use the app to set the first account you signed in as current account
     */
-    private static void    setFirstAccountPref(SharedPreferences preferences, Context context)
+    public static void    setFirstAccountPref(SharedPreferences preferences, Context context)
     {
         Account newCurrAccount = AccountManager.get(context).getAccountsByType(SyncAdapter.ACCOUNT_TYPE)[0];
 
