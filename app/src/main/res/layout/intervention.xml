@@ -86,7 +86,6 @@
             android:layout_gravity="bottom"
             android:gravity="center"/>
 
-
         <LinearLayout
             android:orientation="vertical"
             android:layout_width="match_parent"
@@ -95,15 +94,19 @@
             android:layout_marginLeft="@dimen/activity_horizontal_margin"
             android:layout_marginRight="@dimen/activity_horizontal_margin"
             >
+
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="100dp"
                 android:layout_gravity="center_horizontal">
+
                 <RelativeLayout
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="0.30"
                     android:id="@+id/layout_preparation">
+
                     <Button
                         android:id="@+id/preparation"
                         android:layout_width="match_parent"
@@ -131,6 +134,16 @@
                         android:layout_alignBottom="@+id/preparation"
                         android:layout_marginBottom="4dp"
                         />
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:srcCompat="@drawable/action_preparation"
+                        android:elevation="200dp"
+                        android:paddingTop="5dp"
+                        android:layout_alignParentTop="true"
+                        android:layout_centerHorizontal="true"
+                        android:id="@+id/imageView3"/>
                 </RelativeLayout>
 
                 <RelativeLayout
