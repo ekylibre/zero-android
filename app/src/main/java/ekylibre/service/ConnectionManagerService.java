@@ -26,7 +26,8 @@ import ekylibre.database.ZeroContract;
 public class ConnectionManagerService extends Service
 {
     private static final String     TAG = "ConnectionManagerS";
-    public static final int         TIME_TO_NEXT_SYNC = 300000;
+    public static final int         TIME_TO_NEXT_SYNC_AUTO = 300000;
+    public static final int         TIME_TO_NEXT_SYNC = 600000;
 
     private Handler                 handler;
     private Account                 mAccount = null;
@@ -44,7 +45,7 @@ public class ConnectionManagerService extends Service
     public void         onCreate()
     {
         // Final value is 300000 others values are just here to test sync
-        final int       hDelay = TIME_TO_NEXT_SYNC;
+        final int       hDelay = TIME_TO_NEXT_SYNC_AUTO;
 
         handler = new Handler();
         handler.postDelayed(new Runnable()
