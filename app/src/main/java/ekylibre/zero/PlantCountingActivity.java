@@ -357,7 +357,8 @@ public class PlantCountingActivity extends UpdatableActivity  {
             mIndicator.setBackground(mGrey);
             return;
         }
-        if (averageValue <= referenceValue + ((23.0 / 100.0) * referenceValue) && averageValue >= referenceValue - ((23.0 / 100.0) * referenceValue))
+        if (averageValue <= referenceValue + ((23.0 / 100.0) * referenceValue) &&
+                averageValue >= referenceValue - ((23.0 / 100.0) * referenceValue))
             mIndicator.setBackground(mGreen);
         else
             mIndicator.setBackground(mRed);
@@ -685,7 +686,8 @@ public class PlantCountingActivity extends UpdatableActivity  {
     private int insertNewValuesPlantCounting()
     {
         ContentValues newValuesPlantCounting = new ContentValues();
-	
+
+        newValuesPlantCounting.put(ZeroContract.PlantCountingsColumns.NATURE, getNature());
         newValuesPlantCounting.put(ZeroContract.PlantCountingsColumns.OBSERVED_AT,
 				   (new java.util.Date()).getTime());
         setLocation(newValuesPlantCounting);
@@ -710,7 +712,15 @@ public class PlantCountingActivity extends UpdatableActivity  {
 		return (curs.getInt(0));
 	    }
     }
-    
+
+    public String getNature()
+    {
+        if (germination)
+            return ("germination");
+        else
+            return ("sowing");
+    }
+
     @TargetApi(23)
     private void setLocation(ContentValues newValuesPlantCounting)
     {

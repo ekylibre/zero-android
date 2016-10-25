@@ -11,7 +11,7 @@ import android.util.Log;
 
 public class DatabaseHelper extends SQLiteOpenHelper
 {
-    private static final int DATABASE_VERSION = 14;
+    private static final int DATABASE_VERSION = 15;
 
     private static final String DATABASE_NAME = "zero";
 
@@ -325,6 +325,12 @@ public class DatabaseHelper extends SQLiteOpenHelper
             {
                 database.execSQL("ALTER TABLE intervention ADD uuid VARCHAR(255)");
                 if (newVersion == 14)
+                    break;
+            }
+            case 15:
+            {
+                database.execSQL("ALTER TABLE plant_countings ADD nature VARCHAR(255)");
+                if (newVersion == 15)
                     break;
             }
         }

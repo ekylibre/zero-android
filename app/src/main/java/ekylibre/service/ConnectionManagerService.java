@@ -122,7 +122,7 @@ public class ConnectionManagerService extends Service
         boolean                 wifi;
         boolean                 mobile;
 
-        if (!get_AutoPerm())
+        if (!get_AutoPerm() || !AccountTool.isAnyAccountExist(this))
             return (false);
         mAccount = AccountTool.getCurrentAccount(ConnectionManagerService.this);
         get_MobilePerm();
