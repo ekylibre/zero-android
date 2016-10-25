@@ -106,4 +106,7 @@
     <string name="finish">Finish</string>
     <string name="cancel">Cancel</string>
     <string name="abort">Abort</string>
+    <string name="preparation">Preparation</string>
+    <string name="travel">Travel</string>
+    <string name="intervention">Intervention</string>
 </resources>
