@@ -428,6 +428,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
                         //attributes.put("plant_density_abacus_id", cursor.getString(7));
                         attributes.put("plant_id", cursor.getInt(8));
                         attributes.put("average_value", cursor.getFloat(9));
+                        attributes.put("nature", cursor.getString(10));
                         attributes.put("items_attributes", createPlantCountingItemJSON(account, extras, authority, provider, syncResult, cursor.getInt(0)));
                         //attributes.put("device_uid", "android:" + Secure.getString(mContentResolver, Secure.ANDROID_ID));
 

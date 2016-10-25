@@ -97,6 +97,7 @@ public final class ZeroContract {
         String SYNCED = "synced";
         String AVERAGE_VALUE = "average_value";
         String USER = "user";
+        String NATURE = "nature";
     }
 
     public interface PlantCountingItemsColumns extends BaseColumns {
@@ -232,7 +233,9 @@ public final class ZeroContract {
         // MIME type for individual record.
         public static final String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/vnd.ekylibre.zero.plant_counting";
 
-        public static final String[] PROJECTION_ALL = {_ID, OBSERVED_AT, LATITUDE, LONGITUDE, OBSERVATION,  PLANT_DENSITY_ABACUS_ITEM_ID, SYNCED_AT, PLANT_DENSITY_ABACUS_ID, PLANT_ID, AVERAGE_VALUE};
+        public static final String[] PROJECTION_ALL = {_ID, OBSERVED_AT, LATITUDE, LONGITUDE,
+                OBSERVATION,  PLANT_DENSITY_ABACUS_ITEM_ID, SYNCED_AT, PLANT_DENSITY_ABACUS_ID,
+                PLANT_ID, AVERAGE_VALUE, NATURE};
         public static final String[] PROJECTION_NONE = {_ID};
 
         public static final String SORT_ORDER_DEFAULT = _ID + " ASC";
