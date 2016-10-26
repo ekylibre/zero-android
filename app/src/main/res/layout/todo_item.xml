@@ -56,7 +56,8 @@
         android:layout_alignLeft="@+id/event"
         android:layout_below="@+id/event"
         tools:text="Description"
-        android:layout_alignEnd="@+id/event"/>
+        android:layout_alignEnd="@+id/event"
+        android:layout_marginStart="7dp"/>
 
     <TextView
         android:layout_width="wrap_content"
