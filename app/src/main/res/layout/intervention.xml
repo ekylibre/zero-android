@@ -114,10 +114,10 @@
                         android:background="@drawable/button_disabled"
                         android:text="@string/preparation"
                         android:textColor="@color/ultra_dark_grey"
-                        android:textSize="10sp"
+                        android:textSize="9sp"
                         android:layout_marginStart="0dp"
                         android:onClick="phasePreparation"
-                        android:paddingTop="40dp"
+                        android:paddingTop="28dp"
                         android:layout_marginBottom="16dp"
                         />
 
@@ -143,7 +143,7 @@
                         android:paddingTop="5dp"
                         android:layout_alignParentTop="true"
                         android:layout_centerHorizontal="true"
-                        android:id="@+id/imageView3"/>
+                        />
                 </RelativeLayout>
 
                 <RelativeLayout
@@ -160,9 +160,9 @@
                         android:background="@drawable/state_enabled"
                         android:text="@string/preparation"
                         android:textColor="@color/ultraLight_grey"
-                        android:textSize="10sp"
+                        android:textSize="9sp"
                         android:layout_marginStart="0dp"
-                        android:paddingTop="40dp"
+                        android:paddingTop="28dp"
                         android:layout_marginBottom="16dp"
                         android:onClick="phasePause"
                         />
@@ -179,6 +179,15 @@
                         android:layout_alignBottom="@+id/active_preparation"
                         android:layout_marginBottom="4dp"
                         />
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:srcCompat="@drawable/action_preparation_white"
+                        android:elevation="200dp"
+                        android:paddingTop="5dp"
+                        android:layout_alignParentTop="true"
+                        android:layout_centerHorizontal="true"
+                        />
                 </RelativeLayout>
 
                 <RelativeLayout
@@ -194,9 +203,9 @@
                         android:background="@drawable/button_disabled"
                         android:text="@string/travel"
                         android:textColor="@color/ultra_dark_grey"
-                        android:textSize="10sp"
+                        android:textSize="9sp"
                         android:onClick="phaseTravel"
-                        android:paddingTop="40dp"
+                        android:paddingTop="28dp"
                         android:layout_marginBottom="16dp"
                         />
                     <ekylibre.util.ExtendedChronometer
@@ -212,7 +221,15 @@
                         android:layout_alignBottom="@+id/travel"
                         android:layout_marginBottom="4dp"
                         />
-
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:srcCompat="@drawable/action_travel"
+                        android:elevation="200dp"
+                        android:paddingTop="5dp"
+                        android:layout_alignParentTop="true"
+                        android:layout_centerHorizontal="true"
+                        />
                 </RelativeLayout>
 
                 <RelativeLayout
@@ -229,8 +246,8 @@
                         android:background="@drawable/state_enabled"
                         android:text="@string/travel"
                         android:textColor="@color/ultraLight_grey"
-                        android:textSize="10sp"
-                        android:paddingTop="40dp"
+                        android:textSize="9sp"
+                        android:paddingTop="28dp"
                         android:layout_marginBottom="16dp"
                         android:onClick="phasePause"
                         />
@@ -247,7 +264,15 @@
                         android:layout_alignBottom="@+id/active_travel"
                         android:layout_marginBottom="4dp"
                         />
-
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:srcCompat="@drawable/action_travel_white"
+                        android:elevation="200dp"
+                        android:paddingTop="5dp"
+                        android:layout_alignParentTop="true"
+                        android:layout_centerHorizontal="true"
+                        />
                 </RelativeLayout>
                 <RelativeLayout
                     android:layout_width="0dp"
@@ -262,9 +287,9 @@
                         android:background="@drawable/button_disabled"
                         android:text="@string/intervention"
                         android:textColor="@color/ultra_dark_grey"
-                        android:textSize="10sp"
+                        android:textSize="9sp"
                         android:onClick="phaseIntervention"
-                        android:paddingTop="40dp"
+                        android:paddingTop="28dp"
                         android:layout_marginBottom="16dp"
                         />
                     <ekylibre.util.ExtendedChronometer
@@ -279,6 +304,15 @@
                         android:background="@color/invisible"
                         android:layout_alignBottom="@+id/intervention"
                         android:layout_marginBottom="4dp"
+                        />
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:srcCompat="@drawable/action_intervention"
+                        android:elevation="200dp"
+                        android:paddingTop="5dp"
+                        android:layout_alignParentTop="true"
+                        android:layout_centerHorizontal="true"
                         />
                 </RelativeLayout>
 
@@ -297,8 +331,8 @@
                         android:background="@drawable/state_enabled"
                         android:text="@string/intervention"
                         android:textColor="@color/ultraLight_grey"
-                        android:textSize="10sp"
-                        android:paddingTop="40dp"
+                        android:textSize="9sp"
+                        android:paddingTop="25dp"
                         android:layout_marginBottom="16dp"
                         android:onClick="phasePause"
                         />
@@ -314,6 +348,15 @@
                         android:background="@color/invisible"
                         android:layout_alignBottom="@+id/active_intervention"
                         android:layout_marginBottom="4dp"
+                        />
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:srcCompat="@drawable/action_intervention_white"
+                        android:elevation="200dp"
+                        android:paddingTop="5dp"
+                        android:layout_alignParentTop="true"
+                        android:layout_centerHorizontal="true"
                         />
                 </RelativeLayout>
 

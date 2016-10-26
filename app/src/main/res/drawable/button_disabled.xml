@@ -4,7 +4,7 @@
     <item android:state_pressed="true">
         <shape>
             <solid
-                android:color="#66a65e"/>
+                android:color="#8c66a65e"/>
             <corners
                 android:radius="4dp" />
             <padding
