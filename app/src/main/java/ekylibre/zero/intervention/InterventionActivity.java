@@ -108,6 +108,7 @@ public class InterventionActivity extends UpdatableActivity
     private String stopped_at = null;
     SimpleDateFormat dateFormatter = new SimpleDateFormat(DateConstant.ISO_8601);
     private boolean inProgress = false;
+    private boolean newIntervStarted = false;
 
     @Override
     public void onStart()
@@ -578,6 +579,8 @@ public class InterventionActivity extends UpdatableActivity
 
     private void saveAndExit()
     {
+        if (mNewIntervention && !newIntervStarted)
+            return;
         phasePause(null);
         final AlertDialog.Builder dialog = new AlertDialog.Builder(this);
         dialog.setTitle(R.string.what_to_do);
@@ -617,6 +620,11 @@ public class InterventionActivity extends UpdatableActivity
 
     private void exitInterface()
     {
+        if (mNewIntervention && !newIntervStarted)
+        {
+            super.onBackPressed();
+            return;
+        }
         phasePause(null);
         final AlertDialog.Builder dialog = new AlertDialog.Builder(this);
         dialog.setTitle(R.string.what_to_do);
@@ -732,6 +740,7 @@ public class InterventionActivity extends UpdatableActivity
                                 .setContentTitle(mLastProcedureNatureName)
                                 .setContentText(getString(R.string.running));
                         mNotificationManager.notify(mNotificationID, mNotificationBuilder.build());
+                        newIntervStarted = true;
                     }
                 });
     }
