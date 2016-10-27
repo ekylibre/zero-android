@@ -252,7 +252,6 @@ public class InterventionActivity extends UpdatableActivity
         mStartButton.setVisibility(View.VISIBLE);
     }
 
-
     private void prepareRequest()
     {
         mStartButton.setVisibility(View.GONE);
@@ -260,6 +259,7 @@ public class InterventionActivity extends UpdatableActivity
         mInterventionID = intent.getIntExtra(ZeroContract.Interventions._ID, 0);
         writeInterventionInfo();
         setPausedValues();
+        setNotification();
     }
 
     private void setPausedValues()
@@ -273,7 +273,8 @@ public class InterventionActivity extends UpdatableActivity
         if (curs == null || curs.getCount() == 0)
             return;
         curs.moveToFirst();
-        setTitle(curs.getString(6));
+        mLastProcedureNatureName = curs.getString(6);
+        setTitle(mLastProcedureNatureName);
         diffStuff.setChecked(curs.getInt(1) == 0 ? false : true);
 
         if (curs.getString(0) == null || !curs.getString(0).equals("PAUSE"))
@@ -296,8 +297,6 @@ public class InterventionActivity extends UpdatableActivity
         botId = writeInput(botId);
         botId = writeTool(botId);
     }
-
-
 
     private int writeTarget(int botId)
     {
@@ -498,7 +497,6 @@ public class InterventionActivity extends UpdatableActivity
 
     }
 
-
     public void phaseTravel(View view)
     {
         updateWorkingPeriods(TRAVEL);
@@ -519,8 +517,6 @@ public class InterventionActivity extends UpdatableActivity
         chronoActiveIntervention.stopTimer();
         chronoPreparation.setTime(chronoActivePreparation.getTime());
         chronoIntervention.setTime(chronoActiveIntervention.getTime());
-
-
     }
 
     public void phaseIntervention(View view)
@@ -543,8 +539,6 @@ public class InterventionActivity extends UpdatableActivity
         chronoActivePreparation.stopTimer();
         chronoTravel.setTime(chronoActiveTravel.getTime());
         chronoPreparation.setTime(chronoActivePreparation.getTime());
-
-
     }
 
     public void phasePause(View view)
@@ -567,8 +561,6 @@ public class InterventionActivity extends UpdatableActivity
         chronoPreparation.setTime(chronoActivePreparation.getTime());
         chronoTravel.setTime(chronoActiveTravel.getTime());
         chronoIntervention.setTime(chronoActiveIntervention.getTime());
-
-
     }
 
     @Override
@@ -735,16 +727,21 @@ public class InterventionActivity extends UpdatableActivity
 
                         setTitle(mLastProcedureNatureName);
                         startTracking();
-                        mNotificationBuilder
-                                .setSmallIcon(R.mipmap.ic_stat_notify_running)
-                                .setContentTitle(mLastProcedureNatureName)
-                                .setContentText(getString(R.string.running));
-                        mNotificationManager.notify(mNotificationID, mNotificationBuilder.build());
+                        setNotification();
+
                         newIntervStarted = true;
                     }
                 });
     }
 
+    private void setNotification()
+    {
+        mNotificationBuilder
+                .setSmallIcon(R.mipmap.ic_stat_notify_running)
+                .setContentTitle(mLastProcedureNatureName)
+                .setContentText(getString(R.string.running));
+        mNotificationManager.notify(mNotificationID, mNotificationBuilder.build());
+    }
 
     private void createIntervention()
     {
