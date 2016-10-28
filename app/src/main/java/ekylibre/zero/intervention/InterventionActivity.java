@@ -258,12 +258,14 @@ public class InterventionActivity extends UpdatableActivity
         Intent intent = getIntent();
         mInterventionID = intent.getIntExtra(ZeroContract.Interventions._ID, 0);
         writeInterventionInfo();
-        setPausedValues();
+        Cursor curs = setBasicValues();
+        setPausedValues(curs);
         setNotification();
     }
 
-    private void setPausedValues()
+    private Cursor setBasicValues()
     {
+        startTracking();
         Cursor curs = getContentResolver().query(
                 ZeroContract.Interventions.CONTENT_URI,
                 ZeroContract.Interventions.PROJECTION_PAUSED,
@@ -271,13 +273,17 @@ public class InterventionActivity extends UpdatableActivity
                 null,
                 null);
         if (curs == null || curs.getCount() == 0)
-            return;
+            return (null);
         curs.moveToFirst();
         mLastProcedureNatureName = curs.getString(6);
         setTitle(mLastProcedureNatureName);
         diffStuff.setChecked(curs.getInt(1) == 0 ? false : true);
+        return (curs);
+    }
 
-        if (curs.getString(0) == null || !curs.getString(0).equals("PAUSE"))
+    private void setPausedValues(Cursor curs)
+    {
+        if (curs == null || curs.getString(0) == null || !curs.getString(0).equals("PAUSE"))
             return;
         chronoGeneral.setTime(curs.getInt(2));
         chronoPreparation.setTime(curs.getInt(3));
