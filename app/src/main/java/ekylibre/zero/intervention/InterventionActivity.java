@@ -277,6 +277,7 @@ public class InterventionActivity extends UpdatableActivity
         curs.moveToFirst();
         mLastProcedureNatureName = curs.getString(6);
         setTitle(mLastProcedureNatureName);
+        crumbsCalculator = new CrumbsCalculator(mLastProcedureNature);
         diffStuff.setChecked(curs.getInt(1) == 0 ? false : true);
         return (curs);
     }
