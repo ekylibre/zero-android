@@ -126,7 +126,7 @@ public class InterventionActivity extends UpdatableActivity
     {
         // Inflate the menu items for use in the action bar
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.form, menu);
+        inflater.inflate(R.menu.intervention, menu);
         return (super.onCreateOptionsMenu(menu));
     }
 
@@ -147,6 +147,10 @@ public class InterventionActivity extends UpdatableActivity
         {
             exitInterface();
             return (true);
+        }
+        else if (id == R.id.action_map)
+        {
+            openMap(null);
         }
         return (super.onOptionsItemSelected(item));
     }
@@ -265,7 +269,6 @@ public class InterventionActivity extends UpdatableActivity
 
     private Cursor setBasicValues()
     {
-        startTracking();
         Cursor curs = getContentResolver().query(
                 ZeroContract.Interventions.CONTENT_URI,
                 ZeroContract.Interventions.PROJECTION_PAUSED,
@@ -501,6 +504,7 @@ public class InterventionActivity extends UpdatableActivity
         chronoActiveIntervention.stopTimer();
         chronoTravel.setTime(chronoActiveTravel.getTime());
         chronoIntervention.setTime(chronoActiveIntervention.getTime());
+        startTracking();
 
     }
 
@@ -524,6 +528,8 @@ public class InterventionActivity extends UpdatableActivity
         chronoActiveIntervention.stopTimer();
         chronoPreparation.setTime(chronoActivePreparation.getTime());
         chronoIntervention.setTime(chronoActiveIntervention.getTime());
+        startTracking();
+
     }
 
     public void phaseIntervention(View view)
@@ -546,6 +552,8 @@ public class InterventionActivity extends UpdatableActivity
         chronoActivePreparation.stopTimer();
         chronoTravel.setTime(chronoActiveTravel.getTime());
         chronoPreparation.setTime(chronoActivePreparation.getTime());
+        startTracking();
+
     }
 
     public void phasePause(View view)
@@ -568,6 +576,7 @@ public class InterventionActivity extends UpdatableActivity
         chronoPreparation.setTime(chronoActivePreparation.getTime());
         chronoTravel.setTime(chronoActiveTravel.getTime());
         chronoIntervention.setTime(chronoActiveIntervention.getTime());
+        stopTracking();
     }
 
     @Override
@@ -733,7 +742,6 @@ public class InterventionActivity extends UpdatableActivity
                         mProcedureNature.setText(mLastProcedureNatureName);
 
                         setTitle(mLastProcedureNatureName);
-                        startTracking();
                         setNotification();
 
                         newIntervStarted = true;
@@ -771,6 +779,8 @@ public class InterventionActivity extends UpdatableActivity
 
     public void openMap(View view)
     {
+        if (mNewIntervention && !newIntervStarted)
+            return;
         if (!PermissionManager.internetPermissions(this, this)
                 || !PermissionManager.storagePermissions(this, this)
                 || !PermissionManager.GPSPermissions(this, this))
@@ -780,7 +790,8 @@ public class InterventionActivity extends UpdatableActivity
         startActivity(intent);
     }
 
-    public void stopIntervention(View view) {
+    public void stopIntervention(View view)
+    {
         mMapButton.setVisibility(View.GONE);
         mProcedureNature.setVisibility(View.INVISIBLE);
         mStartButton.setVisibility(View.VISIBLE);
@@ -844,6 +855,7 @@ public class InterventionActivity extends UpdatableActivity
 
     private void startTracking(long interval)
     {
+        Log.d(TAG, "===Strat Tracking !===");
         if (!PermissionManager.GPSPermissions(this, this))
             return;
         mLocationManager.requestLocationUpdates(mLocationProvider, interval, 0, mTrackingListener);
@@ -851,6 +863,7 @@ public class InterventionActivity extends UpdatableActivity
 
     private void stopTracking()
     {
+        Log.d(TAG, "===Stop Tracking !===");
         if (!PermissionManager.GPSPermissions(this, this))
             return;
         mLocationManager.removeUpdates(mTrackingListener);
