@@ -109,6 +109,7 @@ public class InterventionActivity extends UpdatableActivity
     SimpleDateFormat dateFormatter = new SimpleDateFormat(DateConstant.ISO_8601);
     private boolean inProgress = false;
     private boolean newIntervStarted = false;
+    private boolean safeDestroy = false;
 
     @Override
     public void onStart()
@@ -597,6 +598,7 @@ public class InterventionActivity extends UpdatableActivity
             @Override
             public void onClick(DialogInterface dialogInterface, int i)
             {
+                safeDestroy = true;
                 switchStateToFinished();
                 InterventionActivity.super.onBackPressed();
             }
@@ -617,6 +619,7 @@ public class InterventionActivity extends UpdatableActivity
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i)
                 {
+                    safeDestroy = true;
                     saveCurrentStateOfIntervention();
                     InterventionActivity.super.onBackPressed();
                 }
@@ -641,6 +644,7 @@ public class InterventionActivity extends UpdatableActivity
             @Override
             public void onClick(DialogInterface dialogInterface, int i)
             {
+                safeDestroy = true;
                 cleanCurrentSave();
                 InterventionActivity.super.onBackPressed();
             }
@@ -665,6 +669,10 @@ public class InterventionActivity extends UpdatableActivity
         getContentResolver().delete(
                 ZeroContract.WorkingPeriods.CONTENT_URI,
                 ZeroContract.WorkingPeriods.FK_INTERVENTION + " == " + mInterventionID,
+                null);
+        getContentResolver().delete(
+                ZeroContract.Crumbs.CONTENT_URI,
+                ZeroContract.Crumbs.FK_INTERVENTION + " == " + mInterventionID,
                 null);
         values.put(ZeroContract.Interventions.GENERAL_CHRONO, 0);
         values.put(ZeroContract.Interventions.INTERVENTION_CHRONO, 0);
@@ -712,6 +720,8 @@ public class InterventionActivity extends UpdatableActivity
     @Override
     public void onDestroy()
     {
+        if (!safeDestroy)
+            saveCurrentStateOfIntervention();
         stopIntervention(null);
         super.onDestroy();
     }
@@ -792,12 +802,9 @@ public class InterventionActivity extends UpdatableActivity
 
     public void stopIntervention(View view)
     {
-        mMapButton.setVisibility(View.GONE);
-        mProcedureNature.setVisibility(View.INVISIBLE);
-        mStartButton.setVisibility(View.VISIBLE);
         this.stopTracking();
 
-        int lastCrumbID = query_last_crumb_id();
+/*        int lastCrumbID = query_last_crumb_id();
         if (PermissionManager.GPSPermissions(this, this) && lastCrumbID != 0)
         {
             ContentValues values = new ContentValues();
@@ -806,7 +813,7 @@ public class InterventionActivity extends UpdatableActivity
                     values,
                     ZeroContract.CrumbsColumns._ID + " == " + lastCrumbID,
                     null);
-        }
+        }*/
         setTitle(R.string.new_intervention);
         mNotificationBuilder
                 .setSmallIcon(R.mipmap.ic_stat_notify)

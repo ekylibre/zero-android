@@ -4,6 +4,7 @@ import android.accounts.Account;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.location.Location;
 import android.location.LocationManager;
@@ -13,6 +14,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -33,7 +35,8 @@ public class MapsActivity extends UpdatableActivity implements OnMapReadyCallbac
     private Marker  currentMarker = null;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
@@ -44,7 +47,8 @@ public class MapsActivity extends UpdatableActivity implements OnMapReadyCallbac
     }
 
     @Override
-    public void onMapReady(GoogleMap googleMap) {
+    public void onMapReady(GoogleMap googleMap)
+    {
         mMap = googleMap;
 
         if (mMap == null)
@@ -70,7 +74,8 @@ public class MapsActivity extends UpdatableActivity implements OnMapReadyCallbac
 
     }
 
-    private Cursor queryMarkers(int interventionID) {
+    private Cursor queryMarkers(int interventionID)
+    {
         if (interventionID == 0)
             return (null);
         String[] mProjectionMarkers = {ZeroContract.Crumbs.LATITUDE, ZeroContract.Crumbs.LONGITUDE};
@@ -78,7 +83,7 @@ public class MapsActivity extends UpdatableActivity implements OnMapReadyCallbac
         Cursor cursorMarkers = getContentResolver().query(
                 ZeroContract.Crumbs.CONTENT_URI,
                 mProjectionMarkers,
-                "\"" + ZeroContract.Plants.USER + "\"" + " LIKE " + "\"" + mAccount.name + "\""
+                ZeroContract.Plants.USER + " LIKE " + "\"" + mAccount.name + "\""
                         + " AND " + ZeroContract.Crumbs.FK_INTERVENTION + " == " + interventionID,
                 null,
                 null);
@@ -103,8 +108,9 @@ public class MapsActivity extends UpdatableActivity implements OnMapReadyCallbac
         }
     }
 
-    private void drawLines(ArrayList<LatLng> pointList) {
-        PolylineOptions options = new PolylineOptions().width(5).color(Color.BLUE).geodesic(true);
+    private void drawLines(ArrayList<LatLng> pointList)
+    {
+        PolylineOptions options = new PolylineOptions().width(10).color(Color.BLUE).geodesic(true);
         int i = -1;
         while (++i < pointList.size())
         {
@@ -125,7 +131,8 @@ public class MapsActivity extends UpdatableActivity implements OnMapReadyCallbac
         if (mMap == null)
             return;
         currentMarker = mMap.addMarker(new MarkerOptions()
-                //.icon(BitmapDescriptorFactory.fromBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.pos_marker)))
+//                .icon(BitmapDescriptorFactory.fromBitmap(
+//                        BitmapFactory.decodeResource(getResources(), R.drawable.pos_marker)))
                 .position(new LatLng(latitude, longitude))
                 .title(""));
         //mMap.moveCamera(CameraUpdateFactory.newLatLng(new LatLng(latitude, longitude)));

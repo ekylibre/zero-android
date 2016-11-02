@@ -39,6 +39,17 @@ public class CrumbsCalculator
 
     public boolean isCrumbAccurate(Location location, String type, Bundle metadata)
     {
+        //Try to skip the algo verif to see what happen ?!
+        if (location.getAccuracy() < MAX_ACCURACY)
+        {
+            setLast(location, metadata, type);
+            return (true);
+        }
+        else
+            return (false);
+
+
+/*
         if (location.getAccuracy() > MAX_ACCURACY && type.equals("point"))
         {
             vectorCoef++;
@@ -83,6 +94,7 @@ public class CrumbsCalculator
             }
         }
         return (false);
+*/
     }
 
     public void setLast(Location location, Bundle metadata, String type)
