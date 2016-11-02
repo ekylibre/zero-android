@@ -109,7 +109,6 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
             pullPlantDensityAbaci(account,
                 extras, authority, provider, syncResult);
             pullPlants(account, extras, authority, provider, syncResult);
-            pushCrumbs(account, extras, authority, provider, syncResult);
             pushIssues(account, extras, authority, provider, syncResult);
             pushPlantCounting(account, extras, authority, provider, syncResult);
             pullIntervention(account, extras, authority, provider, syncResult);
@@ -133,79 +132,6 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
     ** Following methods are used to transfer data between zero and ekylibre instance
     ** There are POST and GET call
     */
-    public void pushCrumbs(Account account, Bundle extras, String authority,
-                            ContentProviderClient provider, SyncResult syncResult)
-    {
-        if (BuildConfig.DEBUG) Log.i(TAG, "Beginning network synchronization");
-        // Get crumbs from intervention (content) provider
-        Cursor cursor = mContentResolver.query(ZeroContract.Crumbs.CONTENT_URI,
-                ZeroContract.Crumbs.PROJECTION_ALL,
-                ZeroContract.CrumbsColumns.USER + " LIKE" + " \"" + account.name + "\""
-                        + " AND " + ZeroContract.CrumbsColumns.SYNCED + " == " + 0,
-                null,
-                ZeroContract.Crumbs.SORT_ORDER_DEFAULT);
-
-        try
-        {
-            if (cursor.getCount() > 0)
-            {
-                Instance instance = getInstance(account);
-                cursor.moveToFirst();
-                while (!cursor.isAfterLast())
-                {
-                    postNewCrumb(cursor, instance);
-                    cursor.moveToNext();
-                }
-            }
-            else
-            {
-                if (BuildConfig.DEBUG) Log.i(TAG, "Nothing to sync");
-            }
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-        }
-
-        if (BuildConfig.DEBUG) Log.i(TAG, "Finish network synchronization");
-    }
-
-    private void    postNewCrumb(Cursor cursor, Instance instance)
-            throws JSONException, IOException, HTTPException
-    {
-        if (BuildConfig.DEBUG) Log.i(TAG, "New crumb");
-        // Post it to ekylibre
-        JSONObject attributes = new JSONObject();
-        attributes.put("nature", cursor.getString(1));
-        attributes.put("geolocation", "SRID=4326; POINT(" + Double.toString(cursor.getDouble(3)) + " " + Double.toString(cursor.getDouble(2)) + ")");
-        SimpleDateFormat parser = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
-        attributes.put("read_at", parser.format(new Date(cursor.getLong(4))));
-        attributes.put("accuracy", cursor.getString(5));
-        attributes.put("device_uid", "android:" + Secure.getString(mContentResolver, Secure.ANDROID_ID));
-        JSONObject hash = new JSONObject();
-        Uri metadata = Uri.parse("http://domain.tld?" + cursor.getString(6));
-        Set<String> keys = metadata.getQueryParameterNames();
-        if (keys.size() > 0)
-        {
-            for (String key : keys)
-            {
-                if (!key.equals("null"))
-                {
-                    hash.put(key, metadata.getQueryParameter(key));
-                }
-            }
-            if (hash.length() > 0)
-            {
-                attributes.put("metadata", hash);
-            }
-        }
-
-        long id = CrumbPoster.create(instance, attributes);
-        // Marks them as synced
-        ContentValues values = new ContentValues();
-        values.put(ZeroContract.CrumbsColumns.SYNCED, 1);
-        mContentResolver.update(Uri.withAppendedPath(ZeroContract.Crumbs.CONTENT_URI, Long.toString(cursor.getLong(0))), values, null, null);
-    }
 
     public void pushIssues(Account account, Bundle extras, String authority, ContentProviderClient
             provider, SyncResult syncResult)
@@ -674,6 +600,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
         attributes.put("device_uid", "android:" + Secure.getString(mContentResolver, Secure.ANDROID_ID));
 
         attributes.put("working_periods", createWorkingPeriods(cursorIntervention.getInt(0)));
+        attributes.put("crumbs", createCrumbs(cursorIntervention.getInt(0)));
 
         // TODO :: put crumbs here
 
@@ -685,6 +612,70 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
 
         //mContentResolver.update(Uri.withAppendedPath(ZeroContract.Interventions.CONTENT_URI, Long
         //        .toString(cursorIntervention.getLong(0))), values, null, null);
+    }
+
+    public JSONArray createCrumbs(int idIntervention)
+    {
+        Cursor cursor = mContentResolver.query(ZeroContract.Crumbs.CONTENT_URI,
+                ZeroContract.Crumbs.PROJECTION_ALL,
+                ZeroContract.Crumbs.FK_INTERVENTION + " == " +  idIntervention,
+                null,
+                ZeroContract.Crumbs.SORT_ORDER_DEFAULT);
+
+        try
+        {
+            if (cursor != null && cursor.getCount() > 0)
+            {
+                JSONArray crumbsArray = new JSONArray();
+                while (cursor.moveToNext())
+                {
+                    crumbsArray.put(addNewCrumb(cursor));
+                }
+                return (crumbsArray);
+            }
+            else
+            if (BuildConfig.DEBUG) Log.i(TAG, "No crumbs for this intervention");
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        return (null);
+    }
+
+    private JSONObject    addNewCrumb(Cursor cursor)
+            throws JSONException, IOException, HTTPException
+    {
+        if (BuildConfig.DEBUG) Log.i(TAG, "New crumb");
+        // Post it to ekylibre
+        JSONObject attributes = new JSONObject();
+        attributes.put("nature", cursor.getString(1));
+        attributes.put("geolocation", "SRID=4326; POINT(" + Double.toString(cursor.getDouble(3)) + " " + Double.toString(cursor.getDouble(2)) + ")");
+        SimpleDateFormat parser = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
+        attributes.put("read_at", parser.format(new Date(cursor.getLong(4))));
+        attributes.put("accuracy", cursor.getString(5));
+        attributes.put("device_uid", "android:" + Secure.getString(mContentResolver, Secure.ANDROID_ID));
+        JSONObject hash = new JSONObject();
+        Uri metadata = Uri.parse("http://domain.tld?" + cursor.getString(6));
+        Set<String> keys = metadata.getQueryParameterNames();
+        if (keys.size() > 0)
+        {
+            for (String key : keys)
+            {
+                if (!key.equals("null"))
+                {
+                    hash.put(key, metadata.getQueryParameter(key));
+                }
+            }
+            if (hash.length() > 0)
+            {
+                attributes.put("metadata", hash);
+            }
+        }
+        return (attributes);
+/*        ContentValues values = new ContentValues();
+        values.put(ZeroContract.CrumbsColumns.SYNCED, 1);
+        mContentResolver.update(Uri.withAppendedPath(ZeroContract.Crumbs.CONTENT_URI, Long.toString(cursor.getLong(0))), values, null, null);*/
     }
 
     private JSONArray createWorkingPeriods(int interventionID)
