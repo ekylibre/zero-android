@@ -542,8 +542,12 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
                 ZeroContract.Interventions.CONTENT_URI,
                 ZeroContract.Interventions.PROJECTION_POST,
                 ZeroContract.Interventions.USER + " LIKE " + "\"" + account.name + "\""
-                        + " AND " + ZeroContract.Interventions.STATE + " LIKE " +
-                        "\"" + InterventionActivity.STATUS_FINISHED + "\"",
+                        + " AND " + "(" + ZeroContract.Interventions.STATE + " LIKE " +
+                        "\"" + InterventionActivity.STATUS_FINISHED + "\"" +
+                        " OR " + ZeroContract.Interventions.STATE + " LIKE " +
+                        "\"" + InterventionActivity.STATUS_PAUSE + "\"" +
+                        " OR " + ZeroContract.Interventions.STATE + " LIKE " +
+                        "\"" + InterventionActivity.STATUS_IN_PROGRESS + "\"" + ")",
                 null,
                 ZeroContract.Interventions.SORT_ORDER_DEFAULT);
 
@@ -583,6 +587,9 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
             throws JSONException, IOException, HTTPException
     {
         if (BuildConfig.DEBUG) Log.i(TAG, "New intervention");
+        if (BuildConfig.DEBUG) Log.i(TAG, "##");
+        if (BuildConfig.DEBUG) Log.i(TAG, cursorIntervention.getString(4));
+        if (BuildConfig.DEBUG) Log.i(TAG, "##");
 
         // Post it to ekylibre
         JSONObject attributes = new JSONObject();
@@ -601,9 +608,6 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
 
         attributes.put("working_periods", createWorkingPeriods(cursorIntervention.getInt(0)));
         attributes.put("crumbs", createCrumbs(cursorIntervention.getInt(0)));
-
-        // TODO :: put crumbs here
-
 
         long id = Intervention.create(instance, attributes);
         // Marks them as synced
@@ -673,9 +677,6 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
             }
         }
         return (attributes);
-/*        ContentValues values = new ContentValues();
-        values.put(ZeroContract.CrumbsColumns.SYNCED, 1);
-        mContentResolver.update(Uri.withAppendedPath(ZeroContract.Crumbs.CONTENT_URI, Long.toString(cursor.getLong(0))), values, null, null);*/
     }
 
     private JSONArray createWorkingPeriods(int interventionID)
