@@ -10,7 +10,7 @@ import ekylibre.zero.BuildConfig;
 
 /**************************************
  * Created by pierre on 8/11/16.      *
- * ekylibre.zero for zero-android    *
+ * ekylibre.zero for zero-android     *
  *************************************/
 public class CrumbsCalculator
 {
@@ -40,6 +40,7 @@ public class CrumbsCalculator
     public boolean isCrumbAccurate(Location location, String type, Bundle metadata)
     {
         //Try to skip the algo verif to see what happen ?!
+/*
         if (location.getAccuracy() < MAX_ACCURACY)
         {
             setLast(location, metadata, type);
@@ -48,8 +49,8 @@ public class CrumbsCalculator
         else
             return (false);
 
+*/
 
-/*
         if (location.getAccuracy() > MAX_ACCURACY && type.equals("point"))
         {
             vectorCoef++;
@@ -94,7 +95,6 @@ public class CrumbsCalculator
             }
         }
         return (false);
-*/
     }
 
     public void setLast(Location location, Bundle metadata, String type)
@@ -132,7 +132,8 @@ public class CrumbsCalculator
 
     private boolean checkCrumb(Vector vector)
     {
-        if ((vector.norm < averageVector.norm * (1 + 0.90) && vector.norm > averageVector.norm * (1 - 0.80)))
+        if ((vector.norm < averageVector.norm * (1 + 4.00)/* && vector.norm > averageVector.norm *
+                (1 - 0.80)*/))
         {
             currVector.copyVector(vector);
             vectorCoef = 1.0;

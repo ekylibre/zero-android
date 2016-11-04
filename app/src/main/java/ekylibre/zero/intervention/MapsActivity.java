@@ -110,7 +110,7 @@ public class MapsActivity extends UpdatableActivity implements OnMapReadyCallbac
 
     private void drawLines(ArrayList<LatLng> pointList)
     {
-        PolylineOptions options = new PolylineOptions().width(10).color(Color.BLUE).geodesic(true);
+        PolylineOptions options = new PolylineOptions().width(7).color(Color.BLUE).geodesic(true);
         int i = -1;
         while (++i < pointList.size())
         {
