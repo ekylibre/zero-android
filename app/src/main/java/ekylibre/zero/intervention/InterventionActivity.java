@@ -225,7 +225,6 @@ public class InterventionActivity extends UpdatableActivity
         else
         {
             createProcedureChooser();
-            createIntervention();
             prepareSimpleIntervention();
         }
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.close);
@@ -755,6 +754,7 @@ public class InterventionActivity extends UpdatableActivity
                         setNotification();
 
                         newIntervStarted = true;
+                        createIntervention();
                     }
                 });
     }
@@ -775,6 +775,11 @@ public class InterventionActivity extends UpdatableActivity
         values.put(ZeroContract.InterventionsColumns.USER, AccountTool.getCurrentAccount(this).name);
         values.put(ZeroContract.InterventionsColumns.EK_ID, -1);
         values.put(ZeroContract.Interventions.UUID, UUID.randomUUID().toString());
+        values.put(ZeroContract.Interventions.TYPE, "record");
+        values.put(ZeroContract.Interventions.PROCEDURE_NAME, mLastProcedureNature);
+
+        values.put(ZeroContract.Interventions.STARTED_AT, DateConstant.getCurrentDateFormatted());
+
         getContentResolver().insert(ZeroContract.Interventions.CONTENT_URI, values);
         Cursor cursor = getContentResolver().query(ZeroContract.Interventions.CONTENT_URI, new String[]{ZeroContract.Interventions._ID}, null, null, null);
         if (cursor == null || !cursor.moveToLast())
@@ -804,7 +809,15 @@ public class InterventionActivity extends UpdatableActivity
     {
         this.stopTracking();
 
-/*        int lastCrumbID = query_last_crumb_id();
+        if (mNewIntervention)
+        {
+            ContentValues values = new ContentValues();
+            getContentResolver().update(ZeroContract.Interventions.CONTENT_URI,
+                    values,
+                    mInterventionID + " == " + ZeroContract.Interventions._ID,
+                    null);
+        }
+        /*        int lastCrumbID = query_last_crumb_id();
         if (PermissionManager.GPSPermissions(this, this) && lastCrumbID != 0)
         {
             ContentValues values = new ContentValues();
