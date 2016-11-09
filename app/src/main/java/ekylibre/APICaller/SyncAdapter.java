@@ -658,7 +658,6 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
         SimpleDateFormat parser = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
         attributes.put("read_at", parser.format(new Date(cursor.getLong(4))));
         attributes.put("accuracy", cursor.getString(5));
-        attributes.put("device_uid", "android:" + Secure.getString(mContentResolver, Secure.ANDROID_ID));
         JSONObject hash = new JSONObject();
         Uri metadata = Uri.parse("http://domain.tld?" + cursor.getString(6));
         Set<String> keys = metadata.getQueryParameterNames();

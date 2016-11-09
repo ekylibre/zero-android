@@ -37,7 +37,8 @@ public final class ZeroContract {
         String UUID = "uuid";
     }
 
-    public interface InterventionParametersColumns extends BaseColumns {
+    public interface InterventionParametersColumns extends BaseColumns
+    {
         String TABLE_NAME = "intervention_parameters";
         String FK_INTERVENTION = "fk_intervention";
         String EK_ID = "ek_id";
@@ -46,6 +47,7 @@ public final class ZeroContract {
         String NAME = "name";
         String PRODUCT_NAME = "product_name";
         String PRODUCT_ID = "product_id";
+        String SHAPE = "shape";
     }
 
     public interface WorkingPeriodsColumns extends BaseColumns {
