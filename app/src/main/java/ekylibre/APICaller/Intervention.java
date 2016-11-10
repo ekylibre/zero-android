@@ -63,6 +63,21 @@ public class Intervention
         return array;
     }
 
+    public static String getGeoJson(Instance instance, int ek_id)
+    {
+        JSONObject json = null;
+        try
+        {
+            json = instance.getJSONObject("/api/v1/intervention_targets/" + ek_id, "");
+            return (json.getString("working_zone"));
+
+        } catch (JSONException | IOException | HTTPException e)
+        {
+            e.printStackTrace();
+        }
+        return (null);
+    }
+
     public Intervention(JSONObject object) throws JSONException
     {
         if (BuildConfig.DEBUG) Log.d("zero", "Object Intervention : " + object.toString());

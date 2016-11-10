@@ -164,7 +164,7 @@ public class CrumbsCalculator
             Vector vector = listVector.get(i);
             newX += vector.x;
             newY += vector.y;
-            if (BuildConfig.DEBUG) Log.d(TAG, "Norm[" + i + "] = " + vector.norm);
+            //if (BuildConfig.DEBUG) Log.d(TAG, "Norm[" + i + "] = " + vector.norm);
         }
         newX /= i;
         newY /= i;

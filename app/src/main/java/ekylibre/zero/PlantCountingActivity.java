@@ -215,7 +215,7 @@ public class PlantCountingActivity extends UpdatableActivity  {
         mAbaqueTab = new CharSequence[cursorAbacus.getCount() + 1];
         mAbaqueTab[0] = getResources().getString(R.string.select_abacus);
         while (cursorAbacus.moveToNext()) {
-            Log.d("zero", "name : " + cursorAbacus.getString(0));
+            //Log.d("zero", "name : " + cursorAbacus.getString(0));
             mAbaqueTab[itName] = cursorAbacus.getString(0);
             itName++;
         }
@@ -255,7 +255,7 @@ public class PlantCountingActivity extends UpdatableActivity  {
 
         mPlantID[0] = 0;
         while (cursorPlantId.moveToNext()) {
-            Log.d(TAG, "id : " + cursorPlantId.getString(0));
+            //Log.d(TAG, "id : " + cursorPlantId.getString(0));
             mPlantID[itId] = cursorPlantId.getInt(0);
             itId++;
         }
@@ -267,10 +267,10 @@ public class PlantCountingActivity extends UpdatableActivity  {
         mPlantNameTab[0] = getResources().getString(R.string.select_plant);
         mPlantEK_IDTab[0] = 0;
         while (cursorPlantName.moveToNext()) {
-            Log.d(TAG, "name : " + cursorPlantName.getString(0));
+            //Log.d(TAG, "name : " + cursorPlantName.getString(0));
             mPlantNameTab[itName] = cursorPlantName.getString(0);
             mPlantEK_IDTab[itName] = cursorPlantName.getInt(1);
-            Log.d(TAG, "tablename[" + itName + "] : " + mPlantNameTab[itName]);
+            //Log.d(TAG, "tablename[" + itName + "] : " + mPlantNameTab[itName]);
             itName++;
         }
     }

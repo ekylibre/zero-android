@@ -188,6 +188,7 @@ public final class ZeroContract {
 
         public static final String[] PROJECTION_ALL = {_ID};
         public static final String[] PROJECTION_NONE = {_ID};
+        public static final String[] PROJECTION_SHAPE = {SHAPE};
         public static final String[] PROJECTION_TARGET = {_ID, PRODUCT_NAME};
         public static final String[] PROJECTION_TARGET_FULL = {_ID, PRODUCT_NAME, LABEL, NAME};
         public static final String[] PROJECTION_INPUT_FULL = {_ID, PRODUCT_NAME, LABEL, NAME};

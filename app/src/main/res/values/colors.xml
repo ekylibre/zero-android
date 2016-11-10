@@ -11,6 +11,7 @@
     <color name="transparent">#00000000</color>
     <color name="invisible">#00000000</color>
     <color name="basic_green">#66A65E</color>
+    <color name="light_green">#aad2a5</color>
     <color name="gradient_green">#5d9755</color>
     <color name="brand_secondary">#66a65e</color>
     <color name="brand_secondary_dark">#4a7945</color>
@@ -26,6 +27,7 @@
     <color name="ultra_dark_grey">#333333</color>
     <color name="event_blue">#244b8f</color>
     <color name="dark_green">#387e40</color>
+    <color name="ultra_dark_green">#16331a</color>
     <color name="not_so_dark_dark">#555555</color>
 
 
