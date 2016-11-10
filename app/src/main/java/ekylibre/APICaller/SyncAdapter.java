@@ -441,12 +441,12 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
         {
             Intervention intervention = interventionIterator.next();
             insertIntervention(intervention, account);
-            insertInterventionParams(intervention, account);
+            insertInterventionParams(intervention, account, instance);
         }
         if (BuildConfig.DEBUG) Log.i(TAG, "Finish network intervention synchronization");
     }
 
-    private void insertInterventionParams(Intervention intervention, Account account)
+    private void insertInterventionParams(Intervention intervention, Account account, Instance instance)
     {
         ContentValues cv = new ContentValues();
         int interventionID = getInterventionID(account, intervention.getId());
@@ -466,6 +466,12 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
                 cv.put(ZeroContract.InterventionParameters.LABEL, intervention.getParamLabel(i));
                 cv.put(ZeroContract.InterventionParameters.PRODUCT_NAME, intervention.getProductName(i));
                 cv.put(ZeroContract.InterventionParameters.PRODUCT_ID, intervention.getProductID(i));
+                if (intervention.getParamRole(i).equals("target"))
+                {
+                    String json = Intervention.getGeoJson(instance, intervention.getParamID(i));
+                    if (json != null)
+                        cv.put(ZeroContract.InterventionParameters.SHAPE, json);
+                }
                 mContentResolver.insert(ZeroContract.InterventionParameters.CONTENT_URI, cv);
             }
             catch (JSONException jsonex)

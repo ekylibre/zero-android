@@ -812,6 +812,7 @@ public class InterventionActivity extends UpdatableActivity
         if (mNewIntervention)
         {
             ContentValues values = new ContentValues();
+            values.put(ZeroContract.Interventions.STOPPED_AT, DateConstant.getCurrentDateFormatted());
             getContentResolver().update(ZeroContract.Interventions.CONTENT_URI,
                     values,
                     mInterventionID + " == " + ZeroContract.Interventions._ID,
@@ -922,6 +923,13 @@ public class InterventionActivity extends UpdatableActivity
         Intent intent = new Intent(UpdatableActivity.PING);
         intent.putExtra(TrackingListenerWriter.LATITUDE, location.getLatitude());
         intent.putExtra(TrackingListenerWriter.LONGITUDE, location.getLongitude());
+        intent.putExtra(this._interventionID, mInterventionID);
+        sendBroadcast(intent);
+    }
+
+    private void pingMap()
+    {
+        Intent intent = new Intent(UpdatableActivity.PING);
         intent.putExtra(this._interventionID, mInterventionID);
         sendBroadcast(intent);
     }

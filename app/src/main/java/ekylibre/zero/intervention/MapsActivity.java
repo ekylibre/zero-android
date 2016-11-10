@@ -9,6 +9,7 @@ import android.graphics.Color;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.util.Log;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -19,6 +20,13 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
+import com.google.maps.android.geojson.GeoJsonLayer;
+import com.google.maps.android.geojson.GeoJsonPointStyle;
+import com.google.maps.android.geojson.GeoJsonPolygon;
+import com.google.maps.android.geojson.GeoJsonPolygonStyle;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 
@@ -27,12 +35,16 @@ import ekylibre.zero.R;
 import ekylibre.util.AccountTool;
 import ekylibre.util.PermissionManager;
 import ekylibre.util.UpdatableActivity;
+import ekylibre.zero.home.Zero;
 
 public class MapsActivity extends UpdatableActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
     private Account mAccount;
     private Marker  currentMarker = null;
+    private int     interventionID = -1;
+    private ArrayList<GeoJsonLayer> arrayLayers = null;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -44,6 +56,7 @@ public class MapsActivity extends UpdatableActivity implements OnMapReadyCallbac
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
         mAccount = AccountTool.getCurrentAccount(this);
+        interventionID = getIntent().getIntExtra(InterventionActivity._interventionID, 0);
     }
 
     @Override
@@ -64,14 +77,68 @@ public class MapsActivity extends UpdatableActivity implements OnMapReadyCallbac
         if (lastKnownLocation != null)
             mMap.moveCamera(CameraUpdateFactory.newLatLng(new LatLng(lastKnownLocation.getLatitude(), lastKnownLocation.getLongitude())));
         mMap.animateCamera( CameraUpdateFactory.zoomTo( 17.0f ) );
+        setPolygonLayers();
     }
 
+    private void setPolygonLayers()
+    {
+        Log.d("MAP", "Setting Polygons");
+        Cursor curs = getContentResolver().query(ZeroContract.InterventionParameters.CONTENT_URI,
+                ZeroContract.InterventionParameters.PROJECTION_SHAPE,
+                ZeroContract.InterventionParameters.FK_INTERVENTION + " == " + interventionID,
+                null,
+                null);
+        if (curs == null || curs.getCount() == 0)
+        {
+            Log.d("MAP", "Baaaaaaaaaaaaaaaaaaaaaad");
+            return;
+        }
+        arrayLayers = new ArrayList<>();
+        while (curs.moveToNext())
+        {
+            try
+            {
+                JSONObject json;
+                String geoJson = curs.getString(0);
+                if (geoJson != null)
+                {
+                    Log.d("MAP", geoJson);
+                    json = new JSONObject(geoJson);
+                    GeoJsonLayer layer = new GeoJsonLayer(mMap, json);
+                    arrayLayers.add(layer);
+                    setPolygonGrey(layer);
+                }
+            } catch (JSONException e)
+            {
+                e.printStackTrace();
+            }
+        }
+        Log.d("MAP", "OKAAAAAAAAAAAAAAAAAAAAAAAAAY");
+    }
+
+    private void setPolygonGreen(GeoJsonLayer layer)
+    {
+        GeoJsonPolygonStyle polyStyle = layer.getDefaultPolygonStyle();
+        polyStyle.setFillColor(getResources().getColor(R.color.light_green));
+        polyStyle.setStrokeColor(getResources().getColor(R.color.dark_green));
+        polyStyle.setStrokeWidth(3f);
+        layer.addLayerToMap();
+    }
+
+    private void setPolygonGrey(GeoJsonLayer layer)
+    {
+        GeoJsonPolygonStyle polyStyle = layer.getDefaultPolygonStyle();
+        polyStyle.setFillColor(getResources().getColor(R.color.basic_grey));
+        polyStyle.setStrokeColor(getResources().getColor(R.color.ultra_dark_grey));
+        polyStyle.setStrokeWidth(3f);
+        layer.addLayerToMap();
+    }
 
     @Override
     public void onPing(Intent intent)
     {
-        resetPrecedentMarkers(intent.getIntExtra(InterventionActivity._interventionID, 0));
-
+        interventionID = intent.getIntExtra(InterventionActivity._interventionID, 0);
+        resetPrecedentMarkers(interventionID);
     }
 
     private Cursor queryMarkers(int interventionID)

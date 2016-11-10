@@ -332,5 +332,118 @@ public class Instance
     }
 
 
+    public JSONObject getJSONObject(String path, String params) throws JSONException,
+            ClientProtocolException, IOException, HTTPException
+    {
+        if (params == null)
+            params = "";
+        List<Header> headersList = new ArrayList<Header>();
+        headersList.add(new BasicHeader("Authorization", "simple-token " + mEmail + " " + mToken));
+        Header[] headers = new Header[headersList.size()];
+        headersList.toArray(headers);
+
+        if (BuildConfig.DEBUG) Log.d("POST Instance URL", "URL = " + mUrl);
+        if (BuildConfig.DEBUG) Log.d("POST parameters", params);
+
+        return Instance.getJSONObject(mUrl + path + params, headers);
+    }
+
+
+    public static JSONObject getJSONObject(String url, Header[] headers) throws JSONException,
+            ClientProtocolException, IOException, HTTPException
+    {
+        if (BuildConfig.DEBUG) Log.d("zero", "GET " + url);
+
+        // Create a new HttpClient and Get Header
+        HttpClient httpClient = new DefaultHttpClient();
+        HttpGet httpGet = new HttpGet(url);
+        if (BuildConfig.DEBUG) Log.i(TAG, "Header => " + headers[0].toString());
+        if (headers != null)
+        {
+            httpGet.setHeaders(headers);
+        }
+        httpGet.setHeader("Content-type", "application/json");
+
+        InputStream inputStream = null;
+        String result = null;
+        // try {
+/*        if (params != null)
+        {
+            httpGet.setParams(new HTT);
+        }*/
+
+        // // Execute HTTP Get Request
+        HttpResponse response = httpClient.execute(httpGet);
+
+        // Check status
+        StatusLine statusLine = response.getStatusLine();
+        int statusCode = statusLine.getStatusCode();
+        switch(statusLine.getStatusCode())
+        {
+            case HttpStatus.SC_BAD_REQUEST:
+            case HttpStatus.SC_UNAUTHORIZED:
+            case HttpStatus.SC_PAYMENT_REQUIRED:
+            case HttpStatus.SC_FORBIDDEN:
+            case HttpStatus.SC_NOT_FOUND:
+            case HttpStatus.SC_METHOD_NOT_ALLOWED:
+            case HttpStatus.SC_NOT_ACCEPTABLE:
+            case HttpStatus.SC_PROXY_AUTHENTICATION_REQUIRED:
+            case HttpStatus.SC_REQUEST_TIMEOUT:
+            case HttpStatus.SC_CONFLICT:
+            case HttpStatus.SC_GONE:
+            case HttpStatus.SC_LENGTH_REQUIRED:
+            case HttpStatus.SC_PRECONDITION_FAILED:
+            case HttpStatus.SC_REQUEST_TOO_LONG:
+            case HttpStatus.SC_REQUEST_URI_TOO_LONG:
+            case HttpStatus.SC_UNSUPPORTED_MEDIA_TYPE:
+            case HttpStatus.SC_REQUESTED_RANGE_NOT_SATISFIABLE:
+            case HttpStatus.SC_EXPECTATION_FAILED:
+            case HttpStatus.SC_INSUFFICIENT_SPACE_ON_RESOURCE:
+            case HttpStatus.SC_METHOD_FAILURE:
+            case HttpStatus.SC_UNPROCESSABLE_ENTITY:
+            case HttpStatus.SC_LOCKED:
+            case HttpStatus.SC_FAILED_DEPENDENCY:
+                throw new UnauthorizedException();
+            case HttpStatus.SC_INTERNAL_SERVER_ERROR:
+            case HttpStatus.SC_NOT_IMPLEMENTED:
+            case HttpStatus.SC_BAD_GATEWAY:
+            case HttpStatus.SC_SERVICE_UNAVAILABLE:
+            case HttpStatus.SC_GATEWAY_TIMEOUT:
+            case HttpStatus.SC_HTTP_VERSION_NOT_SUPPORTED:
+            case HttpStatus.SC_INSUFFICIENT_STORAGE:
+                throw new ServerErrorException();
+        }
+
+        HttpEntity entity = response.getEntity();
+        inputStream = entity.getContent();
+        // // json is UTF-8 by simple
+        BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream, "UTF-8"), 8);
+        StringBuilder stringBuilder = new StringBuilder();
+
+        String line = null;
+        while ((line = reader.readLine()) != null)
+        {
+            stringBuilder.append(line + "\n");
+        }
+        result = stringBuilder.toString();
+        // } catch (ClientProtocolException e) {
+        //     e.printStackTrace();
+        // } catch (IOException e) {
+        //     e.printStackTrace();
+        // } finally {
+        try
+        {
+            if (inputStream != null)
+                inputStream.close();
+        }
+        catch(Exception squish)
+        {
+        }
+        // }
+
+        return new JSONObject(result);
+    }
+
+
 
 }
