@@ -4,24 +4,32 @@ import android.accounts.Account;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.location.Location;
 import android.location.LocationManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 
+import com.google.android.gms.appindexing.Action;
+import com.google.android.gms.appindexing.AppIndex;
+import com.google.android.gms.appindexing.Thing;
+import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.Polygon;
 import com.google.android.gms.maps.model.PolylineOptions;
+import com.google.maps.android.PolyUtil;
+import com.google.maps.android.geojson.GeoJsonFeature;
+import com.google.maps.android.geojson.GeoJsonGeometry;
 import com.google.maps.android.geojson.GeoJsonLayer;
-import com.google.maps.android.geojson.GeoJsonPointStyle;
+import com.google.maps.android.geojson.GeoJsonMultiPolygon;
 import com.google.maps.android.geojson.GeoJsonPolygon;
 import com.google.maps.android.geojson.GeoJsonPolygonStyle;
 
@@ -29,21 +37,27 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import ekylibre.database.ZeroContract;
-import ekylibre.zero.R;
 import ekylibre.util.AccountTool;
 import ekylibre.util.PermissionManager;
 import ekylibre.util.UpdatableActivity;
-import ekylibre.zero.home.Zero;
+import ekylibre.zero.R;
 
-public class MapsActivity extends UpdatableActivity implements OnMapReadyCallback {
-
+public class MapsActivity extends UpdatableActivity implements OnMapReadyCallback
+{
+    private String TAG = "MAP";
     private GoogleMap mMap;
     private Account mAccount;
-    private Marker  currentMarker = null;
-    private int     interventionID = -1;
-    private ArrayList<GeoJsonLayer> arrayLayers = null;
+    private Marker currentMarker = null;
+    private int interventionID = -1;
+    private ArrayList<Parcel> arrayLayers = null;
+    /**
+     * ATTENTION: This was auto-generated to implement the App Indexing API.
+     * See https://g.co/AppIndexing/AndroidStudio for more information.
+     */
+    private GoogleApiClient client;
 
 
     @Override
@@ -57,6 +71,9 @@ public class MapsActivity extends UpdatableActivity implements OnMapReadyCallbac
         mapFragment.getMapAsync(this);
         mAccount = AccountTool.getCurrentAccount(this);
         interventionID = getIntent().getIntExtra(InterventionActivity._interventionID, 0);
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
     }
 
     @Override
@@ -76,13 +93,14 @@ public class MapsActivity extends UpdatableActivity implements OnMapReadyCallbac
         resetPrecedentMarkers(getIntent().getIntExtra(InterventionActivity._interventionID, 0));
         if (lastKnownLocation != null)
             mMap.moveCamera(CameraUpdateFactory.newLatLng(new LatLng(lastKnownLocation.getLatitude(), lastKnownLocation.getLongitude())));
-        mMap.animateCamera( CameraUpdateFactory.zoomTo( 17.0f ) );
+        mMap.animateCamera(CameraUpdateFactory.zoomTo(17.0f));
         setPolygonLayers();
+        checkIntersection(new LatLng(0, 0));
     }
 
     private void setPolygonLayers()
     {
-        Log.d("MAP", "Setting Polygons");
+        Log.d(TAG, "Setting Polygons");
         Cursor curs = getContentResolver().query(ZeroContract.InterventionParameters.CONTENT_URI,
                 ZeroContract.InterventionParameters.PROJECTION_SHAPE,
                 ZeroContract.InterventionParameters.FK_INTERVENTION + " == " + interventionID,
@@ -102,10 +120,14 @@ public class MapsActivity extends UpdatableActivity implements OnMapReadyCallbac
                 String geoJson = curs.getString(0);
                 if (geoJson != null)
                 {
-                    Log.d("MAP", geoJson);
+                    Log.d(TAG, geoJson);
                     json = new JSONObject(geoJson);
+
                     GeoJsonLayer layer = new GeoJsonLayer(mMap, json);
-                    arrayLayers.add(layer);
+
+                    List<GeoJsonPolygon> polygons = parsePolygons(layer);
+
+                    arrayLayers.add(new Parcel(layer, polygons));
                     setPolygonGrey(layer);
                 }
             } catch (JSONException e)
@@ -116,8 +138,22 @@ public class MapsActivity extends UpdatableActivity implements OnMapReadyCallbac
         Log.d("MAP", "OKAAAAAAAAAAAAAAAAAAAAAAAAAY");
     }
 
+    private List<GeoJsonPolygon> parsePolygons(GeoJsonLayer layer)
+    {
+        List<GeoJsonPolygon> polygons = null;
+        GeoJsonMultiPolygon geometry;
+        Iterable<GeoJsonFeature> features = layer.getFeatures();
+        for (GeoJsonFeature feature : features)
+        {
+            geometry = (GeoJsonMultiPolygon) feature.getGeometry();
+            polygons = geometry.getPolygons();
+        }
+        return (polygons);
+    }
+
     private void setPolygonGreen(GeoJsonLayer layer)
     {
+        layer.removeLayerFromMap();
         GeoJsonPolygonStyle polyStyle = layer.getDefaultPolygonStyle();
         polyStyle.setFillColor(getResources().getColor(R.color.light_green));
         polyStyle.setStrokeColor(getResources().getColor(R.color.dark_green));
@@ -127,9 +163,10 @@ public class MapsActivity extends UpdatableActivity implements OnMapReadyCallbac
 
     private void setPolygonGrey(GeoJsonLayer layer)
     {
+        layer.removeLayerFromMap();
         GeoJsonPolygonStyle polyStyle = layer.getDefaultPolygonStyle();
-        polyStyle.setFillColor(getResources().getColor(R.color.basic_grey));
-        polyStyle.setStrokeColor(getResources().getColor(R.color.ultra_dark_grey));
+        polyStyle.setFillColor(getResources().getColor(R.color.ultraLight_grey));
+        polyStyle.setStrokeColor(getResources().getColor(R.color.basic_grey));
         polyStyle.setStrokeWidth(3f);
         layer.addLayerToMap();
     }
@@ -139,7 +176,32 @@ public class MapsActivity extends UpdatableActivity implements OnMapReadyCallbac
     {
         interventionID = intent.getIntExtra(InterventionActivity._interventionID, 0);
         resetPrecedentMarkers(interventionID);
+        LatLng point = new LatLng(
+                intent.getDoubleExtra(TrackingListenerWriter.LATITUDE, 0),
+                intent.getDoubleExtra(TrackingListenerWriter.LONGITUDE, 0));
+        checkIntersection(point);
     }
+
+    private void checkIntersection(LatLng point)
+    {
+
+        if (arrayLayers == null)
+            return;
+        for (Parcel parcel : arrayLayers)
+        {
+            for (GeoJsonPolygon polygon : parcel.polygons)
+            {
+                Log.d(TAG, polygon.getCoordinates().toString());
+                Log.d(TAG, point.toString());
+
+                if (PolyUtil.containsLocation(point, polygon.getCoordinates().get(0), true))
+                    setPolygonGreen(parcel.layer);
+                else
+                    setPolygonGrey(parcel.layer);
+            }
+        }
+    }
+
 
     private Cursor queryMarkers(int interventionID)
     {
@@ -170,8 +232,8 @@ public class MapsActivity extends UpdatableActivity implements OnMapReadyCallbac
                 pointList.add(point);
             }
             drawLines(pointList);
-           if (cursor.moveToLast())
-               setMarker(cursor.getDouble(0), cursor.getDouble(1));
+            if (cursor.moveToLast())
+                setMarker(cursor.getDouble(0), cursor.getDouble(1));
         }
     }
 
@@ -207,4 +269,42 @@ public class MapsActivity extends UpdatableActivity implements OnMapReadyCallbac
 
     }
 
+    /**
+     * ATTENTION: This was auto-generated to implement the App Indexing API.
+     * See https://g.co/AppIndexing/AndroidStudio for more information.
+     */
+    public Action getIndexApiAction()
+    {
+        Thing object = new Thing.Builder()
+                .setName("Maps Page") // TODO: Define a title for the content shown.
+                // TODO: Make sure this auto-generated URL is correct.
+                .setUrl(Uri.parse("http://[ENTER-YOUR-URL-HERE]"))
+                .build();
+        return new Action.Builder(Action.TYPE_VIEW)
+                .setObject(object)
+                .setActionStatus(Action.STATUS_TYPE_COMPLETED)
+                .build();
+    }
+
+    @Override
+    public void onStart()
+    {
+        super.onStart();
+
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        client.connect();
+        AppIndex.AppIndexApi.start(client, getIndexApiAction());
+    }
+
+    @Override
+    public void onStop()
+    {
+        super.onStop();
+
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        AppIndex.AppIndexApi.end(client, getIndexApiAction());
+        client.disconnect();
+    }
 }
