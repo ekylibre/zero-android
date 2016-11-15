@@ -20,14 +20,11 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.maps.model.Polygon;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.maps.android.PolyUtil;
 import com.google.maps.android.geojson.GeoJsonFeature;
-import com.google.maps.android.geojson.GeoJsonGeometry;
 import com.google.maps.android.geojson.GeoJsonLayer;
 import com.google.maps.android.geojson.GeoJsonMultiPolygon;
 import com.google.maps.android.geojson.GeoJsonPolygon;
@@ -47,6 +44,11 @@ import ekylibre.zero.R;
 
 public class MapsActivity extends UpdatableActivity implements OnMapReadyCallback
 {
+    private int STROKE_GREEN;
+    private int FILL_GREEN;
+    private int STROKE_GREY;
+    private int FILL_GREY;
+
     private String TAG = "MAP";
     private GoogleMap mMap;
     private Account mAccount;
@@ -61,14 +63,16 @@ public class MapsActivity extends UpdatableActivity implements OnMapReadyCallbac
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
+        STROKE_GREEN = getResources().getColor(R.color.dark_green);
+        FILL_GREEN   = getResources().getColor(R.color.light_green);
+        STROKE_GREY  = getResources().getColor(R.color.basic_grey);
+        FILL_GREY    = getResources().getColor(R.color.ultraLight_grey);
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
         mAccount = AccountTool.getCurrentAccount(this);
         interventionID = getIntent().getIntExtra(InterventionActivity._interventionID, 0);
-        // ATTENTION: This was auto-generated to implement the App Indexing API.
-        // See https://g.co/AppIndexing/AndroidStudio for more information.
         client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
     }
 
@@ -149,22 +153,18 @@ public class MapsActivity extends UpdatableActivity implements OnMapReadyCallbac
 
     private void setPolygonGreen(GeoJsonLayer layer)
     {
-        layer.removeLayerFromMap();
         GeoJsonPolygonStyle polyStyle = layer.getDefaultPolygonStyle();
-        polyStyle.setFillColor(getResources().getColor(R.color.light_green));
-        polyStyle.setStrokeColor(getResources().getColor(R.color.dark_green));
+        polyStyle.setFillColor(FILL_GREEN);
+        polyStyle.setStrokeColor(STROKE_GREEN);
         polyStyle.setStrokeWidth(3f);
-        layer.addLayerToMap();
     }
 
     private void setPolygonGrey(GeoJsonLayer layer)
     {
-        layer.removeLayerFromMap();
         GeoJsonPolygonStyle polyStyle = layer.getDefaultPolygonStyle();
-        polyStyle.setFillColor(getResources().getColor(R.color.ultraLight_grey));
-        polyStyle.setStrokeColor(getResources().getColor(R.color.basic_grey));
+        polyStyle.setFillColor(FILL_GREY);
+        polyStyle.setStrokeColor(STROKE_GREY);
         polyStyle.setStrokeWidth(3f);
-        layer.addLayerToMap();
     }
 
     @Override
@@ -185,6 +185,7 @@ public class MapsActivity extends UpdatableActivity implements OnMapReadyCallbac
             return;
         for (Parcel parcel : arrayLayers)
         {
+            Log.d(TAG, "======= Checking polygons for parcel =======");
             for (GeoJsonPolygon polygon : parcel.polygons)
             {
                 Log.d(TAG, polygon.getCoordinates().toString());
@@ -283,8 +284,6 @@ public class MapsActivity extends UpdatableActivity implements OnMapReadyCallbac
     {
         super.onStart();
 
-        // ATTENTION: This was auto-generated to implement the App Indexing API.
-        // See https://g.co/AppIndexing/AndroidStudio for more information.
         client.connect();
         AppIndex.AppIndexApi.start(client, getIndexApiAction());
     }
