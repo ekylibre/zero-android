@@ -22,6 +22,7 @@ public class Parcel
     public Parcel(GeoJsonLayer layer, List<GeoJsonPolygon> polygons)
     {
         this.layer = layer;
+        layer.addLayerToMap();
         this.polygons = polygons;
     }
 
