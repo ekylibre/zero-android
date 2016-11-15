@@ -9,6 +9,7 @@
     <item>Bacterial leaf blight</item>
     <item>Bacterial streak</item>
     <item>Bacteriosis</item>
+    <item>Bad vegetative growth conditions</item>
     <item>Black rust</item>
     <item>Chenopodium album</item>
     <item>Climate issue</item>
@@ -27,6 +28,7 @@
     <item>Escape</item>
     <item>Fecondity problem</item>
     <item>Fever</item>
+    <item>Field edge male seed corn default</item>
     <item>Flooding</item>
     <item>Fomitiporia</item>
     <item>Fungus disease</item>
@@ -45,11 +47,13 @@
     <item>Phytophthora</item>
     <item>Piece breakdown</item>
     <item>Plant disease</item>
+    <item>Plant issue</item>
     <item>Pourridie rot</item>
     <item>Protozoa disease</item>
     <item>Respiratory problem</item>
     <item>Scale insect</item>
     <item>Scaphoideus titanus leafhopper</item>
+    <item>Seed corn castration default</item>
     <item>Septoria blotch</item>
     <item>Support issue</item>
     <item>Vine mildew</item>
@@ -69,6 +73,7 @@
     <item>bacterial_leaf_blight</item>
     <item>bacterial_streak</item>
     <item>bacteriosis</item>
+    <item>bad_vegetative_growth_conditions</item>
     <item>black_rust</item>
     <item>chenopodium_album</item>
     <item>climate_issue</item>
@@ -87,6 +92,7 @@
     <item>escape</item>
     <item>fecondity_problem</item>
     <item>fever</item>
+    <item>field_edge_male_seed_corn_defect</item>
     <item>flooding</item>
     <item>fomitiporia</item>
     <item>fungus_disease</item>
@@ -105,11 +111,13 @@
     <item>phytophthora</item>
     <item>piece_breakdown</item>
     <item>plant_disease</item>
+    <item>plant_issue</item>
     <item>pourridie_rot</item>
     <item>protozoa_disease</item>
     <item>respiratory_problem</item>
     <item>scale_insect</item>
     <item>scaphoideus_titanus_leafhopper</item>
+    <item>seed_corn_castration_defect</item>
     <item>septoria_blotch</item>
     <item>support_issue</item>
     <item>vine_mildew</item>

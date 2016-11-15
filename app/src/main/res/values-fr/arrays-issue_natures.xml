@@ -18,6 +18,8 @@
     <item>Cochenille</item>
     <item>Diarrhée</item>
     <item>Défaillance d’une pièce</item>
+    <item>Défaut de castration sur maïs semences</item>
+    <item>Défaut sur mâle de bordure de maïs semences</item>
     <item>Dégât d’animaux sauvages</item>
     <item>Fièvre</item>
     <item>Flavescence dorée</item>
@@ -28,6 +30,7 @@
     <item>Incident</item>
     <item>Incident climatique</item>
     <item>Incident de support</item>
+    <item>Incident sur production végétale</item>
     <item>Inondation</item>
     <item>Longicorne</item>
     <item>Maladie</item>
@@ -37,6 +40,7 @@
     <item>Maladie virale</item>
     <item>Maladie à nématodes</item>
     <item>Mammite</item>
+    <item>Mauvais état végétatif</item>
     <item>Mildiou de la vigne</item>
     <item>Mouche du brou</item>
     <item>Oïdium de la vigne</item>
@@ -78,6 +82,8 @@
     <item>scale_insect</item>
     <item>diarrhea</item>
     <item>piece_breakdown</item>
+    <item>seed_corn_castration_defect</item>
+    <item>field_edge_male_seed_corn_defect</item>
     <item>wild_animal_ravage</item>
     <item>fever</item>
     <item>grapevine_yellows</item>
@@ -88,6 +94,7 @@
     <item>issue</item>
     <item>climate_issue</item>
     <item>support_issue</item>
+    <item>plant_issue</item>
     <item>flooding</item>
     <item>longhorn_beetle</item>
     <item>disease</item>
@@ -97,6 +104,7 @@
     <item>protozoa_disease</item>
     <item>nematoda_disease</item>
     <item>mammite</item>
+    <item>bad_vegetative_growth_conditions</item>
     <item>vine_mildew</item>
     <item>husk_fly</item>
     <item>vine_powdery_mildew</item>

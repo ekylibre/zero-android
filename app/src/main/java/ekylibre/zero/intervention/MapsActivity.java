@@ -53,10 +53,6 @@ public class MapsActivity extends UpdatableActivity implements OnMapReadyCallbac
     private Marker currentMarker = null;
     private int interventionID = -1;
     private ArrayList<Parcel> arrayLayers = null;
-    /**
-     * ATTENTION: This was auto-generated to implement the App Indexing API.
-     * See https://g.co/AppIndexing/AndroidStudio for more information.
-     */
     private GoogleApiClient client;
 
 
@@ -269,14 +265,10 @@ public class MapsActivity extends UpdatableActivity implements OnMapReadyCallbac
 
     }
 
-    /**
-     * ATTENTION: This was auto-generated to implement the App Indexing API.
-     * See https://g.co/AppIndexing/AndroidStudio for more information.
-     */
     public Action getIndexApiAction()
     {
         Thing object = new Thing.Builder()
-                .setName("Maps Page") // TODO: Define a title for the content shown.
+                .setName("Maps Page")
                 // TODO: Make sure this auto-generated URL is correct.
                 .setUrl(Uri.parse("http://[ENTER-YOUR-URL-HERE]"))
                 .build();
@@ -302,8 +294,6 @@ public class MapsActivity extends UpdatableActivity implements OnMapReadyCallbac
     {
         super.onStop();
 
-        // ATTENTION: This was auto-generated to implement the App Indexing API.
-        // See https://g.co/AppIndexing/AndroidStudio for more information.
         AppIndex.AppIndexApi.end(client, getIndexApiAction());
         client.disconnect();
     }

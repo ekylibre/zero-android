@@ -110,7 +110,7 @@ class Resourcer
       File.write(dir.join("arrays-issue_natures.xml"), builder.to_xml)
     end
   end
-  
+
 end
 
 
