@@ -459,6 +459,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
         {
             try
             {
+                cv.clear();
                 cv.put(ZeroContract.InterventionParameters.EK_ID, intervention.getParamID(i));
                 cv.put(ZeroContract.InterventionParameters.NAME, intervention.getParamName(i));
                 cv.put(ZeroContract.InterventionParameters.FK_INTERVENTION, interventionID);
