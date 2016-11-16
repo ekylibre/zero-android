@@ -56,7 +56,7 @@ public class Intervention
         JSONArray json = instance.getJSONArray("/api/v1/interventions", params);
         List<Intervention> array = new ArrayList<>();
 
-        for(int i = 0 ; i < json.length() ; i++ )
+        for(int i = 0; i < json.length(); i++)
         {
             array.add(new Intervention(json.getJSONObject(i)));
         }
