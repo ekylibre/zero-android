@@ -44,10 +44,10 @@ import ekylibre.zero.R;
 
 public class MapsActivity extends UpdatableActivity implements OnMapReadyCallback
 {
-    private int STROKE_GREEN;
-    private int FILL_GREEN;
-    private int STROKE_GREY;
-    private int FILL_GREY;
+    private final int  STROKE_GREEN = 0x387e40;
+    private final int  FILL_GREEN   = 0x66aad2a5;
+    private final int  STROKE_GREY  = 0x333333;
+    private final int  FILL_GREY    = 0x66AAAAAA;
 
     private String TAG = "MAP";
     private GoogleMap mMap;
@@ -63,17 +63,12 @@ public class MapsActivity extends UpdatableActivity implements OnMapReadyCallbac
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
-        STROKE_GREEN = getResources().getColor(R.color.dark_green);
-        FILL_GREEN   = getResources().getColor(R.color.light_green);
-        STROKE_GREY  = getResources().getColor(R.color.basic_grey);
-        FILL_GREY    = getResources().getColor(R.color.ultraLight_grey);
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
         mAccount = AccountTool.getCurrentAccount(this);
         interventionID = getIntent().getIntExtra(InterventionActivity._interventionID, 0);
-        client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
     }
 
     @Override
@@ -94,6 +89,7 @@ public class MapsActivity extends UpdatableActivity implements OnMapReadyCallbac
         if (lastKnownLocation != null)
             mMap.moveCamera(CameraUpdateFactory.newLatLng(new LatLng(lastKnownLocation.getLatitude(), lastKnownLocation.getLongitude())));
         mMap.animateCamera(CameraUpdateFactory.zoomTo(17.0f));
+        mMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
         setPolygonLayers();
         checkIntersection(new LatLng(0, 0));
     }
@@ -266,34 +262,4 @@ public class MapsActivity extends UpdatableActivity implements OnMapReadyCallbac
 
     }
 
-    public Action getIndexApiAction()
-    {
-        Thing object = new Thing.Builder()
-                .setName("Maps Page")
-                // TODO: Make sure this auto-generated URL is correct.
-                .setUrl(Uri.parse("http://[ENTER-YOUR-URL-HERE]"))
-                .build();
-        return new Action.Builder(Action.TYPE_VIEW)
-                .setObject(object)
-                .setActionStatus(Action.STATUS_TYPE_COMPLETED)
-                .build();
-    }
-
-    @Override
-    public void onStart()
-    {
-        super.onStart();
-
-        client.connect();
-        AppIndex.AppIndexApi.start(client, getIndexApiAction());
-    }
-
-    @Override
-    public void onStop()
-    {
-        super.onStop();
-
-        AppIndex.AppIndexApi.end(client, getIndexApiAction());
-        client.disconnect();
-    }
 }

@@ -41,9 +41,9 @@ public class Intervention
             throws JSONException, IOException, HTTPException
     {
         // JSONObject params = Instance.BundleToJSON(attributes);
-        JSONObject params = attributes;
+        JSONObject parameters = attributes;
         //TODO :: Update path to API
-        JSONObject json = instance.post("/api/v1/intervention_participations", params);
+        JSONObject json = instance.post("/api/v1/intervention_participations", parameters);
 
         return (0);
     }
