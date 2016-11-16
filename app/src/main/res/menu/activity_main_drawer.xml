@@ -16,6 +16,10 @@
             android:id="@+id/nav_counting"
             android:icon="@drawable/ic_count"
             android:title="@string/new_count" />
+        <item
+        android:id="@+id/nav_contact"
+        android:icon="@drawable/ic_avatar"
+        android:title="Contact" />
     </group>
 
     <item android:title="@string/parameters">

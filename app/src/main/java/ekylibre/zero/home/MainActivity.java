@@ -121,8 +121,6 @@ public class MainActivity extends UpdatableActivity
         sync_data();
     }
 
-    // TODO :: SYNC ON FIRST
-
     /*
     ** Start service which auto sync when internet is detected
     */
@@ -263,38 +261,48 @@ public class MainActivity extends UpdatableActivity
             return (false);
         int id = item.getItemId();
 
-        if (id == R.id.nav_tracking)
+        switch (id)
         {
-            launchIntervention(null);
+            case R.id.nav_tracking :
+            {
+                launchIntervention(null);
+            }
+            case R.id.nav_issue :
+            {
+                Intent intent = new Intent(this, IssueActivity.class);
+                startActivity(intent);
+            }
+            case R.id.nav_counting :
+            {
+                Intent intent = new Intent(this, PlantCountingActivity.class);
+                startActivity(intent);
+            }
+            case R.id.nav_settings :
+            {
+                Intent intent = new Intent(this, SettingsActivity.class);
+                startActivity(intent);
+            }
+            case R.id.nav_account :
+            {
+                Intent intent = new Intent(this, AccountManagerActivity.class);
+                startActivity(intent);
+            }
+            case R.id.nav_sync :
+            {
+                forceSync_data();
+            }
+            case R.id.nav_contact :
+            {
+                sync_contact();
+            }
         }
-        else if (id == R.id.nav_issue)
-        {
-            Intent intent = new Intent(this, IssueActivity.class);
-            startActivity(intent);
-        }
-        else if (id == R.id.nav_counting)
-        {
-            Intent intent = new Intent(this, PlantCountingActivity.class);
-            startActivity(intent);
-        }
-        else if (id == R.id.nav_settings)
-        {
-            Intent intent = new Intent(this, SettingsActivity.class);
-            startActivity(intent);
-        }
-        else if (id == R.id.nav_account)
-        {
-            Intent intent = new Intent(this, AccountManagerActivity.class);
-            startActivity(intent);
-        }
-        else if (id == R.id.nav_sync)
-        {
-            forceSync_data();
-        }
-
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return (false);
+    }
+
+    private void sync_contact()
+    {
     }
 
     public void launchIntervention(View v)
