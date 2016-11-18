@@ -22,6 +22,9 @@ public class PermissionManager
     private final static int		REQUEST_CALENDAR = 1;
     private final static int		REQUEST_GPS = 2;
     private final static int		REQUEST_STORAGE = 3;
+    private final static int		REQUEST_INTERNET = 4;
+    private final static int		REQUEST_VIBRATION = 5;
+    private final static int		REQUEST_CONTACT = 6;
 
     public static boolean calendarPermissions(Context context, Activity activity)
     {
@@ -116,7 +119,7 @@ public class PermissionManager
             Log.d(TAG, "REQUESTING PERMISSIONS");
             ActivityCompat.requestPermissions(activity,
                     new String[]{Manifest.permission.ACCESS_NETWORK_STATE, Manifest.permission.INTERNET},
-                    REQUEST_STORAGE);
+                    REQUEST_INTERNET);
 
             if (Build.VERSION.SDK_INT >= 23 &&
                     (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_NETWORK_STATE)
@@ -138,7 +141,27 @@ public class PermissionManager
             Log.d(TAG, "REQUESTING PERMISSIONS");
             ActivityCompat.requestPermissions(activity,
                     new String[]{Manifest.permission.ACCESS_NETWORK_STATE, Manifest.permission.INTERNET},
-                    REQUEST_STORAGE);
+                    REQUEST_VIBRATION);
+
+            if (Build.VERSION.SDK_INT >= 23 &&
+                    (ActivityCompat.checkSelfPermission(context, Manifest.permission.VIBRATE)
+                            != PackageManager.PERMISSION_GRANTED))
+                return (false);
+        }
+        Log.d(TAG, "PERMISSIONS GRANTED");
+        return (true);
+    }
+
+    public static boolean writeContactPermissions(Context context, Activity activity)
+    {
+        if (Build.VERSION.SDK_INT >= 23 &&
+                (ActivityCompat.checkSelfPermission(context, Manifest.permission.WRITE_CONTACTS)
+                        != PackageManager.PERMISSION_GRANTED))
+        {
+            Log.d(TAG, "REQUESTING PERMISSIONS");
+            ActivityCompat.requestPermissions(activity,
+                    new String[]{Manifest.permission.ACCESS_NETWORK_STATE, Manifest.permission.WRITE_CONTACTS},
+                    REQUEST_CONTACT);
 
             if (Build.VERSION.SDK_INT >= 23 &&
                     (ActivityCompat.checkSelfPermission(context, Manifest.permission.VIBRATE)
