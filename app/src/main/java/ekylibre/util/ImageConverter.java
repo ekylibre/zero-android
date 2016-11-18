@@ -22,6 +22,11 @@ public class ImageConverter
         return (stream.toByteArray());
     }
 
+    public static byte[] createByteArrayFromBase64(String image)
+    {
+        return (Base64.decode(image, Base64.DEFAULT));
+    }
+
     public static String convertImageToBase64(Bitmap image)
     {
         String imgString = Base64.encodeToString(getBytesFromBitmap(image),

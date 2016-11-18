@@ -22,7 +22,7 @@ public class Contact
     private String email;
     private String company;
     private String jobTitle;
-    private String photo;
+    private byte[] photo;
     private ArrayList<ContentProviderOperation> contactParameter;
     private Context mContext;
 
@@ -42,7 +42,7 @@ public class Contact
                 .build());
     }
 
-    public void setPhoto(String photo)
+    public void setPhoto(byte[] photo)
     {
         if (photo == null)
             return;
@@ -57,6 +57,23 @@ public class Contact
         );
 
     }
+
+    public void setPhoto(String photo)
+    {
+        if (photo == null)
+            return;
+        this.photo = ImageConverter.createByteArrayFromBase64(photo);
+        contactParameter.add(ContentProviderOperation.newInsert(
+                ContactsContract.Data.CONTENT_URI)
+                .withValueBackReference(ContactsContract.Data.RAW_CONTACT_ID, 0)
+                .withValue(ContactsContract.Data.MIMETYPE,
+                        ContactsContract.CommonDataKinds.StructuredName.CONTENT_ITEM_TYPE)
+                .withValue(ContactsContract.CommonDataKinds.Photo.PHOTO, this.photo)
+                .build()
+        );
+
+    }
+
 
     public void setName(String name)
     {
@@ -185,6 +202,18 @@ public class Contact
         }
     }
 
+    public void clear()
+    {
+        name = null;
+        mobileNumber = null;
+        homeNumber = null;
+        workNumber = null;
+        email = null;
+        company = null;
+        jobTitle = null;
+        photo = null;
+        contactParameter.clear();
+    }
 
 
     /* ****************
@@ -216,7 +245,7 @@ public class Contact
         return (email);
     }
 
-    public String getPhoto()
+    public byte[] getPhoto()
     {
         return (photo);
     }

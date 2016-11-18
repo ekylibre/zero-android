@@ -25,9 +25,11 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.Calendar;
 
+import cz.msebera.android.httpclient.auth.ContextAwareAuthScheme;
 import ekylibre.APICaller.SyncAdapter;
 import ekylibre.database.ZeroContract;
 import ekylibre.service.GeneralHandler;
+import ekylibre.util.Contact;
 import ekylibre.zero.account.AccountManagerActivity;
 import ekylibre.zero.IssueActivity;
 import ekylibre.zero.PlantCountingActivity;
@@ -318,138 +320,20 @@ public class MainActivity extends UpdatableActivity
 
     private void sync_contact()
     {
-        String DisplayName = "TEST";
-        String MobileNumber = "0612345678";
-        String HomeNumber = "1337";
-        String WorkNumber = "42";
-        String emailID = "email@ekylibre.org";
-        String company = "Ekylibre";
-        String jobTitle = "Developer";
-        String photo = "";
-
         if (!PermissionManager.writeContactPermissions(this, this))
             return;
-        addContact(DisplayName, MobileNumber, HomeNumber, WorkNumber, emailID, company, jobTitle,
-                photo);
-        DisplayName = "TEST";
-        MobileNumber = "0612345677";
-        HomeNumber = "1337";
-        WorkNumber = "42";
-        emailID = "email@ekylibre.org";
-        company = "Ekylibre";
-        jobTitle = "Developer";
-        photo = "";
-        addContact(DisplayName, MobileNumber, HomeNumber, WorkNumber, emailID, company, jobTitle,
-                photo);
-    }
+        Contact contact = new Contact(this);
+        contact.setAccount();
+        contact.setName("TEST");
+        contact.setEmail("email@ekylibre.org");
+        contact.setHomeNumber("1337");
+        contact.setMobileNumber("0612345678");
+        contact.setOrganization("Ekylibre", "Developer");
+        contact.setPhoto("");
 
-    private void addContact(String DisplayName, String MobileNumber, String HomeNumber, String
-            WorkNumber, String emailID, String company, String jobTitle, String photo)
-    {
-        ArrayList< ContentProviderOperation > ops = new ArrayList < ContentProviderOperation > ();
+        contact.commit();
+        contact.clear();
 
-        ops.add(ContentProviderOperation.newInsert(
-                ContactsContract.RawContacts.CONTENT_URI)
-                .withValue(ContactsContract.RawContacts.ACCOUNT_TYPE, SyncAdapter.ACCOUNT_TYPE)
-                .withValue(ContactsContract.RawContacts.ACCOUNT_NAME, AccountTool.getAccountName(AccountTool
-                        .getCurrentAccount(this), this))
-                .build());
-
-
-
-        //---------------------------------------------------- Photo
-        ops.add(ContentProviderOperation.newInsert(
-                ContactsContract.Data.CONTENT_URI)
-                .withValueBackReference(ContactsContract.Data.RAW_CONTACT_ID, 0)
-                .withValue(ContactsContract.Data.MIMETYPE,
-                        ContactsContract.CommonDataKinds.StructuredName.CONTENT_ITEM_TYPE)
-                .withValue(ContactsContract.CommonDataKinds.Photo.PHOTO, photo)
-                .build()
-        );
-
-
-
-
-        //------------------------------------------------------ Names
-        if (DisplayName != null) {
-            ops.add(ContentProviderOperation.newInsert(
-                    ContactsContract.Data.CONTENT_URI)
-                    .withValueBackReference(ContactsContract.Data.RAW_CONTACT_ID, 0)
-                    .withValue(ContactsContract.Data.MIMETYPE,
-                            ContactsContract.CommonDataKinds.StructuredName.CONTENT_ITEM_TYPE)
-                    .withValue(
-                            ContactsContract.CommonDataKinds.StructuredName.DISPLAY_NAME,
-                            DisplayName).build());
-        }
-
-        //------------------------------------------------------ Mobile Number
-        if (MobileNumber != null) {
-            ops.add(ContentProviderOperation.
-                    newInsert(ContactsContract.Data.CONTENT_URI)
-                    .withValueBackReference(ContactsContract.Data.RAW_CONTACT_ID, 0)
-                    .withValue(ContactsContract.Data.MIMETYPE,
-                            ContactsContract.CommonDataKinds.Phone.CONTENT_ITEM_TYPE)
-                    .withValue(ContactsContract.CommonDataKinds.Phone.NUMBER, MobileNumber)
-                    .withValue(ContactsContract.CommonDataKinds.Phone.TYPE,
-                            ContactsContract.CommonDataKinds.Phone.TYPE_MOBILE)
-                    .build());
-        }
-
-        //------------------------------------------------------ Home Numbers
-        if (HomeNumber != null) {
-            ops.add(ContentProviderOperation.newInsert(ContactsContract.Data.CONTENT_URI)
-                    .withValueBackReference(ContactsContract.Data.RAW_CONTACT_ID, 0)
-                    .withValue(ContactsContract.Data.MIMETYPE,
-                            ContactsContract.CommonDataKinds.Phone.CONTENT_ITEM_TYPE)
-                    .withValue(ContactsContract.CommonDataKinds.Phone.NUMBER, HomeNumber)
-                    .withValue(ContactsContract.CommonDataKinds.Phone.TYPE,
-                            ContactsContract.CommonDataKinds.Phone.TYPE_HOME)
-                    .build());
-        }
-
-        //------------------------------------------------------ Work Numbers
-        if (WorkNumber != null) {
-            ops.add(ContentProviderOperation.newInsert(ContactsContract.Data.CONTENT_URI)
-                    .withValueBackReference(ContactsContract.Data.RAW_CONTACT_ID, 0)
-                    .withValue(ContactsContract.Data.MIMETYPE,
-                            ContactsContract.CommonDataKinds.Phone.CONTENT_ITEM_TYPE)
-                    .withValue(ContactsContract.CommonDataKinds.Phone.NUMBER, WorkNumber)
-                    .withValue(ContactsContract.CommonDataKinds.Phone.TYPE,
-                            ContactsContract.CommonDataKinds.Phone.TYPE_WORK)
-                    .build());
-        }
-
-        //------------------------------------------------------ Email
-        if (emailID != null) {
-            ops.add(ContentProviderOperation.newInsert(ContactsContract.Data.CONTENT_URI)
-                    .withValueBackReference(ContactsContract.Data.RAW_CONTACT_ID, 0)
-                    .withValue(ContactsContract.Data.MIMETYPE,
-                            ContactsContract.CommonDataKinds.Email.CONTENT_ITEM_TYPE)
-                    .withValue(ContactsContract.CommonDataKinds.Email.DATA, emailID)
-                    .withValue(ContactsContract.CommonDataKinds.Email.TYPE, ContactsContract.CommonDataKinds.Email.TYPE_WORK)
-                    .build());
-        }
-
-        //------------------------------------------------------ Organization
-        if (!company.equals("") && !jobTitle.equals("")) {
-            ops.add(ContentProviderOperation.newInsert(ContactsContract.Data.CONTENT_URI)
-                    .withValueBackReference(ContactsContract.Data.RAW_CONTACT_ID, 0)
-                    .withValue(ContactsContract.Data.MIMETYPE,
-                            ContactsContract.CommonDataKinds.Organization.CONTENT_ITEM_TYPE)
-                    .withValue(ContactsContract.CommonDataKinds.Organization.COMPANY, company)
-                    .withValue(ContactsContract.CommonDataKinds.Organization.TYPE, ContactsContract.CommonDataKinds.Organization.TYPE_WORK)
-                    .withValue(ContactsContract.CommonDataKinds.Organization.TITLE, jobTitle)
-                    .withValue(ContactsContract.CommonDataKinds.Organization.TYPE, ContactsContract.CommonDataKinds.Organization.TYPE_WORK)
-                    .build());
-        }
-
-        // Asking the Contact provider to create a new contact
-        try {
-            getContentResolver().applyBatch(ContactsContract.AUTHORITY, ops);
-        } catch (Exception e) {
-            e.printStackTrace();
-            Toast.makeText(this, "Exception: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-        }
     }
 
     public void launchIntervention(View v)
