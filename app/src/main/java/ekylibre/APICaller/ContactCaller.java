@@ -59,20 +59,28 @@ public class ContactCaller
         }
     }
 
-    public static List<ContactCaller> all(Instance instance, String attributes) throws JSONException,
-            IOException, HTTPException
+    public static List<ContactCaller> all(Instance instance, String attributes)
     {
         // JSONObject params = Instance.BundleToJSON(attributes);
         String params = attributes;
         if (BuildConfig.DEBUG) Log.d(TAG, "Get JSONArray => /api/v1/interventions || params = " + params);
-        JSONArray json = instance.getJSONArray("/api/v1/interventions", params);
-        List<ContactCaller> array = new ArrayList<>();
-
-        for(int i = 0; i < json.length(); i++)
+        JSONArray json = null;
+        try
         {
-            array.add(new ContactCaller(json.getJSONObject(i)));
+            json = instance.getJSONArray("/api/v1/interventions", params);
+
+            List<ContactCaller> array = new ArrayList<>();
+
+            for(int i = 0; i < json.length(); i++)
+            {
+                array.add(new ContactCaller(json.getJSONObject(i)));
+            }
+            return (array);
+        } catch (JSONException | IOException | HTTPException e)
+        {
+            e.printStackTrace();
         }
-        return (array);
+        return (null);
     }
 
     public String getLastName()

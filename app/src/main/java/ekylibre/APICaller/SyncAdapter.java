@@ -741,34 +741,24 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
     {
         if (!getContactPref())
             return;
-        if (BuildConfig.DEBUG) Log.i(TAG, "Beginning network plants synchronization");
+        if (BuildConfig.DEBUG) Log.i(TAG, "Beginning network contact synchronization");
         ContentValues cv = new ContentValues();
         Instance instance = getInstance(account);
 
-        List<> plantsList = null;
-        try {
-            plantsList = Plant.all(instance, null);
-        } catch (JSONException | IOException | HTTPException e) {
-            e.printStackTrace();
-        }
+        List<ContactCaller> contactsList;
+        contactsList = ContactCaller.all(instance, null);
 
-        if (plantsList == null)
+
+        if (contactsList == null)
             return;
 
-        if (BuildConfig.DEBUG) Log.d(TAG, "Nombre de plants : " + plantsList.size() );
-        Iterator<Plant> plantsIterator = plantsList.iterator();
-        while(plantsIterator.hasNext())
+        for (ContactCaller contact : contactsList)
         {
-            Plant plants = plantsIterator.next();
-            cv.put(ZeroContract.Plants.EK_ID, plants.getId());
-            cv.put(ZeroContract.Plants.NAME, plants.getName());
-            cv.put(ZeroContract.Plants.VARIETY, plants.getVariety());
-            cv.put(ZeroContract.Plants.ACTIVITY_ID, plants.getActivityID());
-            cv.put(ZeroContract.Plants.ACTIVE, true);
-            cv.put(ZeroContract.Plants.USER, account.name);
+            cv.put(ZeroContract.Contacts.LAST_NAME, contact.getLastName());
+            cv.put(ZeroContract.Contacts.USER, account.name);
             mContentResolver.insert(ZeroContract.Plants.CONTENT_URI, cv);
         }
-        if (BuildConfig.DEBUG) Log.i(TAG, "Finish network plant synchronization");
+        if (BuildConfig.DEBUG) Log.i(TAG, "Finish network contact synchronization");
     }
 
     protected Instance getInstance(Account account)
