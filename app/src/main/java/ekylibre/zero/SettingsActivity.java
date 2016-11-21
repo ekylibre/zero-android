@@ -14,6 +14,7 @@ public class SettingsActivity extends PreferenceActivity
     public final static String PREF_SYNC_CALENDAR = "pref_syncCalendar";
     public final static String PREF_GPS = "pref_GPS";
     public final static String PREF_POKE = "pref_poke";
+    public final static String PREF_SYNC_CONTACTS = "pref_sync_contacts";
 
     @Override
     public void onStart()

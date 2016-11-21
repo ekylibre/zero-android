@@ -348,6 +348,7 @@ public class DatabaseHelper extends SQLiteOpenHelper
                         + ", " + ZeroContract.Contacts.LAST_NAME + " VARCHAR(255)"
                         + ", " + ZeroContract.Contacts.FIRST_NAME + " VARCHAR(255)"
                         + ", " + ZeroContract.Contacts.PICTURE + " TEXT"
+                        + ", " + ZeroContract.Contacts.PICTURE_ID + " INTEGER"
                         + ")");
                 database.execSQL("CREATE TABLE IF NOT EXISTS " + ZeroContract.ContactParams.TABLE_NAME
                         + "("

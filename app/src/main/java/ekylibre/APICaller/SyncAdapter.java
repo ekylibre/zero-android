@@ -9,10 +9,12 @@ import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.SyncResult;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.provider.Settings.Secure;
 import android.util.Log;
 
@@ -36,6 +38,7 @@ import ekylibre.zero.BuildConfig;
 import ekylibre.util.AccountTool;
 import ekylibre.util.ImageConverter;
 import ekylibre.util.UpdatableActivity;
+import ekylibre.zero.SettingsActivity;
 import ekylibre.zero.home.Zero;
 import ekylibre.zero.intervention.InterventionActivity;
 
@@ -79,6 +82,19 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
         mContext = context;
     }
 
+    /*
+    ** Get mobilePerm from SharedPreference set on settings activity
+    */
+    public boolean          getContactPref()
+    {
+        SharedPreferences pref;
+
+        pref = PreferenceManager.getDefaultSharedPreferences(mContext);
+
+        return (pref.getBoolean(SettingsActivity.PREF_SYNC_CONTACTS, false));
+    }
+
+
     @Override
     public void onPerformSync(Account account, Bundle extras, String authority, ContentProviderClient provider, SyncResult syncResult)
     {
@@ -114,6 +130,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
             pullIntervention(account, extras, authority, provider, syncResult);
 
             pushIntervention(account, extras, authority, provider, syncResult);
+            pullContacts(account, extras, authority, provider, syncResult);
             cleanLocalDb(account);
         }
         getContext().sendBroadcast(new Intent(UpdatableActivity.ACTION_FINISHED_SYNC));
@@ -718,6 +735,40 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
             e.printStackTrace();
         }
         return (null);
+    }
+
+    private void pullContacts(Account account, Bundle extras, String authority, ContentProviderClient provider, SyncResult syncResult)
+    {
+        if (!getContactPref())
+            return;
+        if (BuildConfig.DEBUG) Log.i(TAG, "Beginning network plants synchronization");
+        ContentValues cv = new ContentValues();
+        Instance instance = getInstance(account);
+
+        List<> plantsList = null;
+        try {
+            plantsList = Plant.all(instance, null);
+        } catch (JSONException | IOException | HTTPException e) {
+            e.printStackTrace();
+        }
+
+        if (plantsList == null)
+            return;
+
+        if (BuildConfig.DEBUG) Log.d(TAG, "Nombre de plants : " + plantsList.size() );
+        Iterator<Plant> plantsIterator = plantsList.iterator();
+        while(plantsIterator.hasNext())
+        {
+            Plant plants = plantsIterator.next();
+            cv.put(ZeroContract.Plants.EK_ID, plants.getId());
+            cv.put(ZeroContract.Plants.NAME, plants.getName());
+            cv.put(ZeroContract.Plants.VARIETY, plants.getVariety());
+            cv.put(ZeroContract.Plants.ACTIVITY_ID, plants.getActivityID());
+            cv.put(ZeroContract.Plants.ACTIVE, true);
+            cv.put(ZeroContract.Plants.USER, account.name);
+            mContentResolver.insert(ZeroContract.Plants.CONTENT_URI, cv);
+        }
+        if (BuildConfig.DEBUG) Log.i(TAG, "Finish network plant synchronization");
     }
 
     protected Instance getInstance(Account account)
