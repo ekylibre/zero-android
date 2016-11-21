@@ -21,6 +21,13 @@
             android:persistent="true"
             android:defaultValue="false" />
         <CheckBoxPreference
+            android:key="pref_syncContact"
+            android:title="@string/pref_syncContact"
+            android:dialogTitle="@string/pref_syncContact"
+            android:summary="@string/pref_syncContact_summary"
+            android:persistent="true"
+            android:defaultValue="false" />
+        <CheckBoxPreference
             android:key="pref_GPS"
             android:title="@string/pref_GPS"
             android:dialogTitle="@string/pref_GPS"
@@ -28,12 +35,12 @@
             android:persistent="true"
             android:defaultValue="false" />
         <CheckBoxPreference
-        android:key="pref_poke"
-        android:title="@string/pref_poke"
-        android:dialogTitle="@string/pref_poke"
-        android:summary="@string/pref_poke_summary"
-        android:persistent="true"
-        android:defaultValue="false" />
+            android:key="pref_poke"
+            android:title="@string/pref_poke"
+            android:dialogTitle="@string/pref_poke"
+            android:summary="@string/pref_poke_summary"
+            android:persistent="true"
+            android:defaultValue="false" />
     </PreferenceCategory>
     <PreferenceCategory android:title="@string/network">
         <CheckBoxPreference
