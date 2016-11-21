@@ -4,6 +4,7 @@ import android.content.ContentResolver;
 import android.database.DatabaseErrorHandler;
 import android.net.Uri;
 import android.provider.BaseColumns;
+import android.provider.ContactsContract;
 
 import java.lang.annotation.Target;
 import java.util.UUID;
@@ -140,6 +141,29 @@ public final class ZeroContract {
         String USER = "user";
         String ACTIVITY_ID = "activity_id";
     }
+
+    public interface ContactsColumns extends BaseColumns {
+        String TABLE_NAME = "contacts";
+        String LAST_NAME = "last_name";
+        String FIRST_NAME = "first_name";
+        String USER = "user";
+        String PICTURE = "picture";
+    }
+
+    public interface ContactParamsColumns extends BaseColumns {
+        String TABLE_NAME = "contact_params";
+        String FK_CONTACT = "fk_contact";
+        String TYPE = "type";
+        String EMAIL = "email";
+        String PHONE = "phone";
+        String MOBILE = "mobile";
+        String WEBSITE = "website";
+        String MAIL_LINES = "mail_lines";
+        String POSTAL_CODE = "postal_code";
+        String CITY = "city";
+        String COUNTRY = "country";
+    }
+
 
     public static final class Crumbs implements CrumbsColumns {
         // Content URI for this table
@@ -298,5 +322,44 @@ public final class ZeroContract {
         public static final String[] PROJECTION_NONE = {_ID};
 
         public static final String SORT_ORDER_DEFAULT = _ID + " ASC";
+    }
+
+    public static final class Contacts implements ContactsColumns
+    {
+        // Content URI for this table
+        public static final Uri CONTENT_URI = Uri.withAppendedPath(ZeroContract.CONTENT_URI,
+                "contacts");
+        // MIME type for lists of records.
+        public static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/vnd" +
+                ".ekylibre.zero.contacts";
+        // MIME type for individual record.
+        public static final String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE +
+                "/vnd.ekylibre.zero.contacts";
+
+        public static final String[] PROJECTION_ALL = {_ID, LAST_NAME, FIRST_NAME, USER, PICTURE};
+        public static final String[] PROJECTION_NONE = {_ID};
+
+        public static final String SORT_ORDER_DEFAULT = _ID + " ASC";
+
+    }
+
+    public static final class ContactParams implements ContactParamsColumns
+    {
+        // Content URI for this table
+        public static final Uri CONTENT_URI = Uri.withAppendedPath(ZeroContract.CONTENT_URI,
+                "contact_params ");
+        // MIME type for lists of records.
+        public static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/vnd" +
+                ".ekylibre.zero.contact_params";
+        // MIME type for individual record.
+        public static final String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE +
+                "/vnd.ekylibre.zero.contact_params";
+
+        public static final String[] PROJECTION_ALL = {_ID, FK_CONTACT, TYPE, EMAIL,
+                PHONE, MOBILE, WEBSITE, MAIL_LINES, POSTAL_CODE, CITY, COUNTRY};
+        public static final String[] PROJECTION_NONE = {_ID};
+
+        public static final String SORT_ORDER_DEFAULT = _ID + " ASC";
+
     }
 }

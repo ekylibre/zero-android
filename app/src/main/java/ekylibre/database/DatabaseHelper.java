@@ -11,7 +11,7 @@ import android.util.Log;
 
 public class DatabaseHelper extends SQLiteOpenHelper
 {
-    private static final int DATABASE_VERSION = 16;
+    private static final int DATABASE_VERSION = 17;
 
     private static final String DATABASE_NAME = "zero";
 
@@ -337,6 +337,35 @@ public class DatabaseHelper extends SQLiteOpenHelper
             {
                 database.execSQL("ALTER TABLE intervention_parameters ADD shape text DEFAULT NULL");
                 if (newVersion == 16)
+                    break;
+            }
+            case 17:
+            {
+                database.execSQL("CREATE TABLE IF NOT EXISTS " + ZeroContract.Contacts.TABLE_NAME
+                        + "("
+                        + ZeroContract.Contacts._ID + " INTEGER PRIMARY KEY AUTOINCREMENT"
+                        + ", " + ZeroContract.Contacts.USER + " VARCHAR(255)"
+                        + ", " + ZeroContract.Contacts.LAST_NAME + " VARCHAR(255)"
+                        + ", " + ZeroContract.Contacts.FIRST_NAME + " VARCHAR(255)"
+                        + ", " + ZeroContract.Contacts.PICTURE + " TEXT"
+                        + ")");
+                database.execSQL("CREATE TABLE IF NOT EXISTS " + ZeroContract.ContactParams.TABLE_NAME
+                        + "("
+                        + ZeroContract.ContactParams._ID + " INTEGER PRIMARY KEY AUTOINCREMENT"
+                        + ", " + ZeroContract.ContactParams.FK_CONTACT + " INTEGER"
+                        + ", " + ZeroContract.ContactParams.TYPE + " VARCHAR(255)"
+                        + ", " + ZeroContract.ContactParams.EMAIL + " VARCHAR(255)"
+                        + ", " + ZeroContract.ContactParams.PHONE + " VARCHAR(255)"
+                        + ", " + ZeroContract.ContactParams.MOBILE + " VARCHAR(255)"
+                        + ", " + ZeroContract.ContactParams.WEBSITE + " VARCHAR(255)"
+                        + ", " + ZeroContract.ContactParams.MAIL_LINES + " VARCHAR(255)"
+                        + ", " + ZeroContract.ContactParams.POSTAL_CODE + " VARCHAR(255)"
+                        + ", " + ZeroContract.ContactParams.CITY + " VARCHAR(255)"
+                        + ", " + ZeroContract.ContactParams.COUNTRY + " VARCHAR(255)"
+                        + ", " + "FOREIGN KEY (" + ZeroContract.ContactParams.FK_CONTACT + ") " +
+                        "REFERENCES " + ZeroContract.Contacts.TABLE_NAME + "(_id)"
+                        + ")");
+                if (newVersion == 17)
                     break;
             }
         }
