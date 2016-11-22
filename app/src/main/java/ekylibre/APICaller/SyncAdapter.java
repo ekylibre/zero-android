@@ -681,7 +681,6 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
     private JSONObject    addNewCrumb(Cursor cursor)
             throws JSONException, IOException, HTTPException
     {
-        if (BuildConfig.DEBUG) Log.i(TAG, "New crumb");
         // Post it to ekylibre
         JSONObject attributes = new JSONObject();
         attributes.put("nature", cursor.getString(1));
@@ -747,10 +746,15 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
     private void pullContacts(Account account, Bundle extras, String authority, ContentProviderClient provider, SyncResult syncResult)
     {
         if (!getContactPref())
+        {
+            Log.d(TAG, "============================ T AS PAS LE DROIIIIIIIIIIT " +
+                    "====================");
             return;
+        }
         if (BuildConfig.DEBUG) Log.i(TAG, "Beginning network contact synchronization");
         ContentValues cv = new ContentValues();
         Instance instance = getInstance(account);
+        String picture;
 
         List<ContactCaller> contactsList;
         contactsList = ContactCaller.all(instance, null);
@@ -761,16 +765,24 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
         Contact contactCreator = new Contact(mContext);
         for (ContactCaller contact : contactsList)
         {
+            cv.clear();
             contactCreator.clear();
             cv.put(ZeroContract.Contacts.LAST_NAME, contact.getLastName());
             cv.put(ZeroContract.Contacts.FIRST_NAME, contact.getFirstName());
             cv.put(ZeroContract.Contacts.PICTURE_ID, contact.getPictureId());
-            String picture = contact.getPicture(instance, contact.getPictureId());
-            cv.put(ZeroContract.Contacts.PICTURE, picture);
+            if (contact.getPictureId() != 0)
+            {
+                picture = contact.getPicture(instance, contact.getPictureId());
+                cv.put(ZeroContract.Contacts.PICTURE, picture);
+                if (picture != null)
+                {
+                    //contactCreator.setPhoto(picture.getBytes());
+                }
+            }
             cv.put(ZeroContract.Contacts.USER, account.name);
             contactCreator.setAccount(account);
-            contactCreator.setName(contact.getFirstName() + " " + contact.getLastName());
-            contactCreator.setPhoto(picture.getBytes());
+            contactCreator.setName(contact.getFirstName(), contact.getLastName());
+            contactCreator.setOrganization(contact.getOrganizationName(), contact.getOrganizationPost());
             addContactParams(contact, contactCreator);
             mContentResolver.insert(ZeroContract.Contacts.CONTENT_URI, cv);
             contactCreator.commit();
@@ -785,6 +797,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
 
         while (contact.getMailLines(++i) != null)
         {
+            cv.clear();
             cv.put(ZeroContract.ContactParams.MAIL_LINES, contact.getMailLines(i));
             cv.put(ZeroContract.ContactParams.POSTAL_CODE, contact.getPostalCode(i));
             cv.put(ZeroContract.ContactParams.CITY, contact.getCity(i));
@@ -794,32 +807,40 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
                     contact.getCity(i), contact.getCountry(i));
             mContentResolver.insert(ZeroContract.ContactParams.CONTENT_URI, cv);
         }
-        while (contact.getNextEmail() != null)
+        String email;
+        while ((email = contact.getNextEmail()) != null)
         {
-            cv.put(ZeroContract.ContactParams.EMAIL, contact.getNextEmail());
+            cv.clear();
+            cv.put(ZeroContract.ContactParams.EMAIL, email);
             cv.put(ZeroContract.ContactParams.TYPE, Contact.TYPE_EMAIL);
-            contactCreator.setEmail(contact.getNextEmail());
+            contactCreator.setEmail(email);
             mContentResolver.insert(ZeroContract.ContactParams.CONTENT_URI, cv);
         }
-        while (contact.getNextMobile() != null)
+        String mobile;
+        while ((mobile = contact.getNextMobile()) != null)
         {
-            cv.put(ZeroContract.ContactParams.MOBILE, contact.getNextMobile());
+            cv.clear();
+            cv.put(ZeroContract.ContactParams.MOBILE, mobile);
             cv.put(ZeroContract.ContactParams.TYPE, Contact.TYPE_MOBILE);
-            contactCreator.setMobileNumber(contact.getNextMobile());
+            contactCreator.setMobileNumber(mobile);
             mContentResolver.insert(ZeroContract.ContactParams.CONTENT_URI, cv);
         }
-        while (contact.getNextPhone() != null)
+        String phone;
+        while ((phone = contact.getNextPhone()) != null)
         {
-            cv.put(ZeroContract.ContactParams.PHONE, contact.getNextPhone());
+            cv.clear();
+            cv.put(ZeroContract.ContactParams.PHONE, phone);
             cv.put(ZeroContract.ContactParams.TYPE, Contact.TYPE_PHONE);
-            contactCreator.setHomeNumber(contact.getNextPhone());
+            contactCreator.setHomeNumber(phone);
             mContentResolver.insert(ZeroContract.ContactParams.CONTENT_URI, cv);
         }
-        while (contact.getNextWebsite() != null)
+        String website;
+        while ((website = contact.getNextWebsite()) != null)
         {
-            cv.put(ZeroContract.ContactParams.WEBSITE, contact.getNextWebsite());
+            cv.clear();
+            cv.put(ZeroContract.ContactParams.WEBSITE, website);
             cv.put(ZeroContract.ContactParams.TYPE, Contact.TYPE_WEBSITE);
-            contactCreator.setWebsite(contact.getNextWebsite());
+            contactCreator.setWebsite(website);
             mContentResolver.insert(ZeroContract.ContactParams.CONTENT_URI, cv);
         }
     }
