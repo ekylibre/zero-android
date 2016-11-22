@@ -149,6 +149,8 @@ public final class ZeroContract {
         String USER = "user";
         String PICTURE = "picture";
         String PICTURE_ID = "picture_id";
+        String ORGANIZATION_NAME = "organization_name";
+        String ORGANIZATION_POST = "organization_post";
     }
 
     public interface ContactParamsColumns extends BaseColumns {

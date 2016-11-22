@@ -24,17 +24,18 @@ public class ContactCaller
     private String      lastName;
     private String      firstName;
     private int         pictureId;
-    String      picture;
-    JSONArray   paramEmail;
-    JSONArray   paramPhone;
-    JSONArray   paramMobile;
-    JSONArray   paramWebsite;
-    JSONArray   paramMails;
-    int         iteratorEmail;
-    int         iteratorPhone;
-    int         iteratorMobile;
-    int         iteratorWebsite;
-    int         iteratorMails;
+    private String      picture;
+    private String      organizationName;
+    private String      organizationPost;
+    private JSONArray   paramEmail;
+    private JSONArray   paramPhone;
+    private JSONArray   paramMobile;
+    private JSONArray   paramWebsite;
+    private JSONArray   paramMails;
+    private int         iteratorEmail;
+    private int         iteratorPhone;
+    private int         iteratorMobile;
+    private int         iteratorWebsite;
 
     public ContactCaller(JSONObject json)
     {
@@ -42,17 +43,29 @@ public class ContactCaller
         iteratorPhone   = 0;
         iteratorMobile  = 0;
         iteratorWebsite = 0;
-        iteratorMails   = 0;
         try
         {
-            lastName     = json.getString("last_name");
-            firstName    = json.getString("first_name");
-            pictureId    = json.getInt("picture");
-            paramEmail   = json.getJSONArray("email");
-            paramPhone   = json.getJSONArray("phone");
-            paramMobile  = json.getJSONArray("mobile");
-            paramWebsite = json.getJSONArray("website");
-            paramMails   = json.getJSONArray("mails");
+            if (!json.isNull("last_name"))
+                lastName         = json.getString("last_name");
+            if (!json.isNull("first_name"))
+                firstName        = json.getString("first_name");
+            if (!json.isNull("picture"))
+                pictureId        = json.getInt("picture");
+            if (!json.isNull("organization"))
+            {
+                organizationName = json.getJSONObject("organization").getString("name");
+                organizationPost = json.getJSONObject("organization").getString("post");
+            }
+            if (!json.isNull("email"))
+                paramEmail       = json.getJSONArray("email");
+            if (!json.isNull("phone"))
+                paramPhone       = json.getJSONArray("phone");
+            if (!json.isNull("mobile"))
+                paramMobile      = json.getJSONArray("mobile");
+            if (!json.isNull("website"))
+                paramWebsite     = json.getJSONArray("website");
+            if (!json.isNull("mails"))
+                paramMails       = json.getJSONArray("mails");
         } catch (JSONException e)
         {
             e.printStackTrace();
@@ -63,11 +76,12 @@ public class ContactCaller
     {
         // JSONObject params = Instance.BundleToJSON(attributes);
         String params = attributes;
-        if (BuildConfig.DEBUG) Log.d(TAG, "Get JSONArray => /api/v1/interventions || params = " + params);
+        if (BuildConfig.DEBUG) Log.d(TAG, "Get JSONArray => /api/v1/contacts || params = " +
+                params);
         JSONArray json = null;
         try
         {
-            json = instance.getJSONArray("/api/v1/interventions", params);
+            json = instance.getJSONArray("/api/v1/contacts", params);
 
             List<ContactCaller> array = new ArrayList<>();
 
@@ -88,7 +102,7 @@ public class ContactCaller
         JSONObject json = null;
         try
         {
-            json = instance.getJSONObject("/api/v1/intervention_targets/" + pictureId, "");
+            json = instance.getJSONObject("/api/v1/contacts/" + pictureId + "/picture", "");
             return (json.getString("picture"));
 
         } catch (JSONException | IOException | HTTPException e)
@@ -100,12 +114,18 @@ public class ContactCaller
 
     public String getLastName()
     {
-        return (lastName);
+        if (lastName != null)
+            return (lastName);
+        else
+            return ("");
     }
 
     public String getFirstName()
     {
-        return (firstName);
+        if (firstName != null)
+            return (firstName);
+        else
+            return ("");
     }
 
     public int getPictureId()
@@ -115,6 +135,8 @@ public class ContactCaller
 
     public String getNextMobile()
     {
+        if (paramMobile == null || iteratorMobile >= paramMobile.length())
+            return (null);
         try
         {
             return (paramMobile.getString(iteratorMobile++));
@@ -127,6 +149,8 @@ public class ContactCaller
 
     public String getNextPhone()
     {
+        if (paramPhone == null || iteratorPhone >= paramPhone.length())
+            return (null);
         try
         {
             return (paramPhone.getString(iteratorPhone++));
@@ -139,6 +163,8 @@ public class ContactCaller
 
     public String getNextEmail()
     {
+        if (paramEmail == null || iteratorEmail >= paramEmail.length())
+            return (null);
         try
         {
             return (paramEmail.getString(iteratorEmail++));
@@ -151,6 +177,8 @@ public class ContactCaller
 
     public String getNextWebsite()
     {
+        if (paramWebsite == null || iteratorWebsite >= paramWebsite.length())
+            return (null);
         try
         {
             return (paramWebsite.getString(iteratorWebsite++));
@@ -163,6 +191,8 @@ public class ContactCaller
 
     public String getMailLines(int index)
     {
+        if (paramMails == null || index >= paramMails.length())
+            return (null);
         try
         {
             return (paramMails.getJSONObject(index).getString("mail_lines"));
@@ -175,6 +205,8 @@ public class ContactCaller
 
     public String getPostalCode(int index)
     {
+        if (paramMails == null || index >= paramMails.length())
+            return (null);
         try
         {
             return (paramMails.getJSONObject(index).getString("postal_code"));
@@ -187,6 +219,8 @@ public class ContactCaller
 
     public String getCity(int index)
     {
+        if (paramMails == null || index >= paramMails.length())
+            return (null);
         try
         {
             return (paramMails.getJSONObject(index).getString("city"));
@@ -199,6 +233,8 @@ public class ContactCaller
 
     public String getCountry(int index)
     {
+        if (paramMails == null || index >= paramMails.length())
+            return (null);
         try
         {
             return (paramMails.getJSONObject(index).getString("country"));
@@ -213,5 +249,15 @@ public class ContactCaller
     {
         return (paramEmail.length() + paramWebsite.length() + paramPhone.length() + paramMobile
                 .length() + paramMails.length());
+    }
+
+    public String getOrganizationName()
+    {
+        return (organizationName);
+    }
+
+    public String getOrganizationPost()
+    {
+        return (organizationPost);
     }
 }

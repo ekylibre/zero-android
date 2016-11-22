@@ -22,7 +22,8 @@ public class Contact
     public static final String TYPE_PHONE = "phone";
     public static final String TYPE_WEBSITE = "website";
 
-    private String name;
+    private String firstName;
+    private String lastName;
     private String mobileNumber;
     private String homeNumber;
     private String workNumber;
@@ -45,7 +46,7 @@ public class Contact
         contactParameter.add(ContentProviderOperation.newInsert(
                 ContactsContract.RawContacts.CONTENT_URI)
                 .withValue(ContactsContract.RawContacts.ACCOUNT_TYPE, SyncAdapter.ACCOUNT_TYPE)
-                .withValue(ContactsContract.RawContacts.ACCOUNT_NAME, account)
+                .withValue(ContactsContract.RawContacts.ACCOUNT_NAME, AccountTool.getEmail(account))
                 .build());
     }
 
@@ -82,19 +83,23 @@ public class Contact
     }
 
 
-    public void setName(String name)
+    public void setName(String firstName, String lastName)
     {
-        if (name == null)
+        if (firstName == null || lastName == null)
             return;
-        this.name = name;
+        this.firstName = firstName;
+        this.lastName = lastName;
         contactParameter.add(ContentProviderOperation.newInsert(
                 ContactsContract.Data.CONTENT_URI)
                 .withValueBackReference(ContactsContract.Data.RAW_CONTACT_ID, 0)
                 .withValue(ContactsContract.Data.MIMETYPE,
                         ContactsContract.CommonDataKinds.StructuredName.CONTENT_ITEM_TYPE)
                 .withValue(
-                        ContactsContract.CommonDataKinds.StructuredName.DISPLAY_NAME,
-                        name).build());
+                        ContactsContract.CommonDataKinds.StructuredName.GIVEN_NAME,
+                        firstName)
+                .withValue(
+                        ContactsContract.CommonDataKinds.StructuredName.FAMILY_NAME,
+                        lastName).build());
 
     }
 
@@ -249,7 +254,8 @@ public class Contact
 
     public void clear()
     {
-        name = null;
+        firstName = null;
+        lastName = null;
         mobileNumber = null;
         homeNumber = null;
         workNumber = null;
@@ -258,6 +264,7 @@ public class Contact
         jobTitle = null;
         photo = null;
         contactParameter.clear();
+        contactParameter = new ArrayList<>();
     }
 
 
@@ -265,10 +272,6 @@ public class Contact
     **    Getters
     ******************/
 
-    public String getName()
-    {
-        return (name);
-    }
 
     public String getMobileNumber()
     {
