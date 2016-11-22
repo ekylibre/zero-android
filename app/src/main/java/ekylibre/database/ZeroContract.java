@@ -335,7 +335,7 @@ public final class ZeroContract {
                 ".ekylibre.zero.contacts";
         // MIME type for individual record.
         public static final String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE +
-                "/vnd.ekylibre.zero.contacts";
+                "/vnd.ekylibre.zero.contact";
 
         public static final String[] PROJECTION_ALL = {_ID, LAST_NAME, FIRST_NAME, USER, PICTURE};
         public static final String[] PROJECTION_NONE = {_ID};
@@ -348,13 +348,13 @@ public final class ZeroContract {
     {
         // Content URI for this table
         public static final Uri CONTENT_URI = Uri.withAppendedPath(ZeroContract.CONTENT_URI,
-                "contact_params ");
+                "contact_params");
         // MIME type for lists of records.
         public static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/vnd" +
                 ".ekylibre.zero.contact_params";
         // MIME type for individual record.
         public static final String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE +
-                "/vnd.ekylibre.zero.contact_params";
+                "/vnd.ekylibre.zero.contact_param";
 
         public static final String[] PROJECTION_ALL = {_ID, FK_CONTACT, TYPE, EMAIL,
                 PHONE, MOBILE, WEBSITE, MAIL_LINES, POSTAL_CODE, CITY, COUNTRY};

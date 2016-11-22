@@ -8,6 +8,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 import ekylibre.util.SelectionBuilder;
 
@@ -41,6 +42,10 @@ public class ZeroProvider extends ContentProvider {
     public static final int ROUTE_INTERVENTION_PARAMETERS_ITEM = 901;
     public static final int ROUTE_WORKING_PERIODS_LIST = 1000;
     public static final int ROUTE_WORKING_PERIODS_ITEM = 1001;
+    public static final int ROUTE_CONTACTS_LIST = 1100;
+    public static final int ROUTE_CONTACTS_ITEM = 1101;
+    public static final int ROUTE_CONTACT_PARAMS_LIST = 1200;
+    public static final int ROUTE_CONTACT_PARAMS_ITEM = 1201;
     // UriMatcher, used to decode incoming URIs.
     private static final UriMatcher URI_MATCHER = new UriMatcher(UriMatcher.NO_MATCH);
 
@@ -65,6 +70,10 @@ public class ZeroProvider extends ContentProvider {
         URI_MATCHER.addURI(ZeroContract.AUTHORITY, "intervention_parameters/#", ROUTE_INTERVENTION_PARAMETERS_ITEM);
         URI_MATCHER.addURI(ZeroContract.AUTHORITY, "working_periods", ROUTE_WORKING_PERIODS_LIST);
         URI_MATCHER.addURI(ZeroContract.AUTHORITY, "working_periods/#", ROUTE_WORKING_PERIODS_ITEM);
+        URI_MATCHER.addURI(ZeroContract.AUTHORITY, "contacts", ROUTE_CONTACTS_LIST);
+        URI_MATCHER.addURI(ZeroContract.AUTHORITY, "contacts/#", ROUTE_CONTACTS_ITEM);
+        URI_MATCHER.addURI(ZeroContract.AUTHORITY, "contact_params", ROUTE_CONTACT_PARAMS_LIST);
+        URI_MATCHER.addURI(ZeroContract.AUTHORITY, "contact_params/#", ROUTE_CONTACT_PARAMS_ITEM);
     }
 
     private DatabaseHelper mDatabaseHelper;
@@ -78,6 +87,7 @@ public class ZeroProvider extends ContentProvider {
     // Determine the mime type for records returned by a given URI.
     @Override
     public String getType(@NonNull Uri uri) {
+
         switch (URI_MATCHER.match(uri)) {
             case ROUTE_CRUMB_LIST:
                 return ZeroContract.Crumbs.CONTENT_TYPE;
@@ -119,6 +129,14 @@ public class ZeroProvider extends ContentProvider {
                 return ZeroContract.WorkingPeriods.CONTENT_TYPE;
             case ROUTE_WORKING_PERIODS_ITEM:
                 return ZeroContract.WorkingPeriods.CONTENT_TYPE;
+            case ROUTE_CONTACTS_LIST:
+                return ZeroContract.Contacts.CONTENT_TYPE;
+            case ROUTE_CONTACTS_ITEM:
+                return ZeroContract.Contacts.CONTENT_TYPE;
+            case ROUTE_CONTACT_PARAMS_LIST:
+                return ZeroContract.ContactParams.CONTENT_TYPE;
+            case ROUTE_CONTACT_PARAMS_ITEM:
+                return ZeroContract.ContactParams.CONTENT_TYPE;
             default:
                 throw new UnsupportedOperationException("Unknown URI: " + uri);
         }
@@ -266,6 +284,30 @@ public class ZeroProvider extends ContentProvider {
                 cursor.setNotificationUri(context.getContentResolver(), uri);
                 return cursor;
 
+            case ROUTE_CONTACTS_ITEM:
+                id = uri.getLastPathSegment();
+                builder.where(ZeroContract.Contacts._ID + "=?", id);
+            case ROUTE_CONTACTS_LIST:
+                builder.table(ZeroContract.Contacts.TABLE_NAME)
+                        .where(selection, selectionArgs);
+                cursor = builder.query(database, projection, sortOrder);
+                context = getContext();
+                assert context != null;
+                cursor.setNotificationUri(context.getContentResolver(), uri);
+                return cursor;
+
+            case ROUTE_CONTACT_PARAMS_ITEM:
+                id = uri.getLastPathSegment();
+                builder.where(ZeroContract.ContactParams._ID + "=?", id);
+            case ROUTE_CONTACT_PARAMS_LIST:
+                builder.table(ZeroContract.ContactParams.TABLE_NAME)
+                        .where(selection, selectionArgs);
+                cursor = builder.query(database, projection, sortOrder);
+                context = getContext();
+                assert context != null;
+                cursor.setNotificationUri(context.getContentResolver(), uri);
+                return cursor;
+
             default:
                 throw new UnsupportedOperationException("Unknown URI: " + uri);
         }
@@ -342,6 +384,18 @@ public class ZeroProvider extends ContentProvider {
                 break;
             case ROUTE_WORKING_PERIODS_ITEM:
                 throw new UnsupportedOperationException("Insert not supported on URI: " + uri);
+            case ROUTE_CONTACTS_LIST:
+                id = database.insertOrThrow(ZeroContract.Contacts.TABLE_NAME, null, values);
+                result = Uri.parse(ZeroContract.Contacts.CONTENT_URI + "/" + id);
+                break;
+            case ROUTE_CONTACTS_ITEM:
+                throw new UnsupportedOperationException("Insert not supported on URI: " + uri);
+            case ROUTE_CONTACT_PARAMS_LIST:
+                id = database.insertOrThrow(ZeroContract.ContactParams.TABLE_NAME, null, values);
+                result = Uri.parse(ZeroContract.ContactParams.CONTENT_URI + "/" + id);
+                break;
+            case ROUTE_CONTACT_PARAMS_ITEM:
+                throw new UnsupportedOperationException("Insert not supported on URI: " + uri);
             default:
                 throw new UnsupportedOperationException("Unknown URI: " + uri);
         }
@@ -362,6 +416,9 @@ public class ZeroProvider extends ContentProvider {
         final int match = URI_MATCHER.match(uri);
         int count;
         String id;
+        Log.d("provider", "========================");
+        Log.d("provider", "searching : " + URI_MATCHER.match(uri));
+        Log.d("provider", "========================");
         switch (match) {
             case ROUTE_CRUMB_LIST:
                 count = builder.table(ZeroContract.CrumbsColumns.TABLE_NAME)
@@ -480,6 +537,30 @@ public class ZeroProvider extends ContentProvider {
                 id = uri.getLastPathSegment();
                 count = builder.table(ZeroContract.WorkingPeriodsColumns.TABLE_NAME)
                         .where(ZeroContract.WorkingPeriodsColumns._ID + "=?", id)
+                        .where(selection, selectionArgs)
+                        .delete(database);
+                break;
+            case ROUTE_CONTACTS_LIST:
+                count = builder.table(ZeroContract.Contacts.TABLE_NAME)
+                        .where(selection, selectionArgs)
+                        .delete(database);
+                break;
+            case ROUTE_CONTACTS_ITEM:
+                id = uri.getLastPathSegment();
+                count = builder.table(ZeroContract.Contacts.TABLE_NAME)
+                        .where(ZeroContract.Contacts._ID + "=?", id)
+                        .where(selection, selectionArgs)
+                        .delete(database);
+                break;
+            case ROUTE_CONTACT_PARAMS_LIST:
+                count = builder.table(ZeroContract.ContactParams.TABLE_NAME)
+                        .where(selection, selectionArgs)
+                        .delete(database);
+                break;
+            case ROUTE_CONTACT_PARAMS_ITEM:
+                id = uri.getLastPathSegment();
+                count = builder.table(ZeroContract.ContactParams.TABLE_NAME)
+                        .where(ZeroContract.Contacts._ID + "=?", id)
                         .where(selection, selectionArgs)
                         .delete(database);
                 break;
@@ -622,6 +703,30 @@ public class ZeroProvider extends ContentProvider {
             case ROUTE_WORKING_PERIODS_ITEM:
                 id = uri.getLastPathSegment();
                 count = builder.table(ZeroContract.WorkingPeriodsColumns.TABLE_NAME)
+                        .where(ZeroContract.WorkingPeriodsColumns._ID + "=?", id)
+                        .where(selection, selectionArgs)
+                        .update(database, values);
+                break;
+            case ROUTE_CONTACTS_LIST:
+                count = builder.table(ZeroContract.Contacts.TABLE_NAME)
+                        .where(selection, selectionArgs)
+                        .update(database, values);
+                break;
+            case ROUTE_CONTACTS_ITEM:
+                id = uri.getLastPathSegment();
+                count = builder.table(ZeroContract.Contacts.TABLE_NAME)
+                        .where(ZeroContract.WorkingPeriodsColumns._ID + "=?", id)
+                        .where(selection, selectionArgs)
+                        .update(database, values);
+                break;
+            case ROUTE_CONTACT_PARAMS_LIST:
+                count = builder.table(ZeroContract.ContactParams.TABLE_NAME)
+                        .where(selection, selectionArgs)
+                        .update(database, values);
+                break;
+            case ROUTE_CONTACT_PARAMS_ITEM:
+                id = uri.getLastPathSegment();
+                count = builder.table(ZeroContract.ContactParams.TABLE_NAME)
                         .where(ZeroContract.WorkingPeriodsColumns._ID + "=?", id)
                         .where(selection, selectionArgs)
                         .update(database, values);

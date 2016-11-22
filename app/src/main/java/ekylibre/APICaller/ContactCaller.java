@@ -83,6 +83,21 @@ public class ContactCaller
         return (null);
     }
 
+    public String getPicture(Instance instance, int pictureId)
+    {
+        JSONObject json = null;
+        try
+        {
+            json = instance.getJSONObject("/api/v1/intervention_targets/" + pictureId, "");
+            return (json.getString("picture"));
+
+        } catch (JSONException | IOException | HTTPException e)
+        {
+            e.printStackTrace();
+        }
+        return (null);
+    }
+
     public String getLastName()
     {
         return (lastName);
@@ -192,5 +207,11 @@ public class ContactCaller
             e.printStackTrace();
         }
         return (null);
+    }
+
+    public int getParamSize()
+    {
+        return (paramEmail.length() + paramWebsite.length() + paramPhone.length() + paramMobile
+                .length() + paramMails.length());
     }
 }

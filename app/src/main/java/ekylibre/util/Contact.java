@@ -1,5 +1,6 @@
 package ekylibre.util;
 
+import android.accounts.Account;
 import android.content.ContentProviderOperation;
 import android.content.Context;
 import android.provider.ContactsContract;
@@ -15,6 +16,12 @@ import ekylibre.APICaller.SyncAdapter;
 
 public class Contact
 {
+    public static final String TYPE_MAIL = "mail";
+    public static final String TYPE_EMAIL = "email";
+    public static final String TYPE_MOBILE = "mobile";
+    public static final String TYPE_PHONE = "phone";
+    public static final String TYPE_WEBSITE = "website";
+
     private String name;
     private String mobileNumber;
     private String homeNumber;
@@ -22,6 +29,7 @@ public class Contact
     private String email;
     private String company;
     private String jobTitle;
+    private String website;
     private byte[] photo;
     private ArrayList<ContentProviderOperation> contactParameter;
     private Context mContext;
@@ -32,13 +40,12 @@ public class Contact
         mContext = context;
     }
 
-    public void setAccount()
+    public void setAccount(Account account)
     {
         contactParameter.add(ContentProviderOperation.newInsert(
                 ContactsContract.RawContacts.CONTENT_URI)
                 .withValue(ContactsContract.RawContacts.ACCOUNT_TYPE, SyncAdapter.ACCOUNT_TYPE)
-                .withValue(ContactsContract.RawContacts.ACCOUNT_NAME, AccountTool.getAccountName(
-                        AccountTool.getCurrentAccount(mContext), mContext))
+                .withValue(ContactsContract.RawContacts.ACCOUNT_NAME, account)
                 .build());
     }
 
@@ -89,6 +96,44 @@ public class Contact
                         ContactsContract.CommonDataKinds.StructuredName.DISPLAY_NAME,
                         name).build());
 
+    }
+
+    public void setWebsite(String website)
+    {
+        if (website == null)
+            return;
+        this.website = website;
+        contactParameter.add(ContentProviderOperation.newInsert(
+                ContactsContract.Data.CONTENT_URI)
+                .withValueBackReference(ContactsContract.Data.RAW_CONTACT_ID, 0)
+                .withValue(ContactsContract.Data.MIMETYPE,
+                        ContactsContract.CommonDataKinds.Website.TYPE_WORK)
+                .withValue(
+                        ContactsContract.CommonDataKinds.Website.URL,
+                        website).build());
+    }
+
+    public void setMail(String street, String city, String postalCode, String country)
+    {
+        if (street == null || city == null || postalCode == null || country == null)
+            return;
+        contactParameter.add(ContentProviderOperation.newInsert(
+                ContactsContract.Data.CONTENT_URI)
+                .withValueBackReference(ContactsContract.Data.RAW_CONTACT_ID, 0)
+                .withValue(ContactsContract.Data.MIMETYPE,
+                        ContactsContract.CommonDataKinds.StructuredPostal.TYPE_WORK)
+                .withValue(
+                        ContactsContract.CommonDataKinds.StructuredPostal.STREET,
+                        street)
+                .withValue(
+                        ContactsContract.CommonDataKinds.StructuredPostal.CITY,
+                        city)
+                .withValue(
+                        ContactsContract.CommonDataKinds.StructuredPostal.POSTCODE,
+                        postalCode)
+                .withValue(
+                        ContactsContract.CommonDataKinds.StructuredPostal.COUNTRY,
+                        country).build());
     }
 
     public void setMobileNumber(String mobileNumber)

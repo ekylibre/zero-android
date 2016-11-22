@@ -110,6 +110,6 @@
     <string name="travel">Déplacement</string>
     <string name="intervention">Intervention</string>
     <string name="pref_syncContact">Synchronisation des contacts Ekylibre</string>
-    <string name="pref_syncContact_summary">Autoriser l'application à synchroniser vos
+    <string name="pref_syncContact_summary">Autoriser l\'application à synchroniser vos
         contacts Ekylibre</string>
 </resources>

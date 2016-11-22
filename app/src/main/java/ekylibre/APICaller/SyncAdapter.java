@@ -33,6 +33,7 @@ import java.util.UUID;
 
 import ekylibre.database.ZeroContract;
 import ekylibre.exceptions.HTTPException;
+import ekylibre.util.Contact;
 import ekylibre.util.DateConstant;
 import ekylibre.zero.BuildConfig;
 import ekylibre.util.AccountTool;
@@ -111,6 +112,12 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
                 null,
                 null);
         mContentResolver.delete(ZeroContract.InterventionParameters.CONTENT_URI,
+                null,
+                null);
+        mContentResolver.delete(ZeroContract.Contacts.CONTENT_URI,
+                null,
+                null);
+        mContentResolver.delete(ZeroContract.ContactParams.CONTENT_URI,
                 null,
                 null);
 
@@ -751,14 +758,70 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
 
         if (contactsList == null)
             return;
-
+        Contact contactCreator = new Contact(mContext);
         for (ContactCaller contact : contactsList)
         {
+            contactCreator.clear();
             cv.put(ZeroContract.Contacts.LAST_NAME, contact.getLastName());
+            cv.put(ZeroContract.Contacts.FIRST_NAME, contact.getFirstName());
+            cv.put(ZeroContract.Contacts.PICTURE_ID, contact.getPictureId());
+            String picture = contact.getPicture(instance, contact.getPictureId());
+            cv.put(ZeroContract.Contacts.PICTURE, picture);
             cv.put(ZeroContract.Contacts.USER, account.name);
-            mContentResolver.insert(ZeroContract.Plants.CONTENT_URI, cv);
+            contactCreator.setAccount(account);
+            contactCreator.setName(contact.getFirstName() + " " + contact.getLastName());
+            contactCreator.setPhoto(picture.getBytes());
+            addContactParams(contact, contactCreator);
+            mContentResolver.insert(ZeroContract.Contacts.CONTENT_URI, cv);
+            contactCreator.commit();
         }
         if (BuildConfig.DEBUG) Log.i(TAG, "Finish network contact synchronization");
+    }
+
+    private void addContactParams(ContactCaller contact, Contact contactCreator)
+    {
+        ContentValues cv = new ContentValues();
+        int i = -1;
+
+        while (contact.getMailLines(++i) != null)
+        {
+            cv.put(ZeroContract.ContactParams.MAIL_LINES, contact.getMailLines(i));
+            cv.put(ZeroContract.ContactParams.POSTAL_CODE, contact.getPostalCode(i));
+            cv.put(ZeroContract.ContactParams.CITY, contact.getCity(i));
+            cv.put(ZeroContract.ContactParams.COUNTRY, contact.getCountry(i));
+            cv.put(ZeroContract.ContactParams.TYPE, Contact.TYPE_MAIL);
+            contactCreator.setMail(contact.getMailLines(i), contact.getPostalCode(i),
+                    contact.getCity(i), contact.getCountry(i));
+            mContentResolver.insert(ZeroContract.ContactParams.CONTENT_URI, cv);
+        }
+        while (contact.getNextEmail() != null)
+        {
+            cv.put(ZeroContract.ContactParams.EMAIL, contact.getNextEmail());
+            cv.put(ZeroContract.ContactParams.TYPE, Contact.TYPE_EMAIL);
+            contactCreator.setEmail(contact.getNextEmail());
+            mContentResolver.insert(ZeroContract.ContactParams.CONTENT_URI, cv);
+        }
+        while (contact.getNextMobile() != null)
+        {
+            cv.put(ZeroContract.ContactParams.MOBILE, contact.getNextMobile());
+            cv.put(ZeroContract.ContactParams.TYPE, Contact.TYPE_MOBILE);
+            contactCreator.setMobileNumber(contact.getNextMobile());
+            mContentResolver.insert(ZeroContract.ContactParams.CONTENT_URI, cv);
+        }
+        while (contact.getNextPhone() != null)
+        {
+            cv.put(ZeroContract.ContactParams.PHONE, contact.getNextPhone());
+            cv.put(ZeroContract.ContactParams.TYPE, Contact.TYPE_PHONE);
+            contactCreator.setHomeNumber(contact.getNextPhone());
+            mContentResolver.insert(ZeroContract.ContactParams.CONTENT_URI, cv);
+        }
+        while (contact.getNextWebsite() != null)
+        {
+            cv.put(ZeroContract.ContactParams.WEBSITE, contact.getNextWebsite());
+            cv.put(ZeroContract.ContactParams.TYPE, Contact.TYPE_WEBSITE);
+            contactCreator.setWebsite(contact.getNextWebsite());
+            mContentResolver.insert(ZeroContract.ContactParams.CONTENT_URI, cv);
+        }
     }
 
     protected Instance getInstance(Account account)
