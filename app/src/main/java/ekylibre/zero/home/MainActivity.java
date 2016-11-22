@@ -320,19 +320,6 @@ public class MainActivity extends UpdatableActivity
 
     private void sync_contact()
     {
-        if (!PermissionManager.writeContactPermissions(this, this))
-            return;
-        Contact contact = new Contact(this);
-        contact.setAccount();
-        contact.setName("TEST");
-        contact.setEmail("email@ekylibre.org");
-        contact.setHomeNumber("1337");
-        contact.setMobileNumber("0612345678");
-        contact.setOrganization("Ekylibre", "Developer");
-        contact.setPhoto("");
-
-        contact.commit();
-        contact.clear();
 
     }
 
