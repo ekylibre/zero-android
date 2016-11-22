@@ -112,6 +112,8 @@ public class Contact
                 ContactsContract.Data.CONTENT_URI)
                 .withValueBackReference(ContactsContract.Data.RAW_CONTACT_ID, 0)
                 .withValue(ContactsContract.Data.MIMETYPE,
+                        ContactsContract.CommonDataKinds.Website.CONTENT_ITEM_TYPE)
+                .withValue(ContactsContract.CommonDataKinds.Website.TYPE,
                         ContactsContract.CommonDataKinds.Website.TYPE_WORK)
                 .withValue(
                         ContactsContract.CommonDataKinds.Website.URL,
@@ -126,10 +128,13 @@ public class Contact
                 ContactsContract.Data.CONTENT_URI)
                 .withValueBackReference(ContactsContract.Data.RAW_CONTACT_ID, 0)
                 .withValue(ContactsContract.Data.MIMETYPE,
-                        ContactsContract.CommonDataKinds.StructuredPostal.TYPE_WORK)
+                        ContactsContract.CommonDataKinds.StructuredPostal.CONTENT_ITEM_TYPE)
                 .withValue(
                         ContactsContract.CommonDataKinds.StructuredPostal.STREET,
                         street)
+                .withValue(
+                        ContactsContract.CommonDataKinds.StructuredPostal.TYPE,
+                        ContactsContract.CommonDataKinds.StructuredPostal.TYPE_WORK)
                 .withValue(
                         ContactsContract.CommonDataKinds.StructuredPostal.CITY,
                         city)

@@ -326,9 +326,14 @@ public class MainActivity extends UpdatableActivity
         contact.setAccount(AccountTool.getCurrentAccount(this));
         contact.setName("Je", "TEST");
         contact.setEmail("email@ekylibre.org");
+        contact.setEmail("email@ekylibre.com");
         contact.setHomeNumber("1337");
+        contact.setHomeNumber("1338");
         contact.setMobileNumber("0612345678");
+        contact.setMobileNumber("0612345679");
         contact.setOrganization("Ekylibre", "Developer");
+        contact.setWebsite("www.test.com");
+        contact.setMail("Pierre Bougon", "33600", "PESSAC", "fr");
         contact.setPhoto("");
 
         contact.commit();
