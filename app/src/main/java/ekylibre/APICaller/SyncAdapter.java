@@ -22,6 +22,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -747,8 +748,6 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
     {
         if (!getContactPref())
         {
-            Log.d(TAG, "============================ T AS PAS LE DROIIIIIIIIIIT " +
-                    "====================");
             return;
         }
         if (BuildConfig.DEBUG) Log.i(TAG, "Beginning network contact synchronization");
@@ -770,18 +769,17 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
             cv.put(ZeroContract.Contacts.LAST_NAME, contact.getLastName());
             cv.put(ZeroContract.Contacts.FIRST_NAME, contact.getFirstName());
             cv.put(ZeroContract.Contacts.PICTURE_ID, contact.getPictureId());
-            if (contact.getPictureId() != 0)
+            cv.put(ZeroContract.Contacts.USER, account.name);
+            contactCreator.setAccount(account);
+            if (contact.getPictureId() > 0)
             {
                 picture = contact.getPicture(instance, contact.getPictureId());
                 cv.put(ZeroContract.Contacts.PICTURE, picture);
                 if (picture != null)
                 {
-                    //contactCreator.setPhoto(picture.getBytes());
+                    contactCreator.setPhoto(picture);
                 }
-            }
-            cv.put(ZeroContract.Contacts.USER, account.name);
-            contactCreator.setAccount(account);
-            contactCreator.setName(contact.getFirstName(), contact.getLastName());
+            }            contactCreator.setName(contact.getFirstName(), contact.getLastName());
             contactCreator.setOrganization(contact.getOrganizationName(), contact.getOrganizationPost());
             addContactParams(contact, contactCreator);
             mContentResolver.insert(ZeroContract.Contacts.CONTENT_URI, cv);

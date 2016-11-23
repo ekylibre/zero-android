@@ -3,8 +3,12 @@ package ekylibre.util;
 import android.accounts.Account;
 import android.content.ContentProviderOperation;
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.provider.ContactsContract;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.util.ArrayList;
 
 import ekylibre.APICaller.SyncAdapter;
@@ -31,7 +35,7 @@ public class Contact
     private String company;
     private String jobTitle;
     private String website;
-    private byte[] photo;
+    private ByteArrayOutputStream photo;
     private ArrayList<ContentProviderOperation> contactParameter;
     private Context mContext;
 
@@ -54,12 +58,12 @@ public class Contact
     {
         if (photo == null)
             return;
-        this.photo = photo;
         contactParameter.add(ContentProviderOperation.newInsert(
                 ContactsContract.Data.CONTENT_URI)
                 .withValueBackReference(ContactsContract.Data.RAW_CONTACT_ID, 0)
                 .withValue(ContactsContract.Data.MIMETYPE,
-                        ContactsContract.CommonDataKinds.StructuredName.CONTENT_ITEM_TYPE)
+                        ContactsContract.CommonDataKinds.Photo.CONTENT_ITEM_TYPE)
+                .withValue(ContactsContract.CommonDataKinds.Photo.IS_SUPER_PRIMARY, 1)
                 .withValue(ContactsContract.CommonDataKinds.Photo.PHOTO, photo)
                 .build()
         );
@@ -70,18 +74,25 @@ public class Contact
     {
         if (photo == null)
             return;
-        this.photo = ImageConverter.createByteArrayFromBase64(photo);
+        this.photo = ImageConverter.createStreamFromBase64(photo);
         contactParameter.add(ContentProviderOperation.newInsert(
                 ContactsContract.Data.CONTENT_URI)
                 .withValueBackReference(ContactsContract.Data.RAW_CONTACT_ID, 0)
+                .withValue(ContactsContract.CommonDataKinds.Photo.IS_SUPER_PRIMARY, 1)
                 .withValue(ContactsContract.Data.MIMETYPE,
-                        ContactsContract.CommonDataKinds.StructuredName.CONTENT_ITEM_TYPE)
-                .withValue(ContactsContract.CommonDataKinds.Photo.PHOTO, this.photo)
+                        ContactsContract.CommonDataKinds.Photo.CONTENT_ITEM_TYPE)
+                .withValue(ContactsContract.CommonDataKinds.Photo.PHOTO, this.photo.toByteArray())
                 .build()
         );
 
+        try
+        {
+            this.photo.flush();
+        } catch (IOException e)
+        {
+            e.printStackTrace();
+        }
     }
-
 
     public void setName(String firstName, String lastName)
     {
@@ -298,10 +309,6 @@ public class Contact
         return (email);
     }
 
-    public byte[] getPhoto()
-    {
-        return (photo);
-    }
 
     public String getCompany()
     {
