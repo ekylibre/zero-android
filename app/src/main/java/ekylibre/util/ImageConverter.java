@@ -5,8 +5,11 @@ import android.graphics.BitmapFactory;
 import android.os.Environment;
 import android.util.Base64;
 
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 
 /**************************************
@@ -22,9 +25,13 @@ public class ImageConverter
         return (stream.toByteArray());
     }
 
-    public static byte[] createByteArrayFromBase64(String image)
+    public static ByteArrayOutputStream createStreamFromBase64(String image)
     {
-        return (Base64.decode(image, Base64.DEFAULT));
+        byte[] decodedString = Base64.decode(image, Base64.URL_SAFE);
+        Bitmap bitmap = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 70, stream);
+        return (stream);
     }
 
     public static String convertImageToBase64(Bitmap image)

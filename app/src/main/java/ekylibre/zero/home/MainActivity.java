@@ -5,6 +5,8 @@ import android.accounts.AccountManager;
 import android.content.ContentProviderOperation;
 import android.content.ContentResolver;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.support.design.widget.FloatingActionButton;
@@ -333,8 +335,11 @@ public class MainActivity extends UpdatableActivity
         contact.setMobileNumber("0612345679");
         contact.setOrganization("Ekylibre", "Developer");
         contact.setWebsite("www.test.com");
+        contact.setWebsite("www.qkzdjlkzqjd.com");
         contact.setMail("Pierre Bougon", "33600", "PESSAC", "fr");
-        contact.setPhoto("");
+        contact.setMail("2", "33600", "PESSAC", "fr");
+
+
 
         contact.commit();
         contact.clear();
