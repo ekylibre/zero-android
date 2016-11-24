@@ -167,6 +167,13 @@ public final class ZeroContract {
         String COUNTRY = "country";
     }
 
+    public interface LastSyncsColumns extends BaseColumns {
+        String TABLE_NAME   = "last_syncs";
+        String USER         = "user";
+        String TYPE         = "type";
+        String DATE         = "date";
+    }
+
 
     public static final class Crumbs implements CrumbsColumns {
         // Content URI for this table
@@ -360,6 +367,26 @@ public final class ZeroContract {
 
         public static final String[] PROJECTION_ALL = {_ID, FK_CONTACT, TYPE, EMAIL,
                 PHONE, MOBILE, WEBSITE, MAIL_LINES, POSTAL_CODE, CITY, COUNTRY};
+        public static final String[] PROJECTION_NONE = {_ID};
+
+        public static final String SORT_ORDER_DEFAULT = _ID + " ASC";
+
+    }
+
+    public static final class LastSyncs implements LastSyncsColumns
+    {
+        // Content URI for this table
+        public static final Uri CONTENT_URI = Uri.withAppendedPath(ZeroContract.CONTENT_URI,
+                "last_syncs");
+        // MIME type for lists of records.
+        public static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/vnd" +
+                ".ekylibre.zero.last_syncs";
+        // MIME type for individual record.
+        public static final String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE +
+                "/vnd.ekylibre.zero.last_syncs";
+
+        public static final String[] PROJECTION_ALL = {_ID, USER, TYPE, DATE};
+        public static final String[] PROJECTION_DATE = {DATE};
         public static final String[] PROJECTION_NONE = {_ID};
 
         public static final String SORT_ORDER_DEFAULT = _ID + " ASC";
