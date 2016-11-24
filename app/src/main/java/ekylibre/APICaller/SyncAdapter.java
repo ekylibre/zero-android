@@ -756,7 +756,8 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
         String picture;
 
         List<ContactCaller> contactsList;
-        contactsList = ContactCaller.all(instance, null);
+        String lastSyncContact = getLastSyncContact(account);
+        contactsList = ContactCaller.all(instance, lastSyncContact);
 
 
         if (contactsList == null)
@@ -785,7 +786,41 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
             mContentResolver.insert(ZeroContract.Contacts.CONTENT_URI, cv);
             contactCreator.commit();
         }
+        setNewSyncDate(account);
         if (BuildConfig.DEBUG) Log.i(TAG, "Finish network contact synchronization");
+    }
+
+    private void setNewSyncDate(Account account)
+    {
+        ContentValues cv = new ContentValues();
+        cv.put(ZeroContract.LastSyncs.DATE, DateConstant.getCurrentDateFormatted());
+        int ret = mContentResolver.update(
+                ZeroContract.LastSyncs.CONTENT_URI,
+                cv,
+                ZeroContract.LastSyncs.USER + " LIKE " + account.name +
+                        " AND " + ZeroContract.LastSyncs.TYPE + " LIKE " + "CONTACT",
+                null);
+        if (ret == 0)
+        {
+            cv.put(ZeroContract.LastSyncs.USER, account.name);
+            cv.put(ZeroContract.LastSyncs.TYPE, "CONTACT");
+            mContentResolver.insert(ZeroContract.LastSyncs.CONTENT_URI, cv);
+        }
+    }
+
+    private String getLastSyncContact(Account account)
+    {
+        Cursor curs = mContentResolver.query(
+                ZeroContract.LastSyncs.CONTENT_URI,
+                ZeroContract.LastSyncs.PROJECTION_DATE,
+                ZeroContract.LastSyncs.USER + " LIKE " + account.name,
+                null,
+                null);
+        if (curs == null || curs.getCount() == 0)
+            return ("");
+        String ret = curs.getString(0);
+        curs.close();
+        return (ret);
     }
 
     private void addContactParams(ContactCaller contact, Contact contactCreator)

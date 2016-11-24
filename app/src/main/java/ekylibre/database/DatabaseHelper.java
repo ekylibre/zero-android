@@ -11,7 +11,7 @@ import android.util.Log;
 
 public class DatabaseHelper extends SQLiteOpenHelper
 {
-    private static final int DATABASE_VERSION = 18;
+    private static final int DATABASE_VERSION = 19;
 
     private static final String DATABASE_NAME = "zero";
 
@@ -376,6 +376,18 @@ public class DatabaseHelper extends SQLiteOpenHelper
                 database.execSQL("ALTER TABLE " + ZeroContract.Contacts.TABLE_NAME + " ADD " +
                         "organization_post VARCHAR(255)");
                 if (newVersion == 18)
+                    break;
+            }
+            case 19:
+            {
+                database.execSQL("CREATE TABLE IF NOT EXISTS " + ZeroContract.LastSyncs.TABLE_NAME
+                        + "("
+                        + ZeroContract.LastSyncs._ID + " INTEGER PRIMARY KEY AUTOINCREMENT"
+                        + ", " + ZeroContract.LastSyncs.USER + " VARCHAR(255)"
+                        + ", " + ZeroContract.LastSyncs.TYPE + " VARCHAR(255)"
+                        + ", " + ZeroContract.LastSyncs.DATE + " VARCHAR(255)"
+                        + ")");
+                if (newVersion == 19)
                     break;
             }
         }
