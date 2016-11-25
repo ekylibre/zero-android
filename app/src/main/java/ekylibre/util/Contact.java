@@ -2,6 +2,7 @@ package ekylibre.util;
 
 import android.accounts.Account;
 import android.content.ContentProviderOperation;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.provider.ContactsContract;
@@ -252,6 +253,20 @@ public class Contact
                 .withValue(ContactsContract.CommonDataKinds.Organization.TITLE, jobTitle)
                 .withValue(ContactsContract.CommonDataKinds.Organization.TYPE, ContactsContract.CommonDataKinds.Organization.TYPE_WORK)
                 .build());
+    }
+
+    public void deleteContact(String firstName, String lastName, Context context)
+    {
+        ArrayList contactParam = new ArrayList();
+        ContentResolver contentResolver = context.getContentResolver();
+
+        contactParam.add(
+                ContentProviderOperation.newDelete(ContactsContract.RawContacts.CONTENT_URI)
+                        .withSelection(ContactsContract.CommonDataKinds.StructuredName.GIVEN_NAME + " = ? " + " " +
+                                "AND " + ContactsContract.CommonDataKinds.StructuredName.FAMILY_NAME + " = ? ",
+                                new String[] {firstName, lastName})
+                        .build());
+
     }
 
     public void commit()

@@ -24,7 +24,9 @@ public class ContactCaller
     private String      lastName;
     private String      firstName;
     private int         pictureId;
+    private int         ek_id;
     private String      picture;
+    private String      type;
     private String      organizationName;
     private String      organizationPost;
     private JSONArray   paramEmail;
@@ -39,33 +41,38 @@ public class ContactCaller
 
     public ContactCaller(JSONObject json)
     {
+        JSONObject contact;
+
         iteratorEmail   = 0;
         iteratorPhone   = 0;
         iteratorMobile  = 0;
         iteratorWebsite = 0;
         try
         {
-            if (!json.isNull("last_name"))
-                lastName         = json.getString("last_name");
-            if (!json.isNull("first_name"))
-                firstName        = json.getString("first_name");
-            if (!json.isNull("picture"))
-                pictureId        = json.getInt("picture");
-            if (!json.isNull("organization"))
+            ek_id = json.getInt("id");
+            type = json.getString("type");
+            contact = json.getJSONObject("entity");
+            if (!contact.isNull("last_name"))
+                lastName         = contact.getString("last_name");
+            if (!contact.isNull("first_name"))
+                firstName        = contact.getString("first_name");
+            if (!contact.isNull("picture"))
+                pictureId        = ek_id;
+            if (!contact.isNull("organization"))
             {
-                organizationName = json.getJSONObject("organization").getString("name");
-                organizationPost = json.getJSONObject("organization").getString("post");
+                organizationName = contact.getJSONObject("organization").getString("name");
+                organizationPost = contact.getJSONObject("organization").getString("post");
             }
-            if (!json.isNull("email"))
-                paramEmail       = json.getJSONArray("email");
-            if (!json.isNull("phone"))
-                paramPhone       = json.getJSONArray("phone");
-            if (!json.isNull("mobile"))
-                paramMobile      = json.getJSONArray("mobile");
-            if (!json.isNull("website"))
-                paramWebsite     = json.getJSONArray("website");
-            if (!json.isNull("mails"))
-                paramMails       = json.getJSONArray("mails");
+            if (!contact.isNull("email"))
+                paramEmail       = contact.getJSONArray("email");
+            if (!contact.isNull("phone"))
+                paramPhone       = contact.getJSONArray("phone");
+            if (!contact.isNull("mobile"))
+                paramMobile      = contact.getJSONArray("mobile");
+            if (!contact.isNull("website"))
+                paramWebsite     = contact.getJSONArray("website");
+            if (!contact.isNull("mails"))
+                paramMails       = contact.getJSONArray("mails");
         } catch (JSONException e)
         {
             e.printStackTrace();
@@ -259,5 +266,15 @@ public class ContactCaller
     public String getOrganizationPost()
     {
         return (organizationPost);
+    }
+
+    public String getType()
+    {
+        return (type);
+    }
+
+    public int getEkId()
+    {
+        return (ek_id);
     }
 }
