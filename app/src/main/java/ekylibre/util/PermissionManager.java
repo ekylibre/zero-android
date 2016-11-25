@@ -156,6 +156,8 @@ public class PermissionManager
     {
         if (Build.VERSION.SDK_INT >= 23 &&
                 (ActivityCompat.checkSelfPermission(context, Manifest.permission.WRITE_CONTACTS)
+                        != PackageManager.PERMISSION_GRANTED
+                        || ActivityCompat.checkSelfPermission(context, Manifest.permission.READ_CONTACTS)
                         != PackageManager.PERMISSION_GRANTED))
         {
             Log.d(TAG, "REQUESTING PERMISSIONS");
@@ -164,7 +166,9 @@ public class PermissionManager
                     REQUEST_CONTACT);
 
             if (Build.VERSION.SDK_INT >= 23 &&
-                    (ActivityCompat.checkSelfPermission(context, Manifest.permission.VIBRATE)
+                    (ActivityCompat.checkSelfPermission(context, Manifest.permission.WRITE_CONTACTS)
+                            != PackageManager.PERMISSION_GRANTED
+                            || ActivityCompat.checkSelfPermission(context, Manifest.permission.READ_CONTACTS)
                             != PackageManager.PERMISSION_GRANTED))
                 return (false);
         }

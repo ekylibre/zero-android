@@ -11,7 +11,7 @@ import android.util.Log;
 
 public class DatabaseHelper extends SQLiteOpenHelper
 {
-    private static final int DATABASE_VERSION = 19;
+    private static final int DATABASE_VERSION = 20;
 
     private static final String DATABASE_NAME = "zero";
 
@@ -388,6 +388,15 @@ public class DatabaseHelper extends SQLiteOpenHelper
                         + ", " + ZeroContract.LastSyncs.DATE + " VARCHAR(255)"
                         + ")");
                 if (newVersion == 19)
+                    break;
+            }
+            case 20:
+            {
+                database.execSQL("ALTER TABLE " + ZeroContract.Contacts.TABLE_NAME + " ADD " +
+                        "type VARCHAR(255)");
+                database.execSQL("ALTER TABLE " + ZeroContract.Contacts.TABLE_NAME + " ADD " +
+                        "ek_id INTEGER");
+                if (newVersion == 20)
                     break;
             }
         }

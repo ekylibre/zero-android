@@ -753,11 +753,11 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
         if (BuildConfig.DEBUG) Log.i(TAG, "Beginning network contact synchronization");
         ContentValues cv = new ContentValues();
         Instance instance = getInstance(account);
-        String picture;
 
         List<ContactCaller> contactsList;
         String lastSyncContact = getLastSyncContact(account);
-        contactsList = ContactCaller.all(instance, lastSyncContact);
+        contactsList = ContactCaller.all(instance, "?last_synchro=" + lastSyncContact);
+
 
 
         if (contactsList == null)
@@ -767,27 +767,64 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
         {
             cv.clear();
             contactCreator.clear();
-            cv.put(ZeroContract.Contacts.LAST_NAME, contact.getLastName());
-            cv.put(ZeroContract.Contacts.FIRST_NAME, contact.getFirstName());
-            cv.put(ZeroContract.Contacts.PICTURE_ID, contact.getPictureId());
-            cv.put(ZeroContract.Contacts.USER, account.name);
-            contactCreator.setAccount(account);
-            if (contact.getPictureId() > 0)
+            if (contact.getType().equals("create"))
+                insertContact(account, contact, contactCreator, instance, cv);
+            else if (contact.getType().equals("update"))
             {
-                picture = contact.getPicture(instance, contact.getPictureId());
-                cv.put(ZeroContract.Contacts.PICTURE, picture);
-                if (picture != null)
-                {
-                    contactCreator.setPhoto(picture);
-                }
-            }            contactCreator.setName(contact.getFirstName(), contact.getLastName());
-            contactCreator.setOrganization(contact.getOrganizationName(), contact.getOrganizationPost());
-            addContactParams(contact, contactCreator);
-            mContentResolver.insert(ZeroContract.Contacts.CONTENT_URI, cv);
-            contactCreator.commit();
+                destroyContact(contact, contactCreator);
+                insertContact(account, contact, contactCreator, instance, cv);
+            }
+            else
+            {
+                destroyContact(contact, contactCreator);
+            }
         }
         setNewSyncDate(account);
         if (BuildConfig.DEBUG) Log.i(TAG, "Finish network contact synchronization");
+    }
+
+    private void destroyContact(ContactCaller contact, Contact contactCreator)
+    {
+        Cursor curs = mContentResolver.query(
+                ZeroContract.Contacts.CONTENT_URI,
+                ZeroContract.Contacts.PROJECTION_NAME,
+                ZeroContract.Contacts.EK_ID + " == " + contact.getEkId(),
+                null,
+                null);
+        if (curs == null || curs.getCount() == 0)
+            return;
+        curs.moveToFirst();
+        contactCreator.deleteContact(curs.getString(0), curs.getString(1), mContext);
+        contactCreator.commit();
+        contactCreator.clear();
+        curs.close();
+    }
+
+    private void insertContact(Account account, ContactCaller contact, Contact contactCreator,
+                               Instance instance, ContentValues cv)
+    {
+        String picture;
+
+
+        cv.put(ZeroContract.Contacts.LAST_NAME, contact.getLastName());
+        cv.put(ZeroContract.Contacts.FIRST_NAME, contact.getFirstName());
+        cv.put(ZeroContract.Contacts.PICTURE_ID, contact.getPictureId());
+        cv.put(ZeroContract.Contacts.USER, account.name);
+        cv.put(ZeroContract.Contacts.EK_ID, contact.getEkId());
+        cv.put(ZeroContract.Contacts.TYPE, contact.getType());
+        contactCreator.setAccount(account);
+        if (contact.getPictureId() > 0)
+        {
+            picture = contact.getPicture(instance, contact.getPictureId());
+            cv.put(ZeroContract.Contacts.PICTURE, picture);
+            if (picture != null)
+                contactCreator.setPhoto(picture);
+        }
+        contactCreator.setName(contact.getFirstName(), contact.getLastName());
+        contactCreator.setOrganization(contact.getOrganizationName(), contact.getOrganizationPost());
+        addContactParams(contact, contactCreator);
+        mContentResolver.insert(ZeroContract.Contacts.CONTENT_URI, cv);
+        contactCreator.commit();
     }
 
     private void setNewSyncDate(Account account)
@@ -797,9 +834,10 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
         int ret = mContentResolver.update(
                 ZeroContract.LastSyncs.CONTENT_URI,
                 cv,
-                ZeroContract.LastSyncs.USER + " LIKE " + account.name +
-                        " AND " + ZeroContract.LastSyncs.TYPE + " LIKE " + "CONTACT",
+                ZeroContract.LastSyncs.USER + " LIKE " + "\"" + account.name + "\"" +
+                        " AND " + ZeroContract.LastSyncs.TYPE + " LIKE " + "\"CONTACT\"",
                 null);
+
         if (ret == 0)
         {
             cv.put(ZeroContract.LastSyncs.USER, account.name);
@@ -813,11 +851,12 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
         Cursor curs = mContentResolver.query(
                 ZeroContract.LastSyncs.CONTENT_URI,
                 ZeroContract.LastSyncs.PROJECTION_DATE,
-                ZeroContract.LastSyncs.USER + " LIKE " + account.name,
+                ZeroContract.LastSyncs.USER + " LIKE " + "\"" + account.name + "\"",
                 null,
                 null);
         if (curs == null || curs.getCount() == 0)
             return ("");
+        curs.moveToFirst();
         String ret = curs.getString(0);
         curs.close();
         return (ret);
@@ -864,7 +903,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
             cv.clear();
             cv.put(ZeroContract.ContactParams.PHONE, phone);
             cv.put(ZeroContract.ContactParams.TYPE, Contact.TYPE_PHONE);
-            contactCreator.setHomeNumber(phone);
+            contactCreator.setWorkNumber(phone);
             mContentResolver.insert(ZeroContract.ContactParams.CONTENT_URI, cv);
         }
         String website;

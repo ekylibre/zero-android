@@ -5,6 +5,7 @@ import android.database.DatabaseErrorHandler;
 import android.net.Uri;
 import android.provider.BaseColumns;
 import android.provider.ContactsContract;
+import android.support.design.internal.NavigationMenu;
 
 import java.lang.annotation.Target;
 import java.util.UUID;
@@ -144,6 +145,8 @@ public final class ZeroContract {
 
     public interface ContactsColumns extends BaseColumns {
         String TABLE_NAME = "contacts";
+        String EK_ID = "ek_id";
+        String TYPE = "type";
         String LAST_NAME = "last_name";
         String FIRST_NAME = "first_name";
         String USER = "user";
@@ -347,6 +350,7 @@ public final class ZeroContract {
                 "/vnd.ekylibre.zero.contact";
 
         public static final String[] PROJECTION_ALL = {_ID, LAST_NAME, FIRST_NAME, USER, PICTURE};
+        public static final String[] PROJECTION_NAME = {FIRST_NAME, LAST_NAME};
         public static final String[] PROJECTION_NONE = {_ID};
 
         public static final String SORT_ORDER_DEFAULT = _ID + " ASC";

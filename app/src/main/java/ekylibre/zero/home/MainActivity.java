@@ -108,6 +108,7 @@ public class MainActivity extends UpdatableActivity
         mPrgressBar = (ProgressBar)findViewById(R.id.progress_bar);
         sync_data();
         firstPass = false;
+        PermissionManager.writeContactPermissions(this, this);
     }
 
     /*
