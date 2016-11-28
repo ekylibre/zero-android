@@ -101,6 +101,7 @@ public class MainActivity extends UpdatableActivity
 
         setDrawerLayout();
         startConnectionManager();
+        PermissionManager.multiplePermissions(this, this);
         startGeneralHandler();
         View headerLayout = mNavigationView.inflateHeaderView(R.layout.nav_header_main);
         mNav_account = (TextView)headerLayout.findViewById(R.id.nav_accountName);
@@ -108,7 +109,6 @@ public class MainActivity extends UpdatableActivity
         mPrgressBar = (ProgressBar)findViewById(R.id.progress_bar);
         sync_data();
         firstPass = false;
-        PermissionManager.writeContactPermissions(this, this);
     }
 
     /*
@@ -304,11 +304,6 @@ public class MainActivity extends UpdatableActivity
             case R.id.nav_sync :
             {
                 forceSync_data();
-                break;
-            }
-            case R.id.nav_contact :
-            {
-                sync_contact();
                 break;
             }
             default:

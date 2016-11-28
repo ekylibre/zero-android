@@ -11,6 +11,7 @@ import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 
 import ekylibre.zero.SettingsActivity;
+import ekylibre.zero.home.MainActivity;
 
 /**************************************
  * Created by pierre on 8/22/16.      *
@@ -25,6 +26,7 @@ public class PermissionManager
     private final static int		REQUEST_INTERNET = 4;
     private final static int		REQUEST_VIBRATION = 5;
     private final static int		REQUEST_CONTACT = 6;
+    private final static int		REQUEST_MULTIPLE = 7;
 
     public static boolean calendarPermissions(Context context, Activity activity)
     {
@@ -140,7 +142,7 @@ public class PermissionManager
         {
             Log.d(TAG, "REQUESTING PERMISSIONS");
             ActivityCompat.requestPermissions(activity,
-                    new String[]{Manifest.permission.ACCESS_NETWORK_STATE, Manifest.permission.INTERNET},
+                    new String[]{Manifest.permission.VIBRATE},
                     REQUEST_VIBRATION);
 
             if (Build.VERSION.SDK_INT >= 23 &&
@@ -162,7 +164,8 @@ public class PermissionManager
         {
             Log.d(TAG, "REQUESTING PERMISSIONS");
             ActivityCompat.requestPermissions(activity,
-                    new String[]{Manifest.permission.ACCESS_NETWORK_STATE, Manifest.permission.WRITE_CONTACTS},
+                    new String[]{Manifest.permission.WRITE_CONTACTS,
+                            Manifest.permission.READ_CONTACTS},
                     REQUEST_CONTACT);
 
             if (Build.VERSION.SDK_INT >= 23 &&
@@ -174,5 +177,17 @@ public class PermissionManager
         }
         Log.d(TAG, "PERMISSIONS GRANTED");
         return (true);
+    }
+
+    public static void multiplePermissions(Context context, Activity activity)
+    {
+        ActivityCompat.requestPermissions(activity,
+                new String[]{
+                        Manifest.permission.ACCESS_NETWORK_STATE,
+                        Manifest.permission.INTERNET,
+                        Manifest.permission.WRITE_CONTACTS,
+                        Manifest.permission.READ_CONTACTS,
+                        Manifest.permission.VIBRATE},
+                REQUEST_MULTIPLE);
     }
 }
