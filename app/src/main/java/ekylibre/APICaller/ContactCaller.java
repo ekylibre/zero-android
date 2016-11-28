@@ -51,28 +51,31 @@ public class ContactCaller
         {
             ek_id = json.getInt("id");
             type = json.getString("type");
-            contact = json.getJSONObject("entity");
-            if (!contact.isNull("last_name"))
-                lastName         = contact.getString("last_name");
-            if (!contact.isNull("first_name"))
-                firstName        = contact.getString("first_name");
-            if (!contact.isNull("picture"))
-                pictureId        = ek_id;
-            if (!contact.isNull("organization"))
+            if (!json.isNull("entity"))
             {
-                organizationName = contact.getJSONObject("organization").getString("name");
-                organizationPost = contact.getJSONObject("organization").getString("post");
+                contact = json.getJSONObject("entity");
+                if (!contact.isNull("last_name"))
+                    lastName = contact.getString("last_name");
+                if (!contact.isNull("first_name"))
+                    firstName = contact.getString("first_name");
+                if (!contact.isNull("picture"))
+                    pictureId = ek_id;
+                if (!contact.isNull("organization"))
+                {
+                    organizationName = contact.getJSONObject("organization").getString("name");
+                    organizationPost = contact.getJSONObject("organization").getString("post");
+                }
+                if (!contact.isNull("email"))
+                    paramEmail = contact.getJSONArray("email");
+                if (!contact.isNull("phone"))
+                    paramPhone = contact.getJSONArray("phone");
+                if (!contact.isNull("mobile"))
+                    paramMobile = contact.getJSONArray("mobile");
+                if (!contact.isNull("website"))
+                    paramWebsite = contact.getJSONArray("website");
+                if (!contact.isNull("mails"))
+                    paramMails = contact.getJSONArray("mails");
             }
-            if (!contact.isNull("email"))
-                paramEmail       = contact.getJSONArray("email");
-            if (!contact.isNull("phone"))
-                paramPhone       = contact.getJSONArray("phone");
-            if (!contact.isNull("mobile"))
-                paramMobile      = contact.getJSONArray("mobile");
-            if (!contact.isNull("website"))
-                paramWebsite     = contact.getJSONArray("website");
-            if (!contact.isNull("mails"))
-                paramMails       = contact.getJSONArray("mails");
         } catch (JSONException e)
         {
             e.printStackTrace();

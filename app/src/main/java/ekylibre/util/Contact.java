@@ -6,6 +6,7 @@ import android.content.ContentResolver;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.provider.ContactsContract;
+import android.util.Log;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -257,15 +258,32 @@ public class Contact
 
     public void deleteContact(String firstName, String lastName, Context context)
     {
-        ArrayList contactParam = new ArrayList();
         ContentResolver contentResolver = context.getContentResolver();
 
-        contactParam.add(
+        Log.d("AZERTY", "params = " + firstName + "       " + lastName);
+        contactParameter.clear();
+        contactParameter.add(
                 ContentProviderOperation.newDelete(ContactsContract.RawContacts.CONTENT_URI)
-                        .withSelection(ContactsContract.CommonDataKinds.StructuredName.GIVEN_NAME + " = ? " + " " +
-                                "AND " + ContactsContract.CommonDataKinds.StructuredName.FAMILY_NAME + " = ? ",
+                        .withSelection(
+                                ContactsContract.CommonDataKinds.StructuredName.GIVEN_NAME
+                                        + " LIKE " + "\"" + firstName + "\""
+                                        + " AND "
+                                        + ContactsContract.CommonDataKinds.StructuredName.FAMILY_NAME
+                                        + " LIKE " + "\"" + lastName + "\"",
+                                null)
+                        .build());
+/*
+        contactParameter.add(
+                ContentProviderOperation.newDelete(ContactsContract.RawContacts.CONTENT_URI)
+                        .withSelection(
+                                ContactsContract.CommonDataKinds.StructuredName.GIVEN_NAME
+                                        + " = ?"
+                                        + " AND "
+                                        + ContactsContract.CommonDataKinds.StructuredName.FAMILY_NAME
+                                        + " = ?",
                                 new String[] {firstName, lastName})
                         .build());
+*/
 
     }
 

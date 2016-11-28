@@ -24,6 +24,11 @@ import org.json.JSONObject;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.nio.charset.Charset;
+import java.nio.charset.CharsetEncoder;
+import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -113,12 +118,6 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
                 null,
                 null);
         mContentResolver.delete(ZeroContract.InterventionParameters.CONTENT_URI,
-                null,
-                null);
-        mContentResolver.delete(ZeroContract.Contacts.CONTENT_URI,
-                null,
-                null);
-        mContentResolver.delete(ZeroContract.ContactParams.CONTENT_URI,
                 null,
                 null);
 
@@ -755,8 +754,16 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
         Instance instance = getInstance(account);
 
         List<ContactCaller> contactsList;
-        String lastSyncContact = getLastSyncContact(account);
-        contactsList = ContactCaller.all(instance, "?last_synchro=" + lastSyncContact);
+        String lastSyncContact = null;
+        try
+        {
+            lastSyncContact = getLastSyncContact(account);
+        } catch (UnsupportedEncodingException e)
+        {
+            lastSyncContact = "";
+            e.printStackTrace();
+        }
+        contactsList = ContactCaller.all(instance, lastSyncContact);
 
 
 
@@ -772,11 +779,14 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
             else if (contact.getType().equals("update"))
             {
                 destroyContact(contact, contactCreator);
-                insertContact(account, contact, contactCreator, instance, cv);
+                updateContact(account, contact, contactCreator, instance, cv);
             }
             else
             {
                 destroyContact(contact, contactCreator);
+                mContentResolver.delete(ZeroContract.Contacts.CONTENT_URI,
+                        contact.getEkId() + " == " + ZeroContract.Contacts.EK_ID,
+                        null);
             }
         }
         setNewSyncDate(account);
@@ -785,6 +795,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
 
     private void destroyContact(ContactCaller contact, Contact contactCreator)
     {
+        Log.d(TAG, "Try to destroy id => " + contact.getEkId());
         Cursor curs = mContentResolver.query(
                 ZeroContract.Contacts.CONTENT_URI,
                 ZeroContract.Contacts.PROJECTION_NAME,
@@ -827,6 +838,40 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
         contactCreator.commit();
     }
 
+    private void updateContact(Account account, ContactCaller contact, Contact contactCreator,
+                               Instance instance, ContentValues cv)
+    {
+        String picture;
+
+
+        cv.put(ZeroContract.Contacts.LAST_NAME, contact.getLastName());
+        cv.put(ZeroContract.Contacts.FIRST_NAME, contact.getFirstName());
+        cv.put(ZeroContract.Contacts.PICTURE_ID, contact.getPictureId());
+        cv.put(ZeroContract.Contacts.USER, account.name);
+        cv.put(ZeroContract.Contacts.EK_ID, contact.getEkId());
+        cv.put(ZeroContract.Contacts.TYPE, contact.getType());
+        contactCreator.setAccount(account);
+        if (contact.getPictureId() > 0)
+        {
+            picture = contact.getPicture(instance, contact.getPictureId());
+            cv.put(ZeroContract.Contacts.PICTURE, picture);
+            if (picture != null)
+                contactCreator.setPhoto(picture);
+        }
+        contactCreator.setName(contact.getFirstName(), contact.getLastName());
+        contactCreator.setOrganization(contact.getOrganizationName(), contact.getOrganizationPost());
+
+//      TODO : update contact params into database
+        addContactParams(contact, contactCreator);
+
+        mContentResolver.update(ZeroContract.Contacts.CONTENT_URI,
+                cv,
+                contact.getEkId() + " == " + ZeroContract.Contacts.EK_ID,
+                null);
+        contactCreator.commit();
+    }
+
+
     private void setNewSyncDate(Account account)
     {
         ContentValues cv = new ContentValues();
@@ -846,7 +891,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
         }
     }
 
-    private String getLastSyncContact(Account account)
+    private String getLastSyncContact(Account account) throws UnsupportedEncodingException
     {
         Cursor curs = mContentResolver.query(
                 ZeroContract.LastSyncs.CONTENT_URI,
@@ -859,6 +904,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
         curs.moveToFirst();
         String ret = curs.getString(0);
         curs.close();
+        ret = "?last_synchro=" + URLEncoder.encode(ret, StandardCharsets.UTF_8.name());
         return (ret);
     }
 
