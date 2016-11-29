@@ -263,7 +263,7 @@ public class Contact
         Log.d("AZERTY", "params = " + firstName + "       " + lastName);
         contactParameter.clear();
         contactParameter.add(
-                ContentProviderOperation.newDelete(ContactsContract.RawContacts.CONTENT_URI)
+                ContentProviderOperation.newDelete(ContactsContract.Data.CONTENT_URI)
                         .withSelection(
                                 ContactsContract.CommonDataKinds.StructuredName.GIVEN_NAME
                                         + " LIKE " + "\"" + firstName + "\""
@@ -272,19 +272,6 @@ public class Contact
                                         + " LIKE " + "\"" + lastName + "\"",
                                 null)
                         .build());
-/*
-        contactParameter.add(
-                ContentProviderOperation.newDelete(ContactsContract.RawContacts.CONTENT_URI)
-                        .withSelection(
-                                ContactsContract.CommonDataKinds.StructuredName.GIVEN_NAME
-                                        + " = ?"
-                                        + " AND "
-                                        + ContactsContract.CommonDataKinds.StructuredName.FAMILY_NAME
-                                        + " = ?",
-                                new String[] {firstName, lastName})
-                        .build());
-*/
-
     }
 
     public void commit()
