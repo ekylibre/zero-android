@@ -861,14 +861,32 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
         contactCreator.setName(contact.getFirstName(), contact.getLastName());
         contactCreator.setOrganization(contact.getOrganizationName(), contact.getOrganizationPost());
 
-//      TODO : update contact params into database
-        addContactParams(contact, contactCreator);
+        updateContactParams(contact, contactCreator);
 
         mContentResolver.update(ZeroContract.Contacts.CONTENT_URI,
                 cv,
                 contact.getEkId() + " == " + ZeroContract.Contacts.EK_ID,
                 null);
         contactCreator.commit();
+    }
+
+    private void updateContactParams(ContactCaller contact, Contact contactCreator)
+    {
+        Cursor curs = mContentResolver.query(
+                ZeroContract.Contacts.CONTENT_URI,
+                ZeroContract.Contacts.PROJECTION_NONE,
+                ZeroContract.Contacts.EK_ID + " == " + contact.getEkId(),
+                null,
+                null);
+        if (curs != null && curs.getCount() != 0)
+        {
+            curs.moveToNext();
+            mContentResolver.delete(ZeroContract.ContactParams.CONTENT_URI,
+                    ZeroContract.ContactParams.FK_CONTACT + " == " + curs.getInt(0),
+                    null);
+            curs.close();
+        }
+        addContactParams(contact, contactCreator);
     }
 
 
