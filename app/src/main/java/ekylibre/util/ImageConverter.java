@@ -18,6 +18,9 @@ import java.util.ArrayList;
  *************************************/
 public class ImageConverter
 {
+    /*
+    ** @return byteArray from bitmap
+    */
     private static byte[] getBytesFromBitmap(Bitmap bitmap)
     {
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
@@ -25,6 +28,19 @@ public class ImageConverter
         return (stream.toByteArray());
     }
 
+    /*
+    ** @return byteArray from base64 String
+    */
+    public static byte[] getByteArrayFromBase64(String image)
+    {
+        byte[] decodedString = Base64.decode(image, Base64.URL_SAFE);
+        Bitmap bitmap = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+        return (getBytesFromBitmap(bitmap));
+    }
+
+    /*
+    ** @return output stream from base64 String
+    */
     public static ByteArrayOutputStream createStreamFromBase64(String image)
     {
         byte[] decodedString = Base64.decode(image, Base64.URL_SAFE);
@@ -34,6 +50,9 @@ public class ImageConverter
         return (stream);
     }
 
+    /*
+    ** @return base64 String form Bitmap image
+    */
     public static String convertImageToBase64(Bitmap image)
     {
         String imgString = Base64.encodeToString(getBytesFromBitmap(image),
