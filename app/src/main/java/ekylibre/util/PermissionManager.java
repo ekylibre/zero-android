@@ -17,16 +17,23 @@ import ekylibre.zero.home.MainActivity;
  * Created by pierre on 8/22/16.      *
  * ekylibre for zero-android          *
  *************************************/
+
+/*
+** Use this class to request and check permissions for Android SDK >= 23
+** Each methods will check permissions,
+** if you don't have them the request will be activated
+** and finally the check is done again to give the final answer
+*/
 public class PermissionManager
 {
     private final static String		TAG = "Permission manag";
-    private final static int		REQUEST_CALENDAR = 1;
-    private final static int		REQUEST_GPS = 2;
-    private final static int		REQUEST_STORAGE = 3;
-    private final static int		REQUEST_INTERNET = 4;
-    private final static int		REQUEST_VIBRATION = 5;
-    private final static int		REQUEST_CONTACT = 6;
-    private final static int		REQUEST_MULTIPLE = 7;
+    private final static int		REQUEST_CALENDAR    = 1;
+    private final static int		REQUEST_GPS         = 2;
+    private final static int		REQUEST_STORAGE     = 3;
+    private final static int		REQUEST_INTERNET    = 4;
+    private final static int		REQUEST_VIBRATION   = 5;
+    private final static int		REQUEST_CONTACT     = 6;
+    private final static int		REQUEST_MULTIPLE    = 7;
 
     public static boolean calendarPermissions(Context context, Activity activity)
     {
