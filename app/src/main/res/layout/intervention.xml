@@ -30,6 +30,8 @@
             android:layout_height="wrap_content"
             android:gravity="center"/>
 
+
+
         <android.support.v7.widget.CardView
             xmlns:card_view="http://schemas.android.com/apk/res-auto"
             android:id="@+id/card_view"
@@ -66,8 +68,79 @@
 
                 </RelativeLayout>
             </ScrollView>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="gone">
+
+                <android.support.design.widget.TextInputEditText
+                    android:layout_width="70dp"
+                    android:layout_height="30dp"
+                    android:id="@+id/inputEmpty"
+                    android:background="@drawable/editbar"
+                    android:layout_marginEnd="22dp"
+                    android:layout_marginTop="50dp"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentEnd="true"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Poids à vide (Tonne)"
+                    android:id="@+id/weightEmpty"
+                    android:layout_alignBaseline="@+id/inputEmpty"
+                    android:layout_alignBottom="@+id/inputEmpty"
+                    android:layout_alignParentStart="true"
+                    android:layout_marginStart="10dp"
+                    android:textSize="18sp"/>
+
+
+                <android.support.design.widget.TextInputEditText
+                    android:layout_width="70dp"
+                    android:layout_height="30dp"
+                    android:id="@+id/inputWeightFull"
+                    android:background="@drawable/editbar"
+                    android:layout_below="@+id/inputEmpty"
+                    android:layout_alignStart="@+id/inputEmpty"
+                    android:layout_marginTop="60dp"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Poids en charge (Tonne)"
+                    android:id="@+id/weightFull"
+                    android:layout_alignBottom="@+id/inputWeightFull"
+                    android:layout_alignBaseline="@+id/inputWeightFull"
+                    android:layout_alignStart="@+id/weightEmpty"
+                    android:textSize="18sp"/>
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Poids net (Tonne)"
+                    android:id="@+id/weightFinal"
+                    android:layout_alignBaseline="@+id/inputFinal"
+                    android:layout_alignBottom="@+id/inputFinal"
+                    android:layout_alignStart="@+id/weightEmpty"
+                    android:textSize="18sp"/>
+
+
+                <android.support.design.widget.TextInputEditText
+                    android:layout_width="70dp"
+                    android:layout_height="30dp"
+                    android:id="@+id/inputFinal"
+                    android:background="@drawable/editbar"
+                    android:layout_marginTop="60dp"
+                    android:layout_below="@+id/inputWeightFull"
+                    android:layout_alignStart="@+id/inputEmpty"/>
+
+
+            </RelativeLayout>
         </android.support.v7.widget.CardView>
         <CheckBox
+            android:visibility="gone"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/diff_stuff"
