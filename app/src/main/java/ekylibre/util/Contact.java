@@ -20,6 +20,17 @@ import ekylibre.APICaller.SyncAdapter;
  * ekylibre.util for zero-android     *
  *************************************/
 
+/*
+** Use this class to create contact into mobile phone.
+**
+** This class need context to work.
+** Use setter methods to create your contact using setAccount FIRST
+** Once you've set the data you want, use the commit method to put it into mobile phone.
+** Clear method will clear the class attributes except context, so you will be able to set a new
+** contact without re-instantiate this class
+**
+**
+*/
 public class Contact
 {
     public static final String TYPE_MAIL = "mail";
@@ -299,8 +310,8 @@ public class Contact
         company = null;
         jobTitle = null;
         photo = null;
+        website = null;
         contactParameter.clear();
-        contactParameter = new ArrayList<>();
     }
 
 
@@ -329,10 +340,24 @@ public class Contact
         return (email);
     }
 
-
     public String getCompany()
     {
         return (company);
+    }
+
+    public String getWebsite()
+    {
+        return (website);
+    }
+
+    public String getFirstName()
+    {
+        return (firstName);
+    }
+
+    public String getLastName()
+    {
+        return (lastName);
     }
 }
 
