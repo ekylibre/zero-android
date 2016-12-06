@@ -16,6 +16,11 @@ import java.util.ArrayList;
  * Created by pierre on 8/23/16.      *
  * ekylibre.zero.util for zero-android*
  *************************************/
+
+/*
+** This class is used to manage easily images in the project
+**
+*/
 public class ImageConverter
 {
     /*
