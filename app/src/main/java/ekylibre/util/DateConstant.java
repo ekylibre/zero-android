@@ -7,6 +7,11 @@ import java.util.Calendar;
  * Created by pierre on 9/1/16.      *
  * ekylibre.util for zero-android    *
  *************************************/
+
+/*
+** This class contains ISO_8601 format which is the standard used in this project.
+** You can also call methods that deal with date formatted
+*/
 public final class DateConstant
 {
     public static final String ISO_8601 = "yyyy-MM-dd'T'HH:mm:ss.SSSZ";
