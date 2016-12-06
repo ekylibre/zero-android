@@ -91,10 +91,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".CalendarActivity"
-            android:icon="@mipmap/ic_ekylibre"
-            android:label="@string/calendar" />
 
         <service
             android:name="ekylibre.service.AuthenticatorService"
