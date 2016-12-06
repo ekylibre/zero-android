@@ -16,6 +16,11 @@ import ekylibre.zero.R;
  * ekylibre.zero.util for zero-android*
  *************************************/
 
+/*
+** Extend classic activity that listen sync events and ping event
+** You can override methods needed to do what you want on event
+** The generic application toolbar can be easily added by calling setTollBar
+*/
 public abstract class UpdatableActivity extends AppCompatActivity
 {
     public static final String  ACTION_FINISHED_SYNC        = "ekylibre.zero.util.ACTION_FINISHED_SYNC";
@@ -83,10 +88,19 @@ public abstract class UpdatableActivity extends AppCompatActivity
         mToolbar = toolbar;
     }
 
+    /*
+    ** Called when sync is finished
+    */
     protected void onSyncFinish(){}
 
+    /*
+    ** Called when sync starts
+    */
     protected void onSyncStart(){}
 
+    /*
+    ** Called when ping is sent
+    */
     protected void onPing(Intent intent){}
 
     @Override
