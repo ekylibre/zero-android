@@ -188,13 +188,32 @@ public class PermissionManager
 
     public static void multiplePermissions(Context context, Activity activity)
     {
-        ActivityCompat.requestPermissions(activity,
-                new String[]{
-                        Manifest.permission.ACCESS_NETWORK_STATE,
-                        Manifest.permission.INTERNET,
-                        Manifest.permission.WRITE_CONTACTS,
-                        Manifest.permission.READ_CONTACTS,
-                        Manifest.permission.VIBRATE},
-                REQUEST_MULTIPLE);
+        if (Build.VERSION.SDK_INT >= 23 &&
+                (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_NETWORK_STATE)
+                        != PackageManager.PERMISSION_GRANTED
+                        || ActivityCompat.checkSelfPermission(context, Manifest.permission.INTERNET)
+                        != PackageManager.PERMISSION_GRANTED
+                        || ActivityCompat.checkSelfPermission(context, Manifest.permission.WRITE_CONTACTS)
+                        != PackageManager.PERMISSION_GRANTED
+                        || ActivityCompat.checkSelfPermission(context, Manifest.permission.READ_CONTACTS)
+                        != PackageManager.PERMISSION_GRANTED
+                        || ActivityCompat.checkSelfPermission(context, Manifest.permission.VIBRATE)
+                        != PackageManager.PERMISSION_GRANTED
+                        || ActivityCompat.checkSelfPermission(context, android.Manifest.permission.READ_CALENDAR)
+                        != PackageManager.PERMISSION_GRANTED
+                        || ActivityCompat.checkSelfPermission(context, Manifest.permission.WRITE_CALENDAR)
+                        != PackageManager.PERMISSION_GRANTED))
+        {
+            ActivityCompat.requestPermissions(activity,
+                    new String[]{
+                            Manifest.permission.ACCESS_NETWORK_STATE,
+                            Manifest.permission.INTERNET,
+                            Manifest.permission.WRITE_CONTACTS,
+                            Manifest.permission.READ_CONTACTS,
+                            Manifest.permission.VIBRATE,
+                            Manifest.permission.READ_CALENDAR,
+                            Manifest.permission.WRITE_CALENDAR},
+                    REQUEST_MULTIPLE);
+        }
     }
 }

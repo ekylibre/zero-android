@@ -87,7 +87,7 @@ public class MainActivity extends UpdatableActivity
         setContentView(R.layout.activity_main);
 
         setTitle("Planning");
-        PermissionManager.calendarPermissions(this, this);
+        PermissionManager.multiplePermissions(this, this);
 
         if (!AccountTool.isAnyAccountExist(this))
         {
@@ -101,7 +101,6 @@ public class MainActivity extends UpdatableActivity
 
         setDrawerLayout();
         startConnectionManager();
-        PermissionManager.multiplePermissions(this, this);
         startGeneralHandler();
         View headerLayout = mNavigationView.inflateHeaderView(R.layout.nav_header_main);
         mNav_account = (TextView)headerLayout.findViewById(R.id.nav_accountName);
