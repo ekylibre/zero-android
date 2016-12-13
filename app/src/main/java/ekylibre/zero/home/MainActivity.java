@@ -2,13 +2,9 @@ package ekylibre.zero.home;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
-import android.content.ContentProviderOperation;
 import android.content.ContentResolver;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -24,24 +20,21 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.util.ArrayList;
 import java.util.Calendar;
 
-import cz.msebera.android.httpclient.auth.ContextAwareAuthScheme;
-import ekylibre.APICaller.SyncAdapter;
 import ekylibre.database.ZeroContract;
+import ekylibre.service.ConnectionManagerService;
 import ekylibre.service.GeneralHandler;
+import ekylibre.util.AccountTool;
 import ekylibre.util.Contact;
-import ekylibre.zero.account.AccountManagerActivity;
+import ekylibre.util.PermissionManager;
+import ekylibre.util.UpdatableActivity;
 import ekylibre.zero.IssueActivity;
 import ekylibre.zero.PlantCountingActivity;
 import ekylibre.zero.R;
 import ekylibre.zero.SettingsActivity;
+import ekylibre.zero.account.AccountManagerActivity;
 import ekylibre.zero.intervention.InterventionActivity;
-import ekylibre.service.ConnectionManagerService;
-import ekylibre.util.AccountTool;
-import ekylibre.util.PermissionManager;
-import ekylibre.util.UpdatableActivity;
 
 /**************************************
  * Created by pierre on 7/12/16.      *
