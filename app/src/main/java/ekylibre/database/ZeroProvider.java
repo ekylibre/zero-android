@@ -442,9 +442,6 @@ public class ZeroProvider extends ContentProvider {
         final int match = URI_MATCHER.match(uri);
         int count;
         String id;
-        Log.d("provider", "========================");
-        Log.d("provider", "searching : " + URI_MATCHER.match(uri));
-        Log.d("provider", "========================");
         switch (match) {
             case ROUTE_CRUMB_LIST:
                 count = builder.table(ZeroContract.CrumbsColumns.TABLE_NAME)
