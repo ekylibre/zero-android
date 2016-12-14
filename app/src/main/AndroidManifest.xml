@@ -172,6 +172,7 @@
             android:name=".IssueActivity"
             android:label="@string/new_issue"
             android:parentActivityName=".home.MainActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar"            />
         <activity
             android:name=".PlantCountingActivity"
