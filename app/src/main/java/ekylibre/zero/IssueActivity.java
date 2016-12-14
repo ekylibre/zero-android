@@ -114,7 +114,7 @@ public class IssueActivity extends UpdatableActivity
         //create a new file for this issue
 
         picturesFile = new File(Environment.getExternalStoragePublicDirectory(
-                Environment.DIRECTORY_PICTURES).toString());
+                Environment.DIRECTORY_DCIM).toString());
     }
 
     @Override
@@ -154,7 +154,10 @@ public class IssueActivity extends UpdatableActivity
 
             photoFile = createImageFile(picturesFile);
             if (photoFile == null)
+            {
+                Toast.makeText(this, "Path does not exist", Toast.LENGTH_LONG).show();
                 return;
+            }
 
             Log.d(TAG, "file name = " + photoFile.toString());
             takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(photoFile));
@@ -171,7 +174,7 @@ public class IssueActivity extends UpdatableActivity
         Log.d(TAG, "image file name = " + imageFileName);
 
         File image_path = new File(picturesFile, "." + imageFileName + ".jpg");
-        if (!image_path.createNewFile())
+        if (!image_path.createNewFile() || !image_path.exists())
             return (null);
 
         Log.d(TAG, "image path = " + image_path.toString());
