@@ -1,5 +1,6 @@
 package ekylibre.zero;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
 
@@ -37,11 +38,4 @@ public class SettingsActivity extends PreferenceActivity
 						.commit();
     }
 
-
-    /*@Override
-    protected void onStop(){
-        super.onStop();
-        Intent intent = new Intent(this,InterventionActivity.class);
-        super.startActivity(intent);
-    }*/
 }
