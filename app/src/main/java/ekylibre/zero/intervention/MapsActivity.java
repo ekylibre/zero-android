@@ -40,6 +40,7 @@ import ekylibre.database.ZeroContract;
 import ekylibre.util.AccountTool;
 import ekylibre.util.PermissionManager;
 import ekylibre.util.UpdatableActivity;
+import ekylibre.zero.BuildConfig;
 import ekylibre.zero.R;
 
 public class MapsActivity extends UpdatableActivity implements OnMapReadyCallback
@@ -96,7 +97,7 @@ public class MapsActivity extends UpdatableActivity implements OnMapReadyCallbac
 
     private void setPolygonLayers()
     {
-        Log.d(TAG, "Setting Polygons");
+        if (BuildConfig.DEBUG) Log.d(TAG, "Setting Polygons");
         Cursor curs = getContentResolver().query(ZeroContract.InterventionParameters.CONTENT_URI,
                 ZeroContract.InterventionParameters.PROJECTION_SHAPE,
                 ZeroContract.InterventionParameters.FK_INTERVENTION + " == " + interventionID,
@@ -104,7 +105,6 @@ public class MapsActivity extends UpdatableActivity implements OnMapReadyCallbac
                 null);
         if (curs == null || curs.getCount() == 0)
         {
-            Log.d("MAP", "Baaaaaaaaaaaaaaaaaaaaaad");
             return;
         }
         arrayLayers = new ArrayList<>();
@@ -116,7 +116,7 @@ public class MapsActivity extends UpdatableActivity implements OnMapReadyCallbac
                 String geoJson = curs.getString(0);
                 if (geoJson != null)
                 {
-                    Log.d(TAG, geoJson);
+                    if (BuildConfig.DEBUG) Log.d(TAG, geoJson);
                     json = new JSONObject(geoJson);
 
                     GeoJsonLayer layer = new GeoJsonLayer(mMap, json);
@@ -131,7 +131,6 @@ public class MapsActivity extends UpdatableActivity implements OnMapReadyCallbac
                 e.printStackTrace();
             }
         }
-        Log.d("MAP", "OKAAAAAAAAAAAAAAAAAAAAAAAAAY");
     }
 
     private List<GeoJsonPolygon> parsePolygons(GeoJsonLayer layer)
@@ -181,11 +180,11 @@ public class MapsActivity extends UpdatableActivity implements OnMapReadyCallbac
             return;
         for (Parcel parcel : arrayLayers)
         {
-            Log.d(TAG, "======= Checking polygons for parcel =======");
+            if (BuildConfig.DEBUG) Log.d(TAG, "======= Checking polygons for parcel =======");
             for (GeoJsonPolygon polygon : parcel.polygons)
             {
-                Log.d(TAG, polygon.getCoordinates().toString());
-                Log.d(TAG, point.toString());
+                if (BuildConfig.DEBUG) Log.d(TAG, polygon.getCoordinates().toString());
+                if (BuildConfig.DEBUG) Log.d(TAG, point.toString());
 
                 if (PolyUtil.containsLocation(point, polygon.getCoordinates().get(0), true))
                     setPolygonGreen(parcel.layer);
