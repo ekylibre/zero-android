@@ -120,7 +120,9 @@ public class Instance
 
         if (BuildConfig.DEBUG) Log.d("POST Instance URL", mUrl);
         if (BuildConfig.DEBUG) Log.d("POST parameters", params.toString());
-        
+        if (mUrl == null)
+            return (null);
+
         return Instance.post(mUrl + path, params, headers);
     }
 
@@ -230,6 +232,8 @@ public class Instance
 
         if (BuildConfig.DEBUG) Log.d("POST Instance URL", "URL = " + mUrl);
         if (BuildConfig.DEBUG) Log.d("POST parameters", params);
+        if (mUrl == null)
+            return (null);
 
         return Instance.getJSONArray(mUrl + path + params, headers);
     }
