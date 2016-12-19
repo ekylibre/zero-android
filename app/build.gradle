@@ -10,8 +10,8 @@ android {
         applicationId "ekylibre.zero"
         minSdkVersion 19
         targetSdkVersion 25
-        versionCode 15
-        versionName "0.6.0"
+        versionCode 16
+        versionName "0.7.0"
     }
     buildTypes {
         release {
@@ -29,13 +29,13 @@ dependencies {
 
     compile group: 'cz.msebera.android', name: 'httpclient', version: '4.4.1.1'
 /*    compile group: 'org.apache.httpcomponents' , name: 'httpclient-android' , version: '4.3.5.1'*/
-    compile 'com.android.support:appcompat-v7:25.0.0'
-    compile 'com.android.support:design:25.0.0'
-    compile 'com.android.support:support-v4:25.0.0'
+    compile 'com.android.support:appcompat-v7:25.1.0'
+    compile 'com.android.support:design:25.1.0'
+    compile 'com.android.support:support-v4:25.1.0'
     compile 'com.google.android.gms:play-services-appindexing:9.8.0'
     compile 'org.jbundle.util.osgi.wrapped:org.jbundle.util.osgi.wrapped.org.apache.http.client:4.1.2'
     compile 'com.google.android.gms:play-services-location:9.8.0'
     compile 'com.google.android.gms:play-services-maps:9.8.0'
     compile 'com.google.maps.android:android-maps-utils:0.4.4'
-    compile 'com.android.support:cardview-v7:25.0.0'
+    compile 'com.android.support:cardview-v7:25.1.0'
 }
