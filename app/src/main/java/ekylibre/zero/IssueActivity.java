@@ -142,7 +142,8 @@ public class IssueActivity extends UpdatableActivity
         }
     }
 
-    public void takePicture(View v) throws IOException{
+    public void takePicture(View v) throws IOException
+    {
 
         if (!PermissionManager.storagePermissions(this, this))
             return;
@@ -155,7 +156,7 @@ public class IssueActivity extends UpdatableActivity
             photoFile = createImageFile(picturesFile);
             if (photoFile == null)
             {
-                Toast.makeText(this, "Path does not exist", Toast.LENGTH_LONG).show();
+                //Toast.makeText(this, "Path does not exist", Toast.LENGTH_SHORT).show();
                 return;
             }
 
