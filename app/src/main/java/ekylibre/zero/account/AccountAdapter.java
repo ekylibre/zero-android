@@ -94,6 +94,8 @@ public class AccountAdapter extends ArrayAdapter<Account>
                 AccountManager accManager = AccountManager.get(getContext());
 
                 newCurrAccount = item;
+                if (newCurrAccount == null)
+                    return;
                 SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getContext());
                 SharedPreferences.Editor editor = preferences.edit();
                 editor.putString(CURRENT_ACCOUNT_NAME, newCurrAccount.name);
