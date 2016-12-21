@@ -13,6 +13,9 @@ android {
         versionCode 19
         versionName "0.7.1b"
     }
+    applicationVariants.all { variant ->
+        variant.resValue "string", "versionName", variant.versionName
+    }
     buildTypes {
         release {
             minifyEnabled false
