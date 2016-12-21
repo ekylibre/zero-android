@@ -58,4 +58,18 @@
             android:persistent="true"
             android:defaultValue="false" />
     </PreferenceCategory>
+
+<!--
+    This is not an error : versionName string is created by gradle
+    with the current version name
+-->
+    <PreferenceCategory
+        android:title="About"
+        android:key="pref_key_about">
+    <Preference
+        android:key="pref_static_version"
+        android:selectable="false"
+        android:title="Version"
+        android:summary="@string/versionName"/>
+    </PreferenceCategory>
 </PreferenceScreen>
