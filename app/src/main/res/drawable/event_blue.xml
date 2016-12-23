@@ -16,17 +16,17 @@
     </item>
 
     <item>
-    <shape>
-        <solid
-            android:color="@color/basic_blue"/>
+        <shape>
+            <solid
+                android:color="@color/basic_blue"/>
 
-        <corners
-            android:radius="4dp" />
-        <padding
-            android:left="10dp"
-            android:top="10dp"
-            android:right="10dp"
-            android:bottom="10dp" />
-    </shape>
-</item>
+            <corners
+                android:radius="4dp" />
+            <padding
+                android:left="10dp"
+                android:top="10dp"
+                android:right="10dp"
+                android:bottom="10dp" />
+        </shape>
+    </item>
 </selector>
