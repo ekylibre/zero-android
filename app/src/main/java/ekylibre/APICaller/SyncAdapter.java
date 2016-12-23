@@ -94,7 +94,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
     */
     public boolean          getContactPref()
     {
-        SharedPreferences pref;
+        SharedPreferences   pref;
 
         pref = PreferenceManager.getDefaultSharedPreferences(mContext);
 
