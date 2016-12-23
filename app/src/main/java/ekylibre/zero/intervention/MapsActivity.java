@@ -151,7 +151,7 @@ public class MapsActivity extends UpdatableActivity implements OnMapReadyCallbac
         GeoJsonPolygonStyle polyStyle = layer.getDefaultPolygonStyle();
         polyStyle.setFillColor(FILL_GREEN);
         polyStyle.setStrokeColor(STROKE_GREEN);
-        polyStyle.setStrokeWidth(3f);
+        polyStyle.setStrokeWidth(4f);
     }
 
     private void setPolygonGrey(GeoJsonLayer layer)
@@ -159,7 +159,7 @@ public class MapsActivity extends UpdatableActivity implements OnMapReadyCallbac
         GeoJsonPolygonStyle polyStyle = layer.getDefaultPolygonStyle();
         polyStyle.setFillColor(FILL_GREY);
         polyStyle.setStrokeColor(STROKE_GREY);
-        polyStyle.setStrokeWidth(3f);
+        polyStyle.setStrokeWidth(4f);
     }
 
     @Override
