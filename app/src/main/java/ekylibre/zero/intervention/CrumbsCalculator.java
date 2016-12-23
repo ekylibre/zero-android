@@ -12,6 +12,18 @@ import ekylibre.zero.BuildConfig;
  * Created by pierre on 8/11/16.      *
  * ekylibre.zero for zero-android     *
  *************************************/
+
+/*
+** This is the home made algorithm to check crumbs
+** This decides if the crumb is really accurate
+**
+** First we get some points and consider them as inaccurate
+** Vector norm is set for each couple of points
+** Average vector norm is refresh for each new vector norm is set
+**
+** If a vector norm is unusually high we just ignore the crumb
+** Then we'll try next vector with *2 coefficient
+*/
 public class CrumbsCalculator
 {
     private final int           MAX_ACCURACY = 10;
@@ -39,18 +51,6 @@ public class CrumbsCalculator
 
     public boolean isCrumbAccurate(Location location, String type, Bundle metadata)
     {
-        //Try to skip the algo verif to see what happen ?!
-/*
-        if (location.getAccuracy() < MAX_ACCURACY)
-        {
-            setLast(location, metadata, type);
-            return (true);
-        }
-        else
-            return (false);
-
-*/
-
         if (location.getAccuracy() > MAX_ACCURACY && type.equals("point"))
         {
             vectorCoef++;
