@@ -30,6 +30,7 @@ import android.widget.CheckBox;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
@@ -799,7 +800,10 @@ public class InterventionActivity extends UpdatableActivity
         if (!PermissionManager.internetPermissions(this, this)
                 || !PermissionManager.storagePermissions(this, this)
                 || !PermissionManager.GPSPermissions(this, this))
+        {
+            Toast.makeText(this, "GPS is not activated", Toast.LENGTH_SHORT).show();
             return;
+        }
         Intent intent = new Intent(this, MapsActivity.class);
         intent.putExtra(this._interventionID, mInterventionID);
         startActivity(intent);
