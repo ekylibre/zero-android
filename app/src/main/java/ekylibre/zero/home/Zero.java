@@ -10,6 +10,9 @@ import android.util.Log;
  *************************************/
 public class Zero extends Application
 {
+    /*
+    ** https://developer.android.com/reference/android/support/v7/app/AppCompatDelegate.html#setCompatVectorFromResourcesEnabled%28boolean%29
+    */
     @Override
     public void onCreate()
     {
