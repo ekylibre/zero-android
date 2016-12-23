@@ -11,6 +11,15 @@ import java.util.Date;
  * Created by pierre on 8/11/16.      *
  * ekylibre.zero for zero-android    *
  *************************************/
+
+/*
+** This class define a crumb which is a located point in space.
+**
+** pos is the LatLng definition of the point.
+** speed is the speed related to this point returned by android
+** type can be "start" "point" or "stop"
+** Start and stop points are auto generated
+*/
 public class Crumb
 {
     public float    speed;
