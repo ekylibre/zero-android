@@ -32,6 +32,7 @@
     <item>Ensilage direct</item>
     <item>Ensilage indirect</item>
     <item>Entretien de l’équipement</item>
+    <item>Entretien des installations</item>
     <item>Fauchage</item>
     <item>Fermentation</item>
     <item>Fertilisation</item>
@@ -39,6 +40,7 @@
     <item>Installation de l’irrigation</item>
     <item>Insémination articielle animale</item>
     <item>Labour</item>
+    <item>Manutention</item>
     <item>Mise bas</item>
     <item>Montage de serre</item>
     <item>Nettoyage de stabulation</item>
@@ -76,6 +78,7 @@
     <item>Tri au champ</item>
     <item>Tri de produits végétaux</item>
     <item>Triage de plants</item>
+    <item>Tâches administratives</item>
     <item>Vidange d’huile</item>
     <item>Équipement pièce de rechange</item>
   </string-array>
@@ -111,6 +114,7 @@
     <item>direct_silage</item>
     <item>indirect_silage</item>
     <item>equipment_maintenance</item>
+    <item>installation_maintenance</item>
     <item>plant_mowing</item>
     <item>fermentation</item>
     <item>fertilizing</item>
@@ -118,6 +122,7 @@
     <item>plant_watering_installation</item>
     <item>animal_artificial_insemination</item>
     <item>plowing</item>
+    <item>handling</item>
     <item>parturition</item>
     <item>greenhouse_assembling</item>
     <item>animal_housing_cleaning</item>
@@ -155,6 +160,7 @@
     <item>field_plant_sorting</item>
     <item>plants_sorting</item>
     <item>seedling_sorting</item>
+    <item>administrative_tasks</item>
     <item>oil_replacement</item>
     <item>equipment_item_replacement</item>
   </string-array>
