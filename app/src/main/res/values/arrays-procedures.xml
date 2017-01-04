@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <resources>
   <string-array name="procedures_entries">
+    <item>Administrative tasks</item>
     <item>All-in-one seeding</item>
     <item>Animal antibiotic treatment</item>
     <item>Animal artificial insemination</item>
@@ -27,11 +28,13 @@
     <item>Greenhouse assembling</item>
     <item>Ground destratification</item>
     <item>Hand weeding</item>
+    <item>Handling</item>
     <item>Harrowing</item>
     <item>Harvest transportation</item>
     <item>Harvesting</item>
     <item>Hoeing</item>
     <item>Indirect silage</item>
+    <item>Installation maintenance</item>
     <item>Inter-row hoeing</item>
     <item>Irrigation setup</item>
     <item>Land parcel grinding</item>
@@ -80,6 +83,7 @@
     <item>Wine bottling</item>
   </string-array>
   <string-array name="procedures_values">
+    <item>administrative_tasks</item>
     <item>all_in_one_sowing</item>
     <item>animal_antibiotic_treatment</item>
     <item>animal_artificial_insemination</item>
@@ -106,11 +110,13 @@
     <item>greenhouse_assembling</item>
     <item>ground_destratification</item>
     <item>hand_weeding</item>
+    <item>handling</item>
     <item>raking</item>
     <item>harvest_transportation</item>
     <item>harvesting</item>
     <item>hoeing</item>
     <item>indirect_silage</item>
+    <item>installation_maintenance</item>
     <item>inter_row_hoeing</item>
     <item>plant_watering_installation</item>
     <item>land_parcel_grinding</item>
