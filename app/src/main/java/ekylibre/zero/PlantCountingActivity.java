@@ -715,7 +715,7 @@ public class PlantCountingActivity extends UpdatableActivity  {
 
     public String getNature()
     {
-        if (germination)
+        if (currentContext)
             return ("germination");
         else
             return ("sowing");
