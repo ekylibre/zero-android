@@ -7,8 +7,8 @@
 
 === Download Android Studio
 
-    Go to https://developer.android.com/studio/index.html and download Android Studio for your OS version.
-    For Linux, unzip the file where you want it to be installed (for example in /opt folder) :
+Go to https://developer.android.com/studio/index.html and download Android Studio for your OS version.
+For Linux, unzip the file where you want it to be installed (for example in /opt folder) :
 
     $ sudo cp android-studio-ide-171.4443003-linux.zip /opt/
     $ cd /opt/
@@ -16,25 +16,25 @@
 
 === Install Android Studio
 
-    Run the installer (launcher) :
+Run the installer (launcher) :
 
     $ cd android-studio/bin
     $ ./studio.sh
 
-    Then, follow the instructions about SDK installation and accept the creation of desktop launcher (otherwise, you have to manualy execute studio.sh)
+Then, follow the instructions about SDK installation and accept the creation of desktop launcher (otherwise, you have to manualy execute studio.sh)
 
 === Checkout from GitHub
 
-    You can now clone this repo by clicking in the menu VCS > Checkout from Version Control > GitHub
-    Fill in the repo address: https://github.com/ekylibre/zero-android.git and clone it where you want.
+You can now clone this repo by clicking in the menu VCS > Checkout from Version Control > GitHub
+Fill in the repo address: https://github.com/ekylibre/zero-android.git and clone it where you want.
 
-    Accept to create a new project from this repo.
+Accept to create a new project from this repo.
 
 === Update the project
 
-    Globally, accept all recommendations from Android Studio about upgrading Gradle, and downloading requiered SDK tools.
+Globally, accept all recommendations from Android Studio about upgrading Gradle, and downloading requiered SDK tools.
 
-    You're done to start !
+You're done to start !
 
 
 == [old way] Installation (for developers)
