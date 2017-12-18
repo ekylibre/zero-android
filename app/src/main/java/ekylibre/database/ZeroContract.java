@@ -177,6 +177,36 @@ public final class ZeroContract {
         String DATE         = "date";
     }
 
+    public interface ReceptionsColumns extends BaseColumns {
+        String TABLE_NAME   = "receptions";
+        String USER         = "user";
+        String EK_ID        = "ek_id";
+        String RECEIVED_AT  = "received_at";
+        String RECEPTION_NUMBER = "receptions_number";
+        String FK_SUPPLIER  = "fk_supplier";
+    }
+
+    public interface ArticlesColumns extends BaseColumns {
+        String TABLE_NAME   = "articles";
+        String EK_ID        = "ek_id";
+        String NATURE       = "nature";
+        String UNITY        = "unity";
+        String NAME         = "name";
+    }
+
+    public interface ArticlePicturesColumns extends BaseColumns {
+        String TABLE_NAME   = "article_pictures";
+        String EK_ID        = "ek_id";
+        String PICTURE      = "picture";
+        String FK_ARTICLE  = "fk_article";
+    }
+
+    public interface ArticleCodesColumns extends BaseColumns {
+        String TABLE_NAME   = "article_codes";
+        String EK_ID        = "ek_id";
+        String CODE      = "picture";
+        String FK_ARTICLE  = "fk_article";
+    }
 
     public static final class Crumbs implements CrumbsColumns {
         // Content URI for this table
@@ -396,4 +426,77 @@ public final class ZeroContract {
         public static final String SORT_ORDER_DEFAULT = _ID + " ASC";
 
     }
+
+    public static final class Receptions implements ReceptionsColumns
+    {
+        // Content URI for this table
+        public static final Uri CONTENT_URI = Uri.withAppendedPath(ZeroContract.CONTENT_URI,
+                "receptions");
+        // MIME type for lists of records.
+        public static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/vnd" +
+                ".ekylibre.zero.receptions";
+        // MIME type for individual record.
+        public static final String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE +
+                "/vnd.ekylibre.zero.receptions";
+
+        public static final String[] PROJECTION_ALL = {_ID, USER, EK_ID, RECEIVED_AT, RECEPTION_NUMBER, FK_SUPPLIER;
+        public static final String[] PROJECTION_NONE = {_ID};
+
+        public static final String SORT_ORDER_DEFAULT = _ID + " ASC";
+    }
+
+    public static final class Articles implements ArticlesColumns
+    {
+        // Content URI for this table
+        public static final Uri CONTENT_URI = Uri.withAppendedPath(ZeroContract.CONTENT_URI,
+                "articles");
+        // MIME type for lists of records.
+        public static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/vnd" +
+                ".ekylibre.zero.articles";
+        // MIME type for individual record.
+        public static final String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE +
+                "/vnd.ekylibre.zero.articles";
+
+        public static final String[] PROJECTION_ALL = {_ID, EK_ID, NATURE, UNITY, NAME};
+        public static final String[] PROJECTION_NONE = {_ID};
+
+        public static final String SORT_ORDER_DEFAULT = _ID + " ASC";
+    }
+
+    public static final class ArticlePictures implements ArticlePicturesColumns
+    {
+        // Content URI for this table
+        public static final Uri CONTENT_URI = Uri.withAppendedPath(ZeroContract.CONTENT_URI,
+                "article_pictures");
+        // MIME type for lists of records.
+        public static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/vnd" +
+                ".ekylibre.zero.article_pictures";
+        // MIME type for individual record.
+        public static final String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE +
+                "/vnd.ekylibre.zero.article_pictures";
+
+        public static final String[] PROJECTION_ALL = {_ID, EK_ID, PICTURE, FK_ARTICLE};
+        public static final String[] PROJECTION_NONE = {_ID};
+
+        public static final String SORT_ORDER_DEFAULT = _ID + " ASC";
+    }
+
+    public static final class ArticleCodes implements ArticleCodesColumns
+    {
+        // Content URI for this table
+        public static final Uri CONTENT_URI = Uri.withAppendedPath(ZeroContract.CONTENT_URI,
+                "article_codes");
+        // MIME type for lists of records.
+        public static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/vnd" +
+                ".ekylibre.zero.article_codes";
+        // MIME type for individual record.
+        public static final String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE +
+                "/vnd.ekylibre.zero.article_codes";
+
+        public static final String[] PROJECTION_ALL = {_ID, EK_ID, CODE, FK_ARTICLE};
+        public static final String[] PROJECTION_NONE = {_ID};
+
+        public static final String SORT_ORDER_DEFAULT = _ID + " ASC";
+    }
+
 }
