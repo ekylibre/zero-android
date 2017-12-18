@@ -399,6 +399,23 @@ public class DatabaseHelper extends SQLiteOpenHelper
                 if (newVersion == 20)
                     break;
             }
+            case 21:
+            {
+                database.execSQL("CREATE TABLE IF NOT EXISTS " + ZeroContract.ReceptionItems.TABLE_NAME
+                        + "("
+                        + ZeroContract.ReceptionItems._ID + " INTEGER PRIMARY KEY AUTOINCREMENT"
+                        + ", " + ZeroContract.ReceptionItems.FK_RECEPTION + " INTEGER"
+                        + ", " + ZeroContract.ReceptionItems.FK_ARTICLE + " INTEGER"
+                        + ", " + ZeroContract.ReceptionItems.QUANTITY + " INTEGER"
+                        + ", " + ZeroContract.ReceptionItems.EK_ID + " INTEGER"
+                        + ", " + "FOREIGN KEY (" + ZeroContract.ReceptionItems.FK_RECEPTION + ") " +
+                        "REFERENCES " + ZeroContract.Receptions.TABLE_NAME + "(_id)"
+                        + ", " + "FOREIGN KEY (" + ZeroContract.ReceptionItems.FK_ARTICLE + ") " +
+                        "REFERENCES " + ZeroContract.Articles.TABLE_NAME + "(_id)"
+                        + ")");
+                if (newVersion == 21)
+                    break;
+            }
         }
     }
 }

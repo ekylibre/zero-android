@@ -48,6 +48,8 @@ public class ZeroProvider extends ContentProvider {
     public static final int ROUTE_CONTACT_PARAMS_ITEM = 1201;
     public static final int ROUTE_LAST_SYNCS_LIST = 1300;
     public static final int ROUTE_LAST_SYNCS_ITEM = 1301;
+    public static final int ROUTE_RECEPTION_ITEMS_LIST = 1600;
+    public static final int ROUTE_RECEPTION_ITEMS_ITEM = 1601;
     // UriMatcher, used to decode incoming URIs.
     private static final UriMatcher URI_MATCHER = new UriMatcher(UriMatcher.NO_MATCH);
 
@@ -78,6 +80,9 @@ public class ZeroProvider extends ContentProvider {
         URI_MATCHER.addURI(ZeroContract.AUTHORITY, "contact_params/#", ROUTE_CONTACT_PARAMS_ITEM);
         URI_MATCHER.addURI(ZeroContract.AUTHORITY, "last_syncs", ROUTE_LAST_SYNCS_LIST);
         URI_MATCHER.addURI(ZeroContract.AUTHORITY, "last_syncs/#", ROUTE_LAST_SYNCS_ITEM);
+        URI_MATCHER.addURI(ZeroContract.AUTHORITY, "reception_items", ROUTE_RECEPTION_ITEMS_LIST);
+        URI_MATCHER.addURI(ZeroContract.AUTHORITY, "reception_items/#",ROUTE_RECEPTION_ITEMS_ITEM);
+
     }
 
     private DatabaseHelper mDatabaseHelper;
@@ -145,6 +150,10 @@ public class ZeroProvider extends ContentProvider {
                 return ZeroContract.LastSyncs.CONTENT_TYPE;
             case ROUTE_LAST_SYNCS_ITEM:
                 return ZeroContract.LastSyncs.CONTENT_TYPE;
+            case ROUTE_RECEPTION_ITEMS_LIST:
+                return ZeroContract.ReceptionItems.CONTENT_TYPE;
+            case ROUTE_RECEPTION_ITEMS_ITEM:
+                return ZeroContract.ReceptionItems.CONTENT_TYPE;
             default:
                 throw new UnsupportedOperationException("Unknown URI: " + uri);
         }
@@ -327,6 +336,17 @@ public class ZeroProvider extends ContentProvider {
                 assert context != null;
                 cursor.setNotificationUri(context.getContentResolver(), uri);
                 return cursor;
+            case ROUTE_RECEPTION_ITEMS_ITEM:
+                id = uri.getLastPathSegment();
+                builder.where(ZeroContract.ReceptionItemsColumns._ID + "=?", id);
+            case ROUTE_RECEPTION_ITEMS_LIST:
+                builder.table(ZeroContract.ReceptionItemsColumns.TABLE_NAME)
+                        .where(selection, selectionArgs);
+                cursor = builder.query(database, projection, sortOrder);
+                context = getContext();
+                assert context != null;
+                cursor.setNotificationUri(context.getContentResolver(), uri);
+                return cursor;
 
             default:
                 throw new UnsupportedOperationException("Unknown URI: " + uri);
@@ -421,6 +441,12 @@ public class ZeroProvider extends ContentProvider {
                 result = Uri.parse(ZeroContract.LastSyncs.CONTENT_URI + "/" + id);
                 break;
             case ROUTE_LAST_SYNCS_ITEM:
+                throw new UnsupportedOperationException("Insert not supported on URI: " + uri);
+            case ROUTE_RECEPTION_ITEMS_LIST:
+                id = database.insertOrThrow(ZeroContract.ReceptionItems.TABLE_NAME, null, values);
+                result = Uri.parse(ZeroContract.ReceptionItems.CONTENT_URI + "/" + id);
+                break;
+            case ROUTE_RECEPTION_ITEMS_ITEM:
                 throw new UnsupportedOperationException("Insert not supported on URI: " + uri);
             default:
                 throw new UnsupportedOperationException("Unknown URI: " + uri);
@@ -596,6 +622,18 @@ public class ZeroProvider extends ContentProvider {
                 id = uri.getLastPathSegment();
                 count = builder.table(ZeroContract.LastSyncs.TABLE_NAME)
                         .where(ZeroContract.LastSyncs._ID + "=?", id)
+                        .where(selection, selectionArgs)
+                        .delete(database);
+                break;
+            case ROUTE_RECEPTION_ITEMS_LIST:
+                count = builder.table(ZeroContract.ReceptionItemsColumns.TABLE_NAME)
+                        .where(selection, selectionArgs)
+                        .delete(database);
+                break;
+            case ROUTE_RECEPTION_ITEMS_ITEM:
+                id = uri.getLastPathSegment();
+                count = builder.table(ZeroContract.ReceptionItemsColumns.TABLE_NAME)
+                        .where(ZeroContract.ReceptionItemsColumns._ID + "=?", id)
                         .where(selection, selectionArgs)
                         .delete(database);
                 break;
@@ -775,6 +813,18 @@ public class ZeroProvider extends ContentProvider {
                 id = uri.getLastPathSegment();
                 count = builder.table(ZeroContract.LastSyncs.TABLE_NAME)
                         .where(ZeroContract.LastSyncs._ID + "=?", id)
+                        .where(selection, selectionArgs)
+                        .update(database, values);
+                break;
+            case ROUTE_RECEPTION_ITEMS_LIST:
+                count = builder.table(ZeroContract.ReceptionItemsColumns.TABLE_NAME)
+                        .where(selection, selectionArgs)
+                        .update(database, values);
+                break;
+            case ROUTE_RECEPTION_ITEMS_ITEM:
+                id = uri.getLastPathSegment();
+                count = builder.table(ZeroContract.ReceptionItemsColumns.TABLE_NAME)
+                        .where(ZeroContract.ReceptionItemsColumns._ID + "=?", id)
                         .where(selection, selectionArgs)
                         .update(database, values);
                 break;
