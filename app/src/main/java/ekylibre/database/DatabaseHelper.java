@@ -439,9 +439,16 @@ public class DatabaseHelper extends SQLiteOpenHelper
                         "REFERENCES " + ZeroContract.Articles.TABLE_NAME + "(_id)"
                         + ")");
 
-                if (newVersion == 21)
+                database.execSQL("CREATE TABLE IF NOT EXISTS " + ZeroContract.Suppliers.TABLE_NAME
+                        + "("
+                        + ZeroContract.Contacts._ID + " INTEGER PRIMARY KEY AUTOINCREMENT"
+                        + ", " + ZeroContract.Suppliers.NAME + " VARCHAR(255)"
+                        + ", " + ZeroContract.Suppliers.EK_ID + " INTEGER"
+                        + ")");
+                if (newVersion == 20)
                     break;
             }
+
         }
     }
 }

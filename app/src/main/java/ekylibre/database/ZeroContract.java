@@ -208,6 +208,15 @@ public final class ZeroContract {
         String FK_ARTICLE  = "fk_article";
     }
 
+    public interface SuppliersColumns extends BaseColumns {
+        String TABLE_NAME   = "suppliers";
+        String EK_ID         = "ek_id";
+        String NAME         = "name";
+        String DATE         = "date";
+    }
+
+
+
     public static final class Crumbs implements CrumbsColumns {
         // Content URI for this table
         public static final Uri CONTENT_URI = Uri.withAppendedPath(ZeroContract.CONTENT_URI, "crumbs");
@@ -498,5 +507,27 @@ public final class ZeroContract {
 
         public static final String SORT_ORDER_DEFAULT = _ID + " ASC";
     }
+
+    public static final class Suppliers implements SuppliersColumns
+    {
+        // Content URI for this table
+        public static final Uri CONTENT_URI = Uri.withAppendedPath(ZeroContract.CONTENT_URI,
+                "suppliers");
+        // MIME type for lists of records.
+        public static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/vnd" +
+                ".ekylibre.zero.suppliers";
+        // MIME type for individual record.
+        public static final String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE +
+                "/vnd.ekylibre.zero.suppliers";
+
+        public static final String[] PROJECTION_ALL = {_ID, NAME, EK_ID};
+        public static final String[] PROJECTION_DATE = {DATE};
+        public static final String[] PROJECTION_NONE = {_ID};
+
+        public static final String SORT_ORDER_DEFAULT = _ID + " ASC";
+
+    }
+
+
 
 }

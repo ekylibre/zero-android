@@ -57,6 +57,8 @@ public class ZeroProvider extends ContentProvider {
     public static final int ROUTE_ARTICLE_PICTURES_LIST = 1900;
     public static final int ROUTE_ARTICLE_PICTURES_ITEM = 1901;
 
+    public static final int ROUTE_SUPPLIERS_LIST = 1500;
+    public static final int ROUTE_SUPPLIERS_ITEM = 1501;
     // UriMatcher, used to decode incoming URIs.
     private static final UriMatcher URI_MATCHER = new UriMatcher(UriMatcher.NO_MATCH);
 
@@ -95,6 +97,9 @@ public class ZeroProvider extends ContentProvider {
         URI_MATCHER.addURI(ZeroContract.AUTHORITY, "article_pictures/#", ROUTE_ARTICLE_PICTURES_ITEM);
         URI_MATCHER.addURI(ZeroContract.AUTHORITY, "article_codes", ROUTE_ARTICLE_CODES_LIST);
         URI_MATCHER.addURI(ZeroContract.AUTHORITY, "article_codes/#", ROUTE_ARTICLE_CODES_ITEM);
+        URI_MATCHER.addURI(ZeroContract.AUTHORITY, "suppliers", ROUTE_SUPPLIERS_LIST);
+        URI_MATCHER.addURI(ZeroContract.AUTHORITY, "suppliers/#", ROUTE_SUPPLIERS_ITEM);
+
     }
 
     private DatabaseHelper mDatabaseHelper;
@@ -162,6 +167,11 @@ public class ZeroProvider extends ContentProvider {
                 return ZeroContract.LastSyncs.CONTENT_TYPE;
             case ROUTE_LAST_SYNCS_ITEM:
                 return ZeroContract.LastSyncs.CONTENT_TYPE;
+            case ROUTE_SUPPLIERS_ITEM:
+                return ZeroContract.LastSyncs.CONTENT_TYPE;
+            case ROUTE_SUPPLIERS_LIST:
+                return ZeroContract.LastSyncs.CONTENT_TYPE;
+
 
             case ROUTE_RECEPTION_LIST:
                 return ZeroContract.Receptions.CONTENT_TYPE;
@@ -414,6 +424,19 @@ public class ZeroProvider extends ContentProvider {
                 cursor.setNotificationUri(context.getContentResolver(), uri);
                 return cursor;
 
+            case ROUTE_SUPPLIERS_ITEM:
+                id = uri.getLastPathSegment();
+                builder.where(ZeroContract.Suppliers._ID + "=?", id);
+            case ROUTE_SUPPLIERS_LIST:
+                builder.table(ZeroContract.Suppliers.TABLE_NAME)
+                        .where(selection, selectionArgs);
+                cursor = builder.query(database, projection, sortOrder);
+                context = getContext();
+                assert context != null;
+                cursor.setNotificationUri(context.getContentResolver(), uri);
+                return cursor;
+
+
             default:
                 throw new UnsupportedOperationException("Unknown URI: " + uri);
         }
@@ -502,6 +525,7 @@ public class ZeroProvider extends ContentProvider {
                 break;
             case ROUTE_CONTACT_PARAMS_ITEM:
                 throw new UnsupportedOperationException("Insert not supported on URI: " + uri);
+
             case ROUTE_LAST_SYNCS_LIST:
                 id = database.insertOrThrow(ZeroContract.LastSyncs.TABLE_NAME, null, values);
                 result = Uri.parse(ZeroContract.LastSyncs.CONTENT_URI + "/" + id);
@@ -535,6 +559,14 @@ public class ZeroProvider extends ContentProvider {
                 result = Uri.parse(ZeroContract.ArticleCodes.CONTENT_URI + "/" + id);
                 break;
             case ROUTE_ARTICLE_CODES_ITEM:
+                throw new UnsupportedOperationException("Insert not supported on URI: " + uri);
+
+
+            case ROUTE_SUPPLIERS_LIST:
+                id = database.insertOrThrow(ZeroContract.Suppliers.TABLE_NAME, null, values);
+                result = Uri.parse(ZeroContract.Suppliers.CONTENT_URI + "/" + id);
+                break;
+            case ROUTE_SUPPLIERS_ITEM:
                 throw new UnsupportedOperationException("Insert not supported on URI: " + uri);
 
             default:
@@ -702,6 +734,7 @@ public class ZeroProvider extends ContentProvider {
                         .where(selection, selectionArgs)
                         .delete(database);
                 break;
+
             case ROUTE_LAST_SYNCS_LIST:
                 count = builder.table(ZeroContract.LastSyncs.TABLE_NAME)
                         .where(selection, selectionArgs)
@@ -766,6 +799,21 @@ public class ZeroProvider extends ContentProvider {
                         .where(selection, selectionArgs)
                         .delete(database);
                 break;
+
+
+            case ROUTE_SUPPLIERS_LIST:
+                count = builder.table(ZeroContract.Suppliers.TABLE_NAME)
+                        .where(selection, selectionArgs)
+                        .delete(database);
+                break;
+            case ROUTE_SUPPLIERS_ITEM:
+                id = uri.getLastPathSegment();
+                count = builder.table(ZeroContract.Suppliers.TABLE_NAME)
+                        .where(ZeroContract.Suppliers._ID + "=?", id)
+                        .where(selection, selectionArgs)
+                        .delete(database);
+                break;
+
 
             default:
                 throw new UnsupportedOperationException("Unknown URI: " + uri);
@@ -934,6 +982,7 @@ public class ZeroProvider extends ContentProvider {
                         .where(selection, selectionArgs)
                         .update(database, values);
                 break;
+
             case ROUTE_LAST_SYNCS_LIST:
                 count = builder.table(ZeroContract.LastSyncs.TABLE_NAME)
                         .where(selection, selectionArgs)
@@ -998,6 +1047,21 @@ public class ZeroProvider extends ContentProvider {
                         .where(selection, selectionArgs)
                         .update(database, values);
                 break;
+
+
+            case ROUTE_SUPPLIERS_LIST:
+                count = builder.table(ZeroContract.Suppliers.TABLE_NAME)
+                        .where(selection, selectionArgs)
+                        .update(database, values);
+                break;
+            case ROUTE_SUPPLIERS_ITEM:
+                id = uri.getLastPathSegment();
+                count = builder.table(ZeroContract.Suppliers.TABLE_NAME)
+                        .where(ZeroContract.Suppliers._ID + "=?", id)
+                        .where(selection, selectionArgs)
+                        .update(database, values);
+                break;
+
 
             default:
                 throw new UnsupportedOperationException("Unknown URI: " + uri);
