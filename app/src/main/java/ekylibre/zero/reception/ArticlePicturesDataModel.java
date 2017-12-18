@@ -8,15 +8,18 @@ import java.io.Serializable;
  * Created by Asus on 18/12/2017.
  */
 
-public class ArticlePictures implements Serializable {
+public class ArticlePicturesDataModel implements Serializable {
     private byte[] picture;
     private int fk_article;
     private int id;
     private int ek_id;
 
 
-    public ArticlePictures(byte[] picture) {
+    public ArticlePicturesDataModel(byte[] picture, int id, ArticleDataModel article) {
         this.picture = picture;
+        this.id = id;
+        this.fk_article = article.getId();
+
     }
 
     public byte[] getPicture() {

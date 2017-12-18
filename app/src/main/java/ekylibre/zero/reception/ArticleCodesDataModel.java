@@ -6,15 +6,17 @@ import java.io.Serializable;
  * Created by Asus on 18/12/2017.
  */
 
-public class ArticleCodes implements Serializable {
+public class ArticleCodesDataModel implements Serializable {
     private String code;
     private int fk_article;
     private int id;
     private int ek_id;
 
 
-    public ArticleCodes(String code) {
+    public ArticleCodesDataModel(String code,ArticleDataModel article, int id) {
         this.code = code;
+        this.fk_article = article.getId();
+        this.id = id;
     }
 
     public String getCode() {
@@ -24,4 +26,10 @@ public class ArticleCodes implements Serializable {
     public void setCode(String nature) {
         this.code = code;
     }
+
+    public int getId() {
+        return id;
+    }
+
+
 }
