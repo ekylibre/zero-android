@@ -413,6 +413,50 @@ public class DatabaseHelper extends SQLiteOpenHelper
                         + ", " + "FOREIGN KEY (" + ZeroContract.ReceptionItems.FK_ARTICLE + ") " +
                         "REFERENCES " + ZeroContract.Articles.TABLE_NAME + "(_id)"
                         + ")");
+
+                database.execSQL("CREATE TABLE IF NOT EXISTS " + ZeroContract.Receptions.TABLE_NAME + "("
+                        + ZeroContract.ReceptionsColumns._ID + " INTEGER PRIMARY KEY AUTOINCREMENT"
+                        + ", " + ZeroContract.ReceptionsColumns.USER + " VARCHAR(32)"
+                        + ", " + ZeroContract.ReceptionsColumns.RECEIVED_AT + " DATE NOT NULL"
+                        + ", " + ZeroContract.ReceptionsColumns.RECEPTION_NUMBER + " VARCHAR(50)"
+                        + ", " + ZeroContract.ReceptionsColumns.FK_SUPPLIER + " INTEGER NOT NULL"
+                        + ", " + ZeroContract.ReceptionsColumns.EK_ID + " INTEGER"
+                        + ", " + "FOREIGN KEY (" + ZeroContract.ReceptionsColumns.FK_SUPPLIER + ") " +
+                        "REFERENCES " + ZeroContract.Suppliers.TABLE_NAME + "(_id)"
+                        + ")");
+
+                database.execSQL("CREATE TABLE IF NOT EXISTS " + ZeroContract.ArticlesColumns.TABLE_NAME + "("
+                        + ZeroContract.ArticlesColumns._ID + " INTEGER PRIMARY KEY AUTOINCREMENT"
+                        + ", " + ZeroContract.ArticlesColumns.NATURE + " VARCHAR(255)"
+                        + ", " + ZeroContract.ArticlesColumns.UNITY + " VARCHAR(255)"
+                        + ", " + ZeroContract.ArticlesColumns.NAME + " VARCHAR(255)"
+                        + ", " + ZeroContract.ReceptionsColumns.EK_ID + " INTEGER"
+                        + ")");
+
+                database.execSQL("CREATE TABLE IF NOT EXISTS " + ZeroContract.ArticlePicturesColumns.TABLE_NAME + "("
+                        + ZeroContract.ArticlePicturesColumns._ID + " INTEGER PRIMARY KEY AUTOINCREMENT"
+                        + ", " + ZeroContract.ArticlePicturesColumns.EK_ID + " INTEGER"
+                        + ", " + ZeroContract.ArticlePicturesColumns.PICTURE + " VARCHAR(255)"
+                        + ", " + ZeroContract.ArticlePicturesColumns.FK_ARTICLE + " INTEGER"
+                        + ", " + "FOREIGN KEY (" + ZeroContract.ArticlePicturesColumns.FK_ARTICLE + ") " +
+                        "REFERENCES " + ZeroContract.Articles.TABLE_NAME + "(_id)"
+                        + ")");
+
+                database.execSQL("CREATE TABLE IF NOT EXISTS " + ZeroContract.ArticleCodesColumns.TABLE_NAME + "("
+                        + ZeroContract.ArticleCodesColumns._ID + " INTEGER PRIMARY KEY AUTOINCREMENT"
+                        + ", " + ZeroContract.ArticleCodesColumns.EK_ID + " INTEGER"
+                        + ", " + ZeroContract.ArticleCodesColumns.CODE + " VARCHAR(255)"
+                        + ", " + ZeroContract.ArticleCodesColumns.FK_ARTICLE + " INTEGER"
+                        + ", " + "FOREIGN KEY (" + ZeroContract.ArticleCodesColumns.FK_ARTICLE + ") " +
+                        "REFERENCES " + ZeroContract.Articles.TABLE_NAME + "(_id)"
+                        + ")");
+
+                database.execSQL("CREATE TABLE IF NOT EXISTS " + ZeroContract.Suppliers.TABLE_NAME
+                        + "("
+                        + ZeroContract.Suppliers._ID + " INTEGER PRIMARY KEY AUTOINCREMENT"
+                        + ", " + ZeroContract.Suppliers.NAME + " VARCHAR(255)"
+                        + ", " + ZeroContract.Suppliers.EK_ID + " INTEGER"
+                        + ")");
                 if (newVersion == 21)
                     break;
             }
