@@ -26,6 +26,7 @@
     <string name="new_count">Comptage</string>
     <string name="new_issue">Incident</string>
     <string name="new_intervention">Nouvelle intervention</string>
+    <string name="new_reception">Reception</string>
     <string name="notes">Notes</string>
     <string name="notif_invalidPasswordOrEmail">Mot de passe ou e-mail invalide</string>
     <string name="notif_loginSucceeded">Connexion réussie</string>

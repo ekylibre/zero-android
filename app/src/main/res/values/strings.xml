@@ -25,6 +25,7 @@
     <string name="new_count">Count</string>
     <string name="new_issue">Issue</string>
     <string name="new_intervention">New intervention</string>
+    <string name="new_reception">Reception</string>
     <string name="notes">Notes</string>
     <string name="notif_invalidPasswordOrEmail">Invalid password or e-mail</string>
     <string name="notif_loginSucceeded">Login succeeded</string>
