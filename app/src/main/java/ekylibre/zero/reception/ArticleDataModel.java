@@ -14,10 +14,11 @@ public class ArticleDataModel implements Serializable {
     private int ek_id;
 
 
-    public ArticleDataModel(String nature, String unity, String name) {
+    public ArticleDataModel(String nature, String unity, String name, int id) {
         this.nature = nature;
         this.unity = unity;
         this.name = name;
+        this.id = id;
 
     }
 
@@ -43,6 +44,10 @@ public class ArticleDataModel implements Serializable {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public int getId() {
+        return id;
     }
 
 
