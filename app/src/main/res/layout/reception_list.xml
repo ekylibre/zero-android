@@ -22,6 +22,7 @@
         android:dividerHeight="10.0sp"
         android:footerDividersEnabled="true"
         android:headerDividersEnabled="true"
+
         />
 
 
