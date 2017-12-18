@@ -23,6 +23,7 @@
     <string name="location">Location</string>
     <string name="longitude">Longitude</string>
     <string name="new_count">Count</string>
+    <string name="new_reception">Reception</string>
     <string name="new_issue">Issue</string>
     <string name="new_intervention">New intervention</string>
     <string name="notes">Notes</string>
@@ -74,6 +75,7 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="accountManager">Account manager</string>
     <string name="add_account">Add account</string>
+    <string name="Reception">Reception</string>
     <string name="parameters">Parameters</string>
     <string name="GPSissue">There is a problem with your GPS</string>
     <string name="chose_plant">Chose a plant</string>

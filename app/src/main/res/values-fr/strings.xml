@@ -24,6 +24,7 @@
     <string name="location">Géolocation</string>
     <string name="longitude">Longitude</string>
     <string name="new_count">Comptage</string>
+    <string name="new_reception">Réception</string>
     <string name="new_issue">Incident</string>
     <string name="new_intervention">Nouvelle intervention</string>
     <string name="notes">Notes</string>
@@ -51,6 +52,7 @@
     <string name="select_density">Densité du semoir</string>
     <string name="service_name">Ekylibre</string>
     <string name="settings">Paramètres</string>
+    <string name="Réception">Réception</string>
     <string name="severity">Gravité</string>
     <string name="sign_in">Se connecter</string>
     <string name="start">Commencer</string>
