@@ -402,7 +402,7 @@ public class DatabaseHelper extends SQLiteOpenHelper
 
             case 21:
             {
-                database.execSQL("CREATE TABLE IF NOT EXISTS receptions ("
+                database.execSQL("CREATE TABLE IF NOT EXISTS " + ZeroContract.ReceptionsColumns.TABLE_NAME + "("
                     + ZeroContract.ReceptionsColumns._ID + " INTEGER PRIMARY KEY AUTOINCREMENT"
                     + ", " + ZeroContract.ReceptionsColumns.USER + " VARCHAR(32)"
                     + ", " + ZeroContract.ReceptionsColumns.RECEIVED_AT + " DATE NOT NULL"
@@ -413,7 +413,7 @@ public class DatabaseHelper extends SQLiteOpenHelper
                     "REFERENCES " + ZeroContract.Suppliers.TABLE_NAME + "(_id)"
                     + ")");
 
-                database.execSQL("CREATE TABLE IF NOT EXISTS articles ("
+                database.execSQL("CREATE TABLE IF NOT EXISTS " + ZeroContract.ArticlesColumns.TABLE_NAME + "("
                         + ZeroContract.ArticlesColumns._ID + " INTEGER PRIMARY KEY AUTOINCREMENT"
                         + ", " + ZeroContract.ArticlesColumns.NATURE + " VARCHAR(255)"
                         + ", " + ZeroContract.ArticlesColumns.UNITY + " VARCHAR(255)"
@@ -421,7 +421,7 @@ public class DatabaseHelper extends SQLiteOpenHelper
                         + ", " + ZeroContract.ReceptionsColumns.EK_ID + " INTEGER"
                         + ")");
 
-                database.execSQL("CREATE TABLE IF NOT EXISTS article_pictures ("
+                database.execSQL("CREATE TABLE IF NOT EXISTS " + ZeroContract.ArticlePicturesColumns.TABLE_NAME + "("
                         + ZeroContract.ArticlePicturesColumns._ID + " INTEGER PRIMARY KEY AUTOINCREMENT"
                         + ", " + ZeroContract.ArticlePicturesColumns.EK_ID + " INTEGER"
                         + ", " + ZeroContract.ArticlePicturesColumns.PICTURE + " VARCHAR(255)"
@@ -430,7 +430,7 @@ public class DatabaseHelper extends SQLiteOpenHelper
                         "REFERENCES " + ZeroContract.Articles.TABLE_NAME + "(_id)"
                         + ")");
 
-                database.execSQL("CREATE TABLE IF NOT EXISTS article_codes ("
+                database.execSQL("CREATE TABLE IF NOT EXISTS " + ZeroContract.ArticleCodesColumns.TABLE_NAME + "("
                         + ZeroContract.ArticleCodesColumns._ID + " INTEGER PRIMARY KEY AUTOINCREMENT"
                         + ", " + ZeroContract.ArticleCodesColumns.EK_ID + " INTEGER"
                         + ", " + ZeroContract.ArticleCodesColumns.CODE + " VARCHAR(255)"
@@ -441,7 +441,7 @@ public class DatabaseHelper extends SQLiteOpenHelper
 
                 database.execSQL("CREATE TABLE IF NOT EXISTS " + ZeroContract.Suppliers.TABLE_NAME
                         + "("
-                        + ZeroContract.Contacts._ID + " INTEGER PRIMARY KEY AUTOINCREMENT"
+                        + ZeroContract.Suppliers._ID + " INTEGER PRIMARY KEY AUTOINCREMENT"
                         + ", " + ZeroContract.Suppliers.NAME + " VARCHAR(255)"
                         + ", " + ZeroContract.Suppliers.EK_ID + " INTEGER"
                         + ")");

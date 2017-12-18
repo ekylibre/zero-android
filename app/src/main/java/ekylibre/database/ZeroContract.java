@@ -448,7 +448,7 @@ public final class ZeroContract {
         public static final String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE +
                 "/vnd.ekylibre.zero.receptions";
 
-        public static final String[] PROJECTION_ALL = {_ID, USER, EK_ID, RECEIVED_AT, RECEPTION_NUMBER, FK_SUPPLIER;
+        public static final String[] PROJECTION_ALL = {_ID, USER, EK_ID, RECEIVED_AT, RECEPTION_NUMBER, FK_SUPPLIER};
         public static final String[] PROJECTION_NONE = {_ID};
 
         public static final String SORT_ORDER_DEFAULT = _ID + " ASC";
