@@ -31,5 +31,7 @@ public class ArticleCodesDataModel implements Serializable {
         return id;
     }
 
-
+    public int getFk_article() {
+        return fk_article;
+    }
 }

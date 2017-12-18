@@ -1,10 +1,12 @@
 package ekylibre.zero.reception;
 
+import java.io.Serializable;
+
 /**
  * Created by Pierre on 18/12/2017.
  */
 
-public class ReceptionItemsDataModel {
+public class ReceptionItemsDataModel implements Serializable {
     private int id;
     private int fk_reception ;
     private int fk_article;
@@ -20,6 +22,7 @@ public class ReceptionItemsDataModel {
     }
 
     public int getId() {
+
         return id;
     }
 
@@ -27,9 +30,7 @@ public class ReceptionItemsDataModel {
         return fk_reception;
     }
 
-    public int getFk_article() {
-        return fk_article;
-    }
+
 
     public double getQuantity() {
         return quantity;
@@ -43,7 +44,5 @@ public class ReceptionItemsDataModel {
         return ek_id;
     }
 
-    public void setEk_id(int ek_id) {
-        this.ek_id = ek_id;
-    }
+
 }

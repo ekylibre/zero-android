@@ -29,4 +29,12 @@ public class ArticlePicturesDataModel implements Serializable {
     public void setPicture(String nature) {
         this.picture = picture;
     }
+
+    public int getId() {
+        return id;
+    }
+
+    public int getFk_article() {
+        return fk_article;
+    }
 }

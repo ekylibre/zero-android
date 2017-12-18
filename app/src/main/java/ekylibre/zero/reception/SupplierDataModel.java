@@ -1,10 +1,12 @@
 package ekylibre.zero.reception;
 
+import java.io.Serializable;
+
 /**
  * Created by Asus on 18/12/2017.
  */
 
-public class SupplierDataModel {
+public class SupplierDataModel implements Serializable {
     private String name;
     private int id;
     private int ek_id;
