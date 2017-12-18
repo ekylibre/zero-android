@@ -217,9 +217,9 @@ public final class ZeroContract {
 
 
     public interface ReceptionItemsColumns extends BaseColumns {
-        String TABLE_NAME   = "receptionItems";
+        String TABLE_NAME   = "reception_items";
         String EK_ID        = "ek_id";
-        String FK_RECEPTION = "type";
+        String FK_RECEPTION = "fk_reception";
         String QUANTITY     = "quantity";
         String FK_ARTICLE   = "fk_article";
     }
@@ -455,7 +455,7 @@ public final class ZeroContract {
         public static final String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE +
                 "/vnd.ekylibre.zero.receptionItems";
 
-        public static final String[] PROJECTION_ALL = {_ID, FK_RECEPTION, QUANTITY, FK_ARTICLE,EK_ID};
+        public static final String[] PROJECTION_ALL = {_ID, FK_RECEPTION, QUANTITY, FK_ARTICLE, EK_ID};
         public static final String[] PROJECTION_NONE = {_ID};
 
         public static final String SORT_ORDER_DEFAULT = _ID + " ASC";

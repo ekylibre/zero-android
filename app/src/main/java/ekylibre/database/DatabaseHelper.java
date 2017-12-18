@@ -11,7 +11,7 @@ import android.util.Log;
 
 public class DatabaseHelper extends SQLiteOpenHelper
 {
-    private static final int DATABASE_VERSION = 20;
+    private static final int DATABASE_VERSION = 21;
 
     private static final String DATABASE_NAME = "zero";
 
@@ -406,7 +406,7 @@ public class DatabaseHelper extends SQLiteOpenHelper
                         + ZeroContract.ReceptionItems._ID + " INTEGER PRIMARY KEY AUTOINCREMENT"
                         + ", " + ZeroContract.ReceptionItems.FK_RECEPTION + " INTEGER"
                         + ", " + ZeroContract.ReceptionItems.FK_ARTICLE + " INTEGER"
-                        + ", " + ZeroContract.ReceptionItems.QUANTITY + " INTEGER"
+                        + ", " + ZeroContract.ReceptionItems.QUANTITY + " DOUBLE"
                         + ", " + ZeroContract.ReceptionItems.EK_ID + " INTEGER"
                         + ", " + "FOREIGN KEY (" + ZeroContract.ReceptionItems.FK_RECEPTION + ") " +
                         "REFERENCES " + ZeroContract.Receptions.TABLE_NAME + "(_id)"
