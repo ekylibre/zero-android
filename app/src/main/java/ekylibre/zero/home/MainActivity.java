@@ -305,6 +305,14 @@ public class MainActivity extends UpdatableActivity
                 forceSync_data();
                 break;
             }
+
+            //Button Reception on menu : Launches reception button
+//            case R.id.nav_reception :
+//            {
+//                Intent intent = new Intent(this, ReceptionActivity.class);
+//                startActivity(intent);
+//                break;
+//            }
             default:
             {
                 break;
