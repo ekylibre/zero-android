@@ -18,6 +18,7 @@ public class ArticleDataModel implements Serializable {
         this.nature = nature;
         this.unity = unity;
         this.name = name;
+
     }
 
     public String getNature() {
