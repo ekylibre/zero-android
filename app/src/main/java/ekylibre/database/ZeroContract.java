@@ -5,7 +5,7 @@ import android.database.DatabaseErrorHandler;
 import android.net.Uri;
 import android.provider.BaseColumns;
 import android.provider.ContactsContract;
-// import android.support.design.internal.NavigationMenu;
+import android.support.design.internal.NavigationMenu;
 
 import java.lang.annotation.Target;
 import java.util.UUID;
