@@ -9,9 +9,10 @@ public class SupplierDataModel {
     private int id;
     private int ek_id;
 
-    public SupplierDataModel(String nature, String unity, String name) {
+    public SupplierDataModel( String name, int id) {
 
         this.name = name;
+        this.id = id;
 
     }
 
