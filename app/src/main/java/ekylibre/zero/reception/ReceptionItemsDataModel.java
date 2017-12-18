@@ -11,10 +11,10 @@ public class ReceptionItemsDataModel {
     private double quantity ;
     private int ek_id;
 
-    public ReceptionItemsDataModel(int id, ReceptionDataModel fk_reception, ArticleDataModel fk_article, double quantity, int ek_id) {
+    public ReceptionItemsDataModel(int id, ReceptionDataModel reception, ArticleDataModel article, double quantity, int ek_id) {
         this.id = id;
-        this.fk_reception = ReceptionDataModel.getId ;
-        this.fk_article = ArticleDataModel.getId;
+        this.fk_reception = reception.getId() ;
+        this.fk_article = article.getId();
         this.quantity = quantity ;
         this.ek_id = ek_id;
     }
