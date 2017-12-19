@@ -2,6 +2,9 @@
 <resources>
     <string name="accuracy">Précision</string>
     <string name="action_settings">Paramètres</string>
+    <string name="article_name">Nom de L\'Article</string>
+    <string name="article_type">Type</string>
+    <string name="article_unit">Unité</string>
     <string name="advocated_density">Densité préconisée</string>
     <string name="app_name">Zero</string>
     <string name="analysis_count_hint">Entrer une nouvelle valeur</string>
