@@ -25,5 +25,5 @@
         android:layout_marginEnd="26dp"
         android:text="@string/new_product"
         android:textColor="@color/basic_blue"
-        android:textSize="18sp" />
+         />
 </RelativeLayout>
