@@ -11,12 +11,16 @@
         android:layout_width="match_parent"
         android:layout_height="25dp"
         android:layout_alignRight="@+id/ClientNameId"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
         android:text="@string/New_Date_Reception" />
 
     <EditText
         android:id="@+id/description"
         android:layout_width="fill_parent"
         android:layout_height="25dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
         android:layout_gravity="bottom"
         android:hint="@string/New_Date_Reception"
         android:maxLines="6" />
@@ -25,6 +29,8 @@
         android:id="@+id/SenderId"
         android:layout_width="match_parent"
         android:layout_height="25dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
         android:layout_alignRight="@+id/ClientNameId"
         android:text="@string/New_Sender"
 
@@ -34,6 +40,8 @@
         android:id="@+id/expediteur"
         android:layout_width="fill_parent"
         android:layout_height="25dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
         android:layout_gravity="bottom"
         android:hint="@string/New_Sender"
         android:maxLines="6" />
@@ -42,6 +50,8 @@
         android:id="@+id/BondelivraisonId"
         android:layout_width="match_parent"
         android:layout_height="25dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
         android:layout_alignRight="@+id/ClientNameId"
         android:text="@string/New_Form"
 
@@ -51,6 +61,8 @@
         android:id="@+id/DeliveryFormId"
         android:layout_width="fill_parent"
         android:layout_height="25dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
         android:layout_gravity="bottom"
         android:hint="@string/New_Form"
         android:maxLines="6" />
