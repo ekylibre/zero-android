@@ -12,6 +12,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:inputType="text"
+        android:hint="Article name"
         />
 
     <Button
@@ -19,5 +20,27 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Save"/>
+
+    <Spinner
+        android:id="@+id/spinnerNatureArticleId"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="Select nature"
+        android:padding="5dp"
+        android:layout_marginTop="10dp"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        />
+
+    <Spinner
+        android:id="@+id/spinnerUnityArticleId"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="Select nature"
+        android:padding="5dp"
+        android:layout_marginTop="10dp"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        />
+
+
 
 </LinearLayout>
