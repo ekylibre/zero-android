@@ -79,47 +79,34 @@
         android:layout_marginBottom="10dp" />
 
 
+
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <ImageView
-            android:id="@+id/imageView3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_above="@+id/SaveBLId"
-            android:layout_marginEnd="64dp"
-            android:layout_toStartOf="@+id/imageView4"
-            android:adjustViewBounds="true"
-            android:cropToPadding="true"
-            android:src="@drawable/ic_nouveauproduit" />
 
-        <TextView
-            android:id="@+id/ScanBLId"
-            android:layout_width="wrap_content"
-            android:layout_height="25dp"
+        <Button
+            android:id="@+id/button_save"
+            android:layout_width="100dp"
+            android:layout_height="75dp"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginEnd="15dp"
+            android:drawableTop="@drawable/ic_button_circle"
+            android:onClick="onClick"
+            android:text="@string/savebl"
+            android:textSize="18dp"/>
 
-            android:layout_alignParentBottom="true"
-            android:layout_alignStart="@+id/imageView3"
+        <Button
+            android:id="@+id/button_scan"
+            android:layout_width="100dp"
+            android:layout_height="75dp"
+            android:layout_alignParentTop="true"
+            android:layout_toStartOf="@+id/button_save"
+            android:drawableTop="@drawable/ic_button_circle"
+            android:onClick="onClick"
             android:text="@string/scanbl" />
 
-        <TextView
-            android:id="@+id/SaveBLId"
-            android:layout_width="wrap_content"
-            android:layout_height="25dp"
-
-            android:layout_alignParentBottom="true"
-            android:layout_alignStart="@+id/imageView4"
-            android:text="@string/savebl" />
-
-        <ImageView
-            android:id="@+id/imageView4"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_alignTop="@+id/imageView3"
-            android:layout_marginEnd="33dp"
-            android:src="@drawable/ic_nouveauproduit" />
 
     </RelativeLayout>
 
