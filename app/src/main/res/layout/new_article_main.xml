@@ -79,8 +79,7 @@
             android:id="@+id/takeAPicture"
             android:layout_width="200dp"
             android:layout_height="110dp"
-            android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true"
+
             android:layout_gravity="center_horizontal"
             android:layout_marginBottom="37dp"
             android:background="@drawable/rectangle_dash_line"
