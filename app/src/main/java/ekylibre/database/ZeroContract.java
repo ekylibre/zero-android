@@ -198,14 +198,14 @@ public final class ZeroContract {
         String TABLE_NAME   = "article_pictures";
         String EK_ID        = "ek_id";
         String PICTURE      = "picture";
-        String FK_ARTICLE  = "fk_article";
+        String FK_ARTICLE   = "fk_article";
     }
 
     public interface ArticleCodesColumns extends BaseColumns {
         String TABLE_NAME   = "article_codes";
         String EK_ID        = "ek_id";
-        String CODE      = "picture";
-        String FK_ARTICLE  = "fk_article";
+        String CODE         = "code";
+        String FK_ARTICLE   = "fk_article";
     }
 
     public interface SuppliersColumns extends BaseColumns {
