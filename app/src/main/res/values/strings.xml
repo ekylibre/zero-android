@@ -2,6 +2,9 @@
 <resources>
     <string name="accuracy">Accuracy</string>
     <string name="action_settings">Settings</string>
+    <string name="article_name">Article Name</string>
+    <string name="article_type">Type</string>
+    <string name="article_unit">Unit</string>
     <string name="advocated_density">Advocated density</string>
     <string name="app_name">Zero</string>
     <string name="analysis_count_hint">Enter a new count</string>
@@ -25,6 +28,8 @@
     <string name="new_count">Count</string>
     <string name="new_issue">Issue</string>
     <string name="new_intervention">New intervention</string>
+    <string name="new_reception">Reception</string>
+    <string name="new_article">New Article</string>
     <string name="notes">Notes</string>
     <string name="notif_invalidPasswordOrEmail">Invalid password or e-mail</string>
     <string name="notif_loginSucceeded">Login succeeded</string>
@@ -74,12 +79,21 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="accountManager">Account manager</string>
     <string name="add_account">Add account</string>
+    <string name="Reception">Reception</string>
+    <string name="New_Reception">New Reception</string>
+    <string name="New_Date_Reception">Reception Date</string>
+    <string name="New_Sender">Sender</string>
+    <string name="New_Form">delivery form number</string>
     <string name="parameters">Parameters</string>
     <string name="GPSissue">There is a problem with your GPS</string>
     <string name="chose_plant">Chose a plant</string>
     <string name="chose_abacus">Chose an abacus</string>
     <string name="chose_density">Chose a density</string>
+    <string name="scan_product">Scan a new product</string>
+    <string name="new_product">Add a new product</string>
     <string name="after_semis">Seeding</string>
+    <string name="scanbl">Scan BL</string>
+    <string name="savebl">Save</string>
     <string name="germination">Germination</string>
     <string name="average_obtained">Average obtained :</string>
     <string name="expected_value">Expected value :</string>

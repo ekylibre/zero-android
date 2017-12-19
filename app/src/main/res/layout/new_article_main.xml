@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    android:background="@color/white"
+    tools:context="ekylibre.zero.IssueActivity"
+    android:fitsSystemWindows="true"
+    >
+
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <include
+            layout="@layout/toolbar_new_article"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/upper_toolbar"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/article_name" />
+
+                <EditText
+                    android:id="@+id/article_name"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
+                    android:layout_marginBottom="35dp"
+                    android:maxLines="6" />
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/article_type" />
+
+                <Spinner
+                    android:id="@+id/spinner_type"
+                    style="@style/Widget.AppCompat.Spinner.Underlined"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="35dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/article_unit" />
+
+                <Spinner
+                    android:id="@+id/spinner_unit"
+                    style="@style/Widget.AppCompat.Spinner.Underlined"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="35dp" />
+
+
+            <!--</LinearLayout>-->
+
+    <Button
+        android:id="@+id/takeAPicture"
+        android:layout_width="250dp"
+        android:layout_height="250dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="37dp"
+        android:background="@drawable/rectangle_dash_line"
+        android:onClick="takePicture"
+        android:text="@string/permlab_capture"
+        android:textColor="@color/basic_grey" />
+
+        <!-- todo, for buttons at bottom-->
+        <!--<RelativeLayout-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content">-->
+
+
+
+        <!--</RelativeLayout>-->
+
+        </LinearLayout>
+
+</android.support.design.widget.CoordinatorLayout>
+
