@@ -2,6 +2,9 @@
 <resources>
     <string name="accuracy">Accuracy</string>
     <string name="action_settings">Settings</string>
+    <string name="article_name">Article Name</string>
+    <string name="article_type">Type</string>
+    <string name="article_unit">Unit</string>
     <string name="advocated_density">Advocated density</string>
     <string name="app_name">Zero</string>
     <string name="analysis_count_hint">Enter a new count</string>
@@ -23,9 +26,10 @@
     <string name="location">Location</string>
     <string name="longitude">Longitude</string>
     <string name="new_count">Count</string>
-    <string name="new_reception">Reception</string>
     <string name="new_issue">Issue</string>
     <string name="new_intervention">New intervention</string>
+    <string name="new_reception">Reception</string>
+    <string name="new_article">New Article</string>
     <string name="notes">Notes</string>
     <string name="notif_invalidPasswordOrEmail">Invalid password or e-mail</string>
     <string name="notif_loginSucceeded">Login succeeded</string>
