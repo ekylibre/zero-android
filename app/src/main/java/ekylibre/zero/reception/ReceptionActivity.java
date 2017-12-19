@@ -19,7 +19,6 @@ public class ReceptionActivity {
         return DatabaseUtils.queryNumEntries(db, TABLE_NAME);
     }
 
-
     public void loadata(Context context) {
         receptionDataModels = new ArrayList<ReceptionDataModel>();
         ContentObserver receptionContentResolverObserver = null;
