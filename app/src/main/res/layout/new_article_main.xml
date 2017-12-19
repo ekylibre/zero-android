@@ -14,7 +14,8 @@
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        >
 
         <include
             layout="@layout/toolbar_new_article"
@@ -25,11 +26,16 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginRight="15dp"
+                    android:layout_marginTop="15dp"
                     android:text="@string/article_name" />
 
                 <EditText
                     android:id="@+id/article_name"
                     android:layout_width="fill_parent"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginRight="15dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="bottom"
                     android:layout_marginBottom="35dp"
@@ -39,6 +45,8 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginRight="15dp"
                     android:text="@string/article_type" />
 
                 <Spinner
@@ -46,11 +54,15 @@
                     style="@style/Widget.AppCompat.Spinner.Underlined"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginRight="15dp"
                     android:layout_marginBottom="35dp" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginRight="15dp"
                     android:text="@string/article_unit" />
 
                 <Spinner
@@ -58,10 +70,10 @@
                     style="@style/Widget.AppCompat.Spinner.Underlined"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginRight="15dp"
                     android:layout_marginBottom="35dp" />
 
-
-            <!--</LinearLayout>-->
 
         <Button
             android:id="@+id/takeAPicture"
@@ -76,15 +88,18 @@
             android:text="@string/permlab_capture"
             android:textColor="@color/basic_grey" />
 
-        <!-- todo, for buttons at bottom-->
+        <!--for buttons at bottom-->
         <RelativeLayout
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
 
-            <TextView
-                android:id="@+id/SaveBLId"
+            >
+
+
+        <TextView
+                android:id="@+id/Save"
                 android:layout_width="wrap_content"
-                android:layout_height="25dp"
+                android:layout_height="20dp"
 
                 android:layout_alignParentBottom="true"
                 android:layout_alignStart="@+id/imageView4"
