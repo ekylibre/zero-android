@@ -63,27 +63,43 @@
 
             <!--</LinearLayout>-->
 
-    <Button
-        android:id="@+id/takeAPicture"
-        android:layout_width="250dp"
-        android:layout_height="250dp"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginBottom="37dp"
-        android:background="@drawable/rectangle_dash_line"
-        android:onClick="takePicture"
-        android:text="@string/permlab_capture"
-        android:textColor="@color/basic_grey" />
+        <Button
+            android:id="@+id/takeAPicture"
+            android:layout_width="200dp"
+            android:layout_height="150dp"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="37dp"
+            android:background="@drawable/rectangle_dash_line"
+            android:onClick="takePicture"
+            android:text="@string/permlab_capture"
+            android:textColor="@color/basic_grey" />
 
         <!-- todo, for buttons at bottom-->
-        <!--<RelativeLayout-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content">-->
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
 
+            <TextView
+                android:id="@+id/SaveBLId"
+                android:layout_width="wrap_content"
+                android:layout_height="25dp"
 
+                android:layout_alignParentBottom="true"
+                android:layout_alignStart="@+id/imageView4"
+                android:text="@string/save" />
 
-        <!--</RelativeLayout>-->
+            <ImageView
+                android:id="@+id/imageView4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignTop="@+id/imageView3"
+                android:layout_marginEnd="33dp"
+                android:src="@drawable/ic_nouveauproduit" />
+
+        </RelativeLayout>
 
         </LinearLayout>
 
