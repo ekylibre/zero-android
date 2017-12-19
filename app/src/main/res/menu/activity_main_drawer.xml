@@ -16,6 +16,10 @@
             android:id="@+id/nav_counting"
             android:icon="@drawable/ic_count"
             android:title="@string/new_count" />
+        <item
+            android:id="@+id/nav_reception"
+            android:icon="@drawable/ic_count"
+            android:title="reception" />
     </group>
 
     <item android:title="@string/parameters">
@@ -32,6 +36,7 @@
                 android:id="@+id/nav_sync"
                 android:icon="@drawable/ic_sync"
                 android:title="@string/sync" />
+
 
         </menu>
     </item>

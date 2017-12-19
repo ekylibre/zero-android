@@ -35,6 +35,7 @@ import ekylibre.zero.R;
 import ekylibre.zero.SettingsActivity;
 import ekylibre.zero.account.AccountManagerActivity;
 import ekylibre.zero.intervention.InterventionActivity;
+import ekylibre.zero.reception.ArticleNewActivity;
 
 /**************************************
  * Created by pierre on 7/12/16.      *
@@ -290,6 +291,12 @@ public class MainActivity extends UpdatableActivity
             case R.id.nav_account :
             {
                 Intent intent = new Intent(this, AccountManagerActivity.class);
+                startActivity(intent);
+                break;
+            }
+            case R.id.nav_reception :
+            {
+                Intent intent = new Intent(this, ArticleNewActivity.class);
                 startActivity(intent);
                 break;
             }
