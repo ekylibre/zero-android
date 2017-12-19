@@ -27,6 +27,7 @@ public class SupplierDataModel implements Serializable {
     }
 
     public int getId() {
+
         return id;
     }
 

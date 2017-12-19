@@ -18,14 +18,12 @@ public class ReceptionDataModel implements Serializable {
         this.received_at = received_at;
         this.reception_number = reception_number;
         this.fk_supplier = supplier.getId();
-        this.id = id;
     }
 
     public ReceptionDataModel(String received_at) {
         this.received_at = received_at;
         this.reception_number = "34564";
         this.fk_supplier = 3;
-        this.id = 2;
     }
 
     public String getReceived_at() {
