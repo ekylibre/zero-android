@@ -21,9 +21,8 @@
         android:divider="@color/cardview_light_background"
         android:dividerHeight="10.0sp"
         android:footerDividersEnabled="true"
-        android:headerDividersEnabled="true"
+        android:headerDividersEnabled="true"/>
 
-        />
 
 
 </LinearLayout>

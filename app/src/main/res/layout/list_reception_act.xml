@@ -9,26 +9,30 @@
 
     <TextView
         android:id="@+id/ProductinfoId"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
-        android:layout_below="@+id/ClientNameId" />
+        android:layout_below="@+id/ClientNameId"
+        android:text="Give me love"/>
 
     <TextView
         android:id="@+id/ClientNameId"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
+        android:text="akuna matata"
         android:textStyle="bold" />
 
     <TextView
         android:id="@+id/ReceptiondateId"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignRight="@+id/ClientNameId"
 
-        />
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentTop="true"
+        android:text="11/11/11"
+        android:inputType="date"/>
 
 
 </RelativeLayout>
