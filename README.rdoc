@@ -13,6 +13,8 @@ For Linux, unzip the file where you want it to be installed (for example in /opt
     $ sudo cp android-studio-ide-171.4443003-linux.zip /opt/
     $ cd /opt/
     $ unzip android-studio-ide-171.4443003-linux.zip
+    
+If you have any troubles, please follow the link https://developer.android.com/studio/install.html
 
 === Install Android Studio
 
@@ -27,6 +29,8 @@ Then, follow the instructions about SDK installation and accept the creation of 
 
 You can now clone this repo by clicking in the menu VCS > Checkout from Version Control > GitHub
 Fill in the repo address: https://github.com/ekylibre/zero-android.git and clone it where you want.
+
+At this time, you must have a Github account with access granted to zero-android repository. We recommended you to create a new token for Android studio (Go to Github.com and  Settings / Developer settings / Personal access tokens to create a new token with access to repository)
 
 Accept to create a new project from this repo.
 
