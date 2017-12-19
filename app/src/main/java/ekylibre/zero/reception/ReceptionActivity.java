@@ -24,7 +24,7 @@ public class ReceptionActivity {
         receptionDataModels = new ArrayList<ReceptionDataModel>();
         ContentObserver receptionContentResolverObserver = null;
         getContentResolver().delete(ZeroProvider.Contract.CONTENT_URI, null, null);
-        for (int i = 0; i <; i++) {
+        for (int i = 0; i < 10; i++) {
 
 
         }
