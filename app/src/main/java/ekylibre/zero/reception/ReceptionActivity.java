@@ -3,6 +3,7 @@ package ekylibre.zero.reception;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -10,6 +11,7 @@ import android.provider.ContactsContract;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Selection;
 import android.util.Log;
+import android.view.View;
 import android.widget.ListView;
 
 import java.text.ParseException;
@@ -33,10 +35,13 @@ public class ReceptionActivity extends AppCompatActivity {
 
     protected void onCreate(Bundle savedInstanceState) {
 
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ListView mListView = (ListView) findViewById(R.id.listView);
 
+        setContentView(R.layout.reception_main);
+        ListView mListView = (ListView) findViewById(R.id.reception_list);
         if (savedInstanceState == null) {
             try {
                 loadData(this);
@@ -49,9 +54,11 @@ public class ReceptionActivity extends AppCompatActivity {
 
         //mListView.setEmptyView(findViewById(R.id.emptyListView));
 
+
     }
 
 
+    public void add_supplier(Context context) {
     public void add_supplier(Context context, String name_supplier){
 
         ContentResolver contentResolver = context.getContentResolver();
@@ -72,6 +79,7 @@ public class ReceptionActivity extends AppCompatActivity {
 //                null,null);
 //    }
 
+    public void add_reception(Context context) {
     public void add_reception(Context context, String reception_number, int supplierId){
 
         ContentResolver contentResolver = context.getContentResolver();
@@ -89,14 +97,14 @@ public class ReceptionActivity extends AppCompatActivity {
 
         //Date date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss z").parse(inputDate);
         //return new SimpleDateFormat("dd.MM.yyyy HH:mm:ss").format(date);
-        Log.i("MyTag",inputDate);
+        Log.i("MyTag", inputDate);
         Date date = new SimpleDateFormat(DateConstant.ISO_8601).parse(inputDate);
         String date1 = new SimpleDateFormat("dd/MM/yyyy").format(date);
-        Log.i("MyTag",date1);
+        Log.i("MyTag", date1);
         return date1;
     }
 
-    public void loadData (Context context) throws ParseException {
+    public void loadData(Context context) throws ParseException {
 
         receptionDataModels = new ArrayList<ReceptionDataModel>();
         //ContentObserver receptionContentResolverObserver = null;
@@ -163,6 +171,10 @@ public class ReceptionActivity extends AppCompatActivity {
 //        }
 
         while (curs.moveToNext()) {
+            String date = curs.getString(curs.getColumnIndexOrThrow(ZeroContract.ReceptionsColumns.RECEIVED_AT));
+            Log.i("MyTag", "date après query " + date);
+            String date3 = getDateFormatted(date);
+            Log.i("MyTag", "date après formattage " + date3);
             String date = curs.getString(curs.getColumnIndexOrThrow("received_at")) ;
             String reception_number = curs.getString(curs.getColumnIndexOrThrow("receptions_number")) ;
             String supplier_name = curs.getString(curs.getColumnIndexOrThrow("name")) ;
@@ -177,8 +189,8 @@ public class ReceptionActivity extends AppCompatActivity {
             Log.i("myTag", "received_at" + receptionDataModel.getReceived_at());
             receptionDataModels.add(receptionDataModel);
         }
-        //contentResolver.unregisterContentObserver(receptionContentResolverObserver);
-
-
     }
+    //contentResolver.unregisterContentObserver(receptionContentResolverObserver);
+
+
 }

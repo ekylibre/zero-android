@@ -2,6 +2,9 @@
 <resources>
     <string name="accuracy">Précision</string>
     <string name="action_settings">Paramètres</string>
+    <string name="article_name">Nom de L\'Article</string>
+    <string name="article_type">Type</string>
+    <string name="article_unit">Unité</string>
     <string name="advocated_density">Densité préconisée</string>
     <string name="app_name">Zero</string>
     <string name="analysis_count_hint">Entrer une nouvelle valeur</string>
@@ -24,6 +27,8 @@
     <string name="location">Géolocation</string>
     <string name="longitude">Longitude</string>
     <string name="new_count">Comptage</string>
+    <string name="new_reception">Réception</string>
+    <string name="new_article">Nouvel article</string>
     <string name="new_issue">Incident</string>
     <string name="new_intervention">Nouvelle intervention</string>
     <string name="notes">Notes</string>
@@ -51,10 +56,18 @@
     <string name="select_density">Densité du semoir</string>
     <string name="service_name">Ekylibre</string>
     <string name="settings">Paramètres</string>
+    <string name="Reception">Réception</string>
+    <string name="New_Reception">Nouvelle Réception</string>
+    <string name="New_Date_Reception">Date de réception</string>
+    <string name="New_Sender">Expéditeur</string>
     <string name="severity">Gravité</string>
     <string name="sign_in">Se connecter</string>
     <string name="start">Commencer</string>
     <string name="stop">Stop</string>
+    <string name="scan_product">Scanner un nouveau produit</string>
+    <string name="new_product">Saisir un nouveau produit</string>
+    <string name="savebl">Scanner le BL</string>
+    <string name="New_Form">N° du bon de livraison</string>
     <string name="sync">Synchroniser</string>
     <string name="sync_all">Tout synchroniser</string>
     <string name="test_demo">Tester la démonstration</string>
@@ -112,4 +125,16 @@
     <string name="pref_syncContact">Synchronisation des contacts Ekylibre</string>
     <string name="pref_syncContact_summary">Autoriser l\'application à synchroniser vos
         contacts Ekylibre</string>
+    <string-array name="array_article_type">
+        <item></item>
+        <item>Type One</item>
+        <item>Type Two</item>
+        <item>Type Three</item>
+    </string-array>
+    <string-array name="array_article_unit">
+        <item></item>
+        <item>Unit One</item>
+        <item>Unit Two</item>
+        <item>Unit Three</item>
+    </string-array>
 </resources>

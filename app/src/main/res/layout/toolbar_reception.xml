@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.AppBarLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:theme="@style/AppTheme.AppBarOverlay"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/layoutId">
+
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar_reception"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/basic_green"
+        app:popupTheme="@color/basic_green"
+        app:theme="@style/ThemeToolbar"
+        app:title="@string/Reception"
+        app:titleTextColor="@color/white" />
+
+</android.support.design.widget.AppBarLayout>
+

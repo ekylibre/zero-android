@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <include layout="@layout/toolbar_newreception" />
+
+    <TextView
+        android:id="@+id/ReceptiondateId"
+        android:layout_width="match_parent"
+        android:layout_height="25dp"
+        android:layout_alignRight="@+id/ClientNameId"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:text="@string/New_Date_Reception" />
+
+    <EditText
+        android:id="@+id/description"
+        android:layout_width="fill_parent"
+        android:layout_height="25dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:layout_gravity="bottom"
+        android:hint="@string/New_Date_Reception"
+        android:maxLines="6" />
+
+    <TextView
+        android:id="@+id/SenderId"
+        android:layout_width="match_parent"
+        android:layout_height="25dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:layout_alignRight="@+id/ClientNameId"
+        android:text="@string/New_Sender"
+
+        />
+
+    <EditText
+        android:id="@+id/expediteur"
+        android:layout_width="fill_parent"
+        android:layout_height="25dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:layout_gravity="bottom"
+        android:hint="@string/New_Sender"
+        android:maxLines="6" />
+
+    <TextView
+        android:id="@+id/BondelivraisonId"
+        android:layout_width="match_parent"
+        android:layout_height="25dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:layout_alignRight="@+id/ClientNameId"
+        android:text="@string/New_Form"
+
+        />
+
+    <EditText
+        android:id="@+id/DeliveryFormId"
+        android:layout_width="fill_parent"
+        android:layout_height="25dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:layout_gravity="bottom"
+        android:hint="@string/New_Form"
+        android:maxLines="6" />
+
+    <include
+        layout="@layout/newreception_list"
+        android:layout_width="wrap_content"
+        android:layout_height="200dp" />
+
+    <include
+        layout="@layout/buttons__new_reception"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:layout_marginBottom="10dp" />
+
+
+
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+
+        <Button
+            android:id="@+id/button_save"
+            android:layout_width="100dp"
+            android:layout_height="75dp"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginEnd="15dp"
+            android:drawableTop="@drawable/ic_button_circle"
+            android:onClick="onClick"
+            android:text="@string/savebl"/>
+
+        <Button
+            android:id="@+id/button_scan"
+            android:layout_width="100dp"
+            android:layout_height="75dp"
+            android:layout_alignParentTop="true"
+            android:layout_toStartOf="@+id/button_save"
+            android:drawableTop="@drawable/ic_button_circle"
+            android:onClick="onClick"
+            android:text="@string/scanbl" />
+
+
+    </RelativeLayout>
+
+</LinearLayout>
+
