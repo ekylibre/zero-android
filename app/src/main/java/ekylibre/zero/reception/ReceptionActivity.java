@@ -18,6 +18,8 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import ekylibre.database.DatabaseHelper;
 import ekylibre.database.ZeroContract;
@@ -30,26 +32,28 @@ import ekylibre.zero.R;
  */
 
 public class ReceptionActivity extends AppCompatActivity {
-    ArrayList<ReceptionDataModel> receptionDataModels;
+    ArrayList<List> resultset=new ArrayList<List>();
 
 
     protected void onCreate(Bundle savedInstanceState) {
 
 
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        ListView mListView = (ListView) findViewById(R.id.listView);
-
+        add_supplier(this,"Terrena");
+        Log.i("MyTag","OK");
+        add_supplier(this,"Cap Seine");
         setContentView(R.layout.reception_main);
         ListView mListView = (ListView) findViewById(R.id.reception_list);
         if (savedInstanceState == null) {
             try {
+                //dbTest();
                 loadData(this);
             } catch (ParseException e) {
                 e.printStackTrace();
             }
         }
-        final ReceptionAdapter adapter = new ReceptionAdapter(this, receptionDataModels);
+
+        final ReceptionAdapter adapter = new ReceptionAdapter(this, resultset);
         mListView.setAdapter(adapter);
 
         //mListView.setEmptyView(findViewById(R.id.emptyListView));
@@ -57,8 +61,14 @@ public class ReceptionActivity extends AppCompatActivity {
 
     }
 
+    public void dbTest (){
+        add_supplier(this,"Terrena");
+        add_supplier(this,"Cap Seine");
+        add_reception(this, "6565",1);
+        add_reception(this,"6767", 2);
+    }
 
-    public void add_supplier(Context context) {
+
     public void add_supplier(Context context, String name_supplier){
 
         ContentResolver contentResolver = context.getContentResolver();
@@ -66,6 +76,7 @@ public class ReceptionActivity extends AppCompatActivity {
         mNewValues.put(ZeroContract.Suppliers.NAME, name_supplier);
         mNewValues.put(ZeroContract.Suppliers.EK_ID, 1);
         contentResolver.insert(ZeroContract.Suppliers.CONTENT_URI, mNewValues);
+
 
     }
 
@@ -79,7 +90,7 @@ public class ReceptionActivity extends AppCompatActivity {
 //                null,null);
 //    }
 
-    public void add_reception(Context context) {
+
     public void add_reception(Context context, String reception_number, int supplierId){
 
         ContentResolver contentResolver = context.getContentResolver();
@@ -106,14 +117,10 @@ public class ReceptionActivity extends AppCompatActivity {
 
     public void loadData(Context context) throws ParseException {
 
-        receptionDataModels = new ArrayList<ReceptionDataModel>();
+        //ArrayList<List> resultset = new ArrayList<List>();
         //ContentObserver receptionContentResolverObserver = null;
         //ContentObserver contentObserver = null;
         ContentResolver contentResolver = context.getContentResolver();
-        add_supplier(context,"Terrena");
-        add_supplier(context,"Cap Seine");
-        add_reception(context, "6565",1);
-        add_reception(context,"6767", 2);
 
         //ContentValues mNewValues = new ContentValues();
 
@@ -127,19 +134,22 @@ public class ReceptionActivity extends AppCompatActivity {
         //contentResolver.insert(ZeroContract.Receptions.CONTENT_URI, mNewValues);
 
 
-        String rawQuery = "SELECT " + ZeroContract.Receptions.RECEIVED_AT + ", " +
-                ZeroContract.Suppliers.NAME + ", " + ZeroContract.Receptions.RECEPTION_NUMBER
-                + " FROM " + ZeroContract.Receptions.TABLE_NAME + " INNER JOIN " + ZeroContract.Suppliers.TABLE_NAME
-            + " ON " + ZeroContract.Receptions._ID + " = " + ZeroContract.Suppliers._ID
-                + " WHERE " + ZeroContract.Receptions.FK_SUPPLIER + " = ?" ;
-        String rawQuery1 = "SELECT received_at, suppliers._ID, name, receptions_number FROM receptions" +
-                " INNER JOIN suppliers ON receptions._id=suppliers._id " +
-                "WHERE fk_supplier= suppliers._id" ;
+//        String rawQuery = "SELECT " + ZeroContract.Receptions.RECEIVED_AT + ", " +
+//                ZeroContract.Suppliers.NAME + ", " + ZeroContract.Receptions.RECEPTION_NUMBER
+//                + " FROM " + ZeroContract.Receptions.TABLE_NAME + " INNER JOIN " + ZeroContract.Suppliers.TABLE_NAME
+//            + " ON " + ZeroContract.Receptions._ID + " = " + ZeroContract.Suppliers._ID
+//                + " WHERE " + ZeroContract.Receptions.FK_SUPPLIER + " = ?" ;
+        String rawQuery1 = "SELECT received_at, suppliers._id, suppliers.name, receptions_number FROM receptions " +
+                " INNER JOIN suppliers ON receptions.fk_supplier=suppliers._id ";
 
 
         DatabaseHelper db = new DatabaseHelper(this);
         SQLiteDatabase database = db.getReadableDatabase();
         Cursor curs = database.rawQuery(rawQuery1,null,null);
+
+
+        Log.i("MyTag","cursor length : "+ curs.getCount());
+
         //new String[]{String.valueOf(ZeroContract.Suppliers._ID)}
 //        String [] projection_date = {ZeroContract.Receptions.RECEIVED_AT};
 //        String[] projection = {ZeroContract.Receptions.RECEIVED_AT,ZeroContract.Suppliers.NAME,ZeroContract.Receptions.RECEPTION_NUMBER};
@@ -171,23 +181,26 @@ public class ReceptionActivity extends AppCompatActivity {
 //        }
 
         while (curs.moveToNext()) {
-            String date = curs.getString(curs.getColumnIndexOrThrow(ZeroContract.ReceptionsColumns.RECEIVED_AT));
-            Log.i("MyTag", "date après query " + date);
-            String date3 = getDateFormatted(date);
-            Log.i("MyTag", "date après formattage " + date3);
             String date = curs.getString(curs.getColumnIndexOrThrow("received_at")) ;
             String reception_number = curs.getString(curs.getColumnIndexOrThrow("receptions_number")) ;
             String supplier_name = curs.getString(curs.getColumnIndexOrThrow("name")) ;
             String supplierID = curs.getString(curs.getColumnIndexOrThrow("_id")) ;
+            SupplierDataModel supplier = new SupplierDataModel(Integer.parseInt(supplierID), supplier_name, 1);
             Log.i("MyTag","date après query "+date);
             String date3=getDateFormatted(date);
             Log.i("MyTag","date après formattage "+date3);
             //Log.i("MyTag","curs.getColumnIndexOrThrow(date3) "+curs.getColumnIndexOrThrow(date3));
 
-            ReceptionDataModel receptionDataModel;
-            receptionDataModel = new ReceptionDataModel(date3, reception_number, Integer.parseInt(supplierID));
-            Log.i("myTag", "received_at" + receptionDataModel.getReceived_at());
-            receptionDataModels.add(receptionDataModel);
+            List<String> list = new CopyOnWriteArrayList<String>();
+            list.add(date3);
+            list.add(reception_number);
+            list.add(supplier_name);
+            Log.i("MyTag","list : "+list);
+
+
+            resultset.add(list);
+            Log.i("MyTag","resultset : "+resultset);
+
         }
     }
     //contentResolver.unregisterContentObserver(receptionContentResolverObserver);

@@ -2,6 +2,7 @@ package ekylibre.zero.reception;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import ekylibre.zero.R;
@@ -23,12 +25,12 @@ import ekylibre.zero.intervention.InterventionActivity;
  * ekylibre.zero for zero-android     *
  *************************************/
 
-public class ReceptionAdapter extends ArrayAdapter<ReceptionDataModel>
+public class ReceptionAdapter extends ArrayAdapter<List>
 {
 
-    public ReceptionAdapter(Context context, List<ReceptionDataModel> receptionDataModels)
+    public ReceptionAdapter(Context context, ArrayList<List> resultset)
     {
-        super(context, 0, receptionDataModels);
+        super(context, 0, resultset);
     }
 
     /*
@@ -51,10 +53,15 @@ public class ReceptionAdapter extends ArrayAdapter<ReceptionDataModel>
         TextView clientname = (TextView) convertView.findViewById(R.id.ClientNameId);
         TextView receptiondate = (TextView) convertView.findViewById(R.id.ReceptiondateId);
 
-        ReceptionDataModel itemDataModel = super.getItem(position);
+        List list = super.getItem(position);
+        Log.i("MyTag","date " +list.get(0));
+        Log.i("MyTag","reception number " +list.get(1));
+        Log.i("MyTag","name " +list.get(2));
 
-        receptiondate.setText(itemDataModel.getReceived_at());
 
+        receptiondate.setText((CharSequence) list.get(0));
+        productinfo.setText((CharSequence) list.get(1));
+        clientname.setText((CharSequence) list.get(2));
 
         return (convertView);
     }
