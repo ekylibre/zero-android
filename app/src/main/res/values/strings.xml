@@ -125,18 +125,12 @@
     <string name="intervention">Intervention</string>
     <string name="pref_syncContact">Synchronize Ekylibre\'s contacts</string>
     <string name="pref_syncContact_summary">Allow application to automatically synchronize your contacts from Ekylibre</string>
-    <string name="ClientNameId">Client Name Placeholder</string>
-    <string name="ProductinfoId">Product Info Placeholder</string>
-    <string-array name="array_article_type">
-        <item></item>
-        <item>Type One</item>
-        <item>Type Two</item>
-        <item>Type Three</item>
-    </string-array>
-    <string-array name="array_article_unit">
-        <item></item>
-        <item>Unit One</item>
-        <item>Unit Two</item>
-        <item>Unit Three</item>
-    </string-array>
+    <string name="article_cannot_save">Please complete all the fields</string>
+    <string name="article_saved">Article saved</string>
+    <string name="fertilizer">Fertilizer</string>
+    <string name="seed">Seed</string>
+    <string name="chemical">Chemical</string>
+    <string name="spinner_selection_nature">Please select a nature</string>
+    <string name="spinner_selection_unity">Please select a unity</string>
+
 </resources>
