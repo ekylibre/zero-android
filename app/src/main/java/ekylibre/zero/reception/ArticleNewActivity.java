@@ -13,6 +13,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import ekylibre.database.ZeroContract;
 import ekylibre.zero.R;
@@ -20,12 +21,13 @@ import ekylibre.zero.R;
 
 public class ArticleNewActivity extends AppCompatActivity implements View.OnClickListener {
 
-    String[] natureList = {"Fertilizer", "Seed", "Chemical"};
-    String[] unityList = {"kg", "L", "t"};
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+
+        String[] natureList = {getResources().getString(R.string.spinner_selection_nature), getResources().getString(R.string.fertilizer), getResources().getString(R.string.seed), getResources().getString(R.string.chemical)};
+        String[] unityList = {getResources().getString(R.string.spinner_selection_unity), "kg", "L", "t"};
 
         setContentView(R.layout.article_new);
 
@@ -55,15 +57,40 @@ public class ArticleNewActivity extends AppCompatActivity implements View.OnClic
         mNewValues.put(ZeroContract.Articles.NAME, newArticleName.getText().toString());
         mNewValues.put(ZeroContract.Articles.NATURE, SpinnerArticleNature.getSelectedItem().toString());
         mNewValues.put(ZeroContract.Articles.UNITY, SpinnerArticleUnity.getSelectedItem().toString());
+        mNewValues.put(ZeroContract.Articles.EK_ID, 1);
+
         contentResolver.insert(ZeroContract.Articles.CONTENT_URI, mNewValues);
     }
 
     @Override
     public void onClick(View _buttonView) {
-        //Récupère ce qu'a tapé l'utilisateur dans la zone de texte et la renvoie à la MainActivtity
         if (_buttonView.getId() == R.id.buttonSaveArticleId) {
-            add_article(this);
+            if (is_complete()) {
+                add_article(this);
+                Toast toast = Toast.makeText(getApplicationContext(), R.string.article_saved, Toast.LENGTH_SHORT);
+                toast.show();
+            }
+            else{
+                Toast toast = Toast.makeText(getApplicationContext(), R.string.article_cannot_save, Toast.LENGTH_SHORT);
+                toast.show();
 
+            }
+
+
+        }
+    }
+
+    private boolean is_complete() {
+        EditText newArticleName = (EditText) findViewById(R.id.editArticleNameId);
+
+        Spinner SpinnerArticleNature = (Spinner) findViewById(R.id.spinnerNatureArticleId);
+        Spinner SpinnerArticleUnity = (Spinner) findViewById(R.id.spinnerUnityArticleId);
+
+        if (SpinnerArticleNature.getSelectedItemPosition() == 0 || SpinnerArticleUnity.getSelectedItemPosition() == 0 ||  newArticleName.getText().toString().trim().equals("")){
+            return false;
+        }
+        else {
+            return true;
         }
     }
 }
