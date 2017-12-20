@@ -276,13 +276,6 @@ public class MainActivity extends UpdatableActivity
                 startActivity(intent);
                 break;
             }
-            //currently linking to IssueActivity
-            case R.id.nav_reception :
-            {
-                Intent intent = new Intent(this, IssueActivity.class);
-                startActivity(intent);
-                break;
-            }
             case R.id.nav_counting :
             {
                 Intent intent = new Intent(this, PlantCountingActivity.class);
