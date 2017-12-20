@@ -15,12 +15,6 @@
         android:hint="Article name"
         />
 
-    <Button
-        android:id="@+id/buttonSaveArticleId"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Save"/>
-
     <Spinner
         android:id="@+id/spinnerNatureArticleId"
         android:layout_width="fill_parent"
@@ -41,6 +35,10 @@
         android:textAppearance="?android:attr/textAppearanceLarge"
         />
 
-
+    <Button
+        android:id="@+id/buttonSaveArticleId"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Save"/>
 
 </LinearLayout>

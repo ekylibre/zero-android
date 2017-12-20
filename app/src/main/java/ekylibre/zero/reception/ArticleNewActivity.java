@@ -17,13 +17,10 @@ import android.widget.Spinner;
 import ekylibre.database.ZeroContract;
 import ekylibre.zero.R;
 
-/**
- * Created by NUMAG 1-NB on 19/12/2017.
- */
 
 public class ArticleNewActivity extends AppCompatActivity implements View.OnClickListener {
 
-    String[] natureList = {"fertilizer", "seed", "chemical"};
+    String[] natureList = {"Fertilizer", "Seed", "Chemical"};
     String[] unityList = {"kg", "L", "t"};
 
     @Override
@@ -59,8 +56,6 @@ public class ArticleNewActivity extends AppCompatActivity implements View.OnClic
         mNewValues.put(ZeroContract.Articles.NATURE, SpinnerArticleNature.getSelectedItem().toString());
         mNewValues.put(ZeroContract.Articles.UNITY, SpinnerArticleUnity.getSelectedItem().toString());
         contentResolver.insert(ZeroContract.Articles.CONTENT_URI, mNewValues);
-
-
     }
 
     @Override
