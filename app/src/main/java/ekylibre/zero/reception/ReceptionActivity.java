@@ -113,9 +113,13 @@ public class ReceptionActivity extends AppCompatActivity {
 
         while (curs.moveToNext()) {
             String date = curs.getString(curs.getColumnIndexOrThrow(ZeroContract.ReceptionsColumns.RECEIVED_AT)) ;
+            Log.i("MyTag","date après query "+date);
+            String date3=getDateFormatted(date);
+            Log.i("MyTag","date après formattage "+date3);
+            //Log.i("MyTag","curs.getColumnIndexOrThrow(date3) "+curs.getColumnIndexOrThrow(date3));
+
             ReceptionDataModel receptionDataModel;
-            receptionDataModel = new ReceptionDataModel(curs.getString
-                    (curs.getColumnIndexOrThrow(getDateFormatted(date))));
+            receptionDataModel = new ReceptionDataModel(date3);
             Log.i("myTag", "received_at" + receptionDataModel.getReceived_at());
             receptionDataModels.add(receptionDataModel);
         }
