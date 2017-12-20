@@ -276,6 +276,13 @@ public class MainActivity extends UpdatableActivity
                 startActivity(intent);
                 break;
             }
+            //currently linking to IssueActivity
+            case R.id.nav_reception :
+            {
+                Intent intent = new Intent(this, IssueActivity.class);
+                startActivity(intent);
+                break;
+            }
             case R.id.nav_counting :
             {
                 Intent intent = new Intent(this, PlantCountingActivity.class);
@@ -305,6 +312,14 @@ public class MainActivity extends UpdatableActivity
                 forceSync_data();
                 break;
             }
+
+            //Button Reception on menu : Launches reception button
+//            case R.id.nav_reception :
+//            {
+//                Intent intent = new Intent(this, ReceptionActivity.class);
+//                startActivity(intent);
+//                break;
+//            }
             default:
             {
                 break;
