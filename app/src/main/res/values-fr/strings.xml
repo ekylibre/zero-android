@@ -125,16 +125,12 @@
     <string name="pref_syncContact">Synchronisation des contacts Ekylibre</string>
     <string name="pref_syncContact_summary">Autoriser l\'application à synchroniser vos
         contacts Ekylibre</string>
-    <string-array name="array_article_type">
-        <item></item>
-        <item>Type One</item>
-        <item>Type Two</item>
-        <item>Type Three</item>
-    </string-array>
-    <string-array name="array_article_unit">
-        <item></item>
-        <item>Unit One</item>
-        <item>Unit Two</item>
-        <item>Unit Three</item>
-    </string-array>
+
+    <string name="article_cannot_save">Merci de compléter tous les champs</string>
+    <string name="article_saved">Nouvel article sauvegardé</string>
+    <string name="fertilizer">Fertilisant</string>
+    <string name="seed">Semence</string>
+    <string name="chemical">Produit phytosanitaire</string>
+    <string name="spinner_selection_nature">Sélectionner le type d\'article</string>
+    <string name="spinner_selection_unity">Sélectionner l\'unité</string>
 </resources>

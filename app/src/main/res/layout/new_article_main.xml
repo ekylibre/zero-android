@@ -29,6 +29,8 @@
                     android:layout_marginLeft="15dp"
                     android:layout_marginRight="15dp"
                     android:layout_marginTop="15dp"
+                    android:textStyle="bold"
+                    android:textColor="@color/black"
                     android:text="@string/article_name" />
 
                 <EditText
@@ -47,6 +49,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="15dp"
                     android:layout_marginRight="15dp"
+                    android:textStyle="bold"
+                    android:textColor="@color/black"
                     android:text="@string/article_type" />
 
                 <Spinner
@@ -57,6 +61,8 @@
                     android:layout_marginLeft="15dp"
                     android:layout_marginRight="15dp"
                     android:layout_marginBottom="35dp"
+                    android:textStyle="bold"
+                    android:textColor="@color/black"
                     android:entries="@array/array_article_type"/>
 
                 <TextView
@@ -64,6 +70,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="15dp"
                     android:layout_marginRight="15dp"
+                    android:textStyle="bold"
+                    android:textColor="@color/black"
                     android:text="@string/article_unit" />
 
                 <Spinner
@@ -81,13 +89,13 @@
             android:id="@+id/takeAPicture"
             android:layout_width="200dp"
             android:layout_height="110dp"
-
+            android:textStyle="bold"
+            android:textColor="@color/black"
             android:layout_gravity="center_horizontal"
             android:layout_marginBottom="37dp"
             android:background="@drawable/rectangle_dash_line"
             android:onClick="takePicture"
-            android:text="@string/permlab_capture"
-            android:textColor="@color/basic_grey" />
+            android:text="@string/permlab_capture" />
 
         <!--for button at bottom-->
         <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
