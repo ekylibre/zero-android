@@ -8,16 +8,15 @@
     android:fitsSystemWindows="true"
     tools:context=".reception.ReceptionActivity"
     android:id="@+id/reception_mainLayoutId"
-    android:background="@color/white">
+    android:background="@color/basic_grey">
 
     <include layout="@layout/toolbar_reception" />
 
     <include
         layout="@layout/reception_list"
         android:layout_width="match_parent"
-        android:layout_height="562dp"
-        tools:layout_editor_absoluteY="5dp"
-        />
+        android:layout_height="match_parent"
+        tools:layout_editor_absoluteY="5dp" />
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab"
@@ -28,7 +27,6 @@
         app:backgroundTint="@color/basic_red"
         app:srcCompat="@drawable/ic_add_white"
         />
-
 
 
 </android.support.design.widget.CoordinatorLayout>

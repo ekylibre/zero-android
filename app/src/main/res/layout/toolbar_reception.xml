@@ -15,7 +15,8 @@
         android:background="@color/basic_green"
         app:popupTheme="@color/basic_green"
         app:theme="@style/ThemeToolbar"
-        app:title="@string/Reception" />
+        app:title="@string/Reception"
+        app:titleTextColor="@color/white" />
 
 </android.support.design.widget.AppBarLayout>
 

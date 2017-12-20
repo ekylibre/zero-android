@@ -18,8 +18,9 @@
         android:layout_height="match_parent"
         android:layout_gravity="center_horizontal"
 
-        android:divider="@color/cardview_light_background"
+        android:divider="@color/basic_grey"
         android:dividerHeight="10.0sp"
+        android:background="@color/white"
         android:footerDividersEnabled="true"
         android:headerDividersEnabled="true"
 
