@@ -10,14 +10,16 @@ public class ReceptionDataModel implements Serializable {
     private int id;
     private String received_at;
     private int fk_supplier;
+    private String supplier_name;
     private String reception_number;
     private int ek_id;
 
 
-    public ReceptionDataModel(String received_at, String reception_number, SupplierDataModel supplier, int id) {
+    public ReceptionDataModel(String received_at, String reception_number, SupplierDataModel supplier) {
         this.received_at = received_at;
         this.reception_number = reception_number;
         this.fk_supplier = supplier.getId();
+        this.supplier_name=supplier.getName();
     }
 
     public ReceptionDataModel(String received_at) {
