@@ -21,6 +21,7 @@
             android:id="@+id/nav_reception"
             android:icon="@drawable/ic_reception"
             android:title="@string/new_reception" />
+
     </group>
 
     <item android:title="@string/parameters">
@@ -37,6 +38,7 @@
                 android:id="@+id/nav_sync"
                 android:icon="@drawable/ic_sync"
                 android:title="@string/sync" />
+
 
         </menu>
     </item>
