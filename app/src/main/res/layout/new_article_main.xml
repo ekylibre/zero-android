@@ -14,7 +14,8 @@
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        >
 
         <include
             layout="@layout/toolbar_new_article"
@@ -25,11 +26,16 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginRight="15dp"
+                    android:layout_marginTop="15dp"
                     android:text="@string/article_name" />
 
                 <EditText
                     android:id="@+id/article_name"
                     android:layout_width="fill_parent"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginRight="15dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="bottom"
                     android:layout_marginBottom="35dp"
@@ -39,6 +45,8 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginRight="15dp"
                     android:text="@string/article_type" />
 
                 <Spinner
@@ -46,11 +54,16 @@
                     style="@style/Widget.AppCompat.Spinner.Underlined"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="35dp" />
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginRight="15dp"
+                    android:layout_marginBottom="35dp"
+                    android:entries="@array/array_article_type"/>
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginRight="15dp"
                     android:text="@string/article_unit" />
 
                 <Spinner
@@ -58,32 +71,44 @@
                     style="@style/Widget.AppCompat.Spinner.Underlined"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="35dp" />
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginRight="15dp"
+                    android:layout_marginBottom="35dp"
+                    android:entries="@array/array_article_unit"/>/>
 
 
-            <!--</LinearLayout>-->
+        <Button
+            android:id="@+id/takeAPicture"
+            android:layout_width="200dp"
+            android:layout_height="110dp"
 
-    <Button
-        android:id="@+id/takeAPicture"
-        android:layout_width="250dp"
-        android:layout_height="250dp"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginBottom="37dp"
-        android:background="@drawable/rectangle_dash_line"
-        android:onClick="takePicture"
-        android:text="@string/permlab_capture"
-        android:textColor="@color/basic_grey" />
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="37dp"
+            android:background="@drawable/rectangle_dash_line"
+            android:onClick="takePicture"
+            android:text="@string/permlab_capture"
+            android:textColor="@color/basic_grey" />
 
-        <!-- todo, for buttons at bottom-->
-        <!--<RelativeLayout-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content">-->
+        <!--for button at bottom-->
+        <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
+            android:layout_height="100dp">
 
 
+            <Button
+                android:id="@+id/button_save"
+                android:layout_width="100dp"
+                android:layout_height="75dp"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="11dp"
+                android:drawableTop="@drawable/ic_button_circle"
+                android:onClick="onClick"
+                android:text="@string/savebl"
+                android:textSize="18sp"
+                tools:ignore="OnClick" />
 
-        <!--</RelativeLayout>-->
+        </RelativeLayout>
 
         </LinearLayout>
 
