@@ -35,6 +35,7 @@ import ekylibre.zero.R;
 import ekylibre.zero.SettingsActivity;
 import ekylibre.zero.account.AccountManagerActivity;
 import ekylibre.zero.intervention.InterventionActivity;
+import ekylibre.zero.reception.ReceptionActivity;
 
 /**************************************
  * Created by pierre on 7/12/16.      *
@@ -278,7 +279,7 @@ public class MainActivity extends UpdatableActivity
             //currently linking to IssueActivity
             case R.id.nav_reception :
             {
-                Intent intent = new Intent(this, IssueActivity.class);
+                Intent intent = new Intent(this, ReceptionActivity.class);
                 startActivity(intent);
                 break;
             }

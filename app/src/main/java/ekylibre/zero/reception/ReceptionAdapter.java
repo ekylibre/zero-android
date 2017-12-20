@@ -43,31 +43,50 @@ public class ReceptionAdapter extends ArrayAdapter<ReceptionDataModel>
 
         if (convertView == null)
         {
-            convertView = LayoutInflater.from(getContext()).inflate(R.layout.todo_item, parent, false);
-        }
-        ReceptionViewHolder viewHolder = (ReceptionViewHolder) convertView.getTag();
-        if (viewHolder == null)
-        {
-            viewHolder = new ReceptionViewHolder();
-            getViews(viewHolder, convertView);
-            convertView.setTag(viewHolder);
+            LayoutInflater inflater = (LayoutInflater) super.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            convertView = inflater.inflate(R.layout.list_reception_act, parent, false);
         }
 
-        ReceptionDataModel item = super.getItem(position);
-        viewHolder.event.setText(item.getReceived_at());
+        TextView productinfo = (TextView) convertView.findViewById(R.id.ProductinfoId);
+        TextView clientname = (TextView) convertView.findViewById(R.id.ClientNameId);
+        TextView receptiondate = (TextView) convertView.findViewById(R.id.ReceptiondateId);
+
+        ReceptionDataModel itemDataModel = super.getItem(position);
+
+        receptiondate.setText(itemDataModel.getReceived_at());
 
 
         return (convertView);
     }
-
-    public class ReceptionViewHolder {
-        public TextView         event;
-    }
-
-
-
-    private void getViews(ReceptionViewHolder viewHolder, View convertView)
-    {
-        viewHolder.event = convertView.findViewById(R.id.event);
-    }
 }
+
+
+
+
+
+
+//        ReceptionViewHolder viewHolder = (ReceptionViewHolder) convertView.getTag();
+//        if (viewHolder == null)
+//        {
+//            viewHolder = new ReceptionViewHolder();
+//            getViews(viewHolder, convertView);
+//            convertView.setTag(viewHolder);
+//        }
+//
+//        ReceptionDataModel item = super.getItem(position);
+//        viewHolder.event.setText(item.getReceived_at());
+
+
+//        return (convertView);
+//    }
+//
+//    public class ReceptionViewHolder {
+//        public TextView         event;
+//    }
+//
+//
+//
+//    private void getViews(ReceptionViewHolder viewHolder, View convertView)
+//    {
+//        viewHolder.event = convertView.findViewById(R.id.event);
+//    }

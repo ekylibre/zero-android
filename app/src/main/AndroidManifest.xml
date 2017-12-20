@@ -71,6 +71,10 @@
                 android:value=".home.MainActivity" />
         </activity>
 
+
+
+
+
         <!-- <service android:name="TrackingService"/> -->
         <!-- Authenticator related activities and service needs to be declared here in order for the app to recognize them -->
         <activity
@@ -92,6 +96,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
 
         <service
             android:name="ekylibre.service.AuthenticatorService"
@@ -182,6 +187,14 @@
             android:parentActivityName=".home.MainActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar"            />
+
+        <activity
+            android:name=".reception.ReceptionActivity"
+            android:label="@string/new_reception"
+            android:parentActivityName=".home.MainActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar"            />
+
         <!--
  ATTENTION: This was auto-generated to add Google Play services to your project for
      App Indexing.  See https://g.co/AppIndexing/AndroidStudio for more information.

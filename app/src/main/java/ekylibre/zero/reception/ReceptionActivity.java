@@ -31,8 +31,8 @@ public class ReceptionActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        ListView mListView = (ListView) findViewById(R.id.listView);
+        setContentView(R.layout.reception_main);
+        ListView mListView = (ListView) findViewById(R.id.reception_list);
         if (savedInstanceState == null) {
             loadData(this);
         }

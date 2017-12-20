@@ -8,7 +8,7 @@
     android:paddingTop="65dp"
     android:paddingLeft="@dimen/activity_vertical_margin"
     android:paddingRight="@dimen/activity_vertical_margin"
-    tools:context=".ReceptionActivity"
+    tools:context=".reception.ReceptionActivity"
     >
 
 
@@ -17,7 +17,7 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_gravity="center_horizontal"
-        android:background="@color/basic_grey"
+
         android:divider="@color/cardview_light_background"
         android:dividerHeight="10.0sp"
         android:footerDividersEnabled="true"

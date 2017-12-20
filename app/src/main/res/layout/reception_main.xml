@@ -6,7 +6,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context=".ReceptionActivity">
+    tools:context=".reception.ReceptionActivity"
+    android:id="@+id/reception_mainLayoutId"
+    android:background="@color/white">
 
     <include layout="@layout/toolbar_reception" />
 
