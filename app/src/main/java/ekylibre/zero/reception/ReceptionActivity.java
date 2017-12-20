@@ -3,22 +3,20 @@ package ekylibre.zero.reception;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
-import android.database.ContentObserver;
 import android.database.Cursor;
-import android.database.DatabaseUtils;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.ListView;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 import ekylibre.database.ZeroContract;
-import ekylibre.database.ZeroProvider;
 import ekylibre.util.DateConstant;
 import ekylibre.zero.R;
-import ekylibre.zero.home.Zero;
 
 /**
  * Created by Asus on 18/12/2017.
@@ -34,7 +32,11 @@ public class ReceptionActivity extends AppCompatActivity {
         setContentView(R.layout.reception_main);
         ListView mListView = (ListView) findViewById(R.id.reception_list);
         if (savedInstanceState == null) {
-            loadData(this);
+            try {
+                loadData(this);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
         }
         final ReceptionAdapter adapter = new ReceptionAdapter(this, receptionDataModels);
         mListView.setAdapter(adapter);
@@ -72,7 +74,20 @@ public class ReceptionActivity extends AppCompatActivity {
         contentResolver.insert(ZeroContract.Receptions.CONTENT_URI, mNewValues);
     }
 
-    public void loadData (Context context){
+
+    static public String getDateFormatted(String inputDate) throws ParseException {
+//        Calendar cal = Calendar.getInstance();
+
+        //Date date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss z").parse(inputDate);
+        //return new SimpleDateFormat("dd.MM.yyyy HH:mm:ss").format(date);
+        Log.i("MyTag",inputDate);
+        Date date = new SimpleDateFormat(DateConstant.ISO_8601).parse(inputDate);
+        String date1 = new SimpleDateFormat("dd/MM/yyyy").format(date);
+        Log.i("MyTag",date1);
+        return date1;
+    }
+
+    public void loadData (Context context) throws ParseException {
 
         receptionDataModels = new ArrayList<ReceptionDataModel>();
         //ContentObserver receptionContentResolverObserver = null;
@@ -97,8 +112,14 @@ public class ReceptionActivity extends AppCompatActivity {
                 null, ZeroContract.Receptions.SORT_ORDER_DEFAULT);
 
         while (curs.moveToNext()) {
-            ReceptionDataModel receptionDataModel = new ReceptionDataModel(curs.getString
-                    (curs.getColumnIndexOrThrow(ZeroContract.ReceptionsColumns.RECEIVED_AT)));
+            String date = curs.getString(curs.getColumnIndexOrThrow(ZeroContract.ReceptionsColumns.RECEIVED_AT)) ;
+            Log.i("MyTag","date après query "+date);
+            String date3=getDateFormatted(date);
+            Log.i("MyTag","date après formattage "+date3);
+            //Log.i("MyTag","curs.getColumnIndexOrThrow(date3) "+curs.getColumnIndexOrThrow(date3));
+
+            ReceptionDataModel receptionDataModel;
+            receptionDataModel = new ReceptionDataModel(date3);
             Log.i("myTag", "received_at" + receptionDataModel.getReceived_at());
             receptionDataModels.add(receptionDataModel);
         }
