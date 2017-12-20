@@ -11,10 +11,10 @@ public class SupplierDataModel implements Serializable {
     private int id;
     private int ek_id;
 
-    public SupplierDataModel( String name, int id) {
+    public SupplierDataModel( String name, int ek_id) {
 
         this.name = name;
-        this.id = id;
+        this.ek_id = ek_id;
 
     }
 
