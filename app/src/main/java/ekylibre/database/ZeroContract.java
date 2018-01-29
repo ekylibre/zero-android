@@ -209,6 +209,7 @@ public final class ZeroContract {
         public static final String[] PROJECTION_POST = {_ID, EK_ID, PROCEDURE_NAME,
                 REQUEST_COMPLIANT, STATE, UUID};
         public static final String[] PROJECTION_NONE = {_ID};
+        public static final String[] PROJECTION_NUMBER = {_ID, NUMBER};
 
         public static final String SORT_ORDER_DEFAULT = _ID + " ASC";
         public static final String SORT_ORDER_LAST = _ID + " DESC LIMIT 1";

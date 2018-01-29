@@ -134,9 +134,10 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
             pullPlants(account, extras, authority, provider, syncResult);
             pushIssues(account, extras, authority, provider, syncResult);
             pushPlantCounting(account, extras, authority, provider, syncResult);
-            pullIntervention(account, extras, authority, provider, syncResult);
 
+            pullIntervention(account, extras, authority, provider, syncResult);
             pushIntervention(account, extras, authority, provider, syncResult);
+
             pullContacts(account, extras, authority, provider, syncResult);
             cleanLocalDb(account);
         }
@@ -461,13 +462,61 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
 
         if (BuildConfig.DEBUG) Log.d(TAG, "Number of interventions : " + interventionList.size() );
         Iterator<Intervention> interventionIterator = interventionList.iterator();
+
+        // create the lists containing items number
+        List<Integer> remoteNumbers = new ArrayList<>();
+        List<Integer> localNumbers = getLocalItemsNumbers(account);
+
         while(interventionIterator.hasNext())
         {
             Intervention intervention = interventionIterator.next();
+
+            // adds current remote item number to the list
+            remoteNumbers.add(intervention.getNumber());
+
             insertIntervention(intervention, account);
             insertInterventionParams(intervention, account, instance);
         }
+
+        // check and delete local item if not exists on remote
+        for (Integer i : localNumbers) {
+
+            if (!remoteNumbers.contains(i)){
+                mContentResolver.delete(ZeroContract.Interventions.CONTENT_URI,
+                ZeroContract.Interventions.USER + " LIKE " + " \"" + account.name + "\"" + " AND " +
+                        ZeroContract.Interventions.NUMBER + " == " + i,null);
+
+                if (BuildConfig.DEBUG) Log.d(TAG, String.format("Item number #%s deleted", i));
+            }
+        }
+
         if (BuildConfig.DEBUG) Log.i(TAG, "Finish network intervention synchronization");
+    }
+
+    private List<Integer> getLocalItemsNumbers(Account account) {
+
+        Cursor cursor = mContentResolver.query(
+                ZeroContract.Interventions.CONTENT_URI,
+                ZeroContract.Interventions.PROJECTION_NUMBER,
+                ZeroContract.Interventions.USER + " LIKE " + "\"" + account.name + "\"",
+                null,null);
+
+        List<Integer> localItemsNumbers = new ArrayList<>();
+
+        if (cursor != null && cursor.getCount() > 0) {
+            cursor.moveToFirst();
+
+            while (!cursor.isAfterLast()){
+                localItemsNumbers.add(cursor.getInt(1));
+                cursor.moveToNext();
+            }
+        }
+
+        if (cursor != null) {
+            cursor.close();
+        }
+
+        return localItemsNumbers;
     }
 
     private void insertInterventionParams(Intervention intervention, Account account, Instance instance)
