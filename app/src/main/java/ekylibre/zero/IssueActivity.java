@@ -274,7 +274,7 @@ public class IssueActivity extends UpdatableActivity
 
     public void saveIssue(View v) {
         Context context = getApplicationContext();
-        CharSequence text = "Issue saved";
+        CharSequence text = getString(R.string.issue_saved);
         int duration = Toast.LENGTH_SHORT;
         Toast toast = Toast.makeText(context, text, duration);
         toast.show();

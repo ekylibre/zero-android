@@ -107,8 +107,8 @@
 
                 </TableLayout>
 
-
-                <Button
+                <!-- Disables 'Take a picture' button while Ekylibre not ready -->
+                <!--<Button
                     android:layout_width="204dp"
                     android:layout_height="wrap_content"
                     android:text="@string/permlab_capture"
@@ -117,7 +117,7 @@
                     android:onClick="takePicture"
                     android:textColor="@color/ultraLight_grey"
                     android:background="@drawable/basic_button"
-                    android:layout_marginTop="10dp"/>
+                    android:layout_marginTop="10dp"/>-->
 
                 <ImageView
                     android:layout_width="200dp"
