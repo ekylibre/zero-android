@@ -3,61 +3,112 @@
   <string-array name="issueNatures_entries">
     <item>Acarine gall mite</item>
     <item>Accident</item>
+    <item>Alternaria</item>
+    <item>Amaranth</item>
     <item>Anthracnose</item>
     <item>Aphid</item>
     <item>Bacteria disease</item>
+    <item>Bacterial disease</item>
     <item>Bacterial leaf blight</item>
     <item>Bacterial streak</item>
     <item>Bacteriosis</item>
     <item>Bad vegetative growth conditions</item>
+    <item>Barley helminthosporiosis</item>
     <item>Black rust</item>
+    <item>Brown rust</item>
+    <item>Cabbage maggot</item>
+    <item>Capsella</item>
+    <item>Carrot fly</item>
+    <item>Carrot mildiew</item>
+    <item>Carrot powdery mildew</item>
+    <item>Cassidinae</item>
+    <item>Caterpillar</item>
+    <item>Cercosporiosis</item>
+    <item>Cereal mildiew</item>
     <item>Chenopodium album</item>
     <item>Climate issue</item>
     <item>Codling moth</item>
+    <item>Colorado potato beetle</item>
     <item>Common bunt</item>
+    <item>Common purslane</item>
+    <item>Corn helminthosporiosis</item>
+    <item>Cotton bollworm</item>
     <item>Cough</item>
     <item>Croesus septentrionalis</item>
+    <item>Cutworm</item>
+    <item>Cyperus esculentus</item>
+    <item>Datura</item>
     <item>Defoliant caterpillar</item>
     <item>Diarrhea</item>
+    <item>Digitaria</item>
     <item>Disease</item>
     <item>Drought</item>
     <item>Edema</item>
     <item>Empoasca vitis leafhopper</item>
     <item>Empty fuel tank</item>
     <item>Equipment crash</item>
+    <item>Erigeron</item>
     <item>Escape</item>
+    <item>European corn borer</item>
+    <item>European sawfly</item>
     <item>Fecondity problem</item>
     <item>Fever</item>
     <item>Field edge male seed corn default</item>
+    <item>Flea beetle</item>
     <item>Flooding</item>
     <item>Fomitiporia</item>
     <item>Fungus disease</item>
+    <item>Fusarium</item>
     <item>Fusarium head blight</item>
+    <item>Galium aparine</item>
     <item>Grapevine yellows</item>
+    <item>Groundsel</item>
     <item>Husk fly</item>
     <item>Insecta disease</item>
     <item>Issue</item>
+    <item>Johnson grass</item>
+    <item>Knotweed</item>
+    <item>Large white</item>
     <item>Limping</item>
     <item>Longhorn beetle</item>
     <item>Mammite</item>
     <item>Mechanical issue</item>
+    <item>Mediterranean corn borer</item>
+    <item>Moth</item>
+    <item>Nematoda</item>
     <item>Nematoda disease</item>
+    <item>Nightshade</item>
     <item>Noble rot</item>
     <item>Nut weevil</item>
+    <item>Panicum</item>
     <item>Phytophthora</item>
     <item>Piece breakdown</item>
     <item>Plant disease</item>
     <item>Plant issue</item>
+    <item>Poa</item>
+    <item>Potato late blight</item>
+    <item>Potato powdery mildew</item>
     <item>Pourridie rot</item>
+    <item>Previous crop regrowth</item>
     <item>Protozoa disease</item>
+    <item>Pseudomonas syringae</item>
     <item>Respiratory problem</item>
+    <item>Rhizoctonia</item>
+    <item>Rumex crispus</item>
     <item>Scale insect</item>
     <item>Scaphoideus titanus leafhopper</item>
+    <item>Sclerotinia</item>
     <item>Seed corn castration default</item>
+    <item>Seedcorn maggot</item>
     <item>Septoria blotch</item>
     <item>Support issue</item>
+    <item>Three-lobe beggarticks</item>
+    <item>Tipburn</item>
+    <item>Tomato mildew</item>
+    <item>Vegetation cover regrowth</item>
     <item>Vine mildew</item>
     <item>Vine powdery mildew</item>
+    <item>Wheat helminthosporiosis</item>
     <item>Wheat powdery mildew</item>
     <item>Wild animal ravage</item>
     <item>Wood leopard moth</item>
@@ -67,61 +118,112 @@
   <string-array name="issueNatures_values">
     <item>acarine_gall_mite</item>
     <item>accident</item>
+    <item>alternaria</item>
+    <item>amaranthus</item>
     <item>anthracnose</item>
     <item>aphid</item>
     <item>bacteria_disease</item>
+    <item>bacterial_disease</item>
     <item>bacterial_leaf_blight</item>
     <item>bacterial_streak</item>
     <item>bacteriosis</item>
     <item>bad_vegetative_growth_conditions</item>
+    <item>barley_helminthosporiosis</item>
     <item>black_rust</item>
+    <item>brown_rust</item>
+    <item>cabbage_maggot</item>
+    <item>capsella</item>
+    <item>carrot_fly</item>
+    <item>carrot_mildiew</item>
+    <item>carrot_powdery_mildew</item>
+    <item>cassidinae</item>
+    <item>caterpillar</item>
+    <item>cercosporiosis</item>
+    <item>cereal_mildiew</item>
     <item>chenopodium_album</item>
     <item>climate_issue</item>
     <item>codling_moth</item>
+    <item>colorado_potato_beetle</item>
     <item>common_bunt</item>
+    <item>portulaca_oleracea</item>
+    <item>corn_helminthosporiosis</item>
+    <item>cotton_bollworm</item>
     <item>cough</item>
     <item>croesus_septentrionalis</item>
+    <item>cutworm</item>
+    <item>cyperus_esculentus</item>
+    <item>datura</item>
     <item>defoliant_caterpillar</item>
     <item>diarrhea</item>
+    <item>digitaria</item>
     <item>disease</item>
     <item>drought</item>
     <item>edema</item>
     <item>empoasca_vitis_leafhopper</item>
     <item>empty_fuel_tank</item>
     <item>equipment_crash</item>
+    <item>erigeron</item>
     <item>escape</item>
+    <item>european_corn_borer</item>
+    <item>european_sawfly</item>
     <item>fecondity_problem</item>
     <item>fever</item>
     <item>field_edge_male_seed_corn_defect</item>
+    <item>flea_beetle</item>
     <item>flooding</item>
     <item>fomitiporia</item>
     <item>fungus_disease</item>
+    <item>fusarium</item>
     <item>fusarium_head_blight</item>
+    <item>galium_aparine</item>
     <item>grapevine_yellows</item>
+    <item>senecio_vulgaris</item>
     <item>husk_fly</item>
     <item>insecta_disease</item>
     <item>issue</item>
+    <item>sorghum_halepense</item>
+    <item>polygonum</item>
+    <item>large_white</item>
     <item>limping</item>
     <item>longhorn_beetle</item>
     <item>mammite</item>
     <item>mechanical_issue</item>
+    <item>mediterranean_corn_borer</item>
+    <item>moth</item>
+    <item>nematoda</item>
     <item>nematoda_disease</item>
+    <item>nightshade</item>
     <item>noble_rot</item>
     <item>nut_weevil</item>
+    <item>panicum</item>
     <item>phytophthora</item>
     <item>piece_breakdown</item>
     <item>plant_disease</item>
     <item>plant_issue</item>
+    <item>poa</item>
+    <item>potato_mildew</item>
+    <item>potato_powdery_mildew</item>
     <item>pourridie_rot</item>
+    <item>previous_crop_regrowth</item>
     <item>protozoa_disease</item>
+    <item>pseudomonas_syringae</item>
     <item>respiratory_problem</item>
+    <item>rhizoctonia</item>
+    <item>rumex_crispus</item>
     <item>scale_insect</item>
     <item>scaphoideus_titanus_leafhopper</item>
+    <item>sclerotinia</item>
     <item>seed_corn_castration_defect</item>
+    <item>seedcorn_maggot</item>
     <item>septoria_blotch</item>
     <item>support_issue</item>
+    <item>bidens_tripartita</item>
+    <item>tipburn</item>
+    <item>tomato_mildew</item>
+    <item>vegetation_cover_regrowth</item>
     <item>vine_mildew</item>
     <item>vine_powdery_mildew</item>
+    <item>wheat_helminthosporiosis</item>
     <item>wheat_powdery_mildew</item>
     <item>wild_animal_ravage</item>
     <item>wood_leopard_moth</item>
