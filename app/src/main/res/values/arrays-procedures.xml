@@ -3,17 +3,16 @@
   <string-array name="procedures_entries">
     <item>Administrative tasks</item>
     <item>All-in-one seeding</item>
-    <item>Animal antibiotic treatment</item>
-    <item>Animal artificial insemination</item>
-    <item>Animal group changing</item>
-    <item>Animal housing cleaning</item>
-    <item>Animal housing mulching</item>
+    <item>Animal movement</item>
+    <item>Artificial insemination</item>
     <item>Chaptalization</item>
     <item>Chemical and mechanical weeding</item>
     <item>Chopping</item>
+    <item>Cleaning</item>
     <item>Complete wine transfert</item>
     <item>Detasseling</item>
     <item>Direct silage</item>
+    <item>Disinfection</item>
     <item>Egg collecting</item>
     <item>Enzyme addition</item>
     <item>Equipment maintenance</item>
@@ -25,6 +24,7 @@
     <item>Fuel up</item>
     <item>Gas weeding</item>
     <item>Grape pressing</item>
+    <item>Grazing</item>
     <item>Greenhouse assembling</item>
     <item>Ground destratification</item>
     <item>Hand weeding</item>
@@ -32,19 +32,23 @@
     <item>Harrowing</item>
     <item>Harvest transportation</item>
     <item>Harvesting</item>
+    <item>Herd feeding</item>
     <item>Hoeing</item>
+    <item>Identification</item>
     <item>Indirect silage</item>
+    <item>Individual feeding</item>
     <item>Installation maintenance</item>
     <item>Inter-row hoeing</item>
     <item>Irrigation setup</item>
     <item>Land parcel grinding</item>
     <item>Lifting</item>
     <item>Manual feeding</item>
-    <item>Mechanical planting</item>
     <item>Milking</item>
+    <item>Mulching</item>
     <item>Net installation</item>
     <item>Net removing</item>
     <item>Oil replacement</item>
+    <item>Packaging</item>
     <item>Partial wine transfert</item>
     <item>Parturition</item>
     <item>Pasturing</item>
@@ -55,6 +59,7 @@
     <item>Plant mulching</item>
     <item>Plant uncovering</item>
     <item>Plantation unfixing</item>
+    <item>Planting</item>
     <item>Plants sorting</item>
     <item>Plowing</item>
     <item>Pollination</item>
@@ -67,7 +72,6 @@
     <item>Seeding with spraying</item>
     <item>Seedling sorting</item>
     <item>Sifting</item>
-    <item>Silage unload</item>
     <item>Spraying</item>
     <item>Standard enclosing</item>
     <item>Steam weeding</item>
@@ -79,23 +83,23 @@
     <item>Trellising</item>
     <item>Tunnel installation</item>
     <item>Tunnel removing</item>
+    <item>Veterinary treatment</item>
     <item>Wine blending</item>
     <item>Wine bottling</item>
   </string-array>
   <string-array name="procedures_values">
     <item>administrative_tasks</item>
     <item>all_in_one_sowing</item>
-    <item>animal_antibiotic_treatment</item>
-    <item>animal_artificial_insemination</item>
     <item>animal_group_changing</item>
-    <item>animal_housing_cleaning</item>
-    <item>animal_housing_mulching</item>
+    <item>animal_artificial_insemination</item>
     <item>chaptalization</item>
     <item>chemical_mechanical_weeding</item>
     <item>crop_residues_grinding</item>
+    <item>animal_housing_cleaning</item>
     <item>complete_wine_transfer</item>
     <item>detasseling</item>
     <item>direct_silage</item>
+    <item>animal_housing_disinfection</item>
     <item>egg_collecting</item>
     <item>enzyme_addition</item>
     <item>equipment_maintenance</item>
@@ -107,6 +111,7 @@
     <item>fuel_up</item>
     <item>gas_weeding</item>
     <item>grape_pressing</item>
+    <item>grazing</item>
     <item>greenhouse_assembling</item>
     <item>ground_destratification</item>
     <item>hand_weeding</item>
@@ -114,19 +119,23 @@
     <item>raking</item>
     <item>harvest_transportation</item>
     <item>harvesting</item>
+    <item>herd_feeding</item>
     <item>hoeing</item>
+    <item>identification</item>
     <item>indirect_silage</item>
+    <item>individual_feeding</item>
     <item>installation_maintenance</item>
     <item>inter_row_hoeing</item>
     <item>plant_watering_installation</item>
     <item>land_parcel_grinding</item>
     <item>lifting</item>
     <item>manual_feeding</item>
-    <item>mechanical_planting</item>
     <item>milking</item>
+    <item>animal_housing_mulching</item>
     <item>net_installation</item>
     <item>net_removing</item>
     <item>oil_replacement</item>
+    <item>packaging</item>
     <item>partial_wine_transfer</item>
     <item>parturition</item>
     <item>pasturing</item>
@@ -137,6 +146,7 @@
     <item>plant_mulching</item>
     <item>plant_uncovering</item>
     <item>plantation_unfixing</item>
+    <item>mechanical_planting</item>
     <item>plants_sorting</item>
     <item>plowing</item>
     <item>pollination</item>
@@ -149,7 +159,6 @@
     <item>sowing_with_spraying</item>
     <item>seedling_sorting</item>
     <item>sifting</item>
-    <item>silage_unload</item>
     <item>spraying</item>
     <item>standard_enclosing</item>
     <item>steam_weeding</item>
@@ -161,6 +170,7 @@
     <item>trellising</item>
     <item>tunnel_installation</item>
     <item>tunnel_removing</item>
+    <item>animal_veterinary_treatment</item>
     <item>wine_blending</item>
     <item>wine_bottling</item>
   </string-array>
