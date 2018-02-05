@@ -112,4 +112,7 @@
     <string name="pref_syncContact">Import contacts from Ekylibre</string>
     <string name="pref_syncContact_summary">Import contacts from Ekylibre to your phone automaticaly</string>
     <string name="issue_saved">Issue saved</string>
+    <string name="bad_accuracy_message">Bad GPS accuracy</string>
+    <string name="good_accuracy_message">GPS accuracy is good</string>
+    <string name="gps_disabled">GPS is not activated</string>
 </resources>
