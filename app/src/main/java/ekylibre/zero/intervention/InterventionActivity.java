@@ -88,6 +88,7 @@ public class InterventionActivity extends UpdatableActivity
     private Button mStartButton, mMapButton;
     private TextView mProcedureNature;
     private CardView cardView;
+    private TextView gpsAccuracyMessage;
 
     /* ****************************
     **      Class variables
@@ -202,6 +203,7 @@ public class InterventionActivity extends UpdatableActivity
                 Log.d(TAG, "CheckBox state => " + box.isChecked());
             }
         });
+        gpsAccuracyMessage = findViewById(R.id.gps_accuracy_message);
 
         // Acquire a reference to the system Location Manager
         mTrackingListener = new TrackingListener(this);
@@ -505,7 +507,6 @@ public class InterventionActivity extends UpdatableActivity
         chronoActiveIntervention.stopTimer();
         chronoTravel.setTime(chronoActiveTravel.getTime());
         chronoIntervention.setTime(chronoActiveIntervention.getTime());
-        startTracking();
 
     }
 
@@ -801,7 +802,7 @@ public class InterventionActivity extends UpdatableActivity
                 || !PermissionManager.storagePermissions(this, this)
                 || !PermissionManager.GPSPermissions(this, this))
         {
-            Toast.makeText(this, "GPS is not activated", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.gps_disabled, Toast.LENGTH_SHORT).show();
             return;
         }
         Intent intent = new Intent(this, MapsActivity.class);
@@ -910,8 +911,10 @@ public class InterventionActivity extends UpdatableActivity
     {
 
 
-        if (!crumbsCalculator.isCrumbAccurate(location, type, metadata))
+        if (!crumbsCalculator.isCrumbAccurate(location, type, metadata)) {
+            gpsAccuracyMessage.setText(R.string.bad_accuracy_message);
             return;
+        }
 
         Crumb crumb = crumbsCalculator.getFinalCrumb();
 
@@ -920,6 +923,7 @@ public class InterventionActivity extends UpdatableActivity
 
         sendBroadcastNewCrumb(location);
 
+        gpsAccuracyMessage.setText(R.string.good_accuracy_message);
     }
 
     private void sendBroadcastNewCrumb(Location location)
