@@ -142,17 +142,14 @@ public class InterventionActivity extends UpdatableActivity
     {
         int     id = item.getItemId();
 
-        if (id == R.id.action_save)
-        {
+        if (id == R.id.action_save) {
             saveAndExit();
         }
-        else if (id == android.R.id.home)
-        {
+        else if (id == android.R.id.home) {
             exitInterface();
             return (true);
         }
-        else if (id == R.id.action_map)
-        {
+        else if (id == R.id.action_map) {
             openMap(null);
         }
         return (super.onOptionsItemSelected(item));
@@ -162,12 +159,11 @@ public class InterventionActivity extends UpdatableActivity
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-
         mAccount = AccountTool.getCurrentAccount(this);
-
 
         // Set content view
         setContentView(R.layout.intervention);
+
         super.setToolBar();
         mNewIntervention = getIntent().getBooleanExtra(InterventionActivity.NEW, false);
 
@@ -193,6 +189,7 @@ public class InterventionActivity extends UpdatableActivity
         infoLayout                = (RelativeLayout) findViewById(R.id.infoLayout);
         infoScroll                = (ScrollView) findViewById(R.id.interventionInfo);
         cardView                  = (CardView) findViewById(R.id.card_view);
+        gpsAccuracyMessage = (TextView) findViewById(R.id.gps_accuracy_message);
         diffStuff                 = (CheckBox) findViewById(R.id.diff_stuff);
         diffStuff.setOnClickListener(new View.OnClickListener()
         {
@@ -203,7 +200,6 @@ public class InterventionActivity extends UpdatableActivity
                 Log.d(TAG, "CheckBox state => " + box.isChecked());
             }
         });
-        gpsAccuracyMessage = findViewById(R.id.gps_accuracy_message);
 
         // Acquire a reference to the system Location Manager
         mTrackingListener = new TrackingListener(this);
@@ -225,12 +221,17 @@ public class InterventionActivity extends UpdatableActivity
 
         if (!mNewIntervention)
             prepareRequest();
-        else
-        {
+        else {
             createProcedureChooser();
             prepareSimpleIntervention();
         }
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.close);
+
+        if (!mLocationManager.isProviderEnabled(mLocationProvider)) {
+            gpsAccuracyMessage.setText(R.string.gps_disabled);
+        } else if (!PermissionManager.GPSPermissions(this, this)) {
+            gpsAccuracyMessage.setText(R.string.gps_tracking_disabled);
+        }
     }
 
     private void setInProgressState()
