@@ -115,4 +115,5 @@
     <string name="bad_accuracy_message">Bad GPS accuracy</string>
     <string name="good_accuracy_message">GPS accuracy is good</string>
     <string name="gps_disabled">GPS is not activated</string>
+    <string name="gps_tracking_disabled">GPS tracking disabled</string>
 </resources>

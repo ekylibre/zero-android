@@ -115,4 +115,5 @@
     <string name="bad_accuracy_message">Mauvaise réception GPS</string>
     <string name="good_accuracy_message">La réception GPS est bonne</string>
     <string name="gps_disabled">Le GPS n\'est pas activé</string>
+    <string name="gps_tracking_disabled">Suivi GPS désactivé</string>
 </resources>
