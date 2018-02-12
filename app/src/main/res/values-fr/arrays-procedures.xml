@@ -2,7 +2,8 @@
 <resources>
   <string-array name="procedures_entries">
     <item>Ajout d’enzymes</item>
-    <item>Alimentation d’un troupeau via désileuse</item>
+    <item>Alimentation d’un troupeau</item>
+    <item>Alimentation individuelle</item>
     <item>Alimentation manuelle</item>
     <item>Andainage</item>
     <item>Arrosage des plants</item>
@@ -16,17 +17,18 @@
     <item>Bâchage</item>
     <item>Castration</item>
     <item>Chaptalisation</item>
-    <item>Collecte d’œufs</item>
+    <item>Conditionnement</item>
     <item>Débâchage</item>
     <item>Déchaumage</item>
     <item>Déchaussage</item>
     <item>Décompactage</item>
     <item>Défanage</item>
-    <item>Déplacement d’un animal</item>
+    <item>Déplacement d’animaux</item>
     <item>Désherbage manuel</item>
     <item>Désherbage thermique au gaz</item>
     <item>Désherbage vapeur</item>
     <item>Désherbinage</item>
+    <item>Désinfection</item>
     <item>Déstratification</item>
     <item>Embouteillage de vin</item>
     <item>Ensilage direct</item>
@@ -37,17 +39,18 @@
     <item>Fermentation</item>
     <item>Fertilisation</item>
     <item>Hersage</item>
+    <item>Identification</item>
     <item>Installation de l’irrigation</item>
-    <item>Insémination articielle animale</item>
+    <item>Insémination artificielle</item>
     <item>Labour</item>
     <item>Manutention</item>
     <item>Mise bas</item>
     <item>Montage de serre</item>
-    <item>Nettoyage de stabulation</item>
-    <item>Paillage de stabulation</item>
+    <item>Nettoyage</item>
+    <item>Paillage</item>
     <item>Paillage/Mulching</item>
     <item>Palissage</item>
-    <item>Plantation mécanique</item>
+    <item>Plantation</item>
     <item>Plein de carburant</item>
     <item>Pollinisation</item>
     <item>Pose de chenille ou tunnel</item>
@@ -59,6 +62,8 @@
     <item>Préparation du lit de semences</item>
     <item>Pulvérisation</item>
     <item>Pâturage</item>
+    <item>Pâturage sur parcours</item>
+    <item>Ramassage d’œufs</item>
     <item>Retrait de chenille ou tunnel</item>
     <item>Retrait de filet</item>
     <item>Récolte</item>
@@ -71,7 +76,7 @@
     <item>Taille/Effeuillage</item>
     <item>Tamisage</item>
     <item>Traite</item>
-    <item>Traitement antibiotique</item>
+    <item>Traitement vétérinaire</item>
     <item>Transfert de vin (Complet)</item>
     <item>Transfert de vin (Partiel)</item>
     <item>Transport de récolte</item>
@@ -84,7 +89,8 @@
   </string-array>
   <string-array name="procedures_values">
     <item>enzyme_addition</item>
-    <item>silage_unload</item>
+    <item>herd_feeding</item>
+    <item>individual_feeding</item>
     <item>manual_feeding</item>
     <item>swathing</item>
     <item>plant_watering</item>
@@ -98,7 +104,7 @@
     <item>plant_covering</item>
     <item>detasseling</item>
     <item>chaptalization</item>
-    <item>egg_collecting</item>
+    <item>packaging</item>
     <item>plant_uncovering</item>
     <item>superficial_plowing</item>
     <item>plantation_unfixing</item>
@@ -109,6 +115,7 @@
     <item>gas_weeding</item>
     <item>steam_weeding</item>
     <item>chemical_mechanical_weeding</item>
+    <item>animal_housing_disinfection</item>
     <item>ground_destratification</item>
     <item>wine_bottling</item>
     <item>direct_silage</item>
@@ -119,6 +126,7 @@
     <item>fermentation</item>
     <item>fertilizing</item>
     <item>raking</item>
+    <item>identification</item>
     <item>plant_watering_installation</item>
     <item>animal_artificial_insemination</item>
     <item>plowing</item>
@@ -141,6 +149,8 @@
     <item>seedbed_preparing</item>
     <item>spraying</item>
     <item>pasturing</item>
+    <item>grazing</item>
+    <item>egg_collecting</item>
     <item>tunnel_removing</item>
     <item>net_removing</item>
     <item>harvesting</item>
@@ -153,7 +163,7 @@
     <item>cutting</item>
     <item>sifting</item>
     <item>milking</item>
-    <item>animal_antibiotic_treatment</item>
+    <item>animal_veterinary_treatment</item>
     <item>complete_wine_transfer</item>
     <item>partial_wine_transfer</item>
     <item>harvest_transportation</item>
