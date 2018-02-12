@@ -88,6 +88,7 @@ public class InterventionActivity extends UpdatableActivity
     private Button mStartButton, mMapButton;
     private TextView mProcedureNature;
     private CardView cardView;
+    private TextView gpsAccuracyMessage;
 
     /* ****************************
     **      Class variables
@@ -141,17 +142,14 @@ public class InterventionActivity extends UpdatableActivity
     {
         int     id = item.getItemId();
 
-        if (id == R.id.action_save)
-        {
+        if (id == R.id.action_save) {
             saveAndExit();
         }
-        else if (id == android.R.id.home)
-        {
+        else if (id == android.R.id.home) {
             exitInterface();
             return (true);
         }
-        else if (id == R.id.action_map)
-        {
+        else if (id == R.id.action_map) {
             openMap(null);
         }
         return (super.onOptionsItemSelected(item));
@@ -161,12 +159,11 @@ public class InterventionActivity extends UpdatableActivity
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-
         mAccount = AccountTool.getCurrentAccount(this);
-
 
         // Set content view
         setContentView(R.layout.intervention);
+
         super.setToolBar();
         mNewIntervention = getIntent().getBooleanExtra(InterventionActivity.NEW, false);
 
@@ -192,6 +189,7 @@ public class InterventionActivity extends UpdatableActivity
         infoLayout                = (RelativeLayout) findViewById(R.id.infoLayout);
         infoScroll                = (ScrollView) findViewById(R.id.interventionInfo);
         cardView                  = (CardView) findViewById(R.id.card_view);
+        gpsAccuracyMessage = (TextView) findViewById(R.id.gps_accuracy_message);
         diffStuff                 = (CheckBox) findViewById(R.id.diff_stuff);
         diffStuff.setOnClickListener(new View.OnClickListener()
         {
@@ -223,12 +221,17 @@ public class InterventionActivity extends UpdatableActivity
 
         if (!mNewIntervention)
             prepareRequest();
-        else
-        {
+        else {
             createProcedureChooser();
             prepareSimpleIntervention();
         }
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.close);
+
+        if (!mLocationManager.isProviderEnabled(mLocationProvider)) {
+            gpsAccuracyMessage.setText(R.string.gps_disabled);
+        } else if (!PermissionManager.GPSPermissions(this, this)) {
+            gpsAccuracyMessage.setText(R.string.gps_tracking_disabled);
+        }
     }
 
     private void setInProgressState()
@@ -505,7 +508,6 @@ public class InterventionActivity extends UpdatableActivity
         chronoActiveIntervention.stopTimer();
         chronoTravel.setTime(chronoActiveTravel.getTime());
         chronoIntervention.setTime(chronoActiveIntervention.getTime());
-        startTracking();
 
     }
 
@@ -801,7 +803,7 @@ public class InterventionActivity extends UpdatableActivity
                 || !PermissionManager.storagePermissions(this, this)
                 || !PermissionManager.GPSPermissions(this, this))
         {
-            Toast.makeText(this, "GPS is not activated", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.gps_disabled, Toast.LENGTH_SHORT).show();
             return;
         }
         Intent intent = new Intent(this, MapsActivity.class);
@@ -910,8 +912,10 @@ public class InterventionActivity extends UpdatableActivity
     {
 
 
-        if (!crumbsCalculator.isCrumbAccurate(location, type, metadata))
+        if (!crumbsCalculator.isCrumbAccurate(location, type, metadata)) {
+            gpsAccuracyMessage.setText(R.string.bad_accuracy_message);
             return;
+        }
 
         Crumb crumb = crumbsCalculator.getFinalCrumb();
 
@@ -920,6 +924,7 @@ public class InterventionActivity extends UpdatableActivity
 
         sendBroadcastNewCrumb(location);
 
+        gpsAccuracyMessage.setText(R.string.good_accuracy_message);
     }
 
     private void sendBroadcastNewCrumb(Location location)
