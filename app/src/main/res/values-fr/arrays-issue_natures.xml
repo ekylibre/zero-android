@@ -4,19 +4,31 @@
     <item>Acarien jaune</item>
     <item>Accident</item>
     <item>Accident matériel</item>
+    <item>Alternaria</item>
+    <item>Altises</item>
+    <item>Amarante</item>
     <item>Anthracnose</item>
+    <item>Bactériose</item>
     <item>Bactériose</item>
     <item>Bactériose des glumes du blé</item>
     <item>Balanin des noisettes</item>
     <item>Boîterie</item>
+    <item>Capselle</item>
     <item>Carie commune</item>
     <item>Carpocapse</item>
+    <item>Cassides</item>
+    <item>Cercosporiose</item>
+    <item>Chanvre d’eau</item>
     <item>Chenille défoliatrice</item>
+    <item>Chenilles</item>
     <item>Chénopode blanc</item>
     <item>Cicadelle de la flavescence dorée</item>
     <item>Cicadelle des grillures</item>
     <item>Cochenille</item>
+    <item>Datura</item>
     <item>Diarrhée</item>
+    <item>Digitaire</item>
+    <item>Doryphores</item>
     <item>Défaillance d’une pièce</item>
     <item>Défaut de castration sur maïs semences</item>
     <item>Défaut sur mâle de bordure de maïs semences</item>
@@ -26,7 +38,13 @@
     <item>Fomitiporia</item>
     <item>Fuite (d’animaux)</item>
     <item>Fusariose</item>
+    <item>Fusarium</item>
+    <item>Gaillet gratteron</item>
     <item>Glume noire des céréales</item>
+    <item>Graisse du poireau</item>
+    <item>Helminthosporiose de l’orge</item>
+    <item>Helminthosporiose du blé</item>
+    <item>Helminthosporiose du maïs</item>
     <item>Incident</item>
     <item>Incident climatique</item>
     <item>Incident de support</item>
@@ -41,13 +59,29 @@
     <item>Maladie à nématodes</item>
     <item>Mammite</item>
     <item>Mauvais état végétatif</item>
+    <item>Mildiou de la carotte</item>
+    <item>Mildiou de la pomme de terre</item>
+    <item>Mildiou de la tomate</item>
     <item>Mildiou de la vigne</item>
+    <item>Mildiou des céréales</item>
+    <item>Morelle</item>
+    <item>Mouche de la carotte</item>
+    <item>Mouche des semis</item>
     <item>Mouche du brou</item>
+    <item>Mouche du chou</item>
+    <item>Noctuelle défoliatrice</item>
+    <item>Nécroses marginales (tipburn)</item>
+    <item>Nématodes</item>
+    <item>Oïdium de la carotte</item>
+    <item>Oïdium de la pomme de terre</item>
     <item>Oïdium de la vigne</item>
     <item>Oïdium des céréales</item>
+    <item>Panic</item>
     <item>Panne sèche</item>
     <item>Phytophthora</item>
     <item>Phytopte</item>
+    <item>Piéride du chou</item>
+    <item>Pourpier</item>
     <item>Pourridié</item>
     <item>Pourriture grise ou noble</item>
     <item>Problème de fécondité</item>
@@ -55,32 +89,61 @@
     <item>Problème respiratoire</item>
     <item>Présence d’insecte</item>
     <item>Puceron</item>
+    <item>Pyrale du maïs</item>
+    <item>Pâturin</item>
+    <item>Renouée</item>
+    <item>Repousses de couvert végétal</item>
+    <item>Repousses de la culture précédente</item>
+    <item>Rhizoctonia</item>
     <item>Rouille brune</item>
     <item>Rouille jaune</item>
+    <item>Rouille noire</item>
+    <item>Rumex</item>
+    <item>Sclérotinia</item>
     <item>Septoriose</item>
+    <item>Sorgho d’Alep</item>
+    <item>Souchet</item>
     <item>Sécheresse</item>
+    <item>Séneçon commun</item>
+    <item>Sésamie</item>
+    <item>Teigne (insecte)</item>
+    <item>Tenthrède</item>
     <item>Tenthrède du noisetier</item>
     <item>Toux</item>
+    <item>Ver gris</item>
     <item>Zeuzère</item>
+    <item>Érigeron</item>
     <item>Œdème</item>
   </string-array>
   <string-array name="issueNatures_values">
     <item>yellow_acarine</item>
     <item>accident</item>
     <item>equipment_crash</item>
+    <item>alternaria</item>
+    <item>flea_beetle</item>
+    <item>amaranthus</item>
     <item>anthracnose</item>
+    <item>bacterial_disease</item>
     <item>bacteriosis</item>
     <item>bacterial_leaf_blight</item>
     <item>nut_weevil</item>
     <item>limping</item>
+    <item>capsella</item>
     <item>common_bunt</item>
     <item>codling_moth</item>
+    <item>cassidinae</item>
+    <item>cercosporiosis</item>
+    <item>bidens_tripartita</item>
     <item>defoliant_caterpillar</item>
+    <item>caterpillar</item>
     <item>chenopodium_album</item>
     <item>scaphoideus_titanus_leafhopper</item>
     <item>empoasca_vitis_leafhopper</item>
     <item>scale_insect</item>
+    <item>datura</item>
     <item>diarrhea</item>
+    <item>digitaria</item>
+    <item>colorado_potato_beetle</item>
     <item>piece_breakdown</item>
     <item>seed_corn_castration_defect</item>
     <item>field_edge_male_seed_corn_defect</item>
@@ -89,8 +152,14 @@
     <item>grapevine_yellows</item>
     <item>fomitiporia</item>
     <item>escape</item>
+    <item>fusarium</item>
     <item>fusarium_head_blight</item>
+    <item>galium_aparine</item>
     <item>bacterial_streak</item>
+    <item>pseudomonas_syringae</item>
+    <item>barley_helminthosporiosis</item>
+    <item>wheat_helminthosporiosis</item>
+    <item>corn_helminthosporiosis</item>
     <item>issue</item>
     <item>climate_issue</item>
     <item>support_issue</item>
@@ -105,13 +174,29 @@
     <item>nematoda_disease</item>
     <item>mammite</item>
     <item>bad_vegetative_growth_conditions</item>
+    <item>carrot_mildiew</item>
+    <item>potato_mildew</item>
+    <item>tomato_mildew</item>
     <item>vine_mildew</item>
+    <item>cereal_mildiew</item>
+    <item>nightshade</item>
+    <item>carrot_fly</item>
+    <item>seedcorn_maggot</item>
     <item>husk_fly</item>
+    <item>cabbage_maggot</item>
+    <item>cotton_bollworm</item>
+    <item>tipburn</item>
+    <item>matoda</item>
+    <item>carrot_powdery_mildew</item>
+    <item>potato_powdery_mildew</item>
     <item>vine_powdery_mildew</item>
     <item>wheat_powdery_mildew</item>
+    <item>panicum</item>
     <item>empty_fuel_tank</item>
     <item>phytophthora</item>
     <item>acarine_gall_mite</item>
+    <item>large_white</item>
+    <item>portulaca_oleracea</item>
     <item>pourridie_rot</item>
     <item>noble_rot</item>
     <item>fecondity_problem</item>
@@ -119,13 +204,30 @@
     <item>respiratory_problem</item>
     <item>insecta_disease</item>
     <item>aphid</item>
-    <item>black_rust</item>
+    <item>european_corn_borer</item>
+    <item>poa</item>
+    <item>polygonum</item>
+    <item>vegetation_cover_regrowth</item>
+    <item>previous_crop_regrowth</item>
+    <item>rhizoctonia</item>
+    <item>brown_rust</item>
     <item>yellow_rust</item>
+    <item>black_rust</item>
+    <item>rumex_crispus</item>
+    <item>sclerotinia</item>
     <item>septoria_blotch</item>
+    <item>sorghum_halepense</item>
+    <item>cyperus_esculentus</item>
     <item>drought</item>
+    <item>senecio_vulgaris</item>
+    <item>mediterranean_corn_borer</item>
+    <item>moth</item>
+    <item>european_sawfly</item>
     <item>croesus_septentrionalis</item>
     <item>cough</item>
+    <item>cutworm</item>
     <item>wood_leopard_moth</item>
+    <item>erigeron</item>
     <item>edema</item>
   </string-array>
 </resources>
