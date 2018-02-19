@@ -18,6 +18,12 @@ import android.preference.PreferenceManager;
 import android.provider.Settings.Secure;
 import android.util.Log;
 
+import com.google.android.gms.common.GoogleApiAvailability;
+import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
+import com.google.android.gms.common.GooglePlayServicesRepairableException;
+import com.google.android.gms.common.GooglePlayServicesUtil;
+import com.google.android.gms.security.ProviderInstaller;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -105,6 +111,32 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
     @Override
     public void onPerformSync(Account account, Bundle extras, String authority, ContentProviderClient provider, SyncResult syncResult)
     {
+        // Updates Security Provider to Protect Against SSL Exploits
+        try {
+            ProviderInstaller.installIfNeeded(getContext());
+        } catch (GooglePlayServicesRepairableException e) {
+
+            // Indicates that Google Play services is out of date, disabled, etc.
+
+            // Prompt the user to install/update/enable Google Play services.
+            //GooglePlayServicesUtil
+            // .showErrorNotification(e.getConnectionStatusCode(), getContext());
+            GoogleApiAvailability.getInstance()
+                    .showErrorNotification(getContext(), e.getConnectionStatusCode());
+
+            // Notify the SyncManager that a soft error occurred.
+            syncResult.stats.numIoExceptions++;
+            return;
+
+        } catch (GooglePlayServicesNotAvailableException e) {
+            // Indicates a non-recoverable error; the ProviderInstaller is not able
+            // to install an up-to-date Provider.
+
+            // Notify the SyncManager that a hard error occurred.
+            syncResult.stats.numAuthExceptions++;
+            return;
+        }
+
         getContext().sendBroadcast(new Intent(UpdatableActivity.ACTION_STARTED_SYNC));
 
         if (BuildConfig.DEBUG) Log.i(TAG, "Destruction of tables which will be resynced !");
