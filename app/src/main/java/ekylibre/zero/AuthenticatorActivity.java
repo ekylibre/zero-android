@@ -11,6 +11,8 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.google.android.gms.security.ProviderInstaller;
+
 import ekylibre.APICaller.Token;
 import ekylibre.exceptions.UnauthorizedException;
 import ekylibre.zero.home.MainActivity;
@@ -22,7 +24,7 @@ import ekylibre.zero.home.MainActivity;
  *
  * It sends back to the Authenticator the result.
  */
-public class AuthenticatorActivity extends AccountAuthenticatorActivity {
+public class AuthenticatorActivity extends AccountAuthenticatorActivity implements ProviderInstaller.ProviderInstallListener {
 
     public final static String KEY_ACCOUNT_PASSWORD    = "accountPassword";
     public final static String KEY_AUTH_TOKEN_TYPE     = "authTokenType";
@@ -49,6 +51,8 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login);
+
+        ProviderInstaller.installIfNeededAsync(this, this);
 
         mAccountNameEdit     = (EditText) findViewById(R.id.accountName);
         mAccountPasswordEdit = (EditText) findViewById(R.id.accountPassword);
@@ -156,5 +160,15 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity {
             startActivity(mainIntent);
         }
         finish();
+    }
+
+    @Override
+    public void onProviderInstalled() {
+        if (BuildConfig.DEBUG) Log.d("zero", TAG + "Security provider updated");
+    }
+
+    @Override
+    public void onProviderInstallFailed(int i, Intent intent) {
+        if (BuildConfig.DEBUG) Log.d("zero", TAG + "Cannot update security provider");
     }
 }
