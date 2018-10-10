@@ -6,8 +6,9 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.nfc.Tag;
 import android.os.Build;
 import android.os.Debug;
-import android.support.design.BuildConfig;
 import android.util.Log;
+
+import ekylibre.zero.BuildConfig;
 
 public class DatabaseHelper extends SQLiteOpenHelper
 {
