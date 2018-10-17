@@ -1,5 +1,6 @@
 package ekylibre.zero.intervention;
 
+import android.Manifest;
 import android.accounts.Account;
 import android.app.AlertDialog;
 import android.app.Notification;
@@ -10,6 +11,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.graphics.Typeface;
@@ -17,6 +19,7 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.widget.CardView;
 import android.util.Log;
 import android.view.Gravity;
@@ -51,11 +54,10 @@ import ekylibre.zero.home.Zero;
 
 
 public class InterventionActivity extends UpdatableActivity
-        implements TrackingListenerWriter
-{
+        implements TrackingListenerWriter {
     /* ****************************
-    **      CONSTANT VALUES
-    ** ***************************/
+     **      CONSTANT VALUES
+     ** ***************************/
     protected final int PRODUCT_NAME = 1;
     protected final int LABEL = 2;
     protected final int NAME = 3;
@@ -64,22 +66,22 @@ public class InterventionActivity extends UpdatableActivity
     protected final int INTERVENTION = 2;
     protected final int PAUSE = 3;
     public final static String NEW = "new_intervention";
-    public static final String   _interventionID = "intervention_id";
+    public static final String _interventionID = "intervention_id";
     private final String TAG = "InterventionActivity";
     public final static String STATUS_PAUSE = "PAUSE";
     public final static String STATUS_FINISHED = "FINISHED";
     public final static String STATUS_IN_PROGRESS = "IN_PROGRESS";
 
     /* ****************************
-    ** Notification builder and variables
-    ** ***************************/
+     ** Notification builder and variables
+     ** ***************************/
     private NotificationManager mNotificationManager;
     private Notification.Builder mNotificationBuilder;
     private int mNotificationID;
 
     /* ****************************
-    ** Interface elements variables
-    ** ***************************/
+     ** Interface elements variables
+     ** ***************************/
     private ScrollView infoScroll;
     private RelativeLayout layoutActivePreparation, layoutActiveTravel, layoutActiveIntervention, layoutPreparation, layoutTravel, layoutIntervention;
     private View preparation, travel, intervention;
@@ -91,10 +93,10 @@ public class InterventionActivity extends UpdatableActivity
     private TextView gpsAccuracyMessage;
 
     /* ****************************
-    **      Class variables
-    ** ***************************/
-    private int    mInterventionID;
-    protected int       state = -1;
+     **      Class variables
+     ** ***************************/
+    private int mInterventionID;
+    protected int state = -1;
     private String mLastProcedureNature, mLastProcedureNatureName;
     private String mLocationProvider;
     private TrackingListener mTrackingListener;
@@ -114,19 +116,16 @@ public class InterventionActivity extends UpdatableActivity
     private boolean safeDestroy = false;
 
     @Override
-    public void onStart()
-    {
+    public void onStart() {
         super.onStart();
-        if (!AccountTool.isAnyAccountExist(this))
-        {
+        if (!AccountTool.isAnyAccountExist(this)) {
             AccountTool.askForAccount(this, this);
             return;
         }
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu)
-    {
+    public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu items for use in the action bar
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.intervention, menu);
@@ -134,22 +133,19 @@ public class InterventionActivity extends UpdatableActivity
     }
 
     /*
-    ** Actions on toolbar items
-    ** Items are identified by their view id
-    */
+     ** Actions on toolbar items
+     ** Items are identified by their view id
+     */
     @Override
-    public boolean onOptionsItemSelected(MenuItem item)
-    {
-        int     id = item.getItemId();
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
 
         if (id == R.id.action_save) {
             saveAndExit();
-        }
-        else if (id == android.R.id.home) {
+        } else if (id == android.R.id.home) {
             exitInterface();
             return (true);
-        }
-        else if (id == R.id.action_map) {
+        } else if (id == R.id.action_map) {
             openMap(null);
         }
         return (super.onOptionsItemSelected(item));
@@ -173,9 +169,9 @@ public class InterventionActivity extends UpdatableActivity
         layoutActivePreparation = (RelativeLayout) findViewById(R.id.layout_active_preparation);
         layoutActiveTravel = (RelativeLayout) findViewById(R.id.layout_active_travel);
         layoutActiveIntervention = (RelativeLayout) findViewById(R.id.layout_active_intervention);
-        preparation =  findViewById(R.id.preparation);
-        travel =  findViewById(R.id.travel);
-        intervention =  findViewById(R.id.intervention);
+        preparation = findViewById(R.id.preparation);
+        travel = findViewById(R.id.travel);
+        intervention = findViewById(R.id.intervention);
         chronoPreparation = (ExtendedChronometer) findViewById(R.id.chrono_preparation);
         chronoTravel = (ExtendedChronometer) findViewById(R.id.chrono_travel);
         chronoIntervention = (ExtendedChronometer) findViewById(R.id.chrono_intervention);
@@ -183,20 +179,18 @@ public class InterventionActivity extends UpdatableActivity
         chronoActiveTravel = (ExtendedChronometer) findViewById(R.id.chrono_active_travel);
         chronoActiveIntervention = (ExtendedChronometer) findViewById(R.id.chrono_active_intervention);
         chronoGeneral = (ExtendedChronometer) findViewById(R.id.chrono_general);
-        mProcedureNature          = (TextView)   findViewById(R.id.procedure_nature);
-        mStartButton              = (Button)     findViewById(R.id.start_intervention_button);
-        mMapButton                = (Button)     findViewById(R.id.map_button);
-        infoLayout                = (RelativeLayout) findViewById(R.id.infoLayout);
-        infoScroll                = (ScrollView) findViewById(R.id.interventionInfo);
-        cardView                  = (CardView) findViewById(R.id.card_view);
+        mProcedureNature = (TextView) findViewById(R.id.procedure_nature);
+        mStartButton = (Button) findViewById(R.id.start_intervention_button);
+        mMapButton = (Button) findViewById(R.id.map_button);
+        infoLayout = (RelativeLayout) findViewById(R.id.infoLayout);
+        infoScroll = (ScrollView) findViewById(R.id.interventionInfo);
+        cardView = (CardView) findViewById(R.id.card_view);
         gpsAccuracyMessage = (TextView) findViewById(R.id.gps_accuracy_message);
-        diffStuff                 = (CheckBox) findViewById(R.id.diff_stuff);
-        diffStuff.setOnClickListener(new View.OnClickListener()
-        {
+        diffStuff = (CheckBox) findViewById(R.id.diff_stuff);
+        diffStuff.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view)
-            {
-                CheckBox box =  (CheckBox) view;
+            public void onClick(View view) {
+                CheckBox box = (CheckBox) view;
                 Log.d(TAG, "CheckBox state => " + box.isChecked());
             }
         });
@@ -234,10 +228,8 @@ public class InterventionActivity extends UpdatableActivity
         }
     }
 
-    private void setInProgressState()
-    {
-        if (!inProgress)
-        {
+    private void setInProgressState() {
+        if (!inProgress) {
             ContentValues cv = new ContentValues();
 
             cv.put(ZeroContract.Interventions.STATE, STATUS_IN_PROGRESS);
@@ -249,8 +241,7 @@ public class InterventionActivity extends UpdatableActivity
         inProgress = true;
     }
 
-    private void prepareSimpleIntervention()
-    {
+    private void prepareSimpleIntervention() {
         cardView.setVisibility(View.INVISIBLE);
         diffStuff.setVisibility(View.GONE);
         chronoGeneral.setVisibility(View.GONE);
@@ -260,8 +251,7 @@ public class InterventionActivity extends UpdatableActivity
         mStartButton.setVisibility(View.VISIBLE);
     }
 
-    private void prepareRequest()
-    {
+    private void prepareRequest() {
         mStartButton.setVisibility(View.GONE);
         Intent intent = getIntent();
         mInterventionID = intent.getIntExtra(ZeroContract.Interventions._ID, 0);
@@ -271,8 +261,7 @@ public class InterventionActivity extends UpdatableActivity
         setNotification();
     }
 
-    private Cursor setBasicValues()
-    {
+    private Cursor setBasicValues() {
         Cursor curs = getContentResolver().query(
                 ZeroContract.Interventions.CONTENT_URI,
                 ZeroContract.Interventions.PROJECTION_PAUSED,
@@ -289,8 +278,7 @@ public class InterventionActivity extends UpdatableActivity
         return (curs);
     }
 
-    private void setPausedValues(Cursor curs)
-    {
+    private void setPausedValues(Cursor curs) {
         if (curs == null || curs.getString(0) == null || !curs.getString(0).equals("PAUSE"))
             return;
         chronoGeneral.setTime(curs.getInt(2));
@@ -303,8 +291,7 @@ public class InterventionActivity extends UpdatableActivity
         curs.close();
     }
 
-    private void writeInterventionInfo()
-    {
+    private void writeInterventionInfo() {
         int botId;
 
         botId = writeTarget(View.NO_ID);
@@ -312,8 +299,7 @@ public class InterventionActivity extends UpdatableActivity
         botId = writeTool(botId);
     }
 
-    private int writeTarget(int botId)
-    {
+    private int writeTarget(int botId) {
         Cursor cursTarget = queryTarget();
 
         if (cursTarget == null || cursTarget.getCount() == 0)
@@ -323,8 +309,7 @@ public class InterventionActivity extends UpdatableActivity
         return (botId);
     }
 
-    private int writeInput(int botId)
-    {
+    private int writeInput(int botId) {
         Cursor cursInput = queryInput();
 
         if (cursInput == null || cursInput.getCount() == 0)
@@ -334,8 +319,7 @@ public class InterventionActivity extends UpdatableActivity
         return (botId);
     }
 
-    private int writeTool(int botId)
-    {
+    private int writeTool(int botId) {
         Cursor cursTool = queryTool();
 
         if (cursTool == null || cursTool.getCount() == 0)
@@ -345,17 +329,13 @@ public class InterventionActivity extends UpdatableActivity
         return (botId);
     }
 
-    private int writeCursor(Cursor curs, int botId)
-    {
+    private int writeCursor(Cursor curs, int botId) {
         String str = "";
         String titleRef = "";
 
-        while (curs.moveToNext())
-        {
-            if (!curs.getString(NAME).equals(titleRef))
-            {
-                if (!str.equals(""))
-                {
+        while (curs.moveToNext()) {
+            if (!curs.getString(NAME).equals(titleRef)) {
+                if (!str.equals("")) {
                     botId = flushBlock(str, botId);
                     str = "";
                 }
@@ -368,8 +348,7 @@ public class InterventionActivity extends UpdatableActivity
         return (botId);
     }
 
-    private int createTitle(Cursor curs, int id)
-    {
+    private int createTitle(Cursor curs, int id) {
         TextView title = new TextView(this);
 
         title.setText("• " + curs.getString(LABEL));
@@ -385,8 +364,7 @@ public class InterventionActivity extends UpdatableActivity
         return (title.getId());
     }
 
-    private int flushBlock(String str, int id)
-    {
+    private int flushBlock(String str, int id) {
         TextView text = new TextView(this);
 
         text.setText(str);
@@ -404,8 +382,7 @@ public class InterventionActivity extends UpdatableActivity
         return (text.getId());
     }
 
-    private Cursor queryTarget()
-    {
+    private Cursor queryTarget() {
         String[] projectionTarget = ZeroContract.InterventionParameters.PROJECTION_TARGET_FULL;
 
         Cursor curs = getContentResolver().query(
@@ -418,8 +395,7 @@ public class InterventionActivity extends UpdatableActivity
         return (curs);
     }
 
-    private Cursor queryInput()
-    {
+    private Cursor queryInput() {
         String[] projectionInput = ZeroContract.InterventionParameters.PROJECTION_INPUT_FULL;
 
         Cursor curs = getContentResolver().query(
@@ -432,8 +408,7 @@ public class InterventionActivity extends UpdatableActivity
         return (curs);
     }
 
-    private Cursor queryTool()
-    {
+    private Cursor queryTool() {
         String[] projectionTool = ZeroContract.InterventionParameters.PROJECTION_TOOL_FULL;
 
         Cursor curs = getContentResolver().query(
@@ -446,23 +421,17 @@ public class InterventionActivity extends UpdatableActivity
         return (curs);
     }
 
-    private void updateWorkingPeriods(int currentState)
-    {
+    private void updateWorkingPeriods(int currentState) {
         setInProgressState();
-        if (started_at == null)
-        {
+        if (started_at == null) {
             Calendar cal = Calendar.getInstance();
             started_at = dateFormatter.format(cal.getTime());
-        }
-        else if (currentState == PAUSE)
-        {
+        } else if (currentState == PAUSE) {
             Calendar cal = Calendar.getInstance();
             stopped_at = dateFormatter.format(cal.getTime());
             addWorkingPeriodsToLocalDatabase();
             started_at = null;
-        }
-        else
-        {
+        } else {
             Calendar cal = Calendar.getInstance();
             stopped_at = dateFormatter.format(cal.getTime());
             addWorkingPeriodsToLocalDatabase();
@@ -470,8 +439,7 @@ public class InterventionActivity extends UpdatableActivity
         }
     }
 
-    private void addWorkingPeriodsToLocalDatabase()
-    {
+    private void addWorkingPeriodsToLocalDatabase() {
         ContentValues values = new ContentValues();
 
         values.put(ZeroContract.WorkingPeriodsColumns.FK_INTERVENTION, mInterventionID);
@@ -488,8 +456,7 @@ public class InterventionActivity extends UpdatableActivity
         getContentResolver().insert(ZeroContract.WorkingPeriods.CONTENT_URI, values);
     }
 
-    public void phasePreparation(View view)
-    {
+    public void phasePreparation(View view) {
         updateWorkingPeriods(PREPARATION);
 
         chronoGeneral.startTimer();
@@ -511,8 +478,7 @@ public class InterventionActivity extends UpdatableActivity
 
     }
 
-    public void phaseTravel(View view)
-    {
+    public void phaseTravel(View view) {
         updateWorkingPeriods(TRAVEL);
 
         chronoGeneral.startTimer();
@@ -535,8 +501,7 @@ public class InterventionActivity extends UpdatableActivity
 
     }
 
-    public void phaseIntervention(View view)
-    {
+    public void phaseIntervention(View view) {
         updateWorkingPeriods(INTERVENTION);
 
         chronoGeneral.startTimer();
@@ -559,8 +524,7 @@ public class InterventionActivity extends UpdatableActivity
 
     }
 
-    public void phasePause(View view)
-    {
+    public void phasePause(View view) {
         updateWorkingPeriods(PAUSE);
 
         state = PAUSE;
@@ -583,44 +547,35 @@ public class InterventionActivity extends UpdatableActivity
     }
 
     @Override
-    public void onBackPressed()
-    {
+    public void onBackPressed() {
         exitInterface();
     }
 
-    private void saveAndExit()
-    {
+    private void saveAndExit() {
         if (mNewIntervention && !newIntervStarted)
             return;
         phasePause(null);
         final AlertDialog.Builder dialog = new AlertDialog.Builder(this);
         dialog.setTitle(R.string.what_to_do);
-        dialog.setPositiveButton(R.string.finish, new DialogInterface.OnClickListener()
-        {
+        dialog.setPositiveButton(R.string.finish, new DialogInterface.OnClickListener() {
             @Override
-            public void onClick(DialogInterface dialogInterface, int i)
-            {
+            public void onClick(DialogInterface dialogInterface, int i) {
                 safeDestroy = true;
                 switchStateToFinished();
                 InterventionActivity.super.onBackPressed();
             }
         });
 
-        dialog.setNeutralButton(R.string.cancel, new DialogInterface.OnClickListener()
-        {
+        dialog.setNeutralButton(R.string.cancel, new DialogInterface.OnClickListener() {
             @Override
-            public void onClick(DialogInterface dialogInterface, int i)
-            {
+            public void onClick(DialogInterface dialogInterface, int i) {
                 dialogInterface.cancel();
             }
         });
-        if (!mNewIntervention)
-        {
-            dialog.setNegativeButton(R.string.pause, new DialogInterface.OnClickListener()
-            {
+        if (!mNewIntervention) {
+            dialog.setNegativeButton(R.string.pause, new DialogInterface.OnClickListener() {
                 @Override
-                public void onClick(DialogInterface dialogInterface, int i)
-                {
+                public void onClick(DialogInterface dialogInterface, int i) {
                     safeDestroy = true;
                     saveCurrentStateOfIntervention();
                     InterventionActivity.super.onBackPressed();
@@ -631,31 +586,25 @@ public class InterventionActivity extends UpdatableActivity
         dialog.show();
     }
 
-    private void exitInterface()
-    {
-        if (mNewIntervention && !newIntervStarted)
-        {
+    private void exitInterface() {
+        if (mNewIntervention && !newIntervStarted) {
             super.onBackPressed();
             return;
         }
         phasePause(null);
         final AlertDialog.Builder dialog = new AlertDialog.Builder(this);
         dialog.setTitle(R.string.what_to_do);
-        dialog.setPositiveButton(R.string.abort, new DialogInterface.OnClickListener()
-        {
+        dialog.setPositiveButton(R.string.abort, new DialogInterface.OnClickListener() {
             @Override
-            public void onClick(DialogInterface dialogInterface, int i)
-            {
+            public void onClick(DialogInterface dialogInterface, int i) {
                 safeDestroy = true;
                 cleanCurrentSave();
                 InterventionActivity.super.onBackPressed();
             }
         });
-        dialog.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener()
-        {
+        dialog.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
             @Override
-            public void onClick(DialogInterface dialogInterface, int i)
-            {
+            public void onClick(DialogInterface dialogInterface, int i) {
                 dialogInterface.cancel();
             }
         });
@@ -664,8 +613,7 @@ public class InterventionActivity extends UpdatableActivity
         dialog.show();
     }
 
-    private void cleanCurrentSave()
-    {
+    private void cleanCurrentSave() {
         ContentValues values = new ContentValues();
 
         getContentResolver().delete(
@@ -689,8 +637,7 @@ public class InterventionActivity extends UpdatableActivity
                 null);
     }
 
-    private void switchStateToFinished()
-    {
+    private void switchStateToFinished() {
         ContentValues values = new ContentValues();
 
         values.put(ZeroContract.Interventions.STATE, STATUS_FINISHED);
@@ -702,8 +649,7 @@ public class InterventionActivity extends UpdatableActivity
                 null);
     }
 
-    private void saveCurrentStateOfIntervention()
-    {
+    private void saveCurrentStateOfIntervention() {
         ContentValues values = new ContentValues();
 
         values.put(ZeroContract.Interventions.GENERAL_CHRONO, chronoGeneral.getTime());
@@ -720,25 +666,21 @@ public class InterventionActivity extends UpdatableActivity
     }
 
     @Override
-    public void onDestroy()
-    {
+    public void onDestroy() {
         if (!safeDestroy)
             saveCurrentStateOfIntervention();
         stopIntervention(null);
         super.onDestroy();
     }
 
-    private void createProcedureChooser()
-    {
+    private void createProcedureChooser() {
         infoScroll.setVisibility(View.GONE);
         mProcedureChooser = new AlertDialog.Builder(this)
                 .setTitle(R.string.procedure_nature)
                 .setNegativeButton(android.R.string.cancel, null)
-                .setItems(R.array.procedures_entries, new DialogInterface.OnClickListener()
-                {
+                .setItems(R.array.procedures_entries, new DialogInterface.OnClickListener() {
                     @Override
-                    public void onClick(DialogInterface dialog, int which)
-                    {
+                    public void onClick(DialogInterface dialog, int which) {
                         mLastProcedureNature = getResources().getStringArray(R.array.procedures_values)[which];
                         mLastProcedureNatureName = getResources().getStringArray(R.array.procedures_entries)[which];
                         Log.d("zero", "Start a new " + mLastProcedureNature);
@@ -762,8 +704,7 @@ public class InterventionActivity extends UpdatableActivity
                 });
     }
 
-    private void setNotification()
-    {
+    private void setNotification() {
         mNotificationBuilder
                 .setSmallIcon(R.mipmap.ic_stat_notify_running)
                 .setContentTitle(mLastProcedureNatureName)
@@ -771,8 +712,7 @@ public class InterventionActivity extends UpdatableActivity
         mNotificationManager.notify(mNotificationID, mNotificationBuilder.build());
     }
 
-    private void createIntervention()
-    {
+    private void createIntervention() {
         ContentValues values = new ContentValues();
 
         values.put(ZeroContract.InterventionsColumns.USER, AccountTool.getCurrentAccount(this).name);
@@ -795,14 +735,12 @@ public class InterventionActivity extends UpdatableActivity
         mProcedureChooser.show();
     }
 
-    public void openMap(View view)
-    {
+    public void openMap(View view) {
         if (mNewIntervention && !newIntervStarted)
             return;
         if (!PermissionManager.internetPermissions(this, this)
                 || !PermissionManager.storagePermissions(this, this)
-                || !PermissionManager.GPSPermissions(this, this))
-        {
+                || !PermissionManager.GPSPermissions(this, this)) {
             Toast.makeText(this, R.string.gps_disabled, Toast.LENGTH_SHORT).show();
             return;
         }
@@ -811,12 +749,10 @@ public class InterventionActivity extends UpdatableActivity
         startActivity(intent);
     }
 
-    public void stopIntervention(View view)
-    {
+    public void stopIntervention(View view) {
         this.stopTracking();
 
-        if (mNewIntervention)
-        {
+        if (mNewIntervention) {
             ContentValues values = new ContentValues();
             values.put(ZeroContract.Interventions.STOPPED_AT, DateConstant.getCurrentDateFormatted());
             getContentResolver().update(ZeroContract.Interventions.CONTENT_URI,
@@ -842,8 +778,7 @@ public class InterventionActivity extends UpdatableActivity
         mNotificationManager.cancel(mNotificationID);
     }
 
-    private int query_last_crumb_id()
-    {
+    private int query_last_crumb_id() {
         String[] projectionCrumbID = {ZeroContract.CrumbsColumns._ID};
 
         Cursor cursorCrumb = getContentResolver().query(
@@ -880,16 +815,14 @@ public class InterventionActivity extends UpdatableActivity
         startTracking(0);
     }
 
-    private void startTracking(long interval)
-    {
+    private void startTracking(long interval) {
         Log.d(TAG, "===Strat Tracking !===");
         if (!PermissionManager.GPSPermissions(this, this))
             return;
         mLocationManager.requestLocationUpdates(mLocationProvider, interval, 0, mTrackingListener);
     }
 
-    private void stopTracking()
-    {
+    private void stopTracking() {
         Log.d(TAG, "===Stop Tracking !===");
         if (!PermissionManager.GPSPermissions(this, this))
             return;
@@ -900,8 +833,7 @@ public class InterventionActivity extends UpdatableActivity
         this.addCrumb(type, null);
     }
 
-    private void addCrumb(String type, Bundle metadata)
-    {
+    private void addCrumb(String type, Bundle metadata) {
         if (!PermissionManager.GPSPermissions(this, this))
             return;
         TrackingListener listener = new TrackingListener(this, type, metadata);

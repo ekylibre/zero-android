@@ -30,6 +30,7 @@ import ekylibre.util.Contact;
 import ekylibre.util.PermissionManager;
 import ekylibre.util.UpdatableActivity;
 import ekylibre.zero.IssueActivity;
+import ekylibre.zero.ObservationActivity;
 import ekylibre.zero.PlantCountingActivity;
 import ekylibre.zero.R;
 import ekylibre.zero.SettingsActivity;
@@ -267,6 +268,12 @@ public class MainActivity extends UpdatableActivity
             case R.id.nav_tracking :
             {
                 launchIntervention(null);
+                break;
+            }
+            case R.id.nav_observation:
+            {
+                Intent intent = new Intent(this, ObservationActivity.class);
+                startActivity(intent);
                 break;
             }
             case R.id.nav_issue :

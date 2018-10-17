@@ -30,5 +30,12 @@
     <color name="ultra_dark_green">#16331a</color>
     <color name="not_so_dark_dark">#555555</color>
 
+    <color name="primary_text">#212121</color>
+    <color name="secondary_text">#757575</color>
+
+    <color name="pressed_color">@color/event_blue</color>
+    <color name="selected_color">@color/ultraLight_blue</color>
+    <color name="focused_color">@color/basic_orange</color>
+
 
 </resources>

@@ -9,6 +9,10 @@
             android:icon="@drawable/ic_tracking"
             android:title="@string/tracking" />
         <item
+            android:id="@+id/nav_observation"
+            android:icon="@drawable/ic_rate_review"
+            android:title="@string/new_observation" />
+        <item
             android:id="@+id/nav_issue"
             android:icon="@drawable/ic_issue"
             android:title="@string/new_issue" />
