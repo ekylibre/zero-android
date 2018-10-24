@@ -47,16 +47,13 @@ public class IssueChoiceFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_activity_choice, container, false);
+        View view = inflater.inflate(R.layout.fragment_issues, container, false);
 
-        // Set the adapter
-        if (view instanceof RecyclerView) {
-            Context context = view.getContext();
-            RecyclerView recyclerView = (RecyclerView) view;
-            recyclerView.setLayoutManager(new LinearLayoutManager(context));
-            IssuesRecyclerAdapter adapter = new IssuesRecyclerAdapter(issuesList);
-            recyclerView.setAdapter(adapter);
-        }
+        RecyclerView recyclerView = view.findViewById(R.id.issue_recycler);
+        recyclerView.setLayoutManager(new LinearLayoutManager(container.getContext()));
+        IssuesRecyclerAdapter adapter = new IssuesRecyclerAdapter(issuesList);
+        recyclerView.setAdapter(adapter);
+
         return view;
     }
 

@@ -7,7 +7,6 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -34,6 +33,7 @@ public class ObservationActivity extends AppCompatActivity implements
     private static final int FORM_FRAGMENT = 2;
     public static final int CULTURES_FRAGMENT = 3;
     public static final int ISSUES_FRAGMENT = 4;
+    public static final int BBCH_FRAGMENT = 5;
 
     private ActionBar actionBar;
     int currentFragment = ACTIVITY_FRAGMENT;
@@ -69,8 +69,10 @@ public class ObservationActivity extends AppCompatActivity implements
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.obs_options_menu, menu);
-        if (currentFragment == CULTURES_FRAGMENT
-                || currentFragment == ISSUES_FRAGMENT)
+        // Set cancel or validate button according to fragment
+        if (currentFragment == CULTURES_FRAGMENT ||
+                currentFragment == ISSUES_FRAGMENT ||
+                currentFragment == BBCH_FRAGMENT)
             menu.removeItem(R.id.obs_cancel);
         else
             menu.removeItem(R.id.obs_done);
@@ -93,25 +95,37 @@ public class ObservationActivity extends AppCompatActivity implements
 
     @Override
     public void onBackPressed() {
+        switch (currentFragment) {
+            case FORM_FRAGMENT:
+                currentFragment = ACTIVITY_FRAGMENT;
+                break;
+
+            case ISSUES_FRAGMENT:
+            case CULTURES_FRAGMENT:
+                currentFragment = FORM_FRAGMENT;
+                break;
+            case ACTIVITY_FRAGMENT:
+                finish();
+        }
         super.onBackPressed();
-        currentFragment--;
-        if (currentFragment == HOME)
-            finish();
     }
 
     @Override
     public boolean onSupportNavigateUp() {
-        currentFragment--;
+        // Same as onBackPressed() except super()
         switch (currentFragment) {
-            case HOME:
-                super.onSupportNavigateUp();
-                break;
-            case ACTIVITY_FRAGMENT:
+            case FORM_FRAGMENT:
                 replaceFragmentWith(ACTIVITY_FRAGMENT);
                 break;
-            case FORM_FRAGMENT:
+
+            case ISSUES_FRAGMENT:
+            case CULTURES_FRAGMENT:
                 replaceFragmentWith(FORM_FRAGMENT);
                 break;
+
+            default:
+                finish();
+//                super.onSupportNavigateUp();
         }
         return true;
     }
@@ -124,7 +138,6 @@ public class ObservationActivity extends AppCompatActivity implements
 
     @Override
     public void onFormInteraction(int fragmentId) {
-        Log.e("Frag", "Fragment id = " + fragmentId);
         replaceFragmentWith(fragmentId);
     }
 

@@ -29,8 +29,7 @@ public class IssuesRecyclerAdapter extends RecyclerView.Adapter<IssuesRecyclerAd
         final View view;
         final Context context;
         final TextView nameTextView;
-        final TextView detailsTextView;
-        IssueItem cultureItem;
+        IssueItem issueItem;
         int pos;
 
 
@@ -38,34 +37,29 @@ public class IssuesRecyclerAdapter extends RecyclerView.Adapter<IssuesRecyclerAd
             super(itemView);
             view = itemView;
             context = view.getContext();
-            nameTextView = itemView.findViewById(R.id.item_culture_name);
-            detailsTextView = itemView.findViewById(R.id.item_culture_details);
+            nameTextView = itemView.findViewById(R.id.item_issue_name);
             view.setOnClickListener(this);
         }
 
         void display(int position, int backgroundId) {
             pos = position;
-            cultureItem = issuesList.get(position);
+            issueItem = issuesList.get(position);
             int textColor = R.color.primary_text;
-            int detailsColor = R.color.secondary_text;
-            if (cultureItem.is_selected) {
+            if (issueItem.is_selected) {
                 backgroundId = R.color.basic_blue;
                 textColor = R.color.white;
-                detailsColor = R.color.white;
             }
             // Set colors
             nameTextView.setTextColor(ContextCompat.getColor(context, textColor));
-            detailsTextView.setTextColor(ContextCompat.getColor(context, detailsColor));
             view.setBackgroundColor(ContextCompat.getColor(context, backgroundId));
             // Set text
-            nameTextView.setText(cultureItem.name);
-            detailsTextView.setText(cultureItem.details);
+            nameTextView.setText(issueItem.name);
         }
 
         @Override
         public void onClick(View v) {
             view.setSelected(!view.isSelected());
-            cultureItem.is_selected = !cultureItem.is_selected;
+            issueItem.is_selected = !issueItem.is_selected;
             notifyItemChanged(pos);
         }
     }
@@ -74,7 +68,7 @@ public class IssuesRecyclerAdapter extends RecyclerView.Adapter<IssuesRecyclerAd
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.item_culture, parent, false);
+                .inflate(R.layout.item_issue, parent, false);
         return new ViewHolder(view);
     }
 
