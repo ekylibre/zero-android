@@ -1,6 +1,7 @@
 package ekylibre.zero.fragments.adapter;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +15,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import ekylibre.zero.R;
 import ekylibre.zero.fragments.BBCHChoiceFragment.OnBBCHFragmentInteractionListener;
 import ekylibre.zero.fragments.model.BBCHItem;
+
+import static ekylibre.zero.ObservationActivity.selectedActivity;
+import static ekylibre.zero.ObservationActivity.selectedBBCH;
 
 
 public class BBCHRecyclerAdapter extends RecyclerView.Adapter<BBCHRecyclerAdapter.ViewHolder> {
@@ -31,9 +35,9 @@ public class BBCHRecyclerAdapter extends RecyclerView.Adapter<BBCHRecyclerAdapte
      */
     class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        View view;
-        Context context;
-        TextView nameTextView;
+        final View view;
+        final Context context;
+        final TextView nameTextView;
         BBCHItem bbchItem;
 
         ViewHolder(View itemView) {
@@ -45,10 +49,17 @@ public class BBCHRecyclerAdapter extends RecyclerView.Adapter<BBCHRecyclerAdapte
             view.setOnClickListener(this);
         }
 
-        void display(BBCHItem item, int backgroundId) {
-            bbchItem = item;
+        void display(int position) {
+            bbchItem = bbchList.get(position);
+            int backgroundId = position %2 == 1 ? R.color.another_light_grey : R.color.white;
+            int textColor = R.color.primary_text;
+            if (selectedBBCH != null && bbchItem.id == selectedBBCH.id) {
+                backgroundId = R.color.basic_blue;
+                textColor = R.color.white;
+            }
+            nameTextView.setTextColor(ContextCompat.getColor(context, textColor));
             view.setBackgroundColor(ContextCompat.getColor(context, backgroundId));
-            nameTextView.setText(item.name);
+            nameTextView.setText(bbchItem.name);
         }
 
         @Override
@@ -71,8 +82,7 @@ public class BBCHRecyclerAdapter extends RecyclerView.Adapter<BBCHRecyclerAdapte
 
     @Override
     public void onBindViewHolder(@NonNull final ViewHolder holder, int position) {
-        int backgroundId = position %2 == 1 ? R.color.another_light_grey : R.color.white;
-        holder.display(bbchList.get(position), backgroundId);
+        holder.display(position);
     }
 
     @Override
