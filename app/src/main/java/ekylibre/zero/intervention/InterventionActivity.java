@@ -1,6 +1,5 @@
 package ekylibre.zero.intervention;
 
-import android.Manifest;
 import android.accounts.Account;
 import android.app.AlertDialog;
 import android.app.Notification;
@@ -11,7 +10,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.graphics.Typeface;
@@ -19,8 +17,8 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.v4.app.ActivityCompat;
-import android.support.v7.widget.CardView;
+import androidx.core.app.ActivityCompat;
+import androidx.cardview.widget.CardView;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
@@ -42,7 +40,6 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.UUID;
 
-import ekylibre.APICaller.Intervention;
 import ekylibre.database.ZeroContract;
 import ekylibre.util.AccountTool;
 import ekylibre.util.DateConstant;
@@ -50,7 +47,6 @@ import ekylibre.util.ExtendedChronometer;
 import ekylibre.util.PermissionManager;
 import ekylibre.util.UpdatableActivity;
 import ekylibre.zero.R;
-import ekylibre.zero.home.Zero;
 
 
 public class InterventionActivity extends UpdatableActivity

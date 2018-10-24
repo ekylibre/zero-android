@@ -2,10 +2,10 @@ package ekylibre.zero.fragments;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.v4.app.Fragment;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,14 +19,13 @@ import ekylibre.zero.fragments.model.ActivityItem;
 
 /**
  * A fragment representing a list of Items.
- * <p/>
- * Activities containing this fragment MUST implement the {@link OnListFragmentInteractionListener}
+ * Activities containing this fragment MUST implement the {@link OnActivityFragmentInteractionListener}
  * interface.
  */
 public class ActivityChoiceFragment extends Fragment {
 
     private List<ActivityItem> dataset;
-    private OnListFragmentInteractionListener mListener;
+    private OnActivityFragmentInteractionListener fragmentListener;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -47,8 +46,8 @@ public class ActivityChoiceFragment extends Fragment {
         // TODO: Get from database
         dataset = new ArrayList<>();
         int i = 0;
-        while (i < 25) {
-            dataset.add(new ActivityItem(i, "Activité #" + i, "Détail activité #" + i));
+        while (i < 5) {
+            dataset.add(new ActivityItem(i, "Carotte #" + i, "2019"));
             i++;
         }
     }
@@ -63,7 +62,7 @@ public class ActivityChoiceFragment extends Fragment {
             Context context = view.getContext();
             RecyclerView recyclerView = (RecyclerView) view;
             recyclerView.setLayoutManager(new LinearLayoutManager(context));
-            recyclerView.setAdapter(new ActivitiesRecyclerAdapter(dataset, mListener));
+            recyclerView.setAdapter(new ActivitiesRecyclerAdapter(dataset, fragmentListener));
         }
         return view;
     }
@@ -72,18 +71,17 @@ public class ActivityChoiceFragment extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof OnListFragmentInteractionListener) {
-            mListener = (OnListFragmentInteractionListener) context;
-        } else {
+        if (context instanceof OnActivityFragmentInteractionListener)
+            fragmentListener = (OnActivityFragmentInteractionListener) context;
+        else
             throw new RuntimeException(context.toString()
-                    + " must implement OnListFragmentInteractionListener");
-        }
+                    + " must implement OnActivityFragmentInteractionListener");
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
-        mListener = null;
+        fragmentListener = null;
     }
 
     /**
@@ -96,8 +94,8 @@ public class ActivityChoiceFragment extends Fragment {
      * "http://developer.android.com/training/basics/fragments/communicating.html"
      * >Communicating with Other Fragments</a> for more information.
      */
-    public interface OnListFragmentInteractionListener {
+    public interface OnActivityFragmentInteractionListener {
         // TODO: Update argument type and name
-        void onListFragmentInteraction(ActivityItem item);
+        void onActivityInteraction(ActivityItem item);
     }
 }

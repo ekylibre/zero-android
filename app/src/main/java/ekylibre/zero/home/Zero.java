@@ -1,8 +1,7 @@
 package ekylibre.zero.home;
 
 import android.app.Application;
-import android.support.v7.app.AppCompatDelegate;
-import android.util.Log;
+import androidx.appcompat.app.AppCompatDelegate;
 
 /**************************************
  * Created by pierre on 9/19/16.      *

@@ -1,9 +1,5 @@
 package ekylibre.zero.fragments.adapter;
 
-import androidx.annotation.NonNull;
-import androidx.core.content.ContextCompat;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,23 +8,18 @@ import android.widget.TextView;
 
 import java.util.List;
 
+import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.RecyclerView;
 import ekylibre.zero.R;
-import ekylibre.zero.fragments.CultureChoiceFragment.OnListFragmentInteractionListener;
-import ekylibre.zero.fragments.model.ActivityItem;
-import ekylibre.zero.fragments.model.CultureItem;
+import ekylibre.zero.fragments.model.IssueItem;
 
-/**
- * {@link RecyclerView.Adapter} that can display a {@link ActivityItem} and makes a call to the
- * specified {@link OnListFragmentInteractionListener}.
- */
-public class CulturesRecyclerAdapter extends RecyclerView.Adapter<CulturesRecyclerAdapter.ViewHolder> {
+public class IssuesRecyclerAdapter extends RecyclerView.Adapter<IssuesRecyclerAdapter.ViewHolder> {
 
-    private final List<CultureItem> culturesList;
-    private final OnListFragmentInteractionListener mListener;
+    private final List<IssueItem> issuesList;
 
-    public CulturesRecyclerAdapter(List<CultureItem> items, OnListFragmentInteractionListener listener) {
-        culturesList = items;
-        mListener = listener;
+    public IssuesRecyclerAdapter(List<IssueItem> items) {
+        issuesList = items;
     }
 
     /**
@@ -39,7 +30,7 @@ public class CulturesRecyclerAdapter extends RecyclerView.Adapter<CulturesRecycl
         final Context context;
         final TextView nameTextView;
         final TextView detailsTextView;
-        CultureItem cultureItem;
+        IssueItem cultureItem;
         int pos;
 
 
@@ -54,7 +45,7 @@ public class CulturesRecyclerAdapter extends RecyclerView.Adapter<CulturesRecycl
 
         void display(int position, int backgroundId) {
             pos = position;
-            cultureItem = culturesList.get(position);
+            cultureItem = issuesList.get(position);
             int textColor = R.color.primary_text;
             int detailsColor = R.color.secondary_text;
             if (cultureItem.is_selected) {
@@ -95,6 +86,6 @@ public class CulturesRecyclerAdapter extends RecyclerView.Adapter<CulturesRecycl
 
     @Override
     public int getItemCount() {
-        return culturesList.size();
+        return issuesList.size();
     }
 }

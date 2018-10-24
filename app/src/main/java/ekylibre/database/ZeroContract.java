@@ -1,14 +1,9 @@
 package ekylibre.database;
 
 import android.content.ContentResolver;
-import android.database.DatabaseErrorHandler;
 import android.net.Uri;
 import android.provider.BaseColumns;
-import android.provider.ContactsContract;
-import android.support.design.internal.NavigationMenu;
 
-import java.lang.annotation.Target;
-import java.util.UUID;
 
 public final class ZeroContract {
 

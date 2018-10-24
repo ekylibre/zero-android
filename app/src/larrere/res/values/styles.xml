@@ -1,12 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="AppCompatTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+    <!--<style name="AppCompatTheme" parent="Theme.AppCompat.Light.DarkActionBar">-->
+        <!--<item name="colorPrimary">@color/basic_blue</item>-->
+        <!--<item name="colorPrimaryDark">@color/dark_blue</item>-->
+        <!--<item name="colorAccent">@color/basic_green</item>-->
+        <!--<item name="windowNoTitle">false</item>-->
+        <!--<item name="windowActionBar">true</item>-->
+    <!--</style>-->
+
+    <style name="AppCompatTheme" parent="Theme.MaterialComponents.Light.DarkActionBar">
         <item name="colorPrimary">@color/basic_blue</item>
         <item name="colorPrimaryDark">@color/dark_blue</item>
         <item name="colorAccent">@color/basic_green</item>
         <item name="windowNoTitle">false</item>
         <item name="windowActionBar">true</item>
+    </style>
+
+    <style name="ChipTextAppearance" parent="TextAppearance.AppCompat">
+        <item name="android:textColor">@color/chip_text_color</item>
+        <item name="android:textSize">14sp</item>
     </style>
 
 </resources>

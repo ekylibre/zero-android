@@ -2,10 +2,10 @@ package ekylibre.zero.fragments;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.v4.app.Fragment;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +18,8 @@ import ekylibre.zero.fragments.adapter.CulturesRecyclerAdapter;
 import ekylibre.zero.fragments.model.ActivityItem;
 import ekylibre.zero.fragments.model.CultureItem;
 
+import static ekylibre.zero.ObservationActivity.culturesList;
+
 /**
  * A fragment representing a list of Items.
  * <p/>
@@ -26,7 +28,6 @@ import ekylibre.zero.fragments.model.CultureItem;
  */
 public class CultureChoiceFragment extends Fragment {
 
-    private List<CultureItem> dataset;
     private OnListFragmentInteractionListener mListener;
 
     /**
@@ -46,12 +47,12 @@ public class CultureChoiceFragment extends Fragment {
 
         // Create dummy data
         // TODO: Get from database
-        dataset = new ArrayList<>();
         int i = 0;
-        while (i < 25) {
-            dataset.add(new CultureItem(i, "Activité #" + i, "Détail activité #" + i));
-            i++;
-        }
+        if (culturesList.isEmpty())
+            while (i < 14) {
+                culturesList.add(new CultureItem(i, "A côté de la vigne n°" + i, "2019"));
+                i++;
+            }
     }
 
     @Override
@@ -64,7 +65,8 @@ public class CultureChoiceFragment extends Fragment {
             Context context = view.getContext();
             RecyclerView recyclerView = (RecyclerView) view;
             recyclerView.setLayoutManager(new LinearLayoutManager(context));
-            recyclerView.setAdapter(new CulturesRecyclerAdapter(dataset, mListener));
+            CulturesRecyclerAdapter adapter = new CulturesRecyclerAdapter(culturesList, mListener);
+            recyclerView.setAdapter(adapter);
         }
         return view;
     }
@@ -77,7 +79,7 @@ public class CultureChoiceFragment extends Fragment {
             mListener = (OnListFragmentInteractionListener) context;
         } else {
             throw new RuntimeException(context.toString()
-                    + " must implement OnListFragmentInteractionListener");
+                    + " must implement OnActivityFragmentInteractionListener");
         }
     }
 
@@ -99,6 +101,6 @@ public class CultureChoiceFragment extends Fragment {
      */
     public interface OnListFragmentInteractionListener {
         // TODO: Update argument type and name
-        void onListFragmentInteraction(ActivityItem item);
+        void onCultureFragmentInteraction(ActivityItem item);
     }
 }

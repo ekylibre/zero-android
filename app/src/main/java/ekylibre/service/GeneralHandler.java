@@ -8,10 +8,8 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.os.Vibrator;
 import android.preference.PreferenceManager;
-import android.support.annotation.Nullable;
-import android.util.Log;
+import androidx.annotation.Nullable;
 
-import ekylibre.util.PermissionManager;
 import ekylibre.zero.SettingsActivity;
 
 /**************************************

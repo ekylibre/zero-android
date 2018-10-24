@@ -5,4 +5,7 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="new_observation">Observation</string>
+    <string name="today">aujourd\'hui</string>
+    <string name="yesterday">hier</string>
+    <string name="observation">observation</string>
 </resources>

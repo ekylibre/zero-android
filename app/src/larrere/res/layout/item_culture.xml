@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="16dp"
+    android:foreground="?android:attr/selectableItemBackground">
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/item_culture_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="#000000"
+        android:textStyle="bold"
+        tools:text="A côté de la vigne n°4" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/item_culture_details"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBaseline_toBaselineOf="@id/item_culture_name"
+        tools:text="2019" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

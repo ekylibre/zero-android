@@ -1,0 +1,240 @@
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context="ekylibre.zero.fragments.ObservationFormFragment"
+    android:background="@color/another_light_grey">
+    
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <!--
+                    Display selected activity
+            -->
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/form_activity_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="16dp"
+                android:background="@drawable/border_bottom">
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/form_activity_icon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="24dp"
+                    app:srcCompat="@drawable/icon_carrot"
+                    app:layout_constraintStart_toStartOf="parent"
+                    android:adjustViewBounds="true"
+                    android:scaleType="fitXY"/>
+                <TextView
+                    android:id="@+id/form_activity_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    app:layout_constraintBottom_toBottomOf="@id/form_activity_icon"
+                    app:layout_constraintStart_toEndOf="@id/form_activity_icon"
+                    app:layout_constraintTop_toTopOf="@id/form_activity_icon"
+                    tools:text="Carotte bio" />
+                <TextView
+                    android:id="@+id/form_activity_details"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    app:layout_constraintBaseline_toBaselineOf="@id/form_activity_name"
+                    app:layout_constraintStart_toEndOf="@id/form_activity_name"
+                    tools:text="2018" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <!--
+                    Chose date
+            -->
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/form_date_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="16dp"
+                android:background="@drawable/border_bottom"
+                app:layout_constraintTop_toBottomOf="@id/form_activity_layout"
+                android:foreground="?android:attr/selectableItemBackground">
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/form_date_icon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="24dp"
+                    app:srcCompat="@drawable/icon_calendar"
+                    app:layout_constraintStart_toStartOf="parent"
+                    android:adjustViewBounds="true"
+                    android:scaleType="fitXY"/>
+                <TextView
+                    android:id="@+id/form_date_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    app:layout_constraintBottom_toBottomOf="@id/form_date_icon"
+                    app:layout_constraintStart_toEndOf="@id/form_date_icon"
+                    app:layout_constraintTop_toTopOf="@id/form_date_icon"
+                    tools:text="Aujourd'hui" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <!--
+                    Chose cultures
+            -->
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/form_cultures_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="16dp"
+                android:background="@drawable/border_bottom"
+                app:layout_constraintTop_toBottomOf="@id/form_date_layout"
+                android:foreground="?android:attr/selectableItemBackground">
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/form_cultures_icon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="24dp"
+                    app:srcCompat="@drawable/icon_list"
+                    app:layout_constraintStart_toStartOf="parent"
+                    android:adjustViewBounds="true"
+                    android:scaleType="fitXY"/>
+                <TextView
+                    android:id="@+id/form_cultures_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    app:layout_constraintBottom_toBottomOf="@id/form_cultures_icon"
+                    app:layout_constraintStart_toEndOf="@id/form_cultures_icon"
+                    app:layout_constraintTop_toTopOf="@id/form_cultures_icon"
+                    android:text="Cultures"/>
+
+                <com.google.android.material.chip.ChipGroup
+                    android:id="@+id/form_cultures_chips_group"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintStart_toStartOf="@id/form_cultures_text"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/form_cultures_text"
+                    android:layout_marginTop="16dp"
+                    android:visibility="gone"
+                    app:chipSpacing="6dp">
+
+                    <!--<com.google.android.material.chip.Chip-->
+                        <!--android:id="@+id/form_cultures_exemple_chip"-->
+                        <!--android:layout_width="wrap_content"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:text="Bernessard"-->
+                        <!--android:textAppearance="@style/TextAppearance.MaterialComponents.Chip"-->
+                        <!--app:closeIconEnabled="true" />-->
+
+                    <!--<com.google.android.material.chip.Chip-->
+                        <!--android:layout_width="wrap_content"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:text="Myrmidon"-->
+                        <!--app:closeIconEnabled="true"-->
+                        <!--android:textAppearance="@style/TextAppearance.MaterialComponents.Chip"/>-->
+
+                </com.google.android.material.chip.ChipGroup>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <!--
+                    Vegetal state
+            -->
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/form_bbch_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="16dp"
+                android:background="@drawable/border_bottom"
+                app:layout_constraintTop_toBottomOf="@id/form_cultures_layout"
+                android:foreground="?android:attr/selectableItemBackground">
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/form_bbch_icon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="24dp"
+                    app:srcCompat="@drawable/icon_plant"
+                    app:layout_constraintStart_toStartOf="parent"
+                    android:adjustViewBounds="true"
+                    android:scaleType="fitXY"/>
+                <TextView
+                    android:id="@+id/form_bbch_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    app:layout_constraintBottom_toBottomOf="@id/form_bbch_icon"
+                    app:layout_constraintStart_toEndOf="@id/form_bbch_icon"
+                    app:layout_constraintTop_toTopOf="@id/form_bbch_icon"
+                    android:text="Stade végétatif" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <!--
+                    Issues
+            -->
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/form_issues_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="16dp"
+                android:background="@drawable/border_bottom"
+                app:layout_constraintTop_toBottomOf="@id/form_bbch_layout"
+                android:foreground="?android:attr/selectableItemBackground">
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/form_issues_icon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="24dp"
+                    app:srcCompat="@drawable/icon_bug"
+                    app:layout_constraintStart_toStartOf="parent"
+                    android:adjustViewBounds="true"
+                    android:scaleType="fitXY"/>
+                <TextView
+                    android:id="@+id/form_issues_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    app:layout_constraintBottom_toBottomOf="@id/form_issues_icon"
+                    app:layout_constraintStart_toEndOf="@id/form_issues_icon"
+                    app:layout_constraintTop_toTopOf="@id/form_issues_icon"
+                    android:text="Incidents" />
+
+                <com.google.android.material.chip.ChipGroup
+                    android:id="@+id/form_issues_chips_group"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintStart_toStartOf="@id/form_issues_text"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/form_issues_text"
+                    android:layout_marginTop="16dp"
+                    android:visibility="gone"
+                    app:chipSpacing="6dp">
+                </com.google.android.material.chip.ChipGroup>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <!--
+                    Observation text field
+            -->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/form_obs_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp"
+                android:paddingBottom="16dp"
+                app:layout_constraintTop_toBottomOf="@id/form_issues_layout">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/observations"
+                    android:imeOptions="actionDone"
+                    android:inputType="textMultiLine"
+                    android:maxLines="10"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </ScrollView>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

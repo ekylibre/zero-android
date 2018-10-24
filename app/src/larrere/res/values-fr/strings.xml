@@ -2,4 +2,7 @@
 <resources>
     <string name="app_name">Fermes Larrère</string>
     <string name="new_observation">Observation</string>
+    <string name="today">aujourd\'hui</string>
+    <string name="yesterday">hier</string>
+    <string name="observation">observation</string>
 </resources>

@@ -7,11 +7,10 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.preference.PreferenceManager;
-import android.support.v4.app.ActivityCompat;
+import androidx.core.app.ActivityCompat;
 import android.util.Log;
 
 import ekylibre.zero.SettingsActivity;
-import ekylibre.zero.home.MainActivity;
 
 /**************************************
  * Created by pierre on 8/22/16.      *

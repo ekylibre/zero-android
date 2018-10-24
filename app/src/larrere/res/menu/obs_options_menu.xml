@@ -7,4 +7,9 @@
         android:title="@string/cancel"
         app:showAsAction="ifRoom" />
 
+    <item android:id="@+id/obs_done"
+        android:icon="@drawable/ic_check"
+        android:title="@string/cancel"
+        app:showAsAction="ifRoom" />
+
 </menu>

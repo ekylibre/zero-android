@@ -2,11 +2,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <application android:label="@string/app_name"
-        tools:ignore="GoogleAppIndexingWarning">  <!-- TODO handle GoogleAppIndexing -->
+    <application android:label="@string/app_name">  <!-- TODO handle GoogleAppIndexing -->
 
         <activity android:name="ekylibre.zero.ObservationActivity"
-            android:parentActivityName="ekylibre.zero.home.MainActivity"/>
+            android:parentActivityName="ekylibre.zero.home.MainActivity" />
 
     </application>
 
