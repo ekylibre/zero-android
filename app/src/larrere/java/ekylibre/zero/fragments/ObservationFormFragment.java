@@ -27,6 +27,7 @@ import ekylibre.zero.fragments.model.CultureItem;
 import ekylibre.zero.fragments.model.IssueItem;
 import ekylibre.zero.util.DateTools;
 
+import static ekylibre.zero.ObservationActivity.BBCH_FRAGMENT;
 import static ekylibre.zero.ObservationActivity.CULTURES_FRAGMENT;
 import static ekylibre.zero.ObservationActivity.ISSUES_FRAGMENT;
 import static ekylibre.zero.ObservationActivity.culturesList;
@@ -34,6 +35,7 @@ import static ekylibre.zero.ObservationActivity.date;
 import static ekylibre.zero.ObservationActivity.issuesList;
 import static ekylibre.zero.ObservationActivity.observation;
 import static ekylibre.zero.ObservationActivity.selectedActivity;
+import static ekylibre.zero.ObservationActivity.selectedBBCH;
 
 
 /**
@@ -56,6 +58,7 @@ public class ObservationFormFragment extends Fragment {
     private ConstraintLayout bbchLayout;
     private ConstraintLayout issuesLayout;
     private TextView dateTextView;
+    private TextView bbchTextView;
     private ChipGroup culturesChipsGroup;
     private ChipGroup issuesChipsGroup;
     private TextInputLayout commentInput;
@@ -103,6 +106,7 @@ public class ObservationFormFragment extends Fragment {
 
         // UI BBCH
         bbchLayout = inflatedView.findViewById(R.id.form_bbch_layout);
+        bbchTextView = inflatedView.findViewById(R.id.form_bbch_text);
 
         // UI issues
         issuesLayout = inflatedView.findViewById(R.id.form_issues_layout);
@@ -136,18 +140,14 @@ public class ObservationFormFragment extends Fragment {
             // Show the dialog
             datePickerDialog.show();
         });
-
-
-
         culturesLayout.setOnClickListener(v -> listener.onFormInteraction(CULTURES_FRAGMENT));
-
-        bbchLayout.setOnClickListener(v -> {});
-
+        bbchLayout.setOnClickListener(v -> listener.onFormInteraction(BBCH_FRAGMENT));
         issuesLayout.setOnClickListener(v -> listener.onFormInteraction(ISSUES_FRAGMENT));
 
         // Fill UI
         activityNameTextView.setText(selectedActivity.name);
         activityDetailsTextView.setText(selectedActivity.details);
+        if (selectedBBCH != null) bbchTextView.setText(selectedBBCH.name);
         dateTextView.setText(DateTools.display(getContext(), date));
         commentText.setText(observation);
 

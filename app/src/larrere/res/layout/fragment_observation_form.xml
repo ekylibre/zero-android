@@ -159,7 +159,7 @@
                     android:adjustViewBounds="true"
                     android:scaleType="fitXY"/>
                 <TextView
-                    android:id="@+id/form_bbch_text"
+                    android:id="@+id/form_bbch_label"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
@@ -167,6 +167,16 @@
                     app:layout_constraintStart_toEndOf="@id/form_bbch_icon"
                     app:layout_constraintTop_toTopOf="@id/form_bbch_icon"
                     android:text="Stade végétatif" />
+
+                <TextView
+                    android:id="@+id/form_bbch_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    app:layout_constraintBaseline_toBaselineOf="@id/form_bbch_label"
+                    app:layout_constraintStart_toEndOf="@id/form_bbch_label"
+                    tools:text="Premières feuilles" />
+
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <!--

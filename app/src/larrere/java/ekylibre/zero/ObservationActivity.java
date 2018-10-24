@@ -16,19 +16,21 @@ import java.util.Calendar;
 import java.util.List;
 
 import ekylibre.zero.fragments.ActivityChoiceFragment;
+import ekylibre.zero.fragments.BBCHChoiceFragment;
 import ekylibre.zero.fragments.CultureChoiceFragment;
 import ekylibre.zero.fragments.IssueChoiceFragment;
 import ekylibre.zero.fragments.ObservationFormFragment;
 import ekylibre.zero.fragments.model.ActivityItem;
+import ekylibre.zero.fragments.model.BBCHItem;
 import ekylibre.zero.fragments.model.CultureItem;
 import ekylibre.zero.fragments.model.IssueItem;
 
 public class ObservationActivity extends AppCompatActivity implements
         ActivityChoiceFragment.OnActivityFragmentInteractionListener,
         ObservationFormFragment.OnFragmentInteractionListener,
-        CultureChoiceFragment.OnListFragmentInteractionListener {
+        CultureChoiceFragment.OnListFragmentInteractionListener,
+        BBCHChoiceFragment.OnBBCHFragmentInteractionListener {
 
-    private static final int HOME = 0;
     private static final int ACTIVITY_FRAGMENT = 1;
     private static final int FORM_FRAGMENT = 2;
     public static final int CULTURES_FRAGMENT = 3;
@@ -42,6 +44,7 @@ public class ObservationActivity extends AppCompatActivity implements
     public static Calendar date;
     public static String observation;
     public static ActivityItem selectedActivity;
+    public static BBCHItem selectedBBCH;
     public static List<CultureItem> culturesList;
     public static List<IssueItem> issuesList;
 
@@ -100,6 +103,7 @@ public class ObservationActivity extends AppCompatActivity implements
                 currentFragment = ACTIVITY_FRAGMENT;
                 break;
 
+            case BBCH_FRAGMENT:
             case ISSUES_FRAGMENT:
             case CULTURES_FRAGMENT:
                 currentFragment = FORM_FRAGMENT;
@@ -118,6 +122,7 @@ public class ObservationActivity extends AppCompatActivity implements
                 replaceFragmentWith(ACTIVITY_FRAGMENT);
                 break;
 
+            case BBCH_FRAGMENT:
             case ISSUES_FRAGMENT:
             case CULTURES_FRAGMENT:
                 replaceFragmentWith(FORM_FRAGMENT);
@@ -134,6 +139,13 @@ public class ObservationActivity extends AppCompatActivity implements
     public void onActivityInteraction(ActivityItem item) {
         selectedActivity = item;
         replaceFragmentWith(FORM_FRAGMENT);
+    }
+
+    @Override
+    public void onBBCHInteraction(BBCHItem item) {
+        selectedBBCH = item;
+        replaceFragmentWith(FORM_FRAGMENT);
+
     }
 
     @Override
@@ -166,6 +178,12 @@ public class ObservationActivity extends AppCompatActivity implements
                 fragment = CultureChoiceFragment.newInstance();
                 break;
 
+            case BBCH_FRAGMENT:
+                actionBar.setTitle("Stade végétatif");
+                invalidateOptionsMenu();
+                fragment = BBCHChoiceFragment.newInstance();
+                break;
+
             case ISSUES_FRAGMENT:
                 actionBar.setTitle("Incidents");
                 invalidateOptionsMenu();
@@ -183,6 +201,4 @@ public class ObservationActivity extends AppCompatActivity implements
         ft.addToBackStack(null);
         ft.commit();
     }
-
-
 }
