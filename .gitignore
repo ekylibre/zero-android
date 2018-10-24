@@ -9,9 +9,7 @@ app/app-release.apk
 /studio
 
 # Generated files
-bin/
 gen/
-out/
 
 # Gradle files
 .gradle/

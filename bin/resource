@@ -1,0 +1,117 @@
+#!/usr/bin/env ruby
+# coding: utf-8
+require 'rubygems'
+require 'nokogiri'
+require 'pathname'
+require 'colored'
+require 'yaml'
+require 'fileutils'
+
+class Resourcer
+
+  LOCALES = {
+    # arb: "values-ar",
+    # cmn: "values-zh",
+    # deu: "values-de",
+    eng: "values",
+    fra: "values-fr",
+    # ita: "values-it",
+    # jpn: "values-ja",
+    # por: "values-pt",
+    # spa: "values-es",
+  }
+
+  def initialize()
+    here = Pathname.new(File.expand_path(__FILE__)).dirname
+    @root = here.join("..")
+    @ekylibre_path = @root.join("..", "ekylibre")
+    @resources_path = @root.join('app', 'src', 'main', 'res')
+  end
+
+  def do!
+    # do_procedure_natures!
+    do_procedures!
+    do_issue_natures!
+  end
+
+  private
+
+  def do_procedures!
+    puts " * ".green + "Procedures"
+    ref = YAML.load_file(@ekylibre_path.join("config", "locales", "eng", "procedures.yml"))['eng']["procedures"].keys
+    for source, dest in {eng: "values", fra: "values-fr"}
+      reference = YAML.load_file(@ekylibre_path.join("config", "locales", source.to_s, "procedures.yml"))[source.to_s]["procedures"]
+      items = reference.delete_if{|k,v| !ref.include?(k) }.sort{|a,b| a[1] <=> b[1]}
+      entries, values = items.map{|x| x[1]}, items.map{|x| x[0]}
+      builder = Nokogiri::XML::Builder.new(encoding: 'UTF-8') do |xml|
+        xml.resources {
+          xml.send("string-array", name: "procedures_entries") {
+            entries.each do |name|
+              xml.item(name.gsub('\'', '’'));
+            end
+          }
+          xml.send("string-array", name: "procedures_values") {
+            values.each do |name|
+              xml.item(name);
+            end
+          }
+        }
+      end
+      File.write(@resources_path.join(dest, "arrays-procedures.xml"), builder.to_xml)
+    end
+  end
+
+  def do_procedure_natures!
+    puts " * ".green + "Procedure natures"
+    for source, dest in {eng: "values", fra: "values-fr"}
+      reference = YAML.load_file(@ekylibre_path.join("config", "locales", source.to_s, "nomenclatures.yml"))[source.to_s]["nomenclatures"]["procedure_natures"]
+      items = reference["items"].sort{|a,b| a[1] <=> b[1]}
+      entries, values = items.map{|x| x[1]}, items.map{|x| x[0]}
+      builder = Nokogiri::XML::Builder.new(encoding: 'UTF-8') do |xml|
+        xml.resources {
+          xml.send("string-array", name: "procedureNatures_entries") {
+            for name in entries
+              xml.item(name.gsub('\'', '’'));
+            end
+          }
+          xml.send("string-array", name: "procedureNatures_values") {
+            for name in values
+              xml.item(name);
+            end
+          }
+        }
+      end
+      File.write(@resources_path.join(dest, "arrays-procedure_natures.xml"), builder.to_xml)
+    end
+  end
+
+  def do_issue_natures!
+    puts " * ".green + "Issue natures"
+    for source, dest in LOCALES
+      reference = YAML.load_file(@ekylibre_path.join("config", "locales", source.to_s, "nomenclatures.yml"))[source.to_s]["nomenclatures"]["issue_natures"]
+      items = reference["items"].sort{|a,b| a[1] <=> b[1]}
+      entries, values = items.map{|x| x[1]}, items.map{|x| x[0]}
+      builder = Nokogiri::XML::Builder.new(encoding: 'UTF-8') do |xml|
+        xml.resources {
+          xml.send("string-array", name: "issueNatures_entries") {
+            for name in entries
+              xml.item(name.gsub('\'', '’'));
+            end
+          }
+          xml.send("string-array", name: "issueNatures_values") {
+            for name in values
+              xml.item(name);
+            end
+          }
+        }
+      end
+      dir = @resources_path.join(dest)
+      FileUtils.mkdir_p dir
+      File.write(dir.join("arrays-issue_natures.xml"), builder.to_xml)
+    end
+  end
+
+end
+
+
+Resourcer.new.do!

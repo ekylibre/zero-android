@@ -17,9 +17,4 @@
         <item name="windowActionBar">true</item>
     </style>
 
-    <style name="ChipTextAppearance" parent="TextAppearance.AppCompat">
-        <item name="android:textColor">@color/chip_text_color</item>
-        <item name="android:textSize">14sp</item>
-    </style>
-
 </resources>
