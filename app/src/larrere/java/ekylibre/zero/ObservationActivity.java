@@ -1,7 +1,9 @@
 package ekylibre.zero;
 
+import android.net.Uri;
 import android.os.Bundle;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
@@ -31,14 +33,15 @@ public class ObservationActivity extends AppCompatActivity implements
         CultureChoiceFragment.OnListFragmentInteractionListener,
         BBCHChoiceFragment.OnBBCHFragmentInteractionListener {
 
-    private static final int ACTIVITY_FRAGMENT = 1;
-    private static final int FORM_FRAGMENT = 2;
-    public static final int CULTURES_FRAGMENT = 3;
-    public static final int ISSUES_FRAGMENT = 4;
-    public static final int BBCH_FRAGMENT = 5;
+    private static final String ACTIVITY_FRAGMENT = "ekylibre.zero.fragments.activity";
+    public static final String FORM_FRAGMENT = "ekylibre.zero.fragments.form";
+    public static final String CULTURES_FRAGMENT = "ekylibre.zero.fragments.cultures";
+    public static final String ISSUES_FRAGMENT = "ekylibre.zero.fragments.issues";
+    public static final String BBCH_FRAGMENT = "ekylibre.zero.fragments.bbch";
 
+    public static FragmentManager fragmentManager;
     private ActionBar actionBar;
-    int currentFragment = ACTIVITY_FRAGMENT;
+    private String currentFragment = ACTIVITY_FRAGMENT;
 
     // Shared observation variables
     public static Calendar date;
@@ -47,6 +50,7 @@ public class ObservationActivity extends AppCompatActivity implements
     public static BBCHItem selectedBBCH;
     public static List<CultureItem> culturesList;
     public static List<IssueItem> issuesList;
+    public static List<Uri> picturesList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,8 +65,13 @@ public class ObservationActivity extends AppCompatActivity implements
 
         // Set Observation
         date = Calendar.getInstance();
+        selectedBBCH = null;
+        observation = null;
         culturesList = new ArrayList<>();
         issuesList = new ArrayList<>();
+        picturesList = new ArrayList<>();
+
+        fragmentManager = getSupportFragmentManager();
 
         // Set first fragment (activity choice)
         replaceFragmentWith(ACTIVITY_FRAGMENT);
@@ -73,9 +82,9 @@ public class ObservationActivity extends AppCompatActivity implements
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.obs_options_menu, menu);
         // Set cancel or validate button according to fragment
-        if (currentFragment == CULTURES_FRAGMENT ||
-                currentFragment == ISSUES_FRAGMENT ||
-                currentFragment == BBCH_FRAGMENT)
+        if (currentFragment.equals(CULTURES_FRAGMENT) ||
+                currentFragment.equals(ISSUES_FRAGMENT) ||
+                currentFragment.equals(BBCH_FRAGMENT))
             menu.removeItem(R.id.obs_cancel);
         else
             menu.removeItem(R.id.obs_done);
@@ -149,8 +158,8 @@ public class ObservationActivity extends AppCompatActivity implements
     }
 
     @Override
-    public void onFormInteraction(int fragmentId) {
-        replaceFragmentWith(fragmentId);
+    public void onFormInteraction(String fragmentTag) {
+        replaceFragmentWith(fragmentTag);
     }
 
     @Override
@@ -158,14 +167,14 @@ public class ObservationActivity extends AppCompatActivity implements
 
     }
 
-    void replaceFragmentWith(int fragmentId) {
+    void replaceFragmentWith(String fragmentTag) {
 
-        currentFragment = fragmentId;
+        currentFragment = fragmentTag;
 
-        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        FragmentTransaction ft = fragmentManager.beginTransaction();
         Fragment fragment;
 
-        switch (fragmentId) {
+        switch (fragmentTag) {
 
             case ACTIVITY_FRAGMENT:
                 actionBar.setTitle("Choix de l'activité");
@@ -191,13 +200,14 @@ public class ObservationActivity extends AppCompatActivity implements
                 break;
 
             default:
-                actionBar.setTitle("Observation");
+                actionBar.setTitle(R.string.observation);
                 fragment = ObservationFormFragment.newInstance();
+
         }
 
         ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
 //        ft.setCustomAnimations(R.anim.exit_to_left, R.anim.enter_from_right);
-        ft.replace(R.id.fragment_container, fragment);
+        ft.replace(R.id.fragment_container, fragment, fragmentTag);
         ft.addToBackStack(null);
         ft.commit();
     }

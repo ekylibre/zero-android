@@ -5,14 +5,10 @@ android {
     compileSdkVersion 28
     defaultConfig {
         vectorDrawables.useSupportLibrary = true
-        applicationId "ekylibre.zero"
         minSdkVersion 19
         targetSdkVersion 28
         versionCode 24
         versionName "0.7.5"
-    }
-    applicationVariants.all { variant ->
-        variant.resValue "string", "versionName", variant.versionName
     }
     buildTypes {
         release {
@@ -24,11 +20,17 @@ android {
     productFlavors {
         ekylibre {
             dimension "version"
+            applicationId "ekylibre.zero"
+            resValue "string", "providerName", applicationId
         }
         larrere {
-            applicationIdSuffix ".larrere"
             dimension "version"
+            applicationId "ekylibre.zero.larrere"
+            resValue "string", "providerName", applicationId
         }
+    }
+    applicationVariants.all { variant ->
+        variant.resValue "string", "versionName", variant.versionName
     }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8

@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Fermes Larrère</string>
-    <string name="new_observation">Observation</string>
     <string name="today">aujourd\'hui</string>
     <string name="yesterday">hier</string>
-    <string name="observation">observation</string>
+    <string name="observation">Observation</string>
 </resources>

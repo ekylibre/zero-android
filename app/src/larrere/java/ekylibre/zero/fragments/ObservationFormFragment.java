@@ -1,12 +1,11 @@
 package ekylibre.zero.fragments;
 
 import android.app.DatePickerDialog;
+import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.fragment.app.Fragment;
-
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -17,22 +16,34 @@ import android.widget.TextView;
 
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
-import com.google.android.material.textfield.TextInputEditText;
-import com.google.android.material.textfield.TextInputLayout;
 
 import java.util.Calendar;
+import java.util.Objects;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.fragment.app.DialogFragment;
+import androidx.fragment.app.Fragment;
+
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import ekylibre.zero.R;
+import ekylibre.zero.fragments.adapter.PicturesRecyclerAdapter;
 import ekylibre.zero.fragments.model.CultureItem;
 import ekylibre.zero.fragments.model.IssueItem;
 import ekylibre.zero.util.DateTools;
 
+import static androidx.recyclerview.widget.LinearLayoutManager.HORIZONTAL;
 import static ekylibre.zero.ObservationActivity.BBCH_FRAGMENT;
 import static ekylibre.zero.ObservationActivity.CULTURES_FRAGMENT;
+import static ekylibre.zero.ObservationActivity.FORM_FRAGMENT;
 import static ekylibre.zero.ObservationActivity.ISSUES_FRAGMENT;
 import static ekylibre.zero.ObservationActivity.culturesList;
 import static ekylibre.zero.ObservationActivity.date;
+import static ekylibre.zero.ObservationActivity.fragmentManager;
 import static ekylibre.zero.ObservationActivity.issuesList;
+import static ekylibre.zero.ObservationActivity.picturesList;
 import static ekylibre.zero.ObservationActivity.observation;
 import static ekylibre.zero.ObservationActivity.selectedActivity;
 import static ekylibre.zero.ObservationActivity.selectedBBCH;
@@ -48,73 +59,65 @@ import static ekylibre.zero.ObservationActivity.selectedBBCH;
  */
 public class ObservationFormFragment extends Fragment {
 
-    private static final int CULTURE_CHOICE = 1001;
+    private Context context;
 
     private OnFragmentInteractionListener listener;
+    private PicturesRecyclerAdapter picturesAdapter;
+    public static RecyclerView picturesRecycler;
 
-    // UI
-    private ConstraintLayout dateLayout;
-    private ConstraintLayout culturesLayout;
-    private ConstraintLayout bbchLayout;
-    private ConstraintLayout issuesLayout;
     private TextView dateTextView;
-    private TextView bbchTextView;
     private ChipGroup culturesChipsGroup;
     private ChipGroup issuesChipsGroup;
-    private TextInputLayout commentInput;
-    private EditText commentText;
     private int culturesCount;
     private int issuesCount;
+
+    private static final int GALLERY = 1230;
+    private static final int CAMERA = 1231;
 
     public ObservationFormFragment() {
         // Required empty public constructor
     }
 
     public static ObservationFormFragment newInstance() {
-        // Bundle args = new Bundle();
-        // args.putSerializable(ARG_ACTIVITY, activityParam);
-        // fragment.setArguments(args);
         return new ObservationFormFragment();
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        // Get selected activity from previous fragment
-//        if (getArguments() != null)
-//            selectedActivity = (ActivityItem) getArguments().getSerializable(ARG_ACTIVITY);
     }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View inflatedView = inflater.inflate(R.layout.fragment_observation_form, container, false);
+        View view = inflater.inflate(R.layout.fragment_observation_form, container, false);
+
+        // Get context
+        context = getContext();
 
         // UI Activity
-        TextView activityNameTextView = inflatedView.findViewById(R.id.form_activity_name);
-        TextView activityDetailsTextView = inflatedView.findViewById(R.id.form_activity_details);
+        TextView activityNameTextView = view.findViewById(R.id.form_activity_name);
+        TextView activityDetailsTextView = view.findViewById(R.id.form_activity_details);
 
         // UI date
-        dateLayout = inflatedView.findViewById(R.id.form_date_layout);
-        dateTextView = inflatedView.findViewById(R.id.form_date_text);
+        ConstraintLayout dateLayout = view.findViewById(R.id.form_date_layout);
+        dateTextView = view.findViewById(R.id.form_date_text);
 
         // UI cultures
-        culturesLayout = inflatedView.findViewById(R.id.form_cultures_layout);
-        culturesChipsGroup = inflatedView.findViewById(R.id.form_cultures_chips_group);
+        ConstraintLayout culturesLayout = view.findViewById(R.id.form_cultures_layout);
+        culturesChipsGroup = view.findViewById(R.id.form_cultures_chips_group);
 
         // UI BBCH
-        bbchLayout = inflatedView.findViewById(R.id.form_bbch_layout);
-        bbchTextView = inflatedView.findViewById(R.id.form_bbch_text);
+        ConstraintLayout bbchLayout = view.findViewById(R.id.form_bbch_layout);
+        TextView bbchTextView = view.findViewById(R.id.form_bbch_text);
 
         // UI issues
-        issuesLayout = inflatedView.findViewById(R.id.form_issues_layout);
-        issuesChipsGroup = inflatedView.findViewById(R.id.form_issues_chips_group);
+        ConstraintLayout issuesLayout = view.findViewById(R.id.form_issues_layout);
+        issuesChipsGroup = view.findViewById(R.id.form_issues_chips_group);
+
+        // UI pictures
+        ConstraintLayout picturesLayout = view.findViewById(R.id.form_picture_layout);
+        picturesRecycler = view.findViewById(R.id.form_picture_recycler);
+//        picturesContainer = view.findViewById(R.id.form_picture_container);
 
         // UI Observation Comment
-        commentInput = inflatedView.findViewById(R.id.form_obs_text);
-        commentText = commentInput.getEditText();
+        EditText commentText = view.findViewById(R.id.form_obs_text);
 
         // Save current observation text
         commentText.addTextChangedListener(new TextWatcher() {
@@ -130,11 +133,11 @@ public class ObservationFormFragment extends Fragment {
         dateLayout.setOnClickListener(v -> {
             // Set the datePickerDialog
             DatePickerDialog datePickerDialog =
-                    new DatePickerDialog(v.getContext(), (view, year, month, day) -> {
+                    new DatePickerDialog(context, (dialogView, year, month, day) -> {
                         // Save date in Calendar object
                         date.set(year, month, day);
                         // Display selected date
-                        dateTextView.setText(DateTools.display(v.getContext(), date));
+                        dateTextView.setText(DateTools.display(context, date));
                         }, date.get(Calendar.YEAR), date.get(Calendar.MONTH), date.get(Calendar.DAY_OF_MONTH)
                     );
             // Show the dialog
@@ -143,19 +146,25 @@ public class ObservationFormFragment extends Fragment {
         culturesLayout.setOnClickListener(v -> listener.onFormInteraction(CULTURES_FRAGMENT));
         bbchLayout.setOnClickListener(v -> listener.onFormInteraction(BBCH_FRAGMENT));
         issuesLayout.setOnClickListener(v -> listener.onFormInteraction(ISSUES_FRAGMENT));
+        picturesLayout.setOnClickListener(v -> {
+            DialogFragment pictureDialog = new PictureDialogFragment();
+            pictureDialog.show(fragmentManager, "pictureDialog");
+        });
 
         // Fill UI
         activityNameTextView.setText(selectedActivity.name);
         activityDetailsTextView.setText(selectedActivity.details);
         if (selectedBBCH != null) bbchTextView.setText(selectedBBCH.name);
-        dateTextView.setText(DateTools.display(getContext(), date));
-        commentText.setText(observation);
+        dateTextView.setText(DateTools.display(context, date));
+        if (observation != null)
+            commentText.setText(observation);
 
+        // Constructs cultures chips group
         culturesCount = 0;
         for (CultureItem culture : culturesList) {
             if (culture.is_selected) {
                 culturesCount++;
-                Chip chip = new Chip(container.getContext());
+                Chip chip = new Chip(context);
                 chip.setText(culture.name);
                 chip.setCloseIconVisible(true);
                 chip.setOnCloseIconClickListener(v -> {
@@ -169,11 +178,12 @@ public class ObservationFormFragment extends Fragment {
         }
         culturesChipsGroup.setVisibility(culturesCount > 0 ? View.VISIBLE : View.GONE);
 
+        // Constructs issues chips group
         issuesCount = 0;
         for (IssueItem issue : issuesList) {
             if (issue.is_selected) {
                 issuesCount++;
-                Chip chip = new Chip(container.getContext());
+                Chip chip = new Chip(context);
                 chip.setText(issue.name);
                 chip.setCloseIconVisible(true);
                 chip.setOnCloseIconClickListener(v -> {
@@ -187,7 +197,14 @@ public class ObservationFormFragment extends Fragment {
         }
         issuesChipsGroup.setVisibility(issuesCount > 0 ? View.VISIBLE : View.GONE);
 
-        return inflatedView;
+        picturesRecycler.setLayoutManager(new LinearLayoutManager(context, HORIZONTAL, false));
+        picturesAdapter = new PicturesRecyclerAdapter(picturesList);
+        picturesRecycler.setAdapter(picturesAdapter);
+
+        if (picturesAdapter.getItemCount() == 0)
+            picturesRecycler.setVisibility(View.GONE);
+
+        return view;
     }
 
     @Override
@@ -217,13 +234,50 @@ public class ObservationFormFragment extends Fragment {
      * fragment to allow an interaction in this fragment to be communicated
      * to the activity and potentially other fragments contained in that
      * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onFormInteraction(int action);
+        void onFormInteraction(String fragmentTag);
+    }
+
+    public static class PictureDialogFragment extends DialogFragment {
+
+        @NonNull
+        @Override
+        public Dialog onCreateDialog(Bundle savedInstanceState) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(Objects.requireNonNull(getContext()));
+            builder.setTitle("Prendre une photo")
+                    .setItems(R.array.picture_choice_values, (dialog, which) -> {
+                        switch (which) {
+                            case 0:
+                                break;
+                            case 1:
+                                Fragment fragment = fragmentManager.findFragmentByTag(FORM_FRAGMENT);
+                                if (fragment != null) {
+                                    Intent intent = new Intent();
+                                    intent.setType("image/*");
+                                    intent.setAction(Intent.ACTION_GET_CONTENT);
+                                    fragment.startActivityForResult(intent, GALLERY);
+                                }
+                                break;
+                        }
+                    })
+            .setNegativeButton(R.string.cancel, (dialog, which) -> dialog.dismiss());
+            return builder.create();
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == GALLERY) {
+            Uri pictureUri = data.getData();
+            if (!picturesList.contains(pictureUri)) {
+                picturesList.add(pictureUri);
+                picturesAdapter.notifyItemInserted(picturesList.indexOf(pictureUri));
+            }
+            if (picturesAdapter.getItemCount() > 0 && picturesRecycler.getVisibility() == View.GONE)
+                picturesRecycler.setVisibility(View.VISIBLE);
+            else if (picturesAdapter.getItemCount() == 0 && picturesRecycler.getVisibility() == View.VISIBLE)
+                picturesRecycler.setVisibility(View.GONE);
+        }
     }
 }

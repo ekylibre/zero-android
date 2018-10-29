@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    tools:context=".home.MainActivity">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_tracking"
+            android:icon="@drawable/ic_tracking"
+            android:title="@string/tracking" />
+        <item
+            android:id="@+id/nav_issue"
+            android:icon="@drawable/ic_issue"
+            android:title="@string/new_issue" />
+        <item
+            android:id="@+id/nav_counting"
+            android:icon="@drawable/ic_count"
+            android:title="@string/new_count" />
+    </group>
+
+    <item android:title="@string/parameters">
+        <menu>
+            <item
+                android:id="@+id/nav_account"
+                android:icon="@drawable/ic_account"
+                android:title="@string/accountManager" />
+            <item
+                android:id="@+id/nav_settings"
+                android:icon="@drawable/ic_menu_manage"
+                android:title="@string/settings" />
+            <item
+                android:id="@+id/nav_sync"
+                android:icon="@drawable/ic_sync"
+                android:title="@string/sync" />
+
+        </menu>
+    </item>
+</menu>

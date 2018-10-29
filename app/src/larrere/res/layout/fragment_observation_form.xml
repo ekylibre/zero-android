@@ -32,22 +32,32 @@
                     android:adjustViewBounds="true"
                     android:scaleType="fitXY"/>
                 <TextView
-                    android:id="@+id/form_activity_name"
+                    android:id="@+id/form_activity_label"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
                     app:layout_constraintBottom_toBottomOf="@id/form_activity_icon"
                     app:layout_constraintStart_toEndOf="@id/form_activity_icon"
                     app:layout_constraintTop_toTopOf="@id/form_activity_icon"
-                    tools:text="Carotte bio" />
+                    android:text="Activité" />
+                <TextView
+                    android:id="@+id/form_activity_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    app:layout_constraintStart_toEndOf="@id/form_activity_label"
+                    app:layout_constraintBaseline_toBaselineOf="@id/form_activity_label"
+                    tools:text="Carotte bio"
+                    android:textColor="@color/primary_text"/>
                 <TextView
                     android:id="@+id/form_activity_details"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
-                    app:layout_constraintBaseline_toBaselineOf="@id/form_activity_name"
+                    app:layout_constraintBaseline_toBaselineOf="@id/form_activity_label"
                     app:layout_constraintStart_toEndOf="@id/form_activity_name"
-                    tools:text="2018" />
+                    tools:text="2018"
+                    android:textColor="@color/primary_text"/>
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <!--
@@ -175,7 +185,8 @@
                     android:layout_marginStart="16dp"
                     app:layout_constraintBaseline_toBaselineOf="@id/form_bbch_label"
                     app:layout_constraintStart_toEndOf="@id/form_bbch_label"
-                    tools:text="Premières feuilles" />
+                    tools:text="Premières feuilles"
+                    android:textColor="@color/primary_text"/>
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -223,20 +234,65 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <!--
+                    Pictures Layout
+            -->
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/form_picture_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="16dp"
+                android:background="@drawable/border_bottom"
+                app:layout_constraintTop_toBottomOf="@id/form_issues_layout"
+                android:foreground="?android:attr/selectableItemBackground">
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/form_picture_icon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="24dp"
+                    app:srcCompat="@drawable/icon_photo"
+                    app:layout_constraintStart_toStartOf="parent"
+                    android:adjustViewBounds="true"
+                    android:scaleType="fitXY"/>
+                <TextView
+                    android:id="@+id/form_picture_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    app:layout_constraintBottom_toBottomOf="@id/form_picture_icon"
+                    app:layout_constraintStart_toEndOf="@id/form_picture_icon"
+                    app:layout_constraintTop_toTopOf="@id/form_picture_icon"
+                    android:text="Ajouter des images" />
+
+                <!--<androidx.appcompat.widget.LinearLayoutCompat-->
+                    <!--android:id="@+id/form_picture_container"-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--app:layout_constraintTop_toBottomOf="@id/form_picture_text"-->
+                    <!--android:layout_marginTop="16dp" />-->
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/form_picture_recycler"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    app:layout_constraintTop_toBottomOf="@id/form_picture_text" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <!--
                     Observation text field
             -->
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/form_obs_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="16dp"
                 android:paddingBottom="16dp"
-                app:layout_constraintTop_toBottomOf="@id/form_issues_layout">
+                app:layout_constraintTop_toBottomOf="@id/form_picture_layout">
 
                 <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/form_obs_text"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/observations"
+                    android:hint="@string/observation"
                     android:imeOptions="actionDone"
                     android:inputType="textMultiLine"
                     android:maxLines="10"/>
