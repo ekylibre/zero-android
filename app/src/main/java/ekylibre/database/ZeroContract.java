@@ -4,12 +4,14 @@ import android.content.ContentResolver;
 import android.net.Uri;
 import android.provider.BaseColumns;
 
+import ekylibre.zero.BuildConfig;
+
 
 public final class ZeroContract {
 
     // Authority name for this provider
     // Same as defined in AndroidManifest in <provider> markup
-    public static final String AUTHORITY = "ekylibre.zero";
+    public static final String AUTHORITY = BuildConfig.APPLICATION_ID;
 
     // Content URI for this provider
     public static final Uri CONTENT_URI = Uri.parse("content://" + AUTHORITY);

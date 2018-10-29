@@ -174,14 +174,14 @@
             android:label="@string/new_issue"
             android:parentActivityName=".home.MainActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar"            />
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".PlantCountingActivity"
             android:configChanges="orientation"
             android:label="@string/title_activity_sorting"
             android:parentActivityName=".home.MainActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar"            />
+            android:theme="@style/AppTheme.NoActionBar" />
         <!--
  ATTENTION: This was auto-generated to add Google Play services to your project for
      App Indexing.  See https://g.co/AppIndexing/AndroidStudio for more information.

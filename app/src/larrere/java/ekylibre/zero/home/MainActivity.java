@@ -29,6 +29,7 @@ import ekylibre.util.AccountTool;
 import ekylibre.util.Contact;
 import ekylibre.util.PermissionManager;
 import ekylibre.util.UpdatableActivity;
+import ekylibre.zero.BuildConfig;
 import ekylibre.zero.IssueActivity;
 import ekylibre.zero.ObservationActivity;
 import ekylibre.zero.PlantCountingActivity;

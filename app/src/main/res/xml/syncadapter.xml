@@ -4,7 +4,7 @@
     android="http://schemas.android.com/apk/res/android"
     android:accountType="ekylibre.account.basic"
     android:allowParallelSyncs="false"
-    android:contentAuthority="ekylibre.zero"
+    android:contentAuthority="@string/providerName"
     android:isAlwaysSyncable="true"
     android:supportsUploading="true"
     android:userVisible="true" />
