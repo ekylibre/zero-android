@@ -262,6 +262,11 @@
                     app:layout_constraintTop_toTopOf="@id/form_picture_icon"
                     android:text="Ajouter des images" />
 
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/form_thumb"/>
+
                 <!--<androidx.appcompat.widget.LinearLayoutCompat-->
                     <!--android:id="@+id/form_picture_container"-->
                     <!--android:layout_width="match_parent"-->

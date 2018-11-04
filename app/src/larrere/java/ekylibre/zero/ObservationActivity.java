@@ -82,12 +82,18 @@ public class ObservationActivity extends AppCompatActivity implements
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.obs_options_menu, menu);
         // Set cancel or validate button according to fragment
-        if (currentFragment.equals(CULTURES_FRAGMENT) ||
-                currentFragment.equals(ISSUES_FRAGMENT) ||
-                currentFragment.equals(BBCH_FRAGMENT))
-            menu.removeItem(R.id.obs_cancel);
-        else
-            menu.removeItem(R.id.obs_done);
+        switch (currentFragment) {
+            case CULTURES_FRAGMENT:
+            case ISSUES_FRAGMENT:
+                menu.removeItem(R.id.obs_cancel);
+                break;
+            case BBCH_FRAGMENT:
+                menu.clear();
+                break;
+            default:
+                menu.removeItem(R.id.obs_done);
+                break;
+        }
         return true;
     }
 
@@ -117,6 +123,7 @@ public class ObservationActivity extends AppCompatActivity implements
             case CULTURES_FRAGMENT:
                 currentFragment = FORM_FRAGMENT;
                 break;
+
             case ACTIVITY_FRAGMENT:
                 finish();
         }

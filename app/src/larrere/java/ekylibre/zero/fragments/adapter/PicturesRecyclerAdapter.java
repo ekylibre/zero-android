@@ -1,13 +1,23 @@
 package ekylibre.zero.fragments.adapter;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
+import android.media.ThumbnailUtils;
 import android.net.Uri;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+
+import com.squareup.picasso.Callback;
+import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Transformation;
 
 import java.io.IOException;
 import java.util.List;
@@ -47,26 +57,41 @@ public class PicturesRecyclerAdapter extends RecyclerView.Adapter<PicturesRecycl
         void display(Uri item) {
             pictureUri = item;
 
-            Bitmap bitmap = null;
-            try {
-                bitmap = MediaStore.Images.Media.getBitmap(context.getContentResolver(), item);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            RoundedBitmapDrawable dr = RoundedBitmapDrawableFactory.create(context.getResources(), bitmap);
-            dr.setCornerRadius(10);
-            dr.setAntiAlias(true);
-            imageView.setImageDrawable(dr);
+//            bitmap = MediaStore.Images.Media.getBitmap(context.getContentResolver(), item);
+//            Log.i("Thumb", item.toString());
+//            Bitmap thumb = ThumbnailUtils.extractThumbnail(BitmapFactory.decodeFile(item.getPath()), 128, 128);
+//            RoundedBitmapDrawable dr = RoundedBitmapDrawableFactory.create(context.getResources(), thumb);
+//            dr.setCornerRadius(10);
+//            dr.setAntiAlias(true);
+//            imageView.setImageDrawable(dr);
+
+            Picasso.get()
+                    .load(item)
+                    .resize(256, 256)
+                    .centerCrop()
+                    .into(imageView, new Callback() {
+                        @Override
+                        public void onSuccess() {
+                            Bitmap imageBitmap = ((BitmapDrawable) imageView.getDrawable()).getBitmap();
+                            RoundedBitmapDrawable dr = RoundedBitmapDrawableFactory.create(context.getResources(), imageBitmap);
+                            dr.setCornerRadius(10);
+                            dr.setAntiAlias(true);
+                            imageView.setImageDrawable(dr);
+                        }
+                        @Override
+                        public void onError(Exception e) {
+                            imageView.setImageResource(R.drawable.ic_ekylibre);
+                        }
+                    });
+
         }
 
         @Override
         public void onClick(View v) {
-            itemView.postDelayed(() -> {
-                picturesList.remove(getAdapterPosition());
-                notifyItemRemoved(getAdapterPosition());
-                if (getItemCount() == 0)
-                    picturesRecycler.setVisibility(View.GONE);
-                }, 200);
+            picturesList.remove(getAdapterPosition());
+            notifyItemRemoved(getAdapterPosition());
+            if (getItemCount() == 0)
+                picturesRecycler.setVisibility(View.GONE);
         }
     }
 

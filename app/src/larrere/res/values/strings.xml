@@ -3,7 +3,6 @@
     <string name="app_name">Larrère Farms</string>
 
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="new_observation">Observation</string>
     <string name="today">today</string>
     <string name="yesterday">yesterday</string>
     <string name="observation">observation</string>

@@ -4,10 +4,14 @@ import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,23 +21,31 @@ import android.widget.TextView;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 
+import java.io.File;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.Objects;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.content.FileProvider;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import ekylibre.util.PermissionManager;
 import ekylibre.zero.R;
 import ekylibre.zero.fragments.adapter.PicturesRecyclerAdapter;
 import ekylibre.zero.fragments.model.CultureItem;
 import ekylibre.zero.fragments.model.IssueItem;
 import ekylibre.zero.util.DateTools;
 
+import static android.app.Activity.RESULT_OK;
+import static android.os.Environment.getExternalStoragePublicDirectory;
 import static androidx.recyclerview.widget.LinearLayoutManager.HORIZONTAL;
 import static ekylibre.zero.ObservationActivity.BBCH_FRAGMENT;
 import static ekylibre.zero.ObservationActivity.CULTURES_FRAGMENT;
@@ -70,9 +82,10 @@ public class ObservationFormFragment extends Fragment {
     private ChipGroup issuesChipsGroup;
     private int culturesCount;
     private int issuesCount;
+    private static Uri currentPhotoPath;
 
-    private static final int GALLERY = 1230;
-    private static final int CAMERA = 1231;
+    private static final int CAMERA = 0;
+    private static final int GALLERY = 1;
 
     public ObservationFormFragment() {
         // Required empty public constructor
@@ -147,8 +160,10 @@ public class ObservationFormFragment extends Fragment {
         bbchLayout.setOnClickListener(v -> listener.onFormInteraction(BBCH_FRAGMENT));
         issuesLayout.setOnClickListener(v -> listener.onFormInteraction(ISSUES_FRAGMENT));
         picturesLayout.setOnClickListener(v -> {
-            DialogFragment pictureDialog = new PictureDialogFragment();
-            pictureDialog.show(fragmentManager, "pictureDialog");
+            if (PermissionManager.storagePermissions(context, getActivity())) {
+                DialogFragment pictureDialog = new PictureDialogFragment();
+                pictureDialog.show(fragmentManager, "pictureDialog");
+            }
         });
 
         // Fill UI
@@ -215,18 +230,18 @@ public class ObservationFormFragment extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
+        if (context instanceof OnFragmentInteractionListener)
             listener = (OnFragmentInteractionListener) context;
-        } else {
+        else
             throw new RuntimeException(context.toString()
                     + " must implement OnFragmentInteractionListener");
-        }
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
         listener = null;
+        Log.e("Obs form Fragment", "Detached !");
     }
 
     /**
@@ -244,21 +259,49 @@ public class ObservationFormFragment extends Fragment {
         @NonNull
         @Override
         public Dialog onCreateDialog(Bundle savedInstanceState) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(Objects.requireNonNull(getContext()));
+            Context ctx = getContext();
+            AlertDialog.Builder builder = new AlertDialog.Builder(Objects.requireNonNull(ctx));
             builder.setTitle("Prendre une photo")
                     .setItems(R.array.picture_choice_values, (dialog, which) -> {
-                        switch (which) {
-                            case 0:
-                                break;
-                            case 1:
-                                Fragment fragment = fragmentManager.findFragmentByTag(FORM_FRAGMENT);
-                                if (fragment != null) {
-                                    Intent intent = new Intent();
-                                    intent.setType("image/*");
-                                    intent.setAction(Intent.ACTION_GET_CONTENT);
-                                    fragment.startActivityForResult(intent, GALLERY);
+
+                        Fragment fragment = fragmentManager.findFragmentByTag(FORM_FRAGMENT);
+                        if (fragment != null) {
+
+                            if (which == CAMERA) {
+
+                                Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+//                                    if (intent.resolveActivity(getContext().getPackageManager()) != null)
+//                                fragment.startActivityForResult(takePictureIntent, CAMERA);
+
+                                // Ensure that there's a camera activity to handle the intent
+                                if (takePictureIntent.resolveActivity(ctx.getPackageManager()) != null) {
+                                    // Create the File where the photo should go
+                                    File photoFile = null;
+                                    try {
+                                        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+                                        String imageFileName = "zero_" + timeStamp + "_";
+                                        File storageDir = getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
+//                                        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+                                        photoFile = File.createTempFile(imageFileName, ".jpg", storageDir);
+                                        currentPhotoPath = Uri.fromFile(photoFile);
+                                    } catch (IOException ex) {
+                                        Log.e("Error", ex.getMessage());
+                                    }
+                                    // Continue only if the File was successfully created
+                                    if (photoFile != null) {
+                                        Uri photoURI = FileProvider.getUriForFile(ctx,
+                                                "ekylibre.zero.fileprovider",
+                                                photoFile);
+                                        takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+                                        fragment.startActivityForResult(takePictureIntent, CAMERA);
+                                    }
                                 }
-                                break;
+                            } else if (which == GALLERY) {
+                                Intent intent = new Intent();
+                                intent.setType("image/*");
+                                intent.setAction(Intent.ACTION_GET_CONTENT);
+                                fragment.startActivityForResult(intent, GALLERY);
+                            }
                         }
                     })
             .setNegativeButton(R.string.cancel, (dialog, which) -> dialog.dismiss());
@@ -268,16 +311,36 @@ public class ObservationFormFragment extends Fragment {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == GALLERY) {
-            Uri pictureUri = data.getData();
-            if (!picturesList.contains(pictureUri)) {
+
+        if (resultCode == RESULT_OK) {
+            Uri pictureUri = null;
+            if (requestCode == CAMERA) {
+                Log.i("FromFragment", "onActivityResult CAMERA");
+                pictureUri = currentPhotoPath;
+                galleryAddPic();
+            }
+            else if (requestCode == GALLERY) {
+                pictureUri = data.getData();
+                Log.i("FromFragment", "onActivityResult GALLERY");
+            }
+
+            if (pictureUri != null && !picturesList.contains(pictureUri)) {
                 picturesList.add(pictureUri);
                 picturesAdapter.notifyItemInserted(picturesList.indexOf(pictureUri));
+                currentPhotoPath = null;
             }
+
+            // Hide or show recycler
             if (picturesAdapter.getItemCount() > 0 && picturesRecycler.getVisibility() == View.GONE)
                 picturesRecycler.setVisibility(View.VISIBLE);
             else if (picturesAdapter.getItemCount() == 0 && picturesRecycler.getVisibility() == View.VISIBLE)
                 picturesRecycler.setVisibility(View.GONE);
         }
+    }
+
+    private void galleryAddPic() {
+        Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+        mediaScanIntent.setData(currentPhotoPath);
+        context.sendBroadcast(mediaScanIntent);
     }
 }

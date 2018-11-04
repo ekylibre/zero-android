@@ -59,4 +59,5 @@ dependencies {
     implementation 'com.google.maps.android:android-maps-utils:0.4.4'
 
     implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.8.1'
+    implementation 'com.squareup.picasso:picasso:2.71828'
 }

@@ -201,7 +201,12 @@ public class PermissionManager
                         || ActivityCompat.checkSelfPermission(context, android.Manifest.permission.READ_CALENDAR)
                         != PackageManager.PERMISSION_GRANTED
                         || ActivityCompat.checkSelfPermission(context, Manifest.permission.WRITE_CALENDAR)
-                        != PackageManager.PERMISSION_GRANTED))
+                        != PackageManager.PERMISSION_GRANTED
+                        || ActivityCompat.checkSelfPermission(context, Manifest.permission.READ_EXTERNAL_STORAGE)
+                        != PackageManager.PERMISSION_GRANTED
+                        || ActivityCompat.checkSelfPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                        != PackageManager.PERMISSION_GRANTED
+        ))
         {
             ActivityCompat.requestPermissions(activity,
                     new String[]{
@@ -211,7 +216,9 @@ public class PermissionManager
                             Manifest.permission.READ_CONTACTS,
                             Manifest.permission.VIBRATE,
                             Manifest.permission.READ_CALENDAR,
-                            Manifest.permission.WRITE_CALENDAR},
+                            Manifest.permission.WRITE_CALENDAR,
+                            Manifest.permission.READ_EXTERNAL_STORAGE,
+                            Manifest.permission.WRITE_EXTERNAL_STORAGE},
                     REQUEST_MULTIPLE);
         }
     }
