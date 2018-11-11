@@ -90,7 +90,7 @@ public final class ZeroContract {
         String OBSERVED_AT = "observed_at";
         String LATITUDE = "latitude";
         String LONGITUDE = "longitude";
-        String OBSERVATION = "observation";
+        String OBSERVATION = "description";
         String SYNCED_AT = "synced_at";
         String PLANT_DENSITY_ABACUS_ITEM_ID = "plant_density_abacus_item_id";
         String PLANT_DENSITY_ABACUS_ID = "plant_density_abacus_id";
@@ -138,6 +138,7 @@ public final class ZeroContract {
         String ACTIVE = "active";
         String USER = "user";
         String ACTIVITY_ID = "activity_id";
+        String ACTIVITY_NAME = "activity_name";
     }
 
     public interface ContactsColumns extends BaseColumns {
@@ -174,6 +175,33 @@ public final class ZeroContract {
         String DATE         = "date";
     }
 
+    public interface ObservationsColumns extends BaseColumns {
+        String TABLE_NAME = "observations";
+        String ACTIVITY_ID = "activity_id";
+        String OBSERVED_ON = "observed_on";
+        String SCALE_ID = "scale_id";
+        String DESCRIPTION = "description";
+        String PICTURES = "pictures";
+        String PLANTS = "plants";
+        String LATITUDE = "latitude";
+        String LONGITUDE = "longitude";
+        String SYNCED = "synced";
+        String USER = "user";
+    }
+
+    public interface ObservationPlantColumns extends BaseColumns {
+        String TABLE_NAME = "observation_plants";
+        String FK_OBSERVATION = "fk_observation";
+        String FK_PLANT = "fk_plant";
+        String EKY_ID_PLANT = "plant_eky_id";
+    }
+
+    public interface ObservationIssueColumns extends BaseColumns {
+        String TABLE_NAME = "observation_issues";
+        String FK_OBSERVATION = "fk_observation";
+        String FK_ISSUE = "fk_issue";
+        String EKY_ID_ISSUE = "issue_eky_id";
+    }
 
     public static final class Crumbs implements CrumbsColumns {
         // Content URI for this table
@@ -330,6 +358,7 @@ public final class ZeroContract {
         public static final String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/vnd.ekylibre.zero.plant";
 
         public static final String[] PROJECTION_ALL = {_ID, NAME, SHAPE, VARIETY, ACTIVE, ACTIVITY_ID};
+        public static final String[] PROJECTION_OBS = {_ID, EK_ID, NAME, VARIETY, ACTIVITY_ID, ACTIVITY_NAME};
         public static final String[] PROJECTION_NONE = {_ID};
 
         public static final String SORT_ORDER_DEFAULT = _ID + " ASC";
@@ -393,5 +422,50 @@ public final class ZeroContract {
 
         public static final String SORT_ORDER_DEFAULT = _ID + " ASC";
 
+    }
+
+    public static final class Observations implements ObservationsColumns
+    {
+        // Content URI for this table
+        public static final Uri CONTENT_URI = Uri.withAppendedPath(
+                ZeroContract.CONTENT_URI,"observations");
+        // MIME type for list and individual record.
+        public static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE +
+                "/vnd.ekylibre.zero.observations";
+
+        public static final String[] PROJECTION_ALL = {_ID, ACTIVITY_ID, OBSERVED_ON, PLANTS,
+                SCALE_ID, PICTURES, DESCRIPTION, LONGITUDE, LATITUDE, USER};
+
+
+        public static final String SORT_ORDER_DEFAULT = _ID + " ASC";
+
+    }
+
+    public static final class ObservationPlants implements ObservationPlantColumns
+    {
+        // Content URI for this table
+        public static final Uri CONTENT_URI = Uri.withAppendedPath(
+                ZeroContract.CONTENT_URI,"observation_plants");
+        // MIME type for list and individual record.
+        public static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE +
+                "/vnd.ekylibre.zero.observation_plants";
+
+        public static final String[] PROJECTION_ALL = {_ID, FK_OBSERVATION, FK_PLANT, EKY_ID_PLANT};
+
+        public static final String SORT_ORDER_DEFAULT = _ID + " ASC";
+    }
+
+    public static final class ObservationIssues implements ObservationIssueColumns
+    {
+        // Content URI for this table
+        public static final Uri CONTENT_URI = Uri.withAppendedPath(
+                ZeroContract.CONTENT_URI,"observation_issues");
+        // MIME type for list and individual record.
+        public static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE +
+                "/vnd.ekylibre.zero.observation_issues";
+
+        public static final String[] PROJECTION_ALL = {_ID, FK_OBSERVATION, FK_ISSUE, EKY_ID_ISSUE};
+
+        public static final String SORT_ORDER_DEFAULT = _ID + " ASC";
     }
 }

@@ -1,6 +1,7 @@
 package ekylibre.zero.fragments;
 
 import android.content.Context;
+import android.database.Cursor;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -10,12 +11,20 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.text.Collator;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
+import ekylibre.database.ZeroContract;
 import ekylibre.zero.R;
 import ekylibre.zero.fragments.adapter.ActivitiesRecyclerAdapter;
 import ekylibre.zero.fragments.model.ActivityItem;
+
+import static ekylibre.zero.ObservationActivity.activitiesList;
 
 /**
  * A fragment representing a list of Items.
@@ -24,7 +33,7 @@ import ekylibre.zero.fragments.model.ActivityItem;
  */
 public class ActivityChoiceFragment extends Fragment {
 
-    private List<ActivityItem> dataset;
+//    private List<ActivityItem> dataset;
     private OnActivityFragmentInteractionListener fragmentListener;
 
     /**
@@ -42,14 +51,7 @@ public class ActivityChoiceFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // Create dummy data
-        // TODO: Get from database
-        dataset = new ArrayList<>();
-        int i = 0;
-        while (i < 5) {
-            dataset.add(new ActivityItem(i, "Carotte #" + i, "2019"));
-            i++;
-        }
+
     }
 
     @Override
@@ -62,7 +64,7 @@ public class ActivityChoiceFragment extends Fragment {
             Context context = view.getContext();
             RecyclerView recyclerView = (RecyclerView) view;
             recyclerView.setLayoutManager(new LinearLayoutManager(context));
-            recyclerView.setAdapter(new ActivitiesRecyclerAdapter(dataset, fragmentListener));
+            recyclerView.setAdapter(new ActivitiesRecyclerAdapter(activitiesList, fragmentListener));
         }
         return view;
     }

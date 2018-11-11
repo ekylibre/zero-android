@@ -1,14 +1,10 @@
 package ekylibre.zero.fragments.adapter;
 
 import android.content.Context;
-import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
-import android.media.ThumbnailUtils;
 import android.net.Uri;
-import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,9 +13,10 @@ import android.widget.ImageView;
 
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
-import com.squareup.picasso.Transformation;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 
 import androidx.annotation.NonNull;
@@ -65,25 +62,35 @@ public class PicturesRecyclerAdapter extends RecyclerView.Adapter<PicturesRecycl
 //            dr.setAntiAlias(true);
 //            imageView.setImageDrawable(dr);
 
-            Picasso.get()
-                    .load(item)
-                    .resize(256, 256)
-                    .centerCrop()
-                    .into(imageView, new Callback() {
-                        @Override
-                        public void onSuccess() {
-                            Bitmap imageBitmap = ((BitmapDrawable) imageView.getDrawable()).getBitmap();
-                            RoundedBitmapDrawable dr = RoundedBitmapDrawableFactory.create(context.getResources(), imageBitmap);
-                            dr.setCornerRadius(10);
-                            dr.setAntiAlias(true);
-                            imageView.setImageDrawable(dr);
-                        }
-                        @Override
-                        public void onError(Exception e) {
-                            imageView.setImageResource(R.drawable.ic_ekylibre);
-                        }
-                    });
+            InputStream is;
 
+            Log.e("PictureAdapter", "Before");
+            Log.e("PictureAdapter", "Uri " + item);
+            try {
+                is = context.getContentResolver().openInputStream(pictureUri);
+                Bitmap bitmap = BitmapFactory.decodeStream(is);
+                if (is != null)
+                    is.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            Log.e("PictureAdapter", "After");
+
+            Picasso.get().load(item).resize(256, 256).centerCrop().into(imageView,
+                new Callback() {
+                    @Override
+                    public void onSuccess() {
+                        Bitmap imageBitmap = ((BitmapDrawable) imageView.getDrawable()).getBitmap();
+                        RoundedBitmapDrawable dr = RoundedBitmapDrawableFactory.create(context.getResources(), imageBitmap);
+                        dr.setCornerRadius(10);
+                        dr.setAntiAlias(true);
+                        imageView.setImageDrawable(dr);
+                    }
+                    @Override
+                    public void onError(Exception e) {
+                        imageView.setImageResource(R.drawable.ic_ekylibre);
+                    }
+                });
         }
 
         @Override

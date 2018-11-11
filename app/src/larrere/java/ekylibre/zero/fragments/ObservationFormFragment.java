@@ -4,7 +4,6 @@ import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -16,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.android.material.chip.Chip;
@@ -54,9 +54,10 @@ import static ekylibre.zero.ObservationActivity.ISSUES_FRAGMENT;
 import static ekylibre.zero.ObservationActivity.culturesList;
 import static ekylibre.zero.ObservationActivity.date;
 import static ekylibre.zero.ObservationActivity.fragmentManager;
+import static ekylibre.zero.ObservationActivity.getActivityLogo;
 import static ekylibre.zero.ObservationActivity.issuesList;
 import static ekylibre.zero.ObservationActivity.picturesList;
-import static ekylibre.zero.ObservationActivity.observation;
+import static ekylibre.zero.ObservationActivity.description;
 import static ekylibre.zero.ObservationActivity.selectedActivity;
 import static ekylibre.zero.ObservationActivity.selectedBBCH;
 
@@ -107,6 +108,7 @@ public class ObservationFormFragment extends Fragment {
         // UI Activity
         TextView activityNameTextView = view.findViewById(R.id.form_activity_name);
         TextView activityDetailsTextView = view.findViewById(R.id.form_activity_details);
+        ImageView activityImageView = view.findViewById(R.id.form_activity_icon);
 
         // UI date
         ConstraintLayout dateLayout = view.findViewById(R.id.form_date_layout);
@@ -132,14 +134,14 @@ public class ObservationFormFragment extends Fragment {
         // UI Observation Comment
         EditText commentText = view.findViewById(R.id.form_obs_text);
 
-        // Save current observation text
+        // Save current description text
         commentText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {}
             @Override
-            public void afterTextChanged(Editable editable) { observation = editable.toString(); }
+            public void afterTextChanged(Editable editable) { description = editable.toString(); }
         });
 
         // Set clickListener
@@ -169,10 +171,11 @@ public class ObservationFormFragment extends Fragment {
         // Fill UI
         activityNameTextView.setText(selectedActivity.name);
         activityDetailsTextView.setText(selectedActivity.details);
+        activityImageView.setImageResource(getActivityLogo(selectedActivity.name));
         if (selectedBBCH != null) bbchTextView.setText(selectedBBCH.name);
         dateTextView.setText(DateTools.display(context, date));
-        if (observation != null)
-            commentText.setText(observation);
+        if (description != null)
+            commentText.setText(description);
 
         // Constructs cultures chips group
         culturesCount = 0;
@@ -241,7 +244,6 @@ public class ObservationFormFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         listener = null;
-        Log.e("Obs form Fragment", "Detached !");
     }
 
     /**
@@ -261,50 +263,47 @@ public class ObservationFormFragment extends Fragment {
         public Dialog onCreateDialog(Bundle savedInstanceState) {
             Context ctx = getContext();
             AlertDialog.Builder builder = new AlertDialog.Builder(Objects.requireNonNull(ctx));
-            builder.setTitle("Prendre une photo")
-                    .setItems(R.array.picture_choice_values, (dialog, which) -> {
+            builder.setItems(R.array.picture_choice_values, (dialog, which) -> {
+                Fragment fragment = fragmentManager.findFragmentByTag(FORM_FRAGMENT);
+                if (fragment != null) {
 
-                        Fragment fragment = fragmentManager.findFragmentByTag(FORM_FRAGMENT);
-                        if (fragment != null) {
+                    if (which == CAMERA) {
 
-                            if (which == CAMERA) {
-
-                                Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 //                                    if (intent.resolveActivity(getContext().getPackageManager()) != null)
 //                                fragment.startActivityForResult(takePictureIntent, CAMERA);
 
-                                // Ensure that there's a camera activity to handle the intent
-                                if (takePictureIntent.resolveActivity(ctx.getPackageManager()) != null) {
-                                    // Create the File where the photo should go
-                                    File photoFile = null;
-                                    try {
-                                        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-                                        String imageFileName = "zero_" + timeStamp + "_";
-                                        File storageDir = getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
+                        // Ensure that there's a camera activity to handle the intent
+                        if (takePictureIntent.resolveActivity(ctx.getPackageManager()) != null) {
+                            // Create the File where the photo should go
+                            File photoFile = null;
+                            try {
+                                String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+                                String imageFileName = "zero_" + timeStamp + "_";
+                                File storageDir = getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
 //                                        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
-                                        photoFile = File.createTempFile(imageFileName, ".jpg", storageDir);
-                                        currentPhotoPath = Uri.fromFile(photoFile);
-                                    } catch (IOException ex) {
-                                        Log.e("Error", ex.getMessage());
-                                    }
-                                    // Continue only if the File was successfully created
-                                    if (photoFile != null) {
-                                        Uri photoURI = FileProvider.getUriForFile(ctx,
-                                                "ekylibre.zero.fileprovider",
-                                                photoFile);
-                                        takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
-                                        fragment.startActivityForResult(takePictureIntent, CAMERA);
-                                    }
-                                }
-                            } else if (which == GALLERY) {
-                                Intent intent = new Intent();
-                                intent.setType("image/*");
-                                intent.setAction(Intent.ACTION_GET_CONTENT);
-                                fragment.startActivityForResult(intent, GALLERY);
+                                photoFile = File.createTempFile(imageFileName, ".jpg", storageDir);
+                                currentPhotoPath = Uri.fromFile(photoFile);
+                            } catch (IOException ex) {
+                                Log.e("Error", ex.getMessage());
+                            }
+                            // Continue only if the File was successfully created
+                            if (photoFile != null) {
+                                Uri photoURI = FileProvider.getUriForFile(ctx,
+                                        "ekylibre.zero.fileprovider",
+                                        photoFile);
+                                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+                                fragment.startActivityForResult(takePictureIntent, CAMERA);
                             }
                         }
-                    })
-            .setNegativeButton(R.string.cancel, (dialog, which) -> dialog.dismiss());
+                    } else if (which == GALLERY) {
+                        Intent intent = new Intent();
+                        intent.setType("image/jpeg");
+                        intent.setAction(Intent.ACTION_GET_CONTENT);
+                        fragment.startActivityForResult(intent, GALLERY);
+                    }
+                }
+            }).setNegativeButton(R.string.cancel, (dialog, which) -> dialog.dismiss());
             return builder.create();
         }
     }

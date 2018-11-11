@@ -3,9 +3,6 @@ package ekylibre.database;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.nfc.Tag;
-import android.os.Build;
-import android.os.Debug;
 import android.util.Log;
 
 import ekylibre.zero.BuildConfig;

@@ -23,10 +23,11 @@ import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
 import org.apache.http.StatusLine;
-import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.conn.scheme.Scheme;
+import org.apache.http.conn.ssl.SSLSocketFactory;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicHeader;
@@ -92,6 +93,7 @@ public class Instance
     private String mUrl;
     private String mEmail;
     private String mToken;
+    private static Scheme scheme;
     private final static String TAG = "Instance";
 
     public Instance(String url, String email, String token)
@@ -108,12 +110,17 @@ public class Instance
         mToken = manager.blockingGetAuthToken(account, Authenticator.AUTH_TOKEN_TYPE_GLOBAL, true);
         if (BuildConfig.DEBUG) Log.d("Instance URL", "URL = " + mUrl);
         if (BuildConfig.DEBUG) Log.d("Instance Token", "TOKEN = " + mToken);
+
+        // Config accepting all SSL certificates (debug purpose)
+        SSLSocketFactory sf = SSLSocketFactory.getSocketFactory();
+        sf.setHostnameVerifier(SSLSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER);
+        scheme = new Scheme("https", sf, 443);
     }
 
     // Send POST call to given instance
-    public JSONObject post(String path, JSONObject params) throws JSONException, ClientProtocolException, IOException, HTTPException
+    public JSONObject post(String path, JSONObject params) throws JSONException, IOException, HTTPException
     {
-        List<Header> headersList = new ArrayList<Header>();
+        List<Header> headersList = new ArrayList<>();
         headersList.add(new BasicHeader("Authorization", "simple-token " + mEmail + " " + mToken));
         Header[] headers = new Header[headersList.size()];
         headersList.toArray(headers);
@@ -129,32 +136,34 @@ public class Instance
 
 
     // Send POST call to given URL with given params
-    public static JSONObject post(String url, JSONObject params, Header[] headers) throws JSONException, ClientProtocolException, IOException, HTTPException
+    public static JSONObject post(String url, JSONObject params, Header[] headers) throws JSONException, IOException, HTTPException
     {
+
         if (BuildConfig.DEBUG) Log.d("zero", "POST " + url);
+
+
 
         // Create a new HttpClient and Post Header
         HttpClient httpClient = new DefaultHttpClient();
+        if (BuildConfig.DEBUG)
+            httpClient.getConnectionManager().getSchemeRegistry().register(scheme);
+
         HttpPost httpPost = new HttpPost(url);
         if (headers != null)
-        {
             httpPost.setHeaders(headers);
-        }
         httpPost.setHeader("Content-type", "application/json");
         
-        InputStream inputStream = null;
-        String result = null;
+        InputStream inputStream;
+        String result;
         // try {
         if (params != null)
-        {
             httpPost.setEntity(new StringEntity(params.toString(), "UTF-8"));
-        }
         // // Execute HTTP Post Request
         HttpResponse response = httpClient.execute(httpPost);
 
         // Check status
         StatusLine statusLine = response.getStatusLine();
-        int statusCode = statusLine.getStatusCode();
+        //int statusCode = statusLine.getStatusCode();
         switch(statusLine.getStatusCode()) {
         case HttpStatus.SC_BAD_REQUEST:
         case HttpStatus.SC_UNAUTHORIZED:
@@ -221,7 +230,7 @@ public class Instance
 
 
 // Send GET call to given instance
-    public JSONArray getJSONArray(String path, String params) throws JSONException, ClientProtocolException, IOException, HTTPException
+    public JSONArray getJSONArray(String path, String params) throws JSONException, IOException, HTTPException
     {
         if (params == null)
             params = "";
@@ -241,12 +250,14 @@ public class Instance
 
 
     // Send POST call to given URL with given params
-    public static JSONArray getJSONArray(String url, Header[] headers) throws JSONException, ClientProtocolException, IOException, HTTPException
+    public static JSONArray getJSONArray(String url, Header[] headers) throws JSONException, IOException, HTTPException
     {
         if (BuildConfig.DEBUG) Log.d("zero", "GET " + url);
 
         // Create a new HttpClient and Get Header
         HttpClient httpClient = new DefaultHttpClient();
+        if (BuildConfig.DEBUG)
+            httpClient.getConnectionManager().getSchemeRegistry().register(scheme);
         HttpGet httpGet = new HttpGet(url);
         if (BuildConfig.DEBUG) Log.i(TAG, "Header => " + headers[0].toString());
         if (headers != null)
@@ -337,7 +348,7 @@ public class Instance
 
 
     public JSONObject getJSONObject(String path, String params) throws JSONException,
-            ClientProtocolException, IOException, HTTPException
+            IOException, HTTPException
     {
         if (params == null)
             params = "";
@@ -354,12 +365,14 @@ public class Instance
 
 
     public static JSONObject getJSONObject(String url, Header[] headers) throws JSONException,
-            ClientProtocolException, IOException, HTTPException
+            IOException, HTTPException
     {
         if (BuildConfig.DEBUG) Log.d("zero", "GET " + url);
 
         // Create a new HttpClient and Get Header
         HttpClient httpClient = new DefaultHttpClient();
+        if (BuildConfig.DEBUG)
+            httpClient.getConnectionManager().getSchemeRegistry().register(scheme);
         HttpGet httpGet = new HttpGet(url);
         if (BuildConfig.DEBUG) Log.i(TAG, "Header => " + headers[0].toString());
         if (headers != null)

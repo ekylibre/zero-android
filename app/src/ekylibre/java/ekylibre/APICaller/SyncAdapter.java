@@ -3,6 +3,7 @@ package ekylibre.APICaller;
 import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.accounts.AccountsException;
+import android.annotation.SuppressLint;
 import android.content.AbstractThreadedSyncAdapter;
 import android.content.ContentProviderClient;
 import android.content.ContentResolver;
@@ -40,6 +41,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 import java.util.Set;
 import java.util.UUID;
 
@@ -169,6 +171,8 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
 
             pushIntervention(account, extras, authority, provider, syncResult);
             pullIntervention(account, extras, authority, provider, syncResult);
+
+//            pushObservation(account, extras, authority, provider, syncResult);
 
             pullContacts(account, extras, authority, provider, syncResult);
             cleanLocalDb(account);
@@ -374,6 +378,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
             cv.put(ZeroContract.Plants.EK_ID, plants.getId());
             cv.put(ZeroContract.Plants.NAME, plants.getName());
             cv.put(ZeroContract.Plants.VARIETY, plants.getVariety());
+            cv.put(ZeroContract.Plants.ACTIVITY_ID, plants.getActivityID());
             cv.put(ZeroContract.Plants.ACTIVITY_ID, plants.getActivityID());
             cv.put(ZeroContract.Plants.ACTIVE, true);
             cv.put(ZeroContract.Plants.USER, account.name);
@@ -1059,6 +1064,42 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
             cv.put(ZeroContract.ContactParams.TYPE, Contact.TYPE_WEBSITE);
             contactCreator.setWebsite(website);
             mContentResolver.insert(ZeroContract.ContactParams.CONTENT_URI, cv);
+        }
+    }
+
+    private void pushObservation(Account account, Bundle extras, String authority,
+                                 ContentProviderClient provider, SyncResult syncResult)
+            throws JSONException, IOException, HTTPException
+    {
+        Log.i(TAG, "Push new observation");
+
+        Cursor cursor = mContentResolver.query(
+                ZeroContract.Observations.CONTENT_URI,
+                ZeroContract.Observations.PROJECTION_ALL,
+                ZeroContract.Observations.USER + " LIKE " + "\"" + account.name + "\""
+                        + " AND " + ZeroContract.Observations.SYNCED + " == " + 0,null,
+                ZeroContract.Observations.SORT_ORDER_DEFAULT);
+
+        if (cursor != null) {
+            // Post it to ekylibre
+            JSONObject attributes = new JSONObject();
+            SimpleDateFormat dateTime = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ", Locale.FRANCE);
+            attributes.put(ZeroContract.Observations.OBSERVED_ON, dateTime.format(new Date(cursor.getInt(2))));
+            attributes.put(ZeroContract.Observations.ACTIVITY_ID, cursor.getInt(1));
+            if (!cursor.isNull(7) && cursor.isNull(6))
+                attributes.put("geolocation", String.format("SRID=4326; POINT(%s %s)",
+                        cursor.getDouble(7), cursor.getDouble(6)));
+
+            //TODO : send images to ekylibre api
+            //attributes.put("images", createImageJSONArray(cursor));
+
+//            long id = Observation.create(instance, attributes);
+//            // Marks them as synced
+//            ContentValues values = new ContentValues();
+//            values.put(ZeroContract.IssuesColumns.SYNCED, 1);
+//            mContentResolver.update(Uri.withAppendedPath(ZeroContract.Issues.CONTENT_URI, Long.toString(cursor.getLong(0))), values, null, null);
+
+            cursor.close();
         }
     }
 

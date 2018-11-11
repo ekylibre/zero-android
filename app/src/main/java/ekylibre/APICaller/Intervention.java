@@ -43,6 +43,7 @@ public class Intervention
         // JSONObject params = Instance.BundleToJSON(attributes);
         JSONObject parameters = attributes;
         //TODO :: Update path to API
+        Log.e(TAG, parameters.toString());
         JSONObject json = instance.post("/api/v1/intervention_participations", parameters);
 
         return (0);

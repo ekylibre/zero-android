@@ -1,11 +1,8 @@
 package ekylibre.APICaller;
 
-import ekylibre.APICaller.Instance;
 import ekylibre.exceptions.HTTPException;
 
 import java.io.IOException;
-
-import org.apache.http.client.ClientProtocolException;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -15,7 +12,8 @@ import org.json.JSONObject;
  */
 public class Issue
 {
-    public static long create(Instance instance, JSONObject attributes) throws JSONException, ClientProtocolException, IOException, HTTPException
+    public static long create(Instance instance, JSONObject attributes)
+            throws JSONException, IOException, HTTPException
     {
         // JSONObject params = Instance.BundleToJSON(attributes);
         JSONObject params = attributes;

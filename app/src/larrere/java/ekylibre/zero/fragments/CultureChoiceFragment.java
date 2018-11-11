@@ -6,17 +6,14 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import ekylibre.zero.R;
 import ekylibre.zero.fragments.adapter.CulturesRecyclerAdapter;
 import ekylibre.zero.fragments.model.ActivityItem;
-import ekylibre.zero.fragments.model.CultureItem;
 
 import static ekylibre.zero.ObservationActivity.culturesList;
 
@@ -46,13 +43,12 @@ public class CultureChoiceFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         // Create dummy data
-        // TODO: Get from database
-        int i = 0;
-        if (culturesList.isEmpty())
-            while (i < 14) {
-                culturesList.add(new CultureItem(i, "A côté de la vigne n°" + i, "2019"));
-                i++;
-            }
+//        int i = 0;
+//        if (culturesList.isEmpty())
+//            while (i < 14) {
+//                culturesList.add(new CultureItem(i, "A côté de la vigne n°" + i, "2019"));
+//                i++;
+//            }
     }
 
     @Override
