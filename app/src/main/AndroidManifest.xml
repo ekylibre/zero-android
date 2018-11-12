@@ -118,16 +118,6 @@
             android:exported="false"
             android:syncable="true" />
 
-        <provider
-            android:name="androidx.core.content.FileProvider"
-            android:authorities="ekylibre.zero.fileprovider"
-            android:exported="false"
-            android:grantUriPermissions="true">
-            <meta-data
-                android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/file_paths" />
-        </provider>
-
         <!-- Sync related activities and service needs to be declared here in order for the app to recognize them -->
         <service
             android:name="ekylibre.service.SyncService"

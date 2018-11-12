@@ -62,19 +62,19 @@ public class PicturesRecyclerAdapter extends RecyclerView.Adapter<PicturesRecycl
 //            dr.setAntiAlias(true);
 //            imageView.setImageDrawable(dr);
 
-            InputStream is;
-
-            Log.e("PictureAdapter", "Before");
-            Log.e("PictureAdapter", "Uri " + item);
-            try {
-                is = context.getContentResolver().openInputStream(pictureUri);
-                Bitmap bitmap = BitmapFactory.decodeStream(is);
-                if (is != null)
-                    is.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            Log.e("PictureAdapter", "After");
+//            InputStream is;
+//
+//            Log.e("PictureAdapter", "Before");
+//            Log.e("PictureAdapter", "Uri " + item);
+//            try {
+//                is = context.getContentResolver().openInputStream(pictureUri);
+//                Bitmap bitmap = BitmapFactory.decodeStream(is);
+//                if (is != null)
+//                    is.close();
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            }
+//            Log.e("PictureAdapter", "After");
 
             Picasso.get().load(item).resize(256, 256).centerCrop().into(imageView,
                 new Callback() {

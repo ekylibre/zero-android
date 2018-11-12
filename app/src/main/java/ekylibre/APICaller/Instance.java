@@ -108,13 +108,15 @@ public class Instance
         mUrl   = manager.getUserData(account, Authenticator.KEY_INSTANCE_URL);
         mEmail = manager.getUserData(account, Authenticator.KEY_ACCOUNT_NAME);
         mToken = manager.blockingGetAuthToken(account, Authenticator.AUTH_TOKEN_TYPE_GLOBAL, true);
-        if (BuildConfig.DEBUG) Log.d("Instance URL", "URL = " + mUrl);
-        if (BuildConfig.DEBUG) Log.d("Instance Token", "TOKEN = " + mToken);
+        if (BuildConfig.DEBUG) {
+            Log.d("Instance URL", "URL = " + mUrl);
+            Log.d("Instance Token", "TOKEN = " + mToken);
 
-        // Config accepting all SSL certificates (debug purpose)
-        SSLSocketFactory sf = SSLSocketFactory.getSocketFactory();
-        sf.setHostnameVerifier(SSLSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER);
-        scheme = new Scheme("https", sf, 443);
+            // Config accepting all SSL certificates (debug purpose)
+            SSLSocketFactory sf = SSLSocketFactory.getSocketFactory();
+            sf.setHostnameVerifier(SSLSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER);
+            scheme = new Scheme("https", sf, 443);
+        }
     }
 
     // Send POST call to given instance
@@ -139,14 +141,17 @@ public class Instance
     public static JSONObject post(String url, JSONObject params, Header[] headers) throws JSONException, IOException, HTTPException
     {
 
-        if (BuildConfig.DEBUG) Log.d("zero", "POST " + url);
-
-
-
         // Create a new HttpClient and Post Header
         HttpClient httpClient = new DefaultHttpClient();
-        if (BuildConfig.DEBUG)
+
+        if (BuildConfig.DEBUG) {
+            Log.d("zero", "POST " + url);
+            SSLSocketFactory sf = SSLSocketFactory.getSocketFactory();
+            sf.setHostnameVerifier(SSLSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER);
+            scheme = new Scheme("https", sf, 443);
+            Log.e(TAG, "Scheme 2 = " + scheme);
             httpClient.getConnectionManager().getSchemeRegistry().register(scheme);
+        }
 
         HttpPost httpPost = new HttpPost(url);
         if (headers != null)
@@ -188,6 +193,7 @@ public class Instance
         case HttpStatus.SC_UNPROCESSABLE_ENTITY:
         case HttpStatus.SC_LOCKED:
         case HttpStatus.SC_FAILED_DEPENDENCY:
+            Log.e(TAG, "Http UnauthorizedException");
             throw new UnauthorizedException();
         case HttpStatus.SC_INTERNAL_SERVER_ERROR:
         case HttpStatus.SC_NOT_IMPLEMENTED:
@@ -196,6 +202,7 @@ public class Instance
         case HttpStatus.SC_GATEWAY_TIMEOUT:
         case HttpStatus.SC_HTTP_VERSION_NOT_SUPPORTED:
         case HttpStatus.SC_INSUFFICIENT_STORAGE:
+            Log.e(TAG, "Http ServerErrorException");
             throw new ServerErrorException();
         }
 
@@ -252,12 +259,13 @@ public class Instance
     // Send POST call to given URL with given params
     public static JSONArray getJSONArray(String url, Header[] headers) throws JSONException, IOException, HTTPException
     {
-        if (BuildConfig.DEBUG) Log.d("zero", "GET " + url);
-
         // Create a new HttpClient and Get Header
         HttpClient httpClient = new DefaultHttpClient();
-        if (BuildConfig.DEBUG)
+        if (BuildConfig.DEBUG) {
+            Log.d("zero", "GET " + url);
+            Log.e(TAG, "Scheme 3 = " + scheme);
             httpClient.getConnectionManager().getSchemeRegistry().register(scheme);
+        }
         HttpGet httpGet = new HttpGet(url);
         if (BuildConfig.DEBUG) Log.i(TAG, "Header => " + headers[0].toString());
         if (headers != null)
@@ -367,12 +375,13 @@ public class Instance
     public static JSONObject getJSONObject(String url, Header[] headers) throws JSONException,
             IOException, HTTPException
     {
-        if (BuildConfig.DEBUG) Log.d("zero", "GET " + url);
-
         // Create a new HttpClient and Get Header
         HttpClient httpClient = new DefaultHttpClient();
-        if (BuildConfig.DEBUG)
+        if (BuildConfig.DEBUG) {
+            Log.d("zero", "GET " + url);
+            Log.e(TAG, "Scheme 4 = " + scheme);
             httpClient.getConnectionManager().getSchemeRegistry().register(scheme);
+        }
         HttpGet httpGet = new HttpGet(url);
         if (BuildConfig.DEBUG) Log.i(TAG, "Header => " + headers[0].toString());
         if (headers != null)

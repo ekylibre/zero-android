@@ -14,18 +14,23 @@ import android.content.SyncResult;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 import android.provider.Settings.Secure;
 import android.util.Base64;
 import android.util.Log;
+import android.widget.ImageView;
 
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.security.ProviderInstaller;
+import com.squareup.picasso.Callback;
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -47,6 +52,8 @@ import java.util.Locale;
 import java.util.Set;
 import java.util.UUID;
 
+import androidx.core.graphics.drawable.RoundedBitmapDrawable;
+import androidx.core.graphics.drawable.RoundedBitmapDrawableFactory;
 import ekylibre.database.ZeroContract;
 import ekylibre.exceptions.HTTPException;
 import ekylibre.util.AccountTool;
@@ -55,6 +62,7 @@ import ekylibre.util.DateConstant;
 import ekylibre.util.ImageConverter;
 import ekylibre.util.UpdatableActivity;
 import ekylibre.zero.BuildConfig;
+import ekylibre.zero.R;
 import ekylibre.zero.SettingsActivity;
 import ekylibre.zero.intervention.InterventionActivity;
 
@@ -1113,7 +1121,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
         // Creates JSONObject for each observation
         JSONObject attributes = new JSONObject();
         SimpleDateFormat dateTime = new SimpleDateFormat("yyyy-MM-dd", Locale.FRANCE);
-        attributes.put("observed_on", dateTime.format(new Date(observationCursor.getInt(2))));
+        attributes.put("observed_on", dateTime.format(new Date(observationCursor.getLong(2))));
         attributes.put("activity_id", observationCursor.getInt(1));
         if (!observationCursor.isNull(4))
             attributes.put("scale_id", observationCursor.getInt(4));
@@ -1128,88 +1136,79 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
         if (!observationCursor.isNull(5)) {
             String[] paths = observationCursor.getString(5).split(",");
             Log.e(TAG, "there is " + paths.length + " pictures");
-            StringBuilder sb = new StringBuilder();
-            sb.append("[");
-            for (int i = 0; i < paths.length; i++) {
-                Uri pictureUri = Uri.parse(paths[i]);
-                Log.e(TAG, "Uri " + pictureUri.toString() + " Scheme " + pictureUri.getScheme());
 
-//                String filePath = null;
-//                if ("content".equals(pictureUri.getScheme())) {
-//                    Log.e(TAG, "Scheme = content");
-//                    Cursor cursor = mContentResolver.query(pictureUri,
-//                            new String[] { MediaStore.Images.ImageColumns.DATA, MediaStore.Images.Media.DATA }, null, null, null);
-//                    if (cursor != null) {
-//                        cursor.moveToFirst();
-//                        filePath = cursor.getString(0);
-//                        cursor.close();
-//                    }
-//
-//                } else {
-//                    filePath = pictureUri.getPath();
-//                }
-//                Log.e(TAG, "Uri " + filePath + Uri.parse(filePath));
+            JSONArray jsonArray = new JSONArray();
+            for (String path : paths) {
 
-//                Bitmap bitmap = MediaStore.Images.Media.getBitmap(mContentResolver, Uri.fromFile(new File(filePath)));
+                String filePath = null;
+                Uri pictureUri = Uri.parse(path);
 
-//                String[] projection = { MediaStore.Images.Media.DATA };
+                if (pictureUri.getScheme().equals("content")) {
 
+                    String wholeID = DocumentsContract.getDocumentId(pictureUri);
+                    String id = wholeID.split(":")[1];
+                    String[] column = {MediaStore.Images.Media.DATA};
+                    String selection = MediaStore.Images.Media._ID + "=?";
 
-                // Works for scheme = file
-//                InputStream is = mContentResolver.openInputStream(pictureUri);
-//                Bitmap bitmap = BitmapFactory.decodeStream(is);
-//                if (is != null)
-//                    is.close();
-//
-//                ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-//                bitmap.compress(Bitmap.CompressFormat.JPEG, 80, byteArrayOutputStream);
-//                Log.e(TAG, "Bitmap compress");
-//                byte[] byteArrayImage = byteArrayOutputStream.toByteArray();
-//                sb.append("\"data:image/jpeg;base64,")
-//                        .append(Base64.encodeToString(byteArrayImage, Base64.DEFAULT))
-//                        .append("\"");
-//                if (i < paths.length -1)
-//                    sb.append(",");
+                    // TODO check if MediaStore.Images.Media.INTERNAL_CONTENT_URI is needed
+                    Cursor cursor = mContentResolver.query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+                            column, selection, new String[]{id}, null);
+
+                    if (cursor != null) {
+                        cursor.moveToFirst();
+                        filePath = "file://" + cursor.getString(0);
+                        cursor.close();
+                    }
+                } else {
+                    filePath = pictureUri.toString();
+                }
+                Log.e(TAG, "Uri = " + Uri.parse(filePath));
+
+                InputStream is = getContext().getContentResolver().openInputStream(Uri.parse(filePath));
+                Bitmap bitmap = BitmapFactory.decodeStream(is);
+                if (is != null)
+                    is.close();
+
+                ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 80, byteArrayOutputStream);
+                byte[] byteArrayImage = byteArrayOutputStream.toByteArray();
+                String pictureJson = "data:image/jpeg;base64," + Base64.encodeToString(byteArrayImage, Base64.DEFAULT);
+                jsonArray.put(pictureJson);
             }
-            sb.append("]");
-//            attributes.put("pictures", sb);
+            attributes.put("pictures", jsonArray);
         }
 
         // Parse plants
         if (!observationCursor.isNull(3)) {
-            StringBuilder sb = new StringBuilder();
-            sb.append("[");
             String[] plants = observationCursor.getString(3).split(",");
-            for (int i = 0; i < plants.length; i++) {
-                sb.append("{\"id\":").append(plants[i]).append("}");
-                if (i < plants.length -1)
-                    sb.append(",");
+            JSONArray jsonArray = new JSONArray();
+            for (String plant : plants) {
+                JSONObject jsonObject = new JSONObject();
+                jsonObject.put("id", plant);
+                jsonArray.put(jsonObject);
             }
-            sb.append("]");
-            attributes.put("plants", sb);
+            if (jsonArray.length() > 0)
+                attributes.put("plants", jsonArray);
         }
 
         // Parse issues
         if (issueCursor != null) {
-            StringBuilder sb = new StringBuilder();
-            sb.append("[");
+            JSONArray jsonArray = new JSONArray();
             try {
                 while (issueCursor.moveToNext()) {
                     if (!issueCursor.isNull(3)) {
-                        sb.append("{\"id\":").append(issueCursor.getInt(3)).append("}");
-                        if (!issueCursor.isLast())
-                            sb.append(",");
+                        JSONObject jsonObject = new JSONObject();
+                        jsonObject.put("id", issueCursor.getInt(3));
+                        jsonArray.put(jsonObject);
                     }
                 }
             } finally {
                 issueCursor.close();
             }
-            sb.append("]");
-            if (sb.length() > 2)
-                attributes.put("issues", sb);
+            if (jsonArray.length() > 0)
+                attributes.put("issues", jsonArray);
         }
 
-        Log.e(TAG, "Attributes --> " + attributes);
 
         long resultId = Observation.create(instance, attributes);
         Log.e(TAG, "Obs #" + resultId +" created !" );

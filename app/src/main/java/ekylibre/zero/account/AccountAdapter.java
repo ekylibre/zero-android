@@ -29,12 +29,11 @@ import static ekylibre.zero.account.AccountManagerActivity.CURRENT_ACCOUNT_NAME;
  *************************************/
 public class AccountAdapter extends ArrayAdapter<Account>
 {
-    Context mContext;
-    AccountManagerActivity mAccountManagerActivity;
+    private Context mContext;
+    private AccountManagerActivity mAccountManagerActivity;
 
-    public AccountAdapter(Context context, ArrayList<Account> accountList, AccountManagerActivity
-            accountManagerActivity)
-    {
+    AccountAdapter(Context context, ArrayList<Account> accountList,
+                   AccountManagerActivity accountManagerActivity) {
         super(context, 0, accountList);
         mContext = context;
         mAccountManagerActivity = accountManagerActivity;
@@ -54,11 +53,11 @@ public class AccountAdapter extends ArrayAdapter<Account>
         if (viewHolder == null)
         {
             viewHolder = new AccountViewHolder();
-            viewHolder.accountName = (TextView)convertView.findViewById(R.id.accountName);
-            viewHolder.accountInstance = (TextView)convertView.findViewById(R.id.accountInstance);
-            viewHolder.delete = (ImageButton) convertView.findViewById(R.id.deleteAccount);
-            viewHolder.avatar = (ImageView) convertView.findViewById(R.id.avatar_account);
-            viewHolder.layout = (RelativeLayout) convertView.findViewById(R.id.account_item);
+            viewHolder.accountName = convertView.findViewById(R.id.accountName);
+            viewHolder.accountInstance = convertView.findViewById(R.id.accountInstance);
+            viewHolder.delete = convertView.findViewById(R.id.deleteAccount);
+            viewHolder.avatar = convertView.findViewById(R.id.avatar_account);
+            viewHolder.layout = convertView.findViewById(R.id.account_item);
             convertView.setTag(viewHolder);
         }
         final Account     item = getItem(position);
@@ -66,42 +65,32 @@ public class AccountAdapter extends ArrayAdapter<Account>
         viewHolder.accountInstance.setText(AccountTool.getAccountInstance(item, mContext));
         viewHolder.delete.setVisibility(View.VISIBLE);
         viewHolder.avatar.setVisibility(View.VISIBLE);
-        viewHolder.delete.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View view)
-            {
-                Account selectedAccount = getItem(position);
-                if (selectedAccount != null && selectedAccount.equals(AccountTool.getCurrentAccount
-                    (getContext())))
-                    AccountTool.setFirstAccountPref(PreferenceManager.getDefaultSharedPreferences
-                            (getContext()), getContext());
-                AccountManager manager = AccountManager.get(getContext());
-                remove(selectedAccount);
-                manager.removeAccount(selectedAccount, null, null);
-                notifyDataSetChanged();
-            }
+        viewHolder.delete.setOnClickListener(view -> {
+            Account selectedAccount = getItem(position);
+            if (selectedAccount != null && selectedAccount.equals(AccountTool.getCurrentAccount
+                (getContext())))
+                AccountTool.setFirstAccountPref(PreferenceManager.getDefaultSharedPreferences
+                        (getContext()), getContext());
+            AccountManager manager = AccountManager.get(getContext());
+            remove(selectedAccount);
+            manager.removeAccount(selectedAccount, null, null);
+            notifyDataSetChanged();
         });
 
-        viewHolder.layout.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View view)
-            {
-                Account newCurrAccount;
-                AccountManager accManager = AccountManager.get(getContext());
+        viewHolder.layout.setOnClickListener(view -> {
+            Account newCurrAccount;
+            AccountManager accManager = AccountManager.get(getContext());
 
-                newCurrAccount = item;
-                if (newCurrAccount == null)
-                    return;
-                SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getContext());
-                SharedPreferences.Editor editor = preferences.edit();
-                editor.putString(CURRENT_ACCOUNT_NAME, newCurrAccount.name);
-                editor.commit();
-                Log.d("Account manager", "New current account is ==> " + newCurrAccount.name);
-                mAccountManagerActivity.syncAll(newCurrAccount);
-                mAccountManagerActivity.finish();
-            }
+            newCurrAccount = item;
+            if (newCurrAccount == null)
+                return;
+            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getContext());
+            SharedPreferences.Editor editor = preferences.edit();
+            editor.putString(CURRENT_ACCOUNT_NAME, newCurrAccount.name);
+            editor.commit();
+            Log.d("Account manager", "New current account is ==> " + newCurrAccount.name);
+            mAccountManagerActivity.syncAll(newCurrAccount);
+            mAccountManagerActivity.finish();
         });
         return (convertView);
     }}

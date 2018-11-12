@@ -4,6 +4,9 @@ import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -22,7 +25,9 @@ import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -312,7 +317,10 @@ public class ObservationFormFragment extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
 
         if (resultCode == RESULT_OK) {
+
+            Bitmap bitmap;
             Uri pictureUri = null;
+
             if (requestCode == CAMERA) {
                 Log.i("FromFragment", "onActivityResult CAMERA");
                 pictureUri = currentPhotoPath;
@@ -321,6 +329,7 @@ public class ObservationFormFragment extends Fragment {
             else if (requestCode == GALLERY) {
                 pictureUri = data.getData();
                 Log.i("FromFragment", "onActivityResult GALLERY");
+                Log.e("FromFragment", "Image URI = " + pictureUri);
             }
 
             if (pictureUri != null && !picturesList.contains(pictureUri)) {

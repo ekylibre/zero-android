@@ -32,8 +32,6 @@ import java.util.Calendar;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import ekylibre.database.ZeroContract;
 import ekylibre.service.SimpleLocationService;
@@ -419,10 +417,12 @@ public class ObservationActivity extends AppCompatActivity implements
                     iDs.add(tempActivity.id);
                 }
             }
-            Collections.sort(activitiesList, (ele1, ele2) -> {
-                Collator localeCollator = Collator.getInstance(Locale.FRANCE);
-                return localeCollator.compare(ele1.name, ele2.name);
-            });
+            if (activitiesList.size() > 0) {
+                Collections.sort(activitiesList, (ele1, ele2) -> {
+                    Collator localeCollator = Collator.getInstance(Locale.FRANCE);
+                    return localeCollator.compare(ele1.name, ele2.name);
+                });
+            }
         }
     }
 
@@ -441,9 +441,11 @@ public class ObservationActivity extends AppCompatActivity implements
         if (cursor != null) {
             try {
                 while (cursor.moveToNext()) {
-                    Pattern pattern = Pattern.compile(".*(19|20\\d{2}).*");
-                    Matcher m = pattern.matcher(cursor.getString(2));
-                    culturesList.add(new CultureItem(cursor.getInt(1), cursor.getString(2), m.matches() ? m.group(1) : "---"));
+//                    Pattern pattern = Pattern.compile(".*(19|20\\d{2}).*");
+//                    Matcher m = pattern.matcher(cursor.getString(2));
+//                    m.matches() ? m.group(1) : "---";
+                    culturesList.add(new CultureItem(cursor.getInt(1), cursor.getString(2)
+                            .replace(selectedActivity.name + " ", ""), null));
                 }
             } finally {
                 cursor.close();
