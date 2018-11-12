@@ -38,7 +38,7 @@ public class PicturesRecyclerAdapter extends RecyclerView.Adapter<PicturesRecycl
     /**
      * The item ViewHolder
      */
-    class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    class ViewHolder extends RecyclerView.ViewHolder{
 
         Context context;
         ImageView imageView;
@@ -48,33 +48,17 @@ public class PicturesRecyclerAdapter extends RecyclerView.Adapter<PicturesRecycl
             super(itemView);
             context = itemView.getContext();
             imageView = itemView.findViewById(R.id.picture);
-            itemView.setOnClickListener(this);
+            itemView.setOnLongClickListener(view -> {
+                picturesList.remove(getAdapterPosition());
+                notifyItemRemoved(getAdapterPosition());
+                if (getItemCount() == 0)
+                    picturesRecycler.setVisibility(View.GONE);
+                return true;
+            });
         }
 
         void display(Uri item) {
             pictureUri = item;
-
-//            bitmap = MediaStore.Images.Media.getBitmap(context.getContentResolver(), item);
-//            Log.i("Thumb", item.toString());
-//            Bitmap thumb = ThumbnailUtils.extractThumbnail(BitmapFactory.decodeFile(item.getPath()), 128, 128);
-//            RoundedBitmapDrawable dr = RoundedBitmapDrawableFactory.create(context.getResources(), thumb);
-//            dr.setCornerRadius(10);
-//            dr.setAntiAlias(true);
-//            imageView.setImageDrawable(dr);
-
-//            InputStream is;
-//
-//            Log.e("PictureAdapter", "Before");
-//            Log.e("PictureAdapter", "Uri " + item);
-//            try {
-//                is = context.getContentResolver().openInputStream(pictureUri);
-//                Bitmap bitmap = BitmapFactory.decodeStream(is);
-//                if (is != null)
-//                    is.close();
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//            }
-//            Log.e("PictureAdapter", "After");
 
             Picasso.get().load(item).resize(256, 256).centerCrop().into(imageView,
                 new Callback() {
@@ -91,14 +75,6 @@ public class PicturesRecyclerAdapter extends RecyclerView.Adapter<PicturesRecycl
                         imageView.setImageResource(R.drawable.ic_ekylibre);
                     }
                 });
-        }
-
-        @Override
-        public void onClick(View v) {
-            picturesList.remove(getAdapterPosition());
-            notifyItemRemoved(getAdapterPosition());
-            if (getItemCount() == 0)
-                picturesRecycler.setVisibility(View.GONE);
         }
     }
 
