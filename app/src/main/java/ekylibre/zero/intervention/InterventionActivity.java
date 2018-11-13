@@ -598,7 +598,7 @@ public class InterventionActivity extends UpdatableActivity
                 InterventionActivity.super.onBackPressed();
             }
         });
-        dialog.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+        dialog.setNeutralButton(R.string.cancel, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 dialogInterface.cancel();

@@ -185,7 +185,7 @@
                     android:layout_weight="0.30"
                     android:id="@+id/layout_preparation">
 
-                    <Button
+                    <androidx.appcompat.widget.AppCompatButton
                         android:id="@+id/preparation"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
@@ -213,7 +213,7 @@
                         android:layout_marginBottom="4dp"
                         />
 
-                    <ImageView
+                    <androidx.appcompat.widget.AppCompatImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         app:srcCompat="@drawable/action_preparation"
@@ -231,7 +231,7 @@
                     android:id="@+id/layout_active_preparation"
                     android:visibility="gone">
 
-                    <Button
+                    <androidx.appcompat.widget.AppCompatButton
                         android:id="@+id/active_preparation"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
@@ -257,7 +257,7 @@
                         android:layout_alignBottom="@+id/active_preparation"
                         android:layout_marginBottom="4dp"
                         />
-                    <ImageView
+                    <androidx.appcompat.widget.AppCompatImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         app:srcCompat="@drawable/action_preparation_white"
@@ -274,7 +274,7 @@
                     android:layout_weight="0.30"
                     android:id="@+id/layout_travel"
                     android:layout_marginStart="10dp">
-                    <Button
+                    <androidx.appcompat.widget.AppCompatButton
                         android:id="@+id/travel"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
@@ -299,7 +299,7 @@
                         android:layout_alignBottom="@+id/travel"
                         android:layout_marginBottom="4dp"
                         />
-                    <ImageView
+                    <androidx.appcompat.widget.AppCompatImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         app:srcCompat="@drawable/action_travel"
@@ -317,7 +317,7 @@
                     android:id="@+id/layout_active_travel"
                     android:layout_marginStart="10dp"
                     android:visibility="gone">
-                    <Button
+                    <androidx.appcompat.widget.AppCompatButton
                         android:id="@+id/active_travel"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
@@ -342,7 +342,7 @@
                         android:layout_alignBottom="@+id/active_travel"
                         android:layout_marginBottom="4dp"
                         />
-                    <ImageView
+                    <androidx.appcompat.widget.AppCompatImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         app:srcCompat="@drawable/action_travel_white"
@@ -358,7 +358,7 @@
                     android:layout_weight="0.30"
                     android:id="@+id/layout_intervention"
                     android:layout_marginStart="10dp">
-                    <Button
+                    <androidx.appcompat.widget.AppCompatButton
                         android:id="@+id/intervention"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
@@ -383,7 +383,7 @@
                         android:layout_alignBottom="@+id/intervention"
                         android:layout_marginBottom="4dp"
                         />
-                    <ImageView
+                    <androidx.appcompat.widget.AppCompatImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         app:srcCompat="@drawable/action_intervention"
@@ -402,7 +402,7 @@
                     android:layout_marginStart="10dp"
                     android:visibility="gone">
 
-                    <Button
+                    <androidx.appcompat.widget.AppCompatButton
                         android:id="@+id/active_intervention"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
@@ -427,7 +427,7 @@
                         android:layout_alignBottom="@+id/active_intervention"
                         android:layout_marginBottom="4dp"
                         />
-                    <ImageView
+                    <androidx.appcompat.widget.AppCompatImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         app:srcCompat="@drawable/action_intervention_white"
