@@ -54,6 +54,10 @@ public class ZeroProvider extends ContentProvider {
     public static final int ROUTE_OBSERVATION_PLANTS_ITEM = 1403;
     public static final int ROUTE_OBSERVATION_ISSUES_LIST = 1404;
     public static final int ROUTE_OBSERVATION_ISSUES_ITEM = 1405;
+    public static final int ROUTE_ISSUE_NATURES_LIST = 1406;
+    public static final int ROUTE_ISSUE_NATURES_ITEM = 1407;
+    public static final int ROUTE_VEGETAL_SCALE_LIST = 1408;
+    public static final int ROUTE_VEGETAL_SCALE_ITEM = 1409;
 
     // UriMatcher, used to decode incoming URIs.
     private static final UriMatcher URI_MATCHER = new UriMatcher(UriMatcher.NO_MATCH);
@@ -91,6 +95,10 @@ public class ZeroProvider extends ContentProvider {
         URI_MATCHER.addURI(ZeroContract.AUTHORITY, "observation_plants/#", ROUTE_OBSERVATION_PLANTS_ITEM);
         URI_MATCHER.addURI(ZeroContract.AUTHORITY, "observation_issues", ROUTE_OBSERVATION_ISSUES_LIST);
         URI_MATCHER.addURI(ZeroContract.AUTHORITY, "observation_issues/#", ROUTE_OBSERVATION_ISSUES_ITEM);
+        URI_MATCHER.addURI(ZeroContract.AUTHORITY, "issue_natures", ROUTE_ISSUE_NATURES_LIST);
+        URI_MATCHER.addURI(ZeroContract.AUTHORITY, "issue_natures/#", ROUTE_ISSUE_NATURES_ITEM);
+        URI_MATCHER.addURI(ZeroContract.AUTHORITY, "vegetal_scale", ROUTE_VEGETAL_SCALE_LIST);
+        URI_MATCHER.addURI(ZeroContract.AUTHORITY, "vegetal_scale/#", ROUTE_VEGETAL_SCALE_ITEM);
     }
 
     private DatabaseHelper mDatabaseHelper;
@@ -170,6 +178,14 @@ public class ZeroProvider extends ContentProvider {
             case ROUTE_OBSERVATION_ISSUES_LIST:
             case ROUTE_OBSERVATION_ISSUES_ITEM:
                 return ZeroContract.ObservationIssues.CONTENT_TYPE;
+
+            case ROUTE_ISSUE_NATURES_LIST:
+            case ROUTE_ISSUE_NATURES_ITEM:
+                return ZeroContract.IssueNatures.CONTENT_TYPE;
+
+            case ROUTE_VEGETAL_SCALE_LIST:
+            case ROUTE_VEGETAL_SCALE_ITEM:
+                return ZeroContract.VegetalScale.CONTENT_TYPE;
 
             default:
                 throw new UnsupportedOperationException("Unknown URI: " + uri);
@@ -390,6 +406,30 @@ public class ZeroProvider extends ContentProvider {
                 cursor.setNotificationUri(context.getContentResolver(), uri);
                 return cursor;
 
+            case ROUTE_ISSUE_NATURES_ITEM:
+                id = uri.getLastPathSegment();
+                builder.where(ZeroContract.IssueNatures._ID + "=?", id);
+            case ROUTE_ISSUE_NATURES_LIST:
+                builder.table(ZeroContract.IssueNatures.TABLE_NAME)
+                        .where(selection, selectionArgs);
+                cursor = builder.query(database, projection, sortOrder);
+                context = getContext();
+                assert context != null;
+                cursor.setNotificationUri(context.getContentResolver(), uri);
+                return cursor;
+
+            case ROUTE_VEGETAL_SCALE_ITEM:
+                id = uri.getLastPathSegment();
+                builder.where(ZeroContract.VegetalScale._ID + "=?", id);
+            case ROUTE_VEGETAL_SCALE_LIST:
+                builder.table(ZeroContract.VegetalScale.TABLE_NAME)
+                        .where(selection, selectionArgs);
+                cursor = builder.query(database, projection, sortOrder);
+                context = getContext();
+                assert context != null;
+                cursor.setNotificationUri(context.getContentResolver(), uri);
+                return cursor;
+
 
             default:
                 throw new UnsupportedOperationException("Unknown URI: " + uri);
@@ -505,6 +545,20 @@ public class ZeroProvider extends ContentProvider {
                 result = Uri.parse(ZeroContract.ObservationIssues.CONTENT_URI + "/" + id);
                 break;
             case ROUTE_OBSERVATION_ISSUES_ITEM:
+                throw new UnsupportedOperationException("Insert not supported on URI: " + uri);
+
+            case ROUTE_ISSUE_NATURES_LIST:
+                id = database.insertOrThrow(ZeroContract.IssueNatures.TABLE_NAME, null, values);
+                result = Uri.parse(ZeroContract.IssueNatures.CONTENT_URI + "/" + id);
+                break;
+            case ROUTE_ISSUE_NATURES_ITEM:
+                throw new UnsupportedOperationException("Insert not supported on URI: " + uri);
+
+            case ROUTE_VEGETAL_SCALE_LIST:
+                id = database.insertOrThrow(ZeroContract.VegetalScale.TABLE_NAME, null, values);
+                result = Uri.parse(ZeroContract.VegetalScale.CONTENT_URI + "/" + id);
+                break;
+            case ROUTE_VEGETAL_SCALE_ITEM:
                 throw new UnsupportedOperationException("Insert not supported on URI: " + uri);
 
                 default:
@@ -724,6 +778,32 @@ public class ZeroProvider extends ContentProvider {
                         .delete(database);
                 break;
 
+            case ROUTE_ISSUE_NATURES_LIST:
+                count = builder.table(ZeroContract.IssueNatures.TABLE_NAME)
+                        .where(selection, selectionArgs)
+                        .delete(database);
+                break;
+            case ROUTE_ISSUE_NATURES_ITEM:
+                id = uri.getLastPathSegment();
+                count = builder.table(ZeroContract.IssueNatures.TABLE_NAME)
+                        .where(ZeroContract.IssueNatures._ID + "=?", id)
+                        .where(selection, selectionArgs)
+                        .delete(database);
+                break;
+
+            case ROUTE_VEGETAL_SCALE_LIST:
+                count = builder.table(ZeroContract.VegetalScale.TABLE_NAME)
+                        .where(selection, selectionArgs)
+                        .delete(database);
+                break;
+            case ROUTE_VEGETAL_SCALE_ITEM:
+                id = uri.getLastPathSegment();
+                count = builder.table(ZeroContract.VegetalScale.TABLE_NAME)
+                        .where(ZeroContract.VegetalScale._ID + "=?", id)
+                        .where(selection, selectionArgs)
+                        .delete(database);
+                break;
+
             default:
                 throw new UnsupportedOperationException("Unknown URI: " + uri);
         }
@@ -939,6 +1019,32 @@ public class ZeroProvider extends ContentProvider {
                 id = uri.getLastPathSegment();
                 count = builder.table(ZeroContract.ObservationIssues.TABLE_NAME)
                         .where(ZeroContract.ObservationIssues._ID + "=?", id)
+                        .where(selection, selectionArgs)
+                        .update(database, values);
+                break;
+
+            case ROUTE_ISSUE_NATURES_LIST:
+                count = builder.table(ZeroContract.IssueNatures.TABLE_NAME)
+                        .where(selection, selectionArgs)
+                        .update(database, values);
+                break;
+            case ROUTE_ISSUE_NATURES_ITEM:
+                id = uri.getLastPathSegment();
+                count = builder.table(ZeroContract.IssueNatures.TABLE_NAME)
+                        .where(ZeroContract.IssueNatures._ID + "=?", id)
+                        .where(selection, selectionArgs)
+                        .update(database, values);
+                break;
+
+            case ROUTE_VEGETAL_SCALE_LIST:
+                count = builder.table(ZeroContract.VegetalScale.TABLE_NAME)
+                        .where(selection, selectionArgs)
+                        .update(database, values);
+                break;
+            case ROUTE_VEGETAL_SCALE_ITEM:
+                id = uri.getLastPathSegment();
+                count = builder.table(ZeroContract.VegetalScale.TABLE_NAME)
+                        .where(ZeroContract.VegetalScale._ID + "=?", id)
                         .where(selection, selectionArgs)
                         .update(database, values);
                 break;

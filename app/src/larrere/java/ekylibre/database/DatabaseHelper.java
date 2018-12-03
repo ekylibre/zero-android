@@ -1,11 +1,19 @@
 package ekylibre.database;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
+import ekylibre.util.AccountTool;
+import ekylibre.util.CSVReader;
 import ekylibre.zero.BuildConfig;
+import ekylibre.zero.ObservationActivity;
 
 public class DatabaseHelper extends SQLiteOpenHelper
 {
@@ -15,9 +23,11 @@ public class DatabaseHelper extends SQLiteOpenHelper
 
     private static final int NO_VERSION = -1;
 
-    public DatabaseHelper(Context context)
-    {
+    private Context context;
+
+    public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
+        this.context = context;
     }
 
 
@@ -404,6 +414,19 @@ public class DatabaseHelper extends SQLiteOpenHelper
 
 //                database.execSQL("ALTER TABLE " + ZeroContract.Issues.TABLE_NAME + " ADD " +
 //                        ZeroContract.Issues.EKY_ID + " INTEGER DEFAULT NULL");
+
+                database.execSQL("CREATE TABLE IF NOT EXISTS " + ZeroContract.IssueNatures.TABLE_NAME + "(" +
+                        ZeroContract.IssueNatures._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                        ZeroContract.IssueNatures.CATEGORY + " TEXT NOT NULL, " +
+                        ZeroContract.IssueNatures.LABEL + " TEXT NOT NULL, " +
+                        ZeroContract.IssueNatures.NATURE + " TEXT NOT NULL)");
+
+                database.execSQL("CREATE TABLE IF NOT EXISTS " + ZeroContract.VegetalScale.TABLE_NAME + "(" +
+                        ZeroContract.VegetalScale._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                        ZeroContract.VegetalScale.REFERENCE + " INTEGER NOT NULL, " +
+                        ZeroContract.VegetalScale.LABEL + " TEXT NOT NULL, " +
+                        ZeroContract.VegetalScale.VARIETY + " TEXT NOT NULL," +
+                        ZeroContract.VegetalScale.POSITION + " INTEGER NOT NULL)");
 
                 database.execSQL("ALTER TABLE " + ZeroContract.Plants.TABLE_NAME + " ADD " +
                         ZeroContract.Plants.ACTIVITY_NAME + " TEXT DEFAULT NULL");

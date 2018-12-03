@@ -14,7 +14,6 @@ import android.content.SyncResult;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -23,21 +22,17 @@ import android.provider.MediaStore;
 import android.provider.Settings.Secure;
 import android.util.Base64;
 import android.util.Log;
-import android.widget.ImageView;
 
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.security.ProviderInstaller;
-import com.squareup.picasso.Callback;
-import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
@@ -52,8 +47,6 @@ import java.util.Locale;
 import java.util.Set;
 import java.util.UUID;
 
-import androidx.core.graphics.drawable.RoundedBitmapDrawable;
-import androidx.core.graphics.drawable.RoundedBitmapDrawableFactory;
 import ekylibre.database.ZeroContract;
 import ekylibre.exceptions.HTTPException;
 import ekylibre.util.AccountTool;
@@ -62,7 +55,6 @@ import ekylibre.util.DateConstant;
 import ekylibre.util.ImageConverter;
 import ekylibre.util.UpdatableActivity;
 import ekylibre.zero.BuildConfig;
-import ekylibre.zero.R;
 import ekylibre.zero.SettingsActivity;
 import ekylibre.zero.intervention.InterventionActivity;
 

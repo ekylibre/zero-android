@@ -3,7 +3,10 @@ package ekylibre.zero.home;
 import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.content.ContentResolver;
+import android.content.ContentValues;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
@@ -20,12 +23,16 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
 import ekylibre.database.ZeroContract;
 import ekylibre.service.ConnectionManagerService;
 import ekylibre.service.GeneralHandler;
 import ekylibre.util.AccountTool;
+import ekylibre.util.CSVReader;
 import ekylibre.util.Contact;
 import ekylibre.util.PermissionManager;
 import ekylibre.util.UpdatableActivity;
@@ -103,6 +110,55 @@ public class MainActivity extends UpdatableActivity
         mPrgressBar = (ProgressBar)findViewById(R.id.progress_bar);
         sync_data();
         firstPass = false;
+
+        // Load CSV if not already done
+        SharedPreferences prefs = getSharedPreferences("prefs", Context.MODE_PRIVATE);
+        if (!prefs.getBoolean("csv_loaded", false)) {
+
+            Log.e(TAG, "Loading CSV ...");
+//                for (int i = 0; i < rows.size(); i++) {
+//                    Log.d(Constants.TAG, String.format("row %s: %s, %s", i, rows.get(i)[0], rows.get(i)[1]));
+//                }
+            ContentResolver cr = getContentResolver();
+            CSVReader csvReader = new CSVReader(this, "incidents.csv");
+            List<String[]> rows = null;
+            try {
+                rows = csvReader.readCSV();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            if (rows != null) {
+                ContentValues[] contentValues = new ContentValues[rows.size()];
+                for (int i = 0; i < rows.size(); i++) {
+                    ContentValues cv = new ContentValues();
+                    cv.put(ZeroContract.IssueNatures.CATEGORY, rows.get(i)[0]);
+                    cv.put(ZeroContract.IssueNatures.LABEL, rows.get(i)[1]);
+                    cv.put(ZeroContract.IssueNatures.NATURE, rows.get(i)[2]);
+                    contentValues[i] = cv;
+                }
+                cr.bulkInsert(ZeroContract.IssueNatures.CONTENT_URI, contentValues);
+            }
+
+            csvReader = new CSVReader(this, "stades-vegetatifs.csv");
+            rows = null;
+            try {
+                rows = csvReader.readCSV();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            if (rows != null) {
+                ContentValues[] contentValues = new ContentValues[rows.size()];
+                for (int i = 0; i < rows.size(); i++) {
+                    ContentValues cv = new ContentValues();
+                    cv.put(ZeroContract.VegetalScale.REFERENCE, rows.get(i)[0]);
+                    cv.put(ZeroContract.VegetalScale.LABEL, rows.get(i)[1]);
+                    cv.put(ZeroContract.VegetalScale.VARIETY, rows.get(i)[2]);
+                    cv.put(ZeroContract.VegetalScale.POSITION, rows.get(i)[3]);
+                    contentValues[i] = cv;
+                }
+                cr.bulkInsert(ZeroContract.VegetalScale.CONTENT_URI, contentValues);
+            }
+        }
     }
 
     /*

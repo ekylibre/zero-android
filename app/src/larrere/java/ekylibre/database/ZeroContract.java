@@ -205,12 +205,17 @@ public final class ZeroContract {
 
     public interface IssueNatureColumns extends BaseColumns {
         String TABLE_NAME = "issue_natures";
-        String FK_ISSUE = "fk_issue";
+        String CATEGORY = "category";
+        String LABEL = "label";
+        String NATURE = "nature";
     }
 
     public interface VegetalScaleColumns extends BaseColumns {
-        String TABLE_NAME = "vegetal_scales";
-        String FK_ISSUE = "fk_issue";
+        String TABLE_NAME = "vegetal_scale";
+        String REFERENCE = "reference";
+        String LABEL = "label";
+        String VARIETY = "variety";
+        String POSITION = "position";
     }
 
     public static final class Crumbs implements CrumbsColumns {
@@ -477,5 +482,33 @@ public final class ZeroContract {
         public static final String[] PROJECTION_ALL = {_ID, FK_OBSERVATION, FK_ISSUE, EKY_ID_ISSUE};
 
         public static final String SORT_ORDER_DEFAULT = _ID + " ASC";
+    }
+
+    public static final class IssueNatures implements IssueNatureColumns {
+
+        // Content URI for this table
+        public static final Uri CONTENT_URI = Uri.withAppendedPath(
+                ZeroContract.CONTENT_URI,"issue_natures");
+        // MIME type for list and individual record.
+        public static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE +
+                "/vnd.ekylibre.zero.issue_natures";
+
+        public static final String[] PROJECTION_ALL = {_ID, CATEGORY, LABEL, NATURE};
+
+        public static final String SORT_ORDER_DEFAULT = LABEL + " ASC";
+    }
+
+    public static final class VegetalScale implements VegetalScaleColumns {
+
+        // Content URI for this table
+        public static final Uri CONTENT_URI = Uri.withAppendedPath(
+                ZeroContract.CONTENT_URI,"vegetal_scale");
+        // MIME type for list and individual record.
+        public static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE +
+                "/vnd.ekylibre.zero.vegetal_scale";
+
+        public static final String[] PROJECTION_ALL = {_ID, REFERENCE, LABEL, VARIETY, POSITION};
+
+        public static final String SORT_ORDER_DEFAULT = POSITION + " ASC";
     }
 }
