@@ -4,9 +4,7 @@ import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -25,9 +23,7 @@ import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -47,7 +43,7 @@ import ekylibre.zero.R;
 import ekylibre.zero.fragments.adapter.PicturesRecyclerAdapter;
 import ekylibre.zero.fragments.model.CultureItem;
 import ekylibre.zero.fragments.model.IssueItem;
-import ekylibre.zero.util.DateTools;
+import ekylibre.util.DateTools;
 
 import static android.app.Activity.RESULT_OK;
 import static android.os.Environment.getExternalStoragePublicDirectory;

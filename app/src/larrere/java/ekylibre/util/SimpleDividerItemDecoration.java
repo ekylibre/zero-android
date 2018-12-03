@@ -1,4 +1,4 @@
-package ekylibre.zero.util;
+package ekylibre.util;
 
 import android.content.Context;
 import android.graphics.Canvas;
