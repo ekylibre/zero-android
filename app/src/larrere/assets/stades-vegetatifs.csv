@@ -1,0 +1,359 @@
+reference,label,variety,position
+123,Semis,zea_mays,0
+106,Germination,zea_mays,1
+113,Levée,zea_mays,2
+085,Cigare,zea_mays,3
+006,1 feuille,zea_mays,4
+029,2 feuilles,zea_mays,5
+038,3 feuilles,zea_mays,6
+045,4 feuilles,zea_mays,7
+053,5 feuilles,zea_mays,8
+060,6 feuilles,zea_mays,9
+065,7 feuilles,zea_mays,10
+069,8 feuilles,zea_mays,11
+074,9 feuilles,zea_mays,12
+011,10 feuilles,zea_mays,13
+018,11 feuilles,zea_mays,14
+022,12 feuilles,zea_mays,15
+101,Floraison mâle,zea_mays,16
+100,Floraison femelle,zea_mays,17
+093,Début remplissage,zea_mays,18
+109,Grain laiteux,zea_mays,19
+112,Grain pâteux mou,zea_mays,20
+111,Grain pâteux dur,zea_mays,21
+120,Point noir,zea_mays,22
+123,Semis,pisum,0
+106,Germination,pisum,1
+113,Levée,pisum,2
+007,1 Nœud,pisum,3
+030,2 Nœuds,pisum,4
+039,3 Nœuds,pisum,5
+046,4 Nœuds,pisum,6
+054,5 Nœuds,pisum,7
+061,6 Nœuds,pisum,8
+066,7 Nœuds,pisum,9
+070,8 Nœuds,pisum,10
+075,9 Nœuds,pisum,11
+012,10 Nœuds,pisum,12
+019,11 Nœuds,pisum,13
+023,12 Nœuds,pisum,14
+080,Boutons floraux verts,pisum,15
+092,Début floraison,pisum,16
+127,Sortie des gousses,pisum,17
+123,Semis,cicer_arietinum,0
+106,Germination,cicer_arietinum,1
+113,Levée,cicer_arietinum,2
+007,1 Nœud,cicer_arietinum,3
+030,2 Nœuds,cicer_arietinum,4
+039,3 Nœuds,cicer_arietinum,5
+046,4 Nœuds,cicer_arietinum,6
+054,5 Nœuds,cicer_arietinum,7
+061,6 Nœuds,cicer_arietinum,8
+066,7 Nœuds,cicer_arietinum,9
+070,8 Nœuds,cicer_arietinum,10
+075,9 Nœuds,cicer_arietinum,11
+012,10 Nœuds,cicer_arietinum,12
+019,11 Nœuds,cicer_arietinum,13
+023,12 Nœuds,cicer_arietinum,14
+080,Boutons floraux verts,cicer_arietinum,15
+092,Début floraison,cicer_arietinum,16
+127,Sortie des gousses,cicer_arietinum,17
+104,Formation des graines,cicer_arietinum,18
+110,Grain mou,cicer_arietinum,19
+108,Grain dur,cicer_arietinum,20
+123,Semis,vicia_faba,0
+106,Germination,vicia_faba,1
+113,Levée,vicia_faba,2
+007,1 Nœud,vicia_faba,3
+030,2 Nœuds,vicia_faba,4
+039,3 Nœuds,vicia_faba,5
+046,4 Nœuds,vicia_faba,6
+054,5 Nœuds,vicia_faba,7
+061,6 Nœuds,vicia_faba,8
+066,7 Nœuds,vicia_faba,9
+070,8 Nœuds,vicia_faba,10
+075,9 Nœuds,vicia_faba,11
+012,10 Nœuds,vicia_faba,12
+019,11 Nœuds,vicia_faba,13
+023,12 Nœuds,vicia_faba,14
+080,Boutons floraux verts,vicia_faba,15
+092,Début floraison,vicia_faba,16
+127,Sortie des gousses,vicia_faba,17
+104,Formation des graines,vicia_faba,18
+110,Grain mou,vicia_faba,19
+108,Grain dur,vicia_faba,20
+123,Semis,phaseolus,0
+106,Germination,phaseolus,1
+113,Levée,phaseolus,2
+086,Cotylédons,phaseolus,3
+009,1 trifolié,phaseolus,4
+032,2 trifoliés,phaseolus,5
+041,3 trifoliés,phaseolus,6
+048,4 trifoliés,phaseolus,7
+056,5 trifoliés,phaseolus,8
+063,6 trifoliés,phaseolus,9
+068,7 trifoliés,phaseolus,10
+072,8 trifoliés,phaseolus,11
+077,9 trifoliés,phaseolus,12
+014,10 trifoliés,phaseolus,13
+021,11 trifoliés,phaseolus,14
+025,12 trifoliés,phaseolus,15
+080,Boutons floraux verts,phaseolus,16
+092,Début floraison,phaseolus,17
+127,Sortie des gousses,phaseolus,18
+123,Semis,glycine_max,0
+106,Germination,glycine_max,1
+113,Levée,glycine_max,2
+086,Cotylédons,glycine_max,3
+009,1 trifolié,glycine_max,4
+032,2 trifoliés,glycine_max,5
+041,3 trifoliés,glycine_max,6
+048,4 trifoliés,glycine_max,7
+056,5 trifoliés,glycine_max,8
+063,6 trifoliés,glycine_max,9
+068,7 trifoliés,glycine_max,10
+072,8 trifoliés,glycine_max,11
+077,9 trifoliés,glycine_max,12
+014,10 trifoliés,glycine_max,13
+021,11 trifoliés,glycine_max,14
+025,12 trifoliés,glycine_max,15
+080,Boutons floraux verts,glycine_max,16
+092,Début floraison,glycine_max,17
+127,Sortie des gousses,glycine_max,18
+104,Formation des graines,glycine_max,19
+110,Grain mou,glycine_max,20
+108,Grain dur,glycine_max,21
+123,Semis,spinacia_oleracea,0
+106,Germination,spinacia_oleracea,1
+113,Levée,spinacia_oleracea,2
+086,Cotylédons,spinacia_oleracea,3
+006,1 feuille,spinacia_oleracea,4
+029,2 feuilles,spinacia_oleracea,5
+038,3 feuilles,spinacia_oleracea,6
+045,4 feuilles,spinacia_oleracea,7
+053,5 feuilles,spinacia_oleracea,8
+060,6 feuilles,spinacia_oleracea,9
+065,7 feuilles,spinacia_oleracea,10
+069,8 feuilles,spinacia_oleracea,11
+011,10 feuilles,spinacia_oleracea,12
+022,12 feuilles,spinacia_oleracea,13
+119,Plantation,solanum_tuberosum,0
+106,Germination,solanum_tuberosum,1
+113,Levée,solanum_tuberosum,2
+089,Croissance foliaire,solanum_tuberosum,3
+116,Œils visibles,solanum_tuberosum,4
+129,Stade crochet,solanum_tuberosum,5
+095,Début tubérisation,solanum_tuberosum,6
+090,Croissance tubercules,solanum_tuberosum,7
+102,Formation de peau,solanum_tuberosum,8
+119,Plantation,asteraceae,0
+122,Reprise végétative,asteraceae,1
+119,Plantation,asparagus,0
+122,Reprise végétative,asparagus,1
+128,Sortie des turions,asparagus,2
+028,1ère pousse,asparagus,3
+103,Formation des cladodes,asparagus,4
+117,Ouverture des cladodes,asparagus,5
+037,2ème pousse,asparagus,6
+044,3ème pousse,asparagus,7
+051,4ème pousse,asparagus,8
+059,5ème pousse,asparagus,9
+125,Sénescence,asparagus,10
+123,Semis,daucus,0
+106,Germination,daucus,1
+113,Levée,daucus,2
+086,Cotylédons,daucus,3
+009,1 trifolié,daucus,4
+032,2 trifoliés,daucus,5
+041,3 trifoliés,daucus,6
+048,4 trifoliés,daucus,7
+056,5 trifoliés,daucus,8
+063,6 trifoliés,daucus,9
+068,7 trifoliés,daucus,10
+087,Crayon,daucus,11
+004,- 5 mm,daucus,12
+052,5 - 10 mm,daucus,13
+010,10 - 15 mm,daucus,14
+026,15 - 20 mm,daucus,15
+033,20 - 30 mm,daucus,16
+042,30 - 40 mm,daucus,17
+119,Plantation,allium_porrum,0
+122,Reprise végétative,allium_porrum,1
+003,- 20 mm,allium_porrum,2
+033,20 - 30 mm,allium_porrum,3
+042,30 - 40 mm,allium_porrum,4
+049,40 - 50 mm,allium_porrum,5
+057,50 - 60 mm,allium_porrum,6
+119,Plantation,brassica_oleracea,0
+122,Reprise végétative,brassica_oleracea,1
+088,Croissance,brassica_oleracea,2
+118,Pommaison,brassica_oleracea,3
+002,- 100 mm,brassica_oleracea,4
+016,100 - 150 mm,brassica_oleracea,5
+027,150 - 200 mm,brassica_oleracea,6
+034,200 - 250 mm,brassica_oleracea,7
+036,250 - 300 mm,brassica_oleracea,8
+123,Semis,brassica_napus,0
+106,Germination,brassica_napus,1
+113,Levée,brassica_napus,2
+086,Cotylédons,brassica_napus,3
+006,1 feuille,brassica_napus,4
+029,2 feuilles,brassica_napus,5
+038,3 feuilles,brassica_napus,6
+045,4 feuilles,brassica_napus,7
+053,5 feuilles,brassica_napus,8
+060,6 feuilles,brassica_napus,9
+065,7 feuilles,brassica_napus,10
+069,8 feuilles,brassica_napus,11
+074,9 feuilles,brassica_napus,12
+011,10 feuilles,brassica_napus,13
+018,11 feuilles,brassica_napus,14
+022,12 feuilles,brassica_napus,15
+114,Montaison,brassica_napus,16
+079,Boutons accolés,brassica_napus,17
+081,Boutons séparés,brassica_napus,18
+098,Floraison,brassica_napus,19
+105,Formation des siliques,brassica_napus,20
+078,Apparition des grains,brassica_napus,21
+124,Semis-Plantation,cucurbita,0
+107,Germination - Reprise,cucurbita,1
+113,Levée,cucurbita,2
+086,Cotylédons,cucurbita,3
+006,1 feuille,cucurbita,4
+029,2 feuilles,cucurbita,5
+038,3 feuilles,cucurbita,6
+045,4 feuilles,cucurbita,7
+053,5 feuilles,cucurbita,8
+060,6 feuilles,cucurbita,9
+065,7 feuilles,cucurbita,10
+069,8 feuilles,cucurbita,11
+074,9 feuilles,cucurbita,12
+011,10 feuilles,cucurbita,13
+018,11 feuilles,cucurbita,14
+022,12 feuilles,cucurbita,15
+080,Boutons floraux verts,cucurbita,16
+098,Floraison,cucurbita,17
+115,Nouaison,cucurbita,18
+005,- 50 mm,cucurbita,19
+058,50 - 100 mm,cucurbita,20
+017,100 - 200 mm,cucurbita,21
+035,200 - 300 mm,cucurbita,22
+043,300 - 400 mm,cucurbita,23
+123,Semis,raphanus_sativus,0
+106,Germination,raphanus_sativus,1
+113,Levée,raphanus_sativus,2
+086,Cotylédons,raphanus_sativus,3
+006,1 feuille,raphanus_sativus,4
+029,2 feuilles,raphanus_sativus,5
+038,3 feuilles,raphanus_sativus,6
+045,4 feuilles,raphanus_sativus,7
+053,5 feuilles,raphanus_sativus,8
+060,6 feuilles,raphanus_sativus,9
+065,7 feuilles,raphanus_sativus,10
+087,Crayon,raphanus_sativus,11
+004,- 5 mm,raphanus_sativus,12
+052,5 - 10 mm,raphanus_sativus,13
+010,10 - 15 mm,raphanus_sativus,14
+026,15 - 20 mm,raphanus_sativus,15
+033,20 - 30 mm,raphanus_sativus,16
+042,30 - 40 mm,raphanus_sativus,17
+049,40 - 50 mm,raphanus_sativus,18
+057,50 - 60 mm,raphanus_sativus,19
+123,Semis,brassica_rapa_rapa,0
+106,Germination,brassica_rapa_rapa,1
+113,Levée,brassica_rapa_rapa,2
+086,Cotylédons,brassica_rapa_rapa,3
+006,1 feuille,brassica_rapa_rapa,4
+029,2 feuilles,brassica_rapa_rapa,5
+038,3 feuilles,brassica_rapa_rapa,6
+045,4 feuilles,brassica_rapa_rapa,7
+053,5 feuilles,brassica_rapa_rapa,8
+060,6 feuilles,brassica_rapa_rapa,9
+065,7 feuilles,brassica_rapa_rapa,10
+069,8 feuilles,brassica_rapa_rapa,11
+074,9 feuilles,brassica_rapa_rapa,12
+011,10 feuilles,brassica_rapa_rapa,13
+018,11 feuilles,brassica_rapa_rapa,14
+022,12 feuilles,brassica_rapa_rapa,15
+001,- 10 mm,brassica_rapa_rapa,16
+015,10 - 20 mm,brassica_rapa_rapa,17
+033,20 - 30 mm,brassica_rapa_rapa,18
+042,30 - 40 mm,brassica_rapa_rapa,19
+050,40 - 60 mm,brassica_rapa_rapa,20
+064,60 - 80 mm,brassica_rapa_rapa,21
+119,Plantation,ipomoea_batatas,0
+122,Reprise végétative,ipomoea_batatas,1
+121,Ramification,ipomoea_batatas,2
+130,Tubérisation,ipomoea_batatas,3
+001,- 10 mm,ipomoea_batatas,4
+015,10 - 20 mm,ipomoea_batatas,5
+042,30 - 40 mm,ipomoea_batatas,6
+049,40 - 50 mm,ipomoea_batatas,7
+057,50 - 60 mm,ipomoea_batatas,8
+064,60 - 80 mm,ipomoea_batatas,9
+073,80 - 100 mm,ipomoea_batatas,10
+123,Semis,helianthus,0
+106,Germination,helianthus,1
+113,Levée,helianthus,2
+086,Cotylédons,helianthus,3
+008,1 paire de feuilles,helianthus,4
+031,2 paires de feuilles,helianthus,5
+040,3 paires de feuilles,helianthus,6
+047,4 paires de feuilles,helianthus,7
+055,5 paires de feuilles,helianthus,8
+062,6 paires de feuilles,helianthus,9
+067,7 paires de feuilles,helianthus,10
+071,8 paires de feuilles,helianthus,11
+076,9 paires de feuilles,helianthus,12
+013,10 paires de feuilles,helianthus,13
+020,11 paires de feuilles,helianthus,14
+024,12 paires de feuilles,helianthus,15
+084,Capitule vert,helianthus,16
+099,Floraison du capitule,helianthus,17
+104,Formation des graines,helianthus,18
+083,Capitule jaune,helianthus,19
+082,Capitule brun,helianthus,20
+123,Semis,sorghum,0
+106,Germination,sorghum,1
+113,Levée,sorghum,2
+085,Cigare,sorghum,3
+006,1 feuille,sorghum,4
+029,2 feuilles,sorghum,5
+038,3 feuilles,sorghum,6
+045,4 feuilles,sorghum,7
+053,5 feuilles,sorghum,8
+060,6 feuilles,sorghum,9
+065,7 feuilles,sorghum,10
+069,8 feuilles,sorghum,11
+074,9 feuilles,sorghum,12
+011,10 feuilles,sorghum,13
+018,11 feuilles,sorghum,14
+022,12 feuilles,sorghum,15
+104,Formation des graines,sorghum,16
+110,Grain mou,sorghum,17
+108,Grain dur,sorghum,18
+123,Semis,poaceae,0
+106,Germination,poaceae,1
+113,Levée,poaceae,2
+006,1 feuille,poaceae,3
+029,2 feuilles,poaceae,4
+038,3 feuilles,poaceae,5
+045,4 feuilles,poaceae,6
+053,5 feuilles,poaceae,7
+060,6 feuilles,poaceae,8
+065,7 feuilles,poaceae,9
+069,8 feuilles,poaceae,10
+074,9 feuilles,poaceae,11
+011,10 feuilles,poaceae,12
+018,11 feuilles,poaceae,13
+022,12 feuilles,poaceae,14
+094,Début tallage,poaceae,15
+097,Fin Tallage,poaceae,16
+096,Épi 1 cm,poaceae,17
+007,1 Nœud,poaceae,18
+030,2 Nœuds,poaceae,19
+091,Début épiaison,poaceae,20
+126,Sortie des étamines,poaceae,21
+104,Formation des graines,poaceae,22
+110,Grain mou,poaceae,23
+108,Grain dur,poaceae,24

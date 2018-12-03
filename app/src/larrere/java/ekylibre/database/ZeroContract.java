@@ -203,6 +203,16 @@ public final class ZeroContract {
         String EKY_ID_ISSUE = "issue_eky_id";
     }
 
+    public interface IssueNatureColumns extends BaseColumns {
+        String TABLE_NAME = "issue_natures";
+        String FK_ISSUE = "fk_issue";
+    }
+
+    public interface VegetalScaleColumns extends BaseColumns {
+        String TABLE_NAME = "vegetal_scales";
+        String FK_ISSUE = "fk_issue";
+    }
+
     public static final class Crumbs implements CrumbsColumns {
         // Content URI for this table
         public static final Uri CONTENT_URI = Uri.withAppendedPath(ZeroContract.CONTENT_URI, "crumbs");

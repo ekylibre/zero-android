@@ -1,0 +1,152 @@
+category,label,issue_natures
+Adventices,Achillée millefeuille,plant_disease
+Adventices,Agrostis stolonifère,plant_disease
+Adventices,Amarante blanche,plant_disease
+Adventices,Ambroisie à feuilles d'armoise,plant_disease
+Adventices,Avoine à chapelets,plant_disease
+Adventices,Brome stérile,plant_disease
+Adventices,Capselle bourse à pasteur,plant_disease
+Adventices,Cardamine hirsute,plant_disease
+Adventices,Carotte sauvage,plant_disease
+Adventices,Chiendent pied de poule,plant_disease
+Adventices,Chiendent rampant,plant_disease
+Adventices,Chénopode blanc,plant_disease
+Adventices,Chénopode hybride,plant_disease
+Adventices,Clématite vigne blanche,plant_disease
+Adventices,Dactyle aggloméré,plant_disease
+Adventices,Datura stramoine,plant_disease
+Adventices,Digitaire sanguine,plant_disease
+Adventices,Erigéron du Canada,plant_disease
+Adventices,Folle avoine,plant_disease
+Adventices,Fumeterre grimpante,plant_disease
+Adventices,Gaillet gratteron,plant_disease
+Adventices,Laiteron des champs,plant_disease
+Adventices,Lampourde glouteron,plant_disease
+Adventices,Liseron des champs,plant_disease
+Adventices,Matricaire camomille,plant_disease
+Adventices,Matricaire discoïde,plant_disease
+Adventices,Menthe à feuilles rondes,plant_disease
+Adventices,Morelle noire,plant_disease
+Adventices,Mouron des champs,plant_disease
+Adventices,Mouron des oiseaux-Stellaire intermédiaire,plant_disease
+Adventices,Ortie brûlante,plant_disease
+Adventices,Panic capillaire,plant_disease
+Adventices,Panic dichotomique,plant_disease
+Adventices,Panic faux millet,plant_disease
+Adventices,Panic pied de coq,plant_disease
+Adventices,Pourpier maraîcher,plant_disease
+Adventices,Pâturin annuel,plant_disease
+Adventices,Pâturin commun,plant_disease
+Adventices,Renouée des oiseaux,plant_disease
+Adventices,Renouée liseron,plant_disease
+Adventices,Renouée persicaire,plant_disease
+Adventices,Rumex petite oseille,plant_disease
+Adventices,Sorgho d'alep,plant_disease
+Adventices,Souchet comestible,plant_disease
+Adventices,Séneçon vulgaire,plant_disease
+Adventices,Sétaire glauque,plant_disease
+Adventices,Sétaire verticillée,plant_disease
+Ravageurs,Acariens rouges,insecta_disease
+Ravageurs,Altise d'hiver ou grosse altise,insecta_disease
+Ravageurs,Bruche du haricot,insecta_disease
+Ravageurs,Bruche du pois,insecta_disease
+Ravageurs,Charançon de la tige du colza,insecta_disease
+Ravageurs,Charançon des siliques,insecta_disease
+Ravageurs,Charançon du bourgeon terminal,insecta_disease
+Ravageurs,Chrysomèle du maïs,insecta_disease
+Ravageurs,Cicadelle du maïs,insecta_disease
+Ravageurs,Criocère de l'asperge,insecta_disease
+Ravageurs,Doryphore de la pomme de terre,insecta_disease
+Ravageurs,Drosophile,insecta_disease
+Ravageurs,Mouche de l'asperge,insecta_disease
+Ravageurs,Mouche des semis,insecta_disease
+Ravageurs,Mouches de la carotte,insecta_disease
+Ravageurs,Mouches du chou,insecta_disease
+Ravageurs,Méligèthe du colza,insecta_disease
+Ravageurs,Noctuelle du chou,insecta_disease
+Ravageurs,Noctuelles défoliatrices,insecta_disease
+Ravageurs,Noctuelles terricoles,insecta_disease
+Ravageurs,Nématode,insecta_disease
+Ravageurs,Oscinies,insecta_disease
+Ravageurs,Piérides,insecta_disease
+Ravageurs,Puceron de l'asperge,insecta_disease
+Ravageurs,Puceron vert des pousses,insecta_disease
+Ravageurs,Puceron vert du pois,insecta_disease
+Ravageurs,Pyrale du maïs,insecta_disease
+Ravageurs,Scutigérelle,insecta_disease
+Ravageurs,Sésamie,insecta_disease
+Ravageurs,Taupins,insecta_disease
+Ravageurs,Teigne du poireau,insecta_disease
+Ravageurs,Thrips du tabac et de l'oignon,insecta_disease
+Ravageurs,Tipule,insecta_disease
+Maladies,Alternariose de la pomme de terre,fungus_disease
+Maladies,Alternariose du chou,fungus_disease
+Maladies,Alternariose du colza,fungus_disease
+Maladies,Alternariose du poireau,fungus_disease
+Maladies,Anthracnose du haricot,fungus_disease
+Maladies,Anthracnose du maïs,fungus_disease
+Maladies,Anthracnose du pois de conserve,fungus_disease
+Maladies,Brûlure des feuilles de l'oignon,fungus_disease
+Maladies,Brûlure des feuilles de la carotte,fungus_disease
+Maladies,Charbon commun,fungus_disease
+Maladies,Charbon des inflorescences,fungus_disease
+Maladies,Flétrissement hivernal du chou,fungus_disease
+Maladies,Fonte des semis du chou,fungus_disease
+Maladies,Fonte des semis du colza,fungus_disease
+Maladies,Fonte des semis du haricot,fungus_disease
+Maladies,Fonte des semis du maïs,fungus_disease
+Maladies,Fusarioses de l'asperge,fungus_disease
+Maladies,Graisse du poireau,bacteria_disease
+Maladies,Grillure estivale de l'asperge,fungus_disease
+Maladies,Helminthosporiose du maïs,fungus_disease
+Maladies,Maladie de la bague,fungus_disease
+Maladies,Maladie de la tache,fungus_disease
+Maladies,Maladie des brûlures racinaires,fungus_disease
+Maladies,Maladie des taches angulaires,bacteria_disease
+Maladies,Maladie des taches et des nervures noires,bacteria_disease
+Maladies,Mildiou de l'oignon,fungus_disease
+Maladies,Mildiou de l'épinard,fungus_disease
+Maladies,Mildiou de la pomme de terre,fungus_disease
+Maladies,Mildiou du colza,fungus_disease
+Maladies,Mildiou du pois de conserve,fungus_disease
+Maladies,Mildiou du tournesol,fungus_disease
+Maladies,Nécrose des radicelles,fungus_disease
+Maladies,Nécrose racinaire,fungus_disease
+Maladies,Oïdium de la carotte,fungus_disease
+Maladies,Oïdium du pois de conserve,fungus_disease
+Maladies,Phytophthora,fungus_disease
+Maladies,Sclérotinia,fungus_disease
+Maladies,Pourriture blanche de l'oignon,fungus_disease
+Maladies,Pourriture blanche de la carotte,fungus_disease
+Maladies,Pourriture blanche du poireau,fungus_disease
+Maladies,"Botrytis, pourriture grise",fungus_disease
+Maladies,Pourriture grise du haricot,fungus_disease
+Maladies,Pourriture grise du pois de conserve,fungus_disease
+Maladies,Pythium vasculaire,fungus_disease
+Maladies,Rhizoctone brun de la pomme de terre,fungus_disease
+Maladies,Rhizoctone brun du haricot,fungus_disease
+Maladies,Rhizoctone du maïs,fungus_disease
+Maladies,Rhizoctone et Pourriture basale,fungus_disease
+Maladies,Rhizoctone violet de l'asperge,fungus_disease
+Maladies,Rhizoctone violet de la betterave,fungus_disease
+Maladies,Rhizoctone violet de la carotte,fungus_disease
+Maladies,Rhizomanie,protozoa_disease
+Maladies,Rhynchosporiose,fungus_disease
+Maladies,Rouille brune,fungus_disease
+Maladies,Rouille de l'oignon,fungus_disease
+Maladies,Rouille de la betterave,fungus_disease
+Maladies,Rouille du feuillage,fungus_disease
+Maladies,Rouille du haricot,fungus_disease
+Maladies,Rouille du maïs,fungus_disease
+Maladies,Rouille du poireau,fungus_disease
+Maladies,Rouille du pois de conserve,fungus_disease
+Maladies,Sclérotinia du colza,fungus_disease
+Maladies,Sclérotinia du pois protéagineux,fungus_disease
+Maladies,Sclérotinia du tournesol,fungus_disease
+Maladies,Sclérotiniose du chou,fungus_disease
+Maladies,Sclérotiniose du haricot,fungus_disease
+Maladies,Sclérotiniose du pois de conserve,fungus_disease
+Maladies,Sclérotiniose en végétation,fungus_disease
+Maladies,Septoriose des feuilles - Septoria tritici,fungus_disease
+Maladies,Viroses,protozoa_disease
+Autres,Autre incident,issue
