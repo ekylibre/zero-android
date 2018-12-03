@@ -1,7 +1,10 @@
 package ekylibre.zero.fragments;
 
+import android.content.ContentResolver;
 import android.content.Context;
+import android.database.Cursor;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,11 +16,15 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import ekylibre.APICaller.Intervention;
+import ekylibre.database.ZeroContract;
 import ekylibre.zero.R;
 import ekylibre.zero.fragments.adapter.ActivitiesRecyclerAdapter;
 import ekylibre.zero.fragments.adapter.BBCHRecyclerAdapter;
 import ekylibre.zero.fragments.model.ActivityItem;
 import ekylibre.zero.fragments.model.BBCHItem;
+
+import static ekylibre.zero.ObservationActivity.selectedActivity;
 
 /**
  * A fragment representing a list of Items.
@@ -26,6 +33,7 @@ import ekylibre.zero.fragments.model.BBCHItem;
  */
 public class BBCHChoiceFragment extends Fragment {
 
+    private Context context;
     private List<BBCHItem> dataset;
     private OnBBCHFragmentInteractionListener fragmentListener;
 
@@ -44,14 +52,33 @@ public class BBCHChoiceFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // Create dummy data
-        // TODO: Get from database
+        context = getActivity();
+
+//        // Create dummy data
+//        dataset = new ArrayList<>();
+//        int i = 0;
+//        while (i < 15) {
+//            dataset.add(new BBCHItem(i, "Stade #" + i));
+//            i++;
+//        }
+
         dataset = new ArrayList<>();
-        int i = 0;
-        while (i < 15) {
-            dataset.add(new BBCHItem(i, "Stade #" + i));
-            i++;
+
+        if (context != null && dataset.size() == 0) {
+            Log.e("BBCH", "Build list for variety " + selectedActivity.variety);
+            ContentResolver contentResolver = context.getContentResolver();
+
+            try (Cursor cursor = contentResolver.query(ZeroContract.VegetalScale.CONTENT_URI,
+                    ZeroContract.VegetalScale.PROJECTION_ALL,
+                    ZeroContract.VegetalScale.VARIETY + " LIKE " + "\"" + selectedActivity.variety + "\"",
+                    null, ZeroContract.VegetalScale.SORT_ORDER_DEFAULT)) {
+                if (cursor != null)
+                    while (cursor.moveToNext())
+                        dataset.add(new BBCHItem(cursor.getInt(1), cursor.getString(2)));
+            }
+
         }
+
     }
 
     @Override
@@ -61,7 +88,6 @@ public class BBCHChoiceFragment extends Fragment {
 
         // Set the adapter
         if (view instanceof RecyclerView) {
-            Context context = view.getContext();
             RecyclerView recyclerView = (RecyclerView) view;
             recyclerView.setLayoutManager(new LinearLayoutManager(context));
             recyclerView.setAdapter(new BBCHRecyclerAdapter(dataset, fragmentListener));

@@ -157,6 +157,7 @@ public class MainActivity extends UpdatableActivity
                     contentValues[i] = cv;
                 }
                 cr.bulkInsert(ZeroContract.VegetalScale.CONTENT_URI, contentValues);
+                prefs.edit().putBoolean("csv_loaded", true).apply();
             }
         }
     }

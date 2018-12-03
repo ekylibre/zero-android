@@ -404,8 +404,8 @@ public class ObservationActivity extends AppCompatActivity implements
         if (cursor != null) {
             try {
                 while (cursor.moveToNext()) {
-                    tempList.add(new ActivityItem(cursor.getInt(4), cursor.getString(5), null));
-                    Log.i(TAG, String.format("Activité #%s - %s", cursor.getInt(4), cursor.getString(5)));
+                    tempList.add(new ActivityItem(cursor.getInt(4), cursor.getString(5), cursor.getString(3), null));
+                    Log.i(TAG, String.format("Activité #%s - %s - %s", cursor.getInt(4), cursor.getString(5), cursor.getString(3)));
                 }
             } finally {
                 cursor.close();
