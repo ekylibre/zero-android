@@ -10,6 +10,8 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
+import com.squareup.picasso.Picasso;
+
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -18,6 +20,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -73,6 +76,7 @@ public class MainActivity extends UpdatableActivity
     private Account         mAccount;
     private TextView        mNav_account;
     private TextView        mNav_instance;
+    private ImageView       mNav_avatar;
     private NavigationView  mNavigationView;
     private Toolbar         mToolbar;
     private ProgressBar     mPrgressBar;
@@ -107,6 +111,7 @@ public class MainActivity extends UpdatableActivity
         View headerLayout = mNavigationView.inflateHeaderView(R.layout.nav_header_main);
         mNav_account = (TextView)headerLayout.findViewById(R.id.nav_accountName);
         mNav_instance = (TextView)headerLayout.findViewById(R.id.nav_farmURL);
+        mNav_avatar = headerLayout.findViewById(R.id.imageView);
         mPrgressBar = (ProgressBar)findViewById(R.id.progress_bar);
         sync_data();
         firstPass = false;
@@ -245,6 +250,7 @@ public class MainActivity extends UpdatableActivity
         mAccount = AccountTool.getCurrentAccount(this);
         mNav_instance.setText(AccountTool.getAccountInstance(mAccount, this));
         mNav_account.setText(AccountTool.getAccountName(mAccount, this));
+        Picasso.get().load("file:///android_asset/rounded.png").into(mNav_avatar);
     }
 
     /*
