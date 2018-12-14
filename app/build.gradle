@@ -2,6 +2,14 @@
 apply plugin: 'com.android.application'
 
 android {
+    signingConfigs {
+        config {
+            keyAlias key_alias
+            keyPassword store_password
+            storeFile file(store_path)
+            storePassword store_password
+        }
+    }
     compileSdkVersion 28
     defaultConfig {
         vectorDrawables.useSupportLibrary = true
@@ -22,11 +30,13 @@ android {
             dimension "version"
             applicationId "ekylibre.zero"
             resValue "string", "providerName", applicationId
+            signingConfig signingConfigs.config
         }
         larrere {
             dimension "version"
             applicationId "ekylibre.zero.larrere"
             resValue "string", "providerName", applicationId
+            signingConfig signingConfigs.config
         }
     }
     applicationVariants.all { variant ->
@@ -41,13 +51,12 @@ android {
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     testImplementation 'junit:junit:4.12'
-//    implementation 'cz.msebera.android:httpclient:4.4.1.2'
-//    implementation group: 'org.apache.httpcomponents' , name: 'httpclient-android' , version: '4.3.5.1'
+    //    implementation 'cz.msebera.android:httpclient:4.4.1.2'
+    //    implementation group: 'org.apache.httpcomponents' , name: 'httpclient-android' , version: '4.3.5.1'
     implementation 'org.jbundle.util.osgi.wrapped:org.jbundle.util.osgi.wrapped.org.apache.http.client:4.1.2'
-
     implementation 'androidx.appcompat:appcompat:1.0.2'
     implementation 'androidx.recyclerview:recyclerview:1.0.0'
-//    implementation "com.android.support:recyclerview-selection:28.0.0"
+    //    implementation "com.android.support:recyclerview-selection:28.0.0"
     implementation 'androidx.cardview:cardview:1.0.0'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.0.0-alpha2'
@@ -56,9 +65,8 @@ dependencies {
     implementation 'com.google.firebase:firebase-appindexing:17.1.0'
     implementation 'com.google.android.gms:play-services-location:16.0.0'
     implementation 'com.google.android.gms:play-services-maps:16.0.0'
-//    implementation 'com.google.android.gms:play-services-base:16.0.1'
+    //    implementation 'com.google.android.gms:play-services-base:16.0.1'
     implementation 'com.google.maps.android:android-maps-utils:0.4.4'
-
-    implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.8.1'
+    implementation 'org.apache.commons:commons-lang3:3.8.1'
     implementation 'com.squareup.picasso:picasso:2.71828'
 }

@@ -1,6 +1,7 @@
 package ekylibre.zero.fragments.adapter;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,15 +12,18 @@ import java.util.List;
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
+import ekylibre.APICaller.Issue;
 import ekylibre.zero.R;
 import ekylibre.zero.fragments.model.IssueItem;
 
+import static ekylibre.zero.ObservationActivity.issuesList;
+
 public class IssuesRecyclerAdapter extends RecyclerView.Adapter<IssuesRecyclerAdapter.ViewHolder> {
 
-    private final List<IssueItem> issuesList;
+    private final List<IssueItem> dataset;
 
     public IssuesRecyclerAdapter(List<IssueItem> items) {
-        issuesList = items;
+        dataset = items;
     }
 
     /**
@@ -43,7 +47,7 @@ public class IssuesRecyclerAdapter extends RecyclerView.Adapter<IssuesRecyclerAd
 
         void display(int position, int backgroundId) {
             pos = position;
-            issueItem = issuesList.get(position);
+            issueItem = dataset.get(position);
             int textColor = R.color.primary_text;
             if (issueItem.is_selected) {
                 backgroundId = R.color.basic_blue;
@@ -53,13 +57,26 @@ public class IssuesRecyclerAdapter extends RecyclerView.Adapter<IssuesRecyclerAd
             nameTextView.setTextColor(ContextCompat.getColor(context, textColor));
             view.setBackgroundColor(ContextCompat.getColor(context, backgroundId));
             // Set text
-            nameTextView.setText(issueItem.name);
+            nameTextView.setText(issueItem.label);
         }
 
         @Override
         public void onClick(View v) {
             view.setSelected(!view.isSelected());
-            issueItem.is_selected = !issueItem.is_selected;
+            if (issueItem.is_selected) {
+                issueItem.is_selected = false;
+                for (IssueItem item : issuesList) {
+                    if (item.label.equals(issueItem.label)) {
+                        issuesList.remove(item);
+                        break;
+                    }
+                }
+            } else {
+                issueItem.is_selected = true;
+                issuesList.add(issueItem);
+            }
+//            issueItem.is_selected = !issueItem.is_selected;
+
             notifyItemChanged(pos);
         }
     }
@@ -80,6 +97,6 @@ public class IssuesRecyclerAdapter extends RecyclerView.Adapter<IssuesRecyclerAd
 
     @Override
     public int getItemCount() {
-        return issuesList.size();
+        return dataset.size();
     }
 }

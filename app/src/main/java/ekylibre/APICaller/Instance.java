@@ -16,6 +16,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.apache.http.Header;
@@ -108,10 +109,11 @@ public class Instance
         mUrl   = manager.getUserData(account, Authenticator.KEY_INSTANCE_URL);
         mEmail = manager.getUserData(account, Authenticator.KEY_ACCOUNT_NAME);
         mToken = manager.blockingGetAuthToken(account, Authenticator.AUTH_TOKEN_TYPE_GLOBAL, true);
+
         if (BuildConfig.DEBUG) {
             Log.d("Instance URL", "URL = " + mUrl);
             Log.d("Instance Token", "TOKEN = " + mToken);
-
+            // TODO remove for release
             // Config accepting all SSL certificates (debug purpose)
             SSLSocketFactory sf = SSLSocketFactory.getSocketFactory();
             sf.setHostnameVerifier(SSLSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER);
@@ -161,6 +163,7 @@ public class Instance
         InputStream inputStream;
         String result;
         // try {
+        Log.e(TAG, "Params = " + params);
         if (params != null)
             httpPost.setEntity(new StringEntity(params.toString(), "UTF-8"));
         // // Execute HTTP Post Request
@@ -168,6 +171,7 @@ public class Instance
 
         // Check status
         StatusLine statusLine = response.getStatusLine();
+        Log.e(TAG, statusLine.getReasonPhrase());
         //int statusCode = statusLine.getStatusCode();
         switch(statusLine.getStatusCode()) {
         case HttpStatus.SC_BAD_REQUEST:

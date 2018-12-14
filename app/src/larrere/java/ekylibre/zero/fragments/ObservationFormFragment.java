@@ -203,11 +203,12 @@ public class ObservationFormFragment extends Fragment {
             if (issue.is_selected) {
                 issuesCount++;
                 Chip chip = new Chip(context);
-                chip.setText(issue.name);
+                chip.setText(issue.label);
                 chip.setCloseIconVisible(true);
                 chip.setOnCloseIconClickListener(v -> {
                     issuesChipsGroup.removeView(chip);
-                    issue.is_selected = false;
+//                    issue.is_selected = false;
+                    issuesList.remove(issue);
                     if (--issuesCount == 0)
                         issuesChipsGroup.setVisibility(View.GONE);
                 });
@@ -314,7 +315,6 @@ public class ObservationFormFragment extends Fragment {
 
         if (resultCode == RESULT_OK) {
 
-            Bitmap bitmap;
             Uri pictureUri = null;
 
             if (requestCode == CAMERA) {

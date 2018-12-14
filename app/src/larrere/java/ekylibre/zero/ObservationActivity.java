@@ -97,6 +97,8 @@ public class ObservationActivity extends AppCompatActivity implements
         if (activitiesList == null)
             getActivities();
         issuesList = new ArrayList<>();
+//        if (issuesList == null)
+//            getIssues();
         picturesList = new ArrayList<>();
 
         fragmentManager = getSupportFragmentManager();
@@ -219,9 +221,17 @@ public class ObservationActivity extends AppCompatActivity implements
 
     @Override
     public void onActivityInteraction(ActivityItem item) {
+        boolean newfilter = true;
+        if (selectedActivity != null) {
+            if (!selectedActivity.variety.equals(item.variety))
+                selectedBBCH = null;
+            else
+                newfilter = false;
+        }
         selectedActivity = item;
         replaceFragmentWith(FORM_FRAGMENT);
-        filterWithActivity(item);
+        if (newfilter)
+            filterWithActivity(item);
     }
 
     @Override
@@ -366,11 +376,11 @@ public class ObservationActivity extends AppCompatActivity implements
     }
 
     private long saveIssue(IssueItem issue) {
-        String[] issuesNatures = getResources().getStringArray(R.array.issueNatures_values);
+//        String[] issuesNatures = getResources().getStringArray(R.array.issueNatures_values);
         ContentValues cv = new ContentValues();
         cv.put(ZeroContract.Issues.USER, AccountTool.getCurrentAccount(this).name);
         cv.put(ZeroContract.Issues.SYNCED, 0);
-        cv.put(ZeroContract.Issues.NATURE, issuesNatures[issue.id]);
+        cv.put(ZeroContract.Issues.NATURE, issue.nature);
         cv.put(ZeroContract.Issues.EMERGENCY, 2);
         cv.put(ZeroContract.Issues.SEVERITY, 2);
         cv.put(ZeroContract.Issues.DESCRIPTION, "Incident déclaré lors d'une observation");
@@ -426,6 +436,27 @@ public class ObservationActivity extends AppCompatActivity implements
         }
     }
 
+    private void getIssues() {
+
+        Log.e(TAG, "Get IssuesList");
+
+        issuesList = new ArrayList<>();
+        ContentResolver contentResolver = getContentResolver();
+
+        try (Cursor cursor = contentResolver.query(ZeroContract.IssueNatures.CONTENT_URI,
+                ZeroContract.IssueNatures.PROJECTION_ALL,
+                null, null, ZeroContract.IssueNatures.SORT_ORDER_DEFAULT)) {
+            if (cursor != null) {
+                while (cursor.moveToNext()) {
+                    issuesList.add(new IssueItem(cursor.getString(1), cursor.getString(2),
+                            cursor.getString(3)));
+                }
+            }
+
+        }
+        Log.e(TAG, issuesList.toString());
+    }
+
     private void filterWithActivity(ActivityItem activity) {
 
         culturesList = new ArrayList<>();
@@ -466,10 +497,16 @@ public class ObservationActivity extends AppCompatActivity implements
             resId = R.drawable.icon_asparagus;
         else if (activityName.contains("Blé") || activityName.contains("Orge"))
             resId = R.drawable.icon_wheat;
+        else if (activityName.contains("Brocoli") || activityName.contains("Kale"))
+            resId = R.drawable.icon_broccoli;
         else if (activityName.contains("Carotte"))
             resId = R.drawable.icon_carrot;
         else if (activityName.contains("Choudou"))
             resId = R.drawable.icon_cabbage;
+        else if (activityName.contains("Colza"))
+            resId = R.drawable.icon_canola;
+        else if (activityName.contains("Épinard"))
+            resId = R.drawable.icon_spinach;
         else if (activityName.contains("Haricot"))
             resId = R.drawable.icon_peas;
         else if (activityName.contains("Maïs"))
@@ -478,14 +515,22 @@ public class ObservationActivity extends AppCompatActivity implements
             resId = R.drawable.icon_leek;
         else if (activityName.contains("Pomme"))
             resId = R.drawable.icon_potato;
+        else if (activityName.contains("Patate"))
+            resId = R.drawable.icon_sweet_potato;
+        else if (activityName.contains("Radis Noir"))
+            resId = R.drawable.icon_black_radish;
+        else if (activityName.contains("Navet"))
+            resId = R.drawable.icon_radish;
         else if (activityName.contains("Soja") || activityName.contains("Pois"))
             resId = R.drawable.icon_soybean;
         else if (activityName.contains("Stévia"))
             resId = R.drawable.icon_stevia;
         else if (activityName.contains("Tournesol"))
             resId = R.drawable.icon_sunflower;
+        else if (activityName.contains("ETA"))
+            resId = R.drawable.icon_harvester;
         else
-            resId = R.drawable.icon_carrot;
+            resId = R.drawable.icon_plant;
 
         return resId;
     }

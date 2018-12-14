@@ -26,14 +26,17 @@
         android:layout_height="wrap_content"
         android:paddingTop="12dp"
         android:textColor="@color/white"
-        android:textStyle="bold"
-        tools:text="Farm URL" />
+        tools:text="Farm URL"
+        android:ellipsize="end"
+        android:maxLines="1"/>
 
     <TextView
         android:id="@+id/nav_accountName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textColor="@color/light_grey"
-        tools:text="Account name"/>
+        tools:text="Account name"
+        android:ellipsize="end"
+        android:maxLines="1"/>
 
 </LinearLayout>
