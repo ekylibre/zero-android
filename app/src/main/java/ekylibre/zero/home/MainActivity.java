@@ -23,6 +23,7 @@ import android.widget.Toast;
 import java.util.Calendar;
 
 import ekylibre.database.ZeroContract;
+import ekylibre.database.ui_list_zones;
 import ekylibre.service.ConnectionManagerService;
 import ekylibre.service.GeneralHandler;
 import ekylibre.util.AccountTool;
@@ -278,6 +279,12 @@ public class MainActivity extends UpdatableActivity
             case R.id.nav_counting :
             {
                 Intent intent = new Intent(this, PlantCountingActivity.class);
+                startActivity(intent);
+                break;
+            }
+            case R.id.nav_stocks :
+            {
+                Intent intent = new Intent(this, ui_list_zones.class);
                 startActivity(intent);
                 break;
             }
