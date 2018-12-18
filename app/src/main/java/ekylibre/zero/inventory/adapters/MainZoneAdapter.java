@@ -1,8 +1,11 @@
 package ekylibre.zero.inventory.adapters;
 
 import android.content.Context;
+import android.content.Intent;
+import android.support.constraint.ConstraintLayout;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,7 +15,9 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import ekylibre.zero.R;
+import ekylibre.zero.inventory.InventoryActivity;
 import ekylibre.zero.inventory.ItemZoneInventory;
+import ekylibre.zero.inventory.NewInventory;
 
 public class MainZoneAdapter extends RecyclerView.Adapter<MainZoneAdapter.ViewHolder> {
     private ArrayList<ItemZoneInventory> listeZone;
@@ -67,10 +72,20 @@ public class MainZoneAdapter extends RecyclerView.Adapter<MainZoneAdapter.ViewHo
 
     // Replace the contents of a view (invoked by the layout manager)
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
+    public void onBindViewHolder(ViewHolder holder, final int position) {
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
         holder.display(listeZone.get(position));
+        holder.itemView.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                 long itemId = position;
+                 Intent intent = new Intent(v.getContext(),NewInventory.class);
+                 intent.putExtra("itemId",itemId);
+                 Log.i("mytag"," id : "+itemId);
+                 v.getContext().startActivity(intent);
+            }
+        });
 
     }
 

@@ -208,8 +208,11 @@
         "For example, position the FAB to one side of stream of a cards so the FAB won’t interfere "
         "when a user tries to pick up one of cards.\n\n"
     </string>
-    <string name="usual_inv">Usual inventory</string>
+    <string name="usual_inv">Usual Inventory</string>
     <string name="inventoried_zones">Inventoried zones</string>
     <string name="addzone">+Add</string>
     <string name="inventory_zone">Inventory zone</string>
+    <string name="package_reception">Package Reception</string>
+    <string name="anual_inventory">Annual Inventory</string>
+    <string name="type_d_inventaire">Inventory type</string>
 </resources>
