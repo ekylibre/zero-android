@@ -8,6 +8,7 @@
     <string name="average">Moyenne</string>
     <string name="count">Compte</string>
     <string name="stocks">Stocks</string>
+    <string name="inventory">Nouvel inventaire</string>
     <string name="create_issue">Enregistrement de l\'incident</string>
     <string name="data_synced">Données synchronisées</string>
     <string name="date_label">Date</string>
@@ -117,6 +118,11 @@
     <string name="good_accuracy_message">La réception GPS est bonne</string>
     <string name="gps_disabled">Le GPS n\'est pas activé</string>
     <string name="gps_tracking_disabled">Suivi GPS désactivé</string>
+    <string name="usual_inv">Inventaire courant</string>
+    <string name="inventoried_zones">Zones inventoriées</string>
+    <string name="addzone">+Ajouter</string>
+    <string name="title_activity_ui_list_zones">ui_list_zones</string>
+    <string name="large_text">Large texte</string>
     <string name="inventory_zone">Zone de stockage</string>
     <string name="large_text">Un long texte</string>
     <string name="title_activity_ui_list_zones">ui_list_zones</string>
