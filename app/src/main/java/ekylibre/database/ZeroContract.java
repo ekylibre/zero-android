@@ -177,6 +177,32 @@ public final class ZeroContract {
         String DATE         = "date";
     }
 
+    public interface ProductInventoryColumns extends BaseColumns {
+        String TABLE_NAME = "inventory_product";
+        String INVENTORY_PRODUCT_ID = "inventory_product_id";
+        String FK_PRODUCT = "fk_product";
+        String QUANTITY = "quantity";
+        String DATE = "date";
+        String COMMENT = "comment";
+    }
+
+    public interface ProductColumns extends BaseColumns {
+        String ID_PRODUCT = "id_product";
+        String NAME = "name";
+        String FK_ZONE_STOCK = "fk_zone_stock";
+        String CATEGORY = "category";
+        String TYPE = "type";
+        String CONDITIONING = "conditioning";
+        String PHOTO = "photo";
+    }
+
+    public interface ZoneStockColumns extends BaseColumns {
+        String ID_ZONE_STOCK = "id_zone_stock";
+        String NAME = "name";
+        String SHAPE = "shape";
+    }
+
+
 
     public static final class Crumbs implements CrumbsColumns {
         // Content URI for this table
