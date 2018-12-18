@@ -203,6 +203,29 @@ public final class ZeroContract {
         String SHAPE = "shape";
     }
 
+    public interface VariantColumns extends BaseColumns{
+        String TABLE_NAME="variant";
+        String VARIANT_ID="variant_id";
+        String VARIANT_NAME="variant_name";
+        String FK_TYPE_ID="fk_type_id";
+    }
+    public interface TypeColumns extends BaseColumns{
+        String TABLE_NAME="type";
+        String TYPE_ID="type_id";
+        String TYPE_NAME="type_name";
+        String FK_CATEGORY_ID="fk_category_id";
+    }
+
+
+    public interface CategoryColumns extends BaseColumns{
+        String TABLE_NAME="category";
+        String CATEGORY_ID="category_id";
+        String CATEGORY_NAME="category_name";
+
+    }
+
+
+
 
     public static final class Crumbs implements CrumbsColumns {
         // Content URI for this table
