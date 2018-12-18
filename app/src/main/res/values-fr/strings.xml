@@ -118,4 +118,9 @@
     <string name="good_accuracy_message">La réception GPS est bonne</string>
     <string name="gps_disabled">Le GPS n\'est pas activé</string>
     <string name="gps_tracking_disabled">Suivi GPS désactivé</string>
+    <string name="usual_inv">Inventaire courant</string>
+    <string name="inventoried_zones">Zones inventoriées</string>
+    <string name="addzone">+Ajouter</string>
+    <string name="title_activity_ui_list_zones">ui_list_zones</string>
+    <string name="large_text">Large texte</string>
 </resources>

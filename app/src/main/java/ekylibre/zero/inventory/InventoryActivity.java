@@ -39,7 +39,6 @@ public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
         }*/
 
 public class InventoryActivity extends AppCompatActivity {
-
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
@@ -51,6 +50,8 @@ public class InventoryActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ui_list_zones);
+       setTitle("Nouvel Inventaire");
+
         mRecyclerView = (RecyclerView) findViewById(R.id.my_recycler_view);
 
 

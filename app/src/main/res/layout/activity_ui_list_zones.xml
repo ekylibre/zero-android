@@ -6,31 +6,55 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:fitsSystemWindows="true">
+    android:fitsSystemWindows="true"
+    style="@style/AppTheme.AppBarOverlay">
 
-  <!--      <include layout="@layout/toolbar" /> -->
+    <android.support.design.widget.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:theme="@style/AppTheme.AppBarOverlay"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/toolbar">
+
+        <android.support.v7.widget.Toolbar
+
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            app:popupTheme="@style/AppTheme.PopupOverlay"
+            app:theme="@style/ThemeToolbar"
+            app:title="@string/inventory"/>
+
+    </android.support.design.widget.AppBarLayout>
+
         <ImageView
             android:id="@+id/image_inventory"
             android:layout_width="50dp"
             android:layout_height="50dp"
+            android:layout_below="@id/toolbar"
             app:srcCompat="@drawable/ic_menu_gallery"/>
+    <!--  -->
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Type d'inventaire"
             android:textSize="17dp"
+            android:layout_below="@id/toolbar"
             android:layout_toRightOf="@id/image_inventory"/>
+    <!--      -->
 
     <Switch
         android:id="@+id/switchInventoryRegular"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/image_inventory"
-        android:text="Inventaire courant"
+        android:text="@string/usual_inv"
         android:textSize="17dp"
         android:paddingLeft="8dp"
         android:paddingRight="8dp"
-        android:background="@color/light_grey"
+        android:background="#ccccff"
         android:layout_margin="2dp"
         android:checked="true"/>
     <Switch
@@ -39,7 +63,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/switchInventoryRegular"
         android:textSize="17dp"
-        android:background="@color/light_grey"
+        android:background="#ccccff"
         android:layout_margin="2dp"
         android:paddingLeft="8dp"
         android:paddingRight="8dp"
@@ -52,7 +76,7 @@
         android:paddingLeft="8dp"
         android:paddingRight="8dp"
         android:textSize="17dp"
-        android:background="@color/light_grey"
+        android:background="#ccccff"
         android:layout_margin="2dp"
         android:text="Inventaire annuel"/>
 
@@ -67,7 +91,7 @@
         android:id="@+id/zone_inventoried"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Zones inventoriées"
+        android:text="@string/inventoried_zones"
         android:textSize="17dp"
         android:layout_alignBaseline="@id/image_history"
         android:layout_below="@id/switchInventoryYear"
@@ -77,7 +101,7 @@
         android:id="@+id/AddInventoryZone"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="+Ajouter"
+        android:text="@string/addzone"
         android:textSize="17dp"
         android:layout_marginLeft="70dp"
         android:layout_below="@id/switchInventoryYear"
