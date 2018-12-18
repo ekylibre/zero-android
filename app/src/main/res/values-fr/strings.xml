@@ -124,6 +124,7 @@
     <string name="title_activity_ui_list_zones">ui_list_zones</string>
     <string name="large_text">Large texte</string>
     <string name="inventory_zone">Zone de stockage</string>
-    <string name="large_text">Un long texte</string>
-    <string name="title_activity_ui_list_zones">ui_list_zones</string>
+    <string name="package_reception">Reception Colis</string>
+    <string name="anual_inventory">Inventaire annuel</string>
+    <string name="type_d_inventaire">Type d\'inventaire</string>
 </resources>

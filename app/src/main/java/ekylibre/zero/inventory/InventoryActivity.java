@@ -75,6 +75,8 @@ public class InventoryActivity extends AppCompatActivity {
        // specify an adapter (see also next example)
        mAdapter = new MainZoneAdapter(listeZone);
        mRecyclerView.setAdapter(mAdapter);
+
+
        final Switch regularSwitch = (Switch) findViewById(R.id.switchInventoryRegular);
        final Switch packageSwitch = (Switch) findViewById(R.id.switchInventoryPackage);
        final Switch yearSwitch = (Switch) findViewById(R.id.switchInventoryYear);

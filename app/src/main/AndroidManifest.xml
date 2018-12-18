@@ -67,6 +67,7 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".home.MainActivity" />
         </activity>
+        <activity android:name=".inventory.NewInventory"/>
 
         <!-- <service android:name="TrackingService"/> -->
         <!-- Authenticator related activities and service needs to be declared here in order for the app to recognize them -->

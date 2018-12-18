@@ -39,7 +39,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Type d'inventaire"
+            android:text="@string/type_d_inventaire"
             android:textSize="17dp"
             android:layout_below="@id/toolbar"
             android:layout_toRightOf="@id/image_inventory"/>
@@ -67,7 +67,7 @@
         android:layout_margin="2dp"
         android:paddingLeft="8dp"
         android:paddingRight="8dp"
-        android:text="Reception Colis"/>
+        android:text="@string/package_reception"/>
     <Switch
         android:id="@+id/switchInventoryYear"
         android:layout_width="match_parent"
@@ -78,7 +78,7 @@
         android:textSize="17dp"
         android:background="#ccccff"
         android:layout_margin="2dp"
-        android:text="Inventaire annuel"/>
+        android:text="@string/anual_inventory"/>
 
     <ImageView
         android:id="@+id/image_history"
