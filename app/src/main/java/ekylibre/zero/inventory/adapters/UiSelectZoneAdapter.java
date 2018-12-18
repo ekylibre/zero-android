@@ -1,4 +1,4 @@
-package ekylibre.zero;
+package ekylibre.zero.inventory.adapters;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -11,11 +11,14 @@ import android.widget.TextView;
 
 import java.util.List;
 
+import ekylibre.zero.R;
+import ekylibre.zero.inventory.ItemZoneInventory;
+
 public class UiSelectZoneAdapter extends RecyclerView.Adapter<UiSelectZoneAdapter.ViewHolder> {
 
-    List<String> listZone;
+    List<ItemZoneInventory> listZone;
 
-    public UiSelectZoneAdapter(List<String> dataset) {
+    public UiSelectZoneAdapter(List<ItemZoneInventory> dataset) {
         this.listZone = dataset;
     }
 
@@ -35,9 +38,9 @@ public class UiSelectZoneAdapter extends RecyclerView.Adapter<UiSelectZoneAdapte
         }
 
 
-        void display(String item) {
+        void display(ItemZoneInventory item) {
             zoneImageView.setImageResource(R.drawable.action_travel);
-            zoneNameView.setText(item);
+            zoneNameView.setText(item.zone);
             Log.i("MyTag","Display item:"+item);
 
         }

@@ -1,22 +1,15 @@
 package ekylibre.zero.inventory;
 
-import android.content.Context;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Adapter;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.Switch;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 
@@ -38,11 +31,12 @@ public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
         return view;
         }*/
 
-public class InventoryActivity extends AppCompatActivity {
+public class InventoryActivity extends AppCompatActivity implements SelectZoneDialogFragment.OnFragmentInteractionListener{
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
     int inventory_type =1;
+    private SelectZoneDialogFragment selectZoneDialogFragment;
 
     //String [] type_inventory = new String[3] ;
 
@@ -66,7 +60,7 @@ public class InventoryActivity extends AppCompatActivity {
 
 
 
-        ArrayList<ItemZoneInventory> listeZone = new ArrayList<ItemZoneInventory>();
+        final ArrayList<ItemZoneInventory> listeZone = new ArrayList<ItemZoneInventory>();
 
         for (int i=0;i<20;i++){
             listeZone.add(new ItemZoneInventory("date"+i,"zone"+i,null));
@@ -127,7 +121,16 @@ public class InventoryActivity extends AppCompatActivity {
        yearSwitch.setOnClickListener(new MyButtonClickListener());
        packageSwitch.setOnClickListener(new MyButtonClickListener());
 
-    }
+       TextView addInventoryZone = findViewById(R.id.AddInventoryZone);
+       addInventoryZone.setOnClickListener(new View.OnClickListener() {
+           @Override
+           public void onClick(View addInventoryZone) {
+               selectZoneDialogFragment = SelectZoneDialogFragment.newInstance(listeZone);
+               selectZoneDialogFragment.show(getFragmentTransaction(),"dialog");
+           }
+       });
+
+   }
 
 
 
@@ -167,7 +170,18 @@ public class InventoryActivity extends AppCompatActivity {
             }
         });*/
 
+    @Override
+    public void onFragmentInteraction(Object object) { }
 
+    private FragmentTransaction getFragmentTransaction (){
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        Fragment prev = getSupportFragmentManager().findFragmentByTag("dialog");
+        if (prev!= null){
+            ft.remove(prev);
+        }
+        ft.addToBackStack(null);
+        return ft;
+    }
 }
 
 
