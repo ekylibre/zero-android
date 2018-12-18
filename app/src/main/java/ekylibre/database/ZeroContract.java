@@ -190,10 +190,12 @@ public final class ZeroContract {
         String PRODUCT_ID = "id_product";
         String NAME = "name";
         String FK_ZONE_STOCK_ID = "fk_zone_stock";
-        String CATEGORY = "category";
-        String TYPE = "type";
         String CONDITIONING = "conditioning";
         String PHOTO = "photo";
+
+        String FK_VARIANT_ID = "fk_variant_id";
+
+
     }
 
     public interface ZoneStockColumns extends BaseColumns {
@@ -202,6 +204,29 @@ public final class ZeroContract {
         String NAME = "name";
         String SHAPE = "shape";
     }
+
+    public interface VariantColumns extends BaseColumns{
+        String TABLE_NAME="variant";
+        String VARIANT_ID="variant_id";
+        String VARIANT_NAME="variant_name";
+        String FK_TYPE_ID="fk_type_id";
+    }
+    public interface TypeColumns extends BaseColumns{
+        String TABLE_NAME="type";
+        String TYPE_ID="type_id";
+        String TYPE_NAME="type_name";
+        String FK_CATEGORY_ID="fk_category_id";
+    }
+
+
+    public interface CategoryColumns extends BaseColumns{
+        String TABLE_NAME="category";
+        String CATEGORY_ID="category_id";
+        String CATEGORY_NAME="category_name";
+
+    }
+
+
 
 
     public static final class Crumbs implements CrumbsColumns {
@@ -442,7 +467,7 @@ public final class ZeroContract {
         public static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/vnd.ekylibre.zero.product";
         // MIME type for individual record.
         public static final String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/vnd.ekylibre.zero.product";
-        public static final String[] PROJECTION_ALL = {PRODUCT_ID, NAME, FK_ZONE_STOCK_ID, CATEGORY, TYPE, CONDITIONING, PHOTO};
+        public static final String[] PROJECTION_ALL = {PRODUCT_ID, NAME, FK_ZONE_STOCK_ID, CONDITIONING, PHOTO};
     }
 
 
@@ -456,4 +481,34 @@ public final class ZeroContract {
         public static final String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/vnd.ekylibre.zero.inventory_product";
         public static final String[] PROJECTION_ALL = {INVENTORY_PRODUCT_ID, FK_PRODUCT_ID, QUANTITY, DATE, COMMENT};
     }
+
+    public static final class Variant implements VariantColumns{
+        // Content URI for this table
+        public static final Uri CONTENT_URI = Uri.withAppendedPath(ZeroContract.CONTENT_URI, "variant");
+        // MIME type for lists of records.
+        public static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/vnd.ekylibre.zero.variant";
+        // MIME type for individual record.
+        public static final String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/vnd.ekylibre.zero.variant";
+        public static final String[] PROJECTION_ALL = {VARIANT_ID, VARIANT_NAME,FK_TYPE_ID};
+    }
+    public static final class Type implements TypeColumns{
+        // Content URI for this table
+        public static final Uri CONTENT_URI = Uri.withAppendedPath(ZeroContract.CONTENT_URI, "type");
+        // MIME type for lists of records.
+        public static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/vnd.ekylibre.zero.type";
+        // MIME type for individual record.
+        public static final String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/vnd.ekylibre.zero.type";
+        public static final String[] PROJECTION_ALL = {TYPE_ID, TYPE_NAME,FK_CATEGORY_ID};
+    }
+    public static final class Category implements CategoryColumns{
+        // Content URI for this table
+        public static final Uri CONTENT_URI = Uri.withAppendedPath(ZeroContract.CONTENT_URI, "category");
+        // MIME type for lists of records.
+        public static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/vnd.ekylibre.zero.category";
+        // MIME type for individual record.
+        public static final String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/vnd.ekylibre.zero.category";
+        public static final String[] PROJECTION_ALL = {CATEGORY_ID, CATEGORY_NAME};
+    }
+
 }
+

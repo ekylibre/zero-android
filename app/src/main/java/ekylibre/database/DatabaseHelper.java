@@ -412,12 +412,12 @@ public class DatabaseHelper extends SQLiteOpenHelper
                         +"( "
                         +ZeroContract.Product.PRODUCT_ID+" INTEGER PRIMARY KEY AUTOINCREMENT"
                         +", "+ ZeroContract.Product.NAME+" TEXT "
-                        +", "+ZeroContract.Product.CATEGORY+" VARCHAR(255) "
-                        +", "+ZeroContract.Product.TYPE+" VARCHAR(255) "
                         +", "+ZeroContract.Product.CONDITIONING+" VARCHAR(255)"
                         +", "+ZeroContract.Product.PHOTO+"TEXT"
                         +", "+ZeroContract.Product.FK_ZONE_STOCK_ID+" INTEGER"
+                        +", "+ZeroContract.Product.FK_VARIANT_ID+" INTEGER"
                         +", "+ "FOREIGN KEY (" + ZeroContract.Product.FK_ZONE_STOCK_ID + ") REFERENCES zone_stock(id_zone_stock)"
+                        +", "+ "FOREIGN KEY (" + ZeroContract.Product.FK_VARIANT_ID + ") REFERENCES variant(variant_id)"
                         + ")");
                 database.execSQL("CREATE TABLE IF NOT EXISTS " + ZeroContract.InventoryProduct.TABLE_NAME
                         + "("
@@ -428,12 +428,32 @@ public class DatabaseHelper extends SQLiteOpenHelper
                         + ", " + "FOREIGN KEY (" + ZeroContract.InventoryProductColumns.FK_PRODUCT_ID + ") REFERENCES product(id_product)"
                         + ")");
 
+                database.execSQL("CREATE TABLE IF NOT EXISTS " + ZeroContract.VariantColumns.TABLE_NAME
+                        + "("
+                        + ZeroContract.VariantColumns.VARIANT_ID+ " INTEGER PRIMARY KEY AUTOINCREMENT"
+                        + ", " + ZeroContract.VariantColumns.VARIANT_NAME + " TEXT"
+                        + ", " + ZeroContract.VariantColumns.FK_TYPE_ID + " INTEGER"
+                        + ", " + "FOREIGN KEY (" + ZeroContract.VariantColumns.FK_TYPE_ID + ") REFERENCES variant(variant_id)"
+                        + ")");
 
+                database.execSQL("CREATE TABLE IF NOT EXISTS " + ZeroContract.TypeColumns.TABLE_NAME
+                        + "("
+                        + ZeroContract.TypeColumns.TYPE_ID+ " INTEGER PRIMARY KEY AUTOINCREMENT"
+                        + ", " + ZeroContract.TypeColumns.TYPE_NAME + " TEXT"
+                        + ", " + ZeroContract.TypeColumns.FK_CATEGORY_ID + " INTEGER"
+                        + ", " + "FOREIGN KEY (" + ZeroContract.TypeColumns.FK_CATEGORY_ID + ") REFERENCES category(category_id)"
+                        + ")");
+
+                database.execSQL("CREATE TABLE IF NOT EXISTS " + ZeroContract.CategoryColumns.TABLE_NAME
+                        + "("
+                        + ZeroContract.CategoryColumns.CATEGORY_ID+ " INTEGER PRIMARY KEY AUTOINCREMENT"
+                        + ", " + ZeroContract.CategoryColumns.CATEGORY_NAME + " TEXT"
+                        + ")");
 
                 if (newVersion == 21)
                     break;
-
             }
+
         }
     }
 }
