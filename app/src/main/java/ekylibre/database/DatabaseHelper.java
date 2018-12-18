@@ -415,8 +415,20 @@ public class DatabaseHelper extends SQLiteOpenHelper
                         + ", " + ZeroContract.ZoneStock.NAME+ " TEXT"
                         + ", " + ZeroContract.ZoneStock.SHAPE + " TEXT"
                         + ")");
+
+                database.execSQL(" CREATE TABLE IF NOT EXISTS "+ ZeroContract.Product.TABLE_NAME
+                        +"( "
+                        +ZeroContract.Product.PRODUCT_ID+" INTEGER PRIMARY KEY AUTOINCREMENT"
+                        +", "+ ZeroContract.Product.NAME+" TEXT "
+                        +", "+ZeroContract.Product.CATEGORY+" VARCHAR(255) "
+                        +", "+ZeroContract.Product.TYPE+" VARCHAR(255) "
+                        +", "+ZeroContract.Product.CONDITIONING+" VARCHAR(255)"
+                        +", "+ZeroContract.Product.PHOTO+"TEXT"
+                        +", "+ "FOREIGN KEY (" + ZeroContract.Product.FK_ZONE_STOCK_ID + ") REFERENCES zone_stock(id_zone_stock)"
+                        + ")");
                 if (newVersion == 21)
                     break;
+
             }
         }
     }
