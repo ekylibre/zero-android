@@ -96,7 +96,13 @@ public class ZeroProvider extends ContentProvider {
         URI_MATCHER.addURI(ZeroContract.AUTHORITY, "product", ROUTE_PRODUCT_LIST);
         URI_MATCHER.addURI(ZeroContract.AUTHORITY, "product/#", ROUTE_PRODUCT_ITEM);
         URI_MATCHER.addURI(ZeroContract.AUTHORITY,"inventory_product",ROUTE_INVENTORY_PRODUCT_LIST);
-        URI_MATCHER.addURI(ZeroContract.AUTHORITY, "Inventory_product/#",ROUTE_INVENTORY_PRODUCT_ITEM);
+        URI_MATCHER.addURI(ZeroContract.AUTHORITY, "inventory_product/#",ROUTE_INVENTORY_PRODUCT_ITEM);
+        URI_MATCHER.addURI(ZeroContract.AUTHORITY,"variant",ROUTE_VARIANT_LIST);
+        URI_MATCHER.addURI(ZeroContract.AUTHORITY, "variant/#",ROUTE_VARIANT_ITEM);
+        URI_MATCHER.addURI(ZeroContract.AUTHORITY,"type",ROUTE_TYPE_LIST);
+        URI_MATCHER.addURI(ZeroContract.AUTHORITY, "type/#",ROUTE_TYPE_ITEM);
+        URI_MATCHER.addURI(ZeroContract.AUTHORITY,"category",ROUTE_CATEGORY_LIST);
+        URI_MATCHER.addURI(ZeroContract.AUTHORITY, "category/#",ROUTE_CATEGORY_ITEM);
 
     }
 
@@ -177,6 +183,15 @@ public class ZeroProvider extends ContentProvider {
                 return ZeroContract.InventoryProduct.CONTENT_TYPE;
             case ROUTE_INVENTORY_PRODUCT_ITEM:
                 return ZeroContract.InventoryProduct.CONTENT_TYPE;
+            case ROUTE_VARIANT_LIST:
+                return ZeroContract.Variant.CONTENT_TYPE;
+            case ROUTE_VARIANT_ITEM:
+                return ZeroContract.Variant.CONTENT_TYPE;
+            case ROUTE_TYPE_LIST:
+                return ZeroContract.Type.CONTENT_TYPE;
+            case ROUTE_TYPE_ITEM:
+                return ZeroContract.Type.CONTENT_TYPE;
+
 
             default:
                 throw new UnsupportedOperationException("Unknown URI: " + uri);
