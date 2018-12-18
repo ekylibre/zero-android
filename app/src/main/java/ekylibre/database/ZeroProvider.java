@@ -54,6 +54,12 @@ public class ZeroProvider extends ContentProvider {
     public static final int ROUTE_PRODUCT_ITEM = 1501;
     public static final int ROUTE_INVENTORY_PRODUCT_LIST=1600;
     public static final int ROUTE_INVENTORY_PRODUCT_ITEM=1601;
+    public static final int ROUTE_VARIANT_LIST=1700;
+    public static final int ROUTE_VARIANT_ITEM=1701;
+    public static final int ROUTE_TYPE_LIST=1800;
+    public static final int ROUTE_TYPE_ITEM=1801;
+    public static final int ROUTE_CATEGORY_LIST=1900;
+    public static final int ROUTE_CATEGORY_ITEM=1901;
 
     // UriMatcher, used to decode incoming URIs.
     private static final UriMatcher URI_MATCHER = new UriMatcher(UriMatcher.NO_MATCH);
@@ -723,6 +729,52 @@ public class ZeroProvider extends ContentProvider {
                         .delete(database);
                 break;
 
+
+
+            case ROUTE_VARIANT_LIST:
+                count = builder.table(ZeroContract.Variant.TABLE_NAME)
+                        .where(selection, selectionArgs)
+                        .delete(database);
+                break;
+            case ROUTE_VARIANT_ITEM:
+                id = uri.getLastPathSegment();
+                count = builder.table(ZeroContract.Variant.TABLE_NAME)
+                        .where(ZeroContract.Variant.VARIANT_ID + "=?", id)
+                        .where(selection, selectionArgs)
+                        .delete(database);
+                break;
+
+
+            case ROUTE_TYPE_LIST:
+                count = builder.table(ZeroContract.Type.TABLE_NAME)
+                        .where(selection, selectionArgs)
+                        .delete(database);
+                break;
+            case ROUTE_TYPE_ITEM:
+                id = uri.getLastPathSegment();
+                count = builder.table(ZeroContract.Type.TABLE_NAME)
+                        .where(ZeroContract.Type.TYPE_ID + "=?", id)
+                        .where(selection, selectionArgs)
+                        .delete(database);
+                break;
+
+
+            case ROUTE_CATEGORY_LIST:
+                count = builder.table(ZeroContract.Category.TABLE_NAME)
+                        .where(selection, selectionArgs)
+                        .delete(database);
+                break;
+            case ROUTE_CATEGORY_ITEM:
+                id = uri.getLastPathSegment();
+                count = builder.table(ZeroContract.Category.TABLE_NAME)
+                        .where(ZeroContract.Category.CATEGORY_ID + "=?", id)
+                        .where(selection, selectionArgs)
+                        .delete(database);
+                break;
+
+
+
+
             default:
                 throw new UnsupportedOperationException("Unknown URI: " + uri);
         }
@@ -732,6 +784,8 @@ public class ZeroProvider extends ContentProvider {
         context.getContentResolver().notifyChange(uri, null, false);
         return count;
     }
+
+
 
     /**
      * Update a record in the database by URI.
@@ -937,6 +991,46 @@ public class ZeroProvider extends ContentProvider {
                 id = uri.getLastPathSegment();
                 count = builder.table(ZeroContract.InventoryProduct.TABLE_NAME)
                         .where(ZeroContract.InventoryProduct._ID + "=?", id)
+                        .where(selection, selectionArgs)
+                        .update(database, values);
+                break;
+
+
+            case ROUTE_VARIANT_LIST:
+                count = builder.table(ZeroContract.Variant.TABLE_NAME)
+                        .where(selection, selectionArgs)
+                        .update(database, values);
+                break;
+            case ROUTE_VARIANT_ITEM:
+                id = uri.getLastPathSegment();
+                count = builder.table(ZeroContract.Variant.TABLE_NAME)
+                        .where(ZeroContract.Variant.VARIANT_ID + "=?", id)
+                        .where(selection, selectionArgs)
+                        .update(database, values);
+                break;
+
+            case ROUTE_TYPE_LIST:
+                count = builder.table(ZeroContract.Type.TABLE_NAME)
+                        .where(selection, selectionArgs)
+                        .update(database, values);
+                break;
+            case ROUTE_TYPE_ITEM:
+                id = uri.getLastPathSegment();
+                count = builder.table(ZeroContract.Type.TABLE_NAME)
+                        .where(ZeroContract.Type.TYPE_ID + "=?", id)
+                        .where(selection, selectionArgs)
+                        .update(database, values);
+                break;
+
+            case ROUTE_CATEGORY_LIST:
+                count = builder.table(ZeroContract.Category.TABLE_NAME)
+                        .where(selection, selectionArgs)
+                        .update(database, values);
+                break;
+            case ROUTE_CATEGORY_ITEM:
+                id = uri.getLastPathSegment();
+                count = builder.table(ZeroContract.Category.TABLE_NAME)
+                        .where(ZeroContract.Category.CATEGORY_ID + "=?", id)
                         .where(selection, selectionArgs)
                         .update(database, values);
                 break;
