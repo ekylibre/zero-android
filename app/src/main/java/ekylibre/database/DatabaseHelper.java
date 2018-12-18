@@ -400,6 +400,24 @@ public class DatabaseHelper extends SQLiteOpenHelper
                 if (newVersion == 20)
                     break;
             }
+            case 21:
+            {
+                database.execSQL("CREATE TABLE IF NOT EXISTS " + ZeroContract.InventoryProduct.TABLE_NAME
+                        + "("
+                        + ZeroContract.InventoryProduct.INVENTORY_PRODUCT_ID+ " INTEGER PRIMARY KEY AUTOINCREMENT"
+                        + ", " + ZeroContract.InventoryProduct.DATE+ " DATE"
+                        + ", " + ZeroContract.InventoryProduct.COMMENT + " TEXT"
+                        + ", " + "FOREIGN KEY (" + ZeroContract.InventoryProductColumns.FK_PRODUCT_ID + ") REFERENCES product(id_product)"
+                        + ")");
+                database.execSQL("CREATE TABLE IF NOT EXISTS " + ZeroContract.ZoneStock.TABLE_NAME
+                        + "("
+                        + ZeroContract.ZoneStock.ZONE_STOCK_ID+ " INTEGER PRIMARY KEY AUTOINCREMENT"
+                        + ", " + ZeroContract.ZoneStock.NAME+ " TEXT"
+                        + ", " + ZeroContract.ZoneStock.SHAPE + " TEXT"
+                        + ")");
+                if (newVersion == 21)
+                    break;
+            }
         }
     }
 }
