@@ -8,6 +8,7 @@
     <string name="average">Moyenne</string>
     <string name="count">Compte</string>
     <string name="stocks">Stocks</string>
+    <string name="inventory">Nouvel inventaire</string>
     <string name="create_issue">Enregistrement de l\'incident</string>
     <string name="data_synced">Données synchronisées</string>
     <string name="date_label">Date</string>

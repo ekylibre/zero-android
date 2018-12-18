@@ -8,6 +8,7 @@
     <string name="average">average</string>
     <string name="count">Count</string>
     <string name="stocks">Stocks</string>
+    <string name="inventory">New inventory</string>
     <string name="create_issue">Create Issue</string>
     <string name="data_synced">Data synchronized</string>
     <string name="date_label">Date</string>
