@@ -12,7 +12,7 @@ import ekylibre.zero.BuildConfig;
 
 public class DatabaseHelper extends SQLiteOpenHelper
 {
-    private static final int DATABASE_VERSION = 20;
+    private static final int DATABASE_VERSION = 21;
 
     private static final String DATABASE_NAME = "zero";
 
@@ -399,6 +399,40 @@ public class DatabaseHelper extends SQLiteOpenHelper
                         "ek_id INTEGER");
                 if (newVersion == 20)
                     break;
+            }
+            case 21:
+            {
+                database.execSQL("CREATE TABLE IF NOT EXISTS " + ZeroContract.ZoneStock.TABLE_NAME
+                        + "("
+                        + ZeroContract.ZoneStock.ZONE_STOCK_ID+ " INTEGER PRIMARY KEY AUTOINCREMENT"
+                        + ", " + ZeroContract.ZoneStock.NAME+ " TEXT"
+                        + ", " + ZeroContract.ZoneStock.SHAPE + " TEXT"
+                        + ")");
+                database.execSQL(" CREATE TABLE IF NOT EXISTS "+ ZeroContract.Product.TABLE_NAME
+                        +"( "
+                        +ZeroContract.Product.PRODUCT_ID+" INTEGER PRIMARY KEY AUTOINCREMENT"
+                        +", "+ ZeroContract.Product.NAME+" TEXT "
+                        +", "+ZeroContract.Product.CATEGORY+" VARCHAR(255) "
+                        +", "+ZeroContract.Product.TYPE+" VARCHAR(255) "
+                        +", "+ZeroContract.Product.CONDITIONING+" VARCHAR(255)"
+                        +", "+ZeroContract.Product.PHOTO+"TEXT"
+                        +", "+ZeroContract.Product.FK_ZONE_STOCK_ID+" INTEGER"
+                        +", "+ "FOREIGN KEY (" + ZeroContract.Product.FK_ZONE_STOCK_ID + ") REFERENCES zone_stock(id_zone_stock)"
+                        + ")");
+                database.execSQL("CREATE TABLE IF NOT EXISTS " + ZeroContract.InventoryProduct.TABLE_NAME
+                        + "("
+                        + ZeroContract.InventoryProduct.INVENTORY_PRODUCT_ID+ " INTEGER PRIMARY KEY AUTOINCREMENT"
+                        + ", " + ZeroContract.InventoryProduct.DATE+ " DATE"
+                        + ", " + ZeroContract.InventoryProduct.COMMENT + " TEXT"
+                        + ", " + ZeroContract.InventoryProduct.FK_PRODUCT_ID + " INTEGER"
+                        + ", " + "FOREIGN KEY (" + ZeroContract.InventoryProductColumns.FK_PRODUCT_ID + ") REFERENCES product(id_product)"
+                        + ")");
+
+
+
+                if (newVersion == 21)
+                    break;
+
             }
         }
     }

@@ -39,8 +39,7 @@ public final class ZeroContract {
         String UUID = "uuid";
     }
 
-    public interface InterventionParametersColumns extends BaseColumns
-    {
+    public interface InterventionParametersColumns extends BaseColumns {
         String TABLE_NAME = "intervention_parameters";
         String FK_INTERVENTION = "fk_intervention";
         String EK_ID = "ek_id";
@@ -171,10 +170,37 @@ public final class ZeroContract {
     }
 
     public interface LastSyncsColumns extends BaseColumns {
-        String TABLE_NAME   = "last_syncs";
-        String USER         = "user";
-        String TYPE         = "type";
-        String DATE         = "date";
+        String TABLE_NAME = "last_syncs";
+        String USER = "user";
+        String TYPE = "type";
+        String DATE = "date";
+    }
+
+    public interface InventoryProductColumns extends BaseColumns {
+        String TABLE_NAME = "inventory_product";
+        String INVENTORY_PRODUCT_ID = "inventory_product_id";
+        String FK_PRODUCT_ID = "fk_product";
+        String QUANTITY = "quantity";
+        String DATE = "date";
+        String COMMENT = "comment";
+    }
+
+    public interface ProductColumns extends BaseColumns {
+        String TABLE_NAME = "product";
+        String PRODUCT_ID = "id_product";
+        String NAME = "name";
+        String FK_ZONE_STOCK_ID = "fk_zone_stock";
+        String CATEGORY = "category";
+        String TYPE = "type";
+        String CONDITIONING = "conditioning";
+        String PHOTO = "photo";
+    }
+
+    public interface ZoneStockColumns extends BaseColumns {
+        String TABLE_NAME = "zone_stock";
+        String ZONE_STOCK_ID = "id_zone_stock";
+        String NAME = "name";
+        String SHAPE = "shape";
     }
 
 
@@ -275,7 +301,7 @@ public final class ZeroContract {
         public static final String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/vnd.ekylibre.zero.plant_counting";
 
         public static final String[] PROJECTION_ALL = {_ID, OBSERVED_AT, LATITUDE, LONGITUDE,
-                OBSERVATION,  PLANT_DENSITY_ABACUS_ITEM_ID, SYNCED_AT, PLANT_DENSITY_ABACUS_ID,
+                OBSERVATION, PLANT_DENSITY_ABACUS_ITEM_ID, SYNCED_AT, PLANT_DENSITY_ABACUS_ID,
                 PLANT_ID, AVERAGE_VALUE, NATURE};
         public static final String[] PROJECTION_NONE = {_ID};
 
@@ -338,8 +364,7 @@ public final class ZeroContract {
         public static final String SORT_ORDER_DEFAULT = _ID + " ASC";
     }
 
-    public static final class Contacts implements ContactsColumns
-    {
+    public static final class Contacts implements ContactsColumns {
         // Content URI for this table
         public static final Uri CONTENT_URI = Uri.withAppendedPath(ZeroContract.CONTENT_URI,
                 "contacts");
@@ -358,8 +383,7 @@ public final class ZeroContract {
 
     }
 
-    public static final class ContactParams implements ContactParamsColumns
-    {
+    public static final class ContactParams implements ContactParamsColumns {
         // Content URI for this table
         public static final Uri CONTENT_URI = Uri.withAppendedPath(ZeroContract.CONTENT_URI,
                 "contact_params");
@@ -378,8 +402,7 @@ public final class ZeroContract {
 
     }
 
-    public static final class LastSyncs implements LastSyncsColumns
-    {
+    public static final class LastSyncs implements LastSyncsColumns {
         // Content URI for this table
         public static final Uri CONTENT_URI = Uri.withAppendedPath(ZeroContract.CONTENT_URI,
                 "last_syncs");
@@ -396,5 +419,41 @@ public final class ZeroContract {
 
         public static final String SORT_ORDER_DEFAULT = _ID + " ASC";
 
+    }
+
+
+
+
+    public static final class ZoneStock implements ZoneStockColumns {
+        // Content URI for this table
+        public static final Uri CONTENT_URI = Uri.withAppendedPath(ZeroContract.CONTENT_URI, "zone_stock");
+        // MIME type for lists of records.
+        public static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/vnd.ekylibre.zero.zone_stock";
+        // MIME type for individual record.
+        public static final String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/vnd.ekylibre.zero.zone_stock";
+        public static final String[] PROJECTION_ALL = {ZONE_STOCK_ID, NAME, SHAPE};
+    }
+
+
+    public static final class Product implements ProductColumns {
+        // Content URI for this table
+        public static final Uri CONTENT_URI = Uri.withAppendedPath(ZeroContract.CONTENT_URI, "product");
+        // MIME type for lists of records.
+        public static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/vnd.ekylibre.zero.product";
+        // MIME type for individual record.
+        public static final String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/vnd.ekylibre.zero.product";
+        public static final String[] PROJECTION_ALL = {PRODUCT_ID, NAME, FK_ZONE_STOCK_ID, CATEGORY, TYPE, CONDITIONING, PHOTO};
+    }
+
+
+
+    public static final class InventoryProduct implements InventoryProductColumns {
+        // Content URI for this table
+        public static final Uri CONTENT_URI = Uri.withAppendedPath(ZeroContract.CONTENT_URI, "inventory_product");
+        // MIME type for lists of records.
+        public static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/vnd.ekylibre.zero.inventory_product";
+        // MIME type for individual record.
+        public static final String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/vnd.ekylibre.zero.inventory_product";
+        public static final String[] PROJECTION_ALL = {INVENTORY_PRODUCT_ID, FK_PRODUCT_ID, QUANTITY, DATE, COMMENT};
     }
 }
