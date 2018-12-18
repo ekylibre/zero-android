@@ -15,6 +15,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Adapter;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.Switch;
 
 import java.util.ArrayList;
 
@@ -41,6 +43,7 @@ public class InventoryActivity extends AppCompatActivity {
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
+    int inventory_type =1;
 
     //String [] type_inventory = new String[3] ;
 
@@ -71,7 +74,60 @@ public class InventoryActivity extends AppCompatActivity {
        // specify an adapter (see also next example)
        mAdapter = new MainZoneAdapter(listeZone);
        mRecyclerView.setAdapter(mAdapter);
+       final Switch regularSwitch = (Switch) findViewById(R.id.switchInventoryRegular);
+       final Switch packageSwitch = (Switch) findViewById(R.id.switchInventoryPackage);
+       final Switch yearSwitch = (Switch) findViewById(R.id.switchInventoryYear);
+       class MyButtonClickListener implements View.OnClickListener {
+           @Override
+           public void onClick(View _buttonView) {
+               if (_buttonView.getId() == R.id.switchInventoryRegular) {
+                   Boolean switchState = regularSwitch.isChecked();
+                   inventory_type=1;
+                   if (switchState == false) {
+                       regularSwitch.setChecked(true);
+                       packageSwitch.setChecked(false);
+                       yearSwitch.setChecked(false);
+                   }
+                   else if (switchState == true){
+                       yearSwitch.setChecked(false);
+                       packageSwitch.setChecked(false);
+                   }
+               }
+               if (_buttonView.getId() == R.id.switchInventoryPackage) {
+                   Boolean switchStatepack = packageSwitch.isChecked();
+                   inventory_type=2;
+                   if (switchStatepack == false) {
+                       regularSwitch.setChecked(false);
+                       packageSwitch.setChecked(true);
+                       yearSwitch.setChecked(false);
+                   }
+                   else if (switchStatepack == true){
+                       regularSwitch.setChecked(false);
+                       yearSwitch.setChecked(false);
+                   }
+               }
+               if (_buttonView.getId() == R.id.switchInventoryYear) {
+                   Boolean switchStateyear = yearSwitch.isChecked();
+                   inventory_type=3;
+                   if (switchStateyear == false) {
+                       regularSwitch.setChecked(false);
+                       packageSwitch.setChecked(false);
+                       yearSwitch.setChecked(true);
+                   }
+                   else if (switchStateyear == true){
+                       regularSwitch.setChecked(false);
+                       packageSwitch.setChecked(false);
+                   }
+               }
+               Log.i("mytag", "inv_type : "+inventory_type);
+           }
+       }
+       regularSwitch.setOnClickListener(new MyButtonClickListener());
+       yearSwitch.setOnClickListener(new MyButtonClickListener());
+       packageSwitch.setOnClickListener(new MyButtonClickListener());
+
     }
+
 
 
 /*@Override

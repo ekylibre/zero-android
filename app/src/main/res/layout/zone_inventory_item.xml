@@ -5,12 +5,15 @@
     android:id="@+id/zone_inventory_item"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="16dp">
+    android:background="@color/light_grey"
+    android:padding="8dp"
+    android:layout_margin="2dp"
+    >
 
         <ImageView
             android:id="@+id/zone_inventory_item_image"
-            android:layout_width="45dp"
-            android:layout_height="45dp"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
             app:srcCompat="@drawable/ic_sync"/>
 
         <TextView
@@ -30,7 +33,8 @@
             android:textStyle="italic"
             app:layout_constraintBottom_toBottomOf="@id/zone_inventory_item_image"
             app:layout_constraintStart_toEndOf="@id/zone_inventory_item_image"
-            tools:text="15 Aout 2018" />
+            tools:text="15 Aout 2018"
+            />
 
 
 </android.support.constraint.ConstraintLayout>
