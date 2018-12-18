@@ -421,15 +421,19 @@ public final class ZeroContract {
 
     }
 
-    public static final class InventoryProduct implements InventoryProductColumns {
+
+
+
+    public static final class ZoneStock implements ZoneStockColumns {
         // Content URI for this table
-        public static final Uri CONTENT_URI = Uri.withAppendedPath(ZeroContract.CONTENT_URI, "inventory_product");
+        public static final Uri CONTENT_URI = Uri.withAppendedPath(ZeroContract.CONTENT_URI, "zone_stock");
         // MIME type for lists of records.
-        public static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/vnd.ekylibre.zero.inventory_product";
+        public static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/vnd.ekylibre.zero.zone_stock";
         // MIME type for individual record.
-        public static final String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/vnd.ekylibre.zero.inventory_product";
-        public static final String[] PROJECTION_ALL = {INVENTORY_PRODUCT_ID, FK_PRODUCT_ID, QUANTITY, DATE, COMMENT};
+        public static final String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/vnd.ekylibre.zero.zone_stock";
+        public static final String[] PROJECTION_ALL = {ZONE_STOCK_ID, NAME, SHAPE};
     }
+
 
     public static final class Product implements ProductColumns {
         // Content URI for this table
@@ -441,13 +445,15 @@ public final class ZeroContract {
         public static final String[] PROJECTION_ALL = {PRODUCT_ID, NAME, FK_ZONE_STOCK_ID, CATEGORY, TYPE, CONDITIONING, PHOTO};
     }
 
-    public static final class ZoneStock implements ZoneStockColumns {
+
+
+    public static final class InventoryProduct implements InventoryProductColumns {
         // Content URI for this table
-        public static final Uri CONTENT_URI = Uri.withAppendedPath(ZeroContract.CONTENT_URI, "zone_stock");
+        public static final Uri CONTENT_URI = Uri.withAppendedPath(ZeroContract.CONTENT_URI, "inventory_product");
         // MIME type for lists of records.
-        public static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/vnd.ekylibre.zero.zone_stock";
+        public static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/vnd.ekylibre.zero.inventory_product";
         // MIME type for individual record.
-        public static final String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/vnd.ekylibre.zero.zone_stock";
-        public static final String[] PROJECTION_ALL = {ZONE_STOCK_ID, NAME, SHAPE};
+        public static final String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/vnd.ekylibre.zero.inventory_product";
+        public static final String[] PROJECTION_ALL = {INVENTORY_PRODUCT_ID, FK_PRODUCT_ID, QUANTITY, DATE, COMMENT};
     }
 }
