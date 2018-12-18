@@ -52,6 +52,9 @@ public class ZeroProvider extends ContentProvider {
     public static final int ROUTE_ZONES_STOCK_ITEM = 1401;
     public static final int ROUTE_PRODUCT_LIST = 1500;
     public static final int ROUTE_PRODUCT_ITEM = 1501;
+    public static final int ROUTE_INVENTORY_PRODUCT_LIST=1600;
+    public static final int ROUTE_INVENTORY_PRODUCT_ITEM=1601;
+
     // UriMatcher, used to decode incoming URIs.
     private static final UriMatcher URI_MATCHER = new UriMatcher(UriMatcher.NO_MATCH);
 
@@ -86,6 +89,9 @@ public class ZeroProvider extends ContentProvider {
         URI_MATCHER.addURI(ZeroContract.AUTHORITY, "zone_stock/#", ROUTE_ZONES_STOCK_ITEM);
         URI_MATCHER.addURI(ZeroContract.AUTHORITY, "product", ROUTE_PRODUCT_LIST);
         URI_MATCHER.addURI(ZeroContract.AUTHORITY, "product/#", ROUTE_PRODUCT_ITEM);
+        URI_MATCHER.addURI(ZeroContract.AUTHORITY,"inventory_product",ROUTE_INVENTORY_PRODUCT_LIST);
+        URI_MATCHER.addURI(ZeroContract.AUTHORITY, "Inventory_product/#",ROUTE_INVENTORY_PRODUCT_ITEM);
+
     }
 
     private DatabaseHelper mDatabaseHelper;
@@ -161,6 +167,11 @@ public class ZeroProvider extends ContentProvider {
                 return ZeroContract.Product.CONTENT_TYPE;
             case ROUTE_PRODUCT_ITEM:
                 return ZeroContract.Product.CONTENT_TYPE;
+            case ROUTE_INVENTORY_PRODUCT_LIST:
+                return ZeroContract.InventoryProduct.CONTENT_TYPE;
+            case ROUTE_INVENTORY_PRODUCT_ITEM:
+                return ZeroContract.InventoryProduct.CONTENT_TYPE;
+
             default:
                 throw new UnsupportedOperationException("Unknown URI: " + uri);
         }
@@ -367,6 +378,18 @@ public class ZeroProvider extends ContentProvider {
                 assert context != null;
                 cursor.setNotificationUri(context.getContentResolver(), uri);
                 return cursor;
+            case ROUTE_INVENTORY_PRODUCT_LIST:
+                builder.table(ZeroContract.InventoryProduct.TABLE_NAME)
+                        .where(selection, selectionArgs);
+                cursor = builder.query(database, projection, sortOrder);
+                context = getContext();
+                assert context != null;
+                cursor.setNotificationUri(context.getContentResolver(), uri);
+                return cursor;
+            case ROUTE_INVENTORY_PRODUCT_ITEM:
+                id = uri.getLastPathSegment();
+                builder.where(ZeroContract.InventoryProduct._ID + "=?", id);
+
             default:
                 throw new UnsupportedOperationException("Unknown URI: " + uri);
         }
@@ -474,6 +497,13 @@ public class ZeroProvider extends ContentProvider {
                 break;
             case ROUTE_PRODUCT_ITEM:
                 throw new UnsupportedOperationException("Insert not supported on URI: " + uri);
+            case ROUTE_INVENTORY_PRODUCT_LIST:
+                id = database.insertOrThrow(ZeroContract.InventoryProduct.TABLE_NAME, null, values);
+                result = Uri.parse(ZeroContract.InventoryProduct.CONTENT_URI + "/" + id);
+                break;
+            case ROUTE_INVENTORY_PRODUCT_ITEM:
+                throw new UnsupportedOperationException("Insert not supported on URI: " + uri);
+
             default:
                 throw new UnsupportedOperationException("Unknown URI: " + uri);
 
@@ -680,6 +710,19 @@ public class ZeroProvider extends ContentProvider {
                         .where(selection, selectionArgs)
                         .delete(database);
                 break;
+            case ROUTE_INVENTORY_PRODUCT_LIST:
+                count = builder.table(ZeroContract.InventoryProduct.TABLE_NAME)
+                        .where(selection, selectionArgs)
+                        .delete(database);
+                break;
+            case ROUTE_INVENTORY_PRODUCT_ITEM:
+                id = uri.getLastPathSegment();
+                count = builder.table(ZeroContract.InventoryProduct.TABLE_NAME)
+                        .where(ZeroContract.InventoryProduct._ID + "=?", id)
+                        .where(selection, selectionArgs)
+                        .delete(database);
+                break;
+
             default:
                 throw new UnsupportedOperationException("Unknown URI: " + uri);
         }
@@ -885,6 +928,19 @@ public class ZeroProvider extends ContentProvider {
                         .where(selection, selectionArgs)
                         .update(database, values);
                 break;
+            case ROUTE_INVENTORY_PRODUCT_LIST:
+                count = builder.table(ZeroContract.InventoryProduct.TABLE_NAME)
+                        .where(selection, selectionArgs)
+                        .update(database, values);
+                break;
+            case ROUTE_INVENTORY_PRODUCT_ITEM:
+                id = uri.getLastPathSegment();
+                count = builder.table(ZeroContract.InventoryProduct.TABLE_NAME)
+                        .where(ZeroContract.InventoryProduct._ID + "=?", id)
+                        .where(selection, selectionArgs)
+                        .update(database, values);
+                break;
+
             default:
                 throw new UnsupportedOperationException("Unknown URI: " + uri);
         }
