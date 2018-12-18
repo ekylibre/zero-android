@@ -190,10 +190,12 @@ public final class ZeroContract {
         String PRODUCT_ID = "id_product";
         String NAME = "name";
         String FK_ZONE_STOCK_ID = "fk_zone_stock";
-        String CATEGORY = "category";
-        String TYPE = "type";
         String CONDITIONING = "conditioning";
         String PHOTO = "photo";
+
+        String FK_VARIANT_ID = "fk_variant_id";
+
+
     }
 
     public interface ZoneStockColumns extends BaseColumns {
@@ -465,7 +467,7 @@ public final class ZeroContract {
         public static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/vnd.ekylibre.zero.product";
         // MIME type for individual record.
         public static final String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/vnd.ekylibre.zero.product";
-        public static final String[] PROJECTION_ALL = {PRODUCT_ID, NAME, FK_ZONE_STOCK_ID, CATEGORY, TYPE, CONDITIONING, PHOTO};
+        public static final String[] PROJECTION_ALL = {PRODUCT_ID, NAME, FK_ZONE_STOCK_ID, CONDITIONING, PHOTO};
     }
 
 

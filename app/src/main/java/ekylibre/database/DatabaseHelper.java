@@ -412,12 +412,12 @@ public class DatabaseHelper extends SQLiteOpenHelper
                         +"( "
                         +ZeroContract.Product.PRODUCT_ID+" INTEGER PRIMARY KEY AUTOINCREMENT"
                         +", "+ ZeroContract.Product.NAME+" TEXT "
-                        +", "+ZeroContract.Product.CATEGORY+" VARCHAR(255) "
-                        +", "+ZeroContract.Product.TYPE+" VARCHAR(255) "
                         +", "+ZeroContract.Product.CONDITIONING+" VARCHAR(255)"
                         +", "+ZeroContract.Product.PHOTO+"TEXT"
                         +", "+ZeroContract.Product.FK_ZONE_STOCK_ID+" INTEGER"
+                        +", "+ZeroContract.Product.FK_VARIANT_ID+" INTEGER"
                         +", "+ "FOREIGN KEY (" + ZeroContract.Product.FK_ZONE_STOCK_ID + ") REFERENCES zone_stock(id_zone_stock)"
+                        +", "+ "FOREIGN KEY (" + ZeroContract.Product.FK_VARIANT_ID + ") REFERENCES variant(variant_id)"
                         + ")");
                 database.execSQL("CREATE TABLE IF NOT EXISTS " + ZeroContract.InventoryProduct.TABLE_NAME
                         + "("
@@ -428,12 +428,10 @@ public class DatabaseHelper extends SQLiteOpenHelper
                         + ", " + "FOREIGN KEY (" + ZeroContract.InventoryProductColumns.FK_PRODUCT_ID + ") REFERENCES product(id_product)"
                         + ")");
 
-
-
                 if (newVersion == 21)
                     break;
-
             }
+
         }
     }
 }
