@@ -45,6 +45,7 @@ public class InventoryActivity extends AppCompatActivity implements SelectZoneDi
     private RecyclerView.LayoutManager mLayoutManager;
     int inventory_type =1;
     private SelectZoneDialogFragment selectZoneDialogFragment;
+    ArrayList<ItemZoneInventory> listeZone = new ArrayList<>();
 
     //String [] type_inventory = new String[3] ;
 
@@ -71,7 +72,7 @@ public class InventoryActivity extends AppCompatActivity implements SelectZoneDi
         mRecyclerView.setLayoutManager(mLayoutManager);
 
 
-        final ArrayList<ItemZoneInventory> listeZone = new ArrayList<ItemZoneInventory>();
+
         cursorDateZone.moveToFirst();
         while(cursorDateZone.moveToNext()) {
            int indexid = cursorDateZone.getColumnIndexOrThrow("id_zone_stock");
@@ -319,6 +320,8 @@ public class InventoryActivity extends AppCompatActivity implements SelectZoneDi
     @Override
     public void onFragmentInteraction(ItemZoneInventory zone) {
         Log.i("MyTag", "click zone"+zone.zone);
+        listeZone.add(zone);
+        mAdapter.notifyDataSetChanged();
         selectZoneDialogFragment.dismiss();
     }
 }
