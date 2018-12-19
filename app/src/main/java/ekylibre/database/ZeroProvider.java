@@ -525,6 +525,26 @@ public class ZeroProvider extends ContentProvider {
             case ROUTE_INVENTORY_PRODUCT_ITEM:
                 throw new UnsupportedOperationException("Insert not supported on URI: " + uri);
 
+            case ROUTE_VARIANT_LIST:
+                id = database.insertOrThrow(ZeroContract.Variant.TABLE_NAME, null, values);
+                result = Uri.parse(ZeroContract.Variant.CONTENT_URI + "/" + id);
+                break;
+            case ROUTE_VARIANT_ITEM:
+                throw new UnsupportedOperationException("Insert not supported on URI: " + uri);
+            case ROUTE_TYPE_LIST:
+                id = database.insertOrThrow(ZeroContract.Type.TABLE_NAME, null, values);
+                result = Uri.parse(ZeroContract.Type.CONTENT_URI + "/" + id);
+                break;
+            case ROUTE_TYPE_ITEM:
+                throw new UnsupportedOperationException("Insert not supported on URI: " + uri);
+            case ROUTE_CATEGORY_LIST:
+                id = database.insertOrThrow(ZeroContract.Category.TABLE_NAME, null, values);
+                result = Uri.parse(ZeroContract.Category.CONTENT_URI + "/" + id);
+                break;
+            case ROUTE_CATEGORY_ITEM:
+                throw new UnsupportedOperationException("Insert not supported on URI: " + uri);
+
+
             default:
                 throw new UnsupportedOperationException("Unknown URI: " + uri);
 
@@ -772,7 +792,6 @@ public class ZeroProvider extends ContentProvider {
                         .where(selection, selectionArgs)
                         .delete(database);
                 break;
-
 
             case ROUTE_CATEGORY_LIST:
                 count = builder.table(ZeroContract.Category.TABLE_NAME)
