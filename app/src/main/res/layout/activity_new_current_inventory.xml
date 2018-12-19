@@ -54,11 +54,12 @@
         android:id="@+id/stock"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/current_stock"
-        android:textSize="17dp"
-        android:layout_marginLeft="40dp"
         android:layout_below="@id/toolbar"
-        android:layout_toRightOf="@id/image_category"/>
+        android:layout_marginLeft="40dp"
+        android:layout_marginTop="14dp"
+        android:layout_toRightOf="@id/image_category"
+        android:text="@string/current_stock"
+        android:textSize="17dp" />
 
     <TextView
         android:id="@+id/choose_stock"
@@ -124,6 +125,13 @@
             android:layout_height="wrap_content"
             app:closeIconEnabled="true"
             android:text="testchip"/>
+        <com.google.android.material.chip.Chip
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Chip"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:closeIconEnabled="true"
+            android:text="testchip"/>
+
 
     </android.support.design.chip.ChipGroup>
 
