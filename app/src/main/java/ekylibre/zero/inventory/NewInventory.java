@@ -1,4 +1,4 @@
-/*package ekylibre.zero.inventory;
+package ekylibre.zero.inventory;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -19,7 +19,7 @@ import ekylibre.zero.R;
 import ekylibre.zero.inventory.adapters.MainZoneAdapter;
 
 
-public class NewInventory extends AppCompatActivity {
+/*public class NewInventory extends AppCompatActivity {
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
