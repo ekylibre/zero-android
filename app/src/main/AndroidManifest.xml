@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="ekylibre.zero"
     android:installLocation="auto"
     android:minSdkVersion="19">
@@ -50,6 +51,8 @@
         android:smallScreens="true"
         android:xlargeScreens="true" />
 
+
+    <!--style="@style/AppTheme.AppBarOverlay"-->
     <application
         android:name=".home.Zero"
         android:allowBackup="true"
