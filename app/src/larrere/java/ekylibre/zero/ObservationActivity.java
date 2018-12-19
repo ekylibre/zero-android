@@ -187,6 +187,7 @@ public class ObservationActivity extends AppCompatActivity implements
                 break;
 
             case ACTIVITY_FRAGMENT:
+                cleanData();
                 finish();
         }
 //        super.onBackPressed();
@@ -207,6 +208,7 @@ public class ObservationActivity extends AppCompatActivity implements
                 break;
 
             default:
+                cleanData();
                 finish();
 //                super.onSupportNavigateUp();
         }
@@ -297,6 +299,11 @@ public class ObservationActivity extends AppCompatActivity implements
         ft.commit();
     }
 
+    void cleanData() {
+        picturesList.clear();
+        culturesList.clear();
+    }
+
     public void saveObservation() {
         ContentResolver cr = getContentResolver();
         ContentValues contentValues = new ContentValues();
@@ -373,6 +380,8 @@ public class ObservationActivity extends AppCompatActivity implements
                 }
             }
         }
+
+        cleanData();
     }
 
     private long saveIssue(IssueItem issue) {
@@ -529,6 +538,14 @@ public class ObservationActivity extends AppCompatActivity implements
             resId = R.drawable.icon_sunflower;
         else if (activityName.contains("ETA"))
             resId = R.drawable.icon_harvester;
+        else if (activityName.contains("Courge"))
+            resId = R.drawable.icon_squash;
+        else if (activityName.contains("trèfle"))
+            resId = R.drawable.icon_shamrock;
+        else if (activityName.contains("Forestier"))
+            resId = R.drawable.icon_forest;
+        else if (activityName.contains("Prairie") || activityName.contains("Jachère"))
+            resId = R.drawable.icon_grass;
         else
             resId = R.drawable.icon_plant;
 
