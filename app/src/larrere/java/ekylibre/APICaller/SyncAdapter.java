@@ -1120,7 +1120,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
         if (!observationCursor.isNull(6))
             attributes.put("description", observationCursor.getString(6));
         // Parse geolocation
-        if (!observationCursor.isNull(7) && observationCursor.isNull(8))
+        if (!observationCursor.isNull(7) && !observationCursor.isNull(8))
             attributes.put("geolocation", String.format("SRID=4326; POINT(%s %s)",
                     observationCursor.getDouble(7), observationCursor.getDouble(8)));
 
