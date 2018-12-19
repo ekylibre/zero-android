@@ -459,6 +459,7 @@ public final class ZeroContract {
         // MIME type for individual record.
         public static final String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/vnd.ekylibre.zero.zone_stock";
         public static final String[] PROJECTION_ALL = {_ID, ZONE_STOCK_ID, NAME, SHAPE, DATEZONE};
+        public static final String[] PROJECTION_NAME = {NAME};
     }
 
 

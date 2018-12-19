@@ -14,6 +14,12 @@ public class ItemZoneInventory {
         Icon_zone = icon_zone;
     }
 
+    public ItemZoneInventory(String zone) {
+        this.zone = zone;
+        this.dateInventory = null;
+        this.Icon_zone = null;
+    }
+
     @Override
     public String toString() {
         return dateInventory + ',' + zone ;

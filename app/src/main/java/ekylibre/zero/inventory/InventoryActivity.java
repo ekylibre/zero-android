@@ -55,7 +55,8 @@ public class InventoryActivity extends AppCompatActivity implements SelectZoneDi
         setTitle("Nouvel Inventaire");
 
        fillDBtest();
-       Cursor cursorZone = queryZone();
+       Cursor cursorDateZone = queryDateZone();
+
 
         mRecyclerView = (RecyclerView) findViewById(R.id.my_recycler_view);
 
@@ -71,25 +72,37 @@ public class InventoryActivity extends AppCompatActivity implements SelectZoneDi
 
 
         final ArrayList<ItemZoneInventory> listeZone = new ArrayList<ItemZoneInventory>();
-        cursorZone.moveToFirst();
-        while(cursorZone.moveToNext()) {
-           int indexid = cursorZone.getColumnIndexOrThrow("id_zone_stock");
-           String zoneId = cursorZone.getString(indexid);
+        cursorDateZone.moveToFirst();
+        while(cursorDateZone.moveToNext()) {
+           int indexid = cursorDateZone.getColumnIndexOrThrow("id_zone_stock");
+           String zoneId = cursorDateZone.getString(indexid);
 
-           int indexname = cursorZone.getColumnIndexOrThrow("name");
-           String zoneName = cursorZone.getString(indexname);
+           int indexname = cursorDateZone.getColumnIndexOrThrow("name");
+           String zoneName = cursorDateZone.getString(indexname);
 
-           int indexshape = cursorZone.getColumnIndexOrThrow("shape");
-           String zoneShape = cursorZone.getString(indexshape);
+           int indexshape = cursorDateZone.getColumnIndexOrThrow("shape");
+           String zoneShape = cursorDateZone.getString(indexshape);
 
-            int indexdate = cursorZone.getColumnIndexOrThrow("date_zone");
-            String zoneDate = cursorZone.getString(indexdate);
+            int indexdate = cursorDateZone.getColumnIndexOrThrow("date_zone");
+            String zoneDate = cursorDateZone.getString(indexdate);
 
            Log.i("Mytag", " " + listeZone);
            listeZone.add(new ItemZoneInventory(zoneDate,zoneName,null));
         }
 
-        cursorZone.close();
+        cursorDateZone.close();
+
+       final ArrayList<ItemZoneInventory> listeAddZone = new ArrayList<ItemZoneInventory>();
+       Cursor cursorAddZone = queryAddZone();
+       cursorAddZone.moveToFirst();
+       while(cursorAddZone.moveToNext()) {
+           int indexname = cursorAddZone.getColumnIndexOrThrow("name");
+           String zoneName = cursorAddZone.getString(indexname);
+           listeAddZone.add(new ItemZoneInventory(zoneName));
+       }
+       cursorAddZone.close();
+
+
        // specify an adapter (see also next example)
        mAdapter = new MainZoneAdapter(listeZone);
        mRecyclerView.setAdapter(mAdapter);
@@ -151,7 +164,7 @@ public class InventoryActivity extends AppCompatActivity implements SelectZoneDi
        addInventoryZone.setOnClickListener(new View.OnClickListener() {
            @Override
            public void onClick(View addInventoryZone) {
-               selectZoneDialogFragment = SelectZoneDialogFragment.newInstance(listeZone);
+               selectZoneDialogFragment = SelectZoneDialogFragment.newInstance(listeAddZone);
                selectZoneDialogFragment.show(getFragmentTransaction(),"dialog");
 
            }
@@ -200,7 +213,7 @@ public class InventoryActivity extends AppCompatActivity implements SelectZoneDi
        }
    }
 
-    private Cursor queryZone() {
+    private Cursor queryDateZone() {
         String[] projectionZoneID = ZeroContract.ZoneStock.PROJECTION_ALL;
 
         Cursor cursorZone = getContentResolver().query(
@@ -228,6 +241,30 @@ public class InventoryActivity extends AppCompatActivity implements SelectZoneDi
         //cursorZone.close();
 
         return cursorZone;
+    }
+
+    private Cursor queryAddZone() {
+        String[] projectionZoneID = ZeroContract.ZoneStock.PROJECTION_NAME;
+
+        Cursor cursorAddZone = getContentResolver().query(
+                ZeroContract.ZoneStock.CONTENT_URI,
+                projectionZoneID,
+                ZeroContract.ZoneStock.DATEZONE+" IS NULL",
+                null,
+                null);
+
+        while(cursorAddZone.moveToNext()) {
+            int index;
+
+            index = cursorAddZone.getColumnIndexOrThrow("name");
+            String zoneName = cursorAddZone.getString(index);
+
+            Log.i("Query", "" +zoneName);
+        }
+
+        //cursorZone.close();
+
+        return cursorAddZone;
     }
 
 
