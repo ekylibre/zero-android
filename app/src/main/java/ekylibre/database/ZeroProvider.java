@@ -385,7 +385,7 @@ public class ZeroProvider extends ContentProvider {
                 id = uri.getLastPathSegment();
                 builder.where(ZeroContract.ZoneStock.ZONE_STOCK_ID + "=?", id);
             case ROUTE_ZONES_STOCK_LIST:
-                builder.table(ZeroContract.ZoneStock.ZONE_STOCK_ID)
+                builder.table(ZeroContract.ZoneStock.TABLE_NAME)
                         .where(selection, selectionArgs);
                 cursor = builder.query(database, projection, sortOrder);
                 context = getContext();
@@ -544,8 +544,8 @@ public class ZeroProvider extends ContentProvider {
             case ROUTE_LAST_SYNCS_ITEM:
                 throw new UnsupportedOperationException("Insert not supported on URI: " + uri);
             case ROUTE_ZONES_STOCK_LIST:
-                id = database.insertOrThrow(ZeroContract.ZoneStock.ZONE_STOCK_ID, null, values);
-                result = Uri.parse(ZeroContract.ZoneStock.ZONE_STOCK_ID + "/" + id);
+                id = database.insertOrThrow(ZeroContract.ZoneStock.TABLE_NAME, null, values);
+                result = Uri.parse(ZeroContract.ZoneStock.CONTENT_URI + "/" + id);
                 break;
             case ROUTE_ZONES_STOCK_ITEM:
                 throw new UnsupportedOperationException("Insert not supported on URI: " + uri);

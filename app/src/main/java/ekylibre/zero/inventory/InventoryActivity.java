@@ -49,8 +49,8 @@ public class InventoryActivity extends AppCompatActivity implements SelectZoneDi
         setContentView(R.layout.activity_ui_list_zones);
         setTitle("Nouvel Inventaire");
 
-       //fillDBtest();
-       //queryZone();
+       fillDBtest();
+       Cursor cursorZone = queryZone();
 
         mRecyclerView = (RecyclerView) findViewById(R.id.my_recycler_view);
 
@@ -65,13 +65,22 @@ public class InventoryActivity extends AppCompatActivity implements SelectZoneDi
         mRecyclerView.setLayoutManager(mLayoutManager);
 
 
-
         final ArrayList<ItemZoneInventory> listeZone = new ArrayList<ItemZoneInventory>();
+        cursorZone.moveToFirst();
+        while(cursorZone.moveToNext()) {
+           int indexid = cursorZone.getColumnIndexOrThrow("id_zone_stock");
+           String zoneId = cursorZone.getString(indexid);
 
-        for (int i=0;i<20;i++){
-            listeZone.add(new ItemZoneInventory("date"+i,"zone"+i,null));
-            Log.i("Mytag"," "+listeZone);
+           int indexname = cursorZone.getColumnIndexOrThrow("name");
+           String zoneName = cursorZone.getString(indexname);
+
+           int indexshape = cursorZone.getColumnIndexOrThrow("shape");
+           String zoneShape = cursorZone.getString(indexshape);
+           Log.i("Mytag", " " + listeZone);
+           listeZone.add(new ItemZoneInventory(zoneId,zoneName,null));
         }
+
+        cursorZone.close();
        // specify an adapter (see also next example)
        mAdapter = new MainZoneAdapter(listeZone);
        mRecyclerView.setAdapter(mAdapter);
@@ -144,20 +153,21 @@ public class InventoryActivity extends AppCompatActivity implements SelectZoneDi
    public void fillDBtest() {
        ContentValues mNewValues = new ContentValues();
        for (int i=0;i<20;i++){
+           mNewValues.clear();
            int zoneId = i;
            String zoneName = "zone_"+i;
            String zoneShape = null ;
-           mNewValues.put(ZeroContract.ZoneStockColumns.ZONE_STOCK_ID, zoneId);
-           mNewValues.put(ZeroContract.ZoneStockColumns.NAME, zoneName);
+           mNewValues.put(ZeroContract.ZoneStock.ZONE_STOCK_ID, zoneId);
+           mNewValues.put(ZeroContract.ZoneStock.NAME, zoneName);
            getContentResolver().insert(
                    ZeroContract.ZoneStock.CONTENT_URI,   // the user dictionary content URI
                    mNewValues                          // the values to insert
            );
-           this.finish();
+           //this.finish();
        }
    }
 
-    private void queryZone() {
+    private Cursor queryZone() {
         String[] projectionZoneID = ZeroContract.ZoneStock.PROJECTION_ALL;
 
         Cursor cursorZone = getContentResolver().query(
@@ -182,7 +192,9 @@ public class InventoryActivity extends AppCompatActivity implements SelectZoneDi
             Log.i("Query", "" + zoneId + zoneName + zoneShape);
         }
 
-        cursorZone.close();
+        //cursorZone.close();
+
+        return cursorZone;
     }
 
 
