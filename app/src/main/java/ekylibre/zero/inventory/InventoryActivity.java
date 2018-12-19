@@ -14,6 +14,8 @@ import android.widget.Switch;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.List;
+
 import ekylibre.database.ZeroContract;
 import ekylibre.util.AccountTool;
 import ekylibre.zero.R;
@@ -41,6 +43,8 @@ public class InventoryActivity extends AppCompatActivity implements SelectZoneDi
     int inventory_type =1;
     private SelectZoneDialogFragment selectZoneDialogFragment;
 
+    private List<ItemZoneInventory> listeZone = new ArrayList<>();
+
     //String [] type_inventory = new String[3] ;
 
    @Override
@@ -66,7 +70,7 @@ public class InventoryActivity extends AppCompatActivity implements SelectZoneDi
 
 
 
-        final ArrayList<ItemZoneInventory> listeZone = new ArrayList<ItemZoneInventory>();
+
 
         for (int i=0;i<20;i++){
             listeZone.add(new ItemZoneInventory("date"+i,"zone"+i,null));
@@ -238,6 +242,9 @@ public class InventoryActivity extends AppCompatActivity implements SelectZoneDi
     public void onFragmentInteraction(ItemZoneInventory zone) {
         Log.i("MyTag", "click zone"+zone.zone);
         selectZoneDialogFragment.dismiss();
+        listeZone.add(zone);
+        Log.i("Mytag"," "+zone.zone);
+        mAdapter.notifyDataSetChanged();
     }
 }
 
