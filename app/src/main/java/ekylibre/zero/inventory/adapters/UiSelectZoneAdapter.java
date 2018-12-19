@@ -12,20 +12,29 @@ import android.widget.TextView;
 import java.util.List;
 
 import ekylibre.zero.R;
+import ekylibre.zero.inventory.InventoryActivity;
 import ekylibre.zero.inventory.ItemZoneInventory;
+import ekylibre.zero.inventory.SelectZoneDialogFragment;
 
 public class UiSelectZoneAdapter extends RecyclerView.Adapter<UiSelectZoneAdapter.ViewHolder> {
 
     List<ItemZoneInventory> listZone;
+    SelectZoneDialogFragment.OnFragmentInteractionListener fragmentListener;
 
-    public UiSelectZoneAdapter(List<ItemZoneInventory> dataset) {
+    public UiSelectZoneAdapter(List<ItemZoneInventory> dataset, SelectZoneDialogFragment.OnFragmentInteractionListener listener) {
         this.listZone = dataset;
+        fragmentListener=listener;
+
     }
 
-    class ViewHolder extends RecyclerView.ViewHolder {
+    /**
+     * ViewHolder : défini l'affichage de l'item
+     */
+    class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         ImageView zoneImageView;
         TextView zoneNameView;
+        ItemZoneInventory item;
 
 
         ViewHolder(View itemView) {
@@ -34,6 +43,7 @@ public class UiSelectZoneAdapter extends RecyclerView.Adapter<UiSelectZoneAdapte
             zoneImageView = itemView.findViewById(R.id.select_zone_item_image);
             zoneNameView = itemView.findViewById(R.id.select_zone_item_name);
             Log.i("MyTag","ViewHolder");
+            itemView.setOnClickListener(this);
 
         }
 
@@ -42,10 +52,16 @@ public class UiSelectZoneAdapter extends RecyclerView.Adapter<UiSelectZoneAdapte
             zoneImageView.setImageResource(R.drawable.action_travel);
             zoneNameView.setText(item.zone);
             Log.i("MyTag","Display item:"+item);
+            this.item=item;
 
         }
 
 
+        @Override
+        public void onClick(View view) {
+            Log.i("MyTag", "click zone");
+            fragmentListener.onFragmentInteraction(this.item);
+        }
     }
 
     @NonNull

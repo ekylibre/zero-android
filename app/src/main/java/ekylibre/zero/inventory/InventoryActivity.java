@@ -47,7 +47,7 @@ public class InventoryActivity extends AppCompatActivity implements SelectZoneDi
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ui_list_zones);
-       setTitle("Nouvel Inventaire");
+        setTitle("Nouvel Inventaire");
 
        //fillDBtest();
        //queryZone();
@@ -135,6 +135,7 @@ public class InventoryActivity extends AppCompatActivity implements SelectZoneDi
            public void onClick(View addInventoryZone) {
                selectZoneDialogFragment = SelectZoneDialogFragment.newInstance(listeZone);
                selectZoneDialogFragment.show(getFragmentTransaction(),"dialog");
+
            }
        });
 
@@ -222,8 +223,6 @@ public class InventoryActivity extends AppCompatActivity implements SelectZoneDi
             }
         });*/
 
-    @Override
-    public void onFragmentInteraction(Object object) { }
 
     private FragmentTransaction getFragmentTransaction (){
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
@@ -233,6 +232,12 @@ public class InventoryActivity extends AppCompatActivity implements SelectZoneDi
         }
         ft.addToBackStack(null);
         return ft;
+    }
+
+    @Override
+    public void onFragmentInteraction(ItemZoneInventory zone) {
+        Log.i("MyTag", "click zone"+zone.zone);
+        selectZoneDialogFragment.dismiss();
     }
 }
 
