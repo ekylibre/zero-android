@@ -1,4 +1,4 @@
-package ekylibre.zero.inventory;
+/* package ekylibre.zero.inventory;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -75,3 +75,4 @@ public class Selectproductcategoryfragment extends DialogFragment {
     void onFragmentInteraction(ItemZoneInventory zone);
     }
 }
+*/

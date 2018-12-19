@@ -1,4 +1,4 @@
-package ekylibre.zero.inventory;
+/*package ekylibre.zero.inventory;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -72,6 +72,7 @@ public class NewInventory extends AppCompatActivity {
     }
 
 }
+*/
 
 
 
