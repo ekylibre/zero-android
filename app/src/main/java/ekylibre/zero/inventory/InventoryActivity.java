@@ -1,5 +1,7 @@
 package ekylibre.zero.inventory;
 
+import android.content.ContentValues;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -12,7 +14,8 @@ import android.widget.Switch;
 import android.widget.TextView;
 
 import java.util.ArrayList;
-
+import ekylibre.database.ZeroContract;
+import ekylibre.util.AccountTool;
 import ekylibre.zero.R;
 import ekylibre.zero.inventory.adapters.MainZoneAdapter;
 
@@ -45,6 +48,9 @@ public class InventoryActivity extends AppCompatActivity implements SelectZoneDi
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ui_list_zones);
        setTitle("Nouvel Inventaire");
+
+       //fillDBtest();
+       //queryZone();
 
         mRecyclerView = (RecyclerView) findViewById(R.id.my_recycler_view);
 
@@ -133,6 +139,50 @@ public class InventoryActivity extends AppCompatActivity implements SelectZoneDi
        });
 
    }
+
+   public void fillDBtest() {
+       ContentValues mNewValues = new ContentValues();
+       for (int i=0;i<20;i++){
+           int zoneId = i;
+           String zoneName = "zone_"+i;
+           String zoneShape = null ;
+           mNewValues.put(ZeroContract.ZoneStockColumns.ZONE_STOCK_ID, zoneId);
+           mNewValues.put(ZeroContract.ZoneStockColumns.NAME, zoneName);
+           getContentResolver().insert(
+                   ZeroContract.ZoneStock.CONTENT_URI,   // the user dictionary content URI
+                   mNewValues                          // the values to insert
+           );
+           this.finish();
+       }
+   }
+
+    private void queryZone() {
+        String[] projectionZoneID = ZeroContract.ZoneStock.PROJECTION_ALL;
+
+        Cursor cursorZone = getContentResolver().query(
+                ZeroContract.ZoneStock.CONTENT_URI,
+                projectionZoneID,
+                null,
+                null,
+                null);
+
+        while(cursorZone.moveToNext()) {
+            int index;
+
+            index = cursorZone.getColumnIndexOrThrow("id_zone_stock");
+            String zoneId = cursorZone.getString(index);
+
+            index = cursorZone.getColumnIndexOrThrow("name");
+            String zoneName = cursorZone.getString(index);
+
+            index = cursorZone.getColumnIndexOrThrow("shape");
+            String zoneShape = cursorZone.getString(index);
+
+            Log.i("Query", "" + zoneId + zoneName + zoneShape);
+        }
+
+        cursorZone.close();
+    }
 
 
 
