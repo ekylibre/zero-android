@@ -191,6 +191,11 @@ public class ZeroProvider extends ContentProvider {
                 return ZeroContract.Type.CONTENT_TYPE;
             case ROUTE_TYPE_ITEM:
                 return ZeroContract.Type.CONTENT_TYPE;
+            case ROUTE_CATEGORY_LIST:
+                return ZeroContract.Category.CONTENT_TYPE;
+            case ROUTE_CATEGORY_ITEM:
+                return ZeroContract.Category.CONTENT_TYPE;
+
 
 
             default:
@@ -410,6 +415,39 @@ public class ZeroProvider extends ContentProvider {
             case ROUTE_INVENTORY_PRODUCT_ITEM:
                 id = uri.getLastPathSegment();
                 builder.where(ZeroContract.InventoryProduct._ID + "=?", id);
+            case ROUTE_VARIANT_LIST:
+                builder.table(ZeroContract.Variant.TABLE_NAME)
+                        .where(selection, selectionArgs);
+                cursor = builder.query(database, projection, sortOrder);
+                context = getContext();
+                assert context != null;
+                cursor.setNotificationUri(context.getContentResolver(), uri);
+                return cursor;
+            case ROUTE_VARIANT_ITEM:
+                id = uri.getLastPathSegment();
+                builder.where(ZeroContract.Variant._ID + "=?", id);
+            case ROUTE_TYPE_LIST:
+                builder.table(ZeroContract.Type.TABLE_NAME)
+                        .where(selection, selectionArgs);
+                cursor = builder.query(database, projection, sortOrder);
+                context = getContext();
+                assert context != null;
+                cursor.setNotificationUri(context.getContentResolver(), uri);
+                return cursor;
+            case ROUTE_TYPE_ITEM:
+                id = uri.getLastPathSegment();
+                builder.where(ZeroContract.Type._ID + "=?", id);
+            case ROUTE_CATEGORY_LIST:
+                builder.table(ZeroContract.Category.TABLE_NAME)
+                        .where(selection, selectionArgs);
+                cursor = builder.query(database, projection, sortOrder);
+                context = getContext();
+                assert context != null;
+                cursor.setNotificationUri(context.getContentResolver(), uri);
+                return cursor;
+            case ROUTE_CATEGORY_ITEM:
+                id = uri.getLastPathSegment();
+                builder.where(ZeroContract.Category._ID + "=?", id);
 
             default:
                 throw new UnsupportedOperationException("Unknown URI: " + uri);
