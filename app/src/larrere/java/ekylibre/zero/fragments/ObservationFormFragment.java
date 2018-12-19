@@ -221,15 +221,16 @@ public class ObservationFormFragment extends Fragment {
         picturesAdapter = new PicturesRecyclerAdapter(picturesList);
         picturesRecycler.setAdapter(picturesAdapter);
 
-        if (picturesAdapter.getItemCount() == 0)
-            picturesRecycler.setVisibility(View.GONE);
-
         return view;
     }
 
     @Override
     public void onResume() {
         super.onResume();
+        if (picturesAdapter.getItemCount() == 0)
+            picturesRecycler.setVisibility(View.GONE);
+        else
+            picturesRecycler.setVisibility(View.VISIBLE);
     }
 
     @Override
