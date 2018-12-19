@@ -23,6 +23,7 @@ import android.widget.Toast;
 import java.util.Calendar;
 
 import ekylibre.database.ZeroContract;
+import ekylibre.zero.inventory.InventoryActivity;
 import ekylibre.service.ConnectionManagerService;
 import ekylibre.service.GeneralHandler;
 import ekylibre.util.AccountTool;
@@ -35,6 +36,7 @@ import ekylibre.zero.R;
 import ekylibre.zero.SettingsActivity;
 import ekylibre.zero.account.AccountManagerActivity;
 import ekylibre.zero.intervention.InterventionActivity;
+import ekylibre.zero.inventory.InventoryActivity;
 
 /**************************************
  * Created by pierre on 7/12/16.      *
@@ -278,6 +280,12 @@ public class MainActivity extends UpdatableActivity
             case R.id.nav_counting :
             {
                 Intent intent = new Intent(this, PlantCountingActivity.class);
+                startActivity(intent);
+                break;
+            }
+            case R.id.nav_stocks :
+            {
+                Intent intent = new Intent(this, InventoryActivity.class);
                 startActivity(intent);
                 break;
             }

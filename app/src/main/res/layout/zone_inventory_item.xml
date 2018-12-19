@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/zone_inventory_item"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="#ccccff"
+    android:padding="8dp"
+    android:layout_margin="2dp"
+    >
+
+        <ImageView
+            android:id="@+id/zone_inventory_item_image"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            app:srcCompat="@drawable/ic_sync"/>
+
+        <TextView
+            android:id="@+id/zone_inventory_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            app:layout_constraintStart_toEndOf="@id/zone_inventory_item_image"
+            app:layout_constraintTop_toTopOf="@id/zone_inventory_item_image"
+            tools:text="Grange "
+            />
+
+        <TextView
+            android:id="@+id/inventory_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textStyle="italic"
+            app:layout_constraintBottom_toBottomOf="@id/zone_inventory_item_image"
+            app:layout_constraintStart_toEndOf="@id/zone_inventory_item_image"
+            tools:text="15 Aout 2018"
+            />
+
+
+</android.support.constraint.ConstraintLayout>
