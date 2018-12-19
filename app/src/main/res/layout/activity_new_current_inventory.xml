@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/new_current_inventory"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:fitsSystemWindows="true"
+    style="@style/AppTheme.AppBarOverlay">
+
+
+
+    <android.support.design.widget.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:theme="@style/AppTheme.AppBarOverlay"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/toolbar">
+
+        <android.support.v7.widget.Toolbar
+
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            app:popupTheme="@style/AppTheme.PopupOverlay"
+            app:theme="@style/ThemeToolbar"
+            app:title="@string/new_current_inventory"
+            android:layout_marginLeft="35dp"
+            />
+
+    </android.support.design.widget.AppBarLayout>
+
+    <ImageView
+        android:id="@+id/zone_inventory_item_image"
+        android:layout_width="30dp"
+        android:layout_height="25dp"
+        android:layout_marginLeft="17dp"
+        android:layout_marginTop="16dp"
+        app:srcCompat="@drawable/ic_drawer"/>
+
+    <!--      Ligne du stock       -->
+
+    <ImageView
+        android:id="@+id/image_stock"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_below="@id/toolbar"
+        app:srcCompat="@drawable/ic_menu_gallery"/>
+
+
+    <TextView
+        android:id="@+id/stock"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/toolbar"
+        android:layout_marginLeft="40dp"
+        android:layout_marginTop="14dp"
+        android:layout_toRightOf="@id/image_category"
+        android:text="@string/current_stock"
+        android:textSize="17dp" />
+
+    <TextView
+        android:id="@+id/choose_stock"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/choose_stock"
+        android:textSize="17dp"
+        android:layout_marginLeft="70dp"
+        android:layout_below="@id/toolbar"
+        android:layout_toRightOf="@id/category"/>
+
+    <!--          ligne des catégories           -->
+
+
+    <ImageView
+        android:id="@+id/image_category"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_below="@id/image_stock"
+        android:layout_marginTop="15dp"
+        app:srcCompat="@drawable/ic_menu_gallery"/>
+
+
+    <TextView
+        android:id="@+id/category"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/category"
+        android:textSize="17dp"
+        android:layout_marginStart="40dp"
+        android:layout_below="@id/image_stock"
+        android:layout_marginTop="25dp"
+        android:layout_toEndOf="@id/image_category"/>
+
+    <TextView
+        android:id="@+id/choose_category"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/choose_category"
+        android:textSize="17dp"
+        android:layout_marginStart="70dp"
+        android:layout_below="@id/image_stock"
+        android:layout_marginTop="25dp"
+        android:layout_toEndOf="@id/category"/>
+
+    <android.support.design.chip.ChipGroup
+        android:layout_width="wrap_content"
+        android:id="@+id/chipCategory"
+        android:layout_below="@id/category"
+        android:layout_marginLeft="90dp"
+        android:layout_height="wrap_content"
+        >
+
+        <com.google.android.material.chip.Chip
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Chip"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:closeIconEnabled="true"
+            android:text="testchip"/>
+        <com.google.android.material.chip.Chip
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Chip"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:closeIconEnabled="true"
+            android:text="testchip"/>
+        <com.google.android.material.chip.Chip
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Chip"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:closeIconEnabled="true"
+            android:text="testchip"/>
+
+
+    </android.support.design.chip.ChipGroup>
+
+
+    <!--           ligne des types            -->
+
+
+    <TextView
+        android:id="@+id/type"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/chipCategory"
+        android:layout_marginStart="90dp"
+        android:layout_marginTop="10dp"
+        android:text="@string/type"
+        android:textSize="17dp" />
+
+    <TextView
+        android:id="@+id/choose_type"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/chipCategory"
+        android:layout_marginStart="104dp"
+        android:layout_marginTop="10dp"
+        android:layout_toEndOf="@id/type"
+        android:text="@string/choose_type"
+        android:textSize="17dp" />
+
+    <android.support.design.chip.ChipGroup
+        android:layout_width="wrap_content"
+        android:id="@+id/chipType"
+        android:layout_below="@id/type"
+        android:layout_marginStart="90dp"
+        android:layout_height="wrap_content">
+
+        <com.google.android.material.chip.Chip
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Chip"
+            android:layout_width="wrap_content"
+            app:closeIconEnabled="true"
+            android:layout_height="wrap_content"
+            android:text="testchip2"/>
+    </android.support.design.chip.ChipGroup>
+
+    <!--      ligne des produits       -->
+
+    <ImageView
+        android:id="@+id/image_product"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_below="@id/chipType"/>
+
+    <TextView
+        android:id="@+id/products"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Produit :"
+        android:textSize="17dp"
+        android:layout_alignBaseline="@id/image_product"
+        android:layout_below="@id/chipType"
+        android:layout_marginLeft="40dp"
+        android:layout_marginTop="20dp"
+        android:layout_toRightOf="@id/image_product"/>
+
+    <TextView
+        android:id="@+id/AddInventoryZoneProducts"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Modify"
+        android:textSize="17dp"
+        android:layout_marginLeft="137dp"
+        android:layout_marginTop="20dp"
+        android:layout_below="@id/chipType"
+        android:layout_toRightOf="@id/products"/>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/ProductsRecycler"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scrollbars="vertical"
+        android:layout_below="@id/products"
+        android:layout_margin="2dp"/>
+        <!--tools:listitem="@layout/product_item"-->
+
+
+
+</RelativeLayout>
