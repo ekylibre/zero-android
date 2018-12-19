@@ -55,7 +55,7 @@ public class SelectZoneDialogFragment extends DialogFragment {
         RecyclerView recyclerView = inflatedView.findViewById(R.id.select_zone_dialog_list);
         recyclerView.setLayoutManager(new LinearLayoutManager(inflatedView.getContext()));
 
-        UiSelectZoneAdapter adapter = new UiSelectZoneAdapter(zoneList) ;
+        UiSelectZoneAdapter adapter = new UiSelectZoneAdapter(zoneList, fragmentListener) ;
         recyclerView.setAdapter(adapter);
         return inflatedView;
     }
@@ -72,6 +72,6 @@ public class SelectZoneDialogFragment extends DialogFragment {
     }
 
     public  interface OnFragmentInteractionListener {
-    void onFragmentInteraction(Object object);
+    void onFragmentInteraction(ItemZoneInventory zone);
     }
 }
