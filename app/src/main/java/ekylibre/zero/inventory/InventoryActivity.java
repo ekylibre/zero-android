@@ -18,6 +18,8 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.SimpleTimeZone;
+import java.util.List;
+
 
 import ekylibre.database.ZeroContract;
 import ekylibre.util.AccountTool;
@@ -47,6 +49,8 @@ public class InventoryActivity extends AppCompatActivity implements SelectZoneDi
     private SelectZoneDialogFragment selectZoneDialogFragment;
     ArrayList<ItemZoneInventory> listeZone = new ArrayList<>();
 
+    //private List<ItemZoneInventory> listeZone = new ArrayList<>();
+
     //String [] type_inventory = new String[3] ;
 
    @Override
@@ -72,7 +76,6 @@ public class InventoryActivity extends AppCompatActivity implements SelectZoneDi
         mRecyclerView.setLayoutManager(mLayoutManager);
 
 
-
         cursorDateZone.moveToFirst();
         while(cursorDateZone.moveToNext()) {
            int indexid = cursorDateZone.getColumnIndexOrThrow("id_zone_stock");
@@ -83,6 +86,7 @@ public class InventoryActivity extends AppCompatActivity implements SelectZoneDi
 
            int indexshape = cursorDateZone.getColumnIndexOrThrow("shape");
            String zoneShape = cursorDateZone.getString(indexshape);
+
 
             int indexdate = cursorDateZone.getColumnIndexOrThrow("date_zone");
             String zoneDate = cursorDateZone.getString(indexdate);

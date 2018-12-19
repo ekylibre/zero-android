@@ -13,6 +13,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import ekylibre.zero.R;
 import ekylibre.zero.inventory.InventoryActivity;
@@ -20,7 +21,7 @@ import ekylibre.zero.inventory.ItemZoneInventory;
 import ekylibre.zero.inventory.NewInventory;
 
 public class MainZoneAdapter extends RecyclerView.Adapter<MainZoneAdapter.ViewHolder> {
-    private ArrayList<ItemZoneInventory> listeZone;
+    private List<ItemZoneInventory> listeZone;
 
     // Provide a reference to the views for each data item
     // Complex data items may need more than one view per item, and
@@ -52,7 +53,7 @@ public class MainZoneAdapter extends RecyclerView.Adapter<MainZoneAdapter.ViewHo
     }
 
     // Provide a suitable constructor (depends on the kind of dataset)
-    public MainZoneAdapter(ArrayList<ItemZoneInventory> listez) {
+    public MainZoneAdapter(List<ItemZoneInventory> listez) {
         listeZone = listez;
     }
 
