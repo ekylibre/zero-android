@@ -9,6 +9,11 @@
     <string name="count">Count</string>
     <string name="stocks">Stocks</string>
     <string name="inventory">New inventory</string>
+    <string name="new_current_inventory">New Current Inventory</string>
+    <string name="category">Product category</string>
+    <string name="type">Product type</string>
+    <string name="choose_category">Modify</string>
+    <string name="choose_type">Modify</string>
     <string name="create_issue">Create Issue</string>
     <string name="data_synced">Data synchronized</string>
     <string name="date_label">Date</string>
@@ -56,6 +61,8 @@
     <string name="sign_in">Sign in</string>
     <string name="start">Start</string>
     <string name="stop">Stop</string>
+    <string name="current_stock">Stock Zone</string>
+    <string name="choose_stock">Modify</string>
     <string name="sync">Synchronize</string>
     <string name="sync_all">Synchronize all</string>
     <string name="test_demo">Test demo</string>

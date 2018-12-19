@@ -193,10 +193,7 @@ public final class ZeroContract {
         String FK_ZONE_STOCK_ID = "fk_zone_stock";
         String CONDITIONING = "conditioning";
         String PHOTO = "photo";
-
         String FK_VARIANT_ID = "fk_variant_id";
-
-
     }
 
     public interface ZoneStockColumns extends BaseColumns {
