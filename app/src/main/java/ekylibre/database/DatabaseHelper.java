@@ -408,6 +408,7 @@ public class DatabaseHelper extends SQLiteOpenHelper
                         + ", " + ZeroContract.ZoneStock.ZONE_STOCK_ID+ " INTEGER"
                         + ", " + ZeroContract.ZoneStock.NAME+ " TEXT"
                         + ", " + ZeroContract.ZoneStock.SHAPE + " TEXT"
+                        + ", " + ZeroContract.ZoneStock.DATEZONE + " DATE"
                         + ")");
                 database.execSQL(" CREATE TABLE IF NOT EXISTS "+ ZeroContract.Product.TABLE_NAME
                         +"( "

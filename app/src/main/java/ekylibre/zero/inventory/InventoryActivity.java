@@ -13,7 +13,12 @@ import android.view.View;
 import android.widget.Switch;
 import android.widget.TextView;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.SimpleTimeZone;
+
 import ekylibre.database.ZeroContract;
 import ekylibre.util.AccountTool;
 import ekylibre.zero.R;
@@ -76,8 +81,12 @@ public class InventoryActivity extends AppCompatActivity implements SelectZoneDi
 
            int indexshape = cursorZone.getColumnIndexOrThrow("shape");
            String zoneShape = cursorZone.getString(indexshape);
+
+            int indexdate = cursorZone.getColumnIndexOrThrow("date_zone");
+            String zoneDate = cursorZone.getString(indexdate);
+
            Log.i("Mytag", " " + listeZone);
-           listeZone.add(new ItemZoneInventory(zoneId,zoneName,null));
+           listeZone.add(new ItemZoneInventory(zoneDate,zoneName,null));
         }
 
         cursorZone.close();
@@ -153,17 +162,41 @@ public class InventoryActivity extends AppCompatActivity implements SelectZoneDi
    public void fillDBtest() {
        ContentValues mNewValues = new ContentValues();
        for (int i=0;i<20;i++){
-           mNewValues.clear();
-           int zoneId = i;
-           String zoneName = "zone_"+i;
-           String zoneShape = null ;
-           mNewValues.put(ZeroContract.ZoneStock.ZONE_STOCK_ID, zoneId);
-           mNewValues.put(ZeroContract.ZoneStock.NAME, zoneName);
-           getContentResolver().insert(
-                   ZeroContract.ZoneStock.CONTENT_URI,   // the user dictionary content URI
-                   mNewValues                          // the values to insert
-           );
-           //this.finish();
+           if (i<8) {
+               mNewValues.clear();
+               int zoneId = i;
+               String zoneName = "zone_" + i;
+               String zoneShape = null;
+               //SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd, HH:mm");
+               SimpleDateFormat sdf = new SimpleDateFormat("E  d MMM yyyy, HH:mm");
+               //SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy-MM-dd");
+               //String zoneDate = sdf.format(new Date());
+               Log.i("myatg"," "+sdf.format(Calendar.getInstance().getTime()));
+               String zoneDate = sdf.format(Calendar.getInstance().getTime());
+               //Date zoneDate = new Date() ;
+
+               mNewValues.put(ZeroContract.ZoneStock.ZONE_STOCK_ID, zoneId);
+               mNewValues.put(ZeroContract.ZoneStock.NAME, zoneName);
+               mNewValues.put(ZeroContract.ZoneStock.DATEZONE, zoneDate);
+               getContentResolver().insert(
+                       ZeroContract.ZoneStock.CONTENT_URI,   // the user dictionary content URI
+                       mNewValues                          // the values to insert
+               );
+               //this.finish();
+           } else {
+               mNewValues.clear();
+               int zoneId = i;
+               String zoneName = "zone_" + i;
+               String zoneShape = null;
+               Date zoneDate = null ;
+               mNewValues.put(ZeroContract.ZoneStock.ZONE_STOCK_ID, zoneId);
+               mNewValues.put(ZeroContract.ZoneStock.NAME, zoneName);
+               getContentResolver().insert(
+                       ZeroContract.ZoneStock.CONTENT_URI,   // the user dictionary content URI
+                       mNewValues                          // the values to insert
+               );
+
+           }
        }
    }
 
@@ -173,7 +206,7 @@ public class InventoryActivity extends AppCompatActivity implements SelectZoneDi
         Cursor cursorZone = getContentResolver().query(
                 ZeroContract.ZoneStock.CONTENT_URI,
                 projectionZoneID,
-                null,
+                ZeroContract.ZoneStock.DATEZONE+" IS NOT NULL",
                 null,
                 null);
 
