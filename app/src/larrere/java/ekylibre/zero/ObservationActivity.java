@@ -389,7 +389,7 @@ public class ObservationActivity extends AppCompatActivity implements
         ContentValues cv = new ContentValues();
         cv.put(ZeroContract.Issues.USER, AccountTool.getCurrentAccount(this).name);
         cv.put(ZeroContract.Issues.SYNCED, 0);
-        cv.put(ZeroContract.Issues.NATURE, issue.nature);
+        cv.put(ZeroContract.Issues.NATURE, issue.label);
         cv.put(ZeroContract.Issues.EMERGENCY, 2);
         cv.put(ZeroContract.Issues.SEVERITY, 2);
         cv.put(ZeroContract.Issues.DESCRIPTION, "Incident déclaré lors d'une observation");
@@ -526,6 +526,8 @@ public class ObservationActivity extends AppCompatActivity implements
             resId = R.drawable.icon_potato;
         else if (activityName.contains("Patate"))
             resId = R.drawable.icon_sweet_potato;
+        else if (activityName.equals("Radis"))
+            resId = R.drawable.icon_radish;
         else if (activityName.contains("Radis Noir"))
             resId = R.drawable.icon_black_radish;
         else if (activityName.contains("Navet"))
@@ -538,14 +540,16 @@ public class ObservationActivity extends AppCompatActivity implements
             resId = R.drawable.icon_sunflower;
         else if (activityName.contains("ETA"))
             resId = R.drawable.icon_harvester;
-        else if (activityName.contains("Courge"))
-            resId = R.drawable.icon_squash;
+        else if (activityName.contains("Courge") || activityName.contains("Potiron"))
+            resId = R.drawable.icon_pumpkin;
         else if (activityName.contains("trèfle"))
             resId = R.drawable.icon_shamrock;
         else if (activityName.contains("Forestier"))
             resId = R.drawable.icon_forest;
         else if (activityName.contains("Prairie") || activityName.contains("Jachère"))
             resId = R.drawable.icon_grass;
+        else if (activityName.contains("Topinambour"))
+            resId = R.drawable.icon_ginger;
         else
             resId = R.drawable.icon_plant;
 
