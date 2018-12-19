@@ -21,7 +21,7 @@ public class NewInventory extends AppCompatActivity {
     int inventory_type =1;
 
 
-
+//todo: Faire une méthode pour enregistrer automatiquement la denrière date d'inventaire dans la zone
    @Override
     protected void onCreate(Bundle savedInstanceState) {
        super.onCreate(savedInstanceState);

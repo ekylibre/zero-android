@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:padding="16dp">
+
+    <ImageView
+        android:layout_width="45dp"
+        android:layout_height="45dp"
+        android:id="@+id/select_type_item_image"
+        app:srcCompat="@drawable/ic_category_item"
+        app:layout_constraintStart_toStartOf="parent"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/select_type_item_name"
+        android:text="Tracteur"
+        app:layout_constraintStart_toEndOf="@id/select_type_item_image"
+        app:layout_constraintTop_toTopOf="@id/select_type_item_image"
+        app:layout_constraintBottom_toBottomOf="@id/select_type_item_image"/>
+
+
+
+    <Switch
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/select_type_item_switch"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginStart="16dp"
+        app:layout_constraintTop_toTopOf="@id/select_type_item_image"
+        app:layout_constraintBottom_toBottomOf="@id/select_type_item_image"/>
+        />
+
+</android.support.constraint.ConstraintLayout>
