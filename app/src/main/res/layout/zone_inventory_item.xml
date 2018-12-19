@@ -23,7 +23,6 @@
             android:textStyle="bold"
             app:layout_constraintStart_toEndOf="@id/zone_inventory_item_image"
             app:layout_constraintTop_toTopOf="@id/zone_inventory_item_image"
-            tools:text="Grange "
             />
 
         <TextView
@@ -33,7 +32,6 @@
             android:textStyle="italic"
             app:layout_constraintBottom_toBottomOf="@id/zone_inventory_item_image"
             app:layout_constraintStart_toEndOf="@id/zone_inventory_item_image"
-            tools:text="15 Aout 2018"
             />
 
 
