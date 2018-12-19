@@ -1,13 +1,16 @@
 package ekylibre.zero.inventory;
 
-import android.content.ContentValues;
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.Switch;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 
@@ -28,24 +31,46 @@ public class NewInventory extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
        super.onCreate(savedInstanceState);
        setContentView(R.layout.activity_new_current_inventory);
-       setTitle("Nouvel Inventaire");
+
+       class MyButtonClickListener implements View.OnClickListener {
+           @Override
+           public void onClick(View _buttonView) {
+               if (_buttonView.getId() == R.id.addproduct) {
+                   Log.i("mytag", "categorychoice");
+                   Intent intent=new Intent(this,thirdactivity.class);
+                   startActivity(intent);
+
+
+                   }
+
+           }
+
+
+       }
+       TextView productcategorychoicebutton = findViewById(R.id.productcategorychoicebutton);
+       productcategorychoicebutton.setOnClickListener(new View.OnClickListener() {
+           @Override
+           public void onClick(View productcategorychoice) {
+               Selectproductcategoryfragment = Selectproductcategoryfragment.newInstance(listeZone);
+               Selectproductcategoryfragment.show(getFragmentTransaction(),"dialog");
+
+           }
+       });
+
+
+
    }
 
-
-    public void fillDBtest() {
-        ContentValues mNewValues = new ContentValues();
-        for (int i=0;i<20;i++){ //Modifier les valeurs de i par rapport au nombre de lignes de la table
-            int CategoryId = i;
-            String CategoryName = "Category_"+i;
-            mNewValues.put(ZeroContract.CategoryColumns.CATEGORY_ID, CategoryId);
-            mNewValues.put(ZeroContract.CategoryColumns.CATEGORY_NAME, CategoryName);
-            getContentResolver().insert(
-                    ZeroContract.Category.CONTENT_URI,   // the user dictionary content URI
-                    mNewValues                          // the values to insert
-            );
-            this.finish();
+    private FragmentTransaction getFragmentTransaction (){
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        Fragment prev = getSupportFragmentManager().findFragmentByTag("dialog");
+        if (prev!= null){
+            ft.remove(prev);
         }
+        ft.addToBackStack(null);
+        return ft;
     }
+
 }
 
 
