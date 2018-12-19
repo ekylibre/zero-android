@@ -215,4 +215,5 @@
     <string name="package_reception">Package Reception</string>
     <string name="anual_inventory">Annual Inventory</string>
     <string name="type_d_inventaire">Inventory type</string>
+    <string name="newproduct">New Product</string>
 </resources>

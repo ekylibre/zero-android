@@ -21,6 +21,12 @@
             android:id="@+id/nav_stocks"
             android:icon="@drawable/ic_launcher_background"
             android:title="@string/stocks" />
+
+        <item
+            android:id="@+id/nav_newproduct"
+            android:icon="@drawable/ic_launcher_background"
+            android:title="Nouveau Produit" />
+
     </group>
 
     <item android:title="@string/parameters">

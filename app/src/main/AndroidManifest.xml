@@ -214,8 +214,13 @@
             android:value="@string/google_maps_key" />
 
         <activity
-            android:name=".inventory.InventoryActivity"
-            android:label="@string/inventory"
+        android:name=".inventory.InventoryActivity"
+        android:label="@string/inventory"
+        android:theme="@style/AppTheme"></activity>
+
+        <activity
+            android:name=".inventory.NewProduct"
+            android:label="@string/newproduct"
             android:theme="@style/AppTheme"></activity>
     </application>
 
