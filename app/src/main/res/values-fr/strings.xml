@@ -127,4 +127,5 @@
     <string name="package_reception">Reception Colis</string>
     <string name="anual_inventory">Inventaire annuel</string>
     <string name="type_d_inventaire">Type d\'inventaire</string>
+    <string name="current_inventory">Nouvel inventaire courant</string>
 </resources>
