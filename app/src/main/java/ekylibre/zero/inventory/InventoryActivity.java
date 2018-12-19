@@ -13,7 +13,14 @@ import android.view.View;
 import android.widget.Switch;
 import android.widget.TextView;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.SimpleTimeZone;
+import java.util.List;
+
+
 import ekylibre.database.ZeroContract;
 import ekylibre.util.AccountTool;
 import ekylibre.zero.R;
@@ -40,6 +47,9 @@ public class InventoryActivity extends AppCompatActivity implements SelectZoneDi
     private RecyclerView.LayoutManager mLayoutManager;
     int inventory_type =1;
     private SelectZoneDialogFragment selectZoneDialogFragment;
+    ArrayList<ItemZoneInventory> listeZone = new ArrayList<>();
+
+    //private List<ItemZoneInventory> listeZone = new ArrayList<>();
 
     //String [] type_inventory = new String[3] ;
 
@@ -49,8 +59,9 @@ public class InventoryActivity extends AppCompatActivity implements SelectZoneDi
         setContentView(R.layout.activity_ui_list_zones);
         setTitle("Nouvel Inventaire");
 
-       //fillDBtest();
-       //queryZone();
+       fillDBtest();
+       Cursor cursorDateZone = queryDateZone();
+
 
         mRecyclerView = (RecyclerView) findViewById(R.id.my_recycler_view);
 
@@ -65,13 +76,38 @@ public class InventoryActivity extends AppCompatActivity implements SelectZoneDi
         mRecyclerView.setLayoutManager(mLayoutManager);
 
 
+        cursorDateZone.moveToFirst();
+        while(cursorDateZone.moveToNext()) {
+           int indexid = cursorDateZone.getColumnIndexOrThrow("id_zone_stock");
+           String zoneId = cursorDateZone.getString(indexid);
 
-        final ArrayList<ItemZoneInventory> listeZone = new ArrayList<ItemZoneInventory>();
+           int indexname = cursorDateZone.getColumnIndexOrThrow("name");
+           String zoneName = cursorDateZone.getString(indexname);
 
-        for (int i=0;i<20;i++){
-            listeZone.add(new ItemZoneInventory("date"+i,"zone"+i,null));
-            Log.i("Mytag"," "+listeZone);
+           int indexshape = cursorDateZone.getColumnIndexOrThrow("shape");
+           String zoneShape = cursorDateZone.getString(indexshape);
+
+
+            int indexdate = cursorDateZone.getColumnIndexOrThrow("date_zone");
+            String zoneDate = cursorDateZone.getString(indexdate);
+
+           Log.i("Mytag", " " + listeZone);
+           listeZone.add(new ItemZoneInventory(zoneDate,zoneName,null));
         }
+
+        cursorDateZone.close();
+
+       final ArrayList<ItemZoneInventory> listeAddZone = new ArrayList<ItemZoneInventory>();
+       Cursor cursorAddZone = queryAddZone();
+       cursorAddZone.moveToFirst();
+       while(cursorAddZone.moveToNext()) {
+           int indexname = cursorAddZone.getColumnIndexOrThrow("name");
+           String zoneName = cursorAddZone.getString(indexname);
+           listeAddZone.add(new ItemZoneInventory(zoneName));
+       }
+       cursorAddZone.close();
+
+
        // specify an adapter (see also next example)
        mAdapter = new MainZoneAdapter(listeZone);
        mRecyclerView.setAdapter(mAdapter);
@@ -133,7 +169,7 @@ public class InventoryActivity extends AppCompatActivity implements SelectZoneDi
        addInventoryZone.setOnClickListener(new View.OnClickListener() {
            @Override
            public void onClick(View addInventoryZone) {
-               selectZoneDialogFragment = SelectZoneDialogFragment.newInstance(listeZone);
+               selectZoneDialogFragment = SelectZoneDialogFragment.newInstance(listeAddZone);
                selectZoneDialogFragment.show(getFragmentTransaction(),"dialog");
 
            }
@@ -144,26 +180,51 @@ public class InventoryActivity extends AppCompatActivity implements SelectZoneDi
    public void fillDBtest() {
        ContentValues mNewValues = new ContentValues();
        for (int i=0;i<20;i++){
-           int zoneId = i;
-           String zoneName = "zone_"+i;
-           String zoneShape = null ;
-           mNewValues.put(ZeroContract.ZoneStockColumns.ZONE_STOCK_ID, zoneId);
-           mNewValues.put(ZeroContract.ZoneStockColumns.NAME, zoneName);
-           getContentResolver().insert(
-                   ZeroContract.ZoneStock.CONTENT_URI,   // the user dictionary content URI
-                   mNewValues                          // the values to insert
-           );
-           this.finish();
+           if (i<8) {
+               mNewValues.clear();
+               int zoneId = i;
+               String zoneName = "zone_" + i;
+               String zoneShape = null;
+               //SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd, HH:mm");
+               SimpleDateFormat sdf = new SimpleDateFormat("E  d MMM yyyy, HH:mm");
+               //SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy-MM-dd");
+               //String zoneDate = sdf.format(new Date());
+               Log.i("myatg"," "+sdf.format(Calendar.getInstance().getTime()));
+               String zoneDate = sdf.format(Calendar.getInstance().getTime());
+               //Date zoneDate = new Date() ;
+
+               mNewValues.put(ZeroContract.ZoneStock.ZONE_STOCK_ID, zoneId);
+               mNewValues.put(ZeroContract.ZoneStock.NAME, zoneName);
+               mNewValues.put(ZeroContract.ZoneStock.DATEZONE, zoneDate);
+               getContentResolver().insert(
+                       ZeroContract.ZoneStock.CONTENT_URI,   // the user dictionary content URI
+                       mNewValues                          // the values to insert
+               );
+               //this.finish();
+           } else {
+               mNewValues.clear();
+               int zoneId = i;
+               String zoneName = "zone_" + i;
+               String zoneShape = null;
+               Date zoneDate = null ;
+               mNewValues.put(ZeroContract.ZoneStock.ZONE_STOCK_ID, zoneId);
+               mNewValues.put(ZeroContract.ZoneStock.NAME, zoneName);
+               getContentResolver().insert(
+                       ZeroContract.ZoneStock.CONTENT_URI,   // the user dictionary content URI
+                       mNewValues                          // the values to insert
+               );
+
+           }
        }
    }
 
-    private void queryZone() {
+    private Cursor queryDateZone() {
         String[] projectionZoneID = ZeroContract.ZoneStock.PROJECTION_ALL;
 
         Cursor cursorZone = getContentResolver().query(
                 ZeroContract.ZoneStock.CONTENT_URI,
                 projectionZoneID,
-                null,
+                ZeroContract.ZoneStock.DATEZONE+" IS NOT NULL",
                 null,
                 null);
 
@@ -182,7 +243,33 @@ public class InventoryActivity extends AppCompatActivity implements SelectZoneDi
             Log.i("Query", "" + zoneId + zoneName + zoneShape);
         }
 
-        cursorZone.close();
+        //cursorZone.close();
+
+        return cursorZone;
+    }
+
+    private Cursor queryAddZone() {
+        String[] projectionZoneID = ZeroContract.ZoneStock.PROJECTION_NAME;
+
+        Cursor cursorAddZone = getContentResolver().query(
+                ZeroContract.ZoneStock.CONTENT_URI,
+                projectionZoneID,
+                ZeroContract.ZoneStock.DATEZONE+" IS NULL",
+                null,
+                null);
+
+        while(cursorAddZone.moveToNext()) {
+            int index;
+
+            index = cursorAddZone.getColumnIndexOrThrow("name");
+            String zoneName = cursorAddZone.getString(index);
+
+            Log.i("Query", "" +zoneName);
+        }
+
+        //cursorZone.close();
+
+        return cursorAddZone;
     }
 
 
@@ -237,6 +324,8 @@ public class InventoryActivity extends AppCompatActivity implements SelectZoneDi
     @Override
     public void onFragmentInteraction(ItemZoneInventory zone) {
         Log.i("MyTag", "click zone"+zone.zone);
+        listeZone.add(zone);
+        mAdapter.notifyDataSetChanged();
         selectZoneDialogFragment.dismiss();
     }
 }

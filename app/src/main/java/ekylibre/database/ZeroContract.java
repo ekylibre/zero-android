@@ -8,6 +8,7 @@ import android.provider.ContactsContract;
 import android.support.design.internal.NavigationMenu;
 
 import java.lang.annotation.Target;
+import java.util.Date;
 import java.util.UUID;
 
 public final class ZeroContract {
@@ -200,6 +201,7 @@ public final class ZeroContract {
         String ZONE_STOCK_ID = "id_zone_stock";
         String NAME = "name";
         String SHAPE = "shape";
+        String DATEZONE = "date_zone";
     }
 
     public interface VariantColumns extends BaseColumns{
@@ -453,7 +455,8 @@ public final class ZeroContract {
         public static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/vnd.ekylibre.zero.zone_stock";
         // MIME type for individual record.
         public static final String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/vnd.ekylibre.zero.zone_stock";
-        public static final String[] PROJECTION_ALL = {ZONE_STOCK_ID, NAME, SHAPE};
+        public static final String[] PROJECTION_ALL = {_ID, ZONE_STOCK_ID, NAME, SHAPE, DATEZONE};
+        public static final String[] PROJECTION_NAME = {NAME};
     }
 
 
