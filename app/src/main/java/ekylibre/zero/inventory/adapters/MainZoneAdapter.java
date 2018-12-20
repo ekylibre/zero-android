@@ -22,6 +22,7 @@ import ekylibre.zero.inventory.NewInventory;
 
 public class MainZoneAdapter extends RecyclerView.Adapter<MainZoneAdapter.ViewHolder> {
     private List<ItemZoneInventory> listeZone;
+    public int inventory_type;
 
     // Provide a reference to the views for each data item
     // Complex data items may need more than one view per item, and
@@ -33,6 +34,7 @@ public class MainZoneAdapter extends RecyclerView.Adapter<MainZoneAdapter.ViewHo
         TextView nameZoneTextView;
         TextView dateTextView;
         ImageView iconImageView;
+
 
         ViewHolder(View itemView) {
             super(itemView);
@@ -53,8 +55,9 @@ public class MainZoneAdapter extends RecyclerView.Adapter<MainZoneAdapter.ViewHo
     }
 
     // Provide a suitable constructor (depends on the kind of dataset)
-    public MainZoneAdapter(List<ItemZoneInventory> listez) {
+    public MainZoneAdapter(List<ItemZoneInventory> listez, int inventoryType) {
         listeZone = listez;
+        inventory_type = inventoryType;
     }
 
     // Create new views (invoked by the layout manager)
@@ -84,6 +87,7 @@ public class MainZoneAdapter extends RecyclerView.Adapter<MainZoneAdapter.ViewHo
                  long itemId = position;
                  Intent intent = new Intent(v.getContext(),NewInventory.class);
                  intent.putExtra("itemId",itemId);
+                 intent.putExtra("inventoryType", inventory_type);
                  Log.i("mytag"," id : "+itemId);
                  v.getContext().startActivity(intent);
             }

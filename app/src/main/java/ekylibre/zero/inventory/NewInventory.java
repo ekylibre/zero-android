@@ -2,6 +2,7 @@ package ekylibre.zero.inventory;
 
 import android.content.Intent;
 import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -17,6 +18,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import ekylibre.database.ZeroContract;
+import ekylibre.database.ZeroProvider;
 import ekylibre.zero.R;
 import ekylibre.zero.inventory.adapters.MainZoneAdapter;
 import ekylibre.zero.inventory.adapters.UiSelectProductAdapter;
@@ -30,6 +32,9 @@ public class NewInventory extends AppCompatActivity implements SelectProductCate
     ArrayList<ItemCategoryInventory> listeCategory=new ArrayList<>();
     ArrayList<ItemProductInventory> listProduct = new ArrayList<>();
     byte[] image;
+    Bundle extras;
+    String zoneId = "1";
+    int inventoryType;
 
 
 
@@ -38,7 +43,10 @@ public class NewInventory extends AppCompatActivity implements SelectProductCate
     protected void onCreate(Bundle savedInstanceState) {
        super.onCreate(savedInstanceState);
        setContentView(R.layout.activity_new_current_inventory);
-
+       Intent intent = getIntent();
+       extras = intent.getExtras();
+       inventoryType = extras.getInt("inventoryType");
+       zoneId = extras.getString("itemId");
        setTitle("Nouvel Inventaire Courant");
 
 //       fillDBtest();
@@ -50,6 +58,28 @@ public class NewInventory extends AppCompatActivity implements SelectProductCate
 //       mLayoutManager = new LinearLayoutManager(this);
 //       mRecyclerView.setLayoutManager(mLayoutManager);
 
+       /*
+       Uri uri = ZeroContract.Product.CONTENT_URI;
+       String selection = ZeroContract.ZoneStockColumns.ZONE_STOCK_ID+" = "+zoneId;
+       String[] projection = {ZeroContract.ProductColumns.PRODUCT_ID,
+               ZeroContract.ProductColumns.NAME,
+               ZeroContract.ProductColumns.FK_VARIANT_ID,
+               ZeroContract.InventoryProductColumns.DATE,
+               ZeroContract.InventoryProductColumns.QUANTITY,
+               ZeroContract.InventoryProductColumns.COMMENT,
+               ZeroContract.ProductColumns.PHOTO};
+       Cursor cursor = getContentResolver().query(uri,projection,selection,null,null);
+       while (cursor.moveToNext()){
+           listProduct.add(new ItemProductInventory(cursor.getString(1),
+                   cursor.getString(2),
+                   cursor.getString(3),
+                   cursor.getString(4),
+                   cursor.getString(5),
+                   image));
+
+       }
+       Log.i("MyTag","QueryListProduct"+listProduct.toString());
+        */
 
 
        class MyButtonClickListener implements View.OnClickListener {
