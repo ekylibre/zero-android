@@ -44,8 +44,8 @@ public class ItemCategory {
     {
         // JSONObject params = Instance.BundleToJSON(attributes);
         String params = attributes;
-        if (BuildConfig.DEBUG) Log.d("TAG", "Get JSONArray => /api/v1/category || params = " + params);
-        JSONArray json = instance.getJSONArray("/api/v1/category", params);
+        if (BuildConfig.DEBUG) Log.d("TAG", "Get JSONArray => /api/v1/categories || params = " + params);
+        JSONArray json = instance.getJSONArray("/api/v1/categories", params);
         List<ItemCategory> array = new ArrayList<>();
 
         for(int i = 0 ; i < json.length() ; i++ )
