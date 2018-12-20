@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import ekylibre.database.ZeroContract;
 import ekylibre.zero.R;
 import ekylibre.zero.inventory.adapters.MainZoneAdapter;
+import ekylibre.zero.inventory.adapters.UiSelectProductAdapter;
 
 
 public class NewInventory extends AppCompatActivity implements SelectProductCategoryFragment.OnFragmentInteractionListener {
@@ -27,6 +28,8 @@ public class NewInventory extends AppCompatActivity implements SelectProductCate
     private RecyclerView.LayoutManager mLayoutManager;
     private SelectProductCategoryFragment selectproductcategoryfragment;
     ArrayList<ItemCategoryInventory> listeCategory=new ArrayList<>();
+    ArrayList<ItemProductInventory> listProduct = new ArrayList<>();
+    byte[] image;
 
 
 
@@ -72,6 +75,51 @@ public class NewInventory extends AppCompatActivity implements SelectProductCate
                selectproductcategoryfragment = SelectProductCategoryFragment.newInstance(listeCategory);
                selectproductcategoryfragment.show(getFragmentTransaction(),"dialog");
 
+           }
+       });
+
+       for (int i=0;i<4;i++){
+           listProduct.add(new ItemProductInventory("Name_"+i, "var_"+i,
+                   "date_"+i, "qtt_"+i, "comm_"+i, image));
+       }
+       Log.i("MyTag", ""+listProduct.toString());
+
+       mRecyclerView = (RecyclerView) findViewById(R.id.ProductsRecycler);
+
+       mLayoutManager = new LinearLayoutManager(this);
+       mRecyclerView.setLayoutManager(mLayoutManager);
+
+       mAdapter = new UiSelectProductAdapter(listProduct);
+       mRecyclerView.setAdapter(mAdapter);
+
+       mRecyclerView.setOnClickListener(new View.OnClickListener() {
+           @Override
+           public void onClick(View view) {
+               switch (view.getId()){
+                   case R.id.product_qtt_edit:
+                       Log.i("MyTag", "Edit Quantity");
+                       break;
+                   case R.id.product_minus_qtt:
+                       Log.i("MyTag", "Edit Quantity Minus");
+                       break;
+                   case R.id.product_plus_qtt:
+                       Log.i("MyTag", "Edit Quantity Plus");
+                       break;
+                   case R.id.product_checkbox:
+                       Log.i("MyTag", "Check");
+                       break;
+                   case R.id.add_image:
+                       // Should open popup
+                       Log.i("MyTag", "Edit Image");
+                       break;
+                   case R.id.add_comment:
+                       // Should open popup
+                       Log.i("MyTag", "Edit Comment");
+                       break;
+                   default:
+                       Log.i("MyTag", "Default");
+                       break;
+               }
            }
        });
    }
