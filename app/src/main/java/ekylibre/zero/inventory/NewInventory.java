@@ -42,11 +42,10 @@ public class NewInventory extends AppCompatActivity implements SelectProductCate
 //       Cursor cursorDateZone = queryDateZone();
 
 
-       mRecyclerView = (RecyclerView) findViewById(R.id.my_recycler_view);
-       mRecyclerView.setHasFixedSize(true);
-
-       mLayoutManager = new LinearLayoutManager(this);
-       mRecyclerView.setLayoutManager(mLayoutManager);
+//       mRecyclerView = (RecyclerView) findViewById(R.id.my_recycler_view);
+//
+//       mLayoutManager = new LinearLayoutManager(this);
+//       mRecyclerView.setLayoutManager(mLayoutManager);
 
 
 
@@ -71,11 +70,9 @@ public class NewInventory extends AppCompatActivity implements SelectProductCate
            public void onClick(View productcategorychoice) {
                selectproductcategoryfragment = SelectProductCategoryFragment.newInstance(listeCategory);
                selectproductcategoryfragment.show(getFragmentTransaction(),"dialog");
-
            }
        });
    }
-
 
 
 
