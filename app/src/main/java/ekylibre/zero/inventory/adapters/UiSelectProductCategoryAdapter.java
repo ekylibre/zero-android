@@ -46,15 +46,16 @@ public class UiSelectProductCategoryAdapter extends RecyclerView.Adapter<UiSelec
 
             categoryNameView= itemView.findViewById(R.id.select_category_item_name);
             categoryImageView=itemView.findViewById(R.id.select_category_item_image);
+            switchcategory=itemView.findViewById(R.id.select_category_item_switch);
             Log.i("MyTag","ViewHolder");
             switchcategory.setOnClickListener(this);
         }
 
         void display(ItemCategoryInventory currentItem) {
             //categoryImageView.setImageResource(R.drawable.ic_category_item);
+            item = currentItem;
             categoryNameView.setText(item.category);
             Log.i("MyTag","Display item:"+item);
-            item = currentItem;
         }
 
         @Override

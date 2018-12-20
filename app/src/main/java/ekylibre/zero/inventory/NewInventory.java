@@ -1,5 +1,6 @@
 package ekylibre.zero.inventory;
 
+import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -14,7 +15,10 @@ import android.widget.Button;
 import android.widget.Switch;
 import android.widget.TextView;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 
 import ekylibre.database.ZeroContract;
 import ekylibre.zero.R;
@@ -26,7 +30,7 @@ public class NewInventory extends AppCompatActivity implements SelectProductCate
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
     private SelectProductCategoryFragment selectproductcategoryfragment;
-    ArrayList<ItemCategoryInventory> listeCategory = new ArrayList<>();
+    ArrayList<ItemCategoryInventory> listeCategory=new ArrayList<>();
 
 
 
@@ -70,6 +74,7 @@ public class NewInventory extends AppCompatActivity implements SelectProductCate
        modifycategory.setOnClickListener(new View.OnClickListener() {
            @Override
            public void onClick(View productcategorychoice) {
+               fillDBtest();
                queryAddCategory();
                selectproductcategoryfragment = SelectProductCategoryFragment.newInstance(listeCategory);
                selectproductcategoryfragment.show(getFragmentTransaction(),"dialog");
@@ -90,7 +95,7 @@ public class NewInventory extends AppCompatActivity implements SelectProductCate
         while(cursorAddCategory.moveToNext()) {
             int index;
 
-            index = cursorAddCategory.getColumnIndexOrThrow("name");
+            index = cursorAddCategory.getColumnIndexOrThrow("category_name");
             String categoryName = cursorAddCategory.getString(index);
 
             Log.i("Query", "" +categoryName);
@@ -98,9 +103,7 @@ public class NewInventory extends AppCompatActivity implements SelectProductCate
             listeCategory.add(new ItemCategoryInventory(categoryName,index));
 
         }
-
         //cursorZone.close();
-
     }
 
 
@@ -117,8 +120,8 @@ public class NewInventory extends AppCompatActivity implements SelectProductCate
     }
 
     @Override
-    public void onFragmentInteraction(ItemCategoryInventory zone) {
-
+    public void onFragmentInteraction(ItemCategoryInventory categoryInventory) {
+        //mAdapter.notifyDataSetChanged();
     }
     /*@Override
     public void onFragmentInteraction(ItemZoneInventory zone) {
@@ -129,6 +132,38 @@ public class NewInventory extends AppCompatActivity implements SelectProductCate
         mAdapter.notifyDataSetChanged();
         selectCategoryDialogFragment.dismiss();
     }*/
+
+
+    public void fillDBtest() {
+        ContentValues mNewValues = new ContentValues();
+        for (int i=0;i<7;i++){
+            if (i<8) {
+                mNewValues.clear();
+                int zoneId = i;
+                //String zoneName = "zone_" + i;
+                //String zoneShape = null;
+                //SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd, HH:mm");
+                //SimpleDateFormat sdf = new SimpleDateFormat("E  d MMM yyyy, HH:mm");
+                //SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy-MM-dd");
+                //String zoneDate = sdf.format(new Date());
+                String categoryName = new String("test1");
+                Log.i("myatg"," test 1 ");
+                //String zoneDate = sdf.format(Calendar.getInstance().getTime());
+                //Date zoneDate = new Date() ;
+
+                mNewValues.put(ZeroContract.Category.CATEGORY_NAME, categoryName);
+                //mNewValues.put(ZeroContract.ZoneStock.NAME, zoneName);
+                //mNewValues.put(ZeroContract.ZoneStock.DATEZONE, zoneDate);
+                getContentResolver().insert(
+                        ZeroContract.Category.CONTENT_URI,   // the user dictionary content URI
+                        mNewValues                          // the values to insert
+                );
+                //this.finish();
+            }
+
+
+        }
+    }
 
 }
 
