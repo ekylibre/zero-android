@@ -202,8 +202,8 @@
         android:layout_height="match_parent"
         android:scrollbars="vertical"
         android:layout_below="@id/products"
-        android:layout_margin="2dp"/>
-        <!--tools:listitem="@layout/product_item"-->
+        android:layout_margin="2dp"
+        tools:listitem="@layout/product_item"/>
 
 
 
