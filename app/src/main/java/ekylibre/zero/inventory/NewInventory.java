@@ -15,6 +15,7 @@ import android.widget.Button;
 import android.widget.Switch;
 import android.widget.TextView;
 
+import java.sql.Array;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -31,6 +32,7 @@ public class NewInventory extends AppCompatActivity implements SelectProductCate
     private RecyclerView.LayoutManager mLayoutManager;
     private SelectProductCategoryFragment selectproductcategoryfragment;
     ArrayList<ItemCategoryInventory> listeCategory=new ArrayList<>();
+
 
 
 
@@ -80,6 +82,21 @@ public class NewInventory extends AppCompatActivity implements SelectProductCate
                selectproductcategoryfragment.show(getFragmentTransaction(),"dialog");
            }
        });
+
+       TextView validateCategories = findViewById(R.id.validate_button);
+       modifycategory.setOnClickListener(new View.OnClickListener() {
+           @Override
+           public void onClick(View v) {
+               int length = listeCategory.size();
+               for (int i=0; i<length; i++) {
+                   if (listeCategory.get(i).is_selected){
+                       //todo:Add a chip to the category chipGroup when it doesn't make the app crash anymore
+                   }
+               }
+               //todo:Make the popup close to get back to the Second Activity
+           }
+       });
+
    }
 
     private void queryAddCategory() {
