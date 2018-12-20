@@ -220,6 +220,12 @@
             android:name=".inventory.InventoryActivity"
             android:label="@string/inventory"
             android:theme="@style/AppTheme"></activity>
+
+        <activity
+            android:name=".inventory.TestPhoto"
+            android:label="@string/test_demo"
+            android:theme="@style/AppTheme"></activity>
+
     </application>
 
 </manifest>

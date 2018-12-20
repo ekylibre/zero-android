@@ -18,7 +18,7 @@ import java.util.List;
 import ekylibre.zero.R;
 import ekylibre.zero.inventory.InventoryActivity;
 import ekylibre.zero.inventory.ItemZoneInventory;
-import ekylibre.zero.inventory.NewInventory;
+//import ekylibre.zero.inventory.NewInventory;
 
 public class MainZoneAdapter extends RecyclerView.Adapter<MainZoneAdapter.ViewHolder> {
     private List<ItemZoneInventory> listeZone;
@@ -77,7 +77,7 @@ public class MainZoneAdapter extends RecyclerView.Adapter<MainZoneAdapter.ViewHo
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
         holder.display(listeZone.get(position));
-        holder.itemView.setOnClickListener(new View.OnClickListener(){
+        /*holder.itemView.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
                  long itemId = position;
@@ -86,7 +86,7 @@ public class MainZoneAdapter extends RecyclerView.Adapter<MainZoneAdapter.ViewHo
                  Log.i("mytag"," id : "+itemId);
                  v.getContext().startActivity(intent);
             }
-        });
+        });*/
 
     }
 

@@ -19,7 +19,7 @@ import ekylibre.zero.R;
 import ekylibre.zero.inventory.adapters.MainZoneAdapter;
 
 
-/*public class NewInventory extends AppCompatActivity {
+public class NewInventory extends AppCompatActivity {
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
@@ -29,10 +29,10 @@ import ekylibre.zero.inventory.adapters.MainZoneAdapter;
 //todo: Faire une méthode pour enregistrer automatiquement la denrière date d'inventaire dans la zone
    @Override
     protected void onCreate(Bundle savedInstanceState) {
-       super.onCreate(savedInstanceState);
-       setContentView(R.layout.activity_new_current_inventory);
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_new_current_inventory);
 
-       class MyButtonClickListener implements View.OnClickListener {
+  /*     class MyButtonClickListener implements View.OnClickListener {
            @Override
            public void onClick(View _buttonView) {
                if (_buttonView.getId() == R.id.addproduct) {
@@ -46,7 +46,7 @@ import ekylibre.zero.inventory.adapters.MainZoneAdapter;
            }
 
 
-       }
+    }
        TextView productcategorychoicebutton = findViewById(R.id.productcategorychoicebutton);
        productcategorychoicebutton.setOnClickListener(new View.OnClickListener() {
            @Override
@@ -58,7 +58,7 @@ import ekylibre.zero.inventory.adapters.MainZoneAdapter;
        });
 
 
-
+*/
    }
 
     private FragmentTransaction getFragmentTransaction (){
@@ -72,7 +72,7 @@ import ekylibre.zero.inventory.adapters.MainZoneAdapter;
     }
 
 }
-*/
+
 
 
 
