@@ -61,7 +61,12 @@ public class UiSelectProductAdapter extends RecyclerView.Adapter<UiSelectProduct
             productImageView = itemView.findViewById(R.id.add_image);
             productCheckView = itemView.findViewById(R.id.product_checkbox);
             Log.i("MyTag","ViewHolder");
-            itemView.setOnClickListener(this);
+            productQEditView.setOnClickListener(this);
+            productMinusView.setOnClickListener(this);
+            productPlusView.setOnClickListener(this);
+            productCommentView.setOnClickListener(this);
+            productImageView.setOnClickListener(this);
+            productCheckView.setOnClickListener(this);
 
         }
 

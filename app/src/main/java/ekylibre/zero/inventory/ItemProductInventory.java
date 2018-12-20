@@ -25,11 +25,11 @@ public class ItemProductInventory {
         this.dateInventory = null;
         this.Icon_zone = null;
     }
-
+*/
 
     @Override
     public String toString() {
-        return dateInventory + ',' + zone ;
+        return productName;
     }
-    */
+
 }
