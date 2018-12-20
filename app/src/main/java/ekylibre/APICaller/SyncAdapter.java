@@ -54,6 +54,10 @@ import ekylibre.util.UpdatableActivity;
 import ekylibre.zero.SettingsActivity;
 import ekylibre.zero.home.Zero;
 import ekylibre.zero.intervention.InterventionActivity;
+import ekylibre.zero.inventory.ItemCategory;
+import ekylibre.zero.inventory.ItemType;
+import ekylibre.zero.inventory.ItemVariant;
+import ekylibre.zero.inventory.ItemZoneInventory;
 
 /**
  * Handle the transfer of data between a server and an
@@ -164,6 +168,10 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
             pullPlantDensityAbaci(account,
                 extras, authority, provider, syncResult);
             pullPlants(account, extras, authority, provider, syncResult);
+            pullZonesStock(account, extras, authority, provider, syncResult);
+            pullCategory(account, extras, authority, provider, syncResult);
+            pullType(account, extras, authority, provider, syncResult);
+            pullVariants(account, extras, authority, provider, syncResult);
             pushIssues(account, extras, authority, provider, syncResult);
             pushPlantCounting(account, extras, authority, provider, syncResult);
 
@@ -1078,6 +1086,128 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
                 if (BuildConfig.DEBUG) Log.w(TAG, "IO problem. Cannot get token.");
             }
         return (instance);
+    }
+
+    public void pullZonesStock(Account account, Bundle extras, String authority, ContentProviderClient
+            provider, SyncResult syncResult)
+    {
+        if (BuildConfig.DEBUG) Log.i(TAG, "Beginning network Stock Zones synchronization");
+        ContentValues cv = new ContentValues();
+        Instance instance = getInstance(account);
+
+        List<ItemZoneInventory> zonesList = null;
+        try {
+            zonesList = ItemZoneInventory.all(instance, null);
+        } catch (JSONException | IOException | HTTPException e) {
+            e.printStackTrace();
+        }
+
+        if (zonesList == null)
+            return;
+
+        if (BuildConfig.DEBUG) Log.d(TAG, "Nombre de zones : " + zonesList.size() );
+        Iterator<ItemZoneInventory> zonesIterator = zonesList.iterator();
+        while(zonesIterator.hasNext())
+        {
+            ItemZoneInventory zones = zonesIterator.next();
+            cv.put(ZeroContract.ZoneStock.ZONE_STOCK_ID, zones.getZone_id());
+            cv.put(ZeroContract.ZoneStock.DATEZONE, zones.getDateInventory());
+            cv.put(ZeroContract.ZoneStock.SHAPE, zones.getShape());
+            cv.put(ZeroContract.ZoneStock.NAME, zones.getZone());
+
+            mContentResolver.insert(ZeroContract.ZoneStock.CONTENT_URI, cv);
+        }
+        if (BuildConfig.DEBUG) Log.i(TAG, "Finish network zone synchronization");
+    }
+
+    public void pullCategory(Account account, Bundle extras, String authority, ContentProviderClient
+            provider, SyncResult syncResult)
+    {
+        if (BuildConfig.DEBUG) Log.i(TAG, "Beginning network Category synchronization");
+        ContentValues cv = new ContentValues();
+        Instance instance = getInstance(account);
+
+        List<ItemCategory> catList = null;
+        try {
+            catList = ItemCategory.all(instance, null);
+        } catch (JSONException | IOException | HTTPException e) {
+            e.printStackTrace();
+        }
+
+        if (catList == null)
+            return;
+
+        if (BuildConfig.DEBUG) Log.d(TAG, "Nombre de catégories : " + catList.size() );
+        Iterator<ItemCategory> catIterator = catList.iterator();
+        while(catIterator.hasNext())
+        {
+            ItemCategory category = catIterator.next();
+            cv.put(ZeroContract.Category.CATEGORY_ID, category.getCat_id());
+            cv.put(ZeroContract.Category.CATEGORY_NAME, category.getName());
+
+            mContentResolver.insert(ZeroContract.Category.CONTENT_URI, cv);
+        }
+        if (BuildConfig.DEBUG) Log.i(TAG, "Finish network category synchronization");
+    }
+
+    public void pullType(Account account, Bundle extras, String authority, ContentProviderClient
+            provider, SyncResult syncResult)
+    {
+        if (BuildConfig.DEBUG) Log.i(TAG, "Beginning network Type synchronization");
+        ContentValues cv = new ContentValues();
+        Instance instance = getInstance(account);
+
+        List<ItemType> typeList = null;
+        try {
+            typeList = ItemType.all(instance, null);
+        } catch (JSONException | IOException | HTTPException e) {
+            e.printStackTrace();
+        }
+
+        if (typeList == null)
+            return;
+
+        if (BuildConfig.DEBUG) Log.d(TAG, "Nombre de catégories : " + typeList.size() );
+        Iterator<ItemType> typeIterator = typeList.iterator();
+        while(typeIterator.hasNext())
+        {
+            ItemType type = typeIterator.next();
+            cv.put(ZeroContract.Type.TYPE_ID, type.getType_id());
+            cv.put(ZeroContract.Type.TYPE_NAME, type.getName());
+
+            mContentResolver.insert(ZeroContract.Type.CONTENT_URI, cv);
+        }
+        if (BuildConfig.DEBUG) Log.i(TAG, "Finish network type synchronization");
+    }
+
+    public void pullVariants(Account account, Bundle extras, String authority, ContentProviderClient
+            provider, SyncResult syncResult)
+    {
+        if (BuildConfig.DEBUG) Log.i(TAG, "Beginning network Variants synchronization");
+        ContentValues cv = new ContentValues();
+        Instance instance = getInstance(account);
+
+        List<ItemVariant> varList = null;
+        try {
+            varList = ItemVariant.all(instance, null);
+        } catch (JSONException | IOException | HTTPException e) {
+            e.printStackTrace();
+        }
+
+        if (varList == null)
+            return;
+
+        if (BuildConfig.DEBUG) Log.d(TAG, "Nombre de variants : " + varList.size() );
+        Iterator<ItemVariant> varIterator = varList.iterator();
+        while(varIterator.hasNext())
+        {
+            ItemVariant var = varIterator.next();
+            cv.put(ZeroContract.Variant.VARIANT_ID, var.getVar_id());
+            cv.put(ZeroContract.Variant.VARIANT_NAME, var.getName());
+
+            mContentResolver.insert(ZeroContract.Variant.CONTENT_URI, cv);
+        }
+        if (BuildConfig.DEBUG) Log.i(TAG, "Finish network variants synchronization");
     }
 
 }

@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/list_zones_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:fitsSystemWindows="true"
+    style="@style/AppTheme.AppBarOverlay">
+
+    <android.support.design.widget.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:theme="@style/AppTheme.AppBarOverlay"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/toolbar">
+
+        <android.support.v7.widget.Toolbar
+
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            app:popupTheme="@style/AppTheme.PopupOverlay"
+            app:theme="@style/ThemeToolbar"
+            app:title="@string/inventory"/>
+
+    </android.support.design.widget.AppBarLayout>
+
+    <!--  -->
+
+    <ImageView
+        android:id="@+id/image_zone"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_below="@id/toolbar"
+        app:srcCompat="@drawable/ic_menu_gallery"/>
+    <!--  -->
+
+    <TextView
+        android:id="@+id/selected_zone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Zone de stock"
+        android:textSize="17dp"
+        android:layout_below="@id/toolbar"
+        android:layout_toRightOf="@id/image_zone"/>
+
+    <TextView
+        android:id="@+id/modifier_zone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/toolbar"
+        android:layout_marginLeft="161dp"
+        android:layout_toRightOf="@id/selected_zone"
+        android:text="Modifier"
+        android:textSize="17dp" />
+
+    <ImageView
+        android:id="@+id/image_categorie"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_below="@id/image_zone"
+        app:srcCompat="@drawable/ic_menu_gallery"/>
+
+    <TextView
+        android:id="@+id/cat_to_select"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/image_zone"
+        android:layout_toRightOf="@id/image_categorie"
+        android:text="Catégorie de produits"
+        android:textSize="17dp" />
+
+    <TextView
+        android:id="@+id/modifier_cat"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/image_zone"
+        android:layout_marginLeft="105dp"
+        android:layout_toRightOf="@id/cat_to_select"
+        android:text="Modifier"
+        android:textSize="17dp" />
+
+    <TextView
+        android:id="@+id/selected_cat"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/cat_to_select"
+        android:layout_marginLeft="60dp"
+        android:layout_marginTop="20dp"
+        android:layout_toRightOf="@id/image_categorie"
+        android:text="Futur SetText"
+        android:textSize="17dp" />
+
+    <TextView
+        android:id="@+id/type_prod"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/selected_cat"
+        android:layout_marginLeft="0dp"
+        android:layout_marginTop="51dp"
+        android:layout_toRightOf="@id/image_categorie"
+        android:text="Type de produit"
+        android:textSize="17dp" />
+
+    <TextView
+        android:id="@+id/addprod"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/selected_cat"
+        android:layout_marginLeft="113dp"
+        android:layout_marginTop="51dp"
+        android:layout_toRightOf="@id/cat_to_select"
+        android:text="@string/addzone"
+        android:textSize="17dp" />
+
+    <TextView
+        android:id="@+id/addvariant"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/addprod"
+        android:layout_marginLeft="2dp"
+        android:layout_marginTop="3dp"
+        android:layout_toRightOf="@id/image_categorie"
+        android:text="Variante"
+        android:textSize="17dp" />
+
+    <TextView
+        android:id="@+id/addvar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/addprod"
+        android:layout_marginLeft="211dp"
+        android:layout_marginTop="6dp"
+        android:layout_toRightOf="@id/addvariant"
+        android:text="@string/addzone"
+        android:textSize="17dp" />
+
+    <TextView
+        android:id="@+id/nomVar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/addvar"
+        android:layout_marginStart="-2dp"
+        android:layout_marginTop="25dp"
+        android:layout_toEndOf="@+id/image_zone"
+        android:text="Nom"
+        android:textSize="17dp" />
+
+    <EditText
+        android:id="@+id/uniteedit"
+        android:layout_width="210dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/addvar"
+        android:layout_marginLeft="27dp"
+        android:layout_marginTop="-1dp"
+        android:layout_toRightOf="@id/nomVar" />
+
+    <TextView
+        android:id="@+id/uniteVar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/nomVar"
+        android:layout_marginStart="-1dp"
+        android:layout_marginTop="49dp"
+        android:layout_toEndOf="@+id/image_zone"
+        android:text="Unité"
+        android:textSize="17dp" />
+
+    <EditText
+        android:id="@+id/uniteVaredit"
+        android:layout_width="210dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/nomVar"
+        android:layout_marginLeft="27dp"
+        android:layout_marginTop="29dp"
+        android:layout_toRightOf="@id/uniteVar" />
+
+    <TextView
+        android:id="@+id/caract_detaillee"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/uniteVaredit"
+        android:layout_marginStart="1dp"
+        android:layout_marginTop="45dp"
+        android:layout_toEndOf="@+id/image_zone"
+        android:text="Caractéristiques détaillées"
+        android:textSize="17dp" />
+
+
+</RelativeLayout>

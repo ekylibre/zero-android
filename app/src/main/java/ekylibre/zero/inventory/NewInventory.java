@@ -23,6 +23,7 @@ import ekylibre.zero.inventory.adapters.UiSelectProductAdapter;
 
 
 public class NewInventory extends AppCompatActivity implements SelectProductCategoryFragment.OnFragmentInteractionListener {
+
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
@@ -36,9 +37,17 @@ public class NewInventory extends AppCompatActivity implements SelectProductCate
 //todo: Faire une méthode pour enregistrer automatiquement la dernière date d'inventaire dans la zone
    @Override
     protected void onCreate(Bundle savedInstanceState) {
-       super.onCreate(savedInstanceState);
-       setContentView(R.layout.activity_new_current_inventory);
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_new_current_inventory);
 
+
+  /*     class MyButtonClickListener implements View.OnClickListener {
+           @Override
+           public void onClick(View _buttonView) {
+               if (_buttonView.getId() == R.id.addproduct) {
+                   Log.i("mytag", "categorychoice");
+                   Intent intent=new Intent(this,thirdactivity.class);
+                   startActivity(intent);
        setTitle("Nouvel Inventaire Courant");
 
 //       fillDBtest();
@@ -66,6 +75,9 @@ public class NewInventory extends AppCompatActivity implements SelectProductCate
            }
 
 
+    }
+       TextView productcategorychoicebutton = findViewById(R.id.productcategorychoicebutton);
+       productcategorychoicebutton.setOnClickListener(new View.OnClickListener() {
        }
        TextView modifycategory = findViewById(R.id.choose_category);
        modifycategory.setOnClickListener(new View.OnClickListener() {
@@ -84,6 +96,7 @@ public class NewInventory extends AppCompatActivity implements SelectProductCate
 
        mRecyclerView = (RecyclerView) findViewById(R.id.ProductsRecycler);
 
+*/
        mLayoutManager = new LinearLayoutManager(this);
        mRecyclerView.setLayoutManager(mLayoutManager);
 
