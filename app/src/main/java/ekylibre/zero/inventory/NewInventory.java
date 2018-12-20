@@ -1,6 +1,7 @@
 package ekylibre.zero.inventory;
 
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -35,7 +36,17 @@ public class NewInventory extends AppCompatActivity implements SelectProductCate
        super.onCreate(savedInstanceState);
        setContentView(R.layout.activity_new_current_inventory);
 
+       setTitle("Nouvel Inventaire Courant");
 
+//       fillDBtest();
+//       Cursor cursorDateZone = queryDateZone();
+
+
+       mRecyclerView = (RecyclerView) findViewById(R.id.my_recycler_view);
+       mRecyclerView.setHasFixedSize(true);
+
+       mLayoutManager = new LinearLayoutManager(this);
+       mRecyclerView.setLayoutManager(mLayoutManager);
 
 
 

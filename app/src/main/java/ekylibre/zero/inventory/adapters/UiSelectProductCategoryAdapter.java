@@ -24,6 +24,7 @@ public class UiSelectProductCategoryAdapter extends RecyclerView.Adapter<UiSelec
     List<ItemCategoryInventory> listCategory;
     SelectProductCategoryFragment.OnFragmentInteractionListener fragmentListener;
 
+
     public UiSelectProductCategoryAdapter(List<ItemCategoryInventory> dataset, SelectProductCategoryFragment.OnFragmentInteractionListener listener) {
         this.listCategory = dataset;
         fragmentListener=listener;
@@ -63,7 +64,7 @@ public class UiSelectProductCategoryAdapter extends RecyclerView.Adapter<UiSelec
             item.is_selected = !item.is_selected;
             }
         }
-    }
+
 
     @NonNull
     @Override
