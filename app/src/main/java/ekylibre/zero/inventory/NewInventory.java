@@ -1,6 +1,7 @@
 package ekylibre.zero.inventory;
 
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -9,6 +10,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.Switch;
 import android.widget.TextView;
 
@@ -19,47 +21,63 @@ import ekylibre.zero.R;
 import ekylibre.zero.inventory.adapters.MainZoneAdapter;
 
 
-/*public class NewInventory extends AppCompatActivity {
+public class NewInventory extends AppCompatActivity implements SelectProductCategoryFragment.OnFragmentInteractionListener {
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
-    int inventory_type =1;
+    private SelectProductCategoryFragment selectproductcategoryfragment;
+    ArrayList<ItemCategoryInventory> listeCategory=new ArrayList<>();
 
 
-//todo: Faire une méthode pour enregistrer automatiquement la denrière date d'inventaire dans la zone
+
+//todo: Faire une méthode pour enregistrer automatiquement la dernière date d'inventaire dans la zone
    @Override
     protected void onCreate(Bundle savedInstanceState) {
        super.onCreate(savedInstanceState);
        setContentView(R.layout.activity_new_current_inventory);
 
+       setTitle("Nouvel Inventaire Courant");
+
+//       fillDBtest();
+//       Cursor cursorDateZone = queryDateZone();
+
+
+       mRecyclerView = (RecyclerView) findViewById(R.id.my_recycler_view);
+       mRecyclerView.setHasFixedSize(true);
+
+       mLayoutManager = new LinearLayoutManager(this);
+       mRecyclerView.setLayoutManager(mLayoutManager);
+
+
+
        class MyButtonClickListener implements View.OnClickListener {
            @Override
            public void onClick(View _buttonView) {
-               if (_buttonView.getId() == R.id.addproduct) {
-                   Log.i("mytag", "categorychoice");
-                   Intent intent=new Intent(this,thirdactivity.class);
-                   startActivity(intent);
+//               if (_buttonView.getId() == R.id.choose_category) {
+//                   Log.i("mytag", "categorychoice");
+//                   Intent intent = new Intent(this, thirdactivity.class);
+//                   startActivity(intent);
+//               }
+               if (_buttonView.getId() == R.id.validate_button) {
 
-
-                   }
-
+               }
            }
 
 
        }
-       TextView productcategorychoicebutton = findViewById(R.id.productcategorychoicebutton);
-       productcategorychoicebutton.setOnClickListener(new View.OnClickListener() {
+       TextView modifycategory = findViewById(R.id.choose_category);
+       modifycategory.setOnClickListener(new View.OnClickListener() {
            @Override
            public void onClick(View productcategorychoice) {
-               Selectproductcategoryfragment = Selectproductcategoryfragment.newInstance(listeZone);
-               Selectproductcategoryfragment.show(getFragmentTransaction(),"dialog");
+               selectproductcategoryfragment = SelectProductCategoryFragment.newInstance(listeCategory);
+               selectproductcategoryfragment.show(getFragmentTransaction(),"dialog");
 
            }
        });
-
-
-
    }
+
+
+
 
     private FragmentTransaction getFragmentTransaction (){
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
@@ -71,8 +89,22 @@ import ekylibre.zero.inventory.adapters.MainZoneAdapter;
         return ft;
     }
 
+    @Override
+    public void onFragmentInteraction(ItemCategoryInventory zone) {
+
+    }
+    /*@Override
+    public void onFragmentInteraction(ItemZoneInventory zone) {
+        Log.i("MyTag", "click zone"+zone.zone);
+
+
+
+        mAdapter.notifyDataSetChanged();
+        selectCategoryDialogFragment.dismiss();
+    }*/
+
 }
-*/
+
 
 
 
