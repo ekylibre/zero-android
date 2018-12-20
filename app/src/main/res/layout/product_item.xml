@@ -20,7 +20,7 @@
         />
 
     <TextView
-        android:id="@+id/product_variante"
+        android:id="@+id/product_variant"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toBottomOf="@id/product_name"
@@ -31,7 +31,7 @@
         android:id="@+id/product_date"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/product_variante"
+        app:layout_constraintTop_toBottomOf="@id/product_variant"
         tools:text="Aujourd'hui à 12:56"
         />
 
@@ -45,7 +45,7 @@
         />
 
     <ImageView
-        android:id="@+id/minus_qtt"
+        android:id="@+id/product_minus_qtt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:srcCompat="@drawable/ic_minus"
@@ -59,12 +59,12 @@
         android:layout_height="30dp"
         app:layout_constraintTop_toTopOf="@id/product_name"
         app:layout_constraintBottom_toBottomOf="@id/product_name"
-        app:layout_constraintLeft_toRightOf="@id/minus_qtt"
+        app:layout_constraintLeft_toRightOf="@id/product_minus_qtt"
         tools:text="10"
         />
 
     <ImageView
-        android:id="@+id/plus_qtt"
+        android:id="@+id/product_plus_qtt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:srcCompat="@drawable/ic_add_plus"
@@ -73,12 +73,12 @@
         app:layout_constraintLeft_toRightOf="@id/product_qtt_edit"/>
 
     <CheckBox
-        android:id="@+id/checkbox"
+        android:id="@+id/product_checkbox"
         android:layout_width="10dp"
         android:layout_height="10dp"
         app:layout_constraintTop_toTopOf="@id/product_name"
         app:layout_constraintBottom_toBottomOf="@id/product_name"
-        app:layout_constraintLeft_toRightOf="@id/plus_qtt"/>
+        app:layout_constraintLeft_toRightOf="@id/product_plus_qtt"/>
 
     <ImageView
         android:id="@+id/add_comment"
