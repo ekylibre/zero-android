@@ -26,7 +26,7 @@ public class NewInventory extends AppCompatActivity implements SelectProductCate
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
     private SelectProductCategoryFragment selectproductcategoryfragment;
-    ArrayList<ItemCategoryInventory> listeCategory=new ArrayList<>();
+    ArrayList<ItemCategoryInventory> listeCategory = new ArrayList<>();
 
 
 
@@ -70,19 +70,20 @@ public class NewInventory extends AppCompatActivity implements SelectProductCate
        modifycategory.setOnClickListener(new View.OnClickListener() {
            @Override
            public void onClick(View productcategorychoice) {
+               queryAddCategory();
                selectproductcategoryfragment = SelectProductCategoryFragment.newInstance(listeCategory);
                selectproductcategoryfragment.show(getFragmentTransaction(),"dialog");
            }
        });
    }
 
-    private Cursor queryAddCategory() {
-        String[] projectionCategoryID = ZeroContract.Category.PROJECTION_NAME;
+    private void queryAddCategory() {
+        String[] projectionCategoryID = ZeroContract.Category.PROJECTION_ALL;
 
         Cursor cursorAddCategory = getContentResolver().query(
                 ZeroContract.Category.CONTENT_URI,
                 projectionCategoryID,
-                ZeroContract.Category.CATEGORY_NAME+" IS NULL",
+                null,
                 null,
                 null);
 
@@ -90,14 +91,16 @@ public class NewInventory extends AppCompatActivity implements SelectProductCate
             int index;
 
             index = cursorAddCategory.getColumnIndexOrThrow("name");
-            String zoneName = cursorAddCategory.getString(index);
+            String categoryName = cursorAddCategory.getString(index);
 
-            Log.i("Query", "" +zoneName);
+            Log.i("Query", "" +categoryName);
+
+            listeCategory.add(new ItemCategoryInventory(categoryName,index));
+
         }
 
         //cursorZone.close();
 
-        return cursorAddCategory;
     }
 
 

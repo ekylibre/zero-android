@@ -51,7 +51,7 @@ public class UiSelectProductCategoryAdapter extends RecyclerView.Adapter<UiSelec
         }
 
         void display(ItemCategoryInventory currentItem) {
-            categoryImageView.setImageResource(R.drawable.ic_category_item);
+            //categoryImageView.setImageResource(R.drawable.ic_category_item);
             categoryNameView.setText(item.category);
             Log.i("MyTag","Display item:"+item);
             item = currentItem;
