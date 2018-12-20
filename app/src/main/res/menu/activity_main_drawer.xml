@@ -20,6 +20,10 @@
             android:id="@+id/nav_stocks"
             android:icon="@drawable/ic_launcher_background"
             android:title="@string/stocks" />
+        <item
+            android:id="@+id/nav_testact"
+            android:icon="@drawable/ic_launcher_background"
+            android:title="Lien NewInv" />
     </group>
 
     <item android:title="@string/parameters">
