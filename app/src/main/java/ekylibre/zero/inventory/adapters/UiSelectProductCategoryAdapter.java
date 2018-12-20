@@ -63,7 +63,7 @@ public class UiSelectProductCategoryAdapter extends RecyclerView.Adapter<UiSelec
             item.is_selected = !item.is_selected;
             }
         }
-    }
+
 
     @NonNull
     @Override
@@ -86,4 +86,6 @@ public class UiSelectProductCategoryAdapter extends RecyclerView.Adapter<UiSelec
         Log.i("MyTag",""+listCategory.size());
         return listCategory.size();
     }
+
+
 }
