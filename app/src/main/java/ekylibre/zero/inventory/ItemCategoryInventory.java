@@ -6,13 +6,15 @@ import android.widget.Switch;
 public class ItemCategoryInventory {
 
     public String category;
-    String Icon_category;
-    boolean is_selected;
+    public String Icon_category;
+    public boolean is_selected;
 
 
-    public ItemCategoryInventory(String category, String icon_category) {
+    public ItemCategoryInventory(String category, String icon_category ) {
         this.category = category;
-        Icon_category=icon_category;
+        this.Icon_category=icon_category;
+        this.is_selected=false;
+
 
 
     }
