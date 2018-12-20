@@ -16,6 +16,7 @@ import android.widget.Switch;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 import ekylibre.database.ZeroContract;
 import ekylibre.database.ZeroProvider;
@@ -108,7 +109,7 @@ public class NewInventory extends AppCompatActivity implements SelectProductCate
 
        for (int i=0;i<4;i++){
            listProduct.add(new ItemProductInventory("Name_"+i, "var_"+i,
-                   "date_"+i, "qtt_"+i, "comm_"+i, image));
+                   new Date(), 10+i, "comm_"+i, image));
        }
        Log.i("MyTag", ""+listProduct.toString());
 
