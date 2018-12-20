@@ -59,6 +59,8 @@ public class NewInventory extends AppCompatActivity implements SelectProductCate
 //               }
                if (_buttonView.getId() == R.id.validate_button) {
 
+
+
                }
            }
 
@@ -73,6 +75,31 @@ public class NewInventory extends AppCompatActivity implements SelectProductCate
            }
        });
    }
+
+    private Cursor queryAddCategory() {
+        String[] projectionCategoryID = ZeroContract.Category.PROJECTION_NAME;
+
+        Cursor cursorAddCategory = getContentResolver().query(
+                ZeroContract.Category.CONTENT_URI,
+                projectionCategoryID,
+                ZeroContract.Category.CATEGORY_NAME+" IS NULL",
+                null,
+                null);
+
+        while(cursorAddCategory.moveToNext()) {
+            int index;
+
+            index = cursorAddCategory.getColumnIndexOrThrow("name");
+            String zoneName = cursorAddCategory.getString(index);
+
+            Log.i("Query", "" +zoneName);
+        }
+
+        //cursorZone.close();
+
+        return cursorAddCategory;
+    }
+
 
 
 

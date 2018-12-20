@@ -87,4 +87,6 @@ public class UiSelectProductCategoryAdapter extends RecyclerView.Adapter<UiSelec
         Log.i("MyTag",""+listCategory.size());
         return listCategory.size();
     }
+
+
 }
