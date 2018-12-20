@@ -19,11 +19,13 @@ import ekylibre.zero.R;
 import ekylibre.zero.inventory.adapters.MainZoneAdapter;
 
 
-/*public class NewInventory extends AppCompatActivity {
+public class NewInventory extends AppCompatActivity implements SelectProductCategoryFragment.OnFragmentInteractionListener {
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
-    int inventory_type =1;
+    private SelectProductCategoryFragment selectproductcategoryfragment;
+    ArrayList<ItemCategoryInventory> listeCategory=new ArrayList<>();
+
 
 
 //todo: Faire une méthode pour enregistrer automatiquement la denrière date d'inventaire dans la zone
@@ -47,12 +49,12 @@ import ekylibre.zero.inventory.adapters.MainZoneAdapter;
 
 
        }
-       TextView productcategorychoicebutton = findViewById(R.id.productcategorychoicebutton);
-       productcategorychoicebutton.setOnClickListener(new View.OnClickListener() {
+       TextView modifycategory = findViewById(R.id.choose_category);
+       modifycategory.setOnClickListener(new View.OnClickListener() {
            @Override
            public void onClick(View productcategorychoice) {
-               Selectproductcategoryfragment = Selectproductcategoryfragment.newInstance(listeZone);
-               Selectproductcategoryfragment.show(getFragmentTransaction(),"dialog");
+               selectproductcategoryfragment = SelectProductCategoryFragment.newInstance(listeCategory);
+               selectproductcategoryfragment.show(getFragmentTransaction(),"dialog");
 
            }
        });
@@ -72,7 +74,7 @@ import ekylibre.zero.inventory.adapters.MainZoneAdapter;
     }
 
 }
-*/
+
 
 
 

@@ -1,4 +1,4 @@
-/* package ekylibre.zero.inventory;
+ package ekylibre.zero.inventory;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -15,14 +15,15 @@ import android.widget.LinearLayout;
 import java.util.List;
 
 import ekylibre.zero.R;
+import ekylibre.zero.inventory.adapters.UiSelectProductCategoryAdapter;
 import ekylibre.zero.inventory.adapters.UiSelectZoneAdapter;
 
-public class Selectproductcategoryfragment extends DialogFragment {
+public class SelectProductCategoryFragment extends DialogFragment {
 
     private OnFragmentInteractionListener fragmentListener;
-    public List<ItemZoneInventory> zoneList;
+    public List<ItemCategoryInventory> categoryList;
 
-    public Selectproductcategoryfragment(){    }
+    public SelectProductCategoryFragment(){    }
 
 
     @Override
@@ -36,9 +37,9 @@ public class Selectproductcategoryfragment extends DialogFragment {
         }
     }
 
-    public static Selectproductcategoryfragment newInstance(List<ItemZoneInventory> list){
-        Selectproductcategoryfragment fragment = new Selectproductcategoryfragment();
-        fragment.zoneList = list;
+    public static SelectProductCategoryFragment newInstance(List<ItemCategoryInventory> list){
+        SelectProductCategoryFragment fragment = new SelectProductCategoryFragment();
+        fragment.categoryList = list;
         return fragment;
     }
 
@@ -55,7 +56,7 @@ public class Selectproductcategoryfragment extends DialogFragment {
         RecyclerView recyclerView = inflatedView.findViewById(R.id.select_category_dialog_list);
         recyclerView.setLayoutManager(new LinearLayoutManager(inflatedView.getContext()));
 
-        UiSelectZoneAdapter adapter = new UiSelectZoneAdapter(zoneList, fragmentListener) ;
+        UiSelectProductCategoryAdapter adapter = new UiSelectProductCategoryAdapter(categoryList, fragmentListener) ;
         recyclerView.setAdapter(adapter);
         return inflatedView;
     }
@@ -72,7 +73,6 @@ public class Selectproductcategoryfragment extends DialogFragment {
     }
 
     public  interface OnFragmentInteractionListener {
-    void onFragmentInteraction(ItemZoneInventory zone);
+    void onFragmentInteraction(ItemCategoryInventory zone);
     }
 }
-*/
