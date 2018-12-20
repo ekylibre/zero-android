@@ -40,6 +40,10 @@ public class ItemCategory {
         this.name = name;
     }
 
+    public ItemCategory( String name) {
+        this.name = name;
+    }
+
     public static List<ItemCategory> all(Instance instance, String attributes) throws JSONException, IOException, HTTPException
     {
         // JSONObject params = Instance.BundleToJSON(attributes);
@@ -64,6 +68,8 @@ public class ItemCategory {
         name = object.getString("category_name");
 
     }
+
+
 
 
     @Override

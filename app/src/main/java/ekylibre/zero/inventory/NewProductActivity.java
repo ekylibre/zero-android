@@ -24,26 +24,132 @@ import ekylibre.zero.inventory.adapters.MainZoneAdapter;
 
 
 
-public class NewProductActivity extends AppCompatActivity{ //implements SelectZoneDialogFragment.OnFragmentInteractionListener{
+public class NewProductActivity extends AppCompatActivity implements SelectZoneDialogFragment.OnFragmentInteractionListener{
+
+    private SelectZoneDialogFragment selectZoneDialogFragment;
+    ArrayList<ItemZoneInventory> listeZone = new ArrayList<>();
 
    @Override
     protected void onCreate(Bundle savedInstanceState) {
        super.onCreate(savedInstanceState);
-       setContentView(R.layout.layout_new_prod);
+       setContentView(R.layout.production_new);
 
-
-
-       class MyButtonClickListener implements View.OnClickListener {
-           @Override
-           public void onClick(View _buttonView) {
-               if (_buttonView.getId() == R.id.switchInventoryRegular) {
-
-               }
-           }
+       final ArrayList<ItemZoneInventory> listeAllZones = new ArrayList<ItemZoneInventory>();
+       Cursor cursorAddZone = queryAllZones();
+       cursorAddZone.moveToFirst();
+       while(cursorAddZone.moveToNext()) {
+           int indexname = cursorAddZone.getColumnIndexOrThrow("name");
+           String zoneName = cursorAddZone.getString(indexname);
+           listeAllZones.add(new ItemZoneInventory(zoneName));
        }
+       cursorAddZone.close();
+
+       final ArrayList<ItemCategory> listeAllCat = new ArrayList<ItemCategory>();
+       Cursor cursorCatZone = queryAllCats();
+       cursorCatZone.moveToFirst();
+       while(cursorCatZone.moveToNext()) {
+           int indexname = cursorCatZone.getColumnIndexOrThrow("name");
+           String catName = cursorCatZone.getString(indexname);
+           listeAllCat.add(new ItemCategory(catName));
+       }
+       cursorCatZone.close();
+
+
+       TextView modifyProduct = findViewById(R.id.modifier_zone);
+       modifyProduct.setOnClickListener(new View.OnClickListener() {
+           @Override
+           public void onClick(View addInventoryZone) {
+               selectZoneDialogFragment = SelectZoneDialogFragment.newInstance(listeAllZones);
+               selectZoneDialogFragment.show(getFragmentTransaction(),"dialog");
+
+           }
+       });
+
+       /*TextView modifyCat = findViewById(R.id.modifier_cat);
+       modifyProduct.setOnClickListener(new View.OnClickListener() {
+           @Override
+           public void onClick(View addcat) {
+               selectZoneDialogFragment = SelectZoneDialogFragment.newInstance(listeAllCat);
+               selectZoneDialogFragment.show(getFragmentTransaction(),"dialog");
+
+           }
+       });*/
 
 
    }
+
+    private Cursor queryAllZones() {
+        String[] projectionZoneID = ZeroContract.ZoneStock.PROJECTION_ALL;
+
+        Cursor cursorZone = getContentResolver().query(
+                ZeroContract.ZoneStock.CONTENT_URI,
+                projectionZoneID,
+                null,
+                null,
+                null);
+
+        while(cursorZone.moveToNext()) {
+            int index;
+
+            index = cursorZone.getColumnIndexOrThrow("id_zone_stock");
+            String zoneId = cursorZone.getString(index);
+
+            index = cursorZone.getColumnIndexOrThrow("name");
+            String zoneName = cursorZone.getString(index);
+
+            index = cursorZone.getColumnIndexOrThrow("shape");
+            String zoneShape = cursorZone.getString(index);
+
+            Log.i("Query", "" + zoneId + zoneName + zoneShape);
+        }
+
+        //cursorZone.close();
+
+        return cursorZone;
+    }
+
+    private Cursor queryAllCats() {
+        String[] projectionCatID = ZeroContract.Category.PROJECTION_ALL;
+
+        Cursor cursorZone = getContentResolver().query(
+                ZeroContract.Category.CONTENT_URI,
+                projectionCatID,
+                null,
+                null,
+                null);
+
+        while(cursorZone.moveToNext()) {
+            int index;
+
+            index = cursorZone.getColumnIndexOrThrow("category_id");
+            String catId = cursorZone.getString(index);
+
+            index = cursorZone.getColumnIndexOrThrow("category_name");
+            String catName = cursorZone.getString(index);
+
+            Log.i("Query", "" + catId + catId);
+        }
+
+        return cursorZone;
+    }
+
+    private FragmentTransaction getFragmentTransaction (){
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        Fragment prev = getSupportFragmentManager().findFragmentByTag("dialog");
+        if (prev!= null){
+            ft.remove(prev);
+        }
+        ft.addToBackStack(null);
+        return ft;
+    }
+
+    @Override
+    public void onFragmentInteraction(ItemZoneInventory zone) {
+        Log.i("MyTag", "click zone"+zone.zone);
+        TextView zone_choisie = findViewById(R.id.selected_zone);
+        zone_choisie.setText(zone.getZone());
+        selectZoneDialogFragment.dismiss();
+    }
 }
 
 
