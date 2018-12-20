@@ -1,16 +1,18 @@
 package ekylibre.zero.inventory;
 
 
+import java.util.Date;
+
 public class ItemProductInventory {
     public String productName;
     public String productVariant;
-    public String productDate;
-    public String productQuantity;
+    public Date productDate;
+    public float productQuantity;
     public String productComment;
     public byte[] productImage;
 
-    public ItemProductInventory(String productName, String productVariant, String productDate,
-                                String productQuantity, String productComment, byte[] productImage) {
+    public ItemProductInventory(String productName, String productVariant, Date productDate,
+                                float productQuantity, String productComment, byte[] productImage) {
         this.productName = productName;
         this.productVariant = productVariant;
         this.productDate = productDate;
