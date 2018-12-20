@@ -14,87 +14,106 @@
         android:id="@+id/product_name"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="24dp"
         android:textStyle="bold"
         app:layout_constraintEnd_toStartOf="@id/product_qtt_fix"
-        tools:text="Chaux magnésie granulé"
-        />
+        tools:layout_editor_absoluteY="0dp"
+        tools:text="Chaux magnésie granulé" />
 
     <TextView
         android:id="@+id/product_variant"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toBottomOf="@id/product_name"
-        tools:text="Sac de 25 kg"
-        />
+        tools:layout_editor_absoluteX="8dp"
+        tools:text="Sac de 25 kg" />
 
     <TextView
         android:id="@+id/product_date"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toBottomOf="@id/product_variant"
-        tools:text="Aujourd'hui à 12:56"
-        />
+        tools:layout_editor_absoluteX="8dp"
+        tools:text="Aujourd'hui à 12:56" />
 
     <TextView
         android:id="@+id/product_qtt_fix"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        app:layout_constraintTop_toTopOf="@id/product_name"
+        android:layout_width="36dp"
+        android:layout_height="18dp"
+        android:layout_marginLeft="24dp"
+        android:gravity="center"
+        app:layout_constraintBottom_toBottomOf="@id/product_name"
         app:layout_constraintLeft_toRightOf="@id/product_name"
-        tools:text="9"
-        />
+        app:layout_constraintTop_toTopOf="@id/product_name"
+        app:layout_constraintVertical_bias="0.0"
+        tools:text="9" />
 
     <ImageView
         android:id="@+id/product_minus_qtt"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:srcCompat="@drawable/ic_minus"
-        app:layout_constraintTop_toTopOf="@id/product_name"
+        android:layout_width="18dp"
+        android:layout_height="18dp"
+        android:layout_marginLeft="8dp"
         app:layout_constraintBottom_toBottomOf="@id/product_name"
-        app:layout_constraintLeft_toRightOf="@id/product_qtt_fix"/>
+        app:layout_constraintLeft_toRightOf="@id/product_qtt_fix"
+        app:layout_constraintTop_toTopOf="@id/product_name"
+        app:layout_constraintVertical_bias="1.0"
+        app:srcCompat="@drawable/ic_minus" />
 
     <EditText
         android:id="@+id/product_qtt_edit"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        app:layout_constraintTop_toTopOf="@id/product_name"
+        android:layout_width="53dp"
+        android:layout_height="20dp"
+        android:background="#FFFFFFFF"
+        android:gravity="center"
+        android:textSize="14sp"
         app:layout_constraintBottom_toBottomOf="@id/product_name"
         app:layout_constraintLeft_toRightOf="@id/product_minus_qtt"
-        tools:text="10"
-        />
+        app:layout_constraintTop_toTopOf="@id/product_name"
+        app:layout_constraintVertical_bias="0.0"
+        tools:text="10" />
 
     <ImageView
         android:id="@+id/product_plus_qtt"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:srcCompat="@drawable/ic_add_plus"
-        app:layout_constraintTop_toTopOf="@id/product_name"
+        android:layout_width="18dp"
+        android:layout_height="18dp"
         app:layout_constraintBottom_toBottomOf="@id/product_name"
-        app:layout_constraintLeft_toRightOf="@id/product_qtt_edit"/>
+        app:layout_constraintLeft_toRightOf="@id/product_qtt_edit"
+        app:layout_constraintTop_toTopOf="@id/product_name"
+        app:layout_constraintVertical_bias="1.0"
+        app:srcCompat="@drawable/ic_add_plus" />
 
     <CheckBox
         android:id="@+id/product_checkbox"
-        android:layout_width="10dp"
-        android:layout_height="10dp"
-        app:layout_constraintTop_toTopOf="@id/product_name"
+        android:layout_width="32dp"
+        android:layout_height="21dp"
+        android:layout_marginLeft="4dp"
         app:layout_constraintBottom_toBottomOf="@id/product_name"
-        app:layout_constraintLeft_toRightOf="@id/product_plus_qtt"/>
+        app:layout_constraintLeft_toRightOf="@id/product_plus_qtt"
+        app:layout_constraintTop_toTopOf="@id/product_name"
+        app:layout_constraintVertical_bias="1.0" />
 
     <ImageView
         android:id="@+id/add_comment"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:srcCompat="@drawable/ic_comment"
+        android:layout_marginLeft="144dp"
+        android:layout_marginTop="48dp"
+        app:layout_constraintBottom_toBottomOf="@id/product_date"
+        app:layout_constraintLeft_toRightOf="@id/product_date"
         app:layout_constraintTop_toTopOf="@id/product_date"
-        app:layout_constraintLeft_toRightOf="@id/product_date"/>
+        app:layout_constraintVertical_bias="1.0"
+        app:srcCompat="@drawable/ic_comment" />
 
     <ImageView
         android:id="@+id/add_image"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:srcCompat="@drawable/ic_image"
+        android:layout_marginLeft="24dp"
+        app:layout_constraintBottom_toBottomOf="@id/product_date"
+        app:layout_constraintLeft_toRightOf="@id/add_comment"
         app:layout_constraintTop_toTopOf="@id/product_date"
-        app:layout_constraintLeft_toRightOf="@id/add_comment"/>
+        app:layout_constraintVertical_bias="1.0"
+        app:srcCompat="@drawable/ic_image" />
 
 
 
