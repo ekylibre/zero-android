@@ -35,7 +35,6 @@ public class MainZoneAdapter extends RecyclerView.Adapter<MainZoneAdapter.ViewHo
         TextView dateTextView;
         ImageView iconImageView;
 
-
         ViewHolder(View itemView) {
             super(itemView);
             view = itemView;

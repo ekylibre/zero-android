@@ -35,6 +35,7 @@ import static java.text.SimpleDateFormat.*;
 
 
 public class NewInventory extends AppCompatActivity implements SelectProductCategoryFragment.OnFragmentInteractionListener {
+
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
@@ -56,7 +57,15 @@ public class NewInventory extends AppCompatActivity implements SelectProductCate
        extras = intent.getExtras();
        inventoryType = extras.getInt("inventoryType");
        zoneId = extras.getString("itemId");
-       setTitle("Nouvel Inventaire Courant");
+
+  /*     class MyButtonClickListener implements View.OnClickListener {
+           @Override
+           public void onClick(View _buttonView) {
+               if (_buttonView.getId() == R.id.addproduct) {
+                   Log.i("mytag", "categorychoice");
+                   Intent intent=new Intent(this,thirdactivity.class);
+                   startActivity(intent);
+       setTitle("Nouvel Inventaire Courant");*/
 
 //       fillDBtest();
 //       Cursor cursorDateZone = queryDateZone();
@@ -117,7 +126,10 @@ public class NewInventory extends AppCompatActivity implements SelectProductCate
            }
 
 
-       }
+    }/*
+       TextView productcategorychoicebutton = findViewById(R.id.productcategorychoicebutton);
+       productcategorychoicebutton.setOnClickListener(new View.OnClickListener() {
+       }*/
        TextView modifycategory = findViewById(R.id.choose_category);
        modifycategory.setOnClickListener(new View.OnClickListener() {
            @Override

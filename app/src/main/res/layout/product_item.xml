@@ -10,6 +10,9 @@
     android:layout_margin="2dp"
     >
 
+<<<<<<< HEAD
+
+=======
     <TextView
         android:id="@+id/product_name"
         android:layout_width="0dp"
@@ -19,6 +22,7 @@
         app:layout_constraintEnd_toStartOf="@id/product_qtt_fix"
         tools:layout_editor_absoluteY="0dp"
         tools:text="Chaux magnésie granulé" />
+>>>>>>> 544e2f4f1172463354d2977b39f076557530966f
 
     <TextView
         android:id="@+id/product_variant"
@@ -47,6 +51,15 @@
         app:layout_constraintTop_toTopOf="@id/product_name"
         app:layout_constraintVertical_bias="0.0"
         tools:text="9" />
+
+    <TextView
+        android:id="@+id/product_name"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toStartOf="@id/product_qtt_fix"
+        tools:text="Chaux magnésie granulé"
+        />
 
     <ImageView
         android:id="@+id/product_minus_qtt"
