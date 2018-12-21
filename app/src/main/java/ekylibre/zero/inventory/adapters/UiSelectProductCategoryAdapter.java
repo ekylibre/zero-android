@@ -55,13 +55,14 @@ public class UiSelectProductCategoryAdapter extends RecyclerView.Adapter<UiSelec
             //categoryImageView.setImageResource(R.drawable.ic_category_item);
             item = currentItem;
             categoryNameView.setText(item.category);
+            switchcategory.setChecked(currentItem.is_selected);
             Log.i("MyTag","Display item:"+item);
         }
 
         @Override
         public void onClick(View view) {
             Log.i("MyTag", "click zone");
-            fragmentListener.onFragmentInteraction(this.item);
+            //fragmentListener.onFragmentInteraction(this.item);
             item.is_selected = !item.is_selected;
             }
         }

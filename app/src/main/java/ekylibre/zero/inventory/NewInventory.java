@@ -4,6 +4,8 @@ import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.support.design.chip.Chip;
+import android.support.design.chip.ChipGroup;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
@@ -20,6 +22,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 import ekylibre.database.ZeroContract;
 import ekylibre.zero.R;
@@ -107,7 +110,18 @@ public class NewInventory extends AppCompatActivity implements SelectProductCate
     }
 
     @Override
-    public void onFragmentInteraction(ItemCategoryInventory categoryInventory) {
+    public void onFragmentInteraction(List<ItemCategoryInventory> categoryInventory) {
+       int length = categoryInventory.size();
+       ChipGroup chipGroup = findViewById(R.id.chipCategory);
+       for(ItemCategoryInventory category : categoryInventory) {
+           if(category.is_selected){
+               Chip chip = new Chip(this);
+               chip.setText(category.category);
+               chip.setCloseIconVisible(true);
+               //todo mettre un listener pour fermer
+               chipGroup.addView(chip);
+           }
+       }
         //selectproductcategoryfragment.dismiss();
     }
     /*@Override

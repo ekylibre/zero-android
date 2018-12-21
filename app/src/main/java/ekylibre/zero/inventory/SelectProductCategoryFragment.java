@@ -60,12 +60,8 @@ public class SelectProductCategoryFragment extends DialogFragment {
         validateCategories.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int length = categoryList.size();
-                for (int i=0; i<length; i++) {
-                    if (categoryList.get(i).is_selected){
-                        //todo:Add a chip to the category chipGroup when it doesn't make the app crash anymore
-                    }
-                }
+                fragmentListener.onFragmentInteraction(categoryList);
+                dismiss();
 
                 //todo:Make the popup close to get back to the Second Activity
             }
@@ -90,6 +86,6 @@ public class SelectProductCategoryFragment extends DialogFragment {
     }
 
     public  interface OnFragmentInteractionListener {
-    void onFragmentInteraction(ItemCategoryInventory zone);
+    void onFragmentInteraction(List<ItemCategoryInventory> categories);
     }
 }
