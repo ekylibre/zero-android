@@ -55,23 +55,7 @@ public class NewInventory extends AppCompatActivity implements SelectProductCate
 
 
 
-       class MyButtonClickListener implements View.OnClickListener {
-           @Override
-           public void onClick(View _buttonView) {
-//               if (_buttonView.getId() == R.id.choose_category) {
-//                   Log.i("mytag", "categorychoice");
-//                   Intent intent = new Intent(this, thirdactivity.class);
-//                   startActivity(intent);
-//               }
-               if (_buttonView.getId() == R.id.validate_button) {
 
-
-
-               }
-           }
-
-
-       }
        TextView modifycategory = findViewById(R.id.choose_category);
        modifycategory.setOnClickListener(new View.OnClickListener() {
            @Override
@@ -80,20 +64,6 @@ public class NewInventory extends AppCompatActivity implements SelectProductCate
                queryAddCategory();
                selectproductcategoryfragment = SelectProductCategoryFragment.newInstance(listeCategory);
                selectproductcategoryfragment.show(getFragmentTransaction(),"dialog");
-           }
-       });
-
-       TextView validateCategories = findViewById(R.id.validate_button);
-       modifycategory.setOnClickListener(new View.OnClickListener() {
-           @Override
-           public void onClick(View v) {
-               int length = listeCategory.size();
-               for (int i=0; i<length; i++) {
-                   if (listeCategory.get(i).is_selected){
-                       //todo:Add a chip to the category chipGroup when it doesn't make the app crash anymore
-                   }
-               }
-               //todo:Make the popup close to get back to the Second Activity
            }
        });
 
@@ -138,7 +108,7 @@ public class NewInventory extends AppCompatActivity implements SelectProductCate
 
     @Override
     public void onFragmentInteraction(ItemCategoryInventory categoryInventory) {
-        //mAdapter.notifyDataSetChanged();
+        //selectproductcategoryfragment.dismiss();
     }
     /*@Override
     public void onFragmentInteraction(ItemZoneInventory zone) {
@@ -156,14 +126,14 @@ public class NewInventory extends AppCompatActivity implements SelectProductCate
         for (int i=0;i<7;i++){
             if (i<8) {
                 mNewValues.clear();
-                int zoneId = i;
+                //int zoneId = i;
                 //String zoneName = "zone_" + i;
                 //String zoneShape = null;
                 //SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd, HH:mm");
                 //SimpleDateFormat sdf = new SimpleDateFormat("E  d MMM yyyy, HH:mm");
                 //SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy-MM-dd");
                 //String zoneDate = sdf.format(new Date());
-                String categoryName = new String("test1");
+                String categoryName = new String("test"+i);
                 Log.i("myatg"," test 1 ");
                 //String zoneDate = sdf.format(Calendar.getInstance().getTime());
                 //Date zoneDate = new Date() ;

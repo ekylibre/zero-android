@@ -10,6 +10,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.LinearLayout;
 
 import java.util.List;
@@ -46,13 +47,29 @@ public class SelectProductCategoryFragment extends DialogFragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
     }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-        View inflatedView = inflater.inflate(R.layout.select_category_dialog,container,false);
+        final View inflatedView = inflater.inflate(R.layout.select_category_dialog,container,false);
+
+        Button validateCategories = inflatedView.findViewById(R.id.validate_button);
+        validateCategories.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int length = categoryList.size();
+                for (int i=0; i<length; i++) {
+                    if (categoryList.get(i).is_selected){
+                        //todo:Add a chip to the category chipGroup when it doesn't make the app crash anymore
+                    }
+                }
+
+                //todo:Make the popup close to get back to the Second Activity
+            }
+        });
         RecyclerView recyclerView = inflatedView.findViewById(R.id.select_category_dialog_list);
         recyclerView.setLayoutManager(new LinearLayoutManager(inflatedView.getContext()));
 
