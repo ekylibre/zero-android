@@ -1,7 +1,10 @@
 package ekylibre.zero.inventory;
 
+import android.content.ContentProvider;
 import android.content.Intent;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.net.ParseException;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -15,14 +18,20 @@ import android.widget.Button;
 import android.widget.Switch;
 import android.widget.TextView;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
+import ekylibre.database.DatabaseHelper;
 import ekylibre.database.ZeroContract;
 import ekylibre.database.ZeroProvider;
 import ekylibre.zero.R;
+import ekylibre.zero.home.Zero;
 import ekylibre.zero.inventory.adapters.MainZoneAdapter;
 import ekylibre.zero.inventory.adapters.UiSelectProductAdapter;
+
+import static java.security.AccessController.getContext;
+import static java.text.SimpleDateFormat.*;
 
 
 public class NewInventory extends AppCompatActivity implements SelectProductCategoryFragment.OnFragmentInteractionListener {
@@ -32,7 +41,6 @@ public class NewInventory extends AppCompatActivity implements SelectProductCate
     private SelectProductCategoryFragment selectproductcategoryfragment;
     ArrayList<ItemCategoryInventory> listeCategory=new ArrayList<>();
     ArrayList<ItemProductInventory> listProduct = new ArrayList<>();
-    byte[] image;
     Bundle extras;
     String zoneId = "1";
     int inventoryType;
@@ -59,28 +67,40 @@ public class NewInventory extends AppCompatActivity implements SelectProductCate
 //       mLayoutManager = new LinearLayoutManager(this);
 //       mRecyclerView.setLayoutManager(mLayoutManager);
 
-       /*
-       Uri uri = ZeroContract.Product.CONTENT_URI;
-       String selection = ZeroContract.ZoneStockColumns.ZONE_STOCK_ID+" = "+zoneId;
-       String[] projection = {ZeroContract.ProductColumns.PRODUCT_ID,
-               ZeroContract.ProductColumns.NAME,
-               ZeroContract.ProductColumns.FK_VARIANT_ID,
-               ZeroContract.InventoryProductColumns.DATE,
-               ZeroContract.InventoryProductColumns.QUANTITY,
-               ZeroContract.InventoryProductColumns.COMMENT,
-               ZeroContract.ProductColumns.PHOTO};
-       Cursor cursor = getContentResolver().query(uri,projection,selection,null,null);
+       SQLiteDatabase db = (new DatabaseHelper(getApplicationContext())).getReadableDatabase();
+       String rawQuery = "SELECT * FROM "+ZeroContract.InventoryProductColumns.TABLE_NAME+" JOIN " +
+               ""+ZeroContract.ProductColumns.TABLE_NAME+" ON " +
+               ""+ZeroContract.ProductColumns.PRODUCT_ID+" = "+ZeroContract.InventoryProductColumns.FK_PRODUCT_ID+" " +
+               "WHERE "+ZeroContract.ProductColumns.FK_ZONE_STOCK_ID+" = "+zoneId;
+       Cursor cursor = db.rawQuery(rawQuery,null);
+
        while (cursor.moveToNext()){
-           listProduct.add(new ItemProductInventory(cursor.getString(1),
-                   cursor.getString(2),
-                   cursor.getString(3),
-                   cursor.getString(4),
+           String productName =  cursor.getString(1);
+           String productVariant = cursor.getString(2);
+           Date productDate = null;
+           SimpleDateFormat dateFormat = new SimpleDateFormat("h:mm a");
+           try {
+               productDate = dateFormat.parse(cursor.getString(3));
+           }
+           catch (java.text.ParseException e){
+               Log.e("MyTag","Exception on date converter");
+           }
+           Float productQuantity = null;
+           try {
+               productQuantity = Float.parseFloat(cursor.getString(4));
+           }catch (Exception e){
+               Log.e("MyTag", "exception on quantity converter");
+           }
+           listProduct.add(new ItemProductInventory(productName,
+                   productVariant,
+                   productDate,
+                   productQuantity,
                    cursor.getString(5),
-                   image));
+                   null));
 
        }
        Log.i("MyTag","QueryListProduct"+listProduct.toString());
-        */
+
 
 
        class MyButtonClickListener implements View.OnClickListener {
@@ -106,13 +126,13 @@ public class NewInventory extends AppCompatActivity implements SelectProductCate
                selectproductcategoryfragment.show(getFragmentTransaction(),"dialog");
            }
        });
-
+/*
        for (int i=0;i<4;i++){
            listProduct.add(new ItemProductInventory("Name_"+i, "var_"+i,
                    new Date(), 10+i, "comm_"+i, image));
        }
        Log.i("MyTag", ""+listProduct.toString());
-
+*/
        mRecyclerView = (RecyclerView) findViewById(R.id.ProductsRecycler);
 
        mLayoutManager = new LinearLayoutManager(this);
