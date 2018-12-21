@@ -7,7 +7,8 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:fitsSystemWindows="true"
-    style="@style/AppTheme.AppBarOverlay">
+    style="@style/AppTheme.AppBarOverlay"
+    tools:ignore="MissingDefaultResource">
 
 
     <TextView

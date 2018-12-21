@@ -13,7 +13,10 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.text.SimpleDateFormat;
 import java.util.List;
+import java.util.Locale;
+import java.util.SimpleTimeZone;
 
 import ekylibre.zero.R;
 import ekylibre.zero.inventory.ItemProductInventory;
@@ -46,6 +49,7 @@ public class UiSelectProductAdapter extends RecyclerView.Adapter<UiSelectProduct
         CheckBox productCheckView;
         ItemProductInventory item;
 
+        SimpleDateFormat dateFormat=new SimpleDateFormat("h:mm a");
 
         ViewHolder(View itemView) {
             super(itemView);
@@ -76,8 +80,9 @@ public class UiSelectProductAdapter extends RecyclerView.Adapter<UiSelectProduct
             this.item=item;
             productNameView.setText(item.productName);
             productVariantView.setText(item.productVariant);
-            productDateView.setText(item.productDate);
-            productQFixView.setText(item.productQuantity);
+            productDateView.setText(dateFormat.format(item.productDate));
+            productQFixView.setText(String.valueOf(item.productQuantity));
+            productQEditView.setText(String.valueOf(item.productQuantity));
             productMinusView.setImageResource(R.drawable.ic_minus);
             productPlusView.setImageResource(R.drawable.ic_add_plus);
             productCommentView.setImageResource(R.drawable.ic_comment);
@@ -96,16 +101,42 @@ public class UiSelectProductAdapter extends RecyclerView.Adapter<UiSelectProduct
                 case R.id.product_qtt_edit:
                     Log.i("MyTag", "Edit Quantity");
                     break;
+
                 case R.id.product_minus_qtt:
                     Log.i("MyTag", "Edit Quantity Minus");
+                    try{
+                        String str = productQEditView.getText().toString();
+                        Float minus =Float.parseFloat(str);
+                        minus=minus-1;
+                        productQEditView.setText(String.valueOf(minus));
+                        Log.i("MyTag", "Edit Quantity Minus "+str+" "+minus);
+                    }
+                    catch (Exception e){
+                        Log.i("MyTag", "Edit Quantity Minus Error");
+                    }
                     break;
+
                 case R.id.product_plus_qtt:
                     Log.i("MyTag", "Edit Quantity Plus");
+                    try{
+                        String str = productQEditView.getText().toString();
+                        Float minus =Float.parseFloat(str);
+                        minus=minus+1;
+                        productQEditView.setText(String.valueOf(minus));
+                        Log.i("MyTag", "Edit Quantity Minus "+str+" "+minus);
+                    }
+                    catch (Exception e){
+                        Log.i("MyTag", "Edit Quantity Add Error");
+                    }
                     break;
+
                 case R.id.product_checkbox:
                     Log.i("MyTag", "Check");
-                    productCheckView.setChecked(true);
-                    break;
+                    if (productCheckView.isChecked()){
+                        //productCheckView.setChecked(false);
+                        productQFixView.setText(String.valueOf(productQEditView.getText().toString()));
+                        break;
+                    }
                 case R.id.add_image:
                     // Should open popup
                     Log.i("MyTag", "Edit Image");
