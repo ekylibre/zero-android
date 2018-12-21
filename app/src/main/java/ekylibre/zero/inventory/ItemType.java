@@ -18,6 +18,7 @@ import ekylibre.zero.BuildConfig;
 public class ItemType {
     public String name;
     int type_id;
+    int cat_id;
 
     public String getName() {
         return name;
@@ -60,8 +61,10 @@ public class ItemType {
     public ItemType(JSONObject object) throws JSONException
     {
         if (BuildConfig.DEBUG) Log.d("zero", "Object Zone : " + object.toString());
-        type_id = object.getInt("type_id");
-        name = object.getString("type_name");
+        type_id = object.getInt("id");
+        name = object.getString("name");
+        cat_id = object.getInt("category_id");
+
 
     }
 

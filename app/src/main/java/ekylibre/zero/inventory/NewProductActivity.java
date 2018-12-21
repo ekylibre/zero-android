@@ -24,10 +24,13 @@ import ekylibre.zero.inventory.adapters.MainZoneAdapter;
 
 
 
-public class NewProductActivity extends AppCompatActivity implements SelectZoneDialogFragment.OnFragmentInteractionListener{
+public class NewProductActivity extends AppCompatActivity implements SelectZoneDialogFragment.OnFragmentInteractionListener, SelectCategoryDialogFragment.OnFragmentInteractionListener{
 
     private SelectZoneDialogFragment selectZoneDialogFragment;
     ArrayList<ItemZoneInventory> listeZone = new ArrayList<>();
+
+    private SelectCategoryDialogFragment selectCategoryDialogFragment;
+    ArrayList<ItemZoneInventory> listeCat = new ArrayList<>();
 
    @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,7 +51,7 @@ public class NewProductActivity extends AppCompatActivity implements SelectZoneD
        Cursor cursorCatZone = queryAllCats();
        cursorCatZone.moveToFirst();
        while(cursorCatZone.moveToNext()) {
-           int indexname = cursorCatZone.getColumnIndexOrThrow("name");
+           int indexname = cursorCatZone.getColumnIndexOrThrow("category_name");
            String catName = cursorCatZone.getString(indexname);
            listeAllCat.add(new ItemCategory(catName));
        }
@@ -65,15 +68,15 @@ public class NewProductActivity extends AppCompatActivity implements SelectZoneD
            }
        });
 
-       /*TextView modifyCat = findViewById(R.id.modifier_cat);
-       modifyProduct.setOnClickListener(new View.OnClickListener() {
+       TextView modifyCat = findViewById(R.id.modifier_cat);
+       modifyCat.setOnClickListener(new View.OnClickListener() {
            @Override
            public void onClick(View addcat) {
-               selectZoneDialogFragment = SelectZoneDialogFragment.newInstance(listeAllCat);
-               selectZoneDialogFragment.show(getFragmentTransaction(),"dialog");
+               selectCategoryDialogFragment = SelectCategoryDialogFragment.newInstance(listeAllCat);
+               selectCategoryDialogFragment.show(getFragmentTransaction(),"dialog");
 
            }
-       });*/
+       });
 
 
    }
@@ -149,6 +152,14 @@ public class NewProductActivity extends AppCompatActivity implements SelectZoneD
         TextView zone_choisie = findViewById(R.id.selected_zone);
         zone_choisie.setText(zone.getZone());
         selectZoneDialogFragment.dismiss();
+    }
+
+    @Override
+    public void onFragmentInteraction(ItemCategory cat) {
+        Log.i("MyTag", "click zone"+cat.name);
+        TextView cat_choisie = findViewById(R.id.selected_cat);
+        cat_choisie.setText(cat.name);
+        selectCategoryDialogFragment.dismiss();
     }
 }
 

@@ -83,7 +83,7 @@
         android:text="Modifier"
         android:textSize="17dp" />
 
-    <TextView
+<!--    <TextView
         android:id="@+id/selected_cat"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -92,7 +92,15 @@
         android:layout_marginTop="20dp"
         android:layout_toRightOf="@id/image_categorie"
         android:text="Futur SetText"
-        android:textSize="17dp" />
+        android:textSize="17dp" /> -->
+    <TextView
+        android:id="@+id/selected_cat"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Zone de stock"
+        android:textSize="17dp"
+        android:layout_below="@id/modifier_cat"
+        android:layout_toRightOf="@id/image_zone"/>
 
     <TextView
         android:id="@+id/type_prod"
