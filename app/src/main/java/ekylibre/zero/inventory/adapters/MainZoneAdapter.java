@@ -18,11 +18,9 @@ import java.util.List;
 import ekylibre.zero.R;
 import ekylibre.zero.inventory.InventoryActivity;
 import ekylibre.zero.inventory.ItemZoneInventory;
-<<<<<<< HEAD
+
 import ekylibre.zero.inventory.NewInventory;
-=======
->>>>>>> 544e2f4f1172463354d2977b39f076557530966f
-//import ekylibre.zero.inventory.NewInventory;
+
 
 public class MainZoneAdapter extends RecyclerView.Adapter<MainZoneAdapter.ViewHolder> {
     private List<ItemZoneInventory> listeZone;
@@ -92,11 +90,9 @@ public class MainZoneAdapter extends RecyclerView.Adapter<MainZoneAdapter.ViewHo
                  v.getContext().startActivity(intent);
             }
         });
-<<<<<<< HEAD
-=======
+
         */
 
->>>>>>> 544e2f4f1172463354d2977b39f076557530966f
     }
 
     // Return the size of your dataset (invoked by the layout manager)

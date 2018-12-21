@@ -300,12 +300,12 @@ public class MainActivity extends UpdatableActivity
                 startActivity(intent);
                 break;
             }
-            case R.id.nav_testact :
+       /*     case R.id.nav_testact :
             {
                 Intent intent = new Intent(this, NewInventory.class);
                 startActivity(intent);
                 break;
-            }
+            }*/
 
             case R.id.nav_settings :
             {
