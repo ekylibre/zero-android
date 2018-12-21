@@ -24,13 +24,17 @@ import ekylibre.zero.inventory.adapters.MainZoneAdapter;
 
 
 
-public class NewProductActivity extends AppCompatActivity implements SelectZoneDialogFragment.OnFragmentInteractionListener, SelectCategoryDialogFragment.OnFragmentInteractionListener{
+public class NewProductActivity extends AppCompatActivity implements SelectZoneDialogFragment.OnFragmentInteractionListener,
+        SelectCategoryDialogFragment.OnFragmentInteractionListener, SelectTypeDialogFragment.OnFragmentInteractionListener {
 
     private SelectZoneDialogFragment selectZoneDialogFragment;
     ArrayList<ItemZoneInventory> listeZone = new ArrayList<>();
 
     private SelectCategoryDialogFragment selectCategoryDialogFragment;
     ArrayList<ItemZoneInventory> listeCat = new ArrayList<>();
+
+    private SelectTypeDialogFragment selectTypeDialogFragment;
+    ArrayList<ItemZoneInventory> listeType = new ArrayList<>();
 
    @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +61,16 @@ public class NewProductActivity extends AppCompatActivity implements SelectZoneD
        }
        cursorCatZone.close();
 
+       final ArrayList<ItemType> listeAllType = new ArrayList<ItemType>();
+       Cursor cursorTypeZone = queryAllTypes();
+       cursorTypeZone.moveToFirst();
+       while(cursorTypeZone.moveToNext()) {
+           int indexname = cursorTypeZone.getColumnIndexOrThrow("type_name");
+           String typeName = cursorTypeZone.getString(indexname);
+           listeAllType.add(new ItemType(typeName));
+       }
+       cursorTypeZone.close();
+
 
        TextView modifyProduct = findViewById(R.id.modifier_zone);
        modifyProduct.setOnClickListener(new View.OnClickListener() {
@@ -74,6 +88,16 @@ public class NewProductActivity extends AppCompatActivity implements SelectZoneD
            public void onClick(View addcat) {
                selectCategoryDialogFragment = SelectCategoryDialogFragment.newInstance(listeAllCat);
                selectCategoryDialogFragment.show(getFragmentTransaction(),"dialog");
+
+           }
+       });
+
+       TextView modifyType = findViewById(R.id.addprod);
+       modifyType.setOnClickListener(new View.OnClickListener() {
+           @Override
+           public void onClick(View addtype) {
+               selectTypeDialogFragment = SelectTypeDialogFragment.newInstance(listeAllType);
+               selectTypeDialogFragment.show(getFragmentTransaction(),"dialog");
 
            }
        });
@@ -136,6 +160,31 @@ public class NewProductActivity extends AppCompatActivity implements SelectZoneD
         return cursorZone;
     }
 
+    private Cursor queryAllTypes() {
+        String[] projectionTypeID = ZeroContract.Type.PROJECTION_ALL;
+
+        Cursor cursorZone = getContentResolver().query(
+                ZeroContract.Type.CONTENT_URI,
+                projectionTypeID,
+                null,
+                null,
+                null);
+
+        while(cursorZone.moveToNext()) {
+            int index;
+
+            index = cursorZone.getColumnIndexOrThrow("type_id");
+            String typeId = cursorZone.getString(index);
+
+            index = cursorZone.getColumnIndexOrThrow("type_name");
+            String typeName = cursorZone.getString(index);
+
+            Log.i("Query", "" + typeId + typeName);
+        }
+
+        return cursorZone;
+    }
+
     private FragmentTransaction getFragmentTransaction (){
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         Fragment prev = getSupportFragmentManager().findFragmentByTag("dialog");
@@ -160,6 +209,14 @@ public class NewProductActivity extends AppCompatActivity implements SelectZoneD
         TextView cat_choisie = findViewById(R.id.selected_cat);
         cat_choisie.setText(cat.name);
         selectCategoryDialogFragment.dismiss();
+    }
+
+    @Override
+    public void onFragmentInteraction(ItemType type) {
+        Log.i("MyTag", "click zone"+type.name);
+        TextView chosen_type = findViewById(R.id.selected_type);
+        chosen_type.setText(type.name);
+        selectTypeDialogFragment.dismiss();
     }
 }
 

@@ -114,6 +114,15 @@
         android:textSize="17dp" />
 
     <TextView
+        android:id="@+id/selected_type"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Selcted type"
+        android:textSize="17dp"
+        android:layout_below="@id/type_prod"
+        android:layout_toRightOf="@id/image_zone"/>
+
+    <TextView
         android:id="@+id/addprod"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -128,7 +137,7 @@
         android:id="@+id/addvariant"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/addprod"
+        android:layout_below="@id/selected_type"
         android:layout_marginLeft="2dp"
         android:layout_marginTop="3dp"
         android:layout_toRightOf="@id/image_categorie"

@@ -68,6 +68,10 @@ public class ItemType {
 
     }
 
+    public ItemType( String name) {
+        this.name = name;
+    }
+
 
     @Override
     public String toString() {
