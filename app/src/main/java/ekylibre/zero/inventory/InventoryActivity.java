@@ -109,7 +109,7 @@ public class InventoryActivity extends AppCompatActivity implements SelectZoneDi
 
 
        // specify an adapter (see also next example)
-       mAdapter = new MainZoneAdapter(listeZone);
+       mAdapter = new MainZoneAdapter(listeZone, inventory_type);
        mRecyclerView.setAdapter(mAdapter);
 
 
