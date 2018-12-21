@@ -29,12 +29,15 @@ import ekylibre.zero.R;
 import ekylibre.zero.inventory.adapters.MainZoneAdapter;
 
 
-public class NewInventory extends AppCompatActivity implements SelectProductCategoryFragment.OnFragmentInteractionListener {
+public class NewInventory extends AppCompatActivity implements SelectProductCategoryFragment.OnFragmentInteractionListener,
+        SelectProductTypeFragment.OnTypeFragmentInteractionListener {
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
     private SelectProductCategoryFragment selectproductcategoryfragment;
+    private SelectProductTypeFragment selectproducttypefragment;
     ArrayList<ItemCategoryInventory> listeCategory=new ArrayList<>();
+    ArrayList<ItemTypeInventory> listeType=new ArrayList<>();
 
 
 
@@ -70,10 +73,22 @@ public class NewInventory extends AppCompatActivity implements SelectProductCate
            }
        });
 
+       TextView modifytype = findViewById(R.id.choose_type);
+       modifytype.setOnClickListener(new View.OnClickListener() {
+           @Override
+           public void onClick(View producttypechoice) {
+               fillDBtest();
+               queryAddtype();
+               selectproducttypefragment = SelectProductTypeFragment.newInstance(listeType);
+               selectproducttypefragment.show(getFragmentTransaction(),"dialog");
+           }
+       });
+
    }
 
     private void queryAddCategory() {
         String[] projectionCategoryID = ZeroContract.Category.PROJECTION_ALL;
+
 
         Cursor cursorAddCategory = getContentResolver().query(
                 ZeroContract.Category.CONTENT_URI,
@@ -91,6 +106,39 @@ public class NewInventory extends AppCompatActivity implements SelectProductCate
             Log.i("Query", "" +categoryName);
 
             listeCategory.add(new ItemCategoryInventory(categoryName,index));
+
+        }
+        //cursorZone.close();
+    }
+
+    private void queryAddtype() {
+        String[] projectionTypeID = ZeroContract.Type.PROJECTION_ALL;
+        List<String> listeCategoryId=new ArrayList<>();
+
+        for (ItemCategoryInventory category : listeCategory){
+            listeCategoryId.add(String.valueOf(category.Id));
+        }
+        String[] args = new String[listeCategoryId.size()];
+        for(int i = 0; i < listeCategoryId.size(); i++) {
+            args[i] = listeCategoryId.get(i);
+        }
+
+
+        Cursor cursorAddType = getContentResolver().query(
+                ZeroContract.Type.CONTENT_URI,
+                projectionTypeID,
+                 ZeroContract.Type.FK_CATEGORY_ID+" in ?", args,
+                null);
+
+        while(cursorAddType.moveToNext()) {
+            int index;
+
+            index = cursorAddType.getColumnIndexOrThrow("type_name");
+            String typeName = cursorAddType.getString(index);
+
+            Log.i("Query", "" +typeName);
+
+            listeType.add(new ItemTypeInventory(typeName,index));
 
         }
         //cursorZone.close();
@@ -166,6 +214,10 @@ public class NewInventory extends AppCompatActivity implements SelectProductCate
         }
     }
 
+    @Override
+    public void onFragmentInteraction(ItemTypeInventory zone) {
+
+    }
 }
 
 

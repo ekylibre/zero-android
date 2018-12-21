@@ -15,6 +15,13 @@
         app:title="Product type choice"/>
 </android.support.design.widget.AppBarLayout>
 
+    <Button
+        android:id="@+id/validatetype_button"
+        android:text="Validate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"/>
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/select_type_dialog_list"
         android:layout_width="match_parent"
