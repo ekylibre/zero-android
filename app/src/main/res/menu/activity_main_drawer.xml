@@ -21,15 +21,14 @@
             android:icon="@drawable/ic_launcher_background"
             android:title="@string/stocks" />
         <item
-<<<<<<< HEAD
+
             android:id="@+id/nav_test"
             android:icon="@drawable/ic_launcher_background"
             android:title="Test" />
-=======
+        <item
             android:id="@+id/nav_testact"
             android:icon="@drawable/ic_launcher_background"
             android:title="Lien NewInv" />
->>>>>>> 544e2f4f1172463354d2977b39f076557530966f
     </group>
 
     <item android:title="@string/parameters">
