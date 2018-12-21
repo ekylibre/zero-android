@@ -36,6 +36,8 @@ public class NewProductActivity extends AppCompatActivity implements SelectZoneD
     private SelectTypeDialogFragment selectTypeDialogFragment;
     ArrayList<ItemZoneInventory> listeType = new ArrayList<>();
 
+    int chosen_cat_id ;
+
    @Override
     protected void onCreate(Bundle savedInstanceState) {
        super.onCreate(savedInstanceState);
@@ -62,7 +64,7 @@ public class NewProductActivity extends AppCompatActivity implements SelectZoneD
        cursorCatZone.close();
 
        final ArrayList<ItemType> listeAllType = new ArrayList<ItemType>();
-       Cursor cursorTypeZone = queryAllTypes();
+       Cursor cursorTypeZone = queryAllTypes(chosen_cat_id);
        cursorTypeZone.moveToFirst();
        while(cursorTypeZone.moveToNext()) {
            int indexname = cursorTypeZone.getColumnIndexOrThrow("type_name");
@@ -160,13 +162,13 @@ public class NewProductActivity extends AppCompatActivity implements SelectZoneD
         return cursorZone;
     }
 
-    private Cursor queryAllTypes() {
+    private Cursor queryAllTypes(int chosen_cat_id) {
         String[] projectionTypeID = ZeroContract.Type.PROJECTION_ALL;
 
         Cursor cursorZone = getContentResolver().query(
                 ZeroContract.Type.CONTENT_URI,
                 projectionTypeID,
-                null,
+                ZeroContract.Type.FK_CATEGORY_ID+" = "+chosen_cat_id,
                 null,
                 null);
 
@@ -208,6 +210,7 @@ public class NewProductActivity extends AppCompatActivity implements SelectZoneD
         Log.i("MyTag", "click zone"+cat.name);
         TextView cat_choisie = findViewById(R.id.selected_cat);
         cat_choisie.setText(cat.name);
+        chosen_cat_id = cat.getCat_id();
         selectCategoryDialogFragment.dismiss();
     }
 
