@@ -577,6 +577,7 @@ public class ZeroProvider extends ContentProvider {
                 throw new UnsupportedOperationException("Insert not supported on URI: " + uri);
             case ROUTE_CATEGORY_LIST:
                 id = database.insertOrThrow(ZeroContract.Category.TABLE_NAME, null, values);
+                //id = database.insertOrThrow(ZeroContract.Category.CATEGORY_ID, null, values);
                 result = Uri.parse(ZeroContract.Category.CONTENT_URI + "/" + id);
                 break;
             case ROUTE_CATEGORY_ITEM:

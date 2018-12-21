@@ -37,6 +37,10 @@ import ekylibre.zero.SettingsActivity;
 import ekylibre.zero.account.AccountManagerActivity;
 import ekylibre.zero.intervention.InterventionActivity;
 import ekylibre.zero.inventory.InventoryActivity;
+
+import ekylibre.zero.inventory.NewProductActivity;
+import ekylibre.zero.inventory.TestPhoto;
+
 import ekylibre.zero.inventory.NewInventory;
 
 /**************************************
@@ -290,12 +294,19 @@ public class MainActivity extends UpdatableActivity
                 startActivity(intent);
                 break;
             }
-            case R.id.nav_jbtest :
+            case R.id.nav_test :
+            {
+                Intent intent = new Intent(this, NewProductActivity.class);
+                startActivity(intent);
+                break;
+            }
+       /*     case R.id.nav_testact :
             {
                 Intent intent = new Intent(this, NewInventory.class);
                 startActivity(intent);
                 break;
-            }
+            }*/
+
             case R.id.nav_settings :
             {
                 Intent intent = new Intent(this, SettingsActivity.class);

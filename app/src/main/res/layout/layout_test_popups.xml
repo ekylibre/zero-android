@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/list_zones_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:fitsSystemWindows="true"
+    style="@style/AppTheme.AppBarOverlay"
+    tools:ignore="MissingDefaultResource">
+
+
+    <TextView
+        android:id="@+id/bouton1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/addzone"
+        android:textSize="17dp"
+        android:layout_marginLeft="70dp"
+        android:layout_below="@id/switchInventoryYear"
+        android:layout_toRightOf="@id/zone_inventoried"/>
+
+    <TextView
+        android:id="@+id/bouton2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/addzone"
+        android:textSize="17dp"
+        android:layout_marginLeft="70dp"
+        android:layout_below="@id/switchInventoryYear"
+        android:layout_toRightOf="@id/zone_inventoried"/>
+
+
+    <android.support.v7.widget.RecyclerView
+            android:id="@+id/my_recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scrollbars="vertical"
+            android:layout_below="@id/image_history"
+            android:layout_margin="2dp"
+            tools:listitem="@layout/zone_inventory_item" />
+
+
+</RelativeLayout>
