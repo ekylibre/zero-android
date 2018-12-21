@@ -508,6 +508,9 @@ public final class ZeroContract {
         // MIME type for individual record.
         public static final String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/vnd.ekylibre.zero.category";
         public static final String[] PROJECTION_ALL = {CATEGORY_ID, CATEGORY_NAME};
+        public static final String[] PROJECTION_NAME= {CATEGORY_NAME};
+
+
     }
 
 }
