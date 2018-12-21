@@ -18,6 +18,7 @@ import ekylibre.zero.BuildConfig;
 public class ItemVariant {
     public String name;
     int var_id;
+    int type_id;
 
     public String getName() {
         return name;
@@ -60,8 +61,9 @@ public class ItemVariant {
     public ItemVariant(JSONObject object) throws JSONException
     {
         if (BuildConfig.DEBUG) Log.d("zero", "Object Zone : " + object.toString());
-        var_id = object.getInt("variant_id");
-        name = object.getString("variant_name");
+        var_id = object.getInt("id");
+        name = object.getString("name");
+        type_id = object.getInt("type_id");
 
     }
 

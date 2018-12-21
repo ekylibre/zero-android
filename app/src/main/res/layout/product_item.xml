@@ -48,7 +48,6 @@
         app:layout_constraintVertical_bias="0.0"
         tools:text="9" />
 
-
     <ImageView
         android:id="@+id/product_minus_qtt"
         android:layout_width="18dp"

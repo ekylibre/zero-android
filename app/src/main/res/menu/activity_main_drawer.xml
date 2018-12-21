@@ -25,10 +25,12 @@
             android:id="@+id/nav_test"
             android:icon="@drawable/ic_launcher_background"
             android:title="Test" />
+
         <item
             android:id="@+id/nav_testact"
             android:icon="@drawable/ic_launcher_background"
             android:title="Lien NewInv" />
+
     </group>
 
     <item android:title="@string/parameters">

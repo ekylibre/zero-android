@@ -77,7 +77,7 @@ public class ItemZoneInventory {
     {
         // JSONObject params = Instance.BundleToJSON(attributes);
         String params = attributes;
-        if (BuildConfig.DEBUG) Log.d("TAG", "Get JSONArray => /api/v1/plants || params = " + params);
+        if (BuildConfig.DEBUG) Log.d("TAG", "Get JSONArray => /api/v1/building_divisions || params = " + params);
         JSONArray json = instance.getJSONArray("/api/v1/building_divisions", params);
         List<ItemZoneInventory> array = new ArrayList<>();
 
@@ -94,9 +94,9 @@ public class ItemZoneInventory {
     {
         if (BuildConfig.DEBUG) Log.d("zero", "Object Zone : " + object.toString());
 
-        zone_id = object.getInt("id_zone_stock");
+        zone_id = object.getInt("id");
         zone = object.getString("name");
-        dateInventory =  object.getString("date_zone");
+        //dateInventory =  object.getString("date_zone");
         shape = object.getString("shape");
     }
 
