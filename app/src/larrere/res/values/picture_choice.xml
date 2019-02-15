@@ -2,10 +2,12 @@
 <resources>
     <array name="picture_choice_keys">
         <item>take_photo</item>
-        <item>existing_photo</item>
+        <!--<item>existing_photo</item>-->
+        <!--<item>  </item>-->
     </array>
     <array name="picture_choice_values">
         <item>take_photo</item>
-        <item>existing_photo</item>
+        <!--<item>existing_photo</item>-->
+        <!--<item>  </item>-->
     </array>
 </resources>

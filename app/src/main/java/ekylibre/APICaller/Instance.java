@@ -113,6 +113,8 @@ public class Instance
         if (BuildConfig.DEBUG) {
             Log.d("Instance URL", "URL = " + mUrl);
             Log.d("Instance Token", "TOKEN = " + mToken);
+        }
+        if (mUrl.contains("dev.farm") || mUrl.contains("preprod.farm")) {
             // TODO remove for release
             // Config accepting all SSL certificates (debug purpose)
             SSLSocketFactory sf = SSLSocketFactory.getSocketFactory();
@@ -146,7 +148,7 @@ public class Instance
         // Create a new HttpClient and Post Header
         HttpClient httpClient = new DefaultHttpClient();
 
-        if (BuildConfig.DEBUG) {
+        if (url.contains("dev.farm")|| url.contains("preprod.farm")) {
             Log.d("zero", "POST " + url);
             SSLSocketFactory sf = SSLSocketFactory.getSocketFactory();
             sf.setHostnameVerifier(SSLSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER);

@@ -217,6 +217,7 @@ public class ObservationFormFragment extends Fragment {
         }
         issuesChipsGroup.setVisibility(issuesCount > 0 ? View.VISIBLE : View.GONE);
 
+        // Display picture recycler
         picturesRecycler.setLayoutManager(new LinearLayoutManager(context, HORIZONTAL, false));
         picturesAdapter = new PicturesRecyclerAdapter(picturesList);
         picturesRecycler.setAdapter(picturesAdapter);
@@ -227,10 +228,13 @@ public class ObservationFormFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        if (picturesAdapter.getItemCount() == 0)
-            picturesRecycler.setVisibility(View.GONE);
-        else
+        Log.e("FormFragment", "onResume");
+        Log.e("FormFragment", "cultures -> " + culturesList.size());
+        // Hide or show picture recycler
+        if (picturesList.size() > 0 && picturesRecycler.getVisibility() == View.GONE)
             picturesRecycler.setVisibility(View.VISIBLE);
+        else if (picturesList.isEmpty() && picturesRecycler.getVisibility() == View.VISIBLE)
+            picturesRecycler.setVisibility(View.GONE);
     }
 
     @Override
@@ -293,8 +297,7 @@ public class ObservationFormFragment extends Fragment {
                             // Continue only if the File was successfully created
                             if (photoFile != null) {
                                 Uri photoURI = FileProvider.getUriForFile(ctx,
-                                        "ekylibre.zero.fileprovider",
-                                        photoFile);
+                                        "ekylibre.zero.fileprovider", photoFile);
                                 takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
                                 fragment.startActivityForResult(takePictureIntent, CAMERA);
                             }
@@ -304,6 +307,9 @@ public class ObservationFormFragment extends Fragment {
                         intent.setType("image/jpeg");
                         intent.setAction(Intent.ACTION_GET_CONTENT);
                         fragment.startActivityForResult(intent, GALLERY);
+                    }
+                    else {
+                        dialog.dismiss();
                     }
                 }
             }).setNegativeButton(R.string.cancel, (dialog, which) -> dialog.dismiss());

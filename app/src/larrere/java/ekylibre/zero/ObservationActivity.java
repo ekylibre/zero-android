@@ -25,6 +25,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import java.text.Collator;
 import java.util.ArrayList;
@@ -96,9 +97,10 @@ public class ObservationActivity extends AppCompatActivity implements
         description = null;
         if (activitiesList == null)
             getActivities();
+        if (culturesList == null)
+            culturesList = new ArrayList<>();
+
         issuesList = new ArrayList<>();
-//        if (issuesList == null)
-//            getIssues();
         picturesList = new ArrayList<>();
 
         fragmentManager = getSupportFragmentManager();
@@ -126,6 +128,13 @@ public class ObservationActivity extends AppCompatActivity implements
                 if (SimpleLocationService.class.getName().equals(service.service.getClassName()))
                     return true;
         return false;
+    }
+
+    private int getCulturesCount() {
+        int culturesCount = 0;
+        for (CultureItem culture : culturesList)
+            if (culture.is_selected) culturesCount++;
+        return culturesCount;
     }
 
     @Override
@@ -163,8 +172,12 @@ public class ObservationActivity extends AppCompatActivity implements
                 return true;
 
             case R.id.obs_save:
-                saveObservation();
-                finish();
+                if (getCulturesCount() > 0) {
+                    saveObservation();
+                    finish();
+                } else {
+                    Toast.makeText(this, "Vous devez choisir au moins une culture", Toast.LENGTH_LONG).show();
+                }
                 return true;
 
             default:
@@ -187,7 +200,6 @@ public class ObservationActivity extends AppCompatActivity implements
                 break;
 
             case ACTIVITY_FRAGMENT:
-                cleanData();
                 finish();
         }
 //        super.onBackPressed();
@@ -208,7 +220,6 @@ public class ObservationActivity extends AppCompatActivity implements
                 break;
 
             default:
-                cleanData();
                 finish();
 //                super.onSupportNavigateUp();
         }
@@ -216,24 +227,26 @@ public class ObservationActivity extends AppCompatActivity implements
     }
 
     @Override
+    protected void onStop() {
+        super.onStop();
+//        cleanData();
+    }
+
+    @Override
     protected void onDestroy() {
         super.onDestroy();
         stopService(serviceIntent);
+        cleanData();
     }
 
     @Override
     public void onActivityInteraction(ActivityItem item) {
-        boolean newfilter = true;
-        if (selectedActivity != null) {
-            if (!selectedActivity.variety.equals(item.variety))
+        if (selectedActivity != null)
+            if (!selectedActivity.variety.equals(item.variety) || culturesList.isEmpty())
                 selectedBBCH = null;
-            else
-                newfilter = false;
-        }
         selectedActivity = item;
         replaceFragmentWith(FORM_FRAGMENT);
-        if (newfilter)
-            filterWithActivity(item);
+        filterCulturesWithActivity(item);
     }
 
     @Override
@@ -300,7 +313,7 @@ public class ObservationActivity extends AppCompatActivity implements
     }
 
     void cleanData() {
-        picturesList.clear();
+//        picturesList.clear();
         culturesList.clear();
     }
 
@@ -380,8 +393,7 @@ public class ObservationActivity extends AppCompatActivity implements
                 }
             }
         }
-
-        cleanData();
+        Toast.makeText(this, "Observation enregistrée", Toast.LENGTH_LONG).show();
     }
 
     private long saveIssue(IssueItem issue) {
@@ -466,7 +478,7 @@ public class ObservationActivity extends AppCompatActivity implements
         Log.e(TAG, issuesList.toString());
     }
 
-    private void filterWithActivity(ActivityItem activity) {
+    private void filterCulturesWithActivity(ActivityItem activity) {
 
         culturesList = new ArrayList<>();
 
