@@ -8,6 +8,12 @@
             android:id="@+id/nav_tracking"
             android:icon="@drawable/ic_tracking"
             android:title="@string/tracking" />
+
+        <item
+            android:id="@+id/intervention"
+            android:icon="@drawable/action_travel"
+            android:title="@string/new_intervention" />
+
         <item
             android:id="@+id/nav_observation"
             android:icon="@drawable/ic_rate_review"
