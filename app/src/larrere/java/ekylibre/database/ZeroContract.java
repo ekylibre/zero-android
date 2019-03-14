@@ -218,6 +218,21 @@ public final class ZeroContract {
         String POSITION = "position";
     }
 
+    public interface EquipmentColumns extends BaseColumns {
+        String TABLE_NAME = "equipments";
+        String NAME = "name";
+        String NUMBER = "number";
+        String TYPE = "type";
+    }
+
+    public interface ArticleColumns extends BaseColumns {
+        String TABLE_NAME = "articles";
+        String NAME = "name";
+        String NUMBER = "number";
+        String TYPE = "type";
+        String UNIT = "unit";
+    }
+
     public static final class Crumbs implements CrumbsColumns {
         // Content URI for this table
         public static final Uri CONTENT_URI = Uri.withAppendedPath(ZeroContract.CONTENT_URI, "crumbs");
@@ -510,5 +525,33 @@ public final class ZeroContract {
         public static final String[] PROJECTION_ALL = {_ID, REFERENCE, LABEL, VARIETY, POSITION};
 
         public static final String SORT_ORDER_DEFAULT = POSITION + " ASC";
+    }
+
+    public static final class Equipments implements EquipmentColumns {
+
+        // Content URI for this table
+        public static final Uri CONTENT_URI = Uri.withAppendedPath(
+                ZeroContract.CONTENT_URI,"equipments");
+        // MIME type for list and individual record.
+        public static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE +
+                "/vnd.ekylibre.zero.equipments";
+
+        public static final String[] PROJECTION_ALL = {_ID, NAME, NUMBER, TYPE};
+
+        public static final String SORT_ORDER_DEFAULT = NAME + " ASC";
+    }
+
+    public static final class Articles implements ArticleColumns {
+
+        // Content URI for this table
+        public static final Uri CONTENT_URI = Uri.withAppendedPath(
+                ZeroContract.CONTENT_URI,"articles");
+        // MIME type for list and individual record.
+        public static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE +
+                "/vnd.ekylibre.zero.articles";
+
+        public static final String[] PROJECTION_ALL = {_ID, NAME, NUMBER, TYPE, UNIT};
+
+        public static final String SORT_ORDER_DEFAULT = NAME + " ASC";
     }
 }

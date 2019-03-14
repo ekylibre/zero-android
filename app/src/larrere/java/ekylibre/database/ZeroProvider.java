@@ -48,6 +48,7 @@ public class ZeroProvider extends ContentProvider {
     public static final int ROUTE_LAST_SYNCS_LIST = 1300;
     public static final int ROUTE_LAST_SYNCS_ITEM = 1301;
 
+    // Observation feature
     public static final int ROUTE_OBSERVATIONS_LIST = 1400;
     public static final int ROUTE_OBSERVATIONS_ITEM = 1401;
     public static final int ROUTE_OBSERVATION_PLANTS_LIST = 1402;
@@ -58,6 +59,12 @@ public class ZeroProvider extends ContentProvider {
     public static final int ROUTE_ISSUE_NATURES_ITEM = 1407;
     public static final int ROUTE_VEGETAL_SCALE_LIST = 1408;
     public static final int ROUTE_VEGETAL_SCALE_ITEM = 1409;
+
+    // Intervention with params feature
+    public static final int ROUTE_EQUIPMENTS_LIST = 1500;
+    public static final int ROUTE_EQUIPMENTS_ITEM = 1501;
+    public static final int ROUTE_ARTICLES_LIST = 1502;
+    public static final int ROUTE_ARTICLES_ITEM = 1503;
 
     // UriMatcher, used to decode incoming URIs.
     private static final UriMatcher URI_MATCHER = new UriMatcher(UriMatcher.NO_MATCH);

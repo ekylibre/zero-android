@@ -466,6 +466,25 @@ public class DatabaseHelper extends SQLiteOpenHelper
                 if (newVersion == 21)
                     break;
             }
+            case 22:
+            {
+                database.execSQL("CREATE TABLE IF NOT EXISTS " + ZeroContract.Equipments.TABLE_NAME + "(" +
+                        ZeroContract.Equipments._ID + " INTEGER PRIMARY KEY, " +
+                        ZeroContract.Equipments.NAME + " TEXT NOT NULL, " +
+                        ZeroContract.Equipments.NUMBER + " TEXT, " +
+                        ZeroContract.Equipments.TYPE + " TEXT NOT NULL)");
+
+                database.execSQL("CREATE TABLE IF NOT EXISTS " + ZeroContract.Articles.TABLE_NAME + "(" +
+                        ZeroContract.Articles._ID + " INTEGER PRIMARY KEY, " +
+                        ZeroContract.Articles.NAME + " TEXT NOT NULL, " +
+                        ZeroContract.Articles.NUMBER + " TEXT, " +
+                        ZeroContract.Articles.TYPE + " TEXT NOT NULL, " +
+                        ZeroContract.Articles.UNIT + " TEXT)");
+
+
+                if (newVersion == 22)
+                    break;
+            }
         }
     }
 }
