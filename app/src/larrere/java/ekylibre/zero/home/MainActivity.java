@@ -46,6 +46,7 @@ import ekylibre.zero.PlantCountingActivity;
 import ekylibre.zero.R;
 import ekylibre.zero.SettingsActivity;
 import ekylibre.zero.account.AccountManagerActivity;
+import ekylibre.zero.inter.InterActivity;
 import ekylibre.zero.intervention.InterventionActivity;
 
 /**************************************
@@ -332,6 +333,12 @@ public class MainActivity extends UpdatableActivity
             case R.id.nav_tracking :
             {
                 launchIntervention(null);
+                break;
+            }
+            case R.id.intervention :
+            {
+                Intent intent = new Intent(this, InterActivity.class);
+                startActivity(intent);
                 break;
             }
             case R.id.nav_observation:

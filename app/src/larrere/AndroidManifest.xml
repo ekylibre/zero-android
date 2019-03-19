@@ -2,10 +2,13 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <application android:label="@string/app_name"
-        tools:ignore="AllowBackup,GoogleAppIndexingWarning">  <!-- TODO handle GoogleAppIndexing -->
-
-        <activity android:name="ekylibre.zero.ObservationActivity"
+    <application
+        android:label="@string/app_name"
+        tools:ignore="AllowBackup,GoogleAppIndexingWarning">
+        <activity android:name="ekylibre.zero.inter.InterActivity" />
+        <!-- TODO handle GoogleAppIndexing -->
+        <activity
+            android:name="ekylibre.zero.ObservationActivity"
             android:parentActivityName="ekylibre.zero.home.MainActivity" />
 
         <service android:name="ekylibre.service.SimpleLocationService" />
@@ -19,7 +22,6 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths" />
         </provider>
-
     </application>
 
 </manifest>
