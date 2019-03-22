@@ -7,12 +7,20 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import ekylibre.util.AccountTool;
+import ekylibre.util.XMLReader;
+import ekylibre.util.pojo.ProcedureEntity;
 import ekylibre.zero.R;
 import ekylibre.zero.inter.fragment.ProcedureChoice1Fragment;
 
 import android.accounts.Account;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
+
+import org.xmlpull.v1.XmlPullParserException;
+
+import java.io.IOException;
+import java.io.InputStream;
 
 public class InterActivity extends AppCompatActivity
         implements ProcedureChoice1Fragment.OnFragmentInteractionListener {
@@ -88,7 +96,22 @@ public class InterActivity extends AppCompatActivity
     }
 
     @Override
-    public void onFragmentInteraction(Uri uri) {
+    public void onFragmentInteraction(int id) {
+
+        switch (id) {
+            case R.id.administering:
+                XMLReader xmlReader = new XMLReader();
+                try {
+                    InputStream is = getAssets().open("procedures/animal_group_changing.xml");
+                    ProcedureEntity procedureEntity = xmlReader.parse(is);
+                    Log.e("InterActivity", procedureEntity.toString());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (XmlPullParserException e) {
+                    e.printStackTrace();
+                }
+
+        }
 
     }
 }

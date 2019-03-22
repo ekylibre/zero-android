@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<procedures xmlns="http://www.ekylibre.org/XML/2013/procedures">
+  <procedure name="spraying" categories="crop_protection" optional-actions="herbicide, fungicide, insecticide, growth_regulator, biostimulation, molluscicide, nematicide, acaricide, bactericide, rodenticide, talpicide, corvicide, game_repellent, virucide, desiccation, fireproofing">
+    <parameters>
+      <target name="cultivation" filter="(is plant or is land_parcel) and has indicator shape">
+        <attribute name="working_zone" default-value="PRODUCT.shape" if="PRODUCT?"/>
+        <attribute name="killable"/>
+      </target>
+      <input name="plant_medicine" filter="is preparation and can care(plant)" display-status="miscibility" >
+        <handler name="population"/>
+        <handler indicator="net_mass" unit="kilogram"
+                 if="population_counting_is(PRODUCT, :decimal) > 0 and PRODUCT..net_mass?"
+                 backward="POPULATION * PRODUCT..net_mass(kilogram)"
+                 forward="VALUE / PRODUCT..net_mass(kilogram)"/>
+        <handler indicator="mass_area_density" unit="kilogram_per_hectare"
+                 if="PRODUCT..net_mass? and sum_working_zone_areas(cultivation) != 0"
+                 backward="(POPULATION * PRODUCT..net_mass(kilogram)) / sum_working_zone_areas(cultivation, :hectare)"
+                 forward="(VALUE * sum_working_zone_areas(cultivation, :hectare)) / PRODUCT..net_mass(kilogram)"/>
+        <handler indicator="volume_area_density" unit="liter_per_hectare"
+                 if="PRODUCT..net_volume? and sum_working_zone_areas(cultivation) != 0"
+                 backward="(POPULATION * PRODUCT..net_volume(liter)) / sum_working_zone_areas(cultivation, :hectare)"
+                 forward="(VALUE * sum_working_zone_areas(cultivation, :hectare)) / PRODUCT..net_volume(liter)"/>
+      </input>
+      <doer name="driver" filter="can drive(tractor) and can move" cardinality="*"/>
+      <tool name="tractor" filter="is equipment and can catch(equipment)" cardinality="*"/>
+      <tool name="sprayer" filter="can spray" cardinality="*"/>
+    </parameters>
+  </procedure>
+</procedures>

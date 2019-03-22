@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+<procedures xmlns="http://www.ekylibre.org/XML/2013/procedures">
+  <procedure name="straw_bunching" categories="harvesting" actions="straw_bunching">
+    <parameters>
+      <target name="cultivation" filter="(is plant or is land_parcel) and has indicator shape">
+        <attribute name="working_zone" default-value="PRODUCT.shape" if="PRODUCT?"/>
+        <attribute name="killable"/>
+      </target>
+      <input name="straw_to_bunch" filter="is grass and derives from plant" cardinality="*">
+        <handler name="population"/>
+      </input>
+      <output name="straw_bales" filter="is grass and derives from plant" cardinality="*">
+        <attribute name="new_name"/><!--  value="'{{variant}} [{{birth_day}}/{{birth_month}}/{{birth_year}}] ({{container}})'" -->
+        <handler name="population"/>
+        <handler indicator="net_mass" unit="ton"
+                 backward="POPULATION * VARIANT.net_mass(ton)"
+                 forward="VALUE / VARIANT.net_mass(ton)"/>
+        <handler indicator="fodder_bales_count" unit="unity"
+                 backward="POPULATION * VARIANT.fodder_bales_count(unity)"
+                 forward="VALUE / VARIANT.fodder_bales_count(unity)"
+                 if="VARIANT.fodder_bales_count(unity) > 0" />
+        <handler indicator="mass_area_density" unit="quintal_per_hectare"
+                 backward="(POPULATION * VARIANT.net_mass(quintal)) / sum(cultivation, :net_surface_area, :hectare)"
+                 forward="(VALUE * sum(cultivation, :net_surface_area, :hectare)) / VARIANT.net_mass(quintal)"/>
+        <handler name="mass_area_density_in_ton_per_hectare" indicator="mass_area_density" unit="ton_per_hectare"
+                 backward="(POPULATION * VARIANT.net_mass(ton)) / sum(cultivation, :net_surface_area, :hectare)"
+                 forward="(VALUE * sum(cultivation, :net_surface_area, :hectare)) / VARIANT.net_mass(ton)"/>
+      </output>
+      <doer name="driver" filter="can move and can drive(equipment)" cardinality="*"/>
+      <tool name="tractor" filter="is equipment and can tow(equipment)" cardinality="*"/>
+      <tool name="baler" filter="is equipment and can bunch" cardinality="*"/>
+    </parameters>
+  </procedure>
+</procedures>
