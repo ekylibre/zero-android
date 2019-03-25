@@ -10,18 +10,19 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import ekylibre.util.pojo.GenericEntity;
+import ekylibre.util.pojo.InputEntity;
 import ekylibre.util.pojo.ProcedureEntity;
 import ekylibre.util.pojo.TargetEntity;
 import ekylibre.zero.BuildConfig;
 
 
-public class XMLReader {
+public class ProceduresXMLReader {
 
     private static final String TAG = "XMLParser";
     private static final String ns = null;
     private ProcedureEntity procedureEntity;
 
-    public XMLReader() {}
+    public ProceduresXMLReader() {}
 
     public ProcedureEntity parse(InputStream in) throws XmlPullParserException, IOException {
         try {
@@ -106,6 +107,39 @@ public class XMLReader {
                 case "target":
                     procedureEntity.target.add(readTarget(parser));
                     break;
+                case "input":
+                    procedureEntity.input.add(readInput(parser));
+                    break;
+                case "tool":
+                    procedureEntity.tool.add(readTool(parser));
+                    break;
+                case "group":
+                    readGroup(parser);
+                    break;
+                default:
+                    skip(parser);
+                    break;
+            }
+        }
+    }
+
+    private void readGroup(XmlPullParser parser) throws XmlPullParserException, IOException {
+        parser.require(XmlPullParser.START_TAG, ns, "group");
+
+        while (parser.next() != XmlPullParser.END_TAG) {
+            if (parser.getEventType() != XmlPullParser.START_TAG)
+                continue;
+
+            switch (parser.getName()) {
+                case "doer":
+                    procedureEntity.doer.add(readDoer(parser));
+                    break;
+                case "target":
+                    procedureEntity.target.add(readTarget(parser));
+                    break;
+                case "input":
+                    procedureEntity.input.add(readInput(parser));
+                    break;
                 case "tool":
                     procedureEntity.tool.add(readTool(parser));
                     break;
@@ -143,6 +177,35 @@ public class XMLReader {
         }
 
         return targetEntity;
+    }
+
+    private InputEntity readInput(XmlPullParser parser) throws IOException, XmlPullParserException {
+
+        parser.require(XmlPullParser.START_TAG, ns, "input");
+        InputEntity inputEntity = new InputEntity();
+
+        inputEntity.name = parser.getAttributeValue(ns, "name");
+        inputEntity.filter = parser.getAttributeValue(ns, "filter");
+
+        // Skip attribute balises for now
+        while (true) {
+            parser.nextTag();
+            String name = parser.getName();
+            if (BuildConfig.DEBUG)
+                Log.i(TAG, "node --> " + name);
+            if (name.equals("input"))
+                break;
+        }
+
+        parser.require(XmlPullParser.END_TAG, ns, "input");
+
+        if (BuildConfig.DEBUG) {
+            Log.i(TAG, "parsing [input] node...");
+            Log.i(TAG, "Input name = " + inputEntity.name);
+            Log.i(TAG, "Input filter = " + inputEntity.filter);
+        }
+
+        return inputEntity;
     }
 
     private GenericEntity readDoer(XmlPullParser parser) throws IOException, XmlPullParserException {

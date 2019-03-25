@@ -7,13 +7,12 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import ekylibre.util.AccountTool;
-import ekylibre.util.XMLReader;
+import ekylibre.util.ProceduresXMLReader;
 import ekylibre.util.pojo.ProcedureEntity;
 import ekylibre.zero.R;
 import ekylibre.zero.inter.fragment.ProcedureChoice1Fragment;
 
 import android.accounts.Account;
-import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 
@@ -100,10 +99,10 @@ public class InterActivity extends AppCompatActivity
 
         switch (id) {
             case R.id.administering:
-                XMLReader xmlReader = new XMLReader();
+                ProceduresXMLReader proceduresXmlReader = new ProceduresXMLReader();
                 try {
-                    InputStream is = getAssets().open("procedures/animal_group_changing.xml");
-                    ProcedureEntity procedureEntity = xmlReader.parse(is);
+                    InputStream is = getAssets().open("procedures/all_in_one_sowing.xml");
+                    ProcedureEntity procedureEntity = proceduresXmlReader.parse(is);
                     Log.e("InterActivity", procedureEntity.toString());
                 } catch (IOException e) {
                     e.printStackTrace();
