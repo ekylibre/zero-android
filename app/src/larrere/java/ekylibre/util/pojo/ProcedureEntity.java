@@ -9,6 +9,7 @@ public class ProcedureEntity {
     public String categories;
     public List<TargetEntity> target;
     public List<InputEntity> input;
+    public List<OutputEntity> output;
     public List<GenericEntity> doer;
     public List<GenericEntity> tool;
 
@@ -26,5 +27,6 @@ public class ProcedureEntity {
         this.doer = new ArrayList<>();
         this.tool = new ArrayList<>();
         this.input = new ArrayList<>();
+        this.output = new ArrayList<>();
     }
 }

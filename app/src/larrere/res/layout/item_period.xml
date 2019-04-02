@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--<androidx.constraintlayout.widget.ConstraintLayout-->
+    <!--xmlns:android="http://schemas.android.com/apk/res/android"-->
+    <!--xmlns:app="http://schemas.android.com/apk/res-auto"-->
+    <!--xmlns:tools="http://schemas.android.com/tools"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:padding="12dp"-->
+    <!--android:background="@drawable/background_round_corners">-->
+
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+
+    tools:cardCornerRadius="10dp"
+    app:cardBackgroundColor="@color/background_grey"
+    tools:cardElevation="5dp"
+    tools:cardUseCompatPadding="true">
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/period_label_begin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBaseline_toBaselineOf="@id/period_begin_field"
+        android:text="Début"/>
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/period_label_end"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBaseline_toBaselineOf="@id/period_end_field"
+        app:layout_constraintStart_toStartOf="parent"
+        android:text="Fin"/>
+
+    <androidx.constraintlayout.widget.Barrier
+        android:id="@+id/period_labels_barrier"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:barrierDirection="right"
+        app:constraint_referenced_ids="period_label_begin,period_label_end"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <androidx.appcompat.widget.AppCompatEditText
+        android:id="@+id/period_begin_field"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toEndOf="@id/period_labels_barrier"
+        android:layout_marginStart="16dp"
+        android:paddingStart="@dimen/field_padding_horizontal"
+        android:paddingEnd="@dimen/field_padding_horizontal"
+        android:paddingTop="@dimen/field_padding_vertical"
+        android:paddingBottom="@dimen/field_padding_vertical"
+        tools:text="25 avril à 15h00"
+        android:textSize="16sp"
+        android:ems="10"
+        android:inputType="datetime"
+        android:background="@drawable/field_rounded_white"/>
+
+    <androidx.appcompat.widget.AppCompatEditText
+        android:id="@+id/period_end_field"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/period_begin_field"
+        app:layout_constraintStart_toEndOf="@id/period_labels_barrier"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:paddingStart="@dimen/field_padding_horizontal"
+        android:paddingEnd="@dimen/field_padding_horizontal"
+        android:paddingTop="@dimen/field_padding_vertical"
+        android:paddingBottom="@dimen/field_padding_vertical"
+        tools:text="25 avril à 16h37"
+        android:textSize="16sp"
+        android:ems="10"
+        android:inputType="datetime"
+        android:background="@drawable/field_rounded_white"/>
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:srcCompat="@drawable/cancel"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:adjustViewBounds="true"
+        android:scaleType="fitXY"/>
+
+</com.google.android.material.card.MaterialCardView>

@@ -11,6 +11,7 @@ import java.io.InputStream;
 
 import ekylibre.util.pojo.GenericEntity;
 import ekylibre.util.pojo.InputEntity;
+import ekylibre.util.pojo.OutputEntity;
 import ekylibre.util.pojo.ProcedureEntity;
 import ekylibre.util.pojo.TargetEntity;
 import ekylibre.zero.BuildConfig;
@@ -56,9 +57,9 @@ public class ProceduresXMLReader {
                 procedureEntity.categories = parser.getAttributeValue(ns, "categories");
 
                 if (BuildConfig.DEBUG) {
-                    Log.i(TAG, "parsing [procedure] node...");
-                    Log.i(TAG, "Procedure name = " + procedureEntity.name);
-                    Log.i(TAG, "Categories = " + procedureEntity.categories);
+                    Log.d(TAG, "parsing [procedure] node...");
+                    Log.d(TAG, "Procedure name = " + procedureEntity.name);
+                    Log.d(TAG, "Categories = " + procedureEntity.categories);
                 }
 
                 readProcedure(parser);
@@ -100,7 +101,9 @@ public class ProceduresXMLReader {
             if (parser.getEventType() != XmlPullParser.START_TAG)
                 continue;
 
-            switch (parser.getName()) {
+            String name = parser.getName();
+
+            switch (name) {
                 case "doer":
                     procedureEntity.doer.add(readDoer(parser));
                     break;
@@ -109,6 +112,9 @@ public class ProceduresXMLReader {
                     break;
                 case "input":
                     procedureEntity.input.add(readInput(parser));
+                    break;
+                case "output":
+                    procedureEntity.output.add(readOuput(parser));
                     break;
                 case "tool":
                     procedureEntity.tool.add(readTool(parser));
@@ -126,28 +132,41 @@ public class ProceduresXMLReader {
     private void readGroup(XmlPullParser parser) throws XmlPullParserException, IOException {
         parser.require(XmlPullParser.START_TAG, ns, "group");
 
-        while (parser.next() != XmlPullParser.END_TAG) {
-            if (parser.getEventType() != XmlPullParser.START_TAG)
-                continue;
-
-            switch (parser.getName()) {
-                case "doer":
-                    procedureEntity.doer.add(readDoer(parser));
-                    break;
-                case "target":
-                    procedureEntity.target.add(readTarget(parser));
-                    break;
-                case "input":
-                    procedureEntity.input.add(readInput(parser));
-                    break;
-                case "tool":
-                    procedureEntity.tool.add(readTool(parser));
-                    break;
-                default:
-                    skip(parser);
-                    break;
-            }
+        if (BuildConfig.DEBUG) {
+            Log.d(TAG, "parsing [group] node...");
         }
+
+        String name = parser.getName();
+
+        if (name.equals("zone")) {
+
+            while (parser.next() != XmlPullParser.END_TAG) {
+                if (parser.getEventType() != XmlPullParser.START_TAG)
+                    continue;
+
+                switch (parser.getName()) {
+                    case "doer":
+                        procedureEntity.doer.add(readDoer(parser));
+                        break;
+                    case "target":
+                        procedureEntity.target.add(readTarget(parser));
+                        break;
+                    case "input":
+                        procedureEntity.input.add(readInput(parser));
+                        break;
+                    case "output":
+                        procedureEntity.output.add(readOuput(parser));
+                        break;
+                    case "tool":
+                        procedureEntity.tool.add(readTool(parser));
+                        break;
+                    default:
+                        skip(parser);
+                        break;
+                }
+            }
+        } else
+            skip(parser);
     }
 
     private TargetEntity readTarget(XmlPullParser parser) throws IOException, XmlPullParserException {
@@ -157,13 +176,14 @@ public class ProceduresXMLReader {
 
         targetEntity.name = parser.getAttributeValue(ns, "name");
         targetEntity.filter = parser.getAttributeValue(ns, "filter");
+        targetEntity.cardinality = parser.getAttributeValue(ns, "cardinality");
 
         // Skip attribute balises for now
         while (true) {
             parser.nextTag();
             String name = parser.getName();
             if (BuildConfig.DEBUG)
-                Log.i(TAG, "node --> " + name);
+                Log.d(TAG, "node --> " + name);
             if (name.equals("target"))
                 break;
         }
@@ -171,9 +191,9 @@ public class ProceduresXMLReader {
         parser.require(XmlPullParser.END_TAG, ns, "target");
 
         if (BuildConfig.DEBUG) {
-            Log.i(TAG, "parsing [target] node...");
-            Log.i(TAG, "Taget name = " + targetEntity.name);
-            Log.i(TAG, "Target filter = " + targetEntity.filter);
+            Log.d(TAG, "parsing [target] node...");
+            Log.d(TAG, "Taget name = " + targetEntity.name);
+            Log.d(TAG, "Target filter = " + targetEntity.filter);
         }
 
         return targetEntity;
@@ -192,7 +212,7 @@ public class ProceduresXMLReader {
             parser.nextTag();
             String name = parser.getName();
             if (BuildConfig.DEBUG)
-                Log.i(TAG, "node --> " + name);
+                Log.d(TAG, "node --> " + name);
             if (name.equals("input"))
                 break;
         }
@@ -200,12 +220,41 @@ public class ProceduresXMLReader {
         parser.require(XmlPullParser.END_TAG, ns, "input");
 
         if (BuildConfig.DEBUG) {
-            Log.i(TAG, "parsing [input] node...");
-            Log.i(TAG, "Input name = " + inputEntity.name);
-            Log.i(TAG, "Input filter = " + inputEntity.filter);
+            Log.d(TAG, "parsing [input] node...");
+            Log.d(TAG, "Input name = " + inputEntity.name);
+            Log.d(TAG, "Input filter = " + inputEntity.filter);
         }
 
         return inputEntity;
+    }
+
+    private OutputEntity readOuput(XmlPullParser parser) throws IOException, XmlPullParserException {
+
+        parser.require(XmlPullParser.START_TAG, ns, "output");
+        OutputEntity outputEntity = new OutputEntity();
+
+        outputEntity.name = parser.getAttributeValue(ns, "name");
+        outputEntity.filter = parser.getAttributeValue(ns, "filter");
+
+        // Skip attribute balises for now
+        while (true) {
+            parser.nextTag();
+            String name = parser.getName();
+            if (BuildConfig.DEBUG)
+                Log.d(TAG, "node --> " + name);
+            if (name.equals("output"))
+                break;
+        }
+
+        parser.require(XmlPullParser.END_TAG, ns, "output");
+
+        if (BuildConfig.DEBUG) {
+            Log.d(TAG, "parsing [output] node...");
+            Log.d(TAG, "output name = " + outputEntity.name);
+            Log.d(TAG, "output filter = " + outputEntity.filter);
+        }
+
+        return outputEntity;
     }
 
     private GenericEntity readDoer(XmlPullParser parser) throws IOException, XmlPullParserException {
@@ -221,10 +270,10 @@ public class ProceduresXMLReader {
         parser.require(XmlPullParser.END_TAG, ns, "doer");
 
         if (BuildConfig.DEBUG) {
-            Log.i(TAG, "parsing [doer] node...");
-            Log.i(TAG, "Doer name = " + doerEntity.name);
-            Log.i(TAG, "Doer filter = " + doerEntity.filter);
-            Log.i(TAG, "Doer cardinality = " + doerEntity.cardinality);
+            Log.d(TAG, "parsing [doer] node...");
+            Log.d(TAG, "Doer name = " + doerEntity.name);
+            Log.d(TAG, "Doer filter = " + doerEntity.filter);
+            Log.d(TAG, "Doer cardinality = " + doerEntity.cardinality);
         }
 
         return doerEntity;
@@ -243,10 +292,10 @@ public class ProceduresXMLReader {
         parser.require(XmlPullParser.END_TAG, ns, "tool");
 
         if (BuildConfig.DEBUG) {
-            Log.i(TAG, "parsing [tool] node...");
-            Log.i(TAG, "Tool name = " + toolEntity.name);
-            Log.i(TAG, "Tool filter = " + toolEntity.filter);
-            Log.i(TAG, "Tool cardinality = " + toolEntity.cardinality);
+            Log.d(TAG, "parsing [tool] node...");
+            Log.d(TAG, "Tool name = " + toolEntity.name);
+            Log.d(TAG, "Tool filter = " + toolEntity.filter);
+            Log.d(TAG, "Tool cardinality = " + toolEntity.cardinality);
         }
 
         return toolEntity;
@@ -255,7 +304,7 @@ public class ProceduresXMLReader {
     private void skip(XmlPullParser parser) throws XmlPullParserException, IOException {
 
         if (BuildConfig.DEBUG)
-            Log.i(TAG, "skipping...");
+            Log.d(TAG, "skipping...");
 
         if (parser.getEventType() != XmlPullParser.START_TAG)
             throw new IllegalStateException();

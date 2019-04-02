@@ -73,8 +73,6 @@ public class ActivitiesRecyclerAdapter extends RecyclerView.Adapter<ActivitiesRe
             // Send back item to activity
             view.postDelayed(() -> fragmentListener.onActivityInteraction(activity), 200);
         }
-
-
     }
 
     @NonNull

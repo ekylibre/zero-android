@@ -1,13 +1,135 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Larrère Farms</string>
-
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="today">today</string>
     <string name="yesterday">yesterday</string>
     <string name="observation">observation</string>
     <string name="description">Description</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <!-- Procedure families -->
+    <string name="administering">Administering</string>
+    <string name="animal_farming">Animal farming</string>
+    <string name="plant_farming">Végétal farming</string>
+    <string name="processing">Processing</string>
+    <string name="tool_maintaining">Maintenance</string>
+
+    <!-- Procedure catagories -->
+    <string name="administrative_tasks">Administrative tasks</string>
+    <string name="animal_breeding">Animal breeding</string>
+    <string name="animal_feeding">Animal feeding</string>
+    <string name="animal_identification">Identification</string>
+    <string name="animal_production">Animal production</string>
+    <string name="animal_treating">Animal treating</string>
+    <string name="building_maintenance">Building maintenance</string>
+    <string name="cook_transformation">Cook transformation</string>
+    <string name="crop_maintenance">Crop maintenance</string>
+    <string name="crop_protection">Crop protection</string>
+    <string name="dairy_transformation">Dairy transformation</string>
+    <string name="energy_supplying">Energy supplying</string>
+    <string name="equipment_maintenance">Equipment maintenance</string>
+    <string name="fertilizing">Fertilization</string>
+    <string name="fish_transformation">Fish transformation</string>
+    <string name="habitat_maintenance">Habitat maintenance</string>
+    <string name="handling">Handling</string>
+    <string name="harvesting">Harvesting</string>
+    <string name="installations_modification">Facilities modifications</string>
+    <string name="irrigating">Irrigation</string>
+    <string name="land_maintenance">Land maintenance</string>
+    <string name="meat_transformation">Meat transformation</string>
+    <string name="packaging">Packaging</string>
+    <string name="planting">Crop plantation</string>
+    <string name="plants_transformation">Plants transformation</string>
+    <string name="soil_working">Soil preparation</string>
+    <string name="textile_transformation">Textile transformation</string>
+    <string name="troubleshooting">Troubleshooting</string>
+    <string name="viticulture_transformation">Viticulture transformation</string>
+    <string name="washing_packaging_transformation">Washing packaging transformation</string>
+
+    <!-- Procedure natures -->
+    <!--<string name="administrative_tasks">Administrative tasks</string>-->
+    <string name="all_in_one_sowing">All-in-one seeding</string>
+    <string name="animal_artificial_insemination">Artificial insemination</string>
+    <string name="animal_group_changing">Animal movement</string>
+    <string name="animal_housing_cleaning">Cleaning</string>
+    <string name="animal_housing_disinfection">Disinfection</string>
+    <string name="animal_housing_mulching">Mulching</string>
+    <string name="animal_veterinary_treatment">Veterinary treatment</string>
+    <string name="chaptalization">Chaptalization</string>
+    <string name="chemical_mechanical_weeding">Chemical and mechanical weeding</string>
+    <string name="complete_wine_transfer">Complete wine transfert</string>
+    <string name="crop_residues_grinding">Chopping</string>
+    <string name="cutting">Pruning</string>
+    <string name="detasseling">Detasseling</string>
+    <string name="direct_silage">Direct silage</string>
+    <string name="egg_collecting">Egg collecting</string>
+    <string name="enzyme_addition">Enzyme addition</string>
+    <string name="equipment_item_replacement">Equipment part replacement</string>
+    <!--<string name="equipment_maintenance">Equipment maintenance</string>-->
+    <string name="fermentation">Fermentation</string>
+    <!--<string name="fertilizing">Fertilizing</string>-->
+    <string name="field_plant_sorting">Field plant sorting</string>
+    <string name="food_preparation">Food preparation</string>
+    <string name="fuel_up">Fuel up</string>
+    <string name="gas_weeding">Gas weeding</string>
+    <string name="grape_pressing">Grape pressing</string>
+    <string name="grazing">Grazing</string>
+    <string name="greenhouse_assembling">Greenhouse assembling</string>
+    <string name="ground_destratification">Ground destratification</string>
+    <string name="hand_weeding">Hand weeding</string>
+    <!--<string name="handling">Handling</string>-->
+    <string name="harvest_transportation">Harvest transportation</string>
+    <!--<string name="harvesting">Harvesting</string>-->
+    <string name="herd_feeding">Herd feeding</string>
+    <string name="hilling">Ridging</string>
+    <string name="hilling_for_sifting">Ridging for sifting</string>
+    <string name="hoeing">Hoeing</string>
+    <string name="identification">Identification</string>
+    <string name="indirect_silage">Indirect silage</string>
+    <string name="individual_feeding">Individual feeding</string>
+    <string name="installation_maintenance">Installation maintenance</string>
+    <string name="inter_row_hoeing">Inter-row hoeing</string>
+    <string name="land_parcel_grinding">Land parcel grinding</string>
+    <string name="lifting">Lifting</string>
+    <string name="manual_feeding">Manual feeding</string>
+    <string name="mechanical_planting">Planting</string>
+    <string name="milking">Milking</string>
+    <string name="net_installation">Net installation</string>
+    <string name="net_removing">Net removing</string>
+    <string name="oil_replacement">Oil replacement</string>
+    <!--<string name="packaging">Packaging</string>-->
+    <string name="partial_wine_transfer">Partial wine transfert</string>
+    <string name="parturition">Parturition</string>
+    <string name="pasturing">Pasturing</string>
+    <string name="plant_cover_sowing">Plant cover sowing</string>
+    <string name="plant_covering">Plant covering</string>
+    <string name="plant_mowing">Plant mowing</string>
+    <string name="plant_mulching">Plant mulching</string>
+    <string name="plant_uncovering">Plant uncovering</string>
+    <string name="plant_watering">Plant irrigation</string>
+    <string name="plant_watering_installation">Irrigation setup</string>
+    <string name="plantation_unfixing">Plantation unfixing</string>
+    <string name="plants_sorting">Plants sorting</string>
+    <string name="plowing">Plowing</string>
+    <string name="pollination">Pollination</string>
+    <string name="raking">Harrowing</string>
+    <string name="seedbed_preparing">Seedbed preparing</string>
+    <string name="seedling_sorting">Seedling sorting</string>
+    <string name="sifting">Sifting</string>
+    <string name="sowing">Seeding</string>
+    <string name="sowing_with_spraying">Seeding with spraying</string>
+    <string name="spraying">Spraying</string>
+    <string name="standard_enclosing">Standard enclosing</string>
+    <string name="steam_weeding">Steam weeding</string>
+    <string name="straw_bunching">Straw bunching</string>
+    <string name="sulfur_addition">Sulfur addition</string>
+    <string name="superficial_plowing">Surface plowing</string>
+    <string name="swathing">Raking</string>
+    <string name="topkilling">Topkilling</string>
+    <string name="trellising">Trellising</string>
+    <string name="tunnel_installation">Tunnel installation</string>
+    <string name="tunnel_removing">Tunnel removing</string>
+    <string name="uncompacting">Subsoiling</string>
+    <string name="wine_blending">Wine blending</string>
+    <string name="wine_bottling">Wine bottling</string>
+
 </resources>
