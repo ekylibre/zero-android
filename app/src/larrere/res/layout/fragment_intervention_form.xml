@@ -42,22 +42,62 @@
                     app:layout_constraintTop_toTopOf="@id/form_period_icon"
                     app:layout_constraintBottom_toBottomOf="@id/form_period_icon"
                     app:layout_constraintStart_toEndOf="@id/form_period_icon"
-                    tools:text="Périodes"/>
-                <androidx.appcompat.widget.AppCompatTextView
+                    android:text="Périodes"/>
+                <com.google.android.material.button.MaterialButton
                     android:id="@+id/form_period_add"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     app:layout_constraintBaseline_toBaselineOf="@id/form_period_label"
                     app:layout_constraintEnd_toEndOf="parent"
-                    tools:text="+ ajouter"
-                    app:textAllCaps="true"/>
+                    android:text="+ ajouter"
+                    app:textAllCaps="true"
+                    style="@style/Widget.MaterialComponents.Button.TextButton"/>
                 <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/form_period_recycler"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     app:layout_constraintTop_toBottomOf="@id/form_period_icon"
                     app:layout_constraintBottom_toBottomOf="parent"
                     android:layout_marginTop="16dp"
-                    tools:listitem="@layout/item_period"/>
+                    tools:listitem="@layout/item_period" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <!--Crop / Parcel choice widget -->
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="16dp"
+                android:background="@drawable/border_bottom">
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/form_crop_icon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="24dp"
+                    app:srcCompat="@drawable/icon_field"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    android:adjustViewBounds="true"
+                    android:scaleType="fitXY"/>
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/form_crop_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    app:layout_constraintTop_toTopOf="@id/form_crop_icon"
+                    app:layout_constraintBottom_toBottomOf="@id/form_crop_icon"
+                    app:layout_constraintStart_toEndOf="@id/form_crop_icon"
+                    android:text="Culture / Parcelle"/>
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/form_crop_add"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintBaseline_toBaselineOf="@id/form_crop_label"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    android:text="+ ajouter"
+                    app:textAllCaps="true"
+                    style="@style/Widget.MaterialComponents.Button.TextButton"/>
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 

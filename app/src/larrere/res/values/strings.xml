@@ -131,5 +131,10 @@
     <string name="uncompacting">Subsoiling</string>
     <string name="wine_blending">Wine blending</string>
     <string name="wine_bottling">Wine bottling</string>
+    <string name="translation_missing">Traduction manquante</string>
+    <string name="end_time_before_begin">L\'heure de début ne peut etre après l\'heure de fin</string>
+    <string name="end_date_before_begin">La date de début ne peut tre après la date de fin</string>
+    <string name="crops">Cultures</string>
+    <string name="parcels">Parcelles</string>
 
 </resources>

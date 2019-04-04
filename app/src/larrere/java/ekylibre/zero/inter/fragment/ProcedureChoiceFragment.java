@@ -18,6 +18,7 @@ import android.view.ViewGroup;
 import java.util.List;
 import java.util.Objects;
 
+import ekylibre.zero.BuildConfig;
 import ekylibre.zero.R;
 import ekylibre.zero.inter.InterActivity;
 import ekylibre.zero.inter.adapter.ProcedureChoiceAdapter;
@@ -28,6 +29,7 @@ public class ProcedureChoiceFragment extends Fragment {
     private OnFragmentInteractionListener listener;
     private List<Pair<String,String>> dataset;
     private String fragmentTag;
+    private String titleRes;
     private static final String FRAGMENT_TAG = "tag";
 
     public ProcedureChoiceFragment() {}
@@ -47,31 +49,30 @@ public class ProcedureChoiceFragment extends Fragment {
         if (getArguments() != null)
             fragmentTag = getArguments().getString(FRAGMENT_TAG);
 
-        String titleRes = "";
-
         // Compute the dataset, filter by current family
         if (fragmentTag != null) {
             if (fragmentTag.equals(InterActivity.PROCEDURE_CATEGORY_FRAGMENT)) {
                 dataset = InterActivity.families.get(InterActivity.currentFamily.second);
                 titleRes = InterActivity.currentFamily.second;
             } else {
-                Log.e("tag", fragmentTag);
                 dataset = InterActivity.natures.get(InterActivity.currentCategory.first);
                 titleRes = InterActivity.currentCategory.first;
             }
         }
 
-        Log.e("ChoiceFragment", dataset.toString());
-
-        // Set fragment title to procedure family
-        int resId = getResources().getIdentifier(titleRes, "string",
-                Objects.requireNonNull(getActivity()).getPackageName());
-        InterActivity.actionBar.setTitle(resId);
+        if (BuildConfig.DEBUG)
+            Log.d("ChoiceFragment", dataset.toString());
     }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+        // Set fragment title to procedure family
+        int resId = getResources().getIdentifier(titleRes, "string",
+                Objects.requireNonNull(getActivity()).getPackageName());
+        InterActivity.actionBar.setTitle(resId);
+
         View view = inflater.inflate(R.layout.fragment_keyvalueitem_list, container, false);
 
         // Set the adapter

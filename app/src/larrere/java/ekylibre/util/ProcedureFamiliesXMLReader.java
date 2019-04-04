@@ -45,7 +45,7 @@ public class ProcedureFamiliesXMLReader {
 
     private Map<String, List<Pair<String,String>>> readFeed(XmlPullParser parser) throws XmlPullParserException, IOException {
 
-        Log.e(TAG, "parsing nomenclatures...");
+        Log.d(TAG, "parsing nomenclatures...");
 
         map = new HashMap<>();
 
@@ -112,7 +112,7 @@ public class ProcedureFamiliesXMLReader {
                 parser.require(XmlPullParser.END_TAG, ns, "item");
 
                 if (BuildConfig.DEBUG) {
-                    Log.i(TAG, "Item name = " + name);
+                    Log.d(TAG, "Item name = " + name);
                 }
 
             } else {
@@ -125,7 +125,7 @@ public class ProcedureFamiliesXMLReader {
     private void skip(XmlPullParser parser) throws XmlPullParserException, IOException {
 
         if (BuildConfig.DEBUG)
-            Log.i(TAG, "skipping...");
+            Log.d(TAG, "skipping...");
 
         if (parser.getEventType() != XmlPullParser.START_TAG)
             throw new IllegalStateException();

@@ -11,7 +11,10 @@ import ekylibre.util.AccountTool;
 import ekylibre.util.ProcedureFamiliesXMLReader;
 import ekylibre.util.ProceduresXMLReader;
 import ekylibre.util.pojo.ProcedureEntity;
+import ekylibre.zero.BuildConfig;
 import ekylibre.zero.R;
+import ekylibre.zero.inter.fragment.CropParcelChoiceFragment;
+import ekylibre.zero.inter.fragment.InterventionFormFragment;
 import ekylibre.zero.inter.fragment.ProcedureChoiceFragment;
 import ekylibre.zero.inter.fragment.ProcedureFamilyChoiceFragment;
 
@@ -29,10 +32,10 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-public class InterActivity extends AppCompatActivity implements
+public class InterActivity extends AppCompatActivity implements FragmentManager.OnBackStackChangedListener,
         ProcedureFamilyChoiceFragment.OnFragmentInteractionListener,
         ProcedureChoiceFragment.OnFragmentInteractionListener,
-        FragmentManager.OnBackStackChangedListener {
+                    InterventionFormFragment.OnFragmentInteractionListener {
 
     private static final String TAG = "NewInterventionActivity";
 
@@ -40,6 +43,7 @@ public class InterActivity extends AppCompatActivity implements
     public static final String PROCEDURE_CATEGORY_FRAGMENT = "ekylibre.zero.fragments.procedure.category";
     public static final String PROCEDURE_NATURE_FRAGMENT = "ekylibre.zero.fragments.procedure.nature";
     public static final String INTERVENTION_FORM = "ekylibre.zero.fragments.intervention.form";
+    public static final String CROP_CHOICE_FRAGMENT = "ekylibre.zero.fragments.crop.choice";
 
     private static final Pair<Integer,String> ADMINISTERING = Pair.create(R.id.administering, "administering");
     private static final Pair<Integer,String> ANIMAL_FARMING = Pair.create(R.id.animal_farming, "animal_farming");
@@ -55,6 +59,7 @@ public class InterActivity extends AppCompatActivity implements
     public static Pair<Integer,String> currentFamily;
     public static Pair<String,String> currentCategory;
     public static List<ProcedureEntity> procedures;
+    public static ProcedureEntity selectedProcedure;
     public static Map<String,List<Pair<String,String>>> families;
     public static Map<String,List<Pair<String,String>>> natures;
 
@@ -87,22 +92,21 @@ public class InterActivity extends AppCompatActivity implements
         // Load procedure logic from XML assets
         try {
             procedures = loadProcedures();
-            Log.e(TAG, procedures.toString());
             families = loadFamilies();
-            Log.e(TAG, families.toString());
-            Log.e("NatureLoaded", natures.toString());
         } catch (IOException e) {
             e.printStackTrace();
         } catch (XmlPullParserException e) {
             e.printStackTrace();
         }
-
     }
 
     void replaceFragmentWith(String fragmentTag) {
 
         // Update current fragment reference
         currentFragment = fragmentTag;
+
+        if (BuildConfig.DEBUG)
+            Log.i(TAG, "Current Fragment = " + currentFragment);
 
         FragmentTransaction ft = fragmentManager.beginTransaction();
         Fragment fragment;
@@ -112,6 +116,14 @@ public class InterActivity extends AppCompatActivity implements
             case PROCEDURE_CATEGORY_FRAGMENT:
             case PROCEDURE_NATURE_FRAGMENT:
                 fragment = ProcedureChoiceFragment.newInstance(fragmentTag);
+                break;
+
+            case INTERVENTION_FORM:
+                fragment = InterventionFormFragment.newInstance();
+                break;
+
+            case CROP_CHOICE_FRAGMENT:
+                fragment = CropParcelChoiceFragment.newInstance();
                 break;
 
             // Default to Procedure Family fragment
@@ -125,8 +137,6 @@ public class InterActivity extends AppCompatActivity implements
         ft.replace(R.id.fragment_container, fragment, fragmentTag);
         ft.addToBackStack(null);
         ft.commit();
-
-        Log.i(TAG, String.valueOf(fragmentManager.getBackStackEntryCount()));
 
     }
 
@@ -168,18 +178,28 @@ public class InterActivity extends AppCompatActivity implements
     @Override
     public void onItemChoosed(Pair<String,String> item, String fragmentRef) {
 
-        currentCategory = item;
+        if (BuildConfig.DEBUG)
+            Log.e(TAG, "ItemChosed and current fragment is = " + fragmentRef);
 
         switch (fragmentRef) {
             case PROCEDURE_CATEGORY_FRAGMENT:
+                currentCategory = item;
                 replaceFragmentWith(PROCEDURE_NATURE_FRAGMENT);
                 break;
             case PROCEDURE_NATURE_FRAGMENT:
                 Log.e(TAG, item.second);
-//                replaceFragmentWith(INTERVENTION_FORM);
+                selectedProcedure = getProcedureItem(item.first);
+                replaceFragmentWith(INTERVENTION_FORM);
                 break;
         }
 
+    }
+
+    public ProcedureEntity getProcedureItem(String name) {
+        for (ProcedureEntity procedure : procedures)
+            if (procedure.name.equals(name))
+                return procedure;
+        return null;
     }
 
     private List<ProcedureEntity> loadProcedures() throws IOException, XmlPullParserException {
@@ -252,5 +272,10 @@ public class InterActivity extends AppCompatActivity implements
             finish();
         else
             fragmentManager.popBackStack();
+    }
+
+    @Override
+    public void onCropChoice() {
+        replaceFragmentWith(CROP_CHOICE_FRAGMENT);
     }
 }
