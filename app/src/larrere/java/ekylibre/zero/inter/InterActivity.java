@@ -22,9 +22,12 @@ import android.accounts.Account;
 import android.os.Bundle;
 import android.util.ArrayMap;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
 
 import org.xmlpull.v1.XmlPullParserException;
 
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -32,10 +35,11 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-public class InterActivity extends AppCompatActivity implements FragmentManager.OnBackStackChangedListener,
+public class InterActivity extends AppCompatActivity implements
+        FragmentManager.OnBackStackChangedListener,
         ProcedureFamilyChoiceFragment.OnFragmentInteractionListener,
         ProcedureChoiceFragment.OnFragmentInteractionListener,
-                    InterventionFormFragment.OnFragmentInteractionListener {
+        InterventionFormFragment.OnFragmentInteractionListener {
 
     private static final String TAG = "NewInterventionActivity";
 
@@ -104,6 +108,7 @@ public class InterActivity extends AppCompatActivity implements FragmentManager.
 
         // Update current fragment reference
         currentFragment = fragmentTag;
+        invalidateOptionsMenu();
 
         if (BuildConfig.DEBUG)
             Log.i(TAG, "Current Fragment = " + currentFragment);
@@ -245,6 +250,12 @@ public class InterActivity extends AppCompatActivity implements FragmentManager.
     @Override
     public void onBackStackChanged() {
 
+        Fragment f = fragmentManager.findFragmentById(R.id.fragment_container);
+        if (f instanceof InterventionFormFragment) {
+            currentFragment = INTERVENTION_FORM;
+        }
+
+
         int backStack = fragmentManager.getBackStackEntryCount();
 
         if (backStack > 1 ) {
@@ -253,6 +264,11 @@ public class InterActivity extends AppCompatActivity implements FragmentManager.
         } else {
             actionBar.setHomeAsUpIndicator(R.drawable.close);
         }
+
+        Log.e(TAG, "Backstack changed");
+//        Fragment f = fragmentManager.findFragmentById(R.id.fragment_container);
+
+        invalidateOptionsMenu();
     }
 
     @Override
@@ -267,15 +283,30 @@ public class InterActivity extends AppCompatActivity implements FragmentManager.
     }
 
     private void previousFragmentOrQuit() {
+
         Fragment f = fragmentManager.findFragmentById(R.id.fragment_container);
         if (f instanceof ProcedureFamilyChoiceFragment)
             finish();
-        else
-            fragmentManager.popBackStack();
+        fragmentManager.popBackStack();
+
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+
+//        final Fragment frag = fragmentManager.findFragmentByTag(INTERVENTION_FORM);
+//        Log.i(TAG, "Main fragment ? --> " + frag);
+//        if (frag != null) {
+        if (currentFragment.equals(INTERVENTION_FORM)) {
+            MenuInflater inflater = getMenuInflater();
+            inflater.inflate(R.menu.intervention_options_menu, menu);
+        }
+        return true;
     }
 
     @Override
     public void onCropChoice() {
+        Log.i(TAG, "Choix de la culture");
         replaceFragmentWith(CROP_CHOICE_FRAGMENT);
     }
 }

@@ -44,6 +44,14 @@
         app:constraint_referenced_ids="period_label_begin,period_label_end"
         app:layout_constraintStart_toStartOf="parent" />
 
+    <androidx.constraintlayout.widget.Barrier
+        android:id="@+id/period_date_barrier"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:barrierDirection="right"
+        app:constraint_referenced_ids="period_begin_date_field,period_end_date_field"
+        app:layout_constraintStart_toStartOf="parent" />
+
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/period_begin_date_field"
         android:layout_width="wrap_content"
@@ -55,8 +63,6 @@
         android:paddingEnd="@dimen/field_padding_horizontal"
         android:paddingTop="@dimen/field_padding_vertical"
         android:paddingBottom="@dimen/field_padding_vertical"
-        android:ems="4"
-        android:gravity="center"
         tools:text="25 avr."
         android:textSize="16sp"
         android:background="@drawable/field_rounded_white" />
@@ -66,7 +72,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintBaseline_toBaselineOf="@id/period_label_begin"
-        app:layout_constraintStart_toEndOf="@id/period_begin_date_field"
+        app:layout_constraintStart_toEndOf="@id/period_date_barrier"
         app:layout_constraintEnd_toStartOf="@id/period_begin_time_field"
         android:paddingStart="16dp"
         android:paddingEnd="16dp"
@@ -99,8 +105,6 @@
         android:paddingEnd="@dimen/field_padding_horizontal"
         android:paddingTop="@dimen/field_padding_vertical"
         android:paddingBottom="@dimen/field_padding_vertical"
-        android:ems="4"
-        android:gravity="center"
         tools:text="25 avr."
         android:textSize="16sp"
         android:background="@drawable/field_rounded_white"
@@ -111,7 +115,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintBaseline_toBaselineOf="@id/period_label_end"
-        app:layout_constraintStart_toEndOf="@id/period_begin_date_field"
+        app:layout_constraintStart_toEndOf="@id/period_date_barrier"
         app:layout_constraintEnd_toStartOf="@id/period_begin_time_field"
         android:paddingStart="16dp"
         android:paddingEnd="16dp"
@@ -148,9 +152,9 @@
         android:layout_height="wrap_content"
         app:layout_constraintTop_toBottomOf="@id/period_end_date_field"
         app:layout_constraintStart_toStartOf="@string/packaging"
-        android:layout_marginTop="6dp"
-        android:text="La date de début ne peut etre après la date de fin"
+        android:layout_marginTop="8dp"
+        tools:text="La date de début ne peut etre après la date de fin"
         android:textColor="@color/basic_orange"
-        android:visibility="gone"/>
+        android:visibility="visible"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

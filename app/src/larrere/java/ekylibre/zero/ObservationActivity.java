@@ -261,9 +261,7 @@ public class ObservationActivity extends AppCompatActivity implements
     }
 
     @Override
-    public void onCultureFragmentInteraction(ActivityItem item) {
-
-    }
+    public void onCultureFragmentInteraction(ActivityItem item) {}
 
     void replaceFragmentWith(String fragmentTag) {
 
