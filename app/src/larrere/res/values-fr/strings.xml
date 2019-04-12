@@ -192,10 +192,13 @@
     <string name="wine_bottling">Embouteillage de vin</string>
 
     <string name="translation_missing">Traduction manquante</string>
-
     <string name="end_time_before_begin">L\'heure de début ne peut être après l\'heure de fin.</string>
     <string name="end_date_before_begin">La date de début ne peut être après la date de fin.</string>
     <string name="crops">Cultures</string>
     <string name="parcels">Parcelles</string>
+    <string name="simpleSelectableItem">Conducteur</string>
+    <string name="crop_parcel">Culture / Parcelle</string>
+    <string name="add">+ ajouter</string>
+    <string name="periods">Périodes</string>
 
 </resources>

@@ -12,15 +12,15 @@ import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 import ekylibre.zero.R;
-import ekylibre.zero.fragments.model.IssueItem;
+import ekylibre.zero.inter.InterActivity;
+import ekylibre.zero.inter.model.CropParcel;
 
-import static ekylibre.zero.ObservationActivity.issuesList;
 
 public class CropParcelAdapter extends RecyclerView.Adapter<CropParcelAdapter.ViewHolder> {
 
-    private final List<IssueItem> dataset;
+    private final List<CropParcel> dataset;
 
-    public CropParcelAdapter(List<IssueItem> items) {
+    public CropParcelAdapter(List<CropParcel> items) {
         dataset = items;
     }
 
@@ -28,10 +28,10 @@ public class CropParcelAdapter extends RecyclerView.Adapter<CropParcelAdapter.Vi
      * The item ViewHolder
      */
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        final View view;
-        final Context context;
-        final TextView nameTextView;
-        IssueItem issueItem;
+        View view;
+        Context context;
+        TextView textView;
+        CropParcel item;
         int pos;
 
 
@@ -39,43 +39,38 @@ public class CropParcelAdapter extends RecyclerView.Adapter<CropParcelAdapter.Vi
             super(itemView);
             view = itemView;
             context = view.getContext();
-            nameTextView = itemView.findViewById(R.id.item_issue_name);
+            textView = itemView.findViewById(R.id.intem_label);
+            // Set Click listener
             view.setOnClickListener(this);
         }
 
         void display(int position, int backgroundId) {
             pos = position;
-            issueItem = dataset.get(position);
+            item = dataset.get(position);
             int textColor = R.color.primary_text;
-            if (issueItem.is_selected) {
+            if (item.isSelected) {
                 backgroundId = R.color.basic_blue;
                 textColor = R.color.white;
             }
             // Set colors
-            nameTextView.setTextColor(ContextCompat.getColor(context, textColor));
+            textView.setTextColor(ContextCompat.getColor(context, textColor));
             view.setBackgroundColor(ContextCompat.getColor(context, backgroundId));
             // Set text
-            nameTextView.setText(issueItem.label);
+            textView.setText(item.name);
         }
 
         @Override
         public void onClick(View v) {
-            view.setSelected(!view.isSelected());
-            if (issueItem.is_selected) {
-                issueItem.is_selected = false;
-                for (IssueItem item : issuesList) {
-                    if (item.label.equals(issueItem.label)) {
-                        issuesList.remove(item);
-                        break;
-                    }
-                }
-            } else {
-                issueItem.is_selected = true;
-                issuesList.add(issueItem);
-            }
-//            issueItem.is_selected = !issueItem.is_selected;
 
+            if (item.isSelected)
+                InterActivity.selectedCropParcels.remove(item);
+            else
+                InterActivity.selectedCropParcels.add(item);
+
+            item.isSelected = !item.isSelected;
+            view.setSelected(!view.isSelected());
             notifyItemChanged(pos);
+
         }
     }
 
@@ -83,7 +78,7 @@ public class CropParcelAdapter extends RecyclerView.Adapter<CropParcelAdapter.Vi
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.item_issue, parent, false);
+                .inflate(R.layout.item_single_line, parent, false);
         return new ViewHolder(view);
     }
 

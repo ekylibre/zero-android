@@ -26,7 +26,7 @@
         app:layout_constraintTop_toTopOf="@id/form_period_icon"
         app:layout_constraintBottom_toBottomOf="@id/form_period_icon"
         app:layout_constraintStart_toEndOf="@id/form_period_icon"
-        android:text="Périodes"/>
+        android:text="@string/periods"/>
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/form_period_add"
@@ -34,7 +34,7 @@
         android:layout_height="wrap_content"
         app:layout_constraintBaseline_toBaselineOf="@id/form_period_label"
         app:layout_constraintEnd_toEndOf="parent"
-        android:text="+ ajouter"
+        android:text="@string/add"
         style="@style/AddTextButton"/>
 
     <androidx.recyclerview.widget.RecyclerView

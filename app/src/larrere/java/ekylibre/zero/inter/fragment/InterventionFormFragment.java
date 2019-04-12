@@ -1,35 +1,63 @@
 package ekylibre.zero.inter.fragment;
 
 import android.content.Context;
+import android.database.Cursor;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.google.android.material.chip.Chip;
+import com.google.android.material.chip.ChipGroup;
+
+import java.text.Collator;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import ekylibre.database.ZeroContract;
 import ekylibre.util.MarginTopItemDecoration;
 import ekylibre.util.Translate;
 import ekylibre.zero.R;
 import ekylibre.zero.inter.InterActivity;
 import ekylibre.zero.inter.adapter.FormPeriodAdapter;
 import ekylibre.zero.inter.model.CropParcel;
+import ekylibre.zero.inter.model.SimpleSelectableItem;
 import ekylibre.zero.inter.model.Period;
+
+import static ekylibre.zero.inter.InterActivity.CROP_CHOICE_FRAGMENT;
+import static ekylibre.zero.inter.InterActivity.DRIVER_CHOICE_FRAGMENT;
+
 
 public class InterventionFormFragment extends Fragment {
 
-    private static final String TAG = "InterventionFormFragment";
+    private static final String TAG = "FormFragment";
     private OnFragmentInteractionListener listener;
     private Context context;
     private List<Period> periodList;
-    private List<CropParcel> cropParcelList;
+    static List<CropParcel> cropParcelList;
+    static List<SimpleSelectableItem> driverList;
+
+    // LAYOUT BINDINGS
+    @BindView(R.id.form_period_recycler) RecyclerView periodRecycler;
+    @BindView(R.id.form_period_add) TextView addPeriod;
+
+    @BindView(R.id.form_crop_chips_group) ChipGroup cropChipGroup;
+    @BindView(R.id.form_crop_add) TextView addCrop;
+
+    @BindView(R.id.form_driver_chips_group) ChipGroup driverChipGroup;
+    @BindView(R.id.form_driver_add) TextView addDriver;
+
 
     public static InterventionFormFragment newInstance() {
         return new InterventionFormFragment();
@@ -42,17 +70,18 @@ public class InterventionFormFragment extends Fragment {
         // Get context when fragment is attached
         this.context = context;
 
-        if (context instanceof OnFragmentInteractionListener) {
+        if (context instanceof OnFragmentInteractionListener)
             listener = (OnFragmentInteractionListener) context;
-        } else {
+        else
             throw new RuntimeException(context.toString()
                     + " must implement OnFragmentInteractionListener");
-        }
     }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        Log.i(TAG, "onCreate");
 
         // Add one hour period as default
         periodList = new ArrayList<>();
@@ -60,26 +89,33 @@ public class InterventionFormFragment extends Fragment {
 
         // Init cropParcelList
         cropParcelList = new ArrayList<>();
+        cropParcelList.addAll(getPlants());
+
+        // Init cropParcelList
+        driverList = new ArrayList<>();
+        driverList.addAll(getUsers());
     }
 
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater,
-                             ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         // Set title
         InterActivity.actionBar.setTitle(Translate.getStringId(context, InterActivity.selectedProcedure.name));
 
+        // Inflate layout
         View view = inflater.inflate(R.layout.fragment_intervention_form, container, false);
+        ButterKnife.bind(this, view);
 
         // ------------- //
         // Period layout //
         // ------------- //
-        RecyclerView recyclerView = view.findViewById(R.id.form_period_recycler);
-        recyclerView.setLayoutManager(new LinearLayoutManager(context));
-        recyclerView.addItemDecoration(new MarginTopItemDecoration(context, 16));
+
+        // Set RecyclerView and associated Adapter
+        periodRecycler.setLayoutManager(new LinearLayoutManager(context));
+        periodRecycler.addItemDecoration(new MarginTopItemDecoration(context, 16));
         FormPeriodAdapter periodAdapter = new FormPeriodAdapter(periodList);
-        recyclerView.setAdapter(periodAdapter);
-        TextView addPeriod = view.findViewById(R.id.form_period_add);
+        periodRecycler.setAdapter(periodAdapter);
+
         addPeriod.setOnClickListener(v -> {
             periodList.add(new Period());
             periodAdapter.notifyDataSetChanged();
@@ -88,30 +124,45 @@ public class InterventionFormFragment extends Fragment {
         // ----------- //
         // Crop layout //
         // ----------- //
-        RecyclerView cropRecycler = view.findViewById(R.id.crop_parcel_recycler);
-        TextView addCrop = view.findViewById(R.id.form_crop_add);
-        addCrop.setOnClickListener(v -> listener.onCropChoice());
 
-//        if (cropParcelList.size() == 0)
-//            cropRecycler.setVisibility(View.GONE);
+        addCrop.setOnClickListener(v -> listener.onFormFragmentInteraction(CROP_CHOICE_FRAGMENT));
 
-//        culturesCount = 0;
-//        for (CultureItem culture : culturesList) {
-//            if (culture.is_selected) {
-//                culturesCount++;
-//                Chip chip = new Chip(context);
-//                chip.setText(culture.name);
-//                chip.setCloseIconVisible(true);
-//                chip.setOnCloseIconClickListener(v -> {
-//                    culturesChipsGroup.removeView(chip);
-//                    culture.is_selected = false;
-//                    if (--culturesCount == 0)
-//                        culturesChipsGroup.setVisibility(View.GONE);
-//                });
-//                culturesChipsGroup.addView(chip);
-//            }
-//        }
-//        culturesChipsGroup.setVisibility(culturesCount > 0 ? View.VISIBLE : View.GONE);
+        for (CropParcel crop : InterActivity.selectedCropParcels) {
+            Chip chip = new Chip(context);
+            chip.setText(crop.name);
+            chip.setCloseIconVisible(true);
+            chip.setOnCloseIconClickListener(v -> {
+                cropChipGroup.removeView(chip);
+                InterActivity.selectedCropParcels.remove(crop);
+                cropParcelList.get(cropParcelList.indexOf(crop)).isSelected = false;
+                if (InterActivity.selectedCropParcels.isEmpty())
+                    cropChipGroup.setVisibility(View.GONE);
+            });
+            cropChipGroup.addView(chip);
+        }
+        cropChipGroup.setVisibility(InterActivity.selectedCropParcels.isEmpty() ? View.GONE : View.VISIBLE);
+
+        // ------------- //
+        // Driver layout //
+        // ------------- //
+
+        addDriver.setOnClickListener(v -> listener.onFormFragmentInteraction(DRIVER_CHOICE_FRAGMENT));
+
+        for (SimpleSelectableItem driver : driverList) {
+            if (driver.isSelected) {
+                Chip chip = new Chip(context);
+                chip.setText(driver.label);
+                chip.setCloseIconVisible(true);
+                chip.setOnCloseIconClickListener(v -> {
+                    driverChipGroup.removeView(chip);
+                    driverList.get(driverList.indexOf(driver)).isSelected = false;
+                    if (driverList.isEmpty())
+                        driverChipGroup.setVisibility(View.GONE);
+                });
+                driverChipGroup.addView(chip);
+            }
+        }
+        driverChipGroup.setVisibility(driverList.isEmpty() ? View.GONE : View.VISIBLE);
 
         return view;
     }
@@ -122,7 +173,43 @@ public class InterventionFormFragment extends Fragment {
         listener = null;
     }
 
-    public interface OnFragmentInteractionListener {
-        void onCropChoice();
+    private List<CropParcel> getPlants() {
+
+        List<CropParcel> list = new ArrayList<>();
+        Cursor cursor = context.getContentResolver().query(
+                ZeroContract.Plants.CONTENT_URI, ZeroContract.Plants.PROJECTION_OBS,
+                ZeroContract.Plants.USER + " LIKE " + "\"" + InterActivity.account.name + "\""
+                        + " AND " + ZeroContract.Plants.ACTIVE + " == " + 1,
+                null, ZeroContract.Issues.SORT_ORDER_DEFAULT);
+
+        if (cursor != null) {
+            try {
+                while (cursor.moveToNext())
+                    list.add(new CropParcel(cursor.getString(2), false));
+            } finally {
+                cursor.close();
+            }
+
+            // sorting the List
+            Collections.sort(list, (ele1, ele2) -> {
+                Collator localeCollator = Collator.getInstance(Locale.FRANCE);
+                return localeCollator.compare(ele1.name, ele2.name);
+            });
+        }
+        return list;
     }
+
+    private List<SimpleSelectableItem> getUsers() {
+        List<SimpleSelectableItem> list = new ArrayList<>();
+        list.add(new SimpleSelectableItem("1", "Michel", true));
+        list.add(new SimpleSelectableItem("2", "Jean"));
+        list.add(new SimpleSelectableItem("3", "Jacques"));
+        list.add(new SimpleSelectableItem("4", "Bob"));
+        return list;
+    }
+
+    public interface OnFragmentInteractionListener {
+        void onFormFragmentInteraction(String fragmentTag);
+    }
+
 }

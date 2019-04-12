@@ -1,12 +1,10 @@
 package ekylibre.zero.inter.fragment;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.google.android.material.tabs.TabLayout;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,17 +13,15 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import ekylibre.util.Translate;
 import ekylibre.zero.R;
-import ekylibre.zero.fragments.model.IssueItem;
 import ekylibre.zero.inter.InterActivity;
 import ekylibre.zero.inter.adapter.CropParcelAdapter;
-
+import ekylibre.zero.inter.model.CropParcel;
 
 
 public class CropParcelChoiceFragment extends Fragment {
 
-    private List<IssueItem> dataset = new ArrayList<>();
+    private List<CropParcel> dataset = new ArrayList<>();
     private CropParcelAdapter adapter;
 
     /**
@@ -42,6 +38,8 @@ public class CropParcelChoiceFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        dataset = InterventionFormFragment.cropParcelList;
     }
 
     @Override
@@ -52,10 +50,10 @@ public class CropParcelChoiceFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_crop_parcel, container, false);
 
-//        RecyclerView recyclerView = view.findViewById(R.id.issue_recycler);
-//        recyclerView.setLayoutManager(new LinearLayoutManager(container.getContext()));
-//        adapter = new CropParcelAdapter(dataset);
-//        recyclerView.setAdapter(adapter);
+        RecyclerView recyclerView = view.findViewById(R.id.crop_parcel_recycler);
+        recyclerView.setLayoutManager(new LinearLayoutManager(container.getContext()));
+        adapter = new CropParcelAdapter(dataset);
+        recyclerView.setAdapter(adapter);
 //
 //        TabLayout tabLayout = view.findViewById(R.id.tab_issues);
 //        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {

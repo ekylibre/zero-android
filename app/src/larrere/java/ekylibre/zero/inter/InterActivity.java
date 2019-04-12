@@ -7,6 +7,8 @@ import androidx.core.util.Pair;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import ekylibre.util.AccountTool;
 import ekylibre.util.ProcedureFamiliesXMLReader;
 import ekylibre.util.ProceduresXMLReader;
@@ -14,9 +16,12 @@ import ekylibre.util.pojo.ProcedureEntity;
 import ekylibre.zero.BuildConfig;
 import ekylibre.zero.R;
 import ekylibre.zero.inter.fragment.CropParcelChoiceFragment;
+import ekylibre.zero.inter.fragment.DriverChoiceFragment;
 import ekylibre.zero.inter.fragment.InterventionFormFragment;
 import ekylibre.zero.inter.fragment.ProcedureChoiceFragment;
 import ekylibre.zero.inter.fragment.ProcedureFamilyChoiceFragment;
+import ekylibre.zero.inter.model.CropParcel;
+import ekylibre.zero.inter.model.SimpleSelectableItem;
 
 import android.accounts.Account;
 import android.os.Bundle;
@@ -27,7 +32,6 @@ import android.view.MenuInflater;
 
 import org.xmlpull.v1.XmlPullParserException;
 
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -35,8 +39,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-public class InterActivity extends AppCompatActivity implements
-        FragmentManager.OnBackStackChangedListener,
+public class InterActivity extends AppCompatActivity implements FragmentManager.OnBackStackChangedListener,
         ProcedureFamilyChoiceFragment.OnFragmentInteractionListener,
         ProcedureChoiceFragment.OnFragmentInteractionListener,
         InterventionFormFragment.OnFragmentInteractionListener {
@@ -48,6 +51,7 @@ public class InterActivity extends AppCompatActivity implements
     public static final String PROCEDURE_NATURE_FRAGMENT = "ekylibre.zero.fragments.procedure.nature";
     public static final String INTERVENTION_FORM = "ekylibre.zero.fragments.intervention.form";
     public static final String CROP_CHOICE_FRAGMENT = "ekylibre.zero.fragments.crop.choice";
+    public static final String DRIVER_CHOICE_FRAGMENT = "ekylibre.zero.fragments.driver.choice";
 
     private static final Pair<Integer,String> ADMINISTERING = Pair.create(R.id.administering, "administering");
     private static final Pair<Integer,String> ANIMAL_FARMING = Pair.create(R.id.animal_farming, "animal_farming");
@@ -55,7 +59,7 @@ public class InterActivity extends AppCompatActivity implements
     private static final Pair<Integer,String> PROCESSING = Pair.create(R.id.processing, "processing");
     private static final Pair<Integer,String> TOOL_MAINTAINING = Pair.create(R.id.tool_maintaining, "tool_maintaining");
 
-    private Account account;
+    public static Account account;
     public static ActionBar actionBar;
     private String currentFragment;
     private static FragmentManager fragmentManager;
@@ -64,44 +68,44 @@ public class InterActivity extends AppCompatActivity implements
     public static Pair<String,String> currentCategory;
     public static List<ProcedureEntity> procedures;
     public static ProcedureEntity selectedProcedure;
+    public static List<CropParcel> selectedCropParcels;
+    public static List<SimpleSelectableItem> selectedDrivers;
+
     public static Map<String,List<Pair<String,String>>> families;
     public static Map<String,List<Pair<String,String>>> natures;
+
+    @BindView(R.id.toolbar) Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_inter);
+        ButterKnife.bind(this);
 
         // Get current account
         account = AccountTool.getCurrentAccount(this);
 
         // Set toolbar
-        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         actionBar = getSupportActionBar();
-//        currentFragment = PROCEDURE_FAMILY_FRAGMENT;
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
             actionBar.setHomeAsUpIndicator(R.drawable.close);
         }
 
+        // Init interventions parameters
+        selectedCropParcels = new ArrayList<>();
+        selectedDrivers = new ArrayList<>();
+
         // Get fragment manager
         fragmentManager = getSupportFragmentManager();
         fragmentManager.addOnBackStackChangedListener(this);
 
-
-        // Set first fragment
+        // Set first fragment to procedure family choice
         replaceFragmentWith(PROCEDURE_FAMILY_FRAGMENT);
 
-        // Load procedure logic from XML assets
-        try {
-            procedures = loadProcedures();
-            families = loadFamilies();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (XmlPullParserException e) {
-            e.printStackTrace();
-        }
+        // Load procedure natures, families and params from assets
+        loadXMLAssets();
     }
 
     void replaceFragmentWith(String fragmentTag) {
@@ -131,8 +135,12 @@ public class InterActivity extends AppCompatActivity implements
                 fragment = CropParcelChoiceFragment.newInstance();
                 break;
 
-            // Default to Procedure Family fragment
+            case DRIVER_CHOICE_FRAGMENT:
+                fragment = DriverChoiceFragment.newInstance("Conducteur");
+                break;
+
             default:
+                // Default to Procedure Family fragment
                 fragment = ProcedureFamilyChoiceFragment.newInstance();
                 break;
         }
@@ -142,7 +150,6 @@ public class InterActivity extends AppCompatActivity implements
         ft.replace(R.id.fragment_container, fragment, fragmentTag);
         ft.addToBackStack(null);
         ft.commit();
-
     }
 
     @Override
@@ -160,44 +167,6 @@ public class InterActivity extends AppCompatActivity implements
             currentFamily = TOOL_MAINTAINING;
 
         replaceFragmentWith(PROCEDURE_CATEGORY_FRAGMENT);
-
-//            ProceduresXMLReader proceduresXmlReader = new ProceduresXMLReader();
-//            try {
-//                InputStream is = getAssets().open("procedures/all_in_one_sowing.xml");
-//                ProcedureEntity procedureEntity = proceduresXmlReader.parse(is);
-//                Log.e("InterActivity", procedureEntity.toString());
-//
-////                is = getAssets().open("db.xml");
-////                ProcedureFamiliesXMLReader famReader = new ProcedureFamiliesXMLReader();
-////                String bla = famReader.parse(is);
-////                Log.e("Families", bla);
-//
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//            } catch (XmlPullParserException e) {
-//                e.printStackTrace();
-//            }
-
-    }
-
-    @Override
-    public void onItemChoosed(Pair<String,String> item, String fragmentRef) {
-
-        if (BuildConfig.DEBUG)
-            Log.e(TAG, "ItemChosed and current fragment is = " + fragmentRef);
-
-        switch (fragmentRef) {
-            case PROCEDURE_CATEGORY_FRAGMENT:
-                currentCategory = item;
-                replaceFragmentWith(PROCEDURE_NATURE_FRAGMENT);
-                break;
-            case PROCEDURE_NATURE_FRAGMENT:
-                Log.e(TAG, item.second);
-                selectedProcedure = getProcedureItem(item.first);
-                replaceFragmentWith(INTERVENTION_FORM);
-                break;
-        }
-
     }
 
     public ProcedureEntity getProcedureItem(String name) {
@@ -205,6 +174,17 @@ public class InterActivity extends AppCompatActivity implements
             if (procedure.name.equals(name))
                 return procedure;
         return null;
+    }
+
+    private void loadXMLAssets() {
+        try {
+            procedures = loadProcedures();
+            families = loadFamilies();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (XmlPullParserException e) {
+            e.printStackTrace();
+        }
     }
 
     private List<ProcedureEntity> loadProcedures() throws IOException, XmlPullParserException {
@@ -255,20 +235,25 @@ public class InterActivity extends AppCompatActivity implements
             currentFragment = INTERVENTION_FORM;
         }
 
-
         int backStack = fragmentManager.getBackStackEntryCount();
-
-        if (backStack > 1 ) {
-//            actionBar.setDisplayHomeAsUpEnabled(true);
+        if (backStack > 1 )
             actionBar.setHomeAsUpIndicator(R.drawable.ic_back);
-        } else {
+        else
             actionBar.setHomeAsUpIndicator(R.drawable.close);
-        }
 
         Log.e(TAG, "Backstack changed");
 //        Fragment f = fragmentManager.findFragmentById(R.id.fragment_container);
 
         invalidateOptionsMenu();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        if (currentFragment.equals(INTERVENTION_FORM)) {
+            MenuInflater inflater = getMenuInflater();
+            inflater.inflate(R.menu.intervention_options_menu, menu);
+        }
+        return true;
     }
 
     @Override
@@ -283,30 +268,34 @@ public class InterActivity extends AppCompatActivity implements
     }
 
     private void previousFragmentOrQuit() {
-
         Fragment f = fragmentManager.findFragmentById(R.id.fragment_container);
         if (f instanceof ProcedureFamilyChoiceFragment)
             finish();
         fragmentManager.popBackStack();
-
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
+    public void onFormFragmentInteraction(String fragmentTag) {
+        replaceFragmentWith(fragmentTag);
+    }
 
-//        final Fragment frag = fragmentManager.findFragmentByTag(INTERVENTION_FORM);
-//        Log.i(TAG, "Main fragment ? --> " + frag);
-//        if (frag != null) {
-        if (currentFragment.equals(INTERVENTION_FORM)) {
-            MenuInflater inflater = getMenuInflater();
-            inflater.inflate(R.menu.intervention_options_menu, menu);
+    @Override
+    public void onItemChoosed(Pair<String,String> item, String fragmentRef) {
+
+        if (BuildConfig.DEBUG)
+            Log.e(TAG, "ItemChosed and current fragment is = " + fragmentRef);
+
+        switch (fragmentRef) {
+            case PROCEDURE_CATEGORY_FRAGMENT:
+                currentCategory = item;
+                replaceFragmentWith(PROCEDURE_NATURE_FRAGMENT);
+                break;
+            case PROCEDURE_NATURE_FRAGMENT:
+                Log.e(TAG, item.second);
+                selectedProcedure = getProcedureItem(item.first);
+                replaceFragmentWith(INTERVENTION_FORM);
+                break;
         }
-        return true;
-    }
 
-    @Override
-    public void onCropChoice() {
-        Log.i(TAG, "Choix de la culture");
-        replaceFragmentWith(CROP_CHOICE_FRAGMENT);
     }
 }

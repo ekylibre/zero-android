@@ -6,7 +6,6 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,7 +35,7 @@ public class ProcedureFamilyChoiceFragment extends Fragment {
 
         InterActivity.actionBar.setTitle("Nouvelle intervention");
 
-        View rootView = inflater.inflate(R.layout.fragment_procedure_choice1, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_procedure_family_choice, container, false);
 
         Button administrativeButton = rootView.findViewById(R.id.administering);
         Button animalButton = rootView.findViewById(R.id.animal_farming);

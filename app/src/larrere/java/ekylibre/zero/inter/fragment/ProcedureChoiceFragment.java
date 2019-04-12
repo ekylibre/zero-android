@@ -73,7 +73,7 @@ public class ProcedureChoiceFragment extends Fragment {
                 Objects.requireNonNull(getActivity()).getPackageName());
         InterActivity.actionBar.setTitle(resId);
 
-        View view = inflater.inflate(R.layout.fragment_keyvalueitem_list, container, false);
+        View view = inflater.inflate(R.layout.fragment_procedure_category_choice, container, false);
 
         // Set the adapter
         if (view instanceof RecyclerView) {

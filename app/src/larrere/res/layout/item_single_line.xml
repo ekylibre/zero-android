@@ -9,7 +9,7 @@
     android:orientation="horizontal">
 
     <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/item_name"
+        android:id="@+id/intem_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="#000000"

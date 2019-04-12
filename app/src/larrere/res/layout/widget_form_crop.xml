@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
     android:padding="16dp"
     android:background="@drawable/border_bottom">
 
@@ -24,15 +24,26 @@
         app:layout_constraintTop_toTopOf="@id/form_crop_icon"
         app:layout_constraintBottom_toBottomOf="@id/form_crop_icon"
         app:layout_constraintStart_toEndOf="@id/form_crop_icon"
-        android:text="Culture / Parcelle"/>
+        android:text="@string/crop_parcel"/>
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/form_crop_add"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="+ ajouter"
-        app:layout_constraintBaseline_toBaselineOf="@id/form_crop_label"
+        android:text="@string/add"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         style="@style/AddTextButton"/>
+
+    <com.google.android.material.chip.ChipGroup
+        android:id="@+id/form_crop_chips_group"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/form_crop_icon"
+        android:layout_marginTop="16dp"
+        app:chipSpacing="6dp">
+    </com.google.android.material.chip.ChipGroup>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
