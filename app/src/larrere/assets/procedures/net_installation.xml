@@ -16,7 +16,7 @@
                  backward="POPULATION * (PRODUCT..length(meter) * PRODUCT..width(meter))"
                  forward="VALUE / (PRODUCT..length(meter) * PRODUCT..width(meter))"/>
       </input>
-      <doer name="driver" filter="can drive(tractor) and can move" cardinality="*"/>
+      <doer name="simpleSelectableItem" filter="can drive(tractor) and can move" cardinality="*"/>
       <doer name="worker" filter="is worker" cardinality="*"/>
       <tool name="tractor" filter="can tow(equipment) and can move" cardinality="*"/>
       <tool name="net_implanter" filter="is equipment and can cover(plant)" cardinality="*"/>

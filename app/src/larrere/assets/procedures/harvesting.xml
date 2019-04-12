@@ -26,7 +26,7 @@
                  backward="(POPULATION * VARIANT.net_mass(quintal)) / sum_working_zone_areas(plant, :hectare)"
                  forward="(VALUE * sum_working_zone_areas(plant, :hectare)) / VARIANT.net_mass(quintal)"/>
       </output>
-      <doer name="driver" filter="is worker and can drive(equipment)" cardinality="*"/>
+      <doer name="simpleSelectableItem" filter="is worker and can drive(equipment)" cardinality="*"/>
       <doer name="doer" filter="is worker" cardinality="*"/>
       <tool name="tractor" filter="is equipment and can tow(equipment)" cardinality="*"/>
       <tool name="cropper" filter="can harvest(plant)" cardinality="*"/>

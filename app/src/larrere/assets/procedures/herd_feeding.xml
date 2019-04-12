@@ -26,7 +26,7 @@
                  backward="POPULATION * (PRODUCT..net_mass(ton) * PRODUCT.dry_matter_rate(mass_percent) / 100)"
                  forward="VALUE / ( PRODUCT..net_mass(ton) * PRODUCT.dry_matter_rate(mass_percent) / 100)"/>
       </input>
-      <doer name="driver" filter="can drive(tractor) and can move" cardinality="*"/>
+      <doer name="simpleSelectableItem" filter="can drive(tractor) and can move" cardinality="*"/>
       <doer name="doer" filter="is worker" cardinality="*"/>
       <tool name="tractor" filter="can tow(equipment) and can move" cardinality="*"/>
       <tool name="equipment" filter="can deliver(preparation)" cardinality="*"/>
