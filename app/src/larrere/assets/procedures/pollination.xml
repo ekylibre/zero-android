@@ -8,7 +8,7 @@
       <input name="pollinating_insects" filter="is insecta and can pollinate(plant)" cardinality="*">
         <handler name="population"/>
       </input>
-      <doer name="simpleSelectableItem"  filter="can drive(equipment) and can move" cardinality="*"/>
+      <doer name="driver"  filter="can drive(equipment) and can move" cardinality="*"/>
       <doer name="doer"  filter="is worker and can move" cardinality="*"/>
       <tool name="mechanical_pollinator" filter="is equipment and can pollinate(plant)" cardinality="*"/>
       <tool name="hive"   filter="is equipment and can store(apis)" cardinality="*"/>

@@ -6,7 +6,7 @@
         <attribute name="working_zone" default-value="PRODUCT.shape" if="PRODUCT?"/>
         <attribute name="killable"/>
       </target>
-      <doer name="simpleSelectableItem" filter="can drive(equipment) and can move" cardinality="*"/>
+      <doer name="driver" filter="can drive(equipment) and can move" cardinality="*"/>
       <tool name="tractor" filter="can tow(equipment) and can move" cardinality="*"/>
       <tool name="lifter" filter="can harvest(plant)" cardinality="*"/>
     </parameters>
