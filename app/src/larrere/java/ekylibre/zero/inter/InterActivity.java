@@ -16,10 +16,10 @@ import ekylibre.util.pojo.ProcedureEntity;
 import ekylibre.zero.BuildConfig;
 import ekylibre.zero.R;
 import ekylibre.zero.inter.fragment.CropParcelChoiceFragment;
-import ekylibre.zero.inter.fragment.DriverChoiceFragment;
 import ekylibre.zero.inter.fragment.InterventionFormFragment;
 import ekylibre.zero.inter.fragment.ProcedureChoiceFragment;
 import ekylibre.zero.inter.fragment.ProcedureFamilyChoiceFragment;
+import ekylibre.zero.inter.fragment.ParamChoiceFragment;
 import ekylibre.zero.inter.model.CropParcel;
 import ekylibre.zero.inter.model.SimpleSelectableItem;
 
@@ -39,6 +39,9 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
+import static ekylibre.zero.inter.enums.ParamType.DRIVER;
+import static ekylibre.zero.inter.enums.ParamType.TRACTOR;
+
 public class InterActivity extends AppCompatActivity implements FragmentManager.OnBackStackChangedListener,
         ProcedureFamilyChoiceFragment.OnFragmentInteractionListener,
         ProcedureChoiceFragment.OnFragmentInteractionListener,
@@ -52,6 +55,7 @@ public class InterActivity extends AppCompatActivity implements FragmentManager.
     public static final String INTERVENTION_FORM = "ekylibre.zero.fragments.intervention.form";
     public static final String CROP_CHOICE_FRAGMENT = "ekylibre.zero.fragments.crop.choice";
     public static final String DRIVER_CHOICE_FRAGMENT = "ekylibre.zero.fragments.driver.choice";
+    public static final String PARAM_CHOICE_FRAGMENT = "ekylibre.zero.fragments.tool.choice";
 
     private static final Pair<Integer,String> ADMINISTERING = Pair.create(R.id.administering, "administering");
     private static final Pair<Integer,String> ANIMAL_FARMING = Pair.create(R.id.animal_farming, "animal_farming");
@@ -135,8 +139,9 @@ public class InterActivity extends AppCompatActivity implements FragmentManager.
                 fragment = CropParcelChoiceFragment.newInstance();
                 break;
 
-            case DRIVER_CHOICE_FRAGMENT:
-                fragment = DriverChoiceFragment.newInstance("Conducteur");
+            case TRACTOR:
+            case DRIVER:
+                fragment = ParamChoiceFragment.newInstance(fragmentTag);
                 break;
 
             default:

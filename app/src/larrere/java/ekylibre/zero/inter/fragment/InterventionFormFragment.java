@@ -14,12 +14,16 @@ import com.google.android.material.chip.ChipGroup;
 
 import java.text.Collator;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
+import androidx.annotation.DrawableRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.StringRes;
+import androidx.appcompat.widget.LinearLayoutCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -28,15 +32,21 @@ import butterknife.ButterKnife;
 import ekylibre.database.ZeroContract;
 import ekylibre.util.MarginTopItemDecoration;
 import ekylibre.util.Translate;
+import ekylibre.util.layout.component.WidgetParamView;
 import ekylibre.zero.R;
 import ekylibre.zero.inter.InterActivity;
 import ekylibre.zero.inter.adapter.FormPeriodAdapter;
+import ekylibre.zero.inter.enums.ParamType.Type;
 import ekylibre.zero.inter.model.CropParcel;
 import ekylibre.zero.inter.model.SimpleSelectableItem;
 import ekylibre.zero.inter.model.Period;
 
 import static ekylibre.zero.inter.InterActivity.CROP_CHOICE_FRAGMENT;
 import static ekylibre.zero.inter.InterActivity.DRIVER_CHOICE_FRAGMENT;
+import static ekylibre.zero.inter.InterActivity.PARAM_CHOICE_FRAGMENT;
+import static ekylibre.zero.inter.enums.ParamType.DRIVER;
+import static ekylibre.zero.inter.enums.ParamType.SOWER;
+import static ekylibre.zero.inter.enums.ParamType.TRACTOR;
 
 
 public class InterventionFormFragment extends Fragment {
@@ -47,16 +57,24 @@ public class InterventionFormFragment extends Fragment {
     private List<Period> periodList;
     static List<CropParcel> cropParcelList;
     static List<SimpleSelectableItem> driverList;
+    static List<SimpleSelectableItem> toolList;
+    static List<SimpleSelectableItem> paramsList;
 
     // LAYOUT BINDINGS
+    @BindView(R.id.widgets_container)
+    LinearLayoutCompat widgetContainer;
+
     @BindView(R.id.form_period_recycler) RecyclerView periodRecycler;
     @BindView(R.id.form_period_add) TextView addPeriod;
 
     @BindView(R.id.form_crop_chips_group) ChipGroup cropChipGroup;
     @BindView(R.id.form_crop_add) TextView addCrop;
 
-    @BindView(R.id.form_driver_chips_group) ChipGroup driverChipGroup;
-    @BindView(R.id.form_driver_add) TextView addDriver;
+//    @BindView(R.id.form_driver_chips_group) ChipGroup driverChipGroup;
+//    @BindView(R.id.form_driver_add) TextView addDriver;
+//
+//    @BindView(R.id.form_tool_chips_group) ChipGroup toolChipGroup;
+//    @BindView(R.id.form_tool_add) TextView addTool;
 
 
     public static InterventionFormFragment newInstance() {
@@ -94,6 +112,13 @@ public class InterventionFormFragment extends Fragment {
         // Init cropParcelList
         driverList = new ArrayList<>();
         driverList.addAll(getUsers());
+
+        toolList = new ArrayList<>();
+        toolList.addAll(getTools());
+
+        paramsList = new ArrayList<>();
+        paramsList.addAll(getUsers());
+        paramsList.addAll(getTools());
     }
 
     @Override
@@ -143,26 +168,14 @@ public class InterventionFormFragment extends Fragment {
         cropChipGroup.setVisibility(InterActivity.selectedCropParcels.isEmpty() ? View.GONE : View.VISIBLE);
 
         // ------------- //
-        // Driver layout //
+        // Params layout //
         // ------------- //
 
-        addDriver.setOnClickListener(v -> listener.onFormFragmentInteraction(DRIVER_CHOICE_FRAGMENT));
+        @Type
+        List<String> interventionParams = Arrays.asList(DRIVER, TRACTOR);
 
-        for (SimpleSelectableItem driver : driverList) {
-            if (driver.isSelected) {
-                Chip chip = new Chip(context);
-                chip.setText(driver.label);
-                chip.setCloseIconVisible(true);
-                chip.setOnCloseIconClickListener(v -> {
-                    driverChipGroup.removeView(chip);
-                    driverList.get(driverList.indexOf(driver)).isSelected = false;
-                    if (driverList.isEmpty())
-                        driverChipGroup.setVisibility(View.GONE);
-                });
-                driverChipGroup.addView(chip);
-            }
-        }
-        driverChipGroup.setVisibility(driverList.isEmpty() ? View.GONE : View.VISIBLE);
+        for (@Type String type : interventionParams)
+            widgetContainer.addView(new WidgetParamView(context, listener, type, paramsList));
 
         return view;
     }
@@ -201,10 +214,19 @@ public class InterventionFormFragment extends Fragment {
 
     private List<SimpleSelectableItem> getUsers() {
         List<SimpleSelectableItem> list = new ArrayList<>();
-        list.add(new SimpleSelectableItem("1", "Michel", true));
-        list.add(new SimpleSelectableItem("2", "Jean"));
-        list.add(new SimpleSelectableItem("3", "Jacques"));
-        list.add(new SimpleSelectableItem("4", "Bob"));
+        list.add(new SimpleSelectableItem("1", "Michel", DRIVER, true));
+        list.add(new SimpleSelectableItem("2", "Jean", DRIVER));
+        list.add(new SimpleSelectableItem("3", "Jacques", DRIVER));
+        list.add(new SimpleSelectableItem("4", "Bob", DRIVER));
+        return list;
+    }
+
+    private List<SimpleSelectableItem> getTools() {
+        List<SimpleSelectableItem> list = new ArrayList<>();
+        list.add(new SimpleSelectableItem("1", "Massey 6700 S", TRACTOR));
+        list.add(new SimpleSelectableItem("2", "Sem 360 +", SOWER));
+        list.add(new SimpleSelectableItem("3", "New FR250", TRACTOR));
+        list.add(new SimpleSelectableItem("4", "Multigrains 500L", TRACTOR));
         return list;
     }
 

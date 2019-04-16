@@ -1,34 +1,38 @@
 package ekylibre.zero.inter.fragment;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import androidx.annotation.NonNull;
+import androidx.annotation.StringRes;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import ekylibre.zero.R;
 import ekylibre.zero.inter.InterActivity;
 import ekylibre.zero.inter.adapter.SimpleSelectableItemAdapter;
+import ekylibre.zero.inter.enums.ParamType.Type;
+import ekylibre.zero.inter.model.SimpleSelectableItem;
 
 
-public class DriverChoiceFragment extends Fragment {
+public class ParamChoiceFragment extends Fragment {
 
-    private String actionBarTitle;
+    @Type
+    private String paramType;
+    private Context context;
 
-    /**
-     * Mandatory empty constructor for the fragment manager to instantiate the
-     * fragment (e.g. upon screen orientation changes).
-     */
-    public DriverChoiceFragment() {
-    }
+    public ParamChoiceFragment() {}
 
-    public static DriverChoiceFragment newInstance(String title) {
-        DriverChoiceFragment fragment = new DriverChoiceFragment();
+    public static ParamChoiceFragment newInstance(String param) {
+        ParamChoiceFragment fragment = new ParamChoiceFragment();
         Bundle args = new Bundle();
-        args.putString("appbar_title", title);
+        args.putString("param_type", param);
         fragment.setArguments(args);
         return fragment;
     }
@@ -36,21 +40,29 @@ public class DriverChoiceFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        // Get title from params
+        context = getContext();
         if (getArguments() != null)
-            actionBarTitle = getArguments().getString("appbar_title");
+            paramType = getArguments().getString("param_type");
     }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        InterActivity.actionBar.setTitle(actionBarTitle);
+        @StringRes
+        int titleRes = getResources().getIdentifier(paramType, "string", context.getPackageName());
+        InterActivity.actionBar.setTitle(titleRes);
 
-        View view = inflater.inflate(R.layout.fragment_driver, container, false);
-        RecyclerView recyclerView = view.findViewById(R.id.driver_recycler);
+        // Filter list
+        List<SimpleSelectableItem> dataset = new ArrayList<>();
+        for (SimpleSelectableItem item : InterventionFormFragment.paramsList)
+            if (item.type.equals(paramType))
+                dataset.add(item);
+
+        View view = inflater.inflate(R.layout.fragment_single_line_item, container, false);
+        RecyclerView recyclerView = view.findViewById(R.id.simple_recycler);
         recyclerView.setLayoutManager(new LinearLayoutManager(container.getContext()));
-        SimpleSelectableItemAdapter adapter = new SimpleSelectableItemAdapter(InterventionFormFragment.driverList);
+        SimpleSelectableItemAdapter adapter = new SimpleSelectableItemAdapter(dataset);
         recyclerView.setAdapter(adapter);
 
         return view;

@@ -136,9 +136,10 @@
     <string name="end_date_before_begin">La date de début ne peut tre après la date de fin</string>
     <string name="crops">Cultures</string>
     <string name="parcels">Parcelles</string>
-    <string name="simpleSelectableItem">Conducteur</string>
+    <string name="driver">Conducteur</string>
     <string name="crop_parcel">Culture / Parcelle</string>
     <string name="add">+ ajouter</string>
     <string name="periods">Périodes</string>
+    <string name="tractor">Tracteur</string>
 
 </resources>
