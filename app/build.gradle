@@ -17,6 +17,7 @@ android {
         targetSdkVersion 28
         versionCode 26
         versionName "0.7.6"
+        resValue 'string', 'google_maps_key', google_maps_key
     }
     buildTypes {
         release {
