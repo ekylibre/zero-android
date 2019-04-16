@@ -59,12 +59,18 @@ public class ParamChoiceFragment extends Fragment {
             if (item.type.equals(paramType))
                 dataset.add(item);
 
-        View view = inflater.inflate(R.layout.fragment_single_line_item, container, false);
-        RecyclerView recyclerView = view.findViewById(R.id.simple_recycler);
-        recyclerView.setLayoutManager(new LinearLayoutManager(container.getContext()));
-        SimpleSelectableItemAdapter adapter = new SimpleSelectableItemAdapter(dataset);
-        recyclerView.setAdapter(adapter);
 
+        View view;
+        if (dataset.isEmpty()) {
+            view = inflater.inflate(R.layout.empty_recycler, container, false);
+        }
+        else {
+            view = inflater.inflate(R.layout.fragment_single_line_item, container, false);
+            RecyclerView recyclerView = view.findViewById(R.id.simple_recycler);
+            recyclerView.setLayoutManager(new LinearLayoutManager(container.getContext()));
+            SimpleSelectableItemAdapter adapter = new SimpleSelectableItemAdapter(dataset);
+            recyclerView.setAdapter(adapter);
+        }
         return view;
     }
 

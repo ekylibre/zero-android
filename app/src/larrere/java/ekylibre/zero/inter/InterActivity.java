@@ -54,8 +54,6 @@ public class InterActivity extends AppCompatActivity implements FragmentManager.
     public static final String PROCEDURE_NATURE_FRAGMENT = "ekylibre.zero.fragments.procedure.nature";
     public static final String INTERVENTION_FORM = "ekylibre.zero.fragments.intervention.form";
     public static final String CROP_CHOICE_FRAGMENT = "ekylibre.zero.fragments.crop.choice";
-    public static final String DRIVER_CHOICE_FRAGMENT = "ekylibre.zero.fragments.driver.choice";
-    public static final String PARAM_CHOICE_FRAGMENT = "ekylibre.zero.fragments.tool.choice";
 
     private static final Pair<Integer,String> ADMINISTERING = Pair.create(R.id.administering, "administering");
     private static final Pair<Integer,String> ANIMAL_FARMING = Pair.create(R.id.animal_farming, "animal_farming");
@@ -139,14 +137,13 @@ public class InterActivity extends AppCompatActivity implements FragmentManager.
                 fragment = CropParcelChoiceFragment.newInstance();
                 break;
 
-            case TRACTOR:
-            case DRIVER:
-                fragment = ParamChoiceFragment.newInstance(fragmentTag);
+            case PROCEDURE_FAMILY_FRAGMENT:
+                fragment = ProcedureFamilyChoiceFragment.newInstance();
                 break;
 
             default:
                 // Default to Procedure Family fragment
-                fragment = ProcedureFamilyChoiceFragment.newInstance();
+                fragment = ParamChoiceFragment.newInstance(fragmentTag);
                 break;
         }
 

@@ -33,6 +33,7 @@ import ekylibre.database.ZeroContract;
 import ekylibre.util.MarginTopItemDecoration;
 import ekylibre.util.Translate;
 import ekylibre.util.layout.component.WidgetParamView;
+import ekylibre.util.pojo.GenericEntity;
 import ekylibre.zero.R;
 import ekylibre.zero.inter.InterActivity;
 import ekylibre.zero.inter.adapter.FormPeriodAdapter;
@@ -42,8 +43,7 @@ import ekylibre.zero.inter.model.SimpleSelectableItem;
 import ekylibre.zero.inter.model.Period;
 
 import static ekylibre.zero.inter.InterActivity.CROP_CHOICE_FRAGMENT;
-import static ekylibre.zero.inter.InterActivity.DRIVER_CHOICE_FRAGMENT;
-import static ekylibre.zero.inter.InterActivity.PARAM_CHOICE_FRAGMENT;
+import static ekylibre.zero.inter.InterActivity.selectedProcedure;
 import static ekylibre.zero.inter.enums.ParamType.DRIVER;
 import static ekylibre.zero.inter.enums.ParamType.SOWER;
 import static ekylibre.zero.inter.enums.ParamType.TRACTOR;
@@ -56,8 +56,6 @@ public class InterventionFormFragment extends Fragment {
     private Context context;
     private List<Period> periodList;
     static List<CropParcel> cropParcelList;
-    static List<SimpleSelectableItem> driverList;
-    static List<SimpleSelectableItem> toolList;
     static List<SimpleSelectableItem> paramsList;
 
     // LAYOUT BINDINGS
@@ -69,13 +67,6 @@ public class InterventionFormFragment extends Fragment {
 
     @BindView(R.id.form_crop_chips_group) ChipGroup cropChipGroup;
     @BindView(R.id.form_crop_add) TextView addCrop;
-
-//    @BindView(R.id.form_driver_chips_group) ChipGroup driverChipGroup;
-//    @BindView(R.id.form_driver_add) TextView addDriver;
-//
-//    @BindView(R.id.form_tool_chips_group) ChipGroup toolChipGroup;
-//    @BindView(R.id.form_tool_add) TextView addTool;
-
 
     public static InterventionFormFragment newInstance() {
         return new InterventionFormFragment();
@@ -101,6 +92,8 @@ public class InterventionFormFragment extends Fragment {
 
         Log.i(TAG, "onCreate");
 
+
+
         // Add one hour period as default
         periodList = new ArrayList<>();
         periodList.add(new Period());
@@ -108,13 +101,6 @@ public class InterventionFormFragment extends Fragment {
         // Init cropParcelList
         cropParcelList = new ArrayList<>();
         cropParcelList.addAll(getPlants());
-
-        // Init cropParcelList
-        driverList = new ArrayList<>();
-        driverList.addAll(getUsers());
-
-        toolList = new ArrayList<>();
-        toolList.addAll(getTools());
 
         paramsList = new ArrayList<>();
         paramsList.addAll(getUsers());
@@ -171,11 +157,21 @@ public class InterventionFormFragment extends Fragment {
         // Params layout //
         // ------------- //
 
-        @Type
-        List<String> interventionParams = Arrays.asList(DRIVER, TRACTOR);
+        for (GenericEntity entity : selectedProcedure.doer) {
+            Log.i(TAG, "doer --> " + entity.name);
+            widgetContainer.addView(new WidgetParamView(context, listener, entity.name, paramsList));
+        }
 
-        for (@Type String type : interventionParams)
-            widgetContainer.addView(new WidgetParamView(context, listener, type, paramsList));
+        for (GenericEntity entity : selectedProcedure.tool) {
+            Log.i(TAG, "tool --> " + entity.name);
+            widgetContainer.addView(new WidgetParamView(context, listener, entity.name, paramsList));
+        }
+
+//        //        @Type
+////        List<String> interventionParams = Arrays.asList(DRIVER, TRACTOR);
+//
+//        for (@Type String type : interventionParams)
+//            widgetContainer.addView(new WidgetParamView(context, listener, type, paramsList));
 
         return view;
     }

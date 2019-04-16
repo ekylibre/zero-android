@@ -18,7 +18,7 @@
             android:orientation="vertical">
 
             <!--Include widgets -->
-            <include layout="@layout/widget_form_period" android:id="@+id/include_widget_period" android:visibility="gone"/>
+            <include layout="@layout/widget_form_period" android:id="@+id/include_widget_period" android:visibility="visible"/>
             <include layout="@layout/widget_form_crop" android:id="@+id/include_widget_crop" android:visibility="visible"/>
 
             <!-- Here commes all generated child views for each intervention param -->

@@ -2,6 +2,7 @@ package ekylibre.util.layout.component;
 
 import android.content.Context;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
@@ -11,6 +12,8 @@ import com.google.android.material.button.MaterialButton;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
@@ -28,7 +31,7 @@ import ekylibre.zero.inter.model.SimpleSelectableItem;
 public class WidgetParamView extends ConstraintLayout {
 
     @BindView(R.id.widget_label) TextView labelView;
-    @BindView(R.id.widget_icon) ImageView iconView;
+//    @BindView(R.id.widget_icon) ImageView iconView;
     @BindView(R.id.widget_add) MaterialButton addButton;
     @BindView(R.id.widget_chips_group) ChipGroup chipGroup;
 
@@ -76,12 +79,17 @@ public class WidgetParamView extends ConstraintLayout {
 
         @StringRes
         final int labelRes = getResources().getIdentifier(type, "string", packageName);
-
-        @DrawableRes
-        final int iconRes = getResources().getIdentifier("icon_" + type, "drawable", packageName);
-
+//
+//        @DrawableRes
+//        final int iconRes = getResources().getIdentifier("icon_" + type, "drawable", packageName);
+////        if (iconRes == 0) {
+////            List<String> driverList = Arrays.asList("doer", "driver");
+////            if ()
+////                iconRes = driverList.contains(type) ? R.drawable.icon_driver
+////        }
+//
         labelView.setText(labelRes);
-        iconView.setImageResource(iconRes);
+//        iconView.setImageResource(iconRes);
 
         addButton.setOnClickListener(v -> listener.onFormFragmentInteraction(type));
 
