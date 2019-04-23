@@ -14,6 +14,8 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 
@@ -51,16 +53,21 @@ public class ProcedureChoiceFragment extends Fragment {
         // Compute the dataset, filter by current family
         if (fragmentTag != null) {
             if (fragmentTag.equals(InterActivity.PROCEDURE_CATEGORY_FRAGMENT)) {
-                dataset = InterActivity.families.get(InterActivity.currentFamily.second);
                 titleRes = InterActivity.currentFamily.second;
+                dataset = InterActivity.families.get(InterActivity.currentFamily.second);
+                if (dataset != null)
+                    Collections.sort(dataset, (o1, o2) ->
+                            Objects.requireNonNull(o1.second).compareToIgnoreCase(
+                                    Objects.requireNonNull(o2.second)));
             } else {
-                dataset = InterActivity.natures.get(InterActivity.currentCategory.first);
                 titleRes = InterActivity.currentCategory.first;
+                dataset = InterActivity.natures.get(InterActivity.currentCategory.first);
+                if (dataset != null)
+                    Collections.sort(dataset, (o1, o2) ->
+                            Objects.requireNonNull(o1.second).compareToIgnoreCase(
+                                    Objects.requireNonNull(o2.second)));
             }
         }
-
-        if (BuildConfig.DEBUG)
-            Log.d("ChoiceFragment", dataset.toString());
     }
 
     @Override
