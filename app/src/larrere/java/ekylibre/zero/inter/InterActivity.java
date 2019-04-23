@@ -1,5 +1,13 @@
 package ekylibre.zero.inter;
 
+import android.accounts.Account;
+import android.os.Bundle;
+import android.util.ArrayMap;
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -7,28 +15,6 @@ import androidx.core.util.Pair;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import ekylibre.util.AccountTool;
-import ekylibre.util.ProcedureFamiliesXMLReader;
-import ekylibre.util.ProceduresXMLReader;
-import ekylibre.util.pojo.ProcedureEntity;
-import ekylibre.zero.BuildConfig;
-import ekylibre.zero.R;
-import ekylibre.zero.inter.fragment.CropParcelChoiceFragment;
-import ekylibre.zero.inter.fragment.InterventionFormFragment;
-import ekylibre.zero.inter.fragment.ProcedureChoiceFragment;
-import ekylibre.zero.inter.fragment.ProcedureFamilyChoiceFragment;
-import ekylibre.zero.inter.fragment.ParamChoiceFragment;
-import ekylibre.zero.inter.model.CropParcel;
-import ekylibre.zero.inter.model.SimpleSelectableItem;
-
-import android.accounts.Account;
-import android.os.Bundle;
-import android.util.ArrayMap;
-import android.util.Log;
-import android.view.Menu;
-import android.view.MenuInflater;
 
 import org.xmlpull.v1.XmlPullParserException;
 
@@ -39,8 +25,21 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-import static ekylibre.zero.inter.enums.ParamType.DRIVER;
-import static ekylibre.zero.inter.enums.ParamType.TRACTOR;
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import ekylibre.util.AccountTool;
+import ekylibre.util.ProcedureFamiliesXMLReader;
+import ekylibre.util.ProceduresXMLReader;
+import ekylibre.util.pojo.ProcedureEntity;
+import ekylibre.zero.BuildConfig;
+import ekylibre.zero.R;
+import ekylibre.zero.inter.fragment.CropParcelChoiceFragment;
+import ekylibre.zero.inter.fragment.InterventionFormFragment;
+import ekylibre.zero.inter.fragment.ParamChoiceFragment;
+import ekylibre.zero.inter.fragment.ProcedureChoiceFragment;
+import ekylibre.zero.inter.fragment.ProcedureFamilyChoiceFragment;
+import ekylibre.zero.inter.model.CropParcel;
+import ekylibre.zero.inter.model.SimpleSelectableItem;
 
 public class InterActivity extends AppCompatActivity implements FragmentManager.OnBackStackChangedListener,
         ProcedureFamilyChoiceFragment.OnFragmentInteractionListener,
@@ -53,6 +52,7 @@ public class InterActivity extends AppCompatActivity implements FragmentManager.
     public static final String PROCEDURE_CATEGORY_FRAGMENT = "ekylibre.zero.fragments.procedure.category";
     public static final String PROCEDURE_NATURE_FRAGMENT = "ekylibre.zero.fragments.procedure.nature";
     public static final String INTERVENTION_FORM = "ekylibre.zero.fragments.intervention.form";
+    public static final String PARAM_FRAGMENT = "ekylibre.zero.fragments.intervention.param";
     public static final String CROP_CHOICE_FRAGMENT = "ekylibre.zero.fragments.crop.choice";
 
     private static final Pair<Integer,String> ADMINISTERING = Pair.create(R.id.administering, "administering");
@@ -230,53 +230,6 @@ public class InterActivity extends AppCompatActivity implements FragmentManager.
     }
 
     @Override
-    public void onBackStackChanged() {
-
-        Fragment f = fragmentManager.findFragmentById(R.id.fragment_container);
-        if (f instanceof InterventionFormFragment) {
-            currentFragment = INTERVENTION_FORM;
-        }
-
-        int backStack = fragmentManager.getBackStackEntryCount();
-        if (backStack > 1 )
-            actionBar.setHomeAsUpIndicator(R.drawable.ic_back);
-        else
-            actionBar.setHomeAsUpIndicator(R.drawable.close);
-
-        Log.e(TAG, "Backstack changed");
-//        Fragment f = fragmentManager.findFragmentById(R.id.fragment_container);
-
-        invalidateOptionsMenu();
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        if (currentFragment.equals(INTERVENTION_FORM)) {
-            MenuInflater inflater = getMenuInflater();
-            inflater.inflate(R.menu.intervention_options_menu, menu);
-        }
-        return true;
-    }
-
-    @Override
-    public boolean onSupportNavigateUp() {
-        previousFragmentOrQuit();
-        return true;
-    }
-
-    @Override
-    public void onBackPressed() {
-        previousFragmentOrQuit();
-    }
-
-    private void previousFragmentOrQuit() {
-        Fragment f = fragmentManager.findFragmentById(R.id.fragment_container);
-        if (f instanceof ProcedureFamilyChoiceFragment)
-            finish();
-        fragmentManager.popBackStack();
-    }
-
-    @Override
     public void onFormFragmentInteraction(String fragmentTag) {
         replaceFragmentWith(fragmentTag);
     }
@@ -298,6 +251,101 @@ public class InterActivity extends AppCompatActivity implements FragmentManager.
                 replaceFragmentWith(INTERVENTION_FORM);
                 break;
         }
+    }
 
+    /** *****************************************************************
+     *                                                                  *
+     *                      NAVIGATION MANAGEMENT                       *
+     *                                                                  *
+     ***************************************************************** **/
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        menu.clear();
+        Log.i(TAG, "onCreateOptionMenu");
+//        if (currentFragment.equals(INTERVENTION_FORM)) {
+//            menu.clear();
+//            menu.add()
+////            MenuInflater inflater = getMenuInflater();
+////            inflater.inflate(R.menu.intervention_options_menu, menu);
+//        }
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.intervention_options_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        Log.i(TAG, "onPrepareOptionMenu");
+        switch (currentFragment) {
+            case INTERVENTION_FORM:
+                menu.findItem(R.id.action_inter_save).setVisible(true);
+                break;
+            case PARAM_FRAGMENT:
+                menu.findItem(R.id.action_inter_done).setVisible(true);
+        }
+        return super.onPrepareOptionsMenu(menu);
+    }
+
+    private void previousFragmentOrQuit() {
+        // Finish the activity if on first fragment else popBackStack()
+        Fragment f = fragmentManager.findFragmentById(R.id.fragment_container);
+        if (f instanceof ProcedureFamilyChoiceFragment)
+            finish();
+        fragmentManager.popBackStack();
+    }
+
+    @Override
+    public void onBackStackChanged() {
+        Fragment f = fragmentManager.findFragmentById(R.id.fragment_container);
+        Log.i(TAG, "onBackStackChanged" + f.toString());
+
+        if (f instanceof InterventionFormFragment)
+            currentFragment = INTERVENTION_FORM;
+        else if (f instanceof ParamChoiceFragment)
+            currentFragment = PARAM_FRAGMENT;
+
+        invalidateOptionsMenu();
+
+        // Change icon to close if on first fragment
+        int backStack = fragmentManager.getBackStackEntryCount();
+        if (backStack > 1 )
+            actionBar.setHomeAsUpIndicator(R.drawable.ic_back);
+        else
+            actionBar.setHomeAsUpIndicator(R.drawable.close);
+
+//        Fragment f = fragmentManager.findFragmentById(R.id.fragment_container);
+
+        // Force reset the option menu
+//        invalidateOptionsMenu();
+    }
+
+    /**
+     *      Back and Up navigation will do the same thing
+     */
+    @Override
+    public boolean onSupportNavigateUp() {
+        previousFragmentOrQuit();
+        return true;
+    }
+
+    @Override
+    public void onBackPressed() {
+        previousFragmentOrQuit();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch (item.getItemId()) {
+            case R.id.action_inter_save:
+                break;
+            case R.id.action_inter_done:
+                previousFragmentOrQuit();
+                break;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+        return true;
     }
 }

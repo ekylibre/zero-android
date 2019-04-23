@@ -5,14 +5,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-
-import java.util.ArrayList;
-import java.util.List;
-
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import ekylibre.zero.R;
 import ekylibre.zero.inter.InterActivity;
 import ekylibre.zero.inter.adapter.CropParcelAdapter;
@@ -22,7 +22,6 @@ import ekylibre.zero.inter.model.CropParcel;
 public class CropParcelChoiceFragment extends Fragment {
 
     private List<CropParcel> dataset = new ArrayList<>();
-    private CropParcelAdapter adapter;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -52,7 +51,7 @@ public class CropParcelChoiceFragment extends Fragment {
 
         RecyclerView recyclerView = view.findViewById(R.id.crop_parcel_recycler);
         recyclerView.setLayoutManager(new LinearLayoutManager(container.getContext()));
-        adapter = new CropParcelAdapter(dataset);
+        CropParcelAdapter adapter = new CropParcelAdapter(dataset);
         recyclerView.setAdapter(adapter);
 //
 //        TabLayout tabLayout = view.findViewById(R.id.tab_issues);

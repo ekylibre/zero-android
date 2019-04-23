@@ -9,24 +9,22 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.widget.LinearLayoutCompat;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 
 import java.text.Collator;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
-import androidx.annotation.DrawableRes;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.annotation.StringRes;
-import androidx.appcompat.widget.LinearLayoutCompat;
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import ekylibre.database.ZeroContract;
@@ -37,10 +35,9 @@ import ekylibre.util.pojo.GenericEntity;
 import ekylibre.zero.R;
 import ekylibre.zero.inter.InterActivity;
 import ekylibre.zero.inter.adapter.FormPeriodAdapter;
-import ekylibre.zero.inter.enums.ParamType.Type;
 import ekylibre.zero.inter.model.CropParcel;
-import ekylibre.zero.inter.model.SimpleSelectableItem;
 import ekylibre.zero.inter.model.Period;
+import ekylibre.zero.inter.model.SimpleSelectableItem;
 
 import static ekylibre.zero.inter.InterActivity.CROP_CHOICE_FRAGMENT;
 import static ekylibre.zero.inter.InterActivity.selectedProcedure;
@@ -73,7 +70,7 @@ public class InterventionFormFragment extends Fragment {
     }
 
     @Override
-    public void onAttach(Context context) {
+    public void onAttach(@NonNull Context context) {
         super.onAttach(context);
 
         // Get context when fragment is attached

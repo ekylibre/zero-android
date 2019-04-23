@@ -6,14 +6,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.StringRes;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import ekylibre.zero.R;
 import ekylibre.zero.inter.InterActivity;
 import ekylibre.zero.inter.adapter.SimpleSelectableItemAdapter;
@@ -59,7 +60,6 @@ public class ParamChoiceFragment extends Fragment {
             if (item.type.equals(paramType))
                 dataset.add(item);
 
-
         View view;
         if (dataset.isEmpty()) {
             view = inflater.inflate(R.layout.empty_recycler, container, false);
@@ -71,6 +71,8 @@ public class ParamChoiceFragment extends Fragment {
             SimpleSelectableItemAdapter adapter = new SimpleSelectableItemAdapter(dataset);
             recyclerView.setAdapter(adapter);
         }
+
+
         return view;
     }
 
