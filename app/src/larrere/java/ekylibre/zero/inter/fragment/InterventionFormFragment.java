@@ -35,13 +35,14 @@ import ekylibre.util.pojo.GenericEntity;
 import ekylibre.zero.R;
 import ekylibre.zero.inter.InterActivity;
 import ekylibre.zero.inter.adapter.FormPeriodAdapter;
-import ekylibre.zero.inter.model.CropParcel;
 import ekylibre.zero.inter.model.Period;
 import ekylibre.zero.inter.model.SimpleSelectableItem;
 
 import static ekylibre.zero.inter.InterActivity.CROP_CHOICE_FRAGMENT;
 import static ekylibre.zero.inter.InterActivity.selectedProcedure;
 import static ekylibre.zero.inter.enums.ParamType.DRIVER;
+import static ekylibre.zero.inter.enums.ParamType.LAND_PARCEL;
+import static ekylibre.zero.inter.enums.ParamType.PLANT;
 import static ekylibre.zero.inter.enums.ParamType.SOWER;
 import static ekylibre.zero.inter.enums.ParamType.TRACTOR;
 
@@ -52,8 +53,8 @@ public class InterventionFormFragment extends Fragment {
     private OnFragmentInteractionListener listener;
     private Context context;
     private List<Period> periodList;
-    static List<CropParcel> cropParcelList;
-    static List<SimpleSelectableItem> paramsList;
+//    static List<SimpleSelectableItem> cropParcelList;
+    public static List<SimpleSelectableItem> paramsList;
 
     // LAYOUT BINDINGS
     @BindView(R.id.widgets_container)
@@ -62,8 +63,9 @@ public class InterventionFormFragment extends Fragment {
     @BindView(R.id.form_period_recycler) RecyclerView periodRecycler;
     @BindView(R.id.form_period_add) TextView addPeriod;
 
-    @BindView(R.id.form_crop_chips_group) ChipGroup cropChipGroup;
-    @BindView(R.id.form_crop_add) TextView addCrop;
+//    @BindView(R.id.include_widget_crop) View cropWidget;
+//    @BindView(R.id.form_crop_chips_group) ChipGroup cropChipGroup;
+//    @BindView(R.id.form_crop_add) TextView addCrop;
 
     public static InterventionFormFragment newInstance() {
         return new InterventionFormFragment();
@@ -95,13 +97,14 @@ public class InterventionFormFragment extends Fragment {
         periodList = new ArrayList<>();
         periodList.add(new Period());
 
-        // Init cropParcelList
-        cropParcelList = new ArrayList<>();
-        cropParcelList.addAll(getPlants());
+//        // Init cropParcelList
+//        cropParcelList = new ArrayList<>();
+//        cropParcelList.addAll(getPlants());
 
         paramsList = new ArrayList<>();
         paramsList.addAll(getUsers());
         paramsList.addAll(getTools());
+        paramsList.addAll(getPlants());
     }
 
     @Override
@@ -133,22 +136,47 @@ public class InterventionFormFragment extends Fragment {
         // Crop layout //
         // ----------- //
 
-        addCrop.setOnClickListener(v -> listener.onFormFragmentInteraction(CROP_CHOICE_FRAGMENT));
+        // Check wether to display crop, parcel or both selector
+        for (GenericEntity target : selectedProcedure.target) {
+            switch (target.name) {
 
-        for (CropParcel crop : InterActivity.selectedCropParcels) {
-            Chip chip = new Chip(context);
-            chip.setText(crop.name);
-            chip.setCloseIconVisible(true);
-            chip.setOnCloseIconClickListener(v -> {
-                cropChipGroup.removeView(chip);
-                InterActivity.selectedCropParcels.remove(crop);
-                cropParcelList.get(cropParcelList.indexOf(crop)).isSelected = false;
-                if (InterActivity.selectedCropParcels.isEmpty())
-                    cropChipGroup.setVisibility(View.GONE);
-            });
-            cropChipGroup.addView(chip);
+                case "plant":
+                    widgetContainer.addView(new WidgetParamView(context, listener, PLANT, paramsList));
+                    break;
+
+                case "land_parcel":
+                    widgetContainer.addView(new WidgetParamView(context, listener, LAND_PARCEL, paramsList));
+                    break;
+
+                case "cultivation":
+                    if (target.filter.contains("is plant") && target.filter.contains("is land_parcel")) {
+                        View cropParcelView = inflater.inflate(R.layout.widget_param_layout, container, false);
+                        TextView label = cropParcelView.findViewById(R.id.widget_label);
+                        label.setText(R.string.crop_parcel);
+                        TextView addButton = cropParcelView.findViewById(R.id.widget_add);
+                        ChipGroup cropChipGroup = cropParcelView.findViewById(R.id.widget_chips_group);
+                        addButton.setOnClickListener(v -> listener.onFormFragmentInteraction(CROP_CHOICE_FRAGMENT));
+
+                        // ChipGroup Logic
+                        for (SimpleSelectableItem item : paramsList) {
+                            if ((item.type.equals(PLANT) || item.type.equals(LAND_PARCEL)) && item.isSelected) {
+                                Chip chip = new Chip(context);
+                                chip.setText(item.label);
+                                chip.setCloseIconVisible(true);
+                                chip.setOnCloseIconClickListener(v -> {
+                                    cropChipGroup.removeView(chip);
+                                    paramsList.get(paramsList.indexOf(item)).isSelected = false;
+                                  chipGroupDisplay(cropChipGroup);
+                                });
+                                cropChipGroup.addView(chip);
+                            }
+                        }
+                        chipGroupDisplay(cropChipGroup);
+                        widgetContainer.addView(cropParcelView);
+                    }
+                    break;
+            }
         }
-        cropChipGroup.setVisibility(InterActivity.selectedCropParcels.isEmpty() ? View.GONE : View.VISIBLE);
 
         // ------------- //
         // Params layout //
@@ -173,15 +201,25 @@ public class InterventionFormFragment extends Fragment {
         return view;
     }
 
+    private void chipGroupDisplay(ChipGroup group) {
+        boolean itemCounter = false;
+        for (SimpleSelectableItem item : paramsList)
+            if ((item.type.equals(PLANT) || item.type.equals(LAND_PARCEL)) && item.isSelected) {
+                itemCounter = true;
+                break;
+            }
+        group.setVisibility(itemCounter ? View.VISIBLE : View.GONE);
+    }
+
     @Override
     public void onDetach() {
         super.onDetach();
         listener = null;
     }
 
-    private List<CropParcel> getPlants() {
+    private List<SimpleSelectableItem> getPlants() {
 
-        List<CropParcel> list = new ArrayList<>();
+        List<SimpleSelectableItem> list = new ArrayList<>();
         Cursor cursor = context.getContentResolver().query(
                 ZeroContract.Plants.CONTENT_URI, ZeroContract.Plants.PROJECTION_OBS,
                 ZeroContract.Plants.USER + " LIKE " + "\"" + InterActivity.account.name + "\""
@@ -191,7 +229,7 @@ public class InterventionFormFragment extends Fragment {
         if (cursor != null) {
             try {
                 while (cursor.moveToNext())
-                    list.add(new CropParcel(cursor.getString(2), false));
+                    list.add(new SimpleSelectableItem(cursor.getString(1), cursor.getString(2), PLANT, false));
             } finally {
                 cursor.close();
             }
@@ -211,6 +249,12 @@ public class InterventionFormFragment extends Fragment {
         list.add(new SimpleSelectableItem("2", "Jean", DRIVER));
         list.add(new SimpleSelectableItem("3", "Jacques", DRIVER));
         list.add(new SimpleSelectableItem("4", "Bob", DRIVER));
+
+        Collections.sort(list, (ele1, ele2) -> {
+            Collator localeCollator = Collator.getInstance(Locale.FRANCE);
+            return localeCollator.compare(ele1.name, ele2.name);
+        });
+
         return list;
     }
 
@@ -220,6 +264,12 @@ public class InterventionFormFragment extends Fragment {
         list.add(new SimpleSelectableItem("2", "Sem 360 +", SOWER));
         list.add(new SimpleSelectableItem("3", "New FR250", TRACTOR));
         list.add(new SimpleSelectableItem("4", "Multigrains 500L", TRACTOR));
+
+        Collections.sort(list, (ele1, ele2) -> {
+            Collator localeCollator = Collator.getInstance(Locale.FRANCE);
+            return localeCollator.compare(ele1.name, ele2.name);
+        });
+
         return list;
     }
 

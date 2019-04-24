@@ -12,9 +12,8 @@
         android:id="@+id/widget_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
         app:layout_constraintBaseline_toBaselineOf="@id/widget_add"
-        app:layout_constraintStart_toEndOf="@id/widget_icon"
+        app:layout_constraintStart_toStartOf="parent"
         tools:text="@string/tractor"
         android:textStyle="bold"/>
 

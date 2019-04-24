@@ -10,7 +10,7 @@ public class ProcedureEntity {
 
     public String name;
     public String categories;
-    public List<TargetEntity> target;
+    public List<GenericEntity> target;
     public List<InputEntity> input;
     public List<OutputEntity> output;
     public List<GenericEntity> doer;

@@ -10,18 +10,25 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.tabs.TabLayout;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import ekylibre.zero.R;
 import ekylibre.zero.inter.InterActivity;
 import ekylibre.zero.inter.adapter.CropParcelAdapter;
-import ekylibre.zero.inter.model.CropParcel;
+import ekylibre.zero.inter.model.SimpleSelectableItem;
+
+import static ekylibre.zero.inter.enums.ParamType.LAND_PARCEL;
+import static ekylibre.zero.inter.enums.ParamType.PLANT;
 
 
 public class CropParcelChoiceFragment extends Fragment {
 
-    private List<CropParcel> dataset = new ArrayList<>();
+    List<SimpleSelectableItem> dataset;
+    CropParcelAdapter adapter;
+    public int currentTab = 0;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -35,67 +42,41 @@ public class CropParcelChoiceFragment extends Fragment {
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        dataset = InterventionFormFragment.cropParcelList;
-    }
-
-    @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
         InterActivity.actionBar.setTitle("Choix des cultures/parcelles");
-
         View view = inflater.inflate(R.layout.fragment_crop_parcel, container, false);
+
+        dataset = new ArrayList<>();
 
         RecyclerView recyclerView = view.findViewById(R.id.crop_parcel_recycler);
         recyclerView.setLayoutManager(new LinearLayoutManager(container.getContext()));
-        CropParcelAdapter adapter = new CropParcelAdapter(dataset);
+        adapter = new CropParcelAdapter(dataset);
         recyclerView.setAdapter(adapter);
-//
-//        TabLayout tabLayout = view.findViewById(R.id.tab_issues);
-//        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
-//            @Override public void onTabSelected(TabLayout.Tab tab) {
-////                queryDatabaseForList(tab.getPosition());
-//            }
-//            @Override public void onTabUnselected(TabLayout.Tab tab) { }
-//            @Override public void onTabReselected(TabLayout.Tab tab) { }
-//        });
 
-//        queryDatabaseForList(0);
+        TabLayout tabLayout = view.findViewById(R.id.tab_crop_parcel);
+        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override public void onTabSelected(TabLayout.Tab tab) {
+                queryDatabaseForList(tab.getPosition());
+            }
+            @Override public void onTabUnselected(TabLayout.Tab tab) { }
+            @Override public void onTabReselected(TabLayout.Tab tab) { }
+        });
+
+        // Query data for first tab
+        queryDatabaseForList(0);
 
         return view;
     }
 
-//    private void queryDatabaseForList(int tab) {
-//        // Field values as existing in database
-//        String[] categories = {"Adventices", "Ravageurs", "Maladies", "Autres"};
-//        Context context = getActivity();
-//        if (context != null) {
-//            ContentResolver contentResolver = context.getContentResolver();
-//
-//            try (Cursor cursor = contentResolver.query(ZeroContract.IssueNatures.CONTENT_URI,
-//                    ZeroContract.IssueNatures.PROJECTION_ALL,
-//                    ZeroContract.IssueNatures.CATEGORY + " = ? ", new String[]{categories[tab]},
-//                    ZeroContract.IssueNatures.SORT_ORDER_DEFAULT)) {
-//                if (cursor != null) {
-//                    dataset.clear();
-//                    while (cursor.moveToNext()) {
-//                        String label = cursor.getString(2);
-//                        boolean selected = false;
-//                        for (IssueItem item : issuesList)
-//                            if (item.label.equals(label)) {
-//                                selected = true;
-//                                break;
-//                            }
-//                        dataset.add(new IssueItem(cursor.getString(1), label,
-//                                cursor.getString(3), selected));
-//                    }
-//                    adapter.notifyDataSetChanged();
-//                }
-//            }
-//        }
-//    }
+    private void queryDatabaseForList(int tab) {
+        dataset.clear();
+        String filter = tab == 0 ? PLANT : LAND_PARCEL;
+        for (SimpleSelectableItem item : InterventionFormFragment.paramsList)
+            if (item.type.equals(filter))
+                dataset.add(item);
+        adapter.notifyDataSetChanged();
+    }
 
 }

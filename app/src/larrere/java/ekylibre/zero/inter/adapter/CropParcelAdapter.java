@@ -12,15 +12,15 @@ import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 import ekylibre.zero.R;
-import ekylibre.zero.inter.InterActivity;
 import ekylibre.zero.inter.model.CropParcel;
+import ekylibre.zero.inter.model.SimpleSelectableItem;
 
 
 public class CropParcelAdapter extends RecyclerView.Adapter<CropParcelAdapter.ViewHolder> {
 
-    private final List<CropParcel> dataset;
+    private final List<SimpleSelectableItem> dataset;
 
-    public CropParcelAdapter(List<CropParcel> items) {
+    public CropParcelAdapter(List<SimpleSelectableItem> items) {
         dataset = items;
     }
 
@@ -31,7 +31,7 @@ public class CropParcelAdapter extends RecyclerView.Adapter<CropParcelAdapter.Vi
         View view;
         Context context;
         TextView textView;
-        CropParcel item;
+        SimpleSelectableItem item;
         int pos;
 
 
@@ -56,16 +56,16 @@ public class CropParcelAdapter extends RecyclerView.Adapter<CropParcelAdapter.Vi
             textView.setTextColor(ContextCompat.getColor(context, textColor));
             view.setBackgroundColor(ContextCompat.getColor(context, backgroundId));
             // Set text
-            textView.setText(item.name);
+            textView.setText(item.label);
         }
 
         @Override
         public void onClick(View v) {
 
-            if (item.isSelected)
-                InterActivity.selectedCropParcels.remove(item);
-            else
-                InterActivity.selectedCropParcels.add(item);
+//            if (item.isSelected)
+//                InterventionFormFragment.paramsList.remove(item);
+//            else
+//                InterActivity.selectedCropParcels.add(item);
 
             item.isSelected = !item.isSelected;
             view.setSelected(!view.isSelected());

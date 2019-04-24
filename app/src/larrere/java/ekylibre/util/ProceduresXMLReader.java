@@ -169,10 +169,10 @@ public class ProceduresXMLReader {
             skip(parser);
     }
 
-    private TargetEntity readTarget(XmlPullParser parser) throws IOException, XmlPullParserException {
+    private GenericEntity readTarget(XmlPullParser parser) throws IOException, XmlPullParserException {
 
         parser.require(XmlPullParser.START_TAG, ns, "target");
-        TargetEntity targetEntity = new TargetEntity();
+        GenericEntity targetEntity = new GenericEntity();
 
         targetEntity.name = parser.getAttributeValue(ns, "name");
         targetEntity.filter = parser.getAttributeValue(ns, "filter");

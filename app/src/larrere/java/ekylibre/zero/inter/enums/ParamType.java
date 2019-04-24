@@ -8,6 +8,8 @@ import androidx.annotation.StringDef;
 
 public class ParamType {
 
+    public static final String PLANT = "plant";
+    public static final String LAND_PARCEL = "land_parcel";
     public static final String DRIVER = "driver";
     public static final String TRACTOR = "tractor";
     public static final String SOWER = "sower";
@@ -17,7 +19,7 @@ public class ParamType {
     }
 
     // Declare the @ StringDef for these constants:
-    @StringDef({DRIVER, TRACTOR, SOWER})
+    @StringDef({PLANT, LAND_PARCEL, DRIVER, TRACTOR, SOWER})
     @Retention(RetentionPolicy.SOURCE)
     public @interface Type {}
 
