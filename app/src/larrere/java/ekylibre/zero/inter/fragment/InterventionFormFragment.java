@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.StringRes;
 import androidx.appcompat.widget.LinearLayoutCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -39,6 +40,7 @@ import ekylibre.zero.inter.model.Period;
 import ekylibre.zero.inter.model.SimpleSelectableItem;
 
 import static ekylibre.zero.inter.InterActivity.CROP_CHOICE_FRAGMENT;
+import static ekylibre.zero.inter.InterActivity.INPUT_CHOICE_FRAGMENT;
 import static ekylibre.zero.inter.InterActivity.selectedProcedure;
 import static ekylibre.zero.inter.enums.ParamType.DRIVER;
 import static ekylibre.zero.inter.enums.ParamType.LAND_PARCEL;
@@ -181,6 +183,25 @@ public class InterventionFormFragment extends Fragment {
         // ------------- //
         // Params layout //
         // ------------- //
+
+        for (GenericEntity entity : selectedProcedure.input) {
+            Log.i(TAG, "input --> " + entity.name);
+
+            // Get layout
+            View inputView = inflater.inflate(R.layout.widget_input, container, false);
+
+            // Set param label
+            TextView label = inputView.findViewById(R.id.widget_label);
+            @StringRes final int labelRes = getResources().getIdentifier(entity.name, "string", context.getPackageName());
+            label.setText(labelRes);
+
+            // Add onClick listener
+            TextView addButton = inputView.findViewById(R.id.widget_add);
+            addButton.setOnClickListener(v -> listener.onFormFragmentInteraction(entity.name));
+
+            // Add view
+            widgetContainer.addView(inputView);
+        }
 
         for (GenericEntity entity : selectedProcedure.doer) {
             Log.i(TAG, "doer --> " + entity.name);

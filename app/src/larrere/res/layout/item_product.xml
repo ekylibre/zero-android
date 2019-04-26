@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="12dp"
+    android:background="@drawable/background_round_corners">
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/item_label"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/item_delete"
+        tools:text="Fandango"
+        android:textStyle="bold"
+        android:textColor="@color/not_so_dark_dark"/>
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/quantity_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBaseline_toBaselineOf="@id/quantity_value"
+        android:text="@string/quantity"/>
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/quantity_value"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/item_label"
+        app:layout_constraintStart_toEndOf="@id/quantity_label"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:paddingStart="@dimen/field_padding_horizontal"
+        android:paddingEnd="@dimen/field_padding_horizontal"
+        android:paddingTop="@dimen/field_padding_vertical"
+        android:paddingBottom="@dimen/field_padding_vertical"
+        tools:text="45,6"
+        android:textSize="16sp"
+        android:background="@drawable/field_rounded_white" />
+
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/quantity_unit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBaseline_toBaselineOf="@id/quantity_value"
+        app:layout_constraintStart_toEndOf="@id/quantity_value"
+        android:layout_marginStart="6dp"
+        android:paddingStart="@dimen/field_padding_horizontal"
+        android:paddingEnd="@dimen/field_padding_horizontal"
+        android:paddingTop="@dimen/field_padding_vertical"
+        android:paddingBottom="@dimen/field_padding_vertical"
+        tools:text="kg"
+        android:textSize="16sp"
+        android:background="@drawable/field_rounded_white"
+        android:focusable="false"/>
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/item_delete"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:srcCompat="@drawable/cancel"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toEndOf="@id/item_label"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_chainStyle="spread_inside"
+        android:adjustViewBounds="true"
+        android:scaleType="fitXY"/>
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/item_warning_message"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/quantity_value"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginTop="8dp"
+        tools:text="Quantité invalide"
+        android:textColor="@color/basic_orange"
+        android:visibility="gone"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

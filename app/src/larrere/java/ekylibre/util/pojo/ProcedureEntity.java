@@ -11,10 +11,11 @@ public class ProcedureEntity {
     public String name;
     public String categories;
     public List<GenericEntity> target;
-    public List<InputEntity> input;
+    public List<GenericEntity> input;
     public List<OutputEntity> output;
     public List<GenericEntity> doer;
     public List<GenericEntity> tool;
+    public String group;
 
     public ProcedureEntity() {
         this.target = new ArrayList<>();
@@ -22,6 +23,7 @@ public class ProcedureEntity {
         this.tool = new ArrayList<>();
         this.input = new ArrayList<>();
         this.output = new ArrayList<>();
+        this.group = null;
     }
 
     public int getTranslationId(Context context) {

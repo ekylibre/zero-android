@@ -130,43 +130,56 @@ public class ProceduresXMLReader {
     }
 
     private void readGroup(XmlPullParser parser) throws XmlPullParserException, IOException {
+
         parser.require(XmlPullParser.START_TAG, ns, "group");
 
-        if (BuildConfig.DEBUG) {
-            Log.d(TAG, "parsing [group] node...");
-        }
+        procedureEntity.group = parser.getAttributeValue(ns, "name");
 
-        String name = parser.getName();
+        // Skip inside balises
+        do {
+            parser.nextTag();
+        } while (!parser.getName().equals("group"));
 
-        if (name.equals("zone")) {
+        parser.require(XmlPullParser.END_TAG, ns, "group");
 
-            while (parser.next() != XmlPullParser.END_TAG) {
-                if (parser.getEventType() != XmlPullParser.START_TAG)
-                    continue;
 
-                switch (parser.getName()) {
-                    case "doer":
-                        procedureEntity.doer.add(readDoer(parser));
-                        break;
-                    case "target":
-                        procedureEntity.target.add(readTarget(parser));
-                        break;
-                    case "input":
-                        procedureEntity.input.add(readInput(parser));
-                        break;
-                    case "output":
-                        procedureEntity.output.add(readOuput(parser));
-                        break;
-                    case "tool":
-                        procedureEntity.tool.add(readTool(parser));
-                        break;
-                    default:
-                        skip(parser);
-                        break;
-                }
-            }
-        } else
-            skip(parser);
+//        parser.require(XmlPullParser.START_TAG, ns, "group");
+//
+//        if (BuildConfig.DEBUG) {
+//            Log.d(TAG, "parsing [group] node...");
+//        }
+//
+//        String name = parser.getName();
+//
+//        if (name.equals("zone")) {
+//
+//            while (parser.next() != XmlPullParser.END_TAG) {
+//                if (parser.getEventType() != XmlPullParser.START_TAG)
+//                    continue;
+//
+//                switch (parser.getName()) {
+//                    case "doer":
+//                        procedureEntity.doer.add(readDoer(parser));
+//                        break;
+//                    case "target":
+//                        procedureEntity.target.add(readTarget(parser));
+//                        break;
+//                    case "input":
+//                        procedureEntity.input.add(readInput(parser));
+//                        break;
+//                    case "output":
+//                        procedureEntity.output.add(readOuput(parser));
+//                        break;
+//                    case "tool":
+//                        procedureEntity.tool.add(readTool(parser));
+//                        break;
+//                    default:
+//                        skip(parser);
+//                        break;
+//                }
+//            }
+//        } else
+//            skip(parser);
     }
 
     private GenericEntity readTarget(XmlPullParser parser) throws IOException, XmlPullParserException {
@@ -199,23 +212,19 @@ public class ProceduresXMLReader {
         return targetEntity;
     }
 
-    private InputEntity readInput(XmlPullParser parser) throws IOException, XmlPullParserException {
+    private GenericEntity readInput(XmlPullParser parser) throws IOException, XmlPullParserException {
 
         parser.require(XmlPullParser.START_TAG, ns, "input");
-        InputEntity inputEntity = new InputEntity();
+        GenericEntity inputEntity = new GenericEntity();
 
         inputEntity.name = parser.getAttributeValue(ns, "name");
         inputEntity.filter = parser.getAttributeValue(ns, "filter");
+        inputEntity.cardinality = parser.getAttributeValue(ns, "cardinality");
 
         // Skip attribute balises for now
-        while (true) {
+        do {
             parser.nextTag();
-            String name = parser.getName();
-            if (BuildConfig.DEBUG)
-                Log.d(TAG, "node --> " + name);
-            if (name.equals("input"))
-                break;
-        }
+        } while (!parser.getName().equals("input"));
 
         parser.require(XmlPullParser.END_TAG, ns, "input");
 

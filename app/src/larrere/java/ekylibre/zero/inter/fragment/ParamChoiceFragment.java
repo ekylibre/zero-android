@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.StringRes;
+import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -65,11 +66,35 @@ public class ParamChoiceFragment extends Fragment {
             view = inflater.inflate(R.layout.empty_recycler, container, false);
         }
         else {
-            view = inflater.inflate(R.layout.fragment_single_line_item, container, false);
-            RecyclerView recyclerView = view.findViewById(R.id.simple_recycler);
+            view = inflater.inflate(R.layout.fragment_recycler_with_search_field, container, false);
+            RecyclerView recyclerView = view.findViewById(R.id.recycler);
             recyclerView.setLayoutManager(new LinearLayoutManager(container.getContext()));
             SimpleSelectableItemAdapter adapter = new SimpleSelectableItemAdapter(dataset);
             recyclerView.setAdapter(adapter);
+
+//            // SeachField logic
+//            SearchView searchView = view.findViewById(R.id.search_field);
+//
+//            searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+//                @Override
+//                public boolean onQueryTextSubmit(String query) {
+//                    search(query);
+//                    return false;
+//                }
+//                @Override
+//                public boolean onQueryTextChange(String newText) {
+//                    if (newText.length() > 2)
+//                        search(query);
+//                    return false;
+//                }
+//            });
+//
+//            searchView.setOnCloseListener(() -> {
+//
+//                // Reset filters
+//                search();
+//                return false;
+//            });
         }
 
 

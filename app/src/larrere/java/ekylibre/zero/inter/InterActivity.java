@@ -34,6 +34,7 @@ import ekylibre.util.pojo.ProcedureEntity;
 import ekylibre.zero.BuildConfig;
 import ekylibre.zero.R;
 import ekylibre.zero.inter.fragment.CropParcelChoiceFragment;
+import ekylibre.zero.inter.fragment.InputChoiceFragment;
 import ekylibre.zero.inter.fragment.InterventionFormFragment;
 import ekylibre.zero.inter.fragment.ParamChoiceFragment;
 import ekylibre.zero.inter.fragment.ProcedureChoiceFragment;
@@ -54,6 +55,7 @@ public class InterActivity extends AppCompatActivity implements FragmentManager.
     public static final String INTERVENTION_FORM = "ekylibre.zero.fragments.intervention.form";
     public static final String PARAM_FRAGMENT = "ekylibre.zero.fragments.intervention.param";
     public static final String CROP_CHOICE_FRAGMENT = "ekylibre.zero.fragments.crop.choice";
+    public static final String INPUT_CHOICE_FRAGMENT = "ekylibre.zero.fragments.input.choice";
 
     private static final Pair<Integer,String> ADMINISTERING = Pair.create(R.id.administering, "administering");
     private static final Pair<Integer,String> ANIMAL_FARMING = Pair.create(R.id.animal_farming, "animal_farming");
@@ -136,6 +138,10 @@ public class InterActivity extends AppCompatActivity implements FragmentManager.
             case CROP_CHOICE_FRAGMENT:
                 fragment = CropParcelChoiceFragment.newInstance();
                 break;
+
+//            case INPUT_CHOICE_FRAGMENT:
+//                fragment = InputChoiceFragment.newInstance();
+//                break;
 
             case PROCEDURE_FAMILY_FRAGMENT:
                 fragment = ProcedureFamilyChoiceFragment.newInstance();
