@@ -168,6 +168,9 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
             pullPlantDensityAbaci(account,
                 extras, authority, provider, syncResult);
             pullPlants(account, extras, authority, provider, syncResult);
+
+            pullWorkers(account, extras, authority, provider, syncResult);
+
             pushIssues(account, extras, authority, provider, syncResult);
             pushPlantCounting(account, extras, authority, provider, syncResult);
 
@@ -1211,19 +1214,51 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
         Log.i(TAG, "Observation SYNC DONE");
     }
 
+    /**
+     *   Get workers from Ekylibre instance
+     */
+    private void pullWorkers(Account account, Bundle extras, String authority, ContentProviderClient provider, SyncResult syncResult) {
+
+        if (BuildConfig.DEBUG)
+            Log.i(TAG, "Beginning network workers synchronization");
+
+        ContentValues cv = new ContentValues();
+        Instance instance = getInstance(account);
+
+        List<Worker> workersList = null;
+        try {
+            workersList = Worker.all(instance, null);
+        } catch (JSONException | IOException | HTTPException e) {
+            e.printStackTrace();
+        }
+
+        if (workersList == null)
+            return;
+
+        if (BuildConfig.DEBUG)
+            Log.d(TAG, "Nombre de workers : " + workersList.size() );
+
+        for (Worker worker : workersList) {
+            cv.put(ZeroContract.Workers.EK_ID, worker.id);
+            cv.put(ZeroContract.Workers.NAME, worker.name);
+            cv.put(ZeroContract.Workers.NUMBER, worker.number);
+            cv.put(ZeroContract.Workers.QUALIFICATION, "driver");
+            cv.put(ZeroContract.Workers.USER, account.name);
+            mContentResolver.insert(ZeroContract.Workers.CONTENT_URI, cv);
+        }
+
+        if (BuildConfig.DEBUG)
+            Log.i(TAG, "Finish network workers synchronization");
+    }
+
     protected Instance getInstance(Account account)
     {
         Instance instance = null;
-            try
-            {
+            try {
                 instance = new Instance(account, mAccountManager);
-            }
-            catch(AccountsException e)
-            {
+            } catch(AccountsException e) {
                 if (BuildConfig.DEBUG) Log.e(TAG, "Account manager or user cannot help. Cannot get token.");
-            }
-            catch(IOException e)
-            {
+            } catch(IOException e) {
                 if (BuildConfig.DEBUG) Log.w(TAG, "IO problem. Cannot get token.");
             }
         return (instance);

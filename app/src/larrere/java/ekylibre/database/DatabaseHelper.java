@@ -17,7 +17,7 @@ import ekylibre.zero.ObservationActivity;
 
 public class DatabaseHelper extends SQLiteOpenHelper
 {
-    private static final int DATABASE_VERSION = 21;
+    private static final int DATABASE_VERSION = 22;
 
     private static final String DATABASE_NAME = "zero";
 
@@ -470,17 +470,28 @@ public class DatabaseHelper extends SQLiteOpenHelper
             {
                 database.execSQL("CREATE TABLE IF NOT EXISTS " + ZeroContract.Equipments.TABLE_NAME + "(" +
                         ZeroContract.Equipments._ID + " INTEGER PRIMARY KEY, " +
+                        ZeroContract.Equipments.EK_ID + " INTEGER NOT NULL, " +
                         ZeroContract.Equipments.NAME + " TEXT NOT NULL, " +
                         ZeroContract.Equipments.NUMBER + " TEXT, " +
-                        ZeroContract.Equipments.TYPE + " TEXT NOT NULL)");
+                        ZeroContract.Equipments.TYPE + " TEXT NOT NULL, " +
+                        ZeroContract.Equipments.USER + " TEXT)");
 
                 database.execSQL("CREATE TABLE IF NOT EXISTS " + ZeroContract.Articles.TABLE_NAME + "(" +
                         ZeroContract.Articles._ID + " INTEGER PRIMARY KEY, " +
+                        ZeroContract.Articles.EK_ID + " INTEGER NOT NULL, " +
                         ZeroContract.Articles.NAME + " TEXT NOT NULL, " +
                         ZeroContract.Articles.NUMBER + " TEXT, " +
                         ZeroContract.Articles.TYPE + " TEXT NOT NULL, " +
-                        ZeroContract.Articles.UNIT + " TEXT)");
+                        ZeroContract.Articles.UNIT + " TEXT, " +
+                        ZeroContract.Articles.USER + " TEXT)");
 
+                database.execSQL("CREATE TABLE IF NOT EXISTS " + ZeroContract.Workers.TABLE_NAME + "(" +
+                        ZeroContract.Workers._ID + " INTEGER PRIMARY KEY, " +
+                        ZeroContract.Workers.EK_ID + " INTEGER NOT NULL, " +
+                        ZeroContract.Workers.NAME + " TEXT NOT NULL, " +
+                        ZeroContract.Workers.NUMBER + " TEXT, " +
+                        ZeroContract.Workers.QUALIFICATION + " TEXT NOT NULL, " +
+                        ZeroContract.Workers.USER + " TEXT)");
 
                 if (newVersion == 22)
                     break;

@@ -220,17 +220,30 @@ public final class ZeroContract {
 
     public interface EquipmentColumns extends BaseColumns {
         String TABLE_NAME = "equipments";
+        String EK_ID = "ek_id";
         String NAME = "name";
         String NUMBER = "number";
         String TYPE = "type";
+        String USER = "user";
     }
 
     public interface ArticleColumns extends BaseColumns {
         String TABLE_NAME = "articles";
+        String EK_ID = "ek_id";
         String NAME = "name";
         String NUMBER = "number";
         String TYPE = "type";
         String UNIT = "unit";
+        String USER = "user";
+    }
+
+    public interface WorkerColumns extends BaseColumns {
+        String TABLE_NAME = "workers";
+        String EK_ID = "ek_id";
+        String NAME = "name";
+        String NUMBER = "number";
+        String QUALIFICATION = "qualification";
+        String USER = "user";
     }
 
     public static final class Crumbs implements CrumbsColumns {
@@ -536,7 +549,7 @@ public final class ZeroContract {
         public static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE +
                 "/vnd.ekylibre.zero.equipments";
 
-        public static final String[] PROJECTION_ALL = {_ID, NAME, NUMBER, TYPE};
+        public static final String[] PROJECTION_ALL = {_ID, EK_ID, NAME, NUMBER, TYPE, USER};
 
         public static final String SORT_ORDER_DEFAULT = NAME + " ASC";
     }
@@ -550,7 +563,21 @@ public final class ZeroContract {
         public static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE +
                 "/vnd.ekylibre.zero.articles";
 
-        public static final String[] PROJECTION_ALL = {_ID, NAME, NUMBER, TYPE, UNIT};
+        public static final String[] PROJECTION_ALL = {_ID, EK_ID, NAME, NUMBER, TYPE, UNIT, USER};
+
+        public static final String SORT_ORDER_DEFAULT = NAME + " ASC";
+    }
+
+    public static final class Workers implements WorkerColumns {
+
+        // Content URI for this table
+        public static final Uri CONTENT_URI = Uri.withAppendedPath(
+                ZeroContract.CONTENT_URI,"workers");
+        // MIME type for list and individual record.
+        public static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE +
+                "/vnd.ekylibre.zero.workers";
+
+        public static final String[] PROJECTION_ALL = {_ID, EK_ID, NAME, NUMBER, QUALIFICATION, USER};
 
         public static final String SORT_ORDER_DEFAULT = NAME + " ASC";
     }
