@@ -33,6 +33,6 @@
         app:layout_constraintTop_toBottomOf="@id/widget_label"
         app:layout_constraintBottom_toBottomOf="parent"
         android:layout_marginTop="16dp"
-        tools:listitem="@layout/item_product" />
+        tools:listitem="@layout/item_with_quantity" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

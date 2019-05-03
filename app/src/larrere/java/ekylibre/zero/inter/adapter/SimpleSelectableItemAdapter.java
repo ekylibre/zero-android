@@ -29,7 +29,7 @@ public class SimpleSelectableItemAdapter extends RecyclerView.Adapter<SimpleSele
 
     class ViewHolder extends RecyclerView.ViewHolder {
 
-        @BindView(R.id.intem_label) TextView textView;
+        @BindView(R.id.item_label) TextView textView;
         SimpleSelectableItem item;
 
         ViewHolder(View itemView) {

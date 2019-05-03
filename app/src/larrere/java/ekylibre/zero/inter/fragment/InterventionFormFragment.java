@@ -33,9 +33,12 @@ import ekylibre.util.MarginTopItemDecoration;
 import ekylibre.util.Translate;
 import ekylibre.util.layout.component.WidgetParamView;
 import ekylibre.util.pojo.GenericEntity;
+import ekylibre.zero.BuildConfig;
 import ekylibre.zero.R;
 import ekylibre.zero.inter.InterActivity;
 import ekylibre.zero.inter.adapter.FormPeriodAdapter;
+import ekylibre.zero.inter.adapter.QuantityItemAdapter;
+import ekylibre.zero.inter.model.ItemWithQuantity;
 import ekylibre.zero.inter.model.Period;
 import ekylibre.zero.inter.model.SimpleSelectableItem;
 
@@ -44,6 +47,7 @@ import static ekylibre.zero.inter.InterActivity.selectedProcedure;
 import static ekylibre.zero.inter.enums.ParamType.DRIVER;
 import static ekylibre.zero.inter.enums.ParamType.LAND_PARCEL;
 import static ekylibre.zero.inter.enums.ParamType.PLANT;
+import static ekylibre.zero.inter.enums.ParamType.PLANT_MEDICINE;
 import static ekylibre.zero.inter.enums.ParamType.SOWER;
 import static ekylibre.zero.inter.enums.ParamType.TRACTOR;
 
@@ -54,6 +58,7 @@ public class InterventionFormFragment extends Fragment {
     private OnFragmentInteractionListener listener;
     private Context context;
     private List<Period> periodList;
+    private List<ItemWithQuantity> inputList;
 //    static List<SimpleSelectableItem> cropParcelList;
     public static List<SimpleSelectableItem> paramsList;
 
@@ -92,11 +97,11 @@ public class InterventionFormFragment extends Fragment {
 
         Log.i(TAG, "onCreate");
 
-
-
         // Add one hour period as default
         periodList = new ArrayList<>();
         periodList.add(new Period());
+
+        inputList = new ArrayList<>();
 
 //        // Init cropParcelList
 //        cropParcelList = new ArrayList<>();
@@ -106,10 +111,13 @@ public class InterventionFormFragment extends Fragment {
         paramsList.addAll(getUsers());
         paramsList.addAll(getTools());
         paramsList.addAll(getPlants());
+        paramsList.addAll(getInputs());
     }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
+        if (BuildConfig.DEBUG) Log.e(TAG, "onCreateView");
 
         // Set title
         InterActivity.actionBar.setTitle(Translate.getStringId(context, InterActivity.selectedProcedure.name));
@@ -198,6 +206,14 @@ public class InterventionFormFragment extends Fragment {
             TextView addButton = inputView.findViewById(R.id.widget_add);
             addButton.setOnClickListener(v -> listener.onFormFragmentInteraction(entity.name));
 
+            RecyclerView inputRecycler = inputView.findViewById(R.id.widget_recycler);
+            inputRecycler.setLayoutManager(new LinearLayoutManager(context));
+            inputRecycler.addItemDecoration(new MarginTopItemDecoration(context, 16));
+            QuantityItemAdapter quantityItemAdapter = new QuantityItemAdapter(inputList);
+            inputRecycler.setAdapter(quantityItemAdapter);
+
+            // TODO add selected items from paramsList to inputList
+
             // Add view
             widgetContainer.addView(inputView);
         }
@@ -284,6 +300,29 @@ public class InterventionFormFragment extends Fragment {
         list.add(new SimpleSelectableItem(2, "Sem 360 +", SOWER));
         list.add(new SimpleSelectableItem(3, "New FR250", TRACTOR));
         list.add(new SimpleSelectableItem(4, "Multigrains 500L", TRACTOR));
+
+        Collections.sort(list, (ele1, ele2) -> {
+            Collator localeCollator = Collator.getInstance(Locale.FRANCE);
+            return localeCollator.compare(ele1.name, ele2.name);
+        });
+
+        return list;
+    }
+
+    private List<SimpleSelectableItem> getInputs() {
+        List<SimpleSelectableItem> list = new ArrayList<>();
+        list.add(new SimpleSelectableItem(1, "Adelia EC", PLANT_MEDICINE));
+        list.add(new SimpleSelectableItem(2, "PRIORI GOLD", PLANT_MEDICINE));
+        list.add(new SimpleSelectableItem(3, "Licorne Flex", PLANT_MEDICINE));
+        list.add(new SimpleSelectableItem(4, "SILICOSEC", PLANT_MEDICINE));
+        list.add(new SimpleSelectableItem(5, "Azural xpress", PLANT_MEDICINE));
+        list.add(new SimpleSelectableItem(6, "OPTION FLASH", PLANT_MEDICINE));
+        list.add(new SimpleSelectableItem(7, "OXANA", PLANT_MEDICINE));
+        list.add(new SimpleSelectableItem(8, "DYNAMIZ", PLANT_MEDICINE));
+        list.add(new SimpleSelectableItem(9, "ORENGO", PLANT_MEDICINE));
+        list.add(new SimpleSelectableItem(10, "HM BASA", PLANT_MEDICINE));
+        list.add(new SimpleSelectableItem(11, "CLAYTON EL NINO", PLANT_MEDICINE));
+        list.add(new SimpleSelectableItem(12, "MILLENIUM OPTI", PLANT_MEDICINE));
 
         Collections.sort(list, (ele1, ele2) -> {
             Collator localeCollator = Collator.getInstance(Locale.FRANCE);

@@ -12,7 +12,6 @@ import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 import ekylibre.zero.R;
-import ekylibre.zero.inter.model.CropParcel;
 import ekylibre.zero.inter.model.SimpleSelectableItem;
 
 
@@ -39,7 +38,7 @@ public class CropParcelAdapter extends RecyclerView.Adapter<CropParcelAdapter.Vi
             super(itemView);
             view = itemView;
             context = view.getContext();
-            textView = itemView.findViewById(R.id.intem_label);
+            textView = itemView.findViewById(R.id.item_label);
             // Set Click listener
             view.setOnClickListener(this);
         }

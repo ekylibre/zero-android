@@ -34,6 +34,7 @@ import ekylibre.util.pojo.ProcedureEntity;
 import ekylibre.zero.BuildConfig;
 import ekylibre.zero.R;
 import ekylibre.zero.inter.fragment.CropParcelChoiceFragment;
+import ekylibre.zero.inter.fragment.InputChoiceFragment;
 import ekylibre.zero.inter.fragment.InterventionFormFragment;
 import ekylibre.zero.inter.fragment.ParamChoiceFragment;
 import ekylibre.zero.inter.fragment.ProcedureChoiceFragment;

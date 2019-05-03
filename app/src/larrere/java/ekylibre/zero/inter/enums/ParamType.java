@@ -13,13 +13,14 @@ public class ParamType {
     public static final String DRIVER = "driver";
     public static final String TRACTOR = "tractor";
     public static final String SOWER = "sower";
+    public static final String PLANT_MEDICINE = "plant_medicine";
 
     private ParamType(@Type String type) {
         System.out.println("ParamType :" + type);
     }
 
     // Declare the @ StringDef for these constants:
-    @StringDef({PLANT, LAND_PARCEL, DRIVER, TRACTOR, SOWER})
+    @StringDef({PLANT, LAND_PARCEL, DRIVER, TRACTOR, SOWER, PLANT_MEDICINE})
     @Retention(RetentionPolicy.SOURCE)
     public @interface Type {}
 
