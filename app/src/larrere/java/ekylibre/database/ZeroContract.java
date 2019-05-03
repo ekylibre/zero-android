@@ -246,6 +246,31 @@ public final class ZeroContract {
         String USER = "user";
     }
 
+    public interface LandParcelColumns extends BaseColumns {
+        String TABLE_NAME = "land_parcels";
+        String EK_ID = "ek_id";
+        String NAME = "name";
+        String USER = "user";
+    }
+
+    public interface InputColumns extends BaseColumns {
+        String TABLE_NAME = "inputs";
+        String EK_ID = "ek_id";
+        String NAME = "name";
+        String REFERENCE_NAME = "reference_name";
+        String QUANTITY_UNIT_NAME = "quantity_unit_name";
+        String USER = "user";
+    }
+
+    public interface OutputColumns extends BaseColumns {
+        String TABLE_NAME = "outputs";
+        String EK_ID = "ek_id";
+        String NAME = "name";
+        String REFERENCE_NAME = "reference_name";
+        String QUANTITY_UNIT_NAME = "quantity_unit_name";
+        String USER = "user";
+    }
+
     public static final class Crumbs implements CrumbsColumns {
         // Content URI for this table
         public static final Uri CONTENT_URI = Uri.withAppendedPath(ZeroContract.CONTENT_URI, "crumbs");
@@ -578,6 +603,48 @@ public final class ZeroContract {
                 "/vnd.ekylibre.zero.workers";
 
         public static final String[] PROJECTION_ALL = {_ID, EK_ID, NAME, NUMBER, QUALIFICATION, USER};
+
+        public static final String SORT_ORDER_DEFAULT = NAME + " ASC";
+    }
+
+    public static final class LandParcels implements LandParcelColumns {
+
+        // Content URI for this table
+        public static final Uri CONTENT_URI = Uri.withAppendedPath(
+                ZeroContract.CONTENT_URI,"land_parcels");
+        // MIME type for list and individual record.
+        public static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE +
+                "/vnd.ekylibre.zero.land_parcels";
+
+        public static final String[] PROJECTION_ALL = {_ID, EK_ID, NAME, USER};
+
+        public static final String SORT_ORDER_DEFAULT = NAME + " ASC";
+    }
+
+    public static final class Inputs implements InputColumns {
+
+        // Content URI for this table
+        public static final Uri CONTENT_URI = Uri.withAppendedPath(
+                ZeroContract.CONTENT_URI,"inputs");
+        // MIME type for list and individual record.
+        public static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE +
+                "/vnd.ekylibre.zero.inputs";
+
+        public static final String[] PROJECTION_ALL = {_ID, EK_ID, NAME, REFERENCE_NAME , QUANTITY_UNIT_NAME, USER};
+
+        public static final String SORT_ORDER_DEFAULT = NAME + " ASC";
+    }
+
+    public static final class Outputs implements OutputColumns {
+
+        // Content URI for this table
+        public static final Uri CONTENT_URI = Uri.withAppendedPath(
+                ZeroContract.CONTENT_URI,"outputs");
+        // MIME type for list and individual record.
+        public static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE +
+                "/vnd.ekylibre.zero.outputs";
+
+        public static final String[] PROJECTION_ALL = {_ID, EK_ID, NAME, REFERENCE_NAME , QUANTITY_UNIT_NAME, USER};
 
         public static final String SORT_ORDER_DEFAULT = NAME + " ASC";
     }
