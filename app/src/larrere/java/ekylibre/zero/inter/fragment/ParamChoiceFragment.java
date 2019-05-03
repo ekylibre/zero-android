@@ -1,10 +1,13 @@
 package ekylibre.zero.inter.fragment;
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.StringRes;
@@ -28,6 +31,8 @@ public class ParamChoiceFragment extends Fragment {
     @Type
     private String paramType;
     private Context context;
+    private List<SimpleSelectableItem> dataset;
+    private SimpleSelectableItemAdapter adapter;
 
     public ParamChoiceFragment() {}
 
@@ -56,7 +61,7 @@ public class ParamChoiceFragment extends Fragment {
         InterActivity.actionBar.setTitle(titleRes);
 
         // Filter list
-        List<SimpleSelectableItem> dataset = new ArrayList<>();
+        dataset = new ArrayList<>();
         for (SimpleSelectableItem item : InterventionFormFragment.paramsList)
             if (item.type.equals(paramType))
                 dataset.add(item);
@@ -69,66 +74,120 @@ public class ParamChoiceFragment extends Fragment {
             view = inflater.inflate(R.layout.fragment_recycler_with_search_field, container, false);
             RecyclerView recyclerView = view.findViewById(R.id.recycler);
             recyclerView.setLayoutManager(new LinearLayoutManager(container.getContext()));
-            SimpleSelectableItemAdapter adapter = new SimpleSelectableItemAdapter(dataset);
+            adapter = new SimpleSelectableItemAdapter(dataset);
             recyclerView.setAdapter(adapter);
 
-//            // SeachField logic
-//            SearchView searchView = view.findViewById(R.id.search_field);
-//
-//            searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-//                @Override
-//                public boolean onQueryTextSubmit(String query) {
-//                    search(query);
-//                    return false;
-//                }
-//                @Override
-//                public boolean onQueryTextChange(String newText) {
-//                    if (newText.length() > 2)
-//                        search(query);
-//                    return false;
-//                }
-//            });
-//
-//            searchView.setOnCloseListener(() -> {
-//
-//                // Reset filters
-//                search();
-//                return false;
-//            });
-        }
+            // SeachField logic
+            SearchView searchView = view.findViewById(R.id.search_field);
 
+            searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+                @Override
+                public boolean onQueryTextSubmit(String text) {
+                    filterList(text);
+                    return false;
+                }
+                @Override
+                public boolean onQueryTextChange(String text) {
+                    if (text.length() > 1)
+                        filterList(text);
+                    else
+                        filterList(null);
+                    return false;
+                }
+            });
+
+            searchView.setOnCloseListener(() -> {
+                // Reset search
+                filterList(null);
+                searchView.clearFocus();
+                InputMethodManager imm = (InputMethodManager) context.getSystemService(Activity.INPUT_METHOD_SERVICE);
+                Log.e("PAramChoiceFragment", "ime ?");
+                if (imm != null) {
+                    Log.e("PAramChoiceFragment", "ime not null");
+                    imm.hideSoftInputFromWindow(searchView.getWindowToken(), 0);
+                }
+                return false;
+            });
+        }
 
         return view;
     }
 
-//    private void queryDatabaseForList(int tab) {
-//        // Field values as existing in database
-//        String[] categories = {"Adventices", "Ravageurs", "Maladies", "Autres"};
-//        Context context = getActivity();
-//        if (context != null) {
-//            ContentResolver contentResolver = context.getContentResolver();
+    private void filterList(String text) {
+
+//        Uri uri;
+//        String[] projection;
+//        String query;
+//        String sortOrder;
+//        ContentResolver contentResolver = context.getContentResolver();
+//                uri = ZeroContract.Workers.CONTENT_URI;
+//                projection = ZeroContract.Workers.PROJECTION_ALL;
+//                query = ZeroContract.Workers.QUALIFICATION + " = " + paramType;
+//                sortOrder = ZeroContract.Workers.SORT_ORDER_DEFAULT;
+
+        dataset.clear();
+
+        for (SimpleSelectableItem item : InterventionFormFragment.paramsList)
+            if (item.type.equals(paramType))
+                if (text != null) {
+                    String name = item.name.toLowerCase();
+                    if (name.contains(text.toLowerCase()))
+                        dataset.add(item);
+                } else
+                    dataset.add(item);
+
+        adapter.notifyDataSetChanged();
+
+
+//        switch (paramType) {
 //
-//            try (Cursor cursor = contentResolver.query(ZeroContract.IssueNatures.CONTENT_URI,
-//                    ZeroContract.IssueNatures.PROJECTION_ALL,
-//                    ZeroContract.IssueNatures.CATEGORY + " = ? ", new String[]{categories[tab]},
-//                    ZeroContract.IssueNatures.SORT_ORDER_DEFAULT)) {
-//                if (cursor != null) {
-//                    dataset.clear();
-//                    while (cursor.moveToNext()) {
-//                        String label = cursor.getString(2);
-//                        boolean selected = false;
-//                        for (IssueItem item : issuesList)
-//                            if (item.label.equals(label)) {
-//                                selected = true;
-//                                break;
-//                            }
-//                        dataset.add(new IssueItem(cursor.getString(1), label,
-//                                cursor.getString(3), selected));
-//                    }
-//                    adapter.notifyDataSetChanged();
+//            case "wine_man":
+//            case "operator":
+//            case "responsible":
+//            case "mechanic":
+//            case "forager_driver":
+//            case "caregiver":
+//            case "inseminator":
+//            case "worker":
+//            case "doer":
+//            case "driver":
+//                for (SimpleSelectableItem item : InterventionFormFragment.paramsList)
+//                    if (item.type.equals(paramType))
+//                        if (text != null) {
+//                            String name = item.name.toLowerCase();
+//                            if (name.contains(text.toLowerCase()))
+//                                dataset.add(item);
+//                        } else
+//                            dataset.add(item);
+//                break;
+//        }
+
+//        try (Cursor cursor = contentResolver.query(uri, projection, query, null, sortOrder)) {
+//
+//            if (cursor != null) {
+//                dataset.clear();
+//                while (cursor.moveToNext()) {
+//                    String label = cursor.getString(2);
+//                    boolean selected = false;
+//                    for (IssueItem item : issuesList)
+//                        if (item.label.equals(label)) {
+//                            selected = true;
+//                            break;
+//                        }
+//                    dataset.add(new IssueItem(cursor.getString(1), label,
+//                            cursor.getString(3), selected));
 //                }
+//                adapter.notifyDataSetChanged();
 //            }
 //        }
-//    }
+    }
+
+    private static void hideKeyboard(Context context, View view) {
+        InputMethodManager imm = (InputMethodManager) context.getSystemService(Activity.INPUT_METHOD_SERVICE);
+        //Find the currently focused view, so we can grab the correct window token from it.
+        //If no view currently has focus, create a new one, just so we can grab a window token from it
+        if (imm != null)
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+    }
 
 }

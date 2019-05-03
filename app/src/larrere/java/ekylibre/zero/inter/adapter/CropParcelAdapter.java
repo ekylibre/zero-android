@@ -56,7 +56,7 @@ public class CropParcelAdapter extends RecyclerView.Adapter<CropParcelAdapter.Vi
             textView.setTextColor(ContextCompat.getColor(context, textColor));
             view.setBackgroundColor(ContextCompat.getColor(context, backgroundId));
             // Set text
-            textView.setText(item.label);
+            textView.setText(item.name);
         }
 
         @Override

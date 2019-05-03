@@ -40,7 +40,6 @@ import ekylibre.zero.inter.model.Period;
 import ekylibre.zero.inter.model.SimpleSelectableItem;
 
 import static ekylibre.zero.inter.InterActivity.CROP_CHOICE_FRAGMENT;
-import static ekylibre.zero.inter.InterActivity.INPUT_CHOICE_FRAGMENT;
 import static ekylibre.zero.inter.InterActivity.selectedProcedure;
 import static ekylibre.zero.inter.enums.ParamType.DRIVER;
 import static ekylibre.zero.inter.enums.ParamType.LAND_PARCEL;
@@ -163,7 +162,7 @@ public class InterventionFormFragment extends Fragment {
                         for (SimpleSelectableItem item : paramsList) {
                             if ((item.type.equals(PLANT) || item.type.equals(LAND_PARCEL)) && item.isSelected) {
                                 Chip chip = new Chip(context);
-                                chip.setText(item.label);
+                                chip.setText(item.name);
                                 chip.setCloseIconVisible(true);
                                 chip.setOnCloseIconClickListener(v -> {
                                     cropChipGroup.removeView(chip);
@@ -250,7 +249,7 @@ public class InterventionFormFragment extends Fragment {
         if (cursor != null) {
             try {
                 while (cursor.moveToNext())
-                    list.add(new SimpleSelectableItem(cursor.getString(1), cursor.getString(2), PLANT, false));
+                    list.add(new SimpleSelectableItem(cursor.getInt(1), cursor.getString(2), PLANT, false));
             } finally {
                 cursor.close();
             }
@@ -266,10 +265,10 @@ public class InterventionFormFragment extends Fragment {
 
     private List<SimpleSelectableItem> getUsers() {
         List<SimpleSelectableItem> list = new ArrayList<>();
-        list.add(new SimpleSelectableItem("1", "Michel", DRIVER, true));
-        list.add(new SimpleSelectableItem("2", "Jean", DRIVER));
-        list.add(new SimpleSelectableItem("3", "Jacques", DRIVER));
-        list.add(new SimpleSelectableItem("4", "Bob", DRIVER));
+        list.add(new SimpleSelectableItem(1, "Michel", DRIVER, true));
+        list.add(new SimpleSelectableItem(2, "Jean", DRIVER));
+        list.add(new SimpleSelectableItem(3, "Jacques", DRIVER));
+        list.add(new SimpleSelectableItem(4, "Bob", DRIVER));
 
         Collections.sort(list, (ele1, ele2) -> {
             Collator localeCollator = Collator.getInstance(Locale.FRANCE);
@@ -281,10 +280,10 @@ public class InterventionFormFragment extends Fragment {
 
     private List<SimpleSelectableItem> getTools() {
         List<SimpleSelectableItem> list = new ArrayList<>();
-        list.add(new SimpleSelectableItem("1", "Massey 6700 S", TRACTOR));
-        list.add(new SimpleSelectableItem("2", "Sem 360 +", SOWER));
-        list.add(new SimpleSelectableItem("3", "New FR250", TRACTOR));
-        list.add(new SimpleSelectableItem("4", "Multigrains 500L", TRACTOR));
+        list.add(new SimpleSelectableItem(1, "Massey 6700 S", TRACTOR));
+        list.add(new SimpleSelectableItem(2, "Sem 360 +", SOWER));
+        list.add(new SimpleSelectableItem(3, "New FR250", TRACTOR));
+        list.add(new SimpleSelectableItem(4, "Multigrains 500L", TRACTOR));
 
         Collections.sort(list, (ele1, ele2) -> {
             Collator localeCollator = Collator.getInstance(Locale.FRANCE);

@@ -26,7 +26,7 @@
         android:layout_height="wrap_content"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintBaseline_toBaselineOf="@id/period_begin_date_field"
-        android:text="Début"/>
+        android:text="@string/begin"/>
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/period_label_end"
@@ -34,7 +34,7 @@
         android:layout_height="wrap_content"
         app:layout_constraintBaseline_toBaselineOf="@id/period_end_date_field"
         app:layout_constraintStart_toStartOf="parent"
-        android:text="Fin"/>
+        android:text="@string/end"/>
 
     <androidx.constraintlayout.widget.Barrier
         android:id="@+id/period_labels_barrier"
@@ -74,9 +74,9 @@
         app:layout_constraintBaseline_toBaselineOf="@id/period_label_begin"
         app:layout_constraintStart_toEndOf="@id/period_date_barrier"
         app:layout_constraintEnd_toStartOf="@id/period_begin_time_field"
-        android:paddingStart="16dp"
-        android:paddingEnd="16dp"
-        android:text="à"/>
+        android:paddingStart="10dp"
+        android:paddingEnd="10dp"
+        android:text="@string/at"/>
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/period_begin_time_field"
@@ -117,9 +117,9 @@
         app:layout_constraintBaseline_toBaselineOf="@id/period_label_end"
         app:layout_constraintStart_toEndOf="@id/period_date_barrier"
         app:layout_constraintEnd_toStartOf="@id/period_begin_time_field"
-        android:paddingStart="16dp"
-        android:paddingEnd="16dp"
-        android:text="à"/>
+        android:paddingStart="10dp"
+        android:paddingEnd="10dp"
+        android:text="@string/at"/>
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/period_end_time_field"

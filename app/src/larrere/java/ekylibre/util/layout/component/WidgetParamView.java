@@ -96,7 +96,7 @@ public class WidgetParamView extends ConstraintLayout {
         for (SimpleSelectableItem item : paramList) {
             if (item.type.equals(type) && item.isSelected) {
                 Chip chip = new Chip(context);
-                chip.setText(item.label);
+                chip.setText(item.name);
                 chip.setCloseIconVisible(true);
                 chip.setOnCloseIconClickListener(v -> {
                     chipGroup.removeView(chip);

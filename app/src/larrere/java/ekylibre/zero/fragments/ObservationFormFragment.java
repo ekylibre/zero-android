@@ -74,6 +74,7 @@ import static ekylibre.zero.ObservationActivity.selectedBBCH;
 public class ObservationFormFragment extends Fragment {
 
     private Context context;
+    private static final String TAG = "ObsFormFragment";
 
     private OnFragmentInteractionListener listener;
     private PicturesRecyclerAdapter picturesAdapter;
@@ -100,6 +101,7 @@ public class ObservationFormFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        Log.e(TAG, "onCreateView()");
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_observation_form, container, false);
 
@@ -228,18 +230,23 @@ public class ObservationFormFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        Log.e("FormFragment", "onResume");
-        Log.e("FormFragment", "cultures -> " + culturesList.size());
+        Log.e(TAG, "onResume");
+        Log.i(TAG, "cultures -> " + culturesList.size());
         // Hide or show picture recycler
-        if (picturesList.size() > 0 && picturesRecycler.getVisibility() == View.GONE)
-            picturesRecycler.setVisibility(View.VISIBLE);
-        else if (picturesList.isEmpty() && picturesRecycler.getVisibility() == View.VISIBLE)
-            picturesRecycler.setVisibility(View.GONE);
+        int count = picturesAdapter.getItemCount();
+        Log.i(TAG, "Pict = " + count);
+        picturesRecycler.setVisibility(count == 0 ? View.GONE : View.VISIBLE);
+//        picturesAdapter.notifyDataSetChanged();
+////        if (picturesAdapter.getItemCount() > 0 && picturesRecycler.getVisibility() == View.GONE)
+////            picturesRecycler.setVisibility(View.VISIBLE);
+////        else if (picturesAdapter.getItemCount() == 0 && picturesRecycler.getVisibility() == View.VISIBLE)
+////            picturesRecycler.setVisibility(View.GONE);
     }
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
+        Log.e(TAG, "onAttach()");
         if (context instanceof OnFragmentInteractionListener)
             listener = (OnFragmentInteractionListener) context;
         else
@@ -250,6 +257,7 @@ public class ObservationFormFragment extends Fragment {
     @Override
     public void onDetach() {
         super.onDetach();
+        Log.e(TAG, "onDetach()");
         listener = null;
     }
 
@@ -292,7 +300,7 @@ public class ObservationFormFragment extends Fragment {
                                 photoFile = File.createTempFile(imageFileName, ".jpg", storageDir);
                                 currentPhotoPath = Uri.fromFile(photoFile);
                             } catch (IOException ex) {
-                                Log.e("Error", ex.getMessage());
+                                Log.e(TAG, ex.getMessage());
                             }
                             // Continue only if the File was successfully created
                             if (photoFile != null) {
@@ -325,14 +333,14 @@ public class ObservationFormFragment extends Fragment {
             Uri pictureUri = null;
 
             if (requestCode == CAMERA) {
-                Log.i("FromFragment", "onActivityResult CAMERA");
+                Log.e(TAG, "onActivityResult CAMERA");
                 pictureUri = currentPhotoPath;
                 galleryAddPic();
             }
             else if (requestCode == GALLERY) {
                 pictureUri = data.getData();
-                Log.i("FromFragment", "onActivityResult GALLERY");
-                Log.e("FromFragment", "Image URI = " + pictureUri);
+                Log.i(TAG, "onActivityResult GALLERY");
+                Log.i(TAG, "Image URI = " + pictureUri);
             }
 
             if (pictureUri != null && !picturesList.contains(pictureUri)) {
@@ -341,11 +349,15 @@ public class ObservationFormFragment extends Fragment {
                 currentPhotoPath = null;
             }
 
-            // Hide or show recycler
-            if (picturesAdapter.getItemCount() > 0 && picturesRecycler.getVisibility() == View.GONE)
-                picturesRecycler.setVisibility(View.VISIBLE);
-            else if (picturesAdapter.getItemCount() == 0 && picturesRecycler.getVisibility() == View.VISIBLE)
-                picturesRecycler.setVisibility(View.GONE);
+            Log.i(TAG, "How many pictures ? --> " + picturesAdapter.getItemCount());
+            // Force reload fragment to update picture recycler
+            listener.onFormInteraction(FORM_FRAGMENT);
+
+//            // Hide or show recycler
+//            picturesRecycler.setVisibility(picturesAdapter.getItemCount() == 0 ? View.GONE : View.VISIBLE);
+//            Log.i("Obs", "Is picture recycler visible ? --> " + picturesRecycler.getVisibility());
+//            picturesRecycler.setVisibility(View.VISIBLE);
+//            picturesAdapter.notifyDataSetChanged();
         }
     }
 

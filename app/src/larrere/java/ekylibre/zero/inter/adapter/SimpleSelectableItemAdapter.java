@@ -53,7 +53,7 @@ public class SimpleSelectableItemAdapter extends RecyclerView.Adapter<SimpleSele
                 colorId = R.color.basic_blue;
                 textColor = R.color.white;
             }
-            textView.setText(item.label);
+            textView.setText(item.name);
             textView.setTextColor(ContextCompat.getColor(context, textColor));
             itemView.setBackgroundColor(ContextCompat.getColor(context, colorId));
         }

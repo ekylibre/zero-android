@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/another_light_grey">
 
     <androidx.appcompat.widget.SearchView
@@ -17,7 +17,8 @@
         app:queryBackground="@android:color/transparent"
         android:layout_margin="16dp"
         app:queryHint="Rechercher dans la liste..."
-        app:iconifiedByDefault="false"/>
+        app:iconifiedByDefault="false"
+        android:imeOptions="actionSearch"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler"
@@ -26,6 +27,8 @@
         app:layout_constraintTop_toBottomOf="@id/search_field"
         app:layout_constraintBottom_toBottomOf="parent"
         tools:listitem="@layout/item_single_line"
-        android:background="?android:attr/selectableItemBackground" />
+        android:background="?android:attr/selectableItemBackground"
+        android:focusable="true"
+        android:focusableInTouchMode="true"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -121,6 +121,13 @@ public class ObservationActivity extends AppCompatActivity implements
         replaceFragmentWith(ACTIVITY_FRAGMENT);
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (activitiesList == null || activitiesList.isEmpty())
+            getActivities();
+    }
+
     private boolean isServiceRunning() {
         ActivityManager manager = (ActivityManager) getSystemService(ACTIVITY_SERVICE);
         if (manager != null)
