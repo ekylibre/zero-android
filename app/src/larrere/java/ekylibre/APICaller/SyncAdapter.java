@@ -175,7 +175,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
             pushPlantCounting(account, extras, authority, provider, syncResult);
 
             pushIntervention(account, extras, authority, provider, syncResult);
-//            pullIntervention(account, extras, authority, provider, syncResult);
+            pullIntervention(account, extras, authority, provider, syncResult);
 
             pushObservation(account);
 
