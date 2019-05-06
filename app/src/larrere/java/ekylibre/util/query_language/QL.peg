@@ -1,0 +1,45 @@
+grammar QL
+
+    boolean_expression <- disjunctive / test
+
+    conjonctive <-  head:test spacer "and" spacer operand:conjonctive <Conjunction> / test
+
+    disjunctive <- head:conjonctive spacer "or" spacer operand:disjunctive <Disjunction> / conjonctive
+
+    test <- abilitive / essence / non_essence / derivative / non_derivative / inclusion / indicative / negative / "(" boolean_expression ")" <BooleanExpression>
+
+    essence <- "is" spacer variety_name <EssenceTest>
+
+    non_essence <- "isnt" spacer variety_name <NonEssenceTest>
+
+    derivative <- "derives" spacer "from" spacer variety_name <DerivativeTest>
+
+    non_derivative <- "dont" spacer "derive" spacer "from" spacer variety_name <DerivativeTest>
+
+    inclusion <- "includes" spacer variety_name <InclusionTest>
+
+    indicative <- "has" indicator_filter:(spacer mode:("frozen" / "variable") )? spacer "indicator" spacer indicator_name <IndicatorTest>
+
+    abilitive <- "can" spacer ability <AbilityTest>
+
+    ability <- ability_name ability_parameters:("(" space? parameters:(first_parameter:ability_argument other_parameters:(space? "," space? parameter:ability_argument)* )? space? ")")?
+
+    abilities_list <- list:(first_ability:ability other_abilities:(space? "," space? ability)* )?
+
+    ability_parameters <- "(" space? parameters:(first_parameter:ability_argument other_parameters:(space? "," space? parameter:ability_argument)* )? space? ")"
+
+    ability_name <- [a-z] [a-z0-9]* ("_" [a-z0-9]+)* <AbilityName>
+
+    ability_argument <- [a-z] [a-z0-9]* ("_" [a-z0-9]+)* <AbilityArgument>
+
+    variety_name <- [a-z] [a-z0-9]* ("_" [a-z0-9]+)* <VarietyName>
+
+    indicator_name <- [a-z] [a-z0-9]* ("_" [a-z0-9]+)* <VarietyName>
+
+    negative <- "not" negated_test <NegativeTest>
+
+    negated_test <- spacer ability / spacer essence / spacer derivative / "(" boolean_expression ")" <BooleanExpression>
+
+    spacer <- " "+
+
+    space <- [\s\n]*
