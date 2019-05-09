@@ -31,10 +31,12 @@ import ekylibre.util.AccountTool;
 import ekylibre.util.ProcedureFamiliesXMLReader;
 import ekylibre.util.ProceduresXMLReader;
 import ekylibre.util.pojo.ProcedureEntity;
+import ekylibre.util.query_language.QL.ParseError;
+import ekylibre.util.query_language.QL.QL;
+import ekylibre.util.query_language.QL.TreeNode;
 import ekylibre.zero.BuildConfig;
 import ekylibre.zero.R;
 import ekylibre.zero.inter.fragment.CropParcelChoiceFragment;
-import ekylibre.zero.inter.fragment.InputChoiceFragment;
 import ekylibre.zero.inter.fragment.InterventionFormFragment;
 import ekylibre.zero.inter.fragment.ParamChoiceFragment;
 import ekylibre.zero.inter.fragment.ProcedureChoiceFragment;
@@ -110,6 +112,15 @@ public class InterActivity extends AppCompatActivity implements FragmentManager.
 
         // Load procedure natures, families and params from assets
         loadXMLAssets();
+
+        // Canopy testing
+        try {
+            TreeNode tree = QL.parse("can tow(equipment) and can move");
+            for (TreeNode node : tree.elements)
+                Log.e(TAG, node.text);
+        } catch (ParseError parseError) {
+            parseError.printStackTrace();
+        }
     }
 
     void replaceFragmentWith(String fragmentTag) {

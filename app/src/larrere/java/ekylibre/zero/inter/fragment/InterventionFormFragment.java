@@ -58,7 +58,7 @@ public class InterventionFormFragment extends Fragment {
     private OnFragmentInteractionListener listener;
     private Context context;
     private List<Period> periodList;
-    private List<ItemWithQuantity> inputList;
+    private static List<ItemWithQuantity> inputList;
 //    static List<SimpleSelectableItem> cropParcelList;
     public static List<SimpleSelectableItem> paramsList;
 
@@ -69,7 +69,7 @@ public class InterventionFormFragment extends Fragment {
     @BindView(R.id.form_period_recycler) RecyclerView periodRecycler;
     @BindView(R.id.form_period_add) TextView addPeriod;
 
-//    @BindView(R.id.include_widget_crop) View cropWidget;
+    //    @BindView(R.id.include_widget_crop) View cropWidget;
 //    @BindView(R.id.form_crop_chips_group) ChipGroup cropChipGroup;
 //    @BindView(R.id.form_crop_add) TextView addCrop;
 
@@ -188,7 +188,7 @@ public class InterventionFormFragment extends Fragment {
         }
 
         // ------------- //
-        // Params layout //
+        // Inputs layout //
         // ------------- //
 
         for (GenericEntity entity : selectedProcedure.input) {
@@ -206,17 +206,46 @@ public class InterventionFormFragment extends Fragment {
             TextView addButton = inputView.findViewById(R.id.widget_add);
             addButton.setOnClickListener(v -> listener.onFormFragmentInteraction(entity.name));
 
+            // Initialize Recycler
             RecyclerView inputRecycler = inputView.findViewById(R.id.widget_recycler);
             inputRecycler.setLayoutManager(new LinearLayoutManager(context));
             inputRecycler.addItemDecoration(new MarginTopItemDecoration(context, 16));
-            QuantityItemAdapter quantityItemAdapter = new QuantityItemAdapter(inputList);
+            QuantityItemAdapter quantityItemAdapter = new QuantityItemAdapter(inputList, inputRecycler);
             inputRecycler.setAdapter(quantityItemAdapter);
 
-            // TODO add selected items from paramsList to inputList
+            // Updates iputList for recycler display
+            for (SimpleSelectableItem item : paramsList) {
+                // Check we have an input
+                if (entity.name.equals(item.type)) {
+                    // Get item if present in inputList
+                    ItemWithQuantity currentItem = null;
+                    for (ItemWithQuantity quantityItem : inputList) {
+                        if (item.id == quantityItem.id) {
+                            currentItem = quantityItem;
+                            break;
+                        }
+                    }
+
+                    // If selected but not present, add it else, remove it
+                    if (item.isSelected && currentItem == null)
+                        inputList.add(new ItemWithQuantity(item.id, item.name, item.type, 0f, "kg"));
+                    else if (currentItem != null && !item.isSelected)
+                        inputList.remove(currentItem);
+
+                }
+            }
+            if (inputList.isEmpty())
+                inputRecycler.setVisibility(View.GONE);
+            else
+                inputRecycler.setVisibility(View.VISIBLE);
 
             // Add view
             widgetContainer.addView(inputView);
         }
+
+        // ------------- //
+        // Params layout //
+        // ------------- //
 
         for (GenericEntity entity : selectedProcedure.doer) {
             Log.i(TAG, "doer --> " + entity.name);

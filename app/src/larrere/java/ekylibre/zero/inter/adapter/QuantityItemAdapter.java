@@ -4,6 +4,7 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -15,15 +16,19 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import ekylibre.zero.R;
+import ekylibre.zero.inter.fragment.InterventionFormFragment;
 import ekylibre.zero.inter.model.ItemWithQuantity;
+import ekylibre.zero.inter.model.SimpleSelectableItem;
 
 
 public class QuantityItemAdapter extends RecyclerView.Adapter<QuantityItemAdapter.ViewHolder> {
 
     private final List<ItemWithQuantity> dataset;
+    private final RecyclerView recyclerView;
 
-    public QuantityItemAdapter(List<ItemWithQuantity> dataset) {
+    public QuantityItemAdapter(List<ItemWithQuantity> dataset, RecyclerView recyclerView) {
         this.dataset = dataset;
+        this.recyclerView = recyclerView;
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {
@@ -33,7 +38,7 @@ public class QuantityItemAdapter extends RecyclerView.Adapter<QuantityItemAdapte
         @BindView(R.id.quantity_value) TextView quatity;
         @BindView(R.id.quantity_unit) TextView unit;
         @BindView(R.id.item_warning_message) TextView warningMessage;
-        @BindView(R.id.item_delete) TextView deleteButton;
+        @BindView(R.id.item_delete) ImageView deleteButton;
 
         // Item reference
         ItemWithQuantity item;
@@ -50,13 +55,17 @@ public class QuantityItemAdapter extends RecyclerView.Adapter<QuantityItemAdapte
 
             // Set click listeners
             deleteButton.setOnClickListener(v -> {
-                if (getItemCount() > 1) {
-                    int index = dataset.indexOf(item);
-                    dataset.remove(index);
-                    notifyItemRemoved(index);
-                } else {
-                    displayWarningDialog(context);
+                int index = dataset.indexOf(item);
+                dataset.remove(index);
+                notifyItemRemoved(index);
+                for (SimpleSelectableItem simpleItem : InterventionFormFragment.paramsList) {
+                    if (simpleItem.id == item.id && simpleItem.isSelected) {
+                        simpleItem.isSelected = false;
+                        break;
+                    }
                 }
+                if (dataset.isEmpty())
+                    recyclerView.setVisibility(View.GONE);
             });
 
         }

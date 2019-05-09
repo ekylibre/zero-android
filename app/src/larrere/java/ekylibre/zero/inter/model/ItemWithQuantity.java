@@ -18,5 +18,4 @@ public class ItemWithQuantity {
         this.quantity = quantity;
         this.unit = unit;
     }
-
 }
