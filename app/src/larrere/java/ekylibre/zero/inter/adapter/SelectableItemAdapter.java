@@ -15,22 +15,23 @@ import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import ekylibre.zero.R;
-import ekylibre.zero.inter.model.SimpleSelectableItem;
+import ekylibre.zero.inter.model.GenericItem;
 
 
-public class SimpleSelectableItemAdapter extends RecyclerView.Adapter<SimpleSelectableItemAdapter.ViewHolder> {
+public class SelectableItemAdapter extends RecyclerView.Adapter<SelectableItemAdapter.ViewHolder> {
 
-    private final List<SimpleSelectableItem> dataset;
+    private final List<GenericItem> dataset;
 
     // CONTRUCTOR
-    public SimpleSelectableItemAdapter(List<SimpleSelectableItem> dataset) {
+    public SelectableItemAdapter(List<GenericItem> dataset) {
         this.dataset = dataset;
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {
 
-        @BindView(R.id.item_label) TextView textView;
-        SimpleSelectableItem item;
+        @BindView(R.id.item_first_line) TextView firstLine;
+        @BindView(R.id.item_second_line) TextView secondLine;
+        GenericItem item;
 
         ViewHolder(View itemView) {
             super(itemView);
@@ -53,8 +54,10 @@ public class SimpleSelectableItemAdapter extends RecyclerView.Adapter<SimpleSele
                 colorId = R.color.basic_blue;
                 textColor = R.color.white;
             }
-            textView.setText(item.name);
-            textView.setTextColor(ContextCompat.getColor(context, textColor));
+            firstLine.setText(item.name);
+            firstLine.setTextColor(ContextCompat.getColor(context, textColor));
+            secondLine.setText(item.number);
+            secondLine.setTextColor(ContextCompat.getColor(context, textColor));
             itemView.setBackgroundColor(ContextCompat.getColor(context, colorId));
         }
     }
@@ -64,7 +67,7 @@ public class SimpleSelectableItemAdapter extends RecyclerView.Adapter<SimpleSele
         // CREATE VIEW HOLDER AND INFLATING ITS XML LAYOUT
         Context context = parent.getContext();
         LayoutInflater inflater = LayoutInflater.from(context);
-        View view = inflater.inflate(R.layout.item_single_line, parent, false);
+        View view = inflater.inflate(R.layout.item_two_lines, parent, false);
         return new ViewHolder(view);
     }
 

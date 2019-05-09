@@ -19,27 +19,34 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 import java.util.List;
 
+import ekylibre.util.query_language.DSL;
+import ekylibre.util.query_language.QL.QL;
+import ekylibre.util.query_language.QL.TreeNode;
 import ekylibre.zero.R;
 import ekylibre.zero.inter.InterActivity;
-import ekylibre.zero.inter.adapter.SimpleSelectableItemAdapter;
+import ekylibre.zero.inter.adapter.SelectableItemAdapter;
 import ekylibre.zero.inter.enums.ParamType.Type;
-import ekylibre.zero.inter.model.SimpleSelectableItem;
+import ekylibre.zero.inter.model.GenericItem;
 
 
 public class ParamChoiceFragment extends Fragment {
 
+    private static final String TAG = "ParamChoiceFragment";
+
     @Type
     private String paramType;
+    private String filter;
     private Context context;
-    private List<SimpleSelectableItem> dataset;
-    private SimpleSelectableItemAdapter adapter;
+    private List<GenericItem> dataset;
+    private SelectableItemAdapter adapter;
 
     public ParamChoiceFragment() {}
 
-    public static ParamChoiceFragment newInstance(String param) {
+    public static ParamChoiceFragment newInstance(String param, String filter) {
         ParamChoiceFragment fragment = new ParamChoiceFragment();
         Bundle args = new Bundle();
         args.putString("param_type", param);
+        args.putString("filter", filter);
         fragment.setArguments(args);
         return fragment;
     }
@@ -48,8 +55,11 @@ public class ParamChoiceFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         context = getContext();
-        if (getArguments() != null)
+        if (getArguments() != null) {
             paramType = getArguments().getString("param_type");
+            filter = getArguments().getString("filter");
+            Log.i(TAG, "ParamType = " + paramType);
+        }
     }
 
     @Override
@@ -62,9 +72,23 @@ public class ParamChoiceFragment extends Fragment {
 
         // Filter list
         dataset = new ArrayList<>();
-        for (SimpleSelectableItem item : InterventionFormFragment.paramsList)
+        outer: for (GenericItem item : InterventionFormFragment.paramsList) {
             if (item.type.equals(paramType))
                 dataset.add(item);
+
+            // TODO : activate when abilities available on API
+//            List<String> itemAbilities = DSL.getElements(item.abilities);
+//            List<String> requiredAbilities = DSL.getElements(filter);
+//            Log.i(TAG, "Item abilities = " + itemAbilities);
+//            Log.i(TAG, "Required abilities = " + requiredAbilities);
+//            for (String requiredAbility : requiredAbilities) {
+//                if (!itemAbilities.contains(requiredAbility)) {
+//                    // Missing ability
+//                    continue outer;
+//                }
+//            }
+//            dataset.add(item);
+        }
 
         View view;
         if (dataset.isEmpty()) {
@@ -74,7 +98,7 @@ public class ParamChoiceFragment extends Fragment {
             view = inflater.inflate(R.layout.fragment_recycler_with_search_field, container, false);
             RecyclerView recyclerView = view.findViewById(R.id.recycler);
             recyclerView.setLayoutManager(new LinearLayoutManager(container.getContext()));
-            adapter = new SimpleSelectableItemAdapter(dataset);
+            adapter = new SelectableItemAdapter(dataset);
             recyclerView.setAdapter(adapter);
 
             // SeachField logic
@@ -127,7 +151,7 @@ public class ParamChoiceFragment extends Fragment {
 
         dataset.clear();
 
-        for (SimpleSelectableItem item : InterventionFormFragment.paramsList)
+        for (GenericItem item : InterventionFormFragment.paramsList)
             if (item.type.equals(paramType))
                 if (text != null) {
                     String name = item.name.toLowerCase();
@@ -151,7 +175,7 @@ public class ParamChoiceFragment extends Fragment {
 //            case "worker":
 //            case "doer":
 //            case "driver":
-//                for (SimpleSelectableItem item : InterventionFormFragment.paramsList)
+//                for (GenericItem item : InterventionFormFragment.paramsList)
 //                    if (item.type.equals(paramType))
 //                        if (text != null) {
 //                            String name = item.name.toLowerCase();

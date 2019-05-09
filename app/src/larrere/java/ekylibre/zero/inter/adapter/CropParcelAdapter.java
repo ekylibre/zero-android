@@ -12,14 +12,14 @@ import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 import ekylibre.zero.R;
-import ekylibre.zero.inter.model.SimpleSelectableItem;
+import ekylibre.zero.inter.model.GenericItem;
 
 
 public class CropParcelAdapter extends RecyclerView.Adapter<CropParcelAdapter.ViewHolder> {
 
-    private final List<SimpleSelectableItem> dataset;
+    private final List<GenericItem> dataset;
 
-    public CropParcelAdapter(List<SimpleSelectableItem> items) {
+    public CropParcelAdapter(List<GenericItem> items) {
         dataset = items;
     }
 
@@ -30,7 +30,7 @@ public class CropParcelAdapter extends RecyclerView.Adapter<CropParcelAdapter.Vi
         View view;
         Context context;
         TextView textView;
-        SimpleSelectableItem item;
+        GenericItem item;
         int pos;
 
 

@@ -2,22 +2,17 @@ package ekylibre.util.layout.component;
 
 import android.content.Context;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
-import androidx.annotation.DrawableRes;
 import androidx.annotation.StringRes;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import butterknife.BindView;
@@ -25,7 +20,7 @@ import butterknife.ButterKnife;
 import ekylibre.zero.R;
 import ekylibre.zero.inter.enums.ParamType.Type;
 import ekylibre.zero.inter.fragment.InterventionFormFragment.OnFragmentInteractionListener;
-import ekylibre.zero.inter.model.SimpleSelectableItem;
+import ekylibre.zero.inter.model.GenericItem;
 
 
 public class WidgetParamView extends ConstraintLayout {
@@ -36,9 +31,9 @@ public class WidgetParamView extends ConstraintLayout {
     @BindView(R.id.widget_chips_group) ChipGroup chipGroup;
 
     public WidgetParamView(Context context, OnFragmentInteractionListener listener,
-                           @Type String paramType, List<SimpleSelectableItem> paramList) {
+                           @Type String paramType, String filter, List<GenericItem> paramList) {
         super(context);
-        init(context, listener, paramType, paramList);
+        init(context, listener, paramType, filter, paramList);
     }
 
     public WidgetParamView(Context context, AttributeSet attrs) {
@@ -54,7 +49,7 @@ public class WidgetParamView extends ConstraintLayout {
     }
 
     public void init(Context context, OnFragmentInteractionListener listener, @Type String type,
-                     List<SimpleSelectableItem> paramList) {
+                     String filter, List<GenericItem> paramList) {
 
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View view = Objects.requireNonNull(inflater).inflate(R.layout.widget_param_layout, this);
@@ -91,9 +86,9 @@ public class WidgetParamView extends ConstraintLayout {
         labelView.setText(labelRes);
 //        iconView.setImageResource(iconRes);
 
-        addButton.setOnClickListener(v -> listener.onFormFragmentInteraction(type));
+        addButton.setOnClickListener(v -> listener.onFormFragmentInteraction(type, filter));
 
-        for (SimpleSelectableItem item : paramList) {
+        for (GenericItem item : paramList) {
             if (item.type.equals(type) && item.isSelected) {
                 Chip chip = new Chip(context);
                 chip.setText(item.name);
@@ -109,9 +104,9 @@ public class WidgetParamView extends ConstraintLayout {
         displayOrNot(paramList, type);
     }
 
-    private void displayOrNot(List<SimpleSelectableItem> paramList, @Type String type) {
+    private void displayOrNot(List<GenericItem> paramList, @Type String type) {
         boolean itemCounter = false;
-        for (SimpleSelectableItem item : paramList)
+        for (GenericItem item : paramList)
             if (item.type.equals(type) && item.isSelected) {
                 itemCounter = true;
                 break;

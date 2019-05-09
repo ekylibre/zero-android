@@ -17,39 +17,38 @@ import ekylibre.zero.BuildConfig;
  * Created by antoine on 22/04/16.
  */
 
-public class Worker {
+public class Equipment {
 
-    private static final String TAG = "Worker";
-
+    private static final String TAG = "Equipment";
     public int id;
     public String name;
     public String number;
-    public String qualification;
+    public String variety;
     public String abilities;
 
-    public static List<Worker> all(Instance instance, String attributes) throws JSONException, IOException, HTTPException {
+    public static List<Equipment> all(Instance instance, String attributes) throws JSONException, IOException, HTTPException {
 
         if (BuildConfig.DEBUG)
-            Log.d(TAG, "Get JSONArray => /api/v1/workers || params = " + attributes);
+            Log.d(TAG, "Get JSONArray => /api/v1/equipments || params = " + attributes);
 
-        JSONArray json = instance.getJSONArray("/api/v1/workers", attributes);
-        List<Worker> array = new ArrayList<>();
+        JSONArray json = instance.getJSONArray("/api/v1/equipments", attributes);
+        List<Equipment> array = new ArrayList<>();
 
         for(int i = 0 ; i < json.length() ; i++ )
-            array.add(new Worker(json.getJSONObject(i)));
+            array.add(new Equipment(json.getJSONObject(i)));
 
         return array;
     }
 
-    private Worker(JSONObject object) throws JSONException {
+    private Equipment(JSONObject object) throws JSONException {
 
         if (BuildConfig.DEBUG)
-            Log.d(TAG, "Object Worker : " + object.toString());
+            Log.d(TAG, "Object Equipment : " + object.toString());
 
         id = object.getInt("id");
         name = object.getString("name");
         number = object.getString("number");
-        qualification = object.getString("variety");
+        variety = object.getString("variety");
 
         if (!object.isNull("abilities"))
             abilities = object.getString("abilities");

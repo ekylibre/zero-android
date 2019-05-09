@@ -68,6 +68,8 @@ public class ZeroProvider extends ContentProvider {
     public static final int ROUTE_ARTICLES_ITEM = 1503;
     public static final int ROUTE_WORKERS_LIST = 1504;
     public static final int ROUTE_WORKERS_ITEM = 1505;
+    public static final int ROUTE_LAND_PARCELS_LIST = 1506;
+    public static final int ROUTE_LAND_PARCELS_ITEM = 1507;
 
     // UriMatcher, used to decode incoming URIs.
     private static final UriMatcher URI_MATCHER = new UriMatcher(UriMatcher.NO_MATCH);
@@ -115,6 +117,8 @@ public class ZeroProvider extends ContentProvider {
         URI_MATCHER.addURI(ZeroContract.AUTHORITY, "articles/#", ROUTE_ARTICLES_ITEM);
         URI_MATCHER.addURI(ZeroContract.AUTHORITY, "workers", ROUTE_WORKERS_LIST);
         URI_MATCHER.addURI(ZeroContract.AUTHORITY, "workers/#", ROUTE_WORKERS_ITEM);
+        URI_MATCHER.addURI(ZeroContract.AUTHORITY, "land_parcels", ROUTE_LAND_PARCELS_LIST);
+        URI_MATCHER.addURI(ZeroContract.AUTHORITY, "land_parcels/#", ROUTE_LAND_PARCELS_ITEM);
     }
 
     private DatabaseHelper mDatabaseHelper;
@@ -214,6 +218,10 @@ public class ZeroProvider extends ContentProvider {
             case ROUTE_WORKERS_LIST:
             case ROUTE_WORKERS_ITEM:
                 return ZeroContract.Workers.CONTENT_TYPE;
+
+            case ROUTE_LAND_PARCELS_LIST:
+            case ROUTE_LAND_PARCELS_ITEM:
+                return ZeroContract.LandParcels.CONTENT_TYPE;
 
             default:
                 throw new UnsupportedOperationException("Unknown URI: " + uri);
@@ -426,7 +434,7 @@ public class ZeroProvider extends ContentProvider {
 
             case ROUTE_EQUIPMENTS_ITEM:
                 id = uri.getLastPathSegment();
-                builder.where(ZeroContract.Equipments._ID + "=?", id);
+                builder.where(ZeroContract.Equipments.EK_ID + "=?", id);
             case ROUTE_EQUIPMENTS_LIST:
                 builder.table(ZeroContract.Equipments.TABLE_NAME)
                         .where(selection, selectionArgs);
@@ -446,9 +454,19 @@ public class ZeroProvider extends ContentProvider {
 
             case ROUTE_WORKERS_ITEM:
                 id = uri.getLastPathSegment();
-                builder.where(ZeroContract.Workers._ID + "=?", id);
+                builder.where(ZeroContract.Workers.EK_ID + "=?", id);
             case ROUTE_WORKERS_LIST:
                 builder.table(ZeroContract.Workers.TABLE_NAME)
+                        .where(selection, selectionArgs);
+                cursor = builder.query(database, projection, sortOrder);
+                cursor.setNotificationUri(contentResolver, uri);
+                return cursor;
+
+            case ROUTE_LAND_PARCELS_ITEM:
+                id = uri.getLastPathSegment();
+                builder.where(ZeroContract.LandParcels.EK_ID + "=?", id);
+            case ROUTE_LAND_PARCELS_LIST:
+                builder.table(ZeroContract.LandParcels.TABLE_NAME)
                         .where(selection, selectionArgs);
                 cursor = builder.query(database, projection, sortOrder);
                 cursor.setNotificationUri(contentResolver, uri);
@@ -585,7 +603,7 @@ public class ZeroProvider extends ContentProvider {
                 throw new UnsupportedOperationException("Insert not supported on URI: " + uri);
 
             case ROUTE_EQUIPMENTS_LIST:
-                id = database.insertOrThrow(ZeroContract.Equipments.TABLE_NAME, null, values);
+                id = database.insertWithOnConflict(ZeroContract.Equipments.TABLE_NAME, null, values, SQLiteDatabase.CONFLICT_REPLACE);
                 result = Uri.parse(ZeroContract.Equipments.CONTENT_URI + "/" + id);
                 break;
             case ROUTE_EQUIPMENTS_ITEM:
@@ -599,10 +617,17 @@ public class ZeroProvider extends ContentProvider {
                 throw new UnsupportedOperationException("Insert not supported on URI: " + uri);
 
             case ROUTE_WORKERS_LIST:
-                id = database.insertOrThrow(ZeroContract.Workers.TABLE_NAME, null, values);
+                id = database.insertWithOnConflict(ZeroContract.Workers.TABLE_NAME, null, values, SQLiteDatabase.CONFLICT_REPLACE);
                 result = Uri.parse(ZeroContract.Workers.CONTENT_URI + "/" + id);
                 break;
             case ROUTE_WORKERS_ITEM:
+                throw new UnsupportedOperationException("Insert not supported on URI: " + uri);
+
+            case ROUTE_LAND_PARCELS_LIST:
+                id = database.insertWithOnConflict(ZeroContract.LandParcels.TABLE_NAME, null, values, SQLiteDatabase.CONFLICT_REPLACE);
+                result = Uri.parse(ZeroContract.LandParcels.CONTENT_URI + "/" + id);
+                break;
+            case ROUTE_LAND_PARCELS_ITEM:
                 throw new UnsupportedOperationException("Insert not supported on URI: " + uri);
 
                 default:
@@ -837,7 +862,7 @@ public class ZeroProvider extends ContentProvider {
                 break;
             case ROUTE_EQUIPMENTS_ITEM:
                 count = builder.table(ZeroContract.Equipments.TABLE_NAME)
-                        .where(ZeroContract.Equipments._ID + "=?", id)
+                        .where(ZeroContract.Equipments.EK_ID + "=?", id)
                         .where(selection, selectionArgs)
                         .delete(database);
                 break;
@@ -861,7 +886,19 @@ public class ZeroProvider extends ContentProvider {
                 break;
             case ROUTE_WORKERS_ITEM:
                 count = builder.table(ZeroContract.Workers.TABLE_NAME)
-                        .where(ZeroContract.Workers._ID + "=?", id)
+                        .where(ZeroContract.Workers.EK_ID + "=?", id)
+                        .where(selection, selectionArgs)
+                        .delete(database);
+                break;
+
+            case ROUTE_LAND_PARCELS_LIST:
+                count = builder.table(ZeroContract.LandParcels.TABLE_NAME)
+                        .where(selection, selectionArgs)
+                        .delete(database);
+                break;
+            case ROUTE_LAND_PARCELS_ITEM:
+                count = builder.table(ZeroContract.LandParcels.TABLE_NAME)
+                        .where(ZeroContract.LandParcels.EK_ID + "=?", id)
                         .where(selection, selectionArgs)
                         .delete(database);
                 break;
@@ -1119,7 +1156,7 @@ public class ZeroProvider extends ContentProvider {
             case ROUTE_EQUIPMENTS_ITEM:
                 id = uri.getLastPathSegment();
                 count = builder.table(ZeroContract.Equipments.TABLE_NAME)
-                        .where(ZeroContract.Equipments._ID + "=?", id)
+                        .where(ZeroContract.Equipments.EK_ID + "=?", id)
                         .where(selection, selectionArgs)
                         .update(database, values);
                 break;
@@ -1145,7 +1182,20 @@ public class ZeroProvider extends ContentProvider {
             case ROUTE_WORKERS_ITEM:
                 id = uri.getLastPathSegment();
                 count = builder.table(ZeroContract.Workers.TABLE_NAME)
-                        .where(ZeroContract.Workers._ID + "=?", id)
+                        .where(ZeroContract.Workers.EK_ID + "=?", id)
+                        .where(selection, selectionArgs)
+                        .update(database, values);
+                break;
+
+            case ROUTE_LAND_PARCELS_LIST:
+                count = builder.table(ZeroContract.LandParcels.TABLE_NAME)
+                        .where(selection, selectionArgs)
+                        .update(database, values);
+                break;
+            case ROUTE_LAND_PARCELS_ITEM:
+                id = uri.getLastPathSegment();
+                count = builder.table(ZeroContract.LandParcels.TABLE_NAME)
+                        .where(ZeroContract.LandParcels.EK_ID + "=?", id)
                         .where(selection, selectionArgs)
                         .update(database, values);
                 break;

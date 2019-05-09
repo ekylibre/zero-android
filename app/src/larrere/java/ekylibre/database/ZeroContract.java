@@ -218,12 +218,13 @@ public final class ZeroContract {
         String POSITION = "position";
     }
 
-    public interface EquipmentColumns extends BaseColumns {
+    public interface EquipmentColumns {
         String TABLE_NAME = "equipments";
         String EK_ID = "ek_id";
         String NAME = "name";
         String NUMBER = "number";
-        String TYPE = "type";
+        String VARIETY = "variety";
+        String ABILITIES = "abilities";
         String USER = "user";
     }
 
@@ -237,19 +238,21 @@ public final class ZeroContract {
         String USER = "user";
     }
 
-    public interface WorkerColumns extends BaseColumns {
+    public interface WorkerColumns {
         String TABLE_NAME = "workers";
         String EK_ID = "ek_id";
         String NAME = "name";
         String NUMBER = "number";
         String QUALIFICATION = "qualification";
+        String ABILITIES = "abilities";
         String USER = "user";
     }
 
-    public interface LandParcelColumns extends BaseColumns {
+    public interface LandParcelColumns {
         String TABLE_NAME = "land_parcels";
         String EK_ID = "ek_id";
         String NAME = "name";
+        String NET_SURFACE_AREA = "net_surface_area";
         String USER = "user";
     }
 
@@ -574,7 +577,7 @@ public final class ZeroContract {
         public static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE +
                 "/vnd.ekylibre.zero.equipments";
 
-        public static final String[] PROJECTION_ALL = {_ID, EK_ID, NAME, NUMBER, TYPE, USER};
+        public static final String[] PROJECTION_ALL = {EK_ID, NAME, NUMBER, VARIETY, ABILITIES, USER};
 
         public static final String SORT_ORDER_DEFAULT = NAME + " ASC";
     }
@@ -602,7 +605,7 @@ public final class ZeroContract {
         public static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE +
                 "/vnd.ekylibre.zero.workers";
 
-        public static final String[] PROJECTION_ALL = {_ID, EK_ID, NAME, NUMBER, QUALIFICATION, USER};
+        public static final String[] PROJECTION_ALL = {EK_ID, NAME, NUMBER, QUALIFICATION, ABILITIES, USER};
 
         public static final String SORT_ORDER_DEFAULT = NAME + " ASC";
     }
@@ -616,7 +619,7 @@ public final class ZeroContract {
         public static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE +
                 "/vnd.ekylibre.zero.land_parcels";
 
-        public static final String[] PROJECTION_ALL = {_ID, EK_ID, NAME, USER};
+        public static final String[] PROJECTION_ALL = {EK_ID, NAME, NET_SURFACE_AREA, USER};
 
         public static final String SORT_ORDER_DEFAULT = NAME + " ASC";
     }

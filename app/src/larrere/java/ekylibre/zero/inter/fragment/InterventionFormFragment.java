@@ -1,5 +1,6 @@
 package ekylibre.zero.inter.fragment;
 
+import android.content.ContentResolver;
 import android.content.Context;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -28,7 +29,12 @@ import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import ekylibre.APICaller.Worker;
 import ekylibre.database.ZeroContract;
+import ekylibre.database.ZeroContract.Plants;
+import ekylibre.database.ZeroContract.LandParcels;
+import ekylibre.database.ZeroContract.Equipments;
+import ekylibre.database.ZeroContract.Workers;
 import ekylibre.util.MarginTopItemDecoration;
 import ekylibre.util.Translate;
 import ekylibre.util.layout.component.WidgetParamView;
@@ -38,18 +44,15 @@ import ekylibre.zero.R;
 import ekylibre.zero.inter.InterActivity;
 import ekylibre.zero.inter.adapter.FormPeriodAdapter;
 import ekylibre.zero.inter.adapter.QuantityItemAdapter;
+import ekylibre.zero.inter.model.GenericItem;
 import ekylibre.zero.inter.model.ItemWithQuantity;
 import ekylibre.zero.inter.model.Period;
-import ekylibre.zero.inter.model.SimpleSelectableItem;
 
 import static ekylibre.zero.inter.InterActivity.CROP_CHOICE_FRAGMENT;
 import static ekylibre.zero.inter.InterActivity.selectedProcedure;
-import static ekylibre.zero.inter.enums.ParamType.DRIVER;
 import static ekylibre.zero.inter.enums.ParamType.LAND_PARCEL;
 import static ekylibre.zero.inter.enums.ParamType.PLANT;
 import static ekylibre.zero.inter.enums.ParamType.PLANT_MEDICINE;
-import static ekylibre.zero.inter.enums.ParamType.SOWER;
-import static ekylibre.zero.inter.enums.ParamType.TRACTOR;
 
 
 public class InterventionFormFragment extends Fragment {
@@ -59,8 +62,8 @@ public class InterventionFormFragment extends Fragment {
     private Context context;
     private List<Period> periodList;
     private static List<ItemWithQuantity> inputList;
-//    static List<SimpleSelectableItem> cropParcelList;
-    public static List<SimpleSelectableItem> paramsList;
+//    static List<GenericItem> cropParcelList;
+    public static List<GenericItem> paramsList;
 
     // LAYOUT BINDINGS
     @BindView(R.id.widgets_container)
@@ -97,6 +100,8 @@ public class InterventionFormFragment extends Fragment {
 
         Log.i(TAG, "onCreate");
 
+        ContentResolver cr = context.getContentResolver();
+
         // Add one hour period as default
         periodList = new ArrayList<>();
         periodList.add(new Period());
@@ -108,10 +113,10 @@ public class InterventionFormFragment extends Fragment {
 //        cropParcelList.addAll(getPlants());
 
         paramsList = new ArrayList<>();
-        paramsList.addAll(getUsers());
-        paramsList.addAll(getTools());
-        paramsList.addAll(getPlants());
-        paramsList.addAll(getInputs());
+        paramsList.addAll(getUsers(cr));
+        paramsList.addAll(getTools(cr));
+        paramsList.addAll(getPlantsAndLandParcels(cr));
+        paramsList.addAll(getInputs(cr));
     }
 
     @Override
@@ -150,11 +155,11 @@ public class InterventionFormFragment extends Fragment {
             switch (target.name) {
 
                 case "plant":
-                    widgetContainer.addView(new WidgetParamView(context, listener, PLANT, paramsList));
+                    widgetContainer.addView(new WidgetParamView(context, listener, PLANT, target.filter, paramsList));
                     break;
 
                 case "land_parcel":
-                    widgetContainer.addView(new WidgetParamView(context, listener, LAND_PARCEL, paramsList));
+                    widgetContainer.addView(new WidgetParamView(context, listener, LAND_PARCEL, target.filter, paramsList));
                     break;
 
                 case "cultivation":
@@ -164,10 +169,10 @@ public class InterventionFormFragment extends Fragment {
                         label.setText(R.string.crop_parcel);
                         TextView addButton = cropParcelView.findViewById(R.id.widget_add);
                         ChipGroup cropChipGroup = cropParcelView.findViewById(R.id.widget_chips_group);
-                        addButton.setOnClickListener(v -> listener.onFormFragmentInteraction(CROP_CHOICE_FRAGMENT));
+                        addButton.setOnClickListener(v -> listener.onFormFragmentInteraction(CROP_CHOICE_FRAGMENT, target.filter));
 
                         // ChipGroup Logic
-                        for (SimpleSelectableItem item : paramsList) {
+                        for (GenericItem item : paramsList) {
                             if ((item.type.equals(PLANT) || item.type.equals(LAND_PARCEL)) && item.isSelected) {
                                 Chip chip = new Chip(context);
                                 chip.setText(item.name);
@@ -204,7 +209,7 @@ public class InterventionFormFragment extends Fragment {
 
             // Add onClick listener
             TextView addButton = inputView.findViewById(R.id.widget_add);
-            addButton.setOnClickListener(v -> listener.onFormFragmentInteraction(entity.name));
+            addButton.setOnClickListener(v -> listener.onFormFragmentInteraction(entity.name, entity.filter));
 
             // Initialize Recycler
             RecyclerView inputRecycler = inputView.findViewById(R.id.widget_recycler);
@@ -214,7 +219,7 @@ public class InterventionFormFragment extends Fragment {
             inputRecycler.setAdapter(quantityItemAdapter);
 
             // Updates iputList for recycler display
-            for (SimpleSelectableItem item : paramsList) {
+            for (GenericItem item : paramsList) {
                 // Check we have an input
                 if (entity.name.equals(item.type)) {
                     // Get item if present in inputList
@@ -243,32 +248,30 @@ public class InterventionFormFragment extends Fragment {
             widgetContainer.addView(inputView);
         }
 
-        // ------------- //
-        // Params layout //
-        // ------------- //
+        // -------------- //
+        // Workers layout //
+        // -------------- //
 
         for (GenericEntity entity : selectedProcedure.doer) {
             Log.i(TAG, "doer --> " + entity.name);
-            widgetContainer.addView(new WidgetParamView(context, listener, entity.name, paramsList));
+            widgetContainer.addView(new WidgetParamView(context, listener, entity.name, entity.filter, paramsList));
         }
+
+        // ----------------- //
+        // Equipments layout //
+        // ----------------- //
 
         for (GenericEntity entity : selectedProcedure.tool) {
             Log.i(TAG, "tool --> " + entity.name);
-            widgetContainer.addView(new WidgetParamView(context, listener, entity.name, paramsList));
+            widgetContainer.addView(new WidgetParamView(context, listener, entity.name, entity.filter, paramsList));
         }
-
-//        //        @Type
-////        List<String> interventionParams = Arrays.asList(DRIVER, TRACTOR);
-//
-//        for (@Type String type : interventionParams)
-//            widgetContainer.addView(new WidgetParamView(context, listener, type, paramsList));
 
         return view;
     }
 
     private void chipGroupDisplay(ChipGroup group) {
         boolean itemCounter = false;
-        for (SimpleSelectableItem item : paramsList)
+        for (GenericItem item : paramsList)
             if ((item.type.equals(PLANT) || item.type.equals(LAND_PARCEL)) && item.isSelected) {
                 itemCounter = true;
                 break;
@@ -282,87 +285,115 @@ public class InterventionFormFragment extends Fragment {
         listener = null;
     }
 
-    private List<SimpleSelectableItem> getPlants() {
+    private List<GenericItem> getPlantsAndLandParcels(ContentResolver cr) {
 
-        List<SimpleSelectableItem> list = new ArrayList<>();
-        Cursor cursor = context.getContentResolver().query(
-                ZeroContract.Plants.CONTENT_URI, ZeroContract.Plants.PROJECTION_OBS,
-                ZeroContract.Plants.USER + " LIKE " + "\"" + InterActivity.account.name + "\""
-                        + " AND " + ZeroContract.Plants.ACTIVE + " == " + 1,
-                null, ZeroContract.Issues.SORT_ORDER_DEFAULT);
+        List<GenericItem> list = new ArrayList<>();
+        String likeAccountName = " LIKE " + "\"" + InterActivity.account.name + "\"";
 
-        if (cursor != null) {
-            try {
-                while (cursor.moveToNext())
-                    list.add(new SimpleSelectableItem(cursor.getInt(1), cursor.getString(2), PLANT, false));
-            } finally {
-                cursor.close();
-            }
+        // Load Plants
+        try (Cursor cursor = cr.query(Plants.CONTENT_URI, Plants.PROJECTION_OBS,
+                Plants.USER + likeAccountName + " AND " + Plants.ACTIVE + " == " + 1,
+                null, Plants.SORT_ORDER_DEFAULT)) {
 
-            // sorting the List
-            Collections.sort(list, (ele1, ele2) -> {
-                Collator localeCollator = Collator.getInstance(Locale.FRANCE);
-                return localeCollator.compare(ele1.name, ele2.name);
-            });
+            while (cursor != null && cursor.moveToNext())
+                list.add(new GenericItem(
+                        cursor.getInt(1),       // id
+                        cursor.getString(2),    // name
+                        cursor.getString(3),    // variety
+                        PLANT,                  // type
+                        null));
         }
+
+//        // Load Land Parcels
+        try (Cursor cursor = cr.query(LandParcels.CONTENT_URI, LandParcels.PROJECTION_ALL,
+                LandParcels.USER + likeAccountName, null, LandParcels.SORT_ORDER_DEFAULT)) {
+
+            while (cursor != null && cursor.moveToNext())
+                list.add(new GenericItem(
+                        cursor.getInt(0),       // id
+                        cursor.getString(1),    // name
+                        cursor.getString(2),    // number = surface
+                        LAND_PARCEL,            // type
+                        null                    // abilities
+                ));
+        }
+
+        sortAlphabetically(list);
         return list;
     }
 
-    private List<SimpleSelectableItem> getUsers() {
-        List<SimpleSelectableItem> list = new ArrayList<>();
-        list.add(new SimpleSelectableItem(1, "Michel", DRIVER, true));
-        list.add(new SimpleSelectableItem(2, "Jean", DRIVER));
-        list.add(new SimpleSelectableItem(3, "Jacques", DRIVER));
-        list.add(new SimpleSelectableItem(4, "Bob", DRIVER));
+    private List<GenericItem> getUsers(ContentResolver cr) {
+        List<GenericItem> list = new ArrayList<>();
+        String likeAccountName = " LIKE " + "\"" + InterActivity.account.name + "\"";
 
+        // Load Workers
+        try (Cursor cursor = cr.query(Workers.CONTENT_URI, Workers.PROJECTION_ALL,
+                Workers.USER + likeAccountName, null, Workers.SORT_ORDER_DEFAULT)) {
+
+            while (cursor != null && cursor.moveToNext())
+                list.add(new GenericItem(
+                        cursor.getInt(0),       // ek_id
+                        cursor.getString(1),    // name
+                        cursor.getString(2),    // number
+                        cursor.getString(3),    // type
+                        cursor.getString(4)     // abilities
+                ));
+        }
+
+        sortAlphabetically(list);
+        return list;
+    }
+
+    private List<GenericItem> getTools(ContentResolver cr) {
+        List<GenericItem> list = new ArrayList<>();
+        String likeAccountName = " LIKE " + "\"" + InterActivity.account.name + "\"";
+
+        // Load Plants
+        try (Cursor cursor = cr.query(Equipments.CONTENT_URI, Equipments.PROJECTION_ALL,
+                Equipments.USER + likeAccountName, null, Equipments.SORT_ORDER_DEFAULT)) {
+
+            while (cursor != null && cursor.moveToNext())
+                list.add(new GenericItem(
+                        cursor.getInt(0),       // ek_id
+                        cursor.getString(1),    // name
+                        cursor.getString(2),    // number
+                        cursor.getString(3),    // type
+                        cursor.getString(4)     // abilities
+                ));
+        }
+
+        sortAlphabetically(list);
+        return list;
+    }
+
+    private List<GenericItem> getInputs(ContentResolver cr) {
+        List<GenericItem> list = new ArrayList<>();
+//        list.add(new GenericItem(1, "Adelia EC", PLANT_MEDICINE));
+//        list.add(new GenericItem(2, "PRIORI GOLD", PLANT_MEDICINE));
+//        list.add(new GenericItem(3, "Licorne Flex", PLANT_MEDICINE));
+//        list.add(new GenericItem(4, "SILICOSEC", PLANT_MEDICINE));
+//        list.add(new GenericItem(5, "Azural xpress", PLANT_MEDICINE));
+//        list.add(new GenericItem(6, "OPTION FLASH", PLANT_MEDICINE));
+//        list.add(new GenericItem(7, "OXANA", PLANT_MEDICINE));
+//        list.add(new GenericItem(8, "DYNAMIZ", PLANT_MEDICINE));
+//        list.add(new GenericItem(9, "ORENGO", PLANT_MEDICINE));
+//        list.add(new GenericItem(10, "HM BASA", PLANT_MEDICINE));
+//        list.add(new GenericItem(11, "CLAYTON EL NINO", PLANT_MEDICINE));
+//        list.add(new GenericItem(12, "MILLENIUM OPTI", PLANT_MEDICINE));
+//
+//        sortAlphabetically(list);
+        return list;
+    }
+
+    private void sortAlphabetically(List<GenericItem> list) {
         Collections.sort(list, (ele1, ele2) -> {
             Collator localeCollator = Collator.getInstance(Locale.FRANCE);
             return localeCollator.compare(ele1.name, ele2.name);
         });
-
-        return list;
-    }
-
-    private List<SimpleSelectableItem> getTools() {
-        List<SimpleSelectableItem> list = new ArrayList<>();
-        list.add(new SimpleSelectableItem(1, "Massey 6700 S", TRACTOR));
-        list.add(new SimpleSelectableItem(2, "Sem 360 +", SOWER));
-        list.add(new SimpleSelectableItem(3, "New FR250", TRACTOR));
-        list.add(new SimpleSelectableItem(4, "Multigrains 500L", TRACTOR));
-
-        Collections.sort(list, (ele1, ele2) -> {
-            Collator localeCollator = Collator.getInstance(Locale.FRANCE);
-            return localeCollator.compare(ele1.name, ele2.name);
-        });
-
-        return list;
-    }
-
-    private List<SimpleSelectableItem> getInputs() {
-        List<SimpleSelectableItem> list = new ArrayList<>();
-        list.add(new SimpleSelectableItem(1, "Adelia EC", PLANT_MEDICINE));
-        list.add(new SimpleSelectableItem(2, "PRIORI GOLD", PLANT_MEDICINE));
-        list.add(new SimpleSelectableItem(3, "Licorne Flex", PLANT_MEDICINE));
-        list.add(new SimpleSelectableItem(4, "SILICOSEC", PLANT_MEDICINE));
-        list.add(new SimpleSelectableItem(5, "Azural xpress", PLANT_MEDICINE));
-        list.add(new SimpleSelectableItem(6, "OPTION FLASH", PLANT_MEDICINE));
-        list.add(new SimpleSelectableItem(7, "OXANA", PLANT_MEDICINE));
-        list.add(new SimpleSelectableItem(8, "DYNAMIZ", PLANT_MEDICINE));
-        list.add(new SimpleSelectableItem(9, "ORENGO", PLANT_MEDICINE));
-        list.add(new SimpleSelectableItem(10, "HM BASA", PLANT_MEDICINE));
-        list.add(new SimpleSelectableItem(11, "CLAYTON EL NINO", PLANT_MEDICINE));
-        list.add(new SimpleSelectableItem(12, "MILLENIUM OPTI", PLANT_MEDICINE));
-
-        Collections.sort(list, (ele1, ele2) -> {
-            Collator localeCollator = Collator.getInstance(Locale.FRANCE);
-            return localeCollator.compare(ele1.name, ele2.name);
-        });
-
-        return list;
     }
 
     public interface OnFragmentInteractionListener {
-        void onFormFragmentInteraction(String fragmentTag);
+        void onFormFragmentInteraction(String fragmentTag, String filter);
     }
 
 }

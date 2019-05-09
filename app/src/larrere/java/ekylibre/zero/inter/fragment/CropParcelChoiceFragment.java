@@ -18,7 +18,7 @@ import java.util.List;
 import ekylibre.zero.R;
 import ekylibre.zero.inter.InterActivity;
 import ekylibre.zero.inter.adapter.CropParcelAdapter;
-import ekylibre.zero.inter.model.SimpleSelectableItem;
+import ekylibre.zero.inter.model.GenericItem;
 
 import static ekylibre.zero.inter.enums.ParamType.LAND_PARCEL;
 import static ekylibre.zero.inter.enums.ParamType.PLANT;
@@ -26,7 +26,7 @@ import static ekylibre.zero.inter.enums.ParamType.PLANT;
 
 public class CropParcelChoiceFragment extends Fragment {
 
-    List<SimpleSelectableItem> dataset;
+    List<GenericItem> dataset;
     CropParcelAdapter adapter;
     public int currentTab = 0;
 
@@ -73,7 +73,7 @@ public class CropParcelChoiceFragment extends Fragment {
     private void queryDatabaseForList(int tab) {
         dataset.clear();
         String filter = tab == 0 ? PLANT : LAND_PARCEL;
-        for (SimpleSelectableItem item : InterventionFormFragment.paramsList)
+        for (GenericItem item : InterventionFormFragment.paramsList)
             if (item.type.equals(filter))
                 dataset.add(item);
         adapter.notifyDataSetChanged();

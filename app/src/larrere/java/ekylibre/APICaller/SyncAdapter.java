@@ -143,37 +143,35 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
 
         getContext().sendBroadcast(new Intent(UpdatableActivity.ACTION_STARTED_SYNC));
 
-        if (BuildConfig.DEBUG) Log.i(TAG, "Destruction of tables which will be resynced !");
-        mContentResolver.delete(ZeroContract.Plants.CONTENT_URI,
-                null,
-                null);
-        mContentResolver.delete(ZeroContract.PlantDensityAbacusItems.CONTENT_URI,
-                null,
-                null);
-        mContentResolver.delete(ZeroContract.PlantDensityAbaci.CONTENT_URI,
-                null,
-                null);
-        mContentResolver.delete(ZeroContract.InterventionParameters.CONTENT_URI,
-                null,
-                null);
+        if (BuildConfig.DEBUG)
+            Log.i(TAG, "Destruction of tables which will be resynced !");
+
+        mContentResolver.delete(ZeroContract.Plants.CONTENT_URI, null, null);
+        mContentResolver.delete(ZeroContract.PlantDensityAbacusItems.CONTENT_URI, null, null);
+        mContentResolver.delete(ZeroContract.PlantDensityAbaci.CONTENT_URI, null, null);
+        mContentResolver.delete(ZeroContract.InterventionParameters.CONTENT_URI, null, null);
 
         Account[] accountList = AccountTool.getListAccount(mContext);
-        if (BuildConfig.DEBUG) Log.d(TAG, "Performing Sync ! Pushing all the local data to Ekylibre instance");
+
+        if (BuildConfig.DEBUG)
+            Log.d(TAG, "Performing Sync ! Pushing all the local data to Ekylibre instance");
+
         int i = -1;
-        while (++i < accountList.length)
-        {
+        while (++i < accountList.length) {
+
             account = accountList[i];
+
             if (BuildConfig.DEBUG) Log.d(TAG, "... Sync new account ...");
             if (BuildConfig.DEBUG) Log.d(TAG, "... New account is " + account.name + " ...");
-            pullPlantDensityAbaci(account,
-                extras, authority, provider, syncResult);
-            pullPlants(account, extras, authority, provider, syncResult);
 
-            pullWorkers(account, extras, authority, provider, syncResult);
+            pullPlantDensityAbaci(account, extras, authority, provider, syncResult);
+            pullPlants(account, extras, authority, provider, syncResult);
+            pullLandParcels(account);
+            pullWorkers(account);
+            pullEquipments(account);
 
             pushIssues(account, extras, authority, provider, syncResult);
             pushPlantCounting(account, extras, authority, provider, syncResult);
-
             pushIntervention(account, extras, authority, provider, syncResult);
             pullIntervention(account, extras, authority, provider, syncResult);
 
@@ -182,6 +180,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
             pullContacts(account, extras, authority, provider, syncResult);
             cleanLocalDb(account);
         }
+
         getContext().sendBroadcast(new Intent(UpdatableActivity.ACTION_FINISHED_SYNC));
     }
 
@@ -1217,7 +1216,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
     /**
      *   Get workers from Ekylibre instance
      */
-    private void pullWorkers(Account account, Bundle extras, String authority, ContentProviderClient provider, SyncResult syncResult) {
+    private void pullWorkers(Account account) {
 
         if (BuildConfig.DEBUG)
             Log.i(TAG, "Beginning network workers synchronization");
@@ -1242,13 +1241,88 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
             cv.put(ZeroContract.Workers.EK_ID, worker.id);
             cv.put(ZeroContract.Workers.NAME, worker.name);
             cv.put(ZeroContract.Workers.NUMBER, worker.number);
-            cv.put(ZeroContract.Workers.QUALIFICATION, "driver");
+            cv.put(ZeroContract.Workers.QUALIFICATION, worker.qualification);
+            cv.put(ZeroContract.Workers.ABILITIES, worker.abilities);
             cv.put(ZeroContract.Workers.USER, account.name);
             mContentResolver.insert(ZeroContract.Workers.CONTENT_URI, cv);
         }
 
         if (BuildConfig.DEBUG)
             Log.i(TAG, "Finish network workers synchronization");
+    }
+
+    /**
+     *   Get land parcels from Ekylibre instance
+     */
+    private void pullLandParcels(Account account) {
+
+        if (BuildConfig.DEBUG)
+            Log.i(TAG, "Beginning network land parcels synchronization");
+
+        ContentValues cv = new ContentValues();
+        Instance instance = getInstance(account);
+
+        List<LandParcel> landParcelsList = null;
+        try {
+            landParcelsList = LandParcel.all(instance, null);
+        } catch (JSONException | IOException | HTTPException e) {
+            e.printStackTrace();
+        }
+
+        if (landParcelsList == null)
+            return;
+
+        if (BuildConfig.DEBUG)
+            Log.d(TAG, "Nombre de parcelles : " + landParcelsList.size() );
+
+        for (LandParcel landParcel : landParcelsList) {
+            cv.put(ZeroContract.LandParcels.EK_ID, landParcel.id);
+            cv.put(ZeroContract.LandParcels.NAME, landParcel.name);
+            cv.put(ZeroContract.LandParcels.NET_SURFACE_AREA, landParcel.net_surface_area);
+            cv.put(ZeroContract.LandParcels.USER, account.name);
+            mContentResolver.insert(ZeroContract.LandParcels.CONTENT_URI, cv);
+        }
+
+        if (BuildConfig.DEBUG)
+            Log.i(TAG, "Finish network land parcels synchronization");
+    }
+
+    /**
+     *   Get equipments from Ekylibre instance
+     */
+    private void pullEquipments(Account account) {
+
+        if (BuildConfig.DEBUG)
+            Log.i(TAG, "Beginning network equipments synchronization");
+
+        ContentValues cv = new ContentValues();
+        Instance instance = getInstance(account);
+
+        List<Equipment> equipmentsList = null;
+        try {
+            equipmentsList = Equipment.all(instance, null);
+        } catch (JSONException | IOException | HTTPException e) {
+            e.printStackTrace();
+        }
+
+        if (equipmentsList == null)
+            return;
+
+        if (BuildConfig.DEBUG)
+            Log.d(TAG, "Nombre d'equipments : " + equipmentsList.size() );
+
+        for (Equipment equipment : equipmentsList) {
+            cv.put(ZeroContract.Equipments.EK_ID, equipment.id);
+            cv.put(ZeroContract.Equipments.NAME, equipment.name);
+            cv.put(ZeroContract.Equipments.NUMBER, equipment.number);
+            cv.put(ZeroContract.Equipments.VARIETY, equipment.variety);
+            cv.put(ZeroContract.Equipments.ABILITIES, equipment.abilities);
+            cv.put(ZeroContract.Equipments.USER, account.name);
+            mContentResolver.insert(ZeroContract.Equipments.CONTENT_URI, cv);
+        }
+
+        if (BuildConfig.DEBUG)
+            Log.i(TAG, "Finish network equipments synchronization");
     }
 
     protected Instance getInstance(Account account)

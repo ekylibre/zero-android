@@ -17,8 +17,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import ekylibre.zero.R;
 import ekylibre.zero.inter.fragment.InterventionFormFragment;
+import ekylibre.zero.inter.model.GenericItem;
 import ekylibre.zero.inter.model.ItemWithQuantity;
-import ekylibre.zero.inter.model.SimpleSelectableItem;
 
 
 public class QuantityItemAdapter extends RecyclerView.Adapter<QuantityItemAdapter.ViewHolder> {
@@ -58,7 +58,7 @@ public class QuantityItemAdapter extends RecyclerView.Adapter<QuantityItemAdapte
                 int index = dataset.indexOf(item);
                 dataset.remove(index);
                 notifyItemRemoved(index);
-                for (SimpleSelectableItem simpleItem : InterventionFormFragment.paramsList) {
+                for (GenericItem simpleItem : InterventionFormFragment.paramsList) {
                     if (simpleItem.id == item.id && simpleItem.isSelected) {
                         simpleItem.isSelected = false;
                         break;

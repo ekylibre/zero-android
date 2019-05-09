@@ -42,7 +42,7 @@ import ekylibre.zero.inter.fragment.ParamChoiceFragment;
 import ekylibre.zero.inter.fragment.ProcedureChoiceFragment;
 import ekylibre.zero.inter.fragment.ProcedureFamilyChoiceFragment;
 import ekylibre.zero.inter.model.CropParcel;
-import ekylibre.zero.inter.model.SimpleSelectableItem;
+import ekylibre.zero.inter.model.GenericItem;
 
 public class InterActivity extends AppCompatActivity implements FragmentManager.OnBackStackChangedListener,
         ProcedureFamilyChoiceFragment.OnFragmentInteractionListener,
@@ -75,7 +75,7 @@ public class InterActivity extends AppCompatActivity implements FragmentManager.
     public static List<ProcedureEntity> procedures;
     public static ProcedureEntity selectedProcedure;
     public static List<CropParcel> selectedCropParcels;
-    public static List<SimpleSelectableItem> selectedDrivers;
+    public static List<GenericItem> selectedDrivers;
 
     public static Map<String,List<Pair<String,String>>> families;
     public static Map<String,List<Pair<String,String>>> natures;
@@ -108,22 +108,22 @@ public class InterActivity extends AppCompatActivity implements FragmentManager.
         fragmentManager.addOnBackStackChangedListener(this);
 
         // Set first fragment to procedure family choice
-        replaceFragmentWith(PROCEDURE_FAMILY_FRAGMENT);
+        replaceFragmentWith(PROCEDURE_FAMILY_FRAGMENT, null);
 
         // Load procedure natures, families and params from assets
         loadXMLAssets();
 
-        // Canopy testing
-        try {
-            TreeNode tree = QL.parse("can tow(equipment) and can move");
-            for (TreeNode node : tree.elements)
-                Log.e(TAG, node.text);
-        } catch (ParseError parseError) {
-            parseError.printStackTrace();
-        }
+        // Ekylibre DSL testing (canopy)
+//        try {
+//            TreeNode tree = QL.parse("can tow(equipment) and can move");
+//            for (TreeNode node : tree.elements)
+//                Log.e(TAG, node.text);
+//        } catch (ParseError parseError) {
+//            parseError.printStackTrace();
+//        }
     }
 
-    void replaceFragmentWith(String fragmentTag) {
+    void replaceFragmentWith(String fragmentTag, String filter) {
 
         // Update current fragment reference
         currentFragment = fragmentTag;
@@ -160,7 +160,7 @@ public class InterActivity extends AppCompatActivity implements FragmentManager.
 
             default:
                 // Default to Procedure Family fragment
-                fragment = ParamChoiceFragment.newInstance(fragmentTag);
+                fragment = ParamChoiceFragment.newInstance(fragmentTag, filter);
                 break;
         }
 
@@ -185,7 +185,7 @@ public class InterActivity extends AppCompatActivity implements FragmentManager.
         else if (id.equals(TOOL_MAINTAINING.first))
             currentFamily = TOOL_MAINTAINING;
 
-        replaceFragmentWith(PROCEDURE_CATEGORY_FRAGMENT);
+        replaceFragmentWith(PROCEDURE_CATEGORY_FRAGMENT, null);
     }
 
     public ProcedureEntity getProcedureItem(String name) {
@@ -247,8 +247,8 @@ public class InterActivity extends AppCompatActivity implements FragmentManager.
     }
 
     @Override
-    public void onFormFragmentInteraction(String fragmentTag) {
-        replaceFragmentWith(fragmentTag);
+    public void onFormFragmentInteraction(String fragmentTag, String filter) {
+        replaceFragmentWith(fragmentTag, filter);
     }
 
     @Override
@@ -260,12 +260,12 @@ public class InterActivity extends AppCompatActivity implements FragmentManager.
         switch (fragmentRef) {
             case PROCEDURE_CATEGORY_FRAGMENT:
                 currentCategory = item;
-                replaceFragmentWith(PROCEDURE_NATURE_FRAGMENT);
+                replaceFragmentWith(PROCEDURE_NATURE_FRAGMENT, null);
                 break;
             case PROCEDURE_NATURE_FRAGMENT:
                 Log.e(TAG, item.second);
                 selectedProcedure = getProcedureItem(item.first);
-                replaceFragmentWith(INTERVENTION_FORM);
+                replaceFragmentWith(INTERVENTION_FORM, null);
                 break;
         }
     }
