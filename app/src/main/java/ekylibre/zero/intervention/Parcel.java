@@ -1,9 +1,8 @@
 package ekylibre.zero.intervention;
 
-import com.google.android.gms.maps.model.Polygon;
-import com.google.android.gms.maps.model.PolygonOptions;
-import com.google.maps.android.geojson.GeoJsonLayer;
-import com.google.maps.android.geojson.GeoJsonPolygon;
+
+import com.google.maps.android.data.geojson.GeoJsonLayer;
+import com.google.maps.android.data.geojson.GeoJsonPolygon;
 
 import java.util.List;
 
@@ -14,7 +13,7 @@ import java.util.List;
 
 public class Parcel
 {
-    GeoJsonLayer            layer;
+    GeoJsonLayer layer;
     List<GeoJsonPolygon>    polygons;
     private String          name;
     private int             number;
