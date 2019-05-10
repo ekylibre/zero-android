@@ -44,9 +44,9 @@ public class WidgetParamView extends ConstraintLayout {
         super(context, attrs, defStyleAttr);
     }
 
-    public WidgetParamView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
-        super(context, attrs, defStyleAttr, defStyleRes);
-    }
+//    public WidgetParamView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+//        super(context, attrs, defStyleAttr, defStyleRes);
+//    }
 
     public void init(Context context, OnFragmentInteractionListener listener, @Type String type,
                      String filter, List<GenericItem> paramList) {
