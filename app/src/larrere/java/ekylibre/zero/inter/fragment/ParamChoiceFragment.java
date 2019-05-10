@@ -155,7 +155,8 @@ public class ParamChoiceFragment extends Fragment {
             if (item.type.equals(paramType))
                 if (text != null) {
                     String name = item.name.toLowerCase();
-                    if (name.contains(text.toLowerCase()))
+                    String number = item.number.toLowerCase();
+                    if (name.contains(text.toLowerCase()) || number.contains(text.toLowerCase()))
                         dataset.add(item);
                 } else
                     dataset.add(item);

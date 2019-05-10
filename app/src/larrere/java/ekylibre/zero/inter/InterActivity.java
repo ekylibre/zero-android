@@ -254,19 +254,15 @@ public class InterActivity extends AppCompatActivity implements FragmentManager.
     @Override
     public void onItemChoosed(Pair<String,String> item, String fragmentRef) {
 
-        if (BuildConfig.DEBUG)
-            Log.e(TAG, "ItemChosed and current fragment is = " + fragmentRef);
-
-        switch (fragmentRef) {
-            case PROCEDURE_CATEGORY_FRAGMENT:
-                currentCategory = item;
-                replaceFragmentWith(PROCEDURE_NATURE_FRAGMENT, null);
-                break;
-            case PROCEDURE_NATURE_FRAGMENT:
-                Log.e(TAG, item.second);
-                selectedProcedure = getProcedureItem(item.first);
-                replaceFragmentWith(INTERVENTION_FORM, null);
-                break;
+        if (PROCEDURE_CATEGORY_FRAGMENT.equals(fragmentRef)) {
+            currentCategory = item;
+            replaceFragmentWith(PROCEDURE_NATURE_FRAGMENT, null);
+        } else {
+            // case PROCEDURE_NATURE_FRAGMENT:
+            if (BuildConfig.DEBUG)
+                Log.e(TAG, "Procedure = " + item.second);
+            selectedProcedure = getProcedureItem(item.first);
+            replaceFragmentWith(INTERVENTION_FORM, null);
         }
     }
 
