@@ -16,6 +16,8 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import org.apache.commons.lang3.StringUtils;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -151,12 +153,15 @@ public class ParamChoiceFragment extends Fragment {
 
         dataset.clear();
 
+        // TODO : implement abilities filter when available
+
         for (GenericItem item : InterventionFormFragment.paramsList)
             if (item.type.equals(paramType))
                 if (text != null) {
-                    String name = item.name.toLowerCase();
-                    String number = item.number.toLowerCase();
-                    if (name.contains(text.toLowerCase()) || number.contains(text.toLowerCase()))
+                    String filterText = StringUtils.stripAccents(text.toLowerCase());
+                    String name = StringUtils.stripAccents(item.name.toLowerCase());
+                    String number = StringUtils.stripAccents(item.number.toLowerCase());
+                    if (name.contains(filterText) || number.contains(filterText))
                         dataset.add(item);
                 } else
                     dataset.add(item);

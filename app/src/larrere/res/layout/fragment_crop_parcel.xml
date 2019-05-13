@@ -26,6 +26,17 @@
 
     </com.google.android.material.tabs.TabLayout>
 
+    <androidx.appcompat.widget.SearchView
+        android:id="@+id/search_field"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/field_search"
+        app:queryBackground="@android:color/transparent"
+        android:layout_margin="16dp"
+        app:queryHint="Rechercher dans la liste..."
+        app:iconifiedByDefault="false"
+        android:imeOptions="actionSearch"/>
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/crop_parcel_recycler"
         android:layout_width="match_parent"
