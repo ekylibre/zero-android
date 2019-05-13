@@ -502,6 +502,15 @@ public class DatabaseHelper extends SQLiteOpenHelper
                         ZeroContract.LandParcels.NET_SURFACE_AREA + " TEXT, " +
                         ZeroContract.Workers.USER + " TEXT)");
 
+                database.execSQL("CREATE TABLE IF NOT EXISTS " + ZeroContract.Inputs.TABLE_NAME + "(" +
+                        ZeroContract.Inputs.EK_ID + " INTEGER PRIMARY KEY, " +
+                        ZeroContract.Inputs.NAME + " TEXT NOT NULL, " +
+                        ZeroContract.Inputs.REFERENCE_NAME + " TEXT, " +
+                        ZeroContract.Inputs.QUANTITY_UNIT_NAME + " TEXT NOT NULL, " +
+                        ZeroContract.Inputs.VARIETY + " TEXT, " +
+                        ZeroContract.Inputs.ABILITIES + " TEXT, " +
+                        ZeroContract.Inputs.USER + " TEXT)");
+
                 if (newVersion == 22)
                     break;
             }

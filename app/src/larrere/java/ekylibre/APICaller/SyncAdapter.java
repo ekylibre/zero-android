@@ -169,6 +169,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
             pullLandParcels(account);
             pullWorkers(account);
             pullEquipments(account);
+            pullInputs(account);
 
             pushIssues(account, extras, authority, provider, syncResult);
             pushPlantCounting(account, extras, authority, provider, syncResult);
@@ -1323,6 +1324,45 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
 
         if (BuildConfig.DEBUG)
             Log.i(TAG, "Finish network equipments synchronization");
+    }
+
+    /**
+     *   Get equipments from Ekylibre instance
+     */
+    private void pullInputs(Account account) {
+
+        if (BuildConfig.DEBUG)
+            Log.i(TAG, "Beginning network inputs synchronization");
+
+        ContentValues cv = new ContentValues();
+        Instance instance = getInstance(account);
+
+        List<Input> inputsList = null;
+        try {
+            inputsList = Input.all(instance, null);
+        } catch (JSONException | IOException | HTTPException e) {
+            e.printStackTrace();
+        }
+
+        if (inputsList == null)
+            return;
+
+        if (BuildConfig.DEBUG)
+            Log.d(TAG, "Nombre d'inputs : " + inputsList.size() );
+
+        for (Input input : inputsList) {
+            cv.put(ZeroContract.Inputs.EK_ID, input.id);
+            cv.put(ZeroContract.Inputs.NAME, input.name);
+            cv.put(ZeroContract.Inputs.REFERENCE_NAME, input.reference_name);
+            cv.put(ZeroContract.Inputs.QUANTITY_UNIT_NAME, input.quantity_unit_name);
+            cv.put(ZeroContract.Inputs.VARIETY, input.variety);
+            cv.put(ZeroContract.Inputs.ABILITIES, input.abilities);
+            cv.put(ZeroContract.Inputs.USER, account.name);
+            mContentResolver.insert(ZeroContract.Inputs.CONTENT_URI, cv);
+        }
+
+        if (BuildConfig.DEBUG)
+            Log.i(TAG, "Finish network inputs synchronization");
     }
 
     protected Instance getInstance(Account account)
