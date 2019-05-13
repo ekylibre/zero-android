@@ -95,8 +95,6 @@ public class ObservationActivity extends AppCompatActivity implements
         date = Calendar.getInstance();
         selectedBBCH = null;
         description = null;
-        if (activitiesList == null)
-            getActivities();
         if (culturesList == null)
             culturesList = new ArrayList<>();
 
@@ -119,6 +117,13 @@ public class ObservationActivity extends AppCompatActivity implements
 
         // Set first fragment (activity choice)
         replaceFragmentWith(ACTIVITY_FRAGMENT);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (activitiesList == null || activitiesList.isEmpty())
+            getActivities();
     }
 
     private boolean isServiceRunning() {
