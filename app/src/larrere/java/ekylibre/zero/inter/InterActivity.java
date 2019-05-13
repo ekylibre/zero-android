@@ -23,7 +23,9 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.Map;
+import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -199,6 +201,21 @@ public class InterActivity extends AppCompatActivity implements FragmentManager.
         try {
             procedures = loadProcedures();
             families = loadFamilies();
+            if (BuildConfig.DEBUG){
+                Log.e(TAG, "families = " + families.toString());
+                Log.e(TAG, "\n\nnatures = " + natures.toString());
+            }
+
+            // Removes childless categories
+            for (Map.Entry<String, List<Pair<String, String>>> family : families.entrySet()) {
+                List<Pair<String, String>> categories = family.getValue();
+                ListIterator<Pair<String, String>> it = categories.listIterator();
+                while (it.hasNext()) {
+                    if (!natures.keySet().contains(it.next().first))
+                        it.remove();
+                }
+            }
+
         } catch (IOException e) {
             e.printStackTrace();
         } catch (XmlPullParserException e) {
@@ -255,12 +272,11 @@ public class InterActivity extends AppCompatActivity implements FragmentManager.
     public void onItemChoosed(Pair<String,String> item, String fragmentRef) {
 
         if (PROCEDURE_CATEGORY_FRAGMENT.equals(fragmentRef)) {
+            Log.e(TAG, "cat = " + item);
             currentCategory = item;
             replaceFragmentWith(PROCEDURE_NATURE_FRAGMENT, null);
         } else {
-            // case PROCEDURE_NATURE_FRAGMENT:
-            if (BuildConfig.DEBUG)
-                Log.e(TAG, "Procedure = " + item.second);
+            if (BuildConfig.DEBUG) Log.e(TAG, "Procedure = " + item.second);
             selectedProcedure = getProcedureItem(item.first);
             replaceFragmentWith(INTERVENTION_FORM, null);
         }
@@ -311,7 +327,8 @@ public class InterActivity extends AppCompatActivity implements FragmentManager.
     @Override
     public void onBackStackChanged() {
         Fragment f = fragmentManager.findFragmentById(R.id.fragment_container);
-        Log.i(TAG, "onBackStackChanged" + f.toString());
+        if (BuildConfig.DEBUG)
+            Log.i(TAG, "onBackStackChanged" + Objects.requireNonNull(f).toString());
 
         if (f instanceof InterventionFormFragment)
             currentFragment = INTERVENTION_FORM;
