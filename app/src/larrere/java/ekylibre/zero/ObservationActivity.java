@@ -95,6 +95,8 @@ public class ObservationActivity extends AppCompatActivity implements
         date = Calendar.getInstance();
         selectedBBCH = null;
         description = null;
+        if (activitiesList == null)
+            getActivities();
         if (culturesList == null)
             culturesList = new ArrayList<>();
 
