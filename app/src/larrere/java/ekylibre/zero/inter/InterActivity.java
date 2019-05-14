@@ -161,7 +161,7 @@ public class InterActivity extends AppCompatActivity implements FragmentManager.
                 break;
 
             default:
-                // Default to Procedure Family fragment
+                // Default to param choice fragment list (inputs, equipments, workers...)
                 fragment = ParamChoiceFragment.newInstance(fragmentTag, filter);
                 break;
         }
@@ -201,10 +201,6 @@ public class InterActivity extends AppCompatActivity implements FragmentManager.
         try {
             procedures = loadProcedures();
             families = loadFamilies();
-            if (BuildConfig.DEBUG){
-                Log.e(TAG, "families = " + families.toString());
-                Log.e(TAG, "\n\nnatures = " + natures.toString());
-            }
 
             // Removes childless categories
             for (Map.Entry<String, List<Pair<String, String>>> family : families.entrySet()) {
@@ -238,19 +234,21 @@ public class InterActivity extends AppCompatActivity implements FragmentManager.
 
                 // Fill procedure natures map
 
-                String category = procedureEntity.categories;
+                String[] categories = procedureEntity.categories.split(",");
                 String name = procedureEntity.name;
                 int resId = getResources().getIdentifier(name, "string", getPackageName());
                 Pair<String,String> procedureNaturePair = Pair.create(name, getString(resId));
 
-                if (natures.containsKey(category)) {
-                    List<Pair<String,String>> proceduresList = natures.get(category);
-                    if (proceduresList == null)
-                        proceduresList = new ArrayList<>();
-                    proceduresList.add(procedureNaturePair);
-                    natures.put(category, proceduresList);
-                } else {
-                    natures.put(category, new ArrayList<>(Collections.singletonList(procedureNaturePair)));
+                for (String category : categories) {
+                    if (natures.containsKey(category)) {
+                        List<Pair<String, String>> proceduresList = natures.get(category);
+                        if (proceduresList == null)
+                            proceduresList = new ArrayList<>();
+                        proceduresList.add(procedureNaturePair);
+                        natures.put(category, proceduresList);
+                    } else {
+                        natures.put(category, new ArrayList<>(Collections.singletonList(procedureNaturePair)));
+                    }
                 }
             }
         }
