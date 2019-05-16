@@ -27,18 +27,19 @@ public class CropParcelAdapter extends RecyclerView.Adapter<CropParcelAdapter.Vi
      * The item ViewHolder
      */
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+
         View view;
         Context context;
-        TextView textView;
+        TextView firstLine, secondLine;
         GenericItem item;
         int pos;
-
 
         ViewHolder(View itemView) {
             super(itemView);
             view = itemView;
             context = view.getContext();
-            textView = itemView.findViewById(R.id.item_label);
+            firstLine = itemView.findViewById(R.id.item_first_line);
+            secondLine = itemView.findViewById(R.id.item_second_line);
             // Set Click listener
             view.setOnClickListener(this);
         }
@@ -52,10 +53,12 @@ public class CropParcelAdapter extends RecyclerView.Adapter<CropParcelAdapter.Vi
                 textColor = R.color.white;
             }
             // Set colors
-            textView.setTextColor(ContextCompat.getColor(context, textColor));
+            firstLine.setTextColor(ContextCompat.getColor(context, textColor));
+            secondLine.setTextColor(ContextCompat.getColor(context, textColor));
             view.setBackgroundColor(ContextCompat.getColor(context, backgroundId));
             // Set text
-            textView.setText(item.name);
+            firstLine.setText(item.name);
+            secondLine.setText(item.number);
         }
 
         @Override
@@ -77,7 +80,7 @@ public class CropParcelAdapter extends RecyclerView.Adapter<CropParcelAdapter.Vi
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.item_single_line, parent, false);
+                .inflate(R.layout.item_two_lines, parent, false);
         return new ViewHolder(view);
     }
 

@@ -111,10 +111,6 @@ public class ProcedureFamiliesXMLReader {
                 parser.nextTag();
                 parser.require(XmlPullParser.END_TAG, ns, "item");
 
-                if (BuildConfig.DEBUG) {
-                    Log.d(TAG, "Item name = " + name);
-                }
-
             } else {
                 skip(parser);
             }
@@ -123,9 +119,6 @@ public class ProcedureFamiliesXMLReader {
     }
 
     private void skip(XmlPullParser parser) throws XmlPullParserException, IOException {
-
-        if (BuildConfig.DEBUG)
-            Log.d(TAG, "skipping...");
 
         if (parser.getEventType() != XmlPullParser.START_TAG)
             throw new IllegalStateException();

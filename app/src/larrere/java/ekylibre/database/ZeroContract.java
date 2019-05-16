@@ -139,6 +139,7 @@ public final class ZeroContract {
         String USER = "user";
         String ACTIVITY_ID = "activity_id";
         String ACTIVITY_NAME = "activity_name";
+        String NET_SURFACE_AREA = "net_surface_area";
     }
 
     public interface ContactsColumns extends BaseColumns {
@@ -228,16 +229,6 @@ public final class ZeroContract {
         String USER = "user";
     }
 
-    public interface ArticleColumns extends BaseColumns {
-        String TABLE_NAME = "articles";
-        String EK_ID = "ek_id";
-        String NAME = "name";
-        String NUMBER = "number";
-        String TYPE = "type";
-        String UNIT = "unit";
-        String USER = "user";
-    }
-
     public interface WorkerColumns {
         String TABLE_NAME = "workers";
         String EK_ID = "ek_id";
@@ -274,6 +265,22 @@ public final class ZeroContract {
         String REFERENCE_NAME = "reference_name";
         String QUANTITY_UNIT_NAME = "quantity_unit_name";
         String USER = "user";
+    }
+
+    public interface DetailedInterventionColumns extends BaseColumns {
+        String TABLE_NAME = "detailed_interventions";  // carefull, intervention table name exists !
+        String PROCEDURE_NAME = "procedure_name";
+        String CREATED_ON = "created_on";
+        String USER = "user";
+    }
+
+    public interface DetailedInterventionAttributesColumns extends BaseColumns {
+        String TABLE_NAME = "detailed_intervention_attributes";  // carefull, intervention table name exists !
+        String FK_DETAILED_INTERVENTION = "fk_detailed_intervention";
+        String REFERENCE_ID = "reference_id";
+        String REFERENCE_NAME = "reference_name";
+        String QUANTITY_VALUE = "quantity_value";
+        String QUANTITY_UNIT_NAME = "quantity_unit_name";
     }
 
     public static final class Crumbs implements CrumbsColumns {
@@ -432,6 +439,7 @@ public final class ZeroContract {
 
         public static final String[] PROJECTION_ALL = {_ID, NAME, SHAPE, VARIETY, ACTIVE, ACTIVITY_ID};
         public static final String[] PROJECTION_OBS = {_ID, EK_ID, NAME, VARIETY, ACTIVITY_ID, ACTIVITY_NAME};
+        public static final String[] PROJECTION_INTER = {_ID, EK_ID, NAME, VARIETY, NET_SURFACE_AREA, USER};
         public static final String[] PROJECTION_NONE = {_ID};
 
         public static final String SORT_ORDER_DEFAULT = _ID + " ASC";
@@ -584,20 +592,6 @@ public final class ZeroContract {
         public static final String SORT_ORDER_DEFAULT = NAME + " ASC";
     }
 
-    public static final class Articles implements ArticleColumns {
-
-        // Content URI for this table
-        public static final Uri CONTENT_URI = Uri.withAppendedPath(
-                ZeroContract.CONTENT_URI,"articles");
-        // MIME type for list and individual record.
-        public static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE +
-                "/vnd.ekylibre.zero.articles";
-
-        public static final String[] PROJECTION_ALL = {_ID, EK_ID, NAME, NUMBER, TYPE, UNIT, USER};
-
-        public static final String SORT_ORDER_DEFAULT = NAME + " ASC";
-    }
-
     public static final class Workers implements WorkerColumns {
 
         // Content URI for this table
@@ -652,5 +646,19 @@ public final class ZeroContract {
         public static final String[] PROJECTION_ALL = {_ID, EK_ID, NAME, REFERENCE_NAME , QUANTITY_UNIT_NAME, USER};
 
         public static final String SORT_ORDER_DEFAULT = NAME + " ASC";
+    }
+
+    public static final class DetailedInterventions implements DetailedInterventionColumns {
+        public static final Uri CONTENT_URI = Uri.withAppendedPath(ZeroContract.CONTENT_URI, "detailed_interventions");
+        public static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/vnd.ekylibre.zero.detailed_interventions";
+        public static final String[] PROJECTION_ALL = {_ID, PROCEDURE_NAME, CREATED_ON, USER};
+        public static final String SORT_ORDER_DEFAULT = CREATED_ON + " DESC";
+    }
+
+    public static final class DetailedInterventionAttributes implements DetailedInterventionAttributesColumns {
+        public static final Uri CONTENT_URI = Uri.withAppendedPath(ZeroContract.CONTENT_URI, "detailed_intervention_attributes");
+        public static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/vnd.ekylibre.zero.detailed_intervention_attributes";
+        public static final String[] PROJECTION_ALL = {_ID, FK_DETAILED_INTERVENTION, REFERENCE_ID, REFERENCE_NAME, QUANTITY_VALUE, QUANTITY_UNIT_NAME};
+        public static final String SORT_ORDER_DEFAULT = FK_DETAILED_INTERVENTION + " DESC";
     }
 }

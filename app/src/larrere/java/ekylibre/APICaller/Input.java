@@ -32,7 +32,7 @@ public class Input {
         if (BuildConfig.DEBUG)
             Log.d(TAG, "Get JSONArray => /api/v1/inputs || params = " + attributes);
 
-        JSONArray json = instance.getJSONArray("/api/v1/intervention_inputs", attributes);
+        JSONArray json = instance.getJSONArray("/api/v1/inputs", attributes);
         List<Input> array = new ArrayList<>();
 
         for(int i = 0 ; i < json.length() ; i++ )
@@ -52,7 +52,17 @@ public class Input {
         quantity_unit_name = object.getString("quantity_unit_name");
         if (!object.isNull("variety"))
             variety = object.getString("variety");
-        if (!object.isNull("abilities"))
-            abilities = object.getString("abilities");
+
+        abilities = null;
+        if (!object.isNull("abilities")) {
+            JSONArray array = object.getJSONArray("abilities");
+            StringBuilder sb = new StringBuilder();
+            for (int i=0; i < array.length(); i++) {
+                sb.append(array.getString(i));
+                sb.append(",");
+            }
+            sb.append("is ").append(variety);
+            abilities = sb.toString();
+        }
     }
 }

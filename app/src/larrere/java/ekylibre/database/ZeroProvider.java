@@ -64,14 +64,16 @@ public class ZeroProvider extends ContentProvider {
     // Intervention with params feature
     public static final int ROUTE_EQUIPMENTS_LIST = 1500;
     public static final int ROUTE_EQUIPMENTS_ITEM = 1501;
-    public static final int ROUTE_ARTICLES_LIST = 1502;
-    public static final int ROUTE_ARTICLES_ITEM = 1503;
     public static final int ROUTE_WORKERS_LIST = 1504;
     public static final int ROUTE_WORKERS_ITEM = 1505;
     public static final int ROUTE_LAND_PARCELS_LIST = 1506;
     public static final int ROUTE_LAND_PARCELS_ITEM = 1507;
     public static final int ROUTE_INPUTS_LIST = 1508;
     public static final int ROUTE_INPUTS_ITEM = 1509;
+    public static final int ROUTE_DETAILED_INTERVENTIONS_LIST = 1510;
+    public static final int ROUTE_DETAILED_INTERVENTIONS_ITEM = 1511;
+    public static final int ROUTE_DETAILED_INTERVENTION_ATTRIBUTES_LIST = 1512;
+    public static final int ROUTE_DETAILED_INTERVENTION_ATTRIBUTES_ITEM = 1513;
 
     // UriMatcher, used to decode incoming URIs.
     private static final UriMatcher URI_MATCHER = new UriMatcher(UriMatcher.NO_MATCH);
@@ -115,14 +117,16 @@ public class ZeroProvider extends ContentProvider {
         URI_MATCHER.addURI(ZeroContract.AUTHORITY, "vegetal_scale/#", ROUTE_VEGETAL_SCALE_ITEM);
         URI_MATCHER.addURI(ZeroContract.AUTHORITY, "equipments", ROUTE_EQUIPMENTS_LIST);
         URI_MATCHER.addURI(ZeroContract.AUTHORITY, "equipments/#", ROUTE_EQUIPMENTS_ITEM);
-        URI_MATCHER.addURI(ZeroContract.AUTHORITY, "articles", ROUTE_ARTICLES_LIST);
-        URI_MATCHER.addURI(ZeroContract.AUTHORITY, "articles/#", ROUTE_ARTICLES_ITEM);
         URI_MATCHER.addURI(ZeroContract.AUTHORITY, "workers", ROUTE_WORKERS_LIST);
         URI_MATCHER.addURI(ZeroContract.AUTHORITY, "workers/#", ROUTE_WORKERS_ITEM);
         URI_MATCHER.addURI(ZeroContract.AUTHORITY, "land_parcels", ROUTE_LAND_PARCELS_LIST);
         URI_MATCHER.addURI(ZeroContract.AUTHORITY, "land_parcels/#", ROUTE_LAND_PARCELS_ITEM);
         URI_MATCHER.addURI(ZeroContract.AUTHORITY, "inputs", ROUTE_INPUTS_LIST);
         URI_MATCHER.addURI(ZeroContract.AUTHORITY, "inputs/#", ROUTE_INPUTS_ITEM);
+        URI_MATCHER.addURI(ZeroContract.AUTHORITY, "detailed_interventions", ROUTE_DETAILED_INTERVENTIONS_LIST);
+        URI_MATCHER.addURI(ZeroContract.AUTHORITY, "detailed_interventions/#", ROUTE_DETAILED_INTERVENTION_ATTRIBUTES_ITEM);
+        URI_MATCHER.addURI(ZeroContract.AUTHORITY, "detailed_intervention_attributes", ROUTE_DETAILED_INTERVENTION_ATTRIBUTES_LIST);
+        URI_MATCHER.addURI(ZeroContract.AUTHORITY, "detailed_intervention_attributes/#", ROUTE_DETAILED_INTERVENTION_ATTRIBUTES_ITEM);
     }
 
     private DatabaseHelper mDatabaseHelper;
@@ -215,10 +219,6 @@ public class ZeroProvider extends ContentProvider {
             case ROUTE_EQUIPMENTS_ITEM:
                 return ZeroContract.Equipments.CONTENT_TYPE;
 
-            case ROUTE_ARTICLES_LIST:
-            case ROUTE_ARTICLES_ITEM:
-                return ZeroContract.Articles.CONTENT_TYPE;
-
             case ROUTE_WORKERS_LIST:
             case ROUTE_WORKERS_ITEM:
                 return ZeroContract.Workers.CONTENT_TYPE;
@@ -230,6 +230,14 @@ public class ZeroProvider extends ContentProvider {
             case ROUTE_INPUTS_LIST:
             case ROUTE_INPUTS_ITEM:
                 return ZeroContract.Inputs.CONTENT_TYPE;
+
+            case ROUTE_DETAILED_INTERVENTIONS_LIST:
+            case ROUTE_DETAILED_INTERVENTIONS_ITEM:
+                return ZeroContract.DetailedInterventions.CONTENT_TYPE;
+
+            case ROUTE_DETAILED_INTERVENTION_ATTRIBUTES_LIST:
+            case ROUTE_DETAILED_INTERVENTION_ATTRIBUTES_ITEM:
+                return ZeroContract.DetailedInterventionAttributes.CONTENT_TYPE;
 
             default:
                 throw new UnsupportedOperationException("Unknown URI: " + uri);
@@ -450,16 +458,6 @@ public class ZeroProvider extends ContentProvider {
                 cursor.setNotificationUri(contentResolver, uri);
                 return cursor;
 
-            case ROUTE_ARTICLES_ITEM:
-                id = uri.getLastPathSegment();
-                builder.where(ZeroContract.Articles._ID + "=?", id);
-            case ROUTE_ARTICLES_LIST:
-                builder.table(ZeroContract.Articles.TABLE_NAME)
-                        .where(selection, selectionArgs);
-                cursor = builder.query(database, projection, sortOrder);
-                cursor.setNotificationUri(contentResolver, uri);
-                return cursor;
-
             case ROUTE_WORKERS_ITEM:
                 id = uri.getLastPathSegment();
                 builder.where(ZeroContract.Workers.EK_ID + "=?", id);
@@ -485,6 +483,26 @@ public class ZeroProvider extends ContentProvider {
                 builder.where(ZeroContract.Inputs.EK_ID + "=?", id);
             case ROUTE_INPUTS_LIST:
                 builder.table(ZeroContract.Inputs.TABLE_NAME)
+                        .where(selection, selectionArgs);
+                cursor = builder.query(database, projection, sortOrder);
+                cursor.setNotificationUri(contentResolver, uri);
+                return cursor;
+
+            case ROUTE_DETAILED_INTERVENTIONS_ITEM:
+                id = uri.getLastPathSegment();
+                builder.where(ZeroContract.DetailedInterventions._ID + "=?", id);
+            case ROUTE_DETAILED_INTERVENTIONS_LIST:
+                builder.table(ZeroContract.DetailedInterventions.TABLE_NAME)
+                        .where(selection, selectionArgs);
+                cursor = builder.query(database, projection, sortOrder);
+                cursor.setNotificationUri(contentResolver, uri);
+                return cursor;
+
+            case ROUTE_DETAILED_INTERVENTION_ATTRIBUTES_ITEM:
+                id = uri.getLastPathSegment();
+                builder.where(ZeroContract.DetailedInterventionAttributes._ID + "=?", id);
+            case ROUTE_DETAILED_INTERVENTION_ATTRIBUTES_LIST:
+                builder.table(ZeroContract.DetailedInterventionAttributes.TABLE_NAME)
                         .where(selection, selectionArgs);
                 cursor = builder.query(database, projection, sortOrder);
                 cursor.setNotificationUri(contentResolver, uri);
@@ -627,13 +645,6 @@ public class ZeroProvider extends ContentProvider {
             case ROUTE_EQUIPMENTS_ITEM:
                 throw new UnsupportedOperationException("Insert not supported on URI: " + uri);
 
-            case ROUTE_ARTICLES_LIST:
-                id = database.insertOrThrow(ZeroContract.Articles.TABLE_NAME, null, values);
-                result = Uri.parse(ZeroContract.Articles.CONTENT_URI + "/" + id);
-                break;
-            case ROUTE_ARTICLES_ITEM:
-                throw new UnsupportedOperationException("Insert not supported on URI: " + uri);
-
             case ROUTE_WORKERS_LIST:
                 id = database.insertWithOnConflict(ZeroContract.Workers.TABLE_NAME, null, values, SQLiteDatabase.CONFLICT_REPLACE);
                 result = Uri.parse(ZeroContract.Workers.CONTENT_URI + "/" + id);
@@ -653,6 +664,20 @@ public class ZeroProvider extends ContentProvider {
                 result = Uri.parse(ZeroContract.Inputs.CONTENT_URI + "/" + id);
                 break;
             case ROUTE_INPUTS_ITEM:
+                throw new UnsupportedOperationException("Insert not supported on URI: " + uri);
+
+            case ROUTE_DETAILED_INTERVENTIONS_LIST:
+                id = database.insert(ZeroContract.DetailedInterventions.TABLE_NAME, null, values);
+                result = Uri.parse(ZeroContract.DetailedInterventions.CONTENT_URI + "/" + id);
+                break;
+            case ROUTE_DETAILED_INTERVENTIONS_ITEM:
+                throw new UnsupportedOperationException("Insert not supported on URI: " + uri);
+
+            case ROUTE_DETAILED_INTERVENTION_ATTRIBUTES_LIST:
+                id = database.insert(ZeroContract.DetailedInterventionAttributes.TABLE_NAME, null, values);
+                result = Uri.parse(ZeroContract.DetailedInterventionAttributes.CONTENT_URI + "/" + id);
+                break;
+            case ROUTE_DETAILED_INTERVENTION_ATTRIBUTES_ITEM:
                 throw new UnsupportedOperationException("Insert not supported on URI: " + uri);
 
                 default:
@@ -892,18 +917,6 @@ public class ZeroProvider extends ContentProvider {
                         .delete(database);
                 break;
 
-            case ROUTE_ARTICLES_LIST:
-                count = builder.table(ZeroContract.Articles.TABLE_NAME)
-                        .where(selection, selectionArgs)
-                        .delete(database);
-                break;
-            case ROUTE_ARTICLES_ITEM:
-                count = builder.table(ZeroContract.Articles.TABLE_NAME)
-                        .where(ZeroContract.Articles._ID + "=?", id)
-                        .where(selection, selectionArgs)
-                        .delete(database);
-                break;
-
             case ROUTE_WORKERS_LIST:
                 count = builder.table(ZeroContract.Workers.TABLE_NAME)
                         .where(selection, selectionArgs)
@@ -936,6 +949,30 @@ public class ZeroProvider extends ContentProvider {
             case ROUTE_INPUTS_ITEM:
                 count = builder.table(ZeroContract.Inputs.TABLE_NAME)
                         .where(ZeroContract.Inputs.EK_ID + "=?", id)
+                        .where(selection, selectionArgs)
+                        .delete(database);
+                break;
+
+            case ROUTE_DETAILED_INTERVENTIONS_LIST:
+                count = builder.table(ZeroContract.DetailedInterventions.TABLE_NAME)
+                        .where(selection, selectionArgs)
+                        .delete(database);
+                break;
+            case ROUTE_DETAILED_INTERVENTIONS_ITEM:
+                count = builder.table(ZeroContract.DetailedInterventions.TABLE_NAME)
+                        .where(ZeroContract.DetailedInterventions._ID + "=?", id)
+                        .where(selection, selectionArgs)
+                        .delete(database);
+                break;
+
+            case ROUTE_DETAILED_INTERVENTION_ATTRIBUTES_LIST:
+                count = builder.table(ZeroContract.DetailedInterventionAttributes.TABLE_NAME)
+                        .where(selection, selectionArgs)
+                        .delete(database);
+                break;
+            case ROUTE_DETAILED_INTERVENTION_ATTRIBUTES_ITEM:
+                count = builder.table(ZeroContract.DetailedInterventionAttributes.TABLE_NAME)
+                        .where(ZeroContract.DetailedInterventionAttributes._ID + "=?", id)
                         .where(selection, selectionArgs)
                         .delete(database);
                 break;
@@ -1198,19 +1235,6 @@ public class ZeroProvider extends ContentProvider {
                         .update(database, values);
                 break;
 
-            case ROUTE_ARTICLES_LIST:
-                count = builder.table(ZeroContract.Articles.TABLE_NAME)
-                        .where(selection, selectionArgs)
-                        .update(database, values);
-                break;
-            case ROUTE_ARTICLES_ITEM:
-                id = uri.getLastPathSegment();
-                count = builder.table(ZeroContract.Articles.TABLE_NAME)
-                        .where(ZeroContract.Articles._ID + "=?", id)
-                        .where(selection, selectionArgs)
-                        .update(database, values);
-                break;
-
             case ROUTE_WORKERS_LIST:
                 count = builder.table(ZeroContract.Workers.TABLE_NAME)
                         .where(selection, selectionArgs)
@@ -1246,6 +1270,32 @@ public class ZeroProvider extends ContentProvider {
                 id = uri.getLastPathSegment();
                 count = builder.table(ZeroContract.Inputs.TABLE_NAME)
                         .where(ZeroContract.Inputs.EK_ID + "=?", id)
+                        .where(selection, selectionArgs)
+                        .update(database, values);
+                break;
+
+            case ROUTE_DETAILED_INTERVENTIONS_LIST:
+                count = builder.table(ZeroContract.DetailedInterventions.TABLE_NAME)
+                        .where(selection, selectionArgs)
+                        .update(database, values);
+                break;
+            case ROUTE_DETAILED_INTERVENTIONS_ITEM:
+                id = uri.getLastPathSegment();
+                count = builder.table(ZeroContract.DetailedInterventions.TABLE_NAME)
+                        .where(ZeroContract.DetailedInterventions._ID + "=?", id)
+                        .where(selection, selectionArgs)
+                        .update(database, values);
+                break;
+
+            case ROUTE_DETAILED_INTERVENTION_ATTRIBUTES_LIST:
+                count = builder.table(ZeroContract.DetailedInterventionAttributes.TABLE_NAME)
+                        .where(selection, selectionArgs)
+                        .update(database, values);
+                break;
+            case ROUTE_DETAILED_INTERVENTION_ATTRIBUTES_ITEM:
+                id = uri.getLastPathSegment();
+                count = builder.table(ZeroContract.DetailedInterventionAttributes.TABLE_NAME)
+                        .where(ZeroContract.DetailedInterventionAttributes._ID + "=?", id)
                         .where(selection, selectionArgs)
                         .update(database, values);
                 break;

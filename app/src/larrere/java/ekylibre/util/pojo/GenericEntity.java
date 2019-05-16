@@ -5,7 +5,10 @@ public class GenericEntity {
     public String name;
     public String filter;
     public String cardinality;
+    public String group;
 
-    public GenericEntity() {}
+    public GenericEntity() {
+        group = null;
+    }
 
 }

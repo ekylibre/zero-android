@@ -50,7 +50,16 @@ public class Equipment {
         number = object.getString("number");
         variety = object.getString("variety");
 
-        if (!object.isNull("abilities"))
-            abilities = object.getString("abilities");
+        abilities = null;
+        if (!object.isNull("abilities")) {
+            JSONArray array = object.getJSONArray("abilities");
+            StringBuilder sb = new StringBuilder();
+            for (int i=0; i < array.length(); i++) {
+                sb.append(array.getString(i));
+                sb.append(",");
+            }
+            sb.append("is ").append(variety);
+            abilities = sb.toString();
+        }
     }
 }

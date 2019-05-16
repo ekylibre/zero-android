@@ -25,9 +25,10 @@
         android:layout_height="wrap_content"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintBaseline_toBaselineOf="@id/quantity_value"
-        android:text="@string/quantity"/>
+        android:text="@string/quantity"
+        android:labelFor="@+id/quantity_value"/>
 
-    <androidx.appcompat.widget.AppCompatTextView
+    <EditText
         android:id="@+id/quantity_value"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -39,9 +40,13 @@
         android:paddingEnd="@dimen/field_padding_horizontal"
         android:paddingTop="@dimen/field_padding_vertical"
         android:paddingBottom="@dimen/field_padding_vertical"
-        tools:text="45,6"
+        android:inputType="numberDecimal"
+        android:imeOptions="actionDone"
         android:textSize="16sp"
-        android:background="@drawable/field_rounded_white" />
+        android:background="@drawable/field_rounded_white"
+        android:selectAllOnFocus="true"
+        tools:text="45,6"
+        tools:ignore="Autofill" />
 
 
     <androidx.appcompat.widget.AppCompatTextView
@@ -57,7 +62,6 @@
         android:paddingBottom="@dimen/field_padding_vertical"
         tools:text="kg"
         android:textSize="16sp"
-        android:background="@drawable/field_rounded_white"
         android:focusable="false"/>
 
     <androidx.appcompat.widget.AppCompatImageView

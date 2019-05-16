@@ -1,13 +1,18 @@
 package ekylibre.zero.inter.adapter;
 
 import android.content.Context;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.StringRes;
 import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -15,10 +20,14 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnTextChanged;
 import ekylibre.zero.R;
 import ekylibre.zero.inter.fragment.InterventionFormFragment;
 import ekylibre.zero.inter.model.GenericItem;
 import ekylibre.zero.inter.model.ItemWithQuantity;
+
+import static android.view.View.GONE;
+import static android.view.View.VISIBLE;
 
 
 public class QuantityItemAdapter extends RecyclerView.Adapter<QuantityItemAdapter.ViewHolder> {
@@ -35,10 +44,16 @@ public class QuantityItemAdapter extends RecyclerView.Adapter<QuantityItemAdapte
 
         // Layout
         @BindView(R.id.item_label) TextView name;
-        @BindView(R.id.quantity_value) TextView quatity;
+        @BindView(R.id.quantity_value) EditText quantity;
         @BindView(R.id.quantity_unit) TextView unit;
         @BindView(R.id.item_warning_message) TextView warningMessage;
         @BindView(R.id.item_delete) ImageView deleteButton;
+
+        // Set quantity click listeners
+        @OnTextChanged(R.id.quantity_value)
+        void onQuantityChanged(CharSequence value, int start, int count, int after) {
+            item.quantity = Float.valueOf(value.length() > 0 ? value.toString() : "0");
+        }
 
         // Item reference
         ItemWithQuantity item;
@@ -53,7 +68,7 @@ public class QuantityItemAdapter extends RecyclerView.Adapter<QuantityItemAdapte
             // Get context from view
             context = itemView.getContext();
 
-            // Set click listeners
+            // Set delete click listeners
             deleteButton.setOnClickListener(v -> {
                 int index = dataset.indexOf(item);
                 dataset.remove(index);
@@ -65,7 +80,7 @@ public class QuantityItemAdapter extends RecyclerView.Adapter<QuantityItemAdapte
                     }
                 }
                 if (dataset.isEmpty())
-                    recyclerView.setVisibility(View.GONE);
+                    recyclerView.setVisibility(GONE);
             });
 
         }
@@ -80,8 +95,19 @@ public class QuantityItemAdapter extends RecyclerView.Adapter<QuantityItemAdapte
             this.item = item;
             // Set fields according to current item
             name.setText(item.name != null ? item.name : "");
-            quatity.setText(item.quantity != null ? item.quantity.toString() : "");
-            unit.setText(item.unit);
+            quantity.setText(item.quantity != null ? item.quantity.toString() : "");
+            if (item.unit != null)
+                if (!item.unit.equals("null")) {
+                    @StringRes final int labelRes = context.getResources().getIdentifier(
+                            item.unit, "string", context.getPackageName());
+                    unit.setText(labelRes);
+                    unit.setVisibility(VISIBLE);
+                } else {
+                    unit.setVisibility(GONE);
+                }
+            else {
+                unit.setVisibility(GONE);
+            }
         }
     }
 

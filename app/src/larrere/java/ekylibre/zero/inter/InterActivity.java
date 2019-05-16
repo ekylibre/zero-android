@@ -25,7 +25,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
-import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -33,9 +32,7 @@ import ekylibre.util.AccountTool;
 import ekylibre.util.ProcedureFamiliesXMLReader;
 import ekylibre.util.ProceduresXMLReader;
 import ekylibre.util.pojo.ProcedureEntity;
-import ekylibre.util.query_language.QL.ParseError;
-import ekylibre.util.query_language.QL.QL;
-import ekylibre.util.query_language.QL.TreeNode;
+import ekylibre.util.query_language.DSL;
 import ekylibre.zero.BuildConfig;
 import ekylibre.zero.R;
 import ekylibre.zero.inter.fragment.CropParcelChoiceFragment;
@@ -116,13 +113,8 @@ public class InterActivity extends AppCompatActivity implements FragmentManager.
         loadXMLAssets();
 
         // Ekylibre DSL testing (canopy)
-//        try {
-//            TreeNode tree = QL.parse("can tow(equipment) and can move");
-//            for (TreeNode node : tree.elements)
-//                Log.e(TAG, node.text);
-//        } catch (ParseError parseError) {
-//            parseError.printStackTrace();
-//        }
+        List<String> grammar = DSL.getElements("can tow(equipment) and can move");
+        if (BuildConfig.DEBUG) Log.e(TAG, "GRAMMAR TEST --> " + grammar.toString());
     }
 
     void replaceFragmentWith(String fragmentTag, String filter) {
@@ -233,13 +225,11 @@ public class InterActivity extends AppCompatActivity implements FragmentManager.
                 procedureList.add(procedureEntity);
 
                 // Fill procedure natures map
-
-                String[] categories = procedureEntity.categories.split(",");
                 String name = procedureEntity.name;
                 int resId = getResources().getIdentifier(name, "string", getPackageName());
                 Pair<String,String> procedureNaturePair = Pair.create(name, getString(resId));
 
-                for (String category : categories) {
+                for (String category : procedureEntity.categories) {
                     if (natures.containsKey(category)) {
                         List<Pair<String, String>> proceduresList = natures.get(category);
                         if (proceduresList == null)
@@ -270,11 +260,11 @@ public class InterActivity extends AppCompatActivity implements FragmentManager.
     public void onItemChoosed(Pair<String,String> item, String fragmentRef) {
 
         if (PROCEDURE_CATEGORY_FRAGMENT.equals(fragmentRef)) {
-            Log.e(TAG, "cat = " + item);
+            if (BuildConfig.DEBUG) Log.e(TAG, "category = " + item);
             currentCategory = item;
             replaceFragmentWith(PROCEDURE_NATURE_FRAGMENT, null);
         } else {
-            if (BuildConfig.DEBUG) Log.e(TAG, "Procedure = " + item.second);
+            if (BuildConfig.DEBUG) Log.e(TAG, "procedure = " + item);
             selectedProcedure = getProcedureItem(item.first);
             replaceFragmentWith(INTERVENTION_FORM, null);
         }
@@ -289,7 +279,7 @@ public class InterActivity extends AppCompatActivity implements FragmentManager.
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         menu.clear();
-        Log.i(TAG, "onCreateOptionMenu");
+        if (BuildConfig.DEBUG) Log.d(TAG, "onCreateOptionMenu");
 //        if (currentFragment.equals(INTERVENTION_FORM)) {
 //            menu.clear();
 //            menu.add()
@@ -303,7 +293,7 @@ public class InterActivity extends AppCompatActivity implements FragmentManager.
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
-        Log.i(TAG, "onPrepareOptionMenu");
+        Log.d(TAG, "onPrepareOptionMenu");
         switch (currentFragment) {
             case INTERVENTION_FORM:
                 menu.findItem(R.id.action_inter_save).setVisible(true);
@@ -326,7 +316,7 @@ public class InterActivity extends AppCompatActivity implements FragmentManager.
     public void onBackStackChanged() {
         Fragment f = fragmentManager.findFragmentById(R.id.fragment_container);
         if (BuildConfig.DEBUG)
-            Log.i(TAG, "onBackStackChanged" + Objects.requireNonNull(f).toString());
+            Log.d(TAG, "onBackStackChanged");
 
         if (f instanceof InterventionFormFragment)
             currentFragment = INTERVENTION_FORM;

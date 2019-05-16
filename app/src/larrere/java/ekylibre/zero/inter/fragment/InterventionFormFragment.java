@@ -29,9 +29,8 @@ import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import ekylibre.APICaller.Worker;
-import ekylibre.database.ZeroContract;
 import ekylibre.database.ZeroContract.Plants;
+import ekylibre.database.ZeroContract.Inputs;
 import ekylibre.database.ZeroContract.LandParcels;
 import ekylibre.database.ZeroContract.Equipments;
 import ekylibre.database.ZeroContract.Workers;
@@ -52,29 +51,24 @@ import static ekylibre.zero.inter.InterActivity.CROP_CHOICE_FRAGMENT;
 import static ekylibre.zero.inter.InterActivity.selectedProcedure;
 import static ekylibre.zero.inter.enums.ParamType.LAND_PARCEL;
 import static ekylibre.zero.inter.enums.ParamType.PLANT;
-import static ekylibre.zero.inter.enums.ParamType.PLANT_MEDICINE;
 
 
 public class InterventionFormFragment extends Fragment {
 
     private static final String TAG = "FormFragment";
-    private OnFragmentInteractionListener listener;
+
     private Context context;
+    private OnFragmentInteractionListener listener;
+
     private List<Period> periodList;
-    private static List<ItemWithQuantity> inputList;
-//    static List<GenericItem> cropParcelList;
     public static List<GenericItem> paramsList;
+    private static List<ItemWithQuantity> inputList;
 
     // LAYOUT BINDINGS
-    @BindView(R.id.widgets_container)
-    LinearLayoutCompat widgetContainer;
-
+    @BindView(R.id.widgets_container) LinearLayoutCompat widgetContainer;
     @BindView(R.id.form_period_recycler) RecyclerView periodRecycler;
     @BindView(R.id.form_period_add) TextView addPeriod;
 
-    //    @BindView(R.id.include_widget_crop) View cropWidget;
-//    @BindView(R.id.form_crop_chips_group) ChipGroup cropChipGroup;
-//    @BindView(R.id.form_crop_add) TextView addCrop;
 
     public static InterventionFormFragment newInstance() {
         return new InterventionFormFragment();
@@ -98,7 +92,7 @@ public class InterventionFormFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        Log.i(TAG, "onCreate");
+        if (BuildConfig.DEBUG) Log.d(TAG, "onCreate");
 
         ContentResolver cr = context.getContentResolver();
 
@@ -122,7 +116,7 @@ public class InterventionFormFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        if (BuildConfig.DEBUG) Log.e(TAG, "onCreateView");
+        if (BuildConfig.DEBUG) Log.d(TAG, "onCreateView");
 
         // Set title
         InterActivity.actionBar.setTitle(Translate.getStringId(context, InterActivity.selectedProcedure.name));
@@ -146,6 +140,13 @@ public class InterventionFormFragment extends Fragment {
             periodAdapter.notifyDataSetChanged();
         });
 
+        // ------------ //
+        // Group layout //
+        // ------------ //
+
+
+
+
         // ----------- //
         // Crop layout //
         // ----------- //
@@ -155,11 +156,11 @@ public class InterventionFormFragment extends Fragment {
             switch (target.name) {
 
                 case "plant":
-                    widgetContainer.addView(new WidgetParamView(context, listener, PLANT, target.filter, paramsList));
+                    widgetContainer.addView(new WidgetParamView(context, listener, target, paramsList));
                     break;
 
                 case "land_parcel":
-                    widgetContainer.addView(new WidgetParamView(context, listener, LAND_PARCEL, target.filter, paramsList));
+                    widgetContainer.addView(new WidgetParamView(context, listener, target, paramsList));
                     break;
 
                 case "cultivation":
@@ -197,7 +198,7 @@ public class InterventionFormFragment extends Fragment {
         // ------------- //
 
         for (GenericEntity entity : selectedProcedure.input) {
-            Log.i(TAG, "input --> " + entity.name);
+            if (BuildConfig.DEBUG) Log.i(TAG, "input --> " + entity.name);
 
             // Get layout
             View inputView = inflater.inflate(R.layout.widget_input, container, false);
@@ -233,7 +234,7 @@ public class InterventionFormFragment extends Fragment {
 
                     // If selected but not present, add it else, remove it
                     if (item.isSelected && currentItem == null)
-                        inputList.add(new ItemWithQuantity(item.id, item.name, item.type, 0f, "kg"));
+                        inputList.add(new ItemWithQuantity(item.id, item.name, item.type, 0f, item.unit));
                     else if (currentItem != null && !item.isSelected)
                         inputList.remove(currentItem);
 
@@ -253,8 +254,8 @@ public class InterventionFormFragment extends Fragment {
         // -------------- //
 
         for (GenericEntity entity : selectedProcedure.doer) {
-            Log.i(TAG, "doer --> " + entity.name);
-            widgetContainer.addView(new WidgetParamView(context, listener, entity.name, entity.filter, paramsList));
+            if (BuildConfig.DEBUG) Log.i(TAG, "doer --> " + entity.name);
+            widgetContainer.addView(new WidgetParamView(context, listener, entity, paramsList));
         }
 
         // ----------------- //
@@ -262,8 +263,8 @@ public class InterventionFormFragment extends Fragment {
         // ----------------- //
 
         for (GenericEntity entity : selectedProcedure.tool) {
-            Log.i(TAG, "tool --> " + entity.name);
-            widgetContainer.addView(new WidgetParamView(context, listener, entity.name, entity.filter, paramsList));
+            if (BuildConfig.DEBUG) Log.i(TAG, "tool --> " + entity.name);
+            widgetContainer.addView(new WidgetParamView(context, listener, entity, paramsList));
         }
 
         return view;
@@ -291,7 +292,7 @@ public class InterventionFormFragment extends Fragment {
         String likeAccountName = " LIKE " + "\"" + InterActivity.account.name + "\"";
 
         // Load Plants
-        try (Cursor cursor = cr.query(Plants.CONTENT_URI, Plants.PROJECTION_OBS,
+        try (Cursor cursor = cr.query(Plants.CONTENT_URI, Plants.PROJECTION_INTER,
                 Plants.USER + likeAccountName + " AND " + Plants.ACTIVE + " == " + 1,
                 null, Plants.SORT_ORDER_DEFAULT)) {
 
@@ -299,9 +300,11 @@ public class InterventionFormFragment extends Fragment {
                 list.add(new GenericItem(
                         cursor.getInt(1),       // id
                         cursor.getString(2),    // name
-                        cursor.getString(3),    // variety
+                        cursor.getString(4),    // surface
                         PLANT,                  // type
-                        null));
+                        null,                   // abilities
+                        null                    // unit
+                ));
         }
 
 //        // Load Land Parcels
@@ -314,7 +317,8 @@ public class InterventionFormFragment extends Fragment {
                         cursor.getString(1),    // name
                         cursor.getString(2),    // number = surface
                         LAND_PARCEL,            // type
-                        null                    // abilities
+                        null,                   // abilities
+                        null                    // unit
                 ));
         }
 
@@ -336,7 +340,8 @@ public class InterventionFormFragment extends Fragment {
                         cursor.getString(1),    // name
                         cursor.getString(2),    // number
                         cursor.getString(3),    // type
-                        cursor.getString(4)     // abilities
+                        cursor.getString(4).split(","),    // abilities
+                        null    // no unit here
                 ));
         }
 
@@ -358,7 +363,8 @@ public class InterventionFormFragment extends Fragment {
                         cursor.getString(1),    // name
                         cursor.getString(2),    // number
                         cursor.getString(3),    // type
-                        cursor.getString(4)     // abilities
+                        cursor.getString(4).split(","),    // abilities
+                        null    // no unit here
                 ));
         }
 
@@ -368,20 +374,24 @@ public class InterventionFormFragment extends Fragment {
 
     private List<GenericItem> getInputs(ContentResolver cr) {
         List<GenericItem> list = new ArrayList<>();
-//        list.add(new GenericItem(1, "Adelia EC", PLANT_MEDICINE));
-//        list.add(new GenericItem(2, "PRIORI GOLD", PLANT_MEDICINE));
-//        list.add(new GenericItem(3, "Licorne Flex", PLANT_MEDICINE));
-//        list.add(new GenericItem(4, "SILICOSEC", PLANT_MEDICINE));
-//        list.add(new GenericItem(5, "Azural xpress", PLANT_MEDICINE));
-//        list.add(new GenericItem(6, "OPTION FLASH", PLANT_MEDICINE));
-//        list.add(new GenericItem(7, "OXANA", PLANT_MEDICINE));
-//        list.add(new GenericItem(8, "DYNAMIZ", PLANT_MEDICINE));
-//        list.add(new GenericItem(9, "ORENGO", PLANT_MEDICINE));
-//        list.add(new GenericItem(10, "HM BASA", PLANT_MEDICINE));
-//        list.add(new GenericItem(11, "CLAYTON EL NINO", PLANT_MEDICINE));
-//        list.add(new GenericItem(12, "MILLENIUM OPTI", PLANT_MEDICINE));
-//
-//        sortAlphabetically(list);
+
+        String likeAccountName = " LIKE " + "\"" + InterActivity.account.name + "\"";
+
+        // Load Inputs
+        try (Cursor cursor = cr.query(Inputs.CONTENT_URI, Inputs.PROJECTION_ALL,
+                Inputs.USER + likeAccountName, null, Inputs.SORT_ORDER_DEFAULT)) {
+
+            while (cursor != null && cursor.moveToNext())
+                list.add(new GenericItem(
+                        cursor.getInt(0),       // ek_id
+                        cursor.getString(1),    // name
+                        cursor.getString(4),    // number
+                        cursor.getString(2),    // type
+                        cursor.getString(5).split(","),    // abilities
+                        cursor.getString(3)     // unit
+                ));
+        }
+        sortAlphabetically(list);
         return list;
     }
 

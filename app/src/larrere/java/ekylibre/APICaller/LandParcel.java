@@ -7,8 +7,11 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import ekylibre.exceptions.HTTPException;
 import ekylibre.zero.BuildConfig;
@@ -20,6 +23,8 @@ import ekylibre.zero.BuildConfig;
 public class LandParcel {
 
     private static final String TAG = "LandParcel";
+    private static final DecimalFormat df = new DecimalFormat("###.#", DecimalFormatSymbols.getInstance(Locale.FRENCH));
+
     public int id;
     public String name;
     public String net_surface_area;
@@ -46,7 +51,15 @@ public class LandParcel {
         id = object.getInt("id");
         name = object.getString("name");
 
-        if (!object.isNull("net_surface_area"))
-            net_surface_area = object.getString("net_surface_area");
+        if (!object.isNull("net_surface_area")) {
+            JSONObject json = object.getJSONObject("net_surface_area");
+            String unit = json.getString("unit").equals("hectare") ? "ha" : json.getString("unit");
+            String[] numbers = json.get("value").toString().split("/");
+            if (numbers.length > 1) {
+                Float surface = (Float.valueOf(numbers[0]) / Float.valueOf(numbers[1]));
+                net_surface_area = df.format(surface) + " " + unit;
+            } else
+                net_surface_area = numbers[0] + " " + unit;
+        }
     }
 }

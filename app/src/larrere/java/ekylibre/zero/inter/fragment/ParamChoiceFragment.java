@@ -19,11 +19,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import ekylibre.util.query_language.DSL;
-import ekylibre.util.query_language.QL.QL;
-import ekylibre.util.query_language.QL.TreeNode;
 import ekylibre.zero.R;
 import ekylibre.zero.inter.InterActivity;
 import ekylibre.zero.inter.adapter.SelectableItemAdapter;
@@ -74,22 +73,26 @@ public class ParamChoiceFragment extends Fragment {
 
         // Filter list
         dataset = new ArrayList<>();
-        outer: for (GenericItem item : InterventionFormFragment.paramsList) {
-            if (item.type.equals(paramType))
-                dataset.add(item);
 
-            // TODO : activate when abilities available on API
-//            List<String> itemAbilities = DSL.getElements(item.abilities);
-//            List<String> requiredAbilities = DSL.getElements(filter);
-//            Log.i(TAG, "Item abilities = " + itemAbilities);
-//            Log.i(TAG, "Required abilities = " + requiredAbilities);
-//            for (String requiredAbility : requiredAbilities) {
-//                if (!itemAbilities.contains(requiredAbility)) {
-//                    // Missing ability
-//                    continue outer;
-//                }
-//            }
-//            dataset.add(item);
+        // Add each item matching required abilities, else pass
+        List<String> requiredAbilities = DSL.getElements(filter);
+        outer: for (GenericItem item : InterventionFormFragment.paramsList) {
+            // Check all abilities are satified
+            if (item.abilities != null) {
+                for (String requiredAbility : requiredAbilities) {
+                    if (!Arrays.asList(item.abilities).contains(requiredAbility)) {
+                        Log.d(TAG, "- - -");
+                        Log.d(TAG, "- - - Item ability -> " + Arrays.toString(item.abilities));
+                        Log.d(TAG, "- - - Required ability -> " + requiredAbilities);
+                        continue outer;
+                    }
+                }
+                Log.i(TAG, "- - -");
+                Log.i(TAG, "Item ability -> " + Arrays.toString(item.abilities));
+                Log.i(TAG, "Required ability -> " + requiredAbilities);
+                // Do things with matching item
+                dataset.add(item);
+            }
         }
 
         View view;
@@ -140,23 +143,16 @@ public class ParamChoiceFragment extends Fragment {
     }
 
     private void filterList(String text) {
-
-//        Uri uri;
-//        String[] projection;
-//        String query;
-//        String sortOrder;
-//        ContentResolver contentResolver = context.getContentResolver();
-//                uri = ZeroContract.Workers.CONTENT_URI;
-//                projection = ZeroContract.Workers.PROJECTION_ALL;
-//                query = ZeroContract.Workers.QUALIFICATION + " = " + paramType;
-//                sortOrder = ZeroContract.Workers.SORT_ORDER_DEFAULT;
-
         dataset.clear();
-
-        // TODO : implement abilities filter when available
-
-        for (GenericItem item : InterventionFormFragment.paramsList)
-            if (item.type.equals(paramType))
+        List<String> requiredAbilities = DSL.getElements(filter);
+        outer: for (GenericItem item : InterventionFormFragment.paramsList) {
+            // Check all abilities are satified
+            if (item.abilities != null) {
+                for (String requiredAbility : requiredAbilities) {
+                    if (!Arrays.asList(item.abilities).contains(requiredAbility))
+                        continue outer;
+                }
+                // Do things with matching item
                 if (text != null) {
                     String filterText = StringUtils.stripAccents(text.toLowerCase());
                     String name = StringUtils.stripAccents(item.name.toLowerCase());
@@ -165,53 +161,12 @@ public class ParamChoiceFragment extends Fragment {
                         dataset.add(item);
                 } else
                     dataset.add(item);
-
+            }
+        }
         adapter.notifyDataSetChanged();
-
-
-//        switch (paramType) {
-//
-//            case "wine_man":
-//            case "operator":
-//            case "responsible":
-//            case "mechanic":
-//            case "forager_driver":
-//            case "caregiver":
-//            case "inseminator":
-//            case "worker":
-//            case "doer":
-//            case "driver":
-//                for (GenericItem item : InterventionFormFragment.paramsList)
-//                    if (item.type.equals(paramType))
-//                        if (text != null) {
-//                            String name = item.name.toLowerCase();
-//                            if (name.contains(text.toLowerCase()))
-//                                dataset.add(item);
-//                        } else
-//                            dataset.add(item);
-//                break;
-//        }
-
-//        try (Cursor cursor = contentResolver.query(uri, projection, query, null, sortOrder)) {
-//
-//            if (cursor != null) {
-//                dataset.clear();
-//                while (cursor.moveToNext()) {
-//                    String label = cursor.getString(2);
-//                    boolean selected = false;
-//                    for (IssueItem item : issuesList)
-//                        if (item.label.equals(label)) {
-//                            selected = true;
-//                            break;
-//                        }
-//                    dataset.add(new IssueItem(cursor.getString(1), label,
-//                            cursor.getString(3), selected));
-//                }
-//                adapter.notifyDataSetChanged();
-//            }
-//        }
     }
 
+    // TODO : hide keyboard on click outside
     private static void hideKeyboard(Context context, View view) {
         InputMethodManager imm = (InputMethodManager) context.getSystemService(Activity.INPUT_METHOD_SERVICE);
         //Find the currently focused view, so we can grab the correct window token from it.

@@ -468,8 +468,27 @@ public class DatabaseHelper extends SQLiteOpenHelper
             }
             case 22:
             {
+
+                database.execSQL("ALTER TABLE " + ZeroContract.Plants.TABLE_NAME + " ADD " +
+                        ZeroContract.Plants.NET_SURFACE_AREA + " TEXT DEFAULT NULL");
+
+                database.execSQL("CREATE TABLE IF NOT EXISTS " + ZeroContract.DetailedInterventions.TABLE_NAME + "(" +
+                        ZeroContract.DetailedInterventions._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                        ZeroContract.DetailedInterventions.PROCEDURE_NAME + " TEXT NOT NULL, " +
+                        ZeroContract.DetailedInterventions.CREATED_ON + " DATETIME NOT NULL, " +
+                        ZeroContract.DetailedInterventions.USER + " TEXT)");
+
+                database.execSQL("CREATE TABLE IF NOT EXISTS " + ZeroContract.DetailedInterventionAttributes.TABLE_NAME + "(" +
+                        ZeroContract.DetailedInterventionAttributes._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                        ZeroContract.DetailedInterventionAttributes.FK_DETAILED_INTERVENTION + " INTEGER NOT NULL, " +
+                        ZeroContract.DetailedInterventionAttributes.REFERENCE_NAME + " TEXT NOT NULL, " +
+                        ZeroContract.DetailedInterventionAttributes.REFERENCE_ID + " INTEGER NOT NULL, " +
+                        ZeroContract.DetailedInterventionAttributes.QUANTITY_VALUE + " REAL, " +
+                        ZeroContract.DetailedInterventionAttributes.QUANTITY_UNIT_NAME + " TEXT, " +
+                        "FOREIGN KEY ("+ZeroContract.DetailedInterventionAttributes.FK_DETAILED_INTERVENTION+") " +
+                        "REFERENCES "+ZeroContract.DetailedInterventions.TABLE_NAME+"("+ZeroContract.DetailedInterventions._ID+"));");
+
                 database.execSQL("CREATE TABLE IF NOT EXISTS " + ZeroContract.Equipments.TABLE_NAME + "(" +
-//                        ZeroContract.Equipment._ID + " INTEGER PRIMARY KEY, " +
                         ZeroContract.Equipments.EK_ID + " INTEGER PRIMARY KEY, " +
                         ZeroContract.Equipments.NAME + " TEXT NOT NULL, " +
                         ZeroContract.Equipments.NUMBER + " TEXT, " +
@@ -477,30 +496,19 @@ public class DatabaseHelper extends SQLiteOpenHelper
                         ZeroContract.Equipments.ABILITIES + " TEXT, " +
                         ZeroContract.Equipments.USER + " TEXT)");
 
-                database.execSQL("CREATE TABLE IF NOT EXISTS " + ZeroContract.Articles.TABLE_NAME + "(" +
-                        ZeroContract.Articles._ID + " INTEGER PRIMARY KEY, " +
-                        ZeroContract.Articles.EK_ID + " INTEGER NOT NULL, " +
-                        ZeroContract.Articles.NAME + " TEXT NOT NULL, " +
-                        ZeroContract.Articles.NUMBER + " TEXT, " +
-                        ZeroContract.Articles.TYPE + " TEXT NOT NULL, " +
-                        ZeroContract.Articles.UNIT + " TEXT, " +
-                        ZeroContract.Articles.USER + " TEXT)");
-
                 database.execSQL("CREATE TABLE IF NOT EXISTS " + ZeroContract.Workers.TABLE_NAME + "(" +
-//                        ZeroContract.Workers._ID + " INTEGER PRIMARY KEY, " +
                         ZeroContract.Workers.EK_ID + " INTEGER PRIMARY KEY, " +
                         ZeroContract.Workers.NAME + " TEXT NOT NULL, " +
                         ZeroContract.Workers.NUMBER + " TEXT, " +
                         ZeroContract.Workers.QUALIFICATION + " TEXT NOT NULL, " +
-                        ZeroContract.Equipments.ABILITIES + " TEXT, " +
+                        ZeroContract.Workers.ABILITIES + " TEXT, " +
                         ZeroContract.Workers.USER + " TEXT)");
 
                 database.execSQL("CREATE TABLE IF NOT EXISTS " + ZeroContract.LandParcels.TABLE_NAME + "(" +
-//                        ZeroContract.LandParcels._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                         ZeroContract.LandParcels.EK_ID + " INTEGER PRIMARY KEY, " +
                         ZeroContract.LandParcels.NAME + " TEXT NOT NULL, " +
                         ZeroContract.LandParcels.NET_SURFACE_AREA + " TEXT, " +
-                        ZeroContract.Workers.USER + " TEXT)");
+                        ZeroContract.LandParcels.USER + " TEXT)");
 
                 database.execSQL("CREATE TABLE IF NOT EXISTS " + ZeroContract.Inputs.TABLE_NAME + "(" +
                         ZeroContract.Inputs.EK_ID + " INTEGER PRIMARY KEY, " +

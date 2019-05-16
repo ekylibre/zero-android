@@ -2,6 +2,7 @@ package ekylibre.util.layout.component;
 
 import android.content.Context;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
@@ -10,6 +11,7 @@ import com.google.android.material.button.MaterialButton;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
@@ -17,6 +19,8 @@ import androidx.annotation.StringRes;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import ekylibre.util.pojo.GenericEntity;
+import ekylibre.util.query_language.DSL;
 import ekylibre.zero.R;
 import ekylibre.zero.inter.enums.ParamType.Type;
 import ekylibre.zero.inter.fragment.InterventionFormFragment.OnFragmentInteractionListener;
@@ -31,9 +35,9 @@ public class WidgetParamView extends ConstraintLayout {
     @BindView(R.id.widget_chips_group) ChipGroup chipGroup;
 
     public WidgetParamView(Context context, OnFragmentInteractionListener listener,
-                           @Type String paramType, String filter, List<GenericItem> paramList) {
+                           GenericEntity entity, List<GenericItem> paramList) {
         super(context);
-        init(context, listener, paramType, filter, paramList);
+        init(context, listener, entity.name, entity.filter, paramList);
     }
 
     public WidgetParamView(Context context, AttributeSet attrs) {
@@ -88,29 +92,49 @@ public class WidgetParamView extends ConstraintLayout {
 
         addButton.setOnClickListener(v -> listener.onFormFragmentInteraction(type, filter));
 
-        for (GenericItem item : paramList) {
-            if (item.type.equals(type) && item.isSelected) {
-                Chip chip = new Chip(context);
-                chip.setText(item.name);
-                chip.setCloseIconVisible(true);
-                chip.setOnCloseIconClickListener(v -> {
-                    chipGroup.removeView(chip);
-                    paramList.get(paramList.indexOf(item)).isSelected = false;
-                    displayOrNot(paramList, type);
-                });
-                chipGroup.addView(chip);
+
+
+        List<String> requiredAbilities = DSL.getElements(filter);
+        outer: for (GenericItem item : paramList) {
+            if (item.abilities != null) {
+                // Check all abilities are satified
+                for (String requiredAbility : requiredAbilities)
+                    if (!Arrays.asList(item.abilities).contains(requiredAbility))
+                        continue outer;
+                // Do things with matching item
+                if (item.isSelected) {
+                    Chip chip = new Chip(context);
+                    chip.setText(item.name);
+                    chip.setCloseIconVisible(true);
+                    chip.setOnCloseIconClickListener(v -> {
+                        chipGroup.removeView(chip);
+                        paramList.get(paramList.indexOf(item)).isSelected = false;
+                        displayOrNot(paramList, filter);
+                    });
+                    chipGroup.addView(chip);
+                }
             }
         }
-        displayOrNot(paramList, type);
+        displayOrNot(paramList, filter);
     }
 
-    private void displayOrNot(List<GenericItem> paramList, @Type String type) {
+    private void displayOrNot(List<GenericItem> paramList, String filter) {
+
+        List<String> requiredAbilities = DSL.getElements(filter);
+
         boolean itemCounter = false;
-        for (GenericItem item : paramList)
-            if (item.type.equals(type) && item.isSelected) {
-                itemCounter = true;
-                break;
+        outer: for (GenericItem item : paramList) {
+            if (item.abilities != null) {
+                // Check all abilities are satified
+                for (String requiredAbility : requiredAbilities)
+                    if (!Arrays.asList(item.abilities).contains(requiredAbility))
+                        continue outer;
+                if (item.isSelected) {
+                    itemCounter = true;
+                    break;
+                }
             }
+        }
         chipGroup.setVisibility(itemCounter ? View.VISIBLE : View.GONE);
     }
 
