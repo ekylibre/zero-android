@@ -34,9 +34,12 @@ public class WidgetParamView extends ConstraintLayout {
     @BindView(R.id.widget_add) MaterialButton addButton;
     @BindView(R.id.widget_chips_group) ChipGroup chipGroup;
 
+    private static String role;
+
     public WidgetParamView(Context context, OnFragmentInteractionListener listener,
                            GenericEntity entity, List<GenericItem> paramList) {
         super(context);
+        role = entity.name;
         init(context, listener, entity.name, entity.filter, paramList);
     }
 
@@ -94,24 +97,28 @@ public class WidgetParamView extends ConstraintLayout {
 
 
 
-        List<String> requiredAbilities = DSL.getElements(filter);
+        List<String> requiredAbilities = DSL.parse(filter);
         outer: for (GenericItem item : paramList) {
-            if (item.abilities != null) {
+            if (item.isSelected && item.abilities != null) {
                 // Check all abilities are satified
+                Log.e("View", "Role [" + role + "] required abilities = " + requiredAbilities + " / item abilities = " + Arrays.asList(item.abilities));
                 for (String requiredAbility : requiredAbilities)
                     if (!Arrays.asList(item.abilities).contains(requiredAbility))
                         continue outer;
                 // Do things with matching item
-                if (item.isSelected) {
-                    Chip chip = new Chip(context);
-                    chip.setText(item.name);
-                    chip.setCloseIconVisible(true);
-                    chip.setOnCloseIconClickListener(v -> {
-                        chipGroup.removeView(chip);
-                        paramList.get(paramList.indexOf(item)).isSelected = false;
-                        displayOrNot(paramList, filter);
-                    });
-                    chipGroup.addView(chip);
+                for (String referenceName : item.referenceName) {
+                    Log.e("View", "ref name = " + referenceName + " / procedure role = " + role);
+                    if (referenceName.equals(role)) {
+                        Chip chip = new Chip(context);
+                        chip.setText(item.name);
+                        chip.setCloseIconVisible(true);
+                        chip.setOnCloseIconClickListener(v -> {
+                            chipGroup.removeView(chip);
+                            paramList.get(paramList.indexOf(item)).isSelected = false;
+                            displayOrNot(paramList, filter);
+                        });
+                        chipGroup.addView(chip);
+                    }
                 }
             }
         }
@@ -120,7 +127,7 @@ public class WidgetParamView extends ConstraintLayout {
 
     private void displayOrNot(List<GenericItem> paramList, String filter) {
 
-        List<String> requiredAbilities = DSL.getElements(filter);
+        List<String> requiredAbilities = DSL.parse(filter);
 
         boolean itemCounter = false;
         outer: for (GenericItem item : paramList) {

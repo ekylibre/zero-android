@@ -75,7 +75,7 @@ public class ParamChoiceFragment extends Fragment {
         dataset = new ArrayList<>();
 
         // Add each item matching required abilities, else pass
-        List<String> requiredAbilities = DSL.getElements(filter);
+        List<String> requiredAbilities = DSL.parse(filter);
         outer: for (GenericItem item : InterventionFormFragment.paramsList) {
             // Check all abilities are satified
             if (item.abilities != null) {
@@ -103,7 +103,7 @@ public class ParamChoiceFragment extends Fragment {
             view = inflater.inflate(R.layout.fragment_recycler_with_search_field, container, false);
             RecyclerView recyclerView = view.findViewById(R.id.recycler);
             recyclerView.setLayoutManager(new LinearLayoutManager(container.getContext()));
-            adapter = new SelectableItemAdapter(dataset);
+            adapter = new SelectableItemAdapter(dataset, paramType);
             recyclerView.setAdapter(adapter);
 
             // SeachField logic
@@ -144,7 +144,7 @@ public class ParamChoiceFragment extends Fragment {
 
     private void filterList(String text) {
         dataset.clear();
-        List<String> requiredAbilities = DSL.getElements(filter);
+        List<String> requiredAbilities = DSL.parse(filter);
         outer: for (GenericItem item : InterventionFormFragment.paramsList) {
             // Check all abilities are satified
             if (item.abilities != null) {

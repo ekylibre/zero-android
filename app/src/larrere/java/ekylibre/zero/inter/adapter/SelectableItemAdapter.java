@@ -21,10 +21,12 @@ import ekylibre.zero.inter.model.GenericItem;
 public class SelectableItemAdapter extends RecyclerView.Adapter<SelectableItemAdapter.ViewHolder> {
 
     private final List<GenericItem> dataset;
+    private final String role;
 
     // CONTRUCTOR
-    public SelectableItemAdapter(List<GenericItem> dataset) {
+    public SelectableItemAdapter(List<GenericItem> dataset, String paramType) {
         this.dataset = dataset;
+        this.role = paramType;
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {
@@ -39,6 +41,10 @@ public class SelectableItemAdapter extends RecyclerView.Adapter<SelectableItemAd
             itemView.setOnClickListener(v -> {
                 item.isSelected = !item.isSelected;
                 v.setSelected(!v.isSelected());
+                if (item.isSelected)
+                    item.referenceName.add(role);
+                else
+                    item.referenceName.remove(role);
                 notifyItemChanged(dataset.indexOf(item));
             });
         }

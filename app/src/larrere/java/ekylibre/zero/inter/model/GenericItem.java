@@ -1,5 +1,8 @@
 package ekylibre.zero.inter.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import ekylibre.zero.inter.enums.ParamType;
 
 public class GenericItem {
@@ -12,6 +15,7 @@ public class GenericItem {
     public String[] abilities;
     public String unit;
     public boolean isSelected;
+    public List<String> referenceName;
 
     public GenericItem(int id, String name, String number, @ParamType.Type String type, String[] abilities, String unit) {
         this.id = id;
@@ -21,5 +25,6 @@ public class GenericItem {
         this.abilities = abilities;
         this.unit = unit;
         this.isSelected = false;
+        this.referenceName = new ArrayList<>();
     }
 }

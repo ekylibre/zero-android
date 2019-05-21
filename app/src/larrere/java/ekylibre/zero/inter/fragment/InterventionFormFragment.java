@@ -23,6 +23,7 @@ import com.google.android.material.chip.ChipGroup;
 
 import java.text.Collator;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
@@ -38,6 +39,7 @@ import ekylibre.util.MarginTopItemDecoration;
 import ekylibre.util.Translate;
 import ekylibre.util.layout.component.WidgetParamView;
 import ekylibre.util.pojo.GenericEntity;
+import ekylibre.util.query_language.DSL;
 import ekylibre.zero.BuildConfig;
 import ekylibre.zero.R;
 import ekylibre.zero.inter.InterActivity;
@@ -153,44 +155,48 @@ public class InterventionFormFragment extends Fragment {
 
         // Check wether to display crop, parcel or both selector
         for (GenericEntity target : selectedProcedure.target) {
-            switch (target.name) {
+//            switch (target.name) {
 
-                case "plant":
-                    widgetContainer.addView(new WidgetParamView(context, listener, target, paramsList));
-                    break;
+//                case "land_parcel":
+//                case "plant":
+//                    widgetContainer.addView(new WidgetParamView(context, listener, target, paramsList));
+//                    break;
 
-                case "land_parcel":
-                    widgetContainer.addView(new WidgetParamView(context, listener, target, paramsList));
-                    break;
+//                case "cultivation":
 
-                case "cultivation":
-                    if (target.filter.contains("is plant") && target.filter.contains("is land_parcel")) {
-                        View cropParcelView = inflater.inflate(R.layout.widget_param_layout, container, false);
-                        TextView label = cropParcelView.findViewById(R.id.widget_label);
-                        label.setText(R.string.crop_parcel);
-                        TextView addButton = cropParcelView.findViewById(R.id.widget_add);
-                        ChipGroup cropChipGroup = cropParcelView.findViewById(R.id.widget_chips_group);
-                        addButton.setOnClickListener(v -> listener.onFormFragmentInteraction(CROP_CHOICE_FRAGMENT, target.filter));
+            Log.e(TAG, target.filter);
 
-                        // ChipGroup Logic
-                        for (GenericItem item : paramsList) {
-                            if ((item.type.equals(PLANT) || item.type.equals(LAND_PARCEL)) && item.isSelected) {
-                                Chip chip = new Chip(context);
-                                chip.setText(item.name);
-                                chip.setCloseIconVisible(true);
-                                chip.setOnCloseIconClickListener(v -> {
-                                    cropChipGroup.removeView(chip);
-                                    paramsList.get(paramsList.indexOf(item)).isSelected = false;
-                                  chipGroupDisplay(cropChipGroup);
-                                });
-                                cropChipGroup.addView(chip);
-                            }
-                        }
-                        chipGroupDisplay(cropChipGroup);
-                        widgetContainer.addView(cropParcelView);
-                    }
-                    break;
+            View cropParcelView = inflater.inflate(R.layout.widget_param_layout, container, false);
+            TextView label = cropParcelView.findViewById(R.id.widget_label);
+            if (target.name.equals("cultivation"))
+                label.setText(R.string.crop_parcel);
+            else {
+                @StringRes final int labelRes = getResources().getIdentifier(target.name, "string", context.getPackageName());
+                label.setText(labelRes);
             }
+            TextView addButton = cropParcelView.findViewById(R.id.widget_add);
+            ChipGroup cropChipGroup = cropParcelView.findViewById(R.id.widget_chips_group);
+            addButton.setOnClickListener(v -> listener.onFormFragmentInteraction(CROP_CHOICE_FRAGMENT, target.filter));
+
+            // ChipGroup Logic
+            for (GenericItem item : paramsList) {
+                if ((item.type.equals(PLANT) || item.type.equals(LAND_PARCEL)) && item.isSelected) {
+                    Chip chip = new Chip(context);
+                    chip.setText(item.name);
+                    chip.setCloseIconVisible(true);
+                    chip.setOnCloseIconClickListener(v -> {
+                        cropChipGroup.removeView(chip);
+                        paramsList.get(paramsList.indexOf(item)).isSelected = false;
+                      chipGroupDisplay(cropChipGroup);
+                    });
+                    cropChipGroup.addView(chip);
+                }
+            }
+            chipGroupDisplay(cropChipGroup);
+            widgetContainer.addView(cropParcelView);
+
+//                    break;
+//            }
         }
 
         // ------------- //
@@ -220,9 +226,19 @@ public class InterventionFormFragment extends Fragment {
             inputRecycler.setAdapter(quantityItemAdapter);
 
             // Updates iputList for recycler display
-            for (GenericItem item : paramsList) {
-                // Check we have an input
-                if (entity.name.equals(item.type)) {
+            List<String> requiredAbilities = DSL.parse(entity.filter);
+            outer: for (GenericItem item : paramsList) {
+
+                Log.i(TAG, "Item [type]="+item.type+" [ref]="+item.referenceName);
+
+                // Check only selected item
+                if (item.abilities != null && item.isSelected) {
+
+                    // Go to next item if no corresponding abilities
+                    for (String requiredAbility : requiredAbilities) {
+                        if (!Arrays.asList(item.abilities).contains(requiredAbility))
+                            continue outer;
+
                     // Get item if present in inputList
                     ItemWithQuantity currentItem = null;
                     for (ItemWithQuantity quantityItem : inputList) {
@@ -232,14 +248,38 @@ public class InterventionFormFragment extends Fragment {
                         }
                     }
 
+                    // TODO : remove un-selected items...
                     // If selected but not present, add it else, remove it
-                    if (item.isSelected && currentItem == null)
+                    if (currentItem == null)
                         inputList.add(new ItemWithQuantity(item.id, item.name, item.type, 0f, item.unit));
                     else if (currentItem != null && !item.isSelected)
                         inputList.remove(currentItem);
+                    }
 
                 }
             }
+
+//            for (GenericItem item : paramsList) {
+//                // Check we have an input
+//                if (entity.name.equals(item.type)) {
+//                    // Get item if present in inputList
+//                    ItemWithQuantity currentItem = null;
+//                    for (ItemWithQuantity quantityItem : inputList) {
+//                        if (item.id == quantityItem.id) {
+//                            currentItem = quantityItem;
+//                            break;
+//                        }
+//                    }
+//
+//                    // If selected but not present, add it else, remove it
+//                    if (item.isSelected && currentItem == null)
+//                        inputList.add(new ItemWithQuantity(item.id, item.name, item.type, 0f, item.unit));
+//                    else if (currentItem != null && !item.isSelected)
+//                        inputList.remove(currentItem);
+//
+//                }
+//            }
+
             if (inputList.isEmpty())
                 inputRecycler.setVisibility(View.GONE);
             else

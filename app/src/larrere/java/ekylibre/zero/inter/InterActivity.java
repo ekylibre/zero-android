@@ -1,6 +1,10 @@
 package ekylibre.zero.inter;
 
 import android.accounts.Account;
+import android.content.ContentResolver;
+import android.content.ContentValues;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.ArrayMap;
 import android.util.Log;
@@ -16,23 +20,29 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import org.antlr.v4.runtime.CharStreams;
+import org.antlr.v4.runtime.CommonTokenStream;
 import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import ekylibre.database.ZeroContract.DetailedInterventionAttributes;
+import ekylibre.database.ZeroContract.DetailedInterventions;
 import ekylibre.util.AccountTool;
 import ekylibre.util.ProcedureFamiliesXMLReader;
 import ekylibre.util.ProceduresXMLReader;
+import ekylibre.util.antlr4.QueryLanguageLexer;
+import ekylibre.util.antlr4.QueryLanguageParser;
 import ekylibre.util.pojo.ProcedureEntity;
-import ekylibre.util.query_language.DSL;
 import ekylibre.zero.BuildConfig;
 import ekylibre.zero.R;
 import ekylibre.zero.inter.fragment.CropParcelChoiceFragment;
@@ -42,6 +52,9 @@ import ekylibre.zero.inter.fragment.ProcedureChoiceFragment;
 import ekylibre.zero.inter.fragment.ProcedureFamilyChoiceFragment;
 import ekylibre.zero.inter.model.CropParcel;
 import ekylibre.zero.inter.model.GenericItem;
+
+import static ekylibre.zero.inter.enums.ParamType.LAND_PARCEL;
+import static ekylibre.zero.inter.enums.ParamType.PLANT;
 
 public class InterActivity extends AppCompatActivity implements FragmentManager.OnBackStackChangedListener,
         ProcedureFamilyChoiceFragment.OnFragmentInteractionListener,
@@ -113,8 +126,25 @@ public class InterActivity extends AppCompatActivity implements FragmentManager.
         loadXMLAssets();
 
         // Ekylibre DSL testing (canopy)
-        List<String> grammar = DSL.getElements("can tow(equipment) and can move");
-        if (BuildConfig.DEBUG) Log.e(TAG, "GRAMMAR TEST --> " + grammar.toString());
+//        List<String> grammar = DSL.parse("can drive(equipment) and can move");
+//        List<String> grammar = DSL.parse("is equipment and can move and (can store(silage) or can store(raw_matter) or can store(grass) or can store(grain) or can store_fluid)");
+//        if (BuildConfig.DEBUG) Log.e(TAG, "GRAMMAR TEST --> " + grammar.toString());
+
+        // Testing Parboiled
+//        AbilitiesParser parser = Parboiled.createParser(AbilitiesParser.class);
+//        ParsingResult<?> result = new ReportingParseRunner(parser.booleanExpression()).run("can drive(equipment) and can move");
+//        if (!result.parseErrors.isEmpty())
+//            System.out.println(ErrorUtils.printParseError(result.parseErrors.get(0)));
+//        else
+//            System.out.println(printNodeTree(result) + '\n');
+
+        // ANTLR
+        QueryLanguageLexer lexer = new QueryLanguageLexer(CharStreams.fromString("can drive(tractor) and can move"));
+        QueryLanguageParser parser = new QueryLanguageParser(new CommonTokenStream(lexer));
+
+        Log.e(TAG, "ANTLR4 -> " + parser.abilitive().getText());
+        Log.e(TAG, "ANTLR4 -> " + parser.essence());
+
     }
 
     void replaceFragmentWith(String fragmentTag, String filter) {
@@ -357,13 +387,128 @@ public class InterActivity extends AppCompatActivity implements FragmentManager.
 
         switch (item.getItemId()) {
             case R.id.action_inter_save:
+                if (currentFragment.equals(INTERVENTION_FORM)) {
+                    saveIntervention();
+                }
                 break;
+
             case R.id.action_inter_done:
                 previousFragmentOrQuit();
                 break;
+
             default:
                 return super.onOptionsItemSelected(item);
         }
         return true;
+    }
+
+    private void saveAttribute(ContentResolver cr, long id, String role, GenericItem item) {
+        ContentValues cv = new ContentValues();
+        cv.put(DetailedInterventionAttributes.DETAILED_INTERVENTION_ID, id);
+        cv.put(DetailedInterventionAttributes.REFERENCE_NAME, role);
+        cv.put(DetailedInterventionAttributes.REFERENCE_ID, item.id);
+        Uri plantUri = cr.insert(DetailedInterventionAttributes.CONTENT_URI, cv);
+        if (BuildConfig.DEBUG && plantUri != null && plantUri.getLastPathSegment() != null)
+            Log.i(TAG, role + " -> " + item.name + " (id=" + plantUri.getLastPathSegment() + ")");
+    }
+
+    private void saveIntervention() {
+
+        ContentResolver cr = getContentResolver();
+
+        // Create base intervention
+        ContentValues cv = new ContentValues();
+        cv.put(DetailedInterventions.PROCEDURE_NAME, selectedProcedure.name);
+        cv.put(DetailedInterventions.CREATED_ON, new Date().getTime());
+        cv.put(DetailedInterventions.USER, account.name);
+
+        // Insert into database & get returning id
+        Uri uri = cr.insert(DetailedInterventions.CONTENT_URI, cv);
+        long interId = -1;
+        if (uri != null && uri.getLastPathSegment() != null)
+            interId = Long.valueOf(uri.getLastPathSegment());
+        if (BuildConfig.DEBUG)
+            Log.i(TAG, "Intervention id = " + interId);
+
+
+        // Storing working time
+
+        // Store parameters by reference_name
+        for (GenericItem param : InterventionFormFragment.paramsList) {
+            if (param.isSelected) {
+
+                for (String role : param.referenceName) {
+                    Log.e(TAG, role + " / " + param.type);
+
+                    switch (param.type) {
+
+                        case "equipment":               // equipments
+                        case "handling_equipment":
+                        case "motorized_vehicle":
+                        case "portable_equipment":
+                        case "tank":
+                        case "trailed_equipment":
+                        case "tractor":
+                        case "worker":                  // workers
+                        case "seed":                    // inputs
+                        case "seedling":
+                        case "preparation":
+                        case "matter":
+                        case "oil":
+                        case "excrement":
+                        case "cucurbita_maxima_potimarron":
+                        case "pomace":
+                        case "water":
+                        case "vegetable":
+                        case PLANT:
+                        case LAND_PARCEL:
+                            saveAttribute(cr, interId, role, param);
+                            break;
+
+                    }
+                }
+            }
+        }
+
+        String whereClause = DetailedInterventions._ID + "=?";
+        String[] args = new String[] {String.valueOf(interId)};
+
+        try (Cursor cursor = cr.query(
+                DetailedInterventions.CONTENT_URI,
+                DetailedInterventions.PROJECTION_ALL,
+                whereClause, args, null)) {
+
+            while (cursor != null && cursor.moveToNext())
+                Log.i(TAG, "L'enregistrement est bien en base");
+
+        }
+
+        // Close the activity
+        finish();
+
+
+
+
+
+
+
+
+
+
+
+
+
+//        // Trying sync query
+//        SQLiteDatabase db = new DatabaseHelper(this).getReadableDatabase();
+//
+//        // Get reference_name and reference_id of current parameter
+//        String query = "SELECT "+DetailedInterventionAttributes.REFERENCE_ID+", "+DetailedInterventionAttributes.REFERENCE_NAME
+//                +" FROM "+DetailedInterventionAttributes.TABLE_NAME+", "+ DetailedInterventions.TABLE_NAME
+//                +" WHERE "+DetailedInterventionAttributes.DETAILED_INTERVENTION_ID+"=?";
+//
+//        try(Cursor cursor = db.rawQuery(query, new String[] {String.valueOf(interId)})) {
+//            while (cursor != null && cursor.moveToNext())
+//                Log.e(TAG, "Raw query #" + cursor.getInt(0) + " " + cursor.getString(1));
+//        }
     }
 }
