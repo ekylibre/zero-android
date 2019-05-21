@@ -276,11 +276,18 @@ public final class ZeroContract {
 
     public interface DetailedInterventionAttributesColumns extends BaseColumns {
         String TABLE_NAME = "detailed_intervention_attributes";  // carefull, intervention table name exists !
-        String FK_DETAILED_INTERVENTION = "fk_detailed_intervention";
+        String DETAILED_INTERVENTION_ID = "detailed_intervention_id";
         String REFERENCE_ID = "reference_id";
         String REFERENCE_NAME = "reference_name";
         String QUANTITY_VALUE = "quantity_value";
         String QUANTITY_UNIT_NAME = "quantity_unit_name";
+    }
+
+    public interface WorkingPeriodAttributesColumns extends BaseColumns {
+        String TABLE_NAME = "working_period_attributes";
+        String DETAILED_INTERVENTION_ID = "detailed_intervention_id";
+        String STARTED_AT = "started_at";
+        String STOPPED_AT = "stopped_at";
     }
 
     public static final class Crumbs implements CrumbsColumns {
@@ -658,7 +665,14 @@ public final class ZeroContract {
     public static final class DetailedInterventionAttributes implements DetailedInterventionAttributesColumns {
         public static final Uri CONTENT_URI = Uri.withAppendedPath(ZeroContract.CONTENT_URI, "detailed_intervention_attributes");
         public static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/vnd.ekylibre.zero.detailed_intervention_attributes";
-        public static final String[] PROJECTION_ALL = {_ID, FK_DETAILED_INTERVENTION, REFERENCE_ID, REFERENCE_NAME, QUANTITY_VALUE, QUANTITY_UNIT_NAME};
-        public static final String SORT_ORDER_DEFAULT = FK_DETAILED_INTERVENTION + " DESC";
+        public static final String[] PROJECTION_ALL = {_ID, DETAILED_INTERVENTION_ID, REFERENCE_ID, REFERENCE_NAME, QUANTITY_VALUE, QUANTITY_UNIT_NAME};
+        public static final String SORT_ORDER_DEFAULT = DETAILED_INTERVENTION_ID + " DESC";
+    }
+
+    public static final class WorkingPeriodAttributes implements WorkingPeriodAttributesColumns {
+        public static final Uri CONTENT_URI = Uri.withAppendedPath(ZeroContract.CONTENT_URI, "working_period_attributes");
+        public static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/vnd.ekylibre.zero.working_period_attributes";
+        public static final String[] PROJECTION_ALL = {_ID, DETAILED_INTERVENTION_ID, STARTED_AT, STOPPED_AT};
+        public static final String SORT_ORDER_DEFAULT = _ID + " DESC";
     }
 }

@@ -1,19 +1,11 @@
 package ekylibre.database;
 
-import android.content.ContentValues;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-
-import ekylibre.util.AccountTool;
-import ekylibre.util.CSVReader;
 import ekylibre.zero.BuildConfig;
-import ekylibre.zero.ObservationActivity;
 
 public class DatabaseHelper extends SQLiteOpenHelper
 {
@@ -480,12 +472,20 @@ public class DatabaseHelper extends SQLiteOpenHelper
 
                 database.execSQL("CREATE TABLE IF NOT EXISTS " + ZeroContract.DetailedInterventionAttributes.TABLE_NAME + "(" +
                         ZeroContract.DetailedInterventionAttributes._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                        ZeroContract.DetailedInterventionAttributes.FK_DETAILED_INTERVENTION + " INTEGER NOT NULL, " +
+                        ZeroContract.DetailedInterventionAttributes.DETAILED_INTERVENTION_ID + " INTEGER NOT NULL, " +
                         ZeroContract.DetailedInterventionAttributes.REFERENCE_NAME + " TEXT NOT NULL, " +
                         ZeroContract.DetailedInterventionAttributes.REFERENCE_ID + " INTEGER NOT NULL, " +
                         ZeroContract.DetailedInterventionAttributes.QUANTITY_VALUE + " REAL, " +
                         ZeroContract.DetailedInterventionAttributes.QUANTITY_UNIT_NAME + " TEXT, " +
-                        "FOREIGN KEY ("+ZeroContract.DetailedInterventionAttributes.FK_DETAILED_INTERVENTION+") " +
+                        "FOREIGN KEY ("+ZeroContract.DetailedInterventionAttributes.DETAILED_INTERVENTION_ID +") " +
+                        "REFERENCES "+ZeroContract.DetailedInterventions.TABLE_NAME+"("+ZeroContract.DetailedInterventions._ID+"));");
+
+                database.execSQL("CREATE TABLE IF NOT EXISTS " + ZeroContract.WorkingPeriodAttributes.TABLE_NAME + "(" +
+                        ZeroContract.WorkingPeriodAttributes._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                        ZeroContract.WorkingPeriodAttributes.DETAILED_INTERVENTION_ID + " INTEGER NOT NULL, " +
+                        ZeroContract.WorkingPeriodAttributes.STARTED_AT + " DATETIME NOT NULL, " +
+                        ZeroContract.WorkingPeriodAttributes.STOPPED_AT + " DATETIME NOT NULL, " +
+                        "FOREIGN KEY ("+ZeroContract.WorkingPeriodAttributes.DETAILED_INTERVENTION_ID +") " +
                         "REFERENCES "+ZeroContract.DetailedInterventions.TABLE_NAME+"("+ZeroContract.DetailedInterventions._ID+"));");
 
                 database.execSQL("CREATE TABLE IF NOT EXISTS " + ZeroContract.Equipments.TABLE_NAME + "(" +

@@ -64,6 +64,8 @@ public class ZeroProvider extends ContentProvider {
     // Intervention with params feature
     public static final int ROUTE_EQUIPMENTS_LIST = 1500;
     public static final int ROUTE_EQUIPMENTS_ITEM = 1501;
+    public static final int ROUTE_WORKING_PERIOD_ATTRIBUTES_LIST = 1502;
+    public static final int ROUTE_WORKING_PERIOD_ATTRIBUTES_ITEM = 1503;
     public static final int ROUTE_WORKERS_LIST = 1504;
     public static final int ROUTE_WORKERS_ITEM = 1505;
     public static final int ROUTE_LAND_PARCELS_LIST = 1506;
@@ -127,6 +129,8 @@ public class ZeroProvider extends ContentProvider {
         URI_MATCHER.addURI(ZeroContract.AUTHORITY, "detailed_interventions/#", ROUTE_DETAILED_INTERVENTION_ATTRIBUTES_ITEM);
         URI_MATCHER.addURI(ZeroContract.AUTHORITY, "detailed_intervention_attributes", ROUTE_DETAILED_INTERVENTION_ATTRIBUTES_LIST);
         URI_MATCHER.addURI(ZeroContract.AUTHORITY, "detailed_intervention_attributes/#", ROUTE_DETAILED_INTERVENTION_ATTRIBUTES_ITEM);
+        URI_MATCHER.addURI(ZeroContract.AUTHORITY, "working_period_attributes", ROUTE_WORKING_PERIOD_ATTRIBUTES_LIST);
+        URI_MATCHER.addURI(ZeroContract.AUTHORITY, "working_period_attributes/#", ROUTE_WORKING_PERIOD_ATTRIBUTES_ITEM);
     }
 
     private DatabaseHelper mDatabaseHelper;
@@ -238,6 +242,10 @@ public class ZeroProvider extends ContentProvider {
             case ROUTE_DETAILED_INTERVENTION_ATTRIBUTES_LIST:
             case ROUTE_DETAILED_INTERVENTION_ATTRIBUTES_ITEM:
                 return ZeroContract.DetailedInterventionAttributes.CONTENT_TYPE;
+
+            case ROUTE_WORKING_PERIOD_ATTRIBUTES_LIST:
+            case ROUTE_WORKING_PERIOD_ATTRIBUTES_ITEM:
+                return ZeroContract.WorkingPeriodAttributes.CONTENT_TYPE;
 
             default:
                 throw new UnsupportedOperationException("Unknown URI: " + uri);
@@ -508,6 +516,16 @@ public class ZeroProvider extends ContentProvider {
                 cursor.setNotificationUri(contentResolver, uri);
                 return cursor;
 
+            case ROUTE_WORKING_PERIOD_ATTRIBUTES_ITEM:
+                id = uri.getLastPathSegment();
+                builder.where(ZeroContract.WorkingPeriodAttributes._ID + "=?", id);
+            case ROUTE_WORKING_PERIOD_ATTRIBUTES_LIST:
+                builder.table(ZeroContract.WorkingPeriodAttributes.TABLE_NAME)
+                        .where(selection, selectionArgs);
+                cursor = builder.query(database, projection, sortOrder);
+                cursor.setNotificationUri(contentResolver, uri);
+                return cursor;
+
             default:
                 throw new UnsupportedOperationException("Unknown URI: " + uri);
         }
@@ -678,6 +696,13 @@ public class ZeroProvider extends ContentProvider {
                 result = Uri.parse(ZeroContract.DetailedInterventionAttributes.CONTENT_URI + "/" + id);
                 break;
             case ROUTE_DETAILED_INTERVENTION_ATTRIBUTES_ITEM:
+                throw new UnsupportedOperationException("Insert not supported on URI: " + uri);
+
+            case ROUTE_WORKING_PERIOD_ATTRIBUTES_LIST:
+                id = database.insert(ZeroContract.WorkingPeriodAttributes.TABLE_NAME, null, values);
+                result = Uri.parse(ZeroContract.WorkingPeriodAttributes.CONTENT_URI + "/" + id);
+                break;
+            case ROUTE_WORKING_PERIOD_ATTRIBUTES_ITEM:
                 throw new UnsupportedOperationException("Insert not supported on URI: " + uri);
 
                 default:
@@ -973,6 +998,18 @@ public class ZeroProvider extends ContentProvider {
             case ROUTE_DETAILED_INTERVENTION_ATTRIBUTES_ITEM:
                 count = builder.table(ZeroContract.DetailedInterventionAttributes.TABLE_NAME)
                         .where(ZeroContract.DetailedInterventionAttributes._ID + "=?", id)
+                        .where(selection, selectionArgs)
+                        .delete(database);
+                break;
+
+            case ROUTE_WORKING_PERIOD_ATTRIBUTES_LIST:
+                count = builder.table(ZeroContract.WorkingPeriodAttributes.TABLE_NAME)
+                        .where(selection, selectionArgs)
+                        .delete(database);
+                break;
+            case ROUTE_WORKING_PERIOD_ATTRIBUTES_ITEM:
+                count = builder.table(ZeroContract.WorkingPeriodAttributes.TABLE_NAME)
+                        .where(ZeroContract.WorkingPeriodAttributes._ID + "=?", id)
                         .where(selection, selectionArgs)
                         .delete(database);
                 break;
@@ -1296,6 +1333,19 @@ public class ZeroProvider extends ContentProvider {
                 id = uri.getLastPathSegment();
                 count = builder.table(ZeroContract.DetailedInterventionAttributes.TABLE_NAME)
                         .where(ZeroContract.DetailedInterventionAttributes._ID + "=?", id)
+                        .where(selection, selectionArgs)
+                        .update(database, values);
+                break;
+
+            case ROUTE_WORKING_PERIOD_ATTRIBUTES_LIST:
+                count = builder.table(ZeroContract.WorkingPeriodAttributes.TABLE_NAME)
+                        .where(selection, selectionArgs)
+                        .update(database, values);
+                break;
+            case ROUTE_WORKING_PERIOD_ATTRIBUTES_ITEM:
+                id = uri.getLastPathSegment();
+                count = builder.table(ZeroContract.WorkingPeriodAttributes.TABLE_NAME)
+                        .where(ZeroContract.WorkingPeriodAttributes._ID + "=?", id)
                         .where(selection, selectionArgs)
                         .update(database, values);
                 break;
