@@ -128,6 +128,26 @@ public interface QueryLanguageListener extends ParseTreeListener {
 	 */
 	void exitAbility(QueryLanguageParser.AbilityContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link QueryLanguageParser#abilities_list}.
+	 * @param ctx the parse tree
+	 */
+	void enterAbilities_list(QueryLanguageParser.Abilities_listContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link QueryLanguageParser#abilities_list}.
+	 * @param ctx the parse tree
+	 */
+	void exitAbilities_list(QueryLanguageParser.Abilities_listContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link QueryLanguageParser#ability_parameters}.
+	 * @param ctx the parse tree
+	 */
+	void enterAbility_parameters(QueryLanguageParser.Ability_parametersContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link QueryLanguageParser#ability_parameters}.
+	 * @param ctx the parse tree
+	 */
+	void exitAbility_parameters(QueryLanguageParser.Ability_parametersContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link QueryLanguageParser#ability_name}.
 	 * @param ctx the parse tree
 	 */
@@ -197,4 +217,14 @@ public interface QueryLanguageListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitSpacer(QueryLanguageParser.SpacerContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link QueryLanguageParser#name}.
+	 * @param ctx the parse tree
+	 */
+	void enterName(QueryLanguageParser.NameContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link QueryLanguageParser#name}.
+	 * @param ctx the parse tree
+	 */
+	void exitName(QueryLanguageParser.NameContext ctx);
 }

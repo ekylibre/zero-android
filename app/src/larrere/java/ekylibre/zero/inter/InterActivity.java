@@ -22,6 +22,7 @@ import androidx.fragment.app.FragmentTransaction;
 
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
+import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
@@ -40,6 +41,7 @@ import ekylibre.database.ZeroContract.DetailedInterventions;
 import ekylibre.util.AccountTool;
 import ekylibre.util.ProcedureFamiliesXMLReader;
 import ekylibre.util.ProceduresXMLReader;
+import ekylibre.util.antlr4.QueryLanguageBaseListener;
 import ekylibre.util.antlr4.QueryLanguageLexer;
 import ekylibre.util.antlr4.QueryLanguageParser;
 import ekylibre.util.pojo.ProcedureEntity;
@@ -138,13 +140,24 @@ public class InterActivity extends AppCompatActivity implements FragmentManager.
 //        else
 //            System.out.println(printNodeTree(result) + '\n');
 
-        // ANTLR
-        QueryLanguageLexer lexer = new QueryLanguageLexer(CharStreams.fromString("can drive(tractor) and can move"));
+        // ANTLR (working)
+        QueryLanguageLexer lexer = new QueryLanguageLexer(CharStreams.fromString("is worker and can drive(tractor) and can move"));
         QueryLanguageParser parser = new QueryLanguageParser(new CommonTokenStream(lexer));
 
-        Log.e(TAG, "ANTLR4 -> " + parser.abilitive().getText());
-        Log.e(TAG, "ANTLR4 -> " + parser.essence());
+        ParseTreeWalker.DEFAULT.walk(new QueryLanguageBaseListener() {
+            @Override
+            public void enterVariety_name(QueryLanguageParser.Variety_nameContext ctx) {
+                super.enterVariety_name(ctx);
+                Log.e(TAG, "essence name - > " + ctx.name().getText());
+            }
 
+            @Override
+            public void enterAbility_name(QueryLanguageParser.Ability_nameContext ctx) {
+                super.enterAbility_name(ctx);
+                Log.e(TAG, "ability name - > " + ctx.name().getText());
+            }
+
+        }, parser.boolean_expression());
     }
 
     void replaceFragmentWith(String fragmentTag, String filter) {

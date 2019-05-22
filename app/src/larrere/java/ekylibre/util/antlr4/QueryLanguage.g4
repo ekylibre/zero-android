@@ -5,11 +5,11 @@ boolean_expression
     ;
 
 conjonctive
-    : head=test spacer 'and' spacer operand=conjonctive | test
+    : head=test ' and ' operand=conjonctive <Conjunction> | test
     ;
 
 disjunctive
-    : head=conjonctive spacer 'or' spacer operand=disjunctive <Disjunction> | conjonctive
+    : head=conjonctive ' or ' operand=disjunctive <Disjunction> | conjonctive
     ;
 
 test
@@ -17,59 +17,59 @@ test
     ;
 
 essence
-    : 'is' spacer variety_name <EssenceTest>
+    : 'is ' variety_name <EssenceTest>
     ;
 
 non_essence
-    : 'isnt' spacer variety_name <NonEssenceTest>
+    : 'isnt ' variety_name <NonEssenceTest>
     ;
 
 derivative
-    : 'derives' spacer 'from' spacer variety_name <DerivativeTest>
+    : 'derives from ' variety_name <DerivativeTest>
     ;
 
 non_derivative
-    : 'dont' spacer 'derive' spacer 'from' spacer variety_name <DerivativeTest>
+    : 'dont derive from ' variety_name <DerivativeTest>
     ;
 
 inclusion
-    : 'includes' spacer variety_name <InclusionTest>
+    : 'includes ' variety_name <InclusionTest>
     ;
 
 indicative
-    : 'has' (spacer ('frozen' | 'variable') )? spacer 'indicator' spacer indicator_name <IndicatorTest>
+    : 'has ' ('frozen ' | 'variable ')? 'indicator ' indicator_name <IndicatorTest>
     ;
 
 abilitive
-    : 'can' spacer ability <AbilityTest>
+    : 'can ' ability <AbilityTest>
     ;
 
 ability
-    : ability_name ('(' SPACE? (ability_argument (SPACE? ',' SPACE? ability_argument)* )? SPACE? ')')?
+    : ability_name ability_parameters?
     ;
 
-//abilities_list
-//    : (ability (SPACE? ',' SPACE? ability)* )?
-//    ;
-//
-//ability_parameters
-//    : '(' SPACE? (ability_argument (SPACE? ',' SPACE? ability_argument)* )? SPACE? ')'
-//    ;
+abilities_list
+    : (ability (SPACE? ',' SPACE? ability)* )?
+    ;
+
+ability_parameters
+    : '(' SPACE* (ability_argument (SPACE* ',' SPACE* ability_argument)* )? SPACE* ')'
+    ;
 
 ability_name
-    : CHAR (CHAR|DIGIT)* ('_' (CHAR|DIGIT)+)*
+    : name <AbilityName>
     ;
 
 ability_argument
-    : CHAR (CHAR|DIGIT)* ('_' (CHAR|DIGIT)+)*
+    : name <AbilityArgument>
     ;
 
 variety_name
-    : CHAR (CHAR|DIGIT)* ('_' (CHAR|DIGIT)+)*
+    : name <VarietyName>
     ;
 
 indicator_name
-    : CHAR (CHAR|DIGIT)* ('_' (CHAR|DIGIT)+)*
+    : name <VarietyName>
     ;
 
 negative
@@ -77,15 +77,19 @@ negative
     ;
 
 negated_test
-    : spacer ability | spacer essence | spacer derivative | '(' boolean_expression ')' <BooleanExpression>
+    : spacer+ ability | spacer+ essence | spacer+ derivative | '(' boolean_expression ')' <BooleanExpression>
     ;
 
 spacer
-    : ' '+
+    : ' '
+    ;
+
+name
+    : CHAR (CHAR|DIGIT)* ('_' (CHAR|DIGIT)+)*
     ;
 
 SPACE
-    : [\r\n\t\f ]*
+    : [\r\n\t\f ]
     ;
 
 CHAR : [a-z] ;

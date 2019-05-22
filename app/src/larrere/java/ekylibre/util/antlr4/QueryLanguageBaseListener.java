@@ -160,6 +160,30 @@ public class QueryLanguageBaseListener implements QueryLanguageListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterAbilities_list(QueryLanguageParser.Abilities_listContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitAbilities_list(QueryLanguageParser.Abilities_listContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterAbility_parameters(QueryLanguageParser.Ability_parametersContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitAbility_parameters(QueryLanguageParser.Ability_parametersContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterAbility_name(QueryLanguageParser.Ability_nameContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -239,6 +263,18 @@ public class QueryLanguageBaseListener implements QueryLanguageListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitSpacer(QueryLanguageParser.SpacerContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterName(QueryLanguageParser.NameContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitName(QueryLanguageParser.NameContext ctx) { }
 
 	/**
 	 * {@inheritDoc}
