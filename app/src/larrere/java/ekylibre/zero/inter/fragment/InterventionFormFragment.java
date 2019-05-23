@@ -30,16 +30,16 @@ import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import ekylibre.database.ZeroContract.Plants;
+import ekylibre.database.ZeroContract.Equipments;
 import ekylibre.database.ZeroContract.Inputs;
 import ekylibre.database.ZeroContract.LandParcels;
-import ekylibre.database.ZeroContract.Equipments;
+import ekylibre.database.ZeroContract.Plants;
 import ekylibre.database.ZeroContract.Workers;
 import ekylibre.util.MarginTopItemDecoration;
 import ekylibre.util.Translate;
+import ekylibre.util.antlr4.Grammar;
 import ekylibre.util.layout.component.WidgetParamView;
 import ekylibre.util.pojo.GenericEntity;
-import ekylibre.util.query_language.DSL;
 import ekylibre.zero.BuildConfig;
 import ekylibre.zero.R;
 import ekylibre.zero.inter.InterActivity;
@@ -225,11 +225,14 @@ public class InterventionFormFragment extends Fragment {
             QuantityItemAdapter quantityItemAdapter = new QuantityItemAdapter(inputList, inputRecycler);
             inputRecycler.setAdapter(quantityItemAdapter);
 
-            // Updates iputList for recycler display
-            List<String> requiredAbilities = DSL.parse(entity.filter);
-            outer: for (GenericItem item : paramsList) {
 
-                Log.i(TAG, "Item [type]="+item.type+" [ref]="+item.referenceName);
+            // Updates iputList for recycler display (old way)
+//            List<String> requiredAbilities = DSL.parse(entity.filter);
+
+            // Parsing procedure required abilities with ANTLR4
+            List<String> requiredAbilities = Grammar.parse(entity.filter);
+
+            outer: for (GenericItem item : paramsList) {
 
                 // Check only selected item
                 if (item.abilities != null && item.isSelected) {
@@ -421,7 +424,7 @@ public class InterventionFormFragment extends Fragment {
         try (Cursor cursor = cr.query(Inputs.CONTENT_URI, Inputs.PROJECTION_ALL,
                 Inputs.USER + likeAccountName, null, Inputs.SORT_ORDER_DEFAULT)) {
 
-            while (cursor != null && cursor.moveToNext())
+            while (cursor != null && cursor.moveToNext()) {
                 list.add(new GenericItem(
                         cursor.getInt(0),       // ek_id
                         cursor.getString(1),    // name
@@ -430,6 +433,7 @@ public class InterventionFormFragment extends Fragment {
                         cursor.getString(5).split(","),    // abilities
                         cursor.getString(3)     // unit
                 ));
+            }
         }
         sortAlphabetically(list);
         return list;

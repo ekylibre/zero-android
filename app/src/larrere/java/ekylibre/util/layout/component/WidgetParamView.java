@@ -7,6 +7,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
 
+import androidx.annotation.StringRes;
+import androidx.constraintlayout.widget.ConstraintLayout;
+
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
@@ -15,10 +18,9 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
-import androidx.annotation.StringRes;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import ekylibre.util.antlr4.Grammar;
 import ekylibre.util.pojo.GenericEntity;
 import ekylibre.util.query_language.DSL;
 import ekylibre.zero.R;
@@ -95,9 +97,12 @@ public class WidgetParamView extends ConstraintLayout {
 
         addButton.setOnClickListener(v -> listener.onFormFragmentInteraction(type, filter));
 
+        // Old way (canopy parser)
+//        List<String> requiredAbilities = DSL.parse(filter);
+
+        List<String> requiredAbilities = Grammar.parse(filter);
 
 
-        List<String> requiredAbilities = DSL.parse(filter);
         outer: for (GenericItem item : paramList) {
             if (item.isSelected && item.abilities != null) {
                 // Check all abilities are satified

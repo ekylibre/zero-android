@@ -22,7 +22,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import ekylibre.util.query_language.DSL;
+import ekylibre.util.antlr4.Grammar;
 import ekylibre.zero.R;
 import ekylibre.zero.inter.InterActivity;
 import ekylibre.zero.inter.adapter.SelectableItemAdapter;
@@ -75,19 +75,22 @@ public class ParamChoiceFragment extends Fragment {
         dataset = new ArrayList<>();
 
         // Add each item matching required abilities, else pass
-        List<String> requiredAbilities = DSL.parse(filter);
+//        List<String> requiredAbilities = DSL.parse(filter);
+        List<String> requiredAbilities = Grammar.parse(filter);
         outer: for (GenericItem item : InterventionFormFragment.paramsList) {
             // Check all abilities are satified
             if (item.abilities != null) {
                 for (String requiredAbility : requiredAbilities) {
-                    if (!Arrays.asList(item.abilities).contains(requiredAbility)) {
-                        Log.d(TAG, "- - -");
-                        Log.d(TAG, "- - - Item ability -> " + Arrays.toString(item.abilities));
-                        Log.d(TAG, "- - - Required ability -> " + requiredAbilities);
+                    int count = 0;
+                    for (String ability : item.abilities)
+                        if (!ability.contains(requiredAbility))
+                            ++count;
+                    if (count == item.abilities.length) {
+                        Log.e(TAG, "- - - Item ability -> " + Arrays.toString(item.abilities));
+                        Log.e(TAG, "- - - Required ability -> " + requiredAbilities);
                         continue outer;
                     }
                 }
-                Log.i(TAG, "- - -");
                 Log.i(TAG, "Item ability -> " + Arrays.toString(item.abilities));
                 Log.i(TAG, "Required ability -> " + requiredAbilities);
                 // Do things with matching item
@@ -144,13 +147,16 @@ public class ParamChoiceFragment extends Fragment {
 
     private void filterList(String text) {
         dataset.clear();
-        List<String> requiredAbilities = DSL.parse(filter);
+//        List<String> requiredAbilities = DSL.parse(filter);
+        List<String> requiredAbilities = Grammar.parse(filter);
         outer: for (GenericItem item : InterventionFormFragment.paramsList) {
             // Check all abilities are satified
             if (item.abilities != null) {
                 for (String requiredAbility : requiredAbilities) {
-                    if (!Arrays.asList(item.abilities).contains(requiredAbility))
+                    if (!Arrays.asList(item.abilities).contains(requiredAbility)) {
+                        Log.e(TAG, "Filtering (skip) " + Arrays.asList(item.abilities) + "/" + requiredAbility);
                         continue outer;
+                    }
                 }
                 // Do things with matching item
                 if (text != null) {

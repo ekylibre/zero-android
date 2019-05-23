@@ -141,7 +141,7 @@ public class InterActivity extends AppCompatActivity implements FragmentManager.
 //            System.out.println(printNodeTree(result) + '\n');
 
         // ANTLR (working)
-        QueryLanguageLexer lexer = new QueryLanguageLexer(CharStreams.fromString("is worker and can drive(tractor) and can move"));
+        QueryLanguageLexer lexer = new QueryLanguageLexer(CharStreams.fromString("is worker and can move"));
         QueryLanguageParser parser = new QueryLanguageParser(new CommonTokenStream(lexer));
 
         ParseTreeWalker.DEFAULT.walk(new QueryLanguageBaseListener() {
