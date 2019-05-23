@@ -57,11 +57,9 @@ public class Input {
         if (!object.isNull("abilities")) {
             JSONArray array = object.getJSONArray("abilities");
             StringBuilder sb = new StringBuilder();
-            for (int i=0; i < array.length(); i++) {
-                sb.append(array.getString(i));
-                sb.append(",");
-            }
-            sb.append("is ").append(variety);
+            for (int i=0; i < array.length(); i++)
+                sb.append(array.getString(i)).append(",");
+            sb.append(variety);
             abilities = sb.toString();
         }
     }
