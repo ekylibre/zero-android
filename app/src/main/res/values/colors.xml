@@ -38,4 +38,7 @@
     <color name="focused_color">@color/basic_orange</color>
     <color name="another_light_grey">#EEEEEE</color>
 
+    <color name="primary_grey">#d0d0d0</color>
+
+
 </resources>

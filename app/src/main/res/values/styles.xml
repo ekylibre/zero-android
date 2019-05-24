@@ -3,17 +3,21 @@
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.MaterialComponents.Light.DarkActionBar"> <!-- Theme.AppCompat.Light.DarkActionBar -->
         <!-- Customize your theme here. -->
-        <item name="colorPrimary">#d0d0d0</item>
+        <item name="colorPrimary">@color/basic_blue</item>
         <item name="colorPrimaryDark">#000000</item>
         <item name="colorAccent">@color/basic_blue</item>
+        <item name="colorSecondary">@color/basic_blue</item>
+        <item name="colorSecondaryVariant">@color/basic_red</item>
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
     </style>
 
     <style name="AppTheme.NoActionBar" parent="Theme.MaterialComponents.Light.NoActionBar">
-        <item name="colorPrimary">#d0d0d0</item>
+        <item name="colorPrimary">@color/basic_blue</item>
         <item name="colorPrimaryDark">#000000</item>
         <item name="colorAccent">@color/basic_blue</item>
+        <item name="colorSecondary">@color/basic_blue</item>
+        <item name="colorSecondaryVariant">@color/basic_red</item>
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
     </style>
@@ -22,10 +26,10 @@
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
-    <style name="RaisedButton" parent="Theme.AppCompat.Light">
+    <style name="RaisedButton" parent="Widget.MaterialComponents.Button">
+        <item name="android:colorBackground">@color/basic_blue</item>
         <item name="colorControlHighlight">@color/pressed_state_grey</item>
-        <item name="colorButtonNormal">@color/normal_state_grey</item>
-
+        <item name="colorButtonNormal">@color/basic_blue</item>
     </style>
 
     <style name="ButtonText">
@@ -34,7 +38,7 @@
         <item name="android:textColor">#ffffff</item>
         <item name="android:gravity">center</item>
         <item name="android:layout_margin">3dp</item>
-        <item name="android:textSize">30dp</item>
+        <item name="android:textSize">30sp</item>
         <item name="android:textStyle">bold</item>
         <item name="android:shadowColor">#000000</item>
         <item name="android:shadowDx">1</item>
@@ -51,6 +55,7 @@
     <style name="ThemeToolbar">
 
         <!-- navigation icon color -->
+        <item name="android:colorBackground">@color/primary_grey</item>
         <item name="colorControlNormal">#333333</item>
 
         <!-- color of the menu overflow icon -->
