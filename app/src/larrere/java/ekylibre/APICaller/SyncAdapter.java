@@ -72,6 +72,8 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
     private ContentResolver mContentResolver;
     private AccountManager  mAccountManager;
     private Context         mContext;
+    private long lastSyncDate;
+    private String lastSyncattribute;
 
     /**
      * Set up the sync adapter
@@ -101,12 +103,9 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
     /*
     ** Get mobilePerm from SharedPreference set on settings activity
     */
-    public boolean getContactPref()
-    {
-        SharedPreferences   pref;
-
+    protected boolean getContactPref() {
+        SharedPreferences pref;
         pref = PreferenceManager.getDefaultSharedPreferences(mContext);
-
         return (pref.getBoolean(SettingsActivity.PREF_SYNC_CONTACTS, false));
     }
 
@@ -141,7 +140,13 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
             return;
         }
 
-        getContext().sendBroadcast(new Intent(UpdatableActivity.ACTION_STARTED_SYNC));
+        // Get last sync date from Shared prefs
+        SharedPreferences prefs = mContext.getSharedPreferences("prefs", Context.MODE_PRIVATE);
+        lastSyncDate = prefs.getLong("last_sync_date", 0);
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ", Locale.FRANCE);
+        lastSyncattribute = lastSyncDate > 0 ? "?modified_since=" + sdf.format(new Date(lastSyncDate)) : null;
+
+        mContext.sendBroadcast(new Intent(UpdatableActivity.ACTION_STARTED_SYNC));
 
         if (BuildConfig.DEBUG)
             Log.i(TAG, "Destruction of tables which will be resynced !");
@@ -182,7 +187,8 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
             cleanLocalDb(account);
         }
 
-        getContext().sendBroadcast(new Intent(UpdatableActivity.ACTION_FINISHED_SYNC));
+        mContext.sendBroadcast(new Intent(UpdatableActivity.ACTION_FINISHED_SYNC));
+        prefs.edit().putLong("last_sync_date", new Date().getTime()).apply();
     }
 
     private void cleanLocalDb(Account account)
@@ -199,7 +205,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
     ** There are POST and GET call
     */
 
-    public void pushIssues(Account account, Bundle extras, String authority, ContentProviderClient
+    private void pushIssues(Account account, Bundle extras, String authority, ContentProviderClient
             provider, SyncResult syncResult)
     {
         if (BuildConfig.DEBUG) Log.i(TAG, "Beginning network issues synchronization");
@@ -285,7 +291,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
         return (imageJSON);
     }
 
-    public void pullPlantDensityAbaci(Account account, Bundle extras, String authority,
+    private void pullPlantDensityAbaci(Account account, Bundle extras, String authority,
                                        ContentProviderClient provider, SyncResult syncResult)
     {
 
@@ -331,8 +337,8 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
         if (BuildConfig.DEBUG) Log.i(TAG, "Finish network plant_density_abaci synchronization");
     }
 
-    public void pullPlantDensityAbacusItem(Account account, Bundle extras, String authority,
-                                         ContentProviderClient provider, SyncResult syncResult, List<PlantDensityAbacus> abacusList) throws JSONException
+    private void pullPlantDensityAbacusItem(Account account, Bundle extras, String authority,
+                                            ContentProviderClient provider, SyncResult syncResult, List<PlantDensityAbacus> abacusList) throws JSONException
     {
 
 
@@ -364,7 +370,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
 
 
 
-    public void pullPlants(Account account, Bundle extras, String authority, ContentProviderClient
+    private void pullPlants(Account account, Bundle extras, String authority, ContentProviderClient
             provider, SyncResult syncResult)
     {
         if (BuildConfig.DEBUG) Log.i(TAG, "Beginning network plants synchronization");
@@ -373,7 +379,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
 
         List<Plant> plantsList = null;
         try {
-            plantsList = Plant.all(instance, null);
+            plantsList = Plant.all(instance, lastSyncattribute);
         } catch (JSONException | IOException | HTTPException e) {
             e.printStackTrace();
         }
@@ -399,8 +405,8 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
         if (BuildConfig.DEBUG) Log.i(TAG, "Finish network plant synchronization");
     }
 
-    public void pushPlantCounting(Account account, Bundle extras, String authority,
-                               ContentProviderClient provider, SyncResult syncResult)
+    private void pushPlantCounting(Account account, Bundle extras, String authority,
+                                   ContentProviderClient provider, SyncResult syncResult)
     {
         if (BuildConfig.DEBUG) Log.i(TAG, "Beginning network plant counting synchronization");
         Cursor cursor = mContentResolver.query(ZeroContract.PlantCountings.CONTENT_URI,
@@ -451,7 +457,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
         if (BuildConfig.DEBUG) Log.i(TAG, "Finish network synchronization");
     }
 
-    public JSONArray createPlantCountingItemJSON(Account account, Bundle extras, String authority, ContentProviderClient provider, SyncResult syncResult, int ID)
+    private JSONArray createPlantCountingItemJSON(Account account, Bundle extras, String authority, ContentProviderClient provider, SyncResult syncResult, int ID)
     {
         if (BuildConfig.DEBUG) Log.i(TAG, "Beginning network synchronization");
         Cursor cursor = mContentResolver.query(ZeroContract.PlantCountingItems.CONTENT_URI,
@@ -492,8 +498,8 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
         return (null);
     }
 
-    public void pullIntervention(Account account, Bundle extras, String authority,
-                              ContentProviderClient provider, SyncResult syncResult)
+    private void pullIntervention(Account account, Bundle extras, String authority,
+                                  ContentProviderClient provider, SyncResult syncResult)
     {
         if (BuildConfig.DEBUG) Log.i(TAG, "Beginning network intervention synchronization");
         Instance instance = getInstance(account);
@@ -747,7 +753,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
         //        .toString(cursorIntervention.getLong(0))), values, null, null);
     }
 
-    public JSONArray createCrumbs(int idIntervention)
+    protected JSONArray createCrumbs(int idIntervention)
     {
         Cursor cursor = mContentResolver.query(ZeroContract.Crumbs.CONTENT_URI,
                 ZeroContract.Crumbs.PROJECTION_ALL,
@@ -1228,7 +1234,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
 
         List<Worker> workersList = null;
         try {
-            workersList = Worker.all(instance, null);
+            workersList = Worker.all(instance, lastSyncattribute);
         } catch (JSONException | IOException | HTTPException e) {
             e.printStackTrace();
         }
@@ -1266,7 +1272,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
 
         List<LandParcel> landParcelsList = null;
         try {
-            landParcelsList = LandParcel.all(instance, null);
+            landParcelsList = LandParcel.all(instance, lastSyncattribute);
         } catch (JSONException | IOException | HTTPException e) {
             e.printStackTrace();
         }
@@ -1302,7 +1308,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
 
         List<Equipment> equipmentsList = null;
         try {
-            equipmentsList = Equipment.all(instance, null);
+            equipmentsList = Equipment.all(instance, lastSyncattribute);
         } catch (JSONException | IOException | HTTPException e) {
             e.printStackTrace();
         }
@@ -1339,8 +1345,9 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
         Instance instance = getInstance(account);
 
         List<Input> inputsList = null;
+
         try {
-            inputsList = Input.all(instance, null);
+            inputsList = Input.all(instance, lastSyncattribute);
         } catch (JSONException | IOException | HTTPException e) {
             e.printStackTrace();
         }

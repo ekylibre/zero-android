@@ -32,6 +32,12 @@ public class Input {
         if (BuildConfig.DEBUG)
             Log.d(TAG, "Get JSONArray => /api/v1/inputs || params = " + attributes);
 
+//        if (attributes != null) {
+//            JSONObject params = new JSONObject();
+//            params.put("modified_since", email);
+//        }
+
+        // TODO adds last sync date param
         JSONArray json = instance.getJSONArray("/api/v1/inputs", attributes);
         List<Input> array = new ArrayList<>();
 

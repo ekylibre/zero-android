@@ -579,7 +579,7 @@ public class ZeroProvider extends ContentProvider {
             case ROUTE_PLANT_DENSITY_ABACUS_ITEM_ITEM:
                 throw new UnsupportedOperationException("Insert not supported on URI: " + uri);
             case ROUTE_PLANT_LIST:
-                id = database.insertOrThrow(ZeroContract.PlantsColumns.TABLE_NAME, null, values);
+                id = database.insertWithOnConflict(ZeroContract.PlantsColumns.TABLE_NAME, null, values, SQLiteDatabase.CONFLICT_REPLACE);
                 result = Uri.parse(ZeroContract.Plants.CONTENT_URI + "/" + id);
                 break;
             case ROUTE_PLANT_ITEM:
