@@ -151,7 +151,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
         if (BuildConfig.DEBUG)
             Log.i(TAG, "Destruction of tables which will be resynced !");
 
-        mContentResolver.delete(ZeroContract.Plants.CONTENT_URI, null, null);
+//        mContentResolver.delete(ZeroContract.Plants.CONTENT_URI, null, null);
         mContentResolver.delete(ZeroContract.PlantDensityAbacusItems.CONTENT_URI, null, null);
         mContentResolver.delete(ZeroContract.PlantDensityAbaci.CONTENT_URI, null, null);
         mContentResolver.delete(ZeroContract.InterventionParameters.CONTENT_URI, null, null);
