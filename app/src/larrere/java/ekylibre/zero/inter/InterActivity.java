@@ -20,9 +20,6 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
-import org.antlr.v4.runtime.CharStreams;
-import org.antlr.v4.runtime.CommonTokenStream;
-import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
@@ -41,10 +38,10 @@ import ekylibre.database.ZeroContract.DetailedInterventions;
 import ekylibre.util.AccountTool;
 import ekylibre.util.ProcedureFamiliesXMLReader;
 import ekylibre.util.ProceduresXMLReader;
-import ekylibre.util.antlr4.QueryLanguageBaseListener;
-import ekylibre.util.antlr4.QueryLanguageLexer;
-import ekylibre.util.antlr4.QueryLanguageParser;
+import ekylibre.util.ontology.Node;
+import ekylibre.util.ontology.Ontology;
 import ekylibre.util.pojo.ProcedureEntity;
+import ekylibre.util.xml.XMLReader;
 import ekylibre.zero.BuildConfig;
 import ekylibre.zero.R;
 import ekylibre.zero.inter.fragment.CropParcelChoiceFragment;
@@ -91,6 +88,7 @@ public class InterActivity extends AppCompatActivity implements FragmentManager.
     public static List<CropParcel> selectedCropParcels;
     public static List<GenericItem> selectedDrivers;
 
+    public static Node<String> ontology;
     public static Map<String,List<Pair<String,String>>> families;
     public static Map<String,List<Pair<String,String>>> natures;
 
@@ -127,6 +125,17 @@ public class InterActivity extends AppCompatActivity implements FragmentManager.
         // Load procedure natures, families and params from assets
         loadXMLAssets();
 
+        try {
+            generateOntologyTree();
+            Ontology.displayTree(ontology);
+//            for (Node<String> node : ontology.getChildren())
+//                Log.i(TAG, "Node name="+node.getName()+" parent="+node.getParent());
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (XmlPullParserException e) {
+            e.printStackTrace();
+        }
+
         // Ekylibre DSL testing (canopy)
 //        List<String> grammar = DSL.parse("can drive(equipment) and can move");
 //        List<String> grammar = DSL.parse("is equipment and can move and (can store(silage) or can store(raw_matter) or can store(grass) or can store(grain) or can store_fluid)");
@@ -141,23 +150,23 @@ public class InterActivity extends AppCompatActivity implements FragmentManager.
 //            System.out.println(printNodeTree(result) + '\n');
 
         // ANTLR (working)
-        QueryLanguageLexer lexer = new QueryLanguageLexer(CharStreams.fromString("is worker and can move"));
-        QueryLanguageParser parser = new QueryLanguageParser(new CommonTokenStream(lexer));
-
-        ParseTreeWalker.DEFAULT.walk(new QueryLanguageBaseListener() {
-            @Override
-            public void enterVariety_name(QueryLanguageParser.Variety_nameContext ctx) {
-                super.enterVariety_name(ctx);
-                Log.e(TAG, "essence name - > " + ctx.name().getText());
-            }
-
-            @Override
-            public void enterAbility_name(QueryLanguageParser.Ability_nameContext ctx) {
-                super.enterAbility_name(ctx);
-                Log.e(TAG, "ability name - > " + ctx.name().getText());
-            }
-
-        }, parser.boolean_expression());
+//        QueryLanguageLexer lexer = new QueryLanguageLexer(CharStreams.fromString("is worker and can move"));
+//        QueryLanguageParser parser = new QueryLanguageParser(new CommonTokenStream(lexer));
+//
+//        ParseTreeWalker.DEFAULT.walk(new QueryLanguageBaseListener() {
+//            @Override
+//            public void enterVariety_name(QueryLanguageParser.Variety_nameContext ctx) {
+//                super.enterVariety_name(ctx);
+//                Log.e(TAG, "essence name - > " + ctx.name().getText());
+//            }
+//
+//            @Override
+//            public void enterAbility_name(QueryLanguageParser.Ability_nameContext ctx) {
+//                super.enterAbility_name(ctx);
+//                Log.e(TAG, "ability name - > " + ctx.name().getText());
+//            }
+//
+//        }, parser.boolean_expression());
     }
 
     void replaceFragmentWith(String fragmentTag, String filter) {
@@ -230,6 +239,14 @@ public class InterActivity extends AppCompatActivity implements FragmentManager.
             if (procedure.name.equals(name))
                 return procedure;
         return null;
+    }
+
+    private void generateOntologyTree() throws IOException, XmlPullParserException {
+
+        // Read db.xml to build ontology
+        InputStream inputStream = getAssets().open("db.xml");
+        ontology = new XMLReader().parse(inputStream);
+
     }
 
     private void loadXMLAssets() {

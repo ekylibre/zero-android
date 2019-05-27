@@ -22,7 +22,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import ekylibre.util.antlr4.Grammar;
 import ekylibre.util.pojo.GenericEntity;
-import ekylibre.util.query_language.DSL;
 import ekylibre.zero.R;
 import ekylibre.zero.inter.enums.ParamType.Type;
 import ekylibre.zero.inter.fragment.InterventionFormFragment.OnFragmentInteractionListener;
@@ -106,13 +105,19 @@ public class WidgetParamView extends ConstraintLayout {
         outer: for (GenericItem item : paramList) {
             if (item.isSelected && item.abilities != null) {
                 // Check all abilities are satified
-                Log.e("View", "Role [" + role + "] required abilities = " + requiredAbilities + " / item abilities = " + Arrays.asList(item.abilities));
-                for (String requiredAbility : requiredAbilities)
-                    if (!Arrays.asList(item.abilities).contains(requiredAbility))
+                Log.e("View", "item abilities = " + Arrays.asList(item.abilities));
+
+                for (String requiredAbility : requiredAbilities) {
+                    int count = 0;
+                    for (String ability : item.abilities)
+                        if (!ability.contains(requiredAbility))
+                            ++count;
+                    if (count == item.abilities.length)
                         continue outer;
+                }
+
                 // Do things with matching item
                 for (String referenceName : item.referenceName) {
-                    Log.e("View", "ref name = " + referenceName + " / procedure role = " + role);
                     if (referenceName.equals(role)) {
                         Chip chip = new Chip(context);
                         chip.setText(item.name);
@@ -132,15 +137,20 @@ public class WidgetParamView extends ConstraintLayout {
 
     private void displayOrNot(List<GenericItem> paramList, String filter) {
 
-        List<String> requiredAbilities = DSL.parse(filter);
+        List<String> requiredAbilities = Grammar.parse(filter);
 
         boolean itemCounter = false;
         outer: for (GenericItem item : paramList) {
             if (item.abilities != null) {
                 // Check all abilities are satified
-                for (String requiredAbility : requiredAbilities)
-                    if (!Arrays.asList(item.abilities).contains(requiredAbility))
+                for (String requiredAbility : requiredAbilities) {
+                    int count = 0;
+                    for (String ability : item.abilities)
+                        if (!ability.contains(requiredAbility))
+                            ++count;
+                    if (count == item.abilities.length)
                         continue outer;
+                }
                 if (item.isSelected) {
                     itemCounter = true;
                     break;
