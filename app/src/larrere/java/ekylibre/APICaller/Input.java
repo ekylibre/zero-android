@@ -7,8 +7,12 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import ekylibre.exceptions.HTTPException;
 import ekylibre.zero.BuildConfig;
@@ -19,15 +23,18 @@ import ekylibre.zero.BuildConfig;
 
 public class Input {
 
-    private static final String TAG = "Equipment";
+    private static final String TAG = "Input";
+    private static final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ", Locale.FRENCH);
+
     public int id;
     public String name;
     public String reference_name;
     public String quantity_unit_name;
     public String variety;
     public String abilities;
+    public Date deadAt;
 
-    public static List<Input> all(Instance instance, String attributes) throws JSONException, IOException, HTTPException {
+    public static List<Input> all(Instance instance, String attributes) throws JSONException, IOException, HTTPException, ParseException {
 
         if (BuildConfig.DEBUG)
             Log.d(TAG, "Get JSONArray => /api/v1/inputs || params = " + attributes);
@@ -41,7 +48,7 @@ public class Input {
         return array;
     }
 
-    private Input(JSONObject object) throws JSONException {
+    private Input(JSONObject object) throws JSONException, ParseException {
 
         if (BuildConfig.DEBUG)
             Log.d(TAG, "Object Input : " + object.toString());
@@ -53,13 +60,16 @@ public class Input {
         if (!object.isNull("variety"))
             variety = object.getString("variety");
 
+        if (!object.isNull("dead_at"))
+            deadAt = sdf.parse(object.getString("dead_at"));
+
         abilities = null;
         if (!object.isNull("abilities")) {
             JSONArray array = object.getJSONArray("abilities");
             StringBuilder sb = new StringBuilder();
             for (int i=0; i < array.length(); i++)
-                sb.append(array.getString(i)).append(",");
-            sb.append(variety);
+                sb.append("can ").append(array.getString(i)).append(",");
+            sb.append("is ").append(variety);
             abilities = sb.toString();
         }
     }

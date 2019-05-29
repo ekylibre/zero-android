@@ -38,6 +38,7 @@ import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -69,10 +70,11 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
     public static final String SYNC_STARTED = "sync_started";
     public static final String SYNC_FINISHED = "sync_finished";
 
+    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ", Locale.FRENCH);
+
     private ContentResolver mContentResolver;
     private AccountManager  mAccountManager;
     private Context         mContext;
-    private long lastSyncDate;
     private String lastSyncattribute;
 
     /**
@@ -142,7 +144,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
 
         // Get last sync date from Shared prefs
         SharedPreferences prefs = mContext.getSharedPreferences("prefs", Context.MODE_PRIVATE);
-        lastSyncDate = prefs.getLong("last_sync_date", 0);
+        long lastSyncDate = prefs.getLong("last_sync_date", 0);
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ", Locale.FRANCE);
         lastSyncattribute = lastSyncDate > 0 ? "?modified_since=" + sdf.format(new Date(lastSyncDate)) : null;
 
@@ -188,6 +190,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
         }
 
         mContext.sendBroadcast(new Intent(UpdatableActivity.ACTION_FINISHED_SYNC));
+        // Save last sync date
         prefs.edit().putLong("last_sync_date", new Date().getTime()).apply();
     }
 
@@ -252,8 +255,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
         attributes.put("gravity", cursor.getInt(2));
         attributes.put("priority", cursor.getInt(3));
         attributes.put("description", cursor.getString(5));
-        SimpleDateFormat parser = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
-        attributes.put("observed_at", parser.format(new Date(cursor.getLong(8))));
+        attributes.put("observed_at", sdf.format(new Date(cursor.getLong(8))));
         //TODO : send images to ekylibre api
         //attributes.put("images", createImageJSONArray(cursor));
         if (cursor.getDouble(9) != 0 && cursor.getDouble(10) != 0)
@@ -380,7 +382,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
         List<Plant> plantsList = null;
         try {
             plantsList = Plant.all(instance, lastSyncattribute);
-        } catch (JSONException | IOException | HTTPException e) {
+        } catch (JSONException | IOException | HTTPException | ParseException e) {
             e.printStackTrace();
         }
 
@@ -398,6 +400,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
             cv.put(ZeroContract.Plants.ACTIVITY_ID, plants.getActivityID());
             cv.put(ZeroContract.Plants.ACTIVITY_NAME, plants.getmActivityName());
             cv.put(ZeroContract.Plants.NET_SURFACE_AREA, plants.net_surface_area);
+            cv.put(ZeroContract.Plants.DEAD_AT, plants.deadAt != null ? sdf.format(plants.deadAt) : null);
             cv.put(ZeroContract.Plants.ACTIVE, true);
             cv.put(ZeroContract.Plants.USER, account.name);
             mContentResolver.insert(ZeroContract.Plants.CONTENT_URI, cv);
@@ -427,8 +430,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
                         // Post it to ekylibre
                         JSONObject attributes = new JSONObject();
                         //attributes.put("geolocation", "SRID=4326; POINT(" + Double.toString(cursor.getDouble(3)) + " " + Double.toString(cursor.getDouble(2)) + ")");
-                        SimpleDateFormat parser = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
-                        attributes.put("read_at", parser.format(new Date(cursor.getLong(1))));
+                        attributes.put("read_at", sdf.format(new Date(cursor.getLong(1))));
                         attributes.put("comment", cursor.getString(4));
                         attributes.put("plant_density_abacus_item_id", cursor.getInt(5));
                         //attributes.put("plant_density_abacus_id", cursor.getString(7));
@@ -789,8 +791,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
         JSONObject attributes = new JSONObject();
         attributes.put("nature", cursor.getString(1));
         attributes.put("geolocation", "SRID=4326; POINT(" + Double.toString(cursor.getDouble(3)) + " " + Double.toString(cursor.getDouble(2)) + ")");
-        SimpleDateFormat parser = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
-        attributes.put("read_at", parser.format(new Date(cursor.getLong(4))));
+        attributes.put("read_at", sdf.format(new Date(cursor.getLong(4))));
         attributes.put("accuracy", cursor.getString(5));
         JSONObject hash = new JSONObject();
         Uri metadata = Uri.parse("http://domain.tld?" + cursor.getString(6));
@@ -1235,7 +1236,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
         List<Worker> workersList = null;
         try {
             workersList = Worker.all(instance, lastSyncattribute);
-        } catch (JSONException | IOException | HTTPException e) {
+        } catch (JSONException | IOException | HTTPException | ParseException e) {
             e.printStackTrace();
         }
 
@@ -1251,6 +1252,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
             cv.put(ZeroContract.Workers.NUMBER, worker.number);
             cv.put(ZeroContract.Workers.QUALIFICATION, worker.qualification);
             cv.put(ZeroContract.Workers.ABILITIES, worker.abilities);
+            cv.put(ZeroContract.Workers.DEAD_AT, worker.deadAt != null ? sdf.format(worker.deadAt) : null);
             cv.put(ZeroContract.Workers.USER, account.name);
             mContentResolver.insert(ZeroContract.Workers.CONTENT_URI, cv);
         }
@@ -1273,7 +1275,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
         List<LandParcel> landParcelsList = null;
         try {
             landParcelsList = LandParcel.all(instance, lastSyncattribute);
-        } catch (JSONException | IOException | HTTPException e) {
+        } catch (JSONException | IOException | HTTPException | ParseException e) {
             e.printStackTrace();
         }
 
@@ -1287,6 +1289,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
             cv.put(ZeroContract.LandParcels.EK_ID, landParcel.id);
             cv.put(ZeroContract.LandParcels.NAME, landParcel.name);
             cv.put(ZeroContract.LandParcels.NET_SURFACE_AREA, landParcel.net_surface_area);
+            cv.put(ZeroContract.LandParcels.DEAD_AT, landParcel.deadAt != null ? sdf.format(landParcel.deadAt) : null);
             cv.put(ZeroContract.LandParcels.USER, account.name);
             mContentResolver.insert(ZeroContract.LandParcels.CONTENT_URI, cv);
         }
@@ -1309,7 +1312,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
         List<Equipment> equipmentsList = null;
         try {
             equipmentsList = Equipment.all(instance, lastSyncattribute);
-        } catch (JSONException | IOException | HTTPException e) {
+        } catch (JSONException | IOException | HTTPException | ParseException e) {
             e.printStackTrace();
         }
 
@@ -1325,6 +1328,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
             cv.put(ZeroContract.Equipments.NUMBER, equipment.number);
             cv.put(ZeroContract.Equipments.VARIETY, equipment.variety);
             cv.put(ZeroContract.Equipments.ABILITIES, equipment.abilities);
+            cv.put(ZeroContract.Equipments.DEAD_AT, equipment.deadAt != null ? sdf.format(equipment.deadAt) : null);
             cv.put(ZeroContract.Equipments.USER, account.name);
             mContentResolver.insert(ZeroContract.Equipments.CONTENT_URI, cv);
         }
@@ -1348,7 +1352,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
 
         try {
             inputsList = Input.all(instance, lastSyncattribute);
-        } catch (JSONException | IOException | HTTPException e) {
+        } catch (JSONException | IOException | HTTPException | ParseException e) {
             e.printStackTrace();
         }
 
@@ -1365,6 +1369,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
             cv.put(ZeroContract.Inputs.QUANTITY_UNIT_NAME, input.quantity_unit_name);
             cv.put(ZeroContract.Inputs.VARIETY, input.variety);
             cv.put(ZeroContract.Inputs.ABILITIES, input.abilities);
+            cv.put(ZeroContract.Inputs.DEAD_AT, input.deadAt != null ? sdf.format(input.deadAt) : null);
             cv.put(ZeroContract.Inputs.USER, account.name);
             mContentResolver.insert(ZeroContract.Inputs.CONTENT_URI, cv);
         }

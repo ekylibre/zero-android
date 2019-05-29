@@ -15,11 +15,11 @@ public class DSL {
     private static List<String> response;
 
 
-//    public static List<String> parse(String phrase) {
+//    public static List<String> computeAbilities(String phrase) {
 //
 //        response = new ArrayList<>();
 //
-//        try { TreeNode tree = QL.parse(phrase);
+//        try { TreeNode tree = QL.computeAbilities(phrase);
 //
 //            for (TreeNode node : tree.elements) {
 //                if (!node.text.equals(" ")) {

@@ -9,7 +9,10 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -23,13 +26,15 @@ import ekylibre.zero.BuildConfig;
 public class LandParcel {
 
     private static final String TAG = "LandParcel";
+    private static final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ", Locale.FRENCH);
     private static final DecimalFormat df = new DecimalFormat("###.#", DecimalFormatSymbols.getInstance(Locale.FRENCH));
 
     public int id;
     public String name;
     public String net_surface_area;
+    public Date deadAt;
 
-    public static List<LandParcel> all(Instance instance, String attributes) throws JSONException, IOException, HTTPException {
+    public static List<LandParcel> all(Instance instance, String attributes) throws JSONException, IOException, HTTPException, ParseException {
 
         if (BuildConfig.DEBUG)
             Log.d(TAG, "Get JSONArray => /api/v1/land_parcels || params = " + attributes);
@@ -43,13 +48,16 @@ public class LandParcel {
         return array;
     }
 
-    private LandParcel(JSONObject object) throws JSONException {
+    private LandParcel(JSONObject object) throws JSONException, ParseException {
 
         if (BuildConfig.DEBUG)
             Log.d(TAG, "Object LandParcel : " + object.toString());
 
         id = object.getInt("id");
         name = object.getString("name");
+
+        if (!object.isNull("dead_at"))
+            deadAt = sdf.parse(object.getString("dead_at"));
 
         if (!object.isNull("net_surface_area")) {
             JSONObject json = object.getJSONObject("net_surface_area");

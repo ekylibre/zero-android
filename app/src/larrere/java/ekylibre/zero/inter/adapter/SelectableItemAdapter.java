@@ -39,12 +39,15 @@ public class SelectableItemAdapter extends RecyclerView.Adapter<SelectableItemAd
             super(itemView);
             ButterKnife.bind(this, itemView);
             itemView.setOnClickListener(v -> {
-                item.isSelected = !item.isSelected;
-                v.setSelected(!v.isSelected());
-                if (item.isSelected)
-                    item.referenceName.add(role);
-                else
+                if (item.referenceName.contains(role)) {
+                    item.isSelected = false;
+                    v.setSelected(false);
                     item.referenceName.remove(role);
+                } else {
+                    item.isSelected = true;
+                    v.setSelected(true);
+                    item.referenceName.add(role);
+                }
                 notifyItemChanged(dataset.indexOf(item));
             });
         }
@@ -56,7 +59,7 @@ public class SelectableItemAdapter extends RecyclerView.Adapter<SelectableItemAd
 
             @ColorRes int colorId = position %2 == 1 ? R.color.another_light_grey : R.color.white;
             @ColorRes int textColor = R.color.primary_text;
-            if (item.isSelected) {
+            if (item.referenceName.contains(role)) {
                 colorId = R.color.basic_blue;
                 textColor = R.color.white;
             }

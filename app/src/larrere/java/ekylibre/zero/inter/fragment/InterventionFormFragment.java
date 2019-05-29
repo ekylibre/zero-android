@@ -23,7 +23,6 @@ import com.google.android.material.chip.ChipGroup;
 
 import java.text.Collator;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
@@ -65,6 +64,7 @@ public class InterventionFormFragment extends Fragment {
     private List<Period> periodList;
     public static List<GenericItem> paramsList;
     private static List<ItemWithQuantity> inputList;
+    private Grammar grammar;
 
     // LAYOUT BINDINGS
     @BindView(R.id.widgets_container) LinearLayoutCompat widgetContainer;
@@ -95,6 +95,8 @@ public class InterventionFormFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         if (BuildConfig.DEBUG) Log.d(TAG, "onCreate");
+
+        grammar = new Grammar();
 
         ContentResolver cr = context.getContentResolver();
 
@@ -227,10 +229,10 @@ public class InterventionFormFragment extends Fragment {
 
 
             // Updates iputList for recycler display (old way)
-//            List<String> requiredAbilities = DSL.parse(entity.filter);
+//            List<String> requiredAbilities = DSL.computeAbilities(entity.filter);
 
             // Parsing procedure required abilities with ANTLR4
-            List<String> requiredAbilities = Grammar.parse(entity.filter);
+            List<List<String>> requiredAbilities = grammar.computeAbilities(entity.filter, false);
 
             outer: for (GenericItem item : paramsList) {
 
@@ -238,25 +240,34 @@ public class InterventionFormFragment extends Fragment {
                 if (item.abilities != null && item.isSelected) {
 
                     // Go to next item if no corresponding abilities
-                    for (String requiredAbility : requiredAbilities) {
-                        if (!Arrays.asList(item.abilities).contains(requiredAbility))
+//                    for (String requiredAbility : requiredAbilities) {
+//                        if (!Arrays.asList(item.abilities).contains(requiredAbility))
+//                            continue outer;
+
+                    for (List<String> requiredAbility : requiredAbilities) {
+                        int count = 0;
+                        for (String ability : item.abilities)
+                            if (requiredAbility.contains(ability))
+                                ++count;
+                        if (count == item.abilities.length)
                             continue outer;
 
-                    // Get item if present in inputList
-                    ItemWithQuantity currentItem = null;
-                    for (ItemWithQuantity quantityItem : inputList) {
-                        if (item.id == quantityItem.id) {
-                            currentItem = quantityItem;
-                            break;
-                        }
-                    }
 
-                    // TODO : remove un-selected items...
-                    // If selected but not present, add it else, remove it
-                    if (currentItem == null)
-                        inputList.add(new ItemWithQuantity(item.id, item.name, item.type, 0f, item.unit));
-                    else if (currentItem != null && !item.isSelected)
-                        inputList.remove(currentItem);
+                        // Get item if present in inputList
+                        ItemWithQuantity currentItem = null;
+                        for (ItemWithQuantity quantityItem : inputList) {
+                            if (item.id == quantityItem.id) {
+                                currentItem = quantityItem;
+                                break;
+                            }
+                        }
+
+                        // TODO : remove un-selected items...
+                        // If selected but not present, add it else, remove it
+                        if (currentItem == null)
+                            inputList.add(new ItemWithQuantity(item.id, item.name, item.type, 0f, item.unit));
+                        else if (currentItem != null && !item.isSelected)
+                            inputList.remove(currentItem);
                     }
 
                 }
@@ -336,7 +347,7 @@ public class InterventionFormFragment extends Fragment {
 
         // Load Plants
         try (Cursor cursor = cr.query(Plants.CONTENT_URI, Plants.PROJECTION_INTER,
-                Plants.USER + likeAccountName + " AND " + Plants.ACTIVE + " == " + 1,
+                Plants.USER + likeAccountName + " AND " + Plants.ACTIVE + " == " + 1 + " AND " + Plants.DEAD_AT + " IS NULL",
                 null, Plants.SORT_ORDER_DEFAULT)) {
 
             while (cursor != null && cursor.moveToNext())
@@ -352,7 +363,7 @@ public class InterventionFormFragment extends Fragment {
 
 //        // Load Land Parcels
         try (Cursor cursor = cr.query(LandParcels.CONTENT_URI, LandParcels.PROJECTION_ALL,
-                LandParcels.USER + likeAccountName, null, LandParcels.SORT_ORDER_DEFAULT)) {
+                LandParcels.USER + likeAccountName + " AND " + LandParcels.DEAD_AT + " IS NULL", null, LandParcels.SORT_ORDER_DEFAULT)) {
 
             while (cursor != null && cursor.moveToNext())
                 list.add(new GenericItem(
@@ -375,7 +386,7 @@ public class InterventionFormFragment extends Fragment {
 
         // Load Workers
         try (Cursor cursor = cr.query(Workers.CONTENT_URI, Workers.PROJECTION_ALL,
-                Workers.USER + likeAccountName, null, Workers.SORT_ORDER_DEFAULT)) {
+                Workers.USER + likeAccountName + " AND " + Workers.DEAD_AT + " IS NULL", null, Workers.SORT_ORDER_DEFAULT)) {
 
             while (cursor != null && cursor.moveToNext())
                 list.add(new GenericItem(
@@ -398,7 +409,7 @@ public class InterventionFormFragment extends Fragment {
 
         // Load Plants
         try (Cursor cursor = cr.query(Equipments.CONTENT_URI, Equipments.PROJECTION_ALL,
-                Equipments.USER + likeAccountName, null, Equipments.SORT_ORDER_DEFAULT)) {
+                Equipments.USER + likeAccountName + " AND " + Equipments.DEAD_AT + " IS NULL", null, Equipments.SORT_ORDER_DEFAULT)) {
 
             while (cursor != null && cursor.moveToNext())
                 list.add(new GenericItem(
@@ -422,7 +433,7 @@ public class InterventionFormFragment extends Fragment {
 
         // Load Inputs
         try (Cursor cursor = cr.query(Inputs.CONTENT_URI, Inputs.PROJECTION_ALL,
-                Inputs.USER + likeAccountName, null, Inputs.SORT_ORDER_DEFAULT)) {
+                Inputs.USER + likeAccountName + " AND " + Inputs.DEAD_AT + " IS NULL", null, Inputs.SORT_ORDER_DEFAULT)) {
 
             while (cursor != null && cursor.moveToNext()) {
                 list.add(new GenericItem(

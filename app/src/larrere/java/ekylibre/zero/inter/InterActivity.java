@@ -5,6 +5,7 @@ import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.ArrayMap;
 import android.util.Log;
@@ -39,9 +40,8 @@ import ekylibre.util.AccountTool;
 import ekylibre.util.ProcedureFamiliesXMLReader;
 import ekylibre.util.ProceduresXMLReader;
 import ekylibre.util.ontology.Node;
-import ekylibre.util.ontology.Ontology;
 import ekylibre.util.pojo.ProcedureEntity;
-import ekylibre.util.xml.XMLReader;
+import ekylibre.util.ontology.XMLReader;
 import ekylibre.zero.BuildConfig;
 import ekylibre.zero.R;
 import ekylibre.zero.inter.fragment.CropParcelChoiceFragment;
@@ -125,20 +125,26 @@ public class InterActivity extends AppCompatActivity implements FragmentManager.
         // Load procedure natures, families and params from assets
         loadXMLAssets();
 
-        try {
-            generateOntologyTree();
-            Ontology.displayTree(ontology);
+        if (ontology == null) {
+            try {
+                // Read db.xml to build ontology
+                InputStream inputStream = getAssets().open("db.xml");
+//            ontology = new XMLReader().computeAbilities(inputStream);
+                new XMLReader(inputStream).execute();
+                // Result is automatically saved into ontology when finished
+//            ontology = task.get();
+
+//            Ontology.displayTree(ontology);
 //            for (Node<String> node : ontology.getChildren())
 //                Log.i(TAG, "Node name="+node.getName()+" parent="+node.getParent());
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (XmlPullParserException e) {
-            e.printStackTrace();
+            } catch (IOException e) {  // ExecutionException | InterruptedException |
+                e.printStackTrace();
+            }
         }
 
         // Ekylibre DSL testing (canopy)
-//        List<String> grammar = DSL.parse("can drive(equipment) and can move");
-//        List<String> grammar = DSL.parse("is equipment and can move and (can store(silage) or can store(raw_matter) or can store(grass) or can store(grain) or can store_fluid)");
+//        List<String> grammar = DSL.computeAbilities("can drive(equipment) and can move");
+//        List<String> grammar = DSL.computeAbilities("is equipment and can move and (can store(silage) or can store(raw_matter) or can store(grass) or can store(grain) or can store_fluid)");
 //        if (BuildConfig.DEBUG) Log.e(TAG, "GRAMMAR TEST --> " + grammar.toString());
 
         // Testing Parboiled
@@ -167,6 +173,11 @@ public class InterActivity extends AppCompatActivity implements FragmentManager.
 //            }
 //
 //        }, parser.boolean_expression());
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
     }
 
     void replaceFragmentWith(String fragmentTag, String filter) {
@@ -239,14 +250,6 @@ public class InterActivity extends AppCompatActivity implements FragmentManager.
             if (procedure.name.equals(name))
                 return procedure;
         return null;
-    }
-
-    private void generateOntologyTree() throws IOException, XmlPullParserException {
-
-        // Read db.xml to build ontology
-        InputStream inputStream = getAssets().open("db.xml");
-        ontology = new XMLReader().parse(inputStream);
-
     }
 
     private void loadXMLAssets() {
@@ -510,22 +513,10 @@ public class InterActivity extends AppCompatActivity implements FragmentManager.
 
             while (cursor != null && cursor.moveToNext())
                 Log.i(TAG, "L'enregistrement est bien en base");
-
         }
 
         // Close the activity
         finish();
-
-
-
-
-
-
-
-
-
-
-
 
 
 //        // Trying sync query

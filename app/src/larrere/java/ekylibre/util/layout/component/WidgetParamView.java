@@ -36,6 +36,7 @@ public class WidgetParamView extends ConstraintLayout {
     @BindView(R.id.widget_chips_group) ChipGroup chipGroup;
 
     private static String role;
+    private Grammar grammar;
 
     public WidgetParamView(Context context, OnFragmentInteractionListener listener,
                            GenericEntity entity, List<GenericItem> paramList) {
@@ -62,6 +63,8 @@ public class WidgetParamView extends ConstraintLayout {
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View view = Objects.requireNonNull(inflater).inflate(R.layout.widget_param_layout, this);
         ButterKnife.bind(this, view);
+
+        grammar = new Grammar();
 
 //        if(attrs == null)
 //            return;
@@ -97,9 +100,9 @@ public class WidgetParamView extends ConstraintLayout {
         addButton.setOnClickListener(v -> listener.onFormFragmentInteraction(type, filter));
 
         // Old way (canopy parser)
-//        List<String> requiredAbilities = DSL.parse(filter);
+//        List<String> requiredAbilities = DSL.computeAbilities(filter);
 
-        List<String> requiredAbilities = Grammar.parse(filter);
+        List<List<String>> requiredAbilities = grammar.computeAbilities(filter, false);
 
 
         outer: for (GenericItem item : paramList) {
@@ -107,10 +110,10 @@ public class WidgetParamView extends ConstraintLayout {
                 // Check all abilities are satified
                 Log.e("View", "item abilities = " + Arrays.asList(item.abilities));
 
-                for (String requiredAbility : requiredAbilities) {
+                for (List<String> requiredAbility : requiredAbilities) {
                     int count = 0;
                     for (String ability : item.abilities)
-                        if (!ability.contains(requiredAbility))
+                        if (requiredAbility.contains(ability))
                             ++count;
                     if (count == item.abilities.length)
                         continue outer;
@@ -125,6 +128,7 @@ public class WidgetParamView extends ConstraintLayout {
                         chip.setOnCloseIconClickListener(v -> {
                             chipGroup.removeView(chip);
                             paramList.get(paramList.indexOf(item)).isSelected = false;
+                            paramList.get(paramList.indexOf(item)).referenceName.remove(role);
                             displayOrNot(paramList, filter);
                         });
                         chipGroup.addView(chip);
@@ -137,16 +141,16 @@ public class WidgetParamView extends ConstraintLayout {
 
     private void displayOrNot(List<GenericItem> paramList, String filter) {
 
-        List<String> requiredAbilities = Grammar.parse(filter);
+        List<List<String>> requiredAbilities = grammar.computeAbilities(filter, false);
 
         boolean itemCounter = false;
         outer: for (GenericItem item : paramList) {
             if (item.abilities != null) {
                 // Check all abilities are satified
-                for (String requiredAbility : requiredAbilities) {
+                for (List<String> requiredAbility : requiredAbilities) {
                     int count = 0;
                     for (String ability : item.abilities)
-                        if (!ability.contains(requiredAbility))
+                        if (requiredAbility.contains(ability))
                             ++count;
                     if (count == item.abilities.length)
                         continue outer;

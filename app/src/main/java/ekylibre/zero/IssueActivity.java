@@ -334,9 +334,9 @@ public class IssueActivity extends UpdatableActivity
 //                // TODO: If you have web page content that matches this app activity's content,
 //                // make sure this auto-generated web page URL is correct.
 //                // Otherwise, set the URL to null.
-//                Uri.parse("http://host/path"),
+//                Uri.computeAbilities("http://host/path"),
 //                // TODO: Make sure this auto-generated app URL is correct.
-//                Uri.parse("android-app://ekylibre.zero/http/host/path")
+//                Uri.computeAbilities("android-app://ekylibre.zero/http/host/path")
 //        );
 //        AppIndex.AppIndexApi.start(client, viewAction);
     }
@@ -353,9 +353,9 @@ public class IssueActivity extends UpdatableActivity
 //                // TODO: If you have web page content that matches this app activity's content,
 //                // make sure this auto-generated web page URL is correct.
 //                // Otherwise, set the URL to null.
-//                Uri.parse("http://host/path"),
+//                Uri.computeAbilities("http://host/path"),
 //                // TODO: Make sure this auto-generated app URL is correct.
-//                Uri.parse("android-app://ekylibre.zero/http/host/path")
+//                Uri.computeAbilities("android-app://ekylibre.zero/http/host/path")
 //        );
 //        AppIndex.AppIndexApi.end(client, viewAction);
 //        client.disconnect();
