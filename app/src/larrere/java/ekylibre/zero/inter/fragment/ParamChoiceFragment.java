@@ -73,6 +73,7 @@ public class ParamChoiceFragment extends Fragment {
 
         // Load required items
         dataset = new ArrayList<>();
+        Log.i(TAG, "Filter = "+ filter);
         dataset.addAll(Grammar.getFilteredItems(filter, paramsList, null));
 
         View view;

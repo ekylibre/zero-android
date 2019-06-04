@@ -118,18 +118,9 @@ public class Grammar {
                 // Check all procedure mandatory abilities one by one
                 abilityLoop: for (List<String> extendedAbility : requiredAbilities) {
 
-                    for (String ability : item.abilities) {
-
-//                        if (ability.contains("is ")) {
-//                            List<String> extendedVarieties = computeItemAbilities(ability);
-//                            for (String extendedVariety : extendedVarieties)
-//                                if (extendedAbility.contains(extendedVariety))
-//                                    continue abilityLoop;
-//                        } else
-
+                    for (String ability : item.abilities)
                         if (extendedAbility.contains(ability))
                             continue abilityLoop;
-                    }
 
                     // If here reached, none of current extended ability variant match, skip item
                     continue itemLoop;
@@ -164,18 +155,10 @@ public class Grammar {
         ParseTreeWalker.DEFAULT.walk(new QueryLanguageBaseListener() {
 
             @Override
-            public void enterVariety_name(Variety_nameContext ctx) {
-                super.enterVariety_name(ctx);
+            public void enterEssence(QueryLanguageParser.EssenceContext ctx) {
+                super.enterEssence(ctx);
 
-//                List<String> varietyParents = Ontology.findParentsInRealm(ctx.getText());
-//                List<String> extendedVariants = new ArrayList<>();
-//
-//                for (String variety : varietyParents)
-//                    extendedVariants.add("is " + variety);
-//
-//                output.add(extendedVariants);
-
-                output.add(Collections.singletonList("is " + ctx.getText()));
+                output.add(Collections.singletonList(ctx.getText()));
 
             }
 
@@ -214,14 +197,13 @@ public class Grammar {
         ParseTreeWalker.DEFAULT.walk(new QueryLanguageBaseListener() {
 
             @Override
-            public void enterVariety_name(Variety_nameContext ctx) {
-                super.enterVariety_name(ctx);
+            public void enterEssence(QueryLanguageParser.EssenceContext ctx) {
+                super.enterEssence(ctx);
 
-                List<String> varietyParents = Ontology.findParentsInRealm(ctx.getText());
+                List<String> varietyParents = Ontology.findParentsInRealm(ctx.variety_name().getText());
 
                 for (String variety : varietyParents)
                     output.add("is " + variety);
-
             }
 
         }, parser.boolean_expression());
