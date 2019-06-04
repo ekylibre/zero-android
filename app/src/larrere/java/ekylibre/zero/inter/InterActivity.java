@@ -166,8 +166,10 @@ public class InterActivity extends AppCompatActivity implements FragmentManager.
                 fragment = InterventionFormFragment.newInstance();
                 break;
 
-            case CROP_CHOICE_FRAGMENT:
-                fragment = CropParcelChoiceFragment.newInstance();
+            case "plant":
+            case "land_parcel":
+            case "cultivation":
+                fragment = CropParcelChoiceFragment.newInstance(fragmentTag, filter);
                 break;
 
 //            case INPUT_CHOICE_FRAGMENT:

@@ -11,6 +11,7 @@ import android.view.inputmethod.InputMethodManager;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.StringRes;
 import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -24,8 +25,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ekylibre.zero.R;
+import ekylibre.zero.home.Zero;
 import ekylibre.zero.inter.InterActivity;
 import ekylibre.zero.inter.adapter.CropParcelAdapter;
+import ekylibre.zero.inter.enums.ParamType;
 import ekylibre.zero.inter.model.GenericItem;
 
 import static ekylibre.zero.inter.enums.ParamType.LAND_PARCEL;
@@ -34,6 +37,11 @@ import static ekylibre.zero.inter.enums.ParamType.PLANT;
 
 public class CropParcelChoiceFragment extends Fragment {
 
+    private static final String TAG = "ParcelChoiceFragment";
+
+    @ParamType.Type
+    private String paramType;
+    private String filter;
     private List<GenericItem> dataset;
     private CropParcelAdapter adapter;
     private Context context;
@@ -46,21 +54,35 @@ public class CropParcelChoiceFragment extends Fragment {
     public CropParcelChoiceFragment() {
     }
 
-    public static CropParcelChoiceFragment newInstance() {
-        return new CropParcelChoiceFragment();
+    public static CropParcelChoiceFragment newInstance(String param, String filter) {
+
+        CropParcelChoiceFragment fragment = new CropParcelChoiceFragment();
+        Bundle args = new Bundle();
+        args.putString("param_type", param);
+        args.putString("filter", filter);
+        fragment.setArguments(args);
+        return fragment;
     }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         context = getContext();
+        if (getArguments() != null) {
+            paramType = getArguments().getString("param_type");
+            filter = getArguments().getString("filter");
+            Log.i(TAG, "Parcel type = " + paramType);
+        }
     }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        InterActivity.actionBar.setTitle("Choix des cultures/parcelles");
+        @StringRes
+        final int labelRes = getResources().getIdentifier(paramType + "_label", "string", Zero.getPkgName());
+        InterActivity.actionBar.setTitle(labelRes);
+
         View view = inflater.inflate(R.layout.fragment_crop_parcel, container, false);
 
         dataset = new ArrayList<>();
@@ -71,16 +93,23 @@ public class CropParcelChoiceFragment extends Fragment {
         recyclerView.setAdapter(adapter);
 
         TabLayout tabLayout = view.findViewById(R.id.tab_crop_parcel);
-        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
-            @Override public void onTabSelected(TabLayout.Tab tab) {
-                queryDatabaseForList(tab.getPosition());
-            }
-            @Override public void onTabUnselected(TabLayout.Tab tab) { }
-            @Override public void onTabReselected(TabLayout.Tab tab) { }
-        });
 
+        if (paramType.equals("cultivation")) {
+            tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+                @Override public void onTabUnselected(TabLayout.Tab tab) {}
+                @Override public void onTabReselected(TabLayout.Tab tab) {}
+                @Override public void onTabSelected(TabLayout.Tab tab) {
+                    queryDatabaseForList(tab.getPosition());
+                }
+            });
+            tabLayout.setVisibility(View.VISIBLE);
+        } else {
+            tabLayout.setVisibility(View.GONE);
+        }
+
+//        currentTab = paramType.equals("parcel") ? LAND_PARCEL : PLANT;
         // Query data for first tab
-        queryDatabaseForList(0);
+        queryDatabaseForList(paramType.equals("parcel") ? 1 : 0);
 
         // SeachField logic
         SearchView searchView = view.findViewById(R.id.search_field);

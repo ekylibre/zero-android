@@ -127,9 +127,9 @@ public class InterventionFormFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_intervention_form, container, false);
         ButterKnife.bind(this, view);
 
-        // ------------- //
-        // Period layout //
-        // ------------- //
+        // ------------------ //
+        // Time Period layout //
+        // ------------------ //
 
         // Set RecyclerView and associated Adapter
         periodRecycler.setLayoutManager(new LinearLayoutManager(context));
@@ -164,8 +164,11 @@ public class InterventionFormFragment extends Fragment {
 
 //                case "cultivation":
 
+            // Inflate the layout
             View cropParcelView = inflater.inflate(R.layout.widget_param_layout, container, false);
             TextView label = cropParcelView.findViewById(R.id.widget_label);
+
+            // Set the title
             if (target.name.equals("cultivation"))
                 label.setText(R.string.crop_parcel);
             else {
@@ -174,7 +177,7 @@ public class InterventionFormFragment extends Fragment {
             }
             TextView addButton = cropParcelView.findViewById(R.id.widget_add);
             ChipGroup cropChipGroup = cropParcelView.findViewById(R.id.widget_chips_group);
-            addButton.setOnClickListener(v -> listener.onFormFragmentInteraction(CROP_CHOICE_FRAGMENT, target.filter));
+            addButton.setOnClickListener(v -> listener.onFormFragmentInteraction(target.name, target.filter));  // CROP_CHOICE_FRAGMENT
 
             // ChipGroup Logic
             for (GenericItem item : paramsList) {
@@ -299,7 +302,7 @@ public class InterventionFormFragment extends Fragment {
         // Load Plants
         try (Cursor cursor = cr.query(Plants.CONTENT_URI, Plants.PROJECTION_INTER,
                 Plants.USER + likeAccountName + " AND " + Plants.ACTIVE + " == " + 1 + " AND " + Plants.DEAD_AT + " IS NULL",
-                null, Plants.SORT_ORDER_DEFAULT)) {
+                null, Plants.SORT_ORDER_NAME)) {
 
             while (cursor != null && cursor.moveToNext())
                 list.add(new GenericItem(

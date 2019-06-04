@@ -456,6 +456,7 @@ public final class ZeroContract {
         public static final String[] PROJECTION_NONE = {_ID};
 
         public static final String SORT_ORDER_DEFAULT = _ID + " ASC";
+        public static final String SORT_ORDER_NAME = NAME + " ASC";
     }
 
     public static final class Contacts implements ContactsColumns

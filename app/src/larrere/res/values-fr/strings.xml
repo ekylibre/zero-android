@@ -448,6 +448,9 @@
     <string name="begin">Début</string>
     <string name="end">Fin</string>
     <string name="at">à</string>
+    <string name="plant_label">Choix des cultures</string>
+    <string name="land_parcel_label">Choix des parcelles</string>
+    <string name="cultivation_label">Choix des cultures/parcelles</string>
 
     <!-- Units -->
     <string name="acre">acre</string>
