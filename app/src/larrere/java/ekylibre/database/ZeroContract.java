@@ -263,12 +263,14 @@ public final class ZeroContract {
         String USER = "user";
     }
 
-    public interface OutputColumns extends BaseColumns {
-        String TABLE_NAME = "outputs";
+    public interface OutputColumns {
+        String TABLE_NAME = "inputs";
         String EK_ID = "ek_id";
         String NAME = "name";
         String REFERENCE_NAME = "reference_name";
         String QUANTITY_UNIT_NAME = "quantity_unit_name";
+        String VARIETY = "variety";
+        String ABILITIES = "abilities";
         String DEAD_AT = "dead_at";
         String USER = "user";
     }
@@ -657,7 +659,7 @@ public final class ZeroContract {
         public static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE +
                 "/vnd.ekylibre.zero.outputs";
 
-        public static final String[] PROJECTION_ALL = {_ID, EK_ID, NAME, REFERENCE_NAME , QUANTITY_UNIT_NAME, USER, DEAD_AT};
+        public static final String[] PROJECTION_ALL = {EK_ID, NAME, REFERENCE_NAME , QUANTITY_UNIT_NAME, VARIETY, ABILITIES, USER, DEAD_AT};
 
         public static final String SORT_ORDER_DEFAULT = NAME + " ASC";
     }

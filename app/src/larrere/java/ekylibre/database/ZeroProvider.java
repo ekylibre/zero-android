@@ -72,10 +72,12 @@ public class ZeroProvider extends ContentProvider {
     public static final int ROUTE_LAND_PARCELS_ITEM = 1507;
     public static final int ROUTE_INPUTS_LIST = 1508;
     public static final int ROUTE_INPUTS_ITEM = 1509;
-    public static final int ROUTE_DETAILED_INTERVENTIONS_LIST = 1510;
-    public static final int ROUTE_DETAILED_INTERVENTIONS_ITEM = 1511;
-    public static final int ROUTE_DETAILED_INTERVENTION_ATTRIBUTES_LIST = 1512;
-    public static final int ROUTE_DETAILED_INTERVENTION_ATTRIBUTES_ITEM = 1513;
+    public static final int ROUTE_OUTPUTS_LIST = 1510;
+    public static final int ROUTE_OUTPUTS_ITEM = 1511;
+    public static final int ROUTE_DETAILED_INTERVENTIONS_LIST = 1512;
+    public static final int ROUTE_DETAILED_INTERVENTIONS_ITEM = 1513;
+    public static final int ROUTE_DETAILED_INTERVENTION_ATTRIBUTES_LIST = 1514;
+    public static final int ROUTE_DETAILED_INTERVENTION_ATTRIBUTES_ITEM = 1515;
 
     // UriMatcher, used to decode incoming URIs.
     private static final UriMatcher URI_MATCHER = new UriMatcher(UriMatcher.NO_MATCH);
@@ -125,6 +127,8 @@ public class ZeroProvider extends ContentProvider {
         URI_MATCHER.addURI(ZeroContract.AUTHORITY, "land_parcels/#", ROUTE_LAND_PARCELS_ITEM);
         URI_MATCHER.addURI(ZeroContract.AUTHORITY, "inputs", ROUTE_INPUTS_LIST);
         URI_MATCHER.addURI(ZeroContract.AUTHORITY, "inputs/#", ROUTE_INPUTS_ITEM);
+        URI_MATCHER.addURI(ZeroContract.AUTHORITY, "outputs", ROUTE_OUTPUTS_LIST);
+        URI_MATCHER.addURI(ZeroContract.AUTHORITY, "outputs/#", ROUTE_OUTPUTS_ITEM);
         URI_MATCHER.addURI(ZeroContract.AUTHORITY, "detailed_interventions", ROUTE_DETAILED_INTERVENTIONS_LIST);
         URI_MATCHER.addURI(ZeroContract.AUTHORITY, "detailed_interventions/#", ROUTE_DETAILED_INTERVENTION_ATTRIBUTES_ITEM);
         URI_MATCHER.addURI(ZeroContract.AUTHORITY, "detailed_intervention_attributes", ROUTE_DETAILED_INTERVENTION_ATTRIBUTES_LIST);
@@ -234,6 +238,10 @@ public class ZeroProvider extends ContentProvider {
             case ROUTE_INPUTS_LIST:
             case ROUTE_INPUTS_ITEM:
                 return ZeroContract.Inputs.CONTENT_TYPE;
+
+            case ROUTE_OUTPUTS_LIST:
+            case ROUTE_OUTPUTS_ITEM:
+                return ZeroContract.Outputs.CONTENT_TYPE;
 
             case ROUTE_DETAILED_INTERVENTIONS_LIST:
             case ROUTE_DETAILED_INTERVENTIONS_ITEM:
@@ -496,6 +504,16 @@ public class ZeroProvider extends ContentProvider {
                 cursor.setNotificationUri(contentResolver, uri);
                 return cursor;
 
+            case ROUTE_OUTPUTS_ITEM:
+                id = uri.getLastPathSegment();
+                builder.where(ZeroContract.Outputs.EK_ID + "=?", id);
+            case ROUTE_OUTPUTS_LIST:
+                builder.table(ZeroContract.Outputs.TABLE_NAME)
+                        .where(selection, selectionArgs);
+                cursor = builder.query(database, projection, sortOrder);
+                cursor.setNotificationUri(contentResolver, uri);
+                return cursor;
+
             case ROUTE_DETAILED_INTERVENTIONS_ITEM:
                 id = uri.getLastPathSegment();
                 builder.where(ZeroContract.DetailedInterventions._ID + "=?", id);
@@ -682,6 +700,13 @@ public class ZeroProvider extends ContentProvider {
                 result = Uri.parse(ZeroContract.Inputs.CONTENT_URI + "/" + id);
                 break;
             case ROUTE_INPUTS_ITEM:
+                throw new UnsupportedOperationException("Insert not supported on URI: " + uri);
+
+            case ROUTE_OUTPUTS_LIST:
+                id = database.insertWithOnConflict(ZeroContract.Outputs.TABLE_NAME, null, values, SQLiteDatabase.CONFLICT_REPLACE);
+                result = Uri.parse(ZeroContract.Outputs.CONTENT_URI + "/" + id);
+                break;
+            case ROUTE_OUTPUTS_ITEM:
                 throw new UnsupportedOperationException("Insert not supported on URI: " + uri);
 
             case ROUTE_DETAILED_INTERVENTIONS_LIST:
@@ -974,6 +999,18 @@ public class ZeroProvider extends ContentProvider {
             case ROUTE_INPUTS_ITEM:
                 count = builder.table(ZeroContract.Inputs.TABLE_NAME)
                         .where(ZeroContract.Inputs.EK_ID + "=?", id)
+                        .where(selection, selectionArgs)
+                        .delete(database);
+                break;
+
+            case ROUTE_OUTPUTS_LIST:
+                count = builder.table(ZeroContract.Outputs.TABLE_NAME)
+                        .where(selection, selectionArgs)
+                        .delete(database);
+                break;
+            case ROUTE_OUTPUTS_ITEM:
+                count = builder.table(ZeroContract.Outputs.TABLE_NAME)
+                        .where(ZeroContract.Outputs.EK_ID + "=?", id)
                         .where(selection, selectionArgs)
                         .delete(database);
                 break;
@@ -1307,6 +1344,19 @@ public class ZeroProvider extends ContentProvider {
                 id = uri.getLastPathSegment();
                 count = builder.table(ZeroContract.Inputs.TABLE_NAME)
                         .where(ZeroContract.Inputs.EK_ID + "=?", id)
+                        .where(selection, selectionArgs)
+                        .update(database, values);
+                break;
+
+            case ROUTE_OUTPUTS_LIST:
+                count = builder.table(ZeroContract.Outputs.TABLE_NAME)
+                        .where(selection, selectionArgs)
+                        .update(database, values);
+                break;
+            case ROUTE_OUTPUTS_ITEM:
+                id = uri.getLastPathSegment();
+                count = builder.table(ZeroContract.Outputs.TABLE_NAME)
+                        .where(ZeroContract.Outputs.EK_ID + "=?", id)
                         .where(selection, selectionArgs)
                         .update(database, values);
                 break;
