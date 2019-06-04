@@ -3,8 +3,10 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <application
+        android:name="ekylibre.zero.home.Zero"
         android:label="@string/app_name"
         tools:ignore="AllowBackup,GoogleAppIndexingWarning">
+
         <activity android:name="ekylibre.zero.inter.InterActivity" />
         <!-- TODO handle GoogleAppIndexing -->
         <activity

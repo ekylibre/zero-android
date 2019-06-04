@@ -39,7 +39,6 @@ public class ParamChoiceFragment extends Fragment {
     private Context context;
     private List<GenericItem> dataset;
     private SelectableItemAdapter adapter;
-    private Grammar grammar;
 
     public ParamChoiceFragment() {}
 
@@ -56,7 +55,6 @@ public class ParamChoiceFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         context = getContext();
-        grammar = new Grammar();
         if (getArguments() != null) {
             paramType = getArguments().getString("param_type");
             filter = getArguments().getString("filter");
@@ -72,33 +70,9 @@ public class ParamChoiceFragment extends Fragment {
         int titleRes = getResources().getIdentifier(paramType, "string", context.getPackageName());
         InterActivity.actionBar.setTitle(titleRes);
 
-        // Filter list
+        // Load required items
         dataset = new ArrayList<>();
-        dataset.addAll(grammar.getFilteredItems(filter, paramsList, null));
-
-//        // Add each item matching required abilities, else pass
-////        List<String> requiredAbilities = DSL.computeAbilities(filter);
-//        List<String> requiredAbilities = Grammar.computeAbilities(filter, false);
-//        outer: for (GenericItem item : InterventionFormFragment.paramsList) {
-//            // Check all abilities are satified
-//            if (item.abilities != null) {
-//                for (String requiredAbility : requiredAbilities) {
-//                    int count = 0;
-//                    for (String ability : item.abilities)
-//                        if (!ability.contains(requiredAbility))
-//                            ++count;
-//                    if (count == item.abilities.length) {
-////                        Log.i(TAG, "- - - Item ability -> " + Arrays.toString(item.abilities));
-////                        Log.e(TAG, "- - - Required ability -> " + requiredAbilities);
-//                        continue outer;
-//                    }
-//                }
-//                Log.i(TAG, "Item ability -> " + Arrays.toString(item.abilities));
-//                Log.i(TAG, "Required ability -> " + requiredAbilities);
-//                // Do things with matching item
-//                dataset.add(item);
-//            }
-//        }
+        dataset.addAll(Grammar.getFilteredItems(filter, paramsList, null));
 
         View view;
         if (dataset.isEmpty()) {
@@ -117,13 +91,17 @@ public class ParamChoiceFragment extends Fragment {
             searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
                 @Override
                 public boolean onQueryTextSubmit(String text) {
-                    dataset = grammar.getFilteredItems(filter, paramsList, text);
+                    dataset.clear();
+                    dataset.addAll(Grammar.getFilteredItems(filter, paramsList, text));
+                    Log.i(TAG, "dataset = "+dataset);
                     adapter.notifyDataSetChanged();
+                    Log.e(TAG, "dataset changed");
                     return false;
                 }
                 @Override
                 public boolean onQueryTextChange(String text) {
-                    dataset = grammar.getFilteredItems(filter, paramsList, text.length() > 1 ? text : null);
+                    dataset.clear();
+                    dataset.addAll(Grammar.getFilteredItems(filter, paramsList, text.length() > 1 ? text : null));
                     adapter.notifyDataSetChanged();
                     return false;
                 }
@@ -131,7 +109,7 @@ public class ParamChoiceFragment extends Fragment {
 
             searchView.setOnCloseListener(() -> {
                 // Reset search
-                dataset = grammar.getFilteredItems(filter, paramsList, null);
+                dataset = Grammar.getFilteredItems(filter, paramsList, null);
                 adapter.notifyDataSetChanged();
                 searchView.clearFocus();
                 InputMethodManager imm = (InputMethodManager) context.getSystemService(Activity.INPUT_METHOD_SERVICE);
@@ -146,33 +124,6 @@ public class ParamChoiceFragment extends Fragment {
 
         return view;
     }
-
-//    private void filterList(String text) {
-//        dataset.clear();
-////        List<String> requiredAbilities = DSL.computeAbilities(filter);
-//        List<String> requiredAbilities = Grammar.computeAbilities(filter, false);
-//        outer: for (GenericItem item : InterventionFormFragment.paramsList) {
-//            // Check all abilities are satified
-//            if (item.abilities != null) {
-//                for (String requiredAbility : requiredAbilities) {
-//                    if (!Arrays.asList(item.abilities).contains(requiredAbility)) {
-//                        Log.e(TAG, "Filtering (skip) " + Arrays.asList(item.abilities) + "/" + requiredAbility);
-//                        continue outer;
-//                    }
-//                }
-//                // Do things with matching item
-//                if (text != null) {
-//                    String filterText = StringUtils.stripAccents(text.toLowerCase());
-//                    String name = StringUtils.stripAccents(item.name.toLowerCase());
-//                    String number = StringUtils.stripAccents(item.number.toLowerCase());
-//                    if (name.contains(filterText) || number.contains(filterText))
-//                        dataset.add(item);
-//                } else
-//                    dataset.add(item);
-//            }
-//        }
-//        adapter.notifyDataSetChanged();
-//    }
 
     // TODO : hide keyboard on click outside
     private static void hideKeyboard(Context context, View view) {

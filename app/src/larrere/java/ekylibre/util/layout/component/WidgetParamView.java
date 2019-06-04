@@ -2,7 +2,6 @@ package ekylibre.util.layout.component;
 
 import android.content.Context;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
@@ -14,35 +13,36 @@ import com.google.android.material.button.MaterialButton;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import ekylibre.util.antlr4.Grammar;
 import ekylibre.util.pojo.GenericEntity;
 import ekylibre.zero.R;
-import ekylibre.zero.inter.enums.ParamType.Type;
+import ekylibre.zero.home.Zero;
 import ekylibre.zero.inter.fragment.InterventionFormFragment.OnFragmentInteractionListener;
 import ekylibre.zero.inter.model.GenericItem;
 
 
 public class WidgetParamView extends ConstraintLayout {
 
+    private static final String TAG = "WidgetParamView";
+
+    // @BindView(R.id.widget_icon) ImageView iconView;
     @BindView(R.id.widget_label) TextView labelView;
-//    @BindView(R.id.widget_icon) ImageView iconView;
     @BindView(R.id.widget_add) MaterialButton addButton;
     @BindView(R.id.widget_chips_group) ChipGroup chipGroup;
 
-    private static String role;
-    private Grammar grammar;
+    private List<GenericItem> paramList;
+    private GenericEntity procedure;
 
     public WidgetParamView(Context context, OnFragmentInteractionListener listener,
-                           GenericEntity entity, List<GenericItem> paramList) {
+                           GenericEntity procedure, List<GenericItem> paramList) {
         super(context);
-        role = entity.name;
-        init(context, listener, entity.name, entity.filter, paramList);
+        this.paramList = paramList;
+        this.procedure = procedure;
+        init(context, listener);
     }
 
     public WidgetParamView(Context context, AttributeSet attrs) {
@@ -53,18 +53,14 @@ public class WidgetParamView extends ConstraintLayout {
         super(context, attrs, defStyleAttr);
     }
 
-//    public WidgetParamView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
-//        super(context, attrs, defStyleAttr, defStyleRes);
-//    }
+    public void init(Context context, OnFragmentInteractionListener listener) {
 
-    public void init(Context context, OnFragmentInteractionListener listener, @Type String type,
-                     String filter, List<GenericItem> paramList) {
-
+        // Inflate layout
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View view = Objects.requireNonNull(inflater).inflate(R.layout.widget_param_layout, this);
-        ButterKnife.bind(this, view);
 
-        grammar = new Grammar();
+        // Bind Butterknife to created view
+        ButterKnife.bind(this, view);
 
 //        if(attrs == null)
 //            return;
@@ -81,10 +77,8 @@ public class WidgetParamView extends ConstraintLayout {
 //
 //        ta.recycle();
 
-        final String packageName = context.getPackageName();
-
         @StringRes
-        final int labelRes = getResources().getIdentifier(type, "string", packageName);
+        final int labelRes = getResources().getIdentifier(procedure.name, "string", Zero.getPkgName());
 //
 //        @DrawableRes
 //        final int iconRes = getResources().getIdentifier("icon_" + type, "drawable", packageName);
@@ -94,74 +88,40 @@ public class WidgetParamView extends ConstraintLayout {
 ////                iconRes = driverList.contains(type) ? R.drawable.icon_driver
 ////        }
 //
+        // iconView.setImageResource(iconRes);
         labelView.setText(labelRes);
-//        iconView.setImageResource(iconRes);
+        addButton.setOnClickListener(v -> listener.onFormFragmentInteraction(procedure.name, procedure.filter));
 
-        addButton.setOnClickListener(v -> listener.onFormFragmentInteraction(type, filter));
-
-        // Old way (canopy parser)
-//        List<String> requiredAbilities = DSL.computeAbilities(filter);
-
-        List<List<String>> requiredAbilities = grammar.computeAbilities(filter, false);
-
-
-        outer: for (GenericItem item : paramList) {
-            if (item.isSelected && item.abilities != null) {
-                // Check all abilities are satified
-                Log.e("View", "item abilities = " + Arrays.asList(item.abilities));
-
-                for (List<String> requiredAbility : requiredAbilities) {
-                    int count = 0;
-                    for (String ability : item.abilities)
-                        if (requiredAbility.contains(ability))
-                            ++count;
-                    if (count == item.abilities.length)
-                        continue outer;
-                }
-
-                // Do things with matching item
-                for (String referenceName : item.referenceName) {
-                    if (referenceName.equals(role)) {
-                        Chip chip = new Chip(context);
-                        chip.setText(item.name);
-                        chip.setCloseIconVisible(true);
-                        chip.setOnCloseIconClickListener(v -> {
-                            chipGroup.removeView(chip);
-                            paramList.get(paramList.indexOf(item)).isSelected = false;
-                            paramList.get(paramList.indexOf(item)).referenceName.remove(role);
-                            displayOrNot(paramList, filter);
-                        });
-                        chipGroup.addView(chip);
-                    }
-                }
+        for (GenericItem item : paramList) {
+            if (item.referenceName.contains(procedure.name)) {
+                Chip chip = new Chip(context);
+                chip.setText(item.name);
+                chip.setCloseIconVisible(true);
+                chip.setOnCloseIconClickListener(v -> {
+                    // Remove chip
+                    chipGroup.removeView(chip);
+                    // Remove current procedure in item referenceName list
+                    paramList.get(paramList.indexOf(item)).referenceName.remove(procedure.name);
+                    // Check whether to display or not
+                    displayOrNot(paramList);
+                });
+                chipGroup.addView(chip);
             }
         }
-        displayOrNot(paramList, filter);
+        displayOrNot(paramList);
     }
 
-    private void displayOrNot(List<GenericItem> paramList, String filter) {
+    private void displayOrNot(List<GenericItem> filteredItems) {
 
-        List<List<String>> requiredAbilities = grammar.computeAbilities(filter, false);
+        int visibility = View.GONE;
 
-        boolean itemCounter = false;
-        outer: for (GenericItem item : paramList) {
-            if (item.abilities != null) {
-                // Check all abilities are satified
-                for (List<String> requiredAbility : requiredAbilities) {
-                    int count = 0;
-                    for (String ability : item.abilities)
-                        if (requiredAbility.contains(ability))
-                            ++count;
-                    if (count == item.abilities.length)
-                        continue outer;
-                }
-                if (item.isSelected) {
-                    itemCounter = true;
-                    break;
-                }
+        for (GenericItem item : filteredItems)
+            if (item.referenceName.contains(procedure.name)) {
+                visibility = View.VISIBLE;
+                break;
             }
-        }
-        chipGroup.setVisibility(itemCounter ? View.VISIBLE : View.GONE);
+
+        chipGroup.setVisibility(visibility);
     }
 
 }

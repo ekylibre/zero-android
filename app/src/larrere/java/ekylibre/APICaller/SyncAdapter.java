@@ -55,6 +55,7 @@ import ekylibre.util.Contact;
 import ekylibre.util.DateConstant;
 import ekylibre.util.ImageConverter;
 import ekylibre.util.UpdatableActivity;
+import ekylibre.util.ontology.Ontology;
 import ekylibre.zero.BuildConfig;
 import ekylibre.zero.SettingsActivity;
 import ekylibre.zero.intervention.InterventionActivity;
@@ -86,7 +87,6 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
         mContentResolver = context.getContentResolver();
         mAccountManager = AccountManager.get(context);
         mContext = context;
-
     }
 
     /**

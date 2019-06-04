@@ -166,8 +166,6 @@ public class InterventionFormFragment extends Fragment {
 
 //                case "cultivation":
 
-            Log.e(TAG, target.filter);
-
             View cropParcelView = inflater.inflate(R.layout.widget_param_layout, container, false);
             TextView label = cropParcelView.findViewById(R.id.widget_label);
             if (target.name.equals("cultivation"))
@@ -224,75 +222,32 @@ public class InterventionFormFragment extends Fragment {
             RecyclerView inputRecycler = inputView.findViewById(R.id.widget_recycler);
             inputRecycler.setLayoutManager(new LinearLayoutManager(context));
             inputRecycler.addItemDecoration(new MarginTopItemDecoration(context, 16));
-            QuantityItemAdapter quantityItemAdapter = new QuantityItemAdapter(inputList, inputRecycler);
+            QuantityItemAdapter quantityItemAdapter = new QuantityItemAdapter(inputList, inputRecycler, entity.name);
             inputRecycler.setAdapter(quantityItemAdapter);
 
+            // Loop over all items availables for this role
+            List<GenericItem> filteredItems = grammar.getFilteredItems(entity.filter, paramsList, null);
+            for (GenericItem item : filteredItems) {
 
-            // Updates iputList for recycler display (old way)
-//            List<String> requiredAbilities = DSL.computeAbilities(entity.filter);
+                ItemWithQuantity currentItem = null;
 
-            // Parsing procedure required abilities with ANTLR4
-            List<List<String>> requiredAbilities = grammar.computeAbilities(entity.filter, false);
-
-            outer: for (GenericItem item : paramsList) {
-
-                // Check only selected item
-                if (item.abilities != null && item.isSelected) {
-
-                    // Go to next item if no corresponding abilities
-//                    for (String requiredAbility : requiredAbilities) {
-//                        if (!Arrays.asList(item.abilities).contains(requiredAbility))
-//                            continue outer;
-
-                    for (List<String> requiredAbility : requiredAbilities) {
-                        int count = 0;
-                        for (String ability : item.abilities)
-                            if (requiredAbility.contains(ability))
-                                ++count;
-                        if (count == item.abilities.length)
-                            continue outer;
-
-
-                        // Get item if present in inputList
-                        ItemWithQuantity currentItem = null;
-                        for (ItemWithQuantity quantityItem : inputList) {
-                            if (item.id == quantityItem.id) {
-                                currentItem = quantityItem;
-                                break;
-                            }
-                        }
-
-                        // TODO : remove un-selected items...
-                        // If selected but not present, add it else, remove it
-                        if (currentItem == null)
-                            inputList.add(new ItemWithQuantity(item.id, item.name, item.type, 0f, item.unit));
-                        else if (currentItem != null && !item.isSelected)
-                            inputList.remove(currentItem);
+                // Get it if present in inputList
+                for (ItemWithQuantity quantityItem : inputList) {
+                    if (item.id == quantityItem.id) {
+                        currentItem = quantityItem;
+                        break;
                     }
-
                 }
-            }
 
-//            for (GenericItem item : paramsList) {
-//                // Check we have an input
-//                if (entity.name.equals(item.type)) {
-//                    // Get item if present in inputList
-//                    ItemWithQuantity currentItem = null;
-//                    for (ItemWithQuantity quantityItem : inputList) {
-//                        if (item.id == quantityItem.id) {
-//                            currentItem = quantityItem;
-//                            break;
-//                        }
-//                    }
-//
-//                    // If selected but not present, add it else, remove it
-//                    if (item.isSelected && currentItem == null)
-//                        inputList.add(new ItemWithQuantity(item.id, item.name, item.type, 0f, item.unit));
-//                    else if (currentItem != null && !item.isSelected)
-//                        inputList.remove(currentItem);
-//
-//                }
-//            }
+                if (item.referenceName.contains(entity.name) && currentItem == null) {
+                    // If selected but not present, add it else, remove it
+                    inputList.add(new ItemWithQuantity(item.id, item.name, item.type, 0f, item.unit));
+
+                } else if (currentItem != null) {
+                    inputList.remove(currentItem);
+                }
+
+            }
 
             if (inputList.isEmpty())
                 inputRecycler.setVisibility(View.GONE);

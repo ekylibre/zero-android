@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Locale;
 
 import ekylibre.exceptions.HTTPException;
+import ekylibre.util.antlr4.Grammar;
 import ekylibre.zero.BuildConfig;
 
 /**
@@ -62,12 +63,46 @@ public class Equipment {
 
         abilities = null;
         if (!object.isNull("abilities")) {
+            // Fill abilities
             JSONArray array = object.getJSONArray("abilities");
             StringBuilder sb = new StringBuilder();
             for (int i=0; i < array.length(); i++)
                 sb.append("can ").append(array.getString(i)).append(",");
-            sb.append("is ").append(variety);
+
+            // Fill varieties
+            List<String> varieties = Grammar.computeItemAbilities("is " + variety);
+            for (String var : varieties) {
+                sb.append(var);
+                if (varieties.indexOf(var) < varieties.size() - 1)
+                    sb.append(",");
+            }
+
             abilities = sb.toString();
         }
+
+//        Grammar grammar = new Grammar();
+//        abilities = null;
+//        if (!object.isNull("abilities")) {
+//            JSONArray array = object.getJSONArray("abilities");
+//            StringBuilder sb = new StringBuilder();
+//
+//            for (int i=0; i < array.length(); i++) {
+//                List<String> parents = grammar.computeAbilities("can " + array.getString(i), true);
+//                for (String parent : parents) {
+//                    if (!sb.toString().contains(parent))
+//                        sb.append(parent).append(",");
+//                }
+//            }
+//
+//            // Adds parents variety
+//            List<String> parents = grammar.computeAbilities("is " + variety, true);
+//            for (String parent : parents) {
+//                sb.append(parent);
+//                if (parents.indexOf(parent) < parents.size() - 1)
+//                    sb.append(",");
+//            }
+//
+//            abilities = sb.toString();
+//        }
     }
 }

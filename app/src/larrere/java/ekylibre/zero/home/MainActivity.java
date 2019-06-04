@@ -39,6 +39,8 @@ import ekylibre.util.CSVReader;
 import ekylibre.util.Contact;
 import ekylibre.util.PermissionManager;
 import ekylibre.util.UpdatableActivity;
+import ekylibre.util.ontology.Node;
+import ekylibre.util.ontology.Ontology;
 import ekylibre.zero.BuildConfig;
 import ekylibre.zero.IssueActivity;
 import ekylibre.zero.ObservationActivity;
@@ -86,6 +88,9 @@ public class MainActivity extends UpdatableActivity
     private TodoListActivity todoListActivity;
     private Calendar        syncTime = Calendar.getInstance();
     private DrawerLayout    mDrawer;
+
+    public Ontology ontology;
+    public static Node<String> tree;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -166,6 +171,13 @@ public class MainActivity extends UpdatableActivity
                 prefs.edit().putBoolean("csv_loaded", true).apply();
             }
         }
+
+//        // Build ontology async
+//        if (Ontology.getTree() == null) {
+//            Log.i(TAG, "Build ontology");
+//            Ontology.build();
+//        }
+
     }
 
     /*
@@ -471,15 +483,13 @@ public class MainActivity extends UpdatableActivity
     ** onClick method which is call when click on header of drawer layout is detected
     ** actually redirecting to the account manager
     */
-    public void launchAccountManagerActivity(View v)
-    {
+    public void launchAccountManagerActivity(View v) {
         Intent intent = new Intent(this, AccountManagerActivity.class);
         startActivity(intent);
     }
 
     @Override
-    protected void onSyncFinish()
-    {
+    protected void onSyncFinish() {
         todoListActivity.onSyncFinish();
         setTodolist();
         mPrgressBar.setVisibility(View.GONE);
@@ -488,8 +498,7 @@ public class MainActivity extends UpdatableActivity
     }
 
     @Override
-    protected void onSyncStart()
-    {
+    protected void onSyncStart() {
         todoListActivity.onSyncStart();
         mPrgressBar.setVisibility(View.VISIBLE);
         mPrgressBar.setScaleX((float) 0.15);
@@ -497,14 +506,8 @@ public class MainActivity extends UpdatableActivity
     }
 
     @Override
-    protected void onPause()
-    {
+    protected void onPause() {
         super.onPause();
-    }
-    @Override
-    protected void onResume()
-    {
-        super.onResume();
     }
 
 }

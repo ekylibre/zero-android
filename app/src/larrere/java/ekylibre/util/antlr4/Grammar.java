@@ -17,68 +17,137 @@ import ekylibre.util.antlr4.QueryLanguageParser.Variety_nameContext;
 import ekylibre.util.ontology.Ontology;
 import ekylibre.zero.inter.model.GenericItem;
 
-import static ekylibre.zero.inter.InterActivity.ontology;
-
 public class Grammar {
 
     private static final String TAG = "Grammar";
 
-    public List<GenericItem> getFilteredItems(String procedureFilter, List<GenericItem> items, String search) {
+//    public List<GenericItem> getFilteredItems(String procedureFilter, List<GenericItem> items, String search) {
+//
+//        List<GenericItem> list = new ArrayList<>();
+//
+//        // Prepare required abilities variants
+//        List<String> requiredAbilities = computeAbilitiesPhrase(procedureFilter, true);
+//
+//        // Loop over all available items
+//        outer: for (GenericItem item : items) {
+//            if (item.abilities != null) {
+//
+//                // Check all procedure mandatory abilities one by one
+//                required: for (String requiredAbility : requiredAbilities) {
+//                    List<String> extendedRequiredAbilities = Ontology.findParentsInRealm(requiredAbility);
+//                    for (String extendedRequiredAbility : extendedRequiredAbilities)
+//                        if (Arrays.asList(item.abilities).contains(extendedRequiredAbility))
+//                            continue required;
+//
+//                    // If here, none of current extended ability variant match, skip item
+//                    Log.e(TAG, Arrays.toString(item.abilities) + " does not contains [" + requiredAbility + "]");
+//                    continue outer;
+//                }
+//
+//                // Abilities test passed ! Do things here with matching item :
+//                Log.i(TAG, "["+item.name+"] abilities -> " + Arrays.toString(item.abilities));
+//                Log.d(TAG, "Required ability -> " + requiredAbilities);
+//
+//                if (search != null) {
+//                    String filterText = StringUtils.stripAccents(search.toLowerCase());
+//                    String name = StringUtils.stripAccents(item.name.toLowerCase());
+//                    String number = StringUtils.stripAccents(item.number.toLowerCase());
+//                    if (name.contains(filterText) || number.contains(filterText))
+//                        list.add(item);
+//                } else
+//                    list.add(item);
+//            }
+//        }
+//
+//        // Return the selected items after browsing all items
+//        return list;
+//    }
 
-//        Pattern pattern = Pattern.compile("can [a-z]*\\((.*)\\)");
+//
+//    private List<List<String>> computeAbilitiesPhrase(String input, boolean withParents) {  //boolean getLowerAbilities
+//        List<String> output = new ArrayList<>();
+//        QueryLanguageLexer lexer = new QueryLanguageLexer(CharStreams.fromString(input));
+//        QueryLanguageParser parser = new QueryLanguageParser(new CommonTokenStream(lexer));
+//        ParseTreeWalker.DEFAULT.walk(new QueryLanguageBaseListener() {
+//            @Override
+//            public void enterVariety_name(Variety_nameContext ctx) {
+//                super.enterVariety_name(ctx);
+//
+//                if (withParents) {
+//                    List<String> varietyParents = Ontology.findParentsInRealm(ctx.getText());
+//                    for (String variety : varietyParents)
+//                        output.add("is " + variety);
+//                } else
+//                    output.add("is " + ctx.getText());
+//            }
+//            @Override
+//            public void enterAbility(AbilityContext ctx) {
+//                super.enterAbility(ctx);
+//
+//                if (withParents && ctx.ability_parameters() != null) {
+//
+//                    String ability = ctx.ability_name().name().getText();
+//
+//                    String abilityParameter = ctx.ability_parameters().ability_argument().get(0).getText();
+//
+//                    List<String> parameterVariants = Ontology.findParentsInRealm(abilityParameter);
+//                    for (String param : parameterVariants)
+//                        output.add("can " + ability + "(" + param + ")");
+//
+//                } else {
+//                    output.add("can " + ctx.getText());
+//                }
+//            }
+//        }, parser.boolean_expression());
+//        return output;
+//    }
+
+    public static List<GenericItem> getFilteredItems(String procedureFilter, List<GenericItem> items, String search) {
+
         List<GenericItem> list = new ArrayList<>();
 
         // Prepare required abilities variants
-        List<List<String>> requiredAbilities = computeAbilities(procedureFilter, true);
+        List<List<String>> requiredAbilities = computeAbilitiesPhrase(procedureFilter);
+
+        Log.e(TAG, "Mandatory abilities --> " + requiredAbilities);
 
         // Loop over all available items
-        outer: for (GenericItem item : items) {
+        itemLoop: for (GenericItem item : items) {
             if (item.abilities != null) {
 
-                // Check for all mandatory abilities for the procedure
-                abilityLoop: for (List<String> requiredAbility : requiredAbilities) {
+                // Check all procedure mandatory abilities one by one
+                abilityLoop: for (List<String> extendedAbility : requiredAbilities) {
 
-                    // Loop each item ability to check if match required ability
-                    for (String itemAbility : item.abilities) {
+                    for (String ability : item.abilities) {
 
-                        // If one item ability fullfil current mandatory ability, continue to next requirement
-                        if (requiredAbility.contains(itemAbility))
+//                        if (ability.contains("is ")) {
+//                            List<String> extendedVarieties = computeItemAbilities(ability);
+//                            for (String extendedVariety : extendedVarieties)
+//                                if (extendedAbility.contains(extendedVariety))
+//                                    continue abilityLoop;
+//                        } else
+
+                        if (extendedAbility.contains(ability))
                             continue abilityLoop;
                     }
 
-                    // If this code is reached, mandatory ability requirement is not fullfiled
-                    continue outer;
-
-                    // Check if we have an ability parameter
-//                    Matcher matcher = pattern.matcher(requiredAbility);
-//                    if (matcher.matches()) {
-//                        String parameter = matcher.group(1);
-//                        Log.i(TAG, "ability param --> " + parameter);
-//
-//                        // Loop over required abilities variants
-//                        List<String> parameterVariants = Ontology.findInTree(ontology, parameter);
-//                        Log.e(TAG, "Variants --> " + Ontology.findInTree(ontology, "equipment"));
-//
-//                        Log.i(TAG, "parameterVariants --> " + parameterVariants);
-//                        for (String parameterVariant : parameterVariants) {
-//
-//                            String abilityVariant = matcher.group(0).replace(parameter, parameterVariant);
-//                            Log.i(TAG, "abilityVariant --> " + abilityVariant);
-//
-
+                    // If here reached, none of current extended ability variant match, skip item
+                    continue itemLoop;
                 }
 
                 // Abilities test passed ! Do things here with matching item :
-                Log.d(TAG, "Item ability -> " + Arrays.toString(item.abilities));
+                Log.i(TAG, "["+item.name+"] abilities -> " + Arrays.toString(item.abilities));
                 Log.d(TAG, "Required ability -> " + requiredAbilities);
+
                 if (search != null) {
                     String filterText = StringUtils.stripAccents(search.toLowerCase());
                     String name = StringUtils.stripAccents(item.name.toLowerCase());
                     String number = StringUtils.stripAccents(item.number.toLowerCase());
                     if (name.contains(filterText) || number.contains(filterText))
                         list.add(item);
-                } else
+                } else {
                     list.add(item);
+                }
             }
         }
 
@@ -86,47 +155,77 @@ public class Grammar {
         return list;
     }
 
-    public List<List<String>> computeAbilities(String input, boolean getLowerAbilities) {  //boolean getLowerAbilities
-        Ontology ontologyInstance = new Ontology();
+    private static List<List<String>> computeAbilitiesPhrase(String input) {  //boolean getLowerAbilities
+
         List<List<String>> output = new ArrayList<>();
+
         QueryLanguageLexer lexer = new QueryLanguageLexer(CharStreams.fromString(input));
         QueryLanguageParser parser = new QueryLanguageParser(new CommonTokenStream(lexer));
         ParseTreeWalker.DEFAULT.walk(new QueryLanguageBaseListener() {
+
             @Override
             public void enterVariety_name(Variety_nameContext ctx) {
                 super.enterVariety_name(ctx);
-                if (!getLowerAbilities)
-                    output.add(Collections.singletonList("is " + ctx.getText()));
+
+//                List<String> varietyParents = Ontology.findParentsInRealm(ctx.getText());
+//                List<String> extendedVariants = new ArrayList<>();
+//
+//                for (String variety : varietyParents)
+//                    extendedVariants.add("is " + variety);
+//
+//                output.add(extendedVariants);
+
+                output.add(Collections.singletonList("is " + ctx.getText()));
+
             }
-//            @Override
-//            public void enterAbility_name(QueryLanguageParser.Ability_nameContext ctx) {
-//                super.enterAbility_name(ctx);
-//                if (BuildConfig.DEBUG)
-//                    Log.e(TAG, "ability name - > " + ctx.name().getText());
-//                output.add(ctx.name().getText());
-//            }
+
             @Override
             public void enterAbility(AbilityContext ctx) {
                 super.enterAbility(ctx);
 
-                if (getLowerAbilities && ctx.ability_parameters() != null) {
+                String ability = ctx.ability_name().name().getText();
+                List<String> extendedVariants = new ArrayList<>();
 
-                    String ability = ctx.ability_name().name().getText();
+                if (ctx.ability_parameters() != null) {
 
                     String abilityParameter = ctx.ability_parameters().ability_argument().get(0).getText();
-                    Log.d(TAG, "Ability parameter = "+ abilityParameter);
+                    List<String> parameterVariants = Ontology.findParentsInRealm(abilityParameter);
 
-                    List<String> parameterVariants = ontologyInstance.findInTree(ontology, abilityParameter);
-                    List<String> newList = new ArrayList<>();
                     for (String param : parameterVariants)
-                        newList.add("can " + ability + "(" + param + ")");
-                    output.add(newList);
+                        extendedVariants.add("can " + ability + "(" + param + ")");
+
+                    output.add(extendedVariants);
 
                 } else {
-                    output.add(Collections.singletonList("can " + ctx.getText()));
+                    output.add(Collections.singletonList("can " + ability));
                 }
             }
         }, parser.boolean_expression());
+
+        return output;
+    }
+
+    public static List<String> computeItemAbilities(String input) {  //boolean getLowerAbilities
+
+        List<String> output = new ArrayList<>();
+
+        QueryLanguageLexer lexer = new QueryLanguageLexer(CharStreams.fromString(input));
+        QueryLanguageParser parser = new QueryLanguageParser(new CommonTokenStream(lexer));
+        ParseTreeWalker.DEFAULT.walk(new QueryLanguageBaseListener() {
+
+            @Override
+            public void enterVariety_name(Variety_nameContext ctx) {
+                super.enterVariety_name(ctx);
+
+                List<String> varietyParents = Ontology.findParentsInRealm(ctx.getText());
+
+                for (String variety : varietyParents)
+                    output.add("is " + variety);
+
+            }
+
+        }, parser.boolean_expression());
+
         return output;
     }
 }

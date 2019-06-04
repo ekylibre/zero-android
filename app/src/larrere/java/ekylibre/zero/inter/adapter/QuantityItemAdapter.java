@@ -34,10 +34,12 @@ public class QuantityItemAdapter extends RecyclerView.Adapter<QuantityItemAdapte
 
     private final List<ItemWithQuantity> dataset;
     private final RecyclerView recyclerView;
+    private final String role;
 
-    public QuantityItemAdapter(List<ItemWithQuantity> dataset, RecyclerView recyclerView) {
+    public QuantityItemAdapter(List<ItemWithQuantity> dataset, RecyclerView recyclerView, String role) {
         this.dataset = dataset;
         this.recyclerView = recyclerView;
+        this.role = role;
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {
@@ -74,8 +76,8 @@ public class QuantityItemAdapter extends RecyclerView.Adapter<QuantityItemAdapte
                 dataset.remove(index);
                 notifyItemRemoved(index);
                 for (GenericItem simpleItem : InterventionFormFragment.paramsList) {
-                    if (simpleItem.id == item.id && simpleItem.isSelected) {
-                        simpleItem.isSelected = false;
+                    if (simpleItem.id == item.id && simpleItem.referenceName.contains(role)) {
+                        simpleItem.referenceName.remove(role);
                         break;
                     }
                 }

@@ -11,7 +11,8 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import ekylibre.zero.BuildConfig;
-import ekylibre.zero.inter.InterActivity;
+import io.realm.Realm;
+import io.realm.RealmResults;
 
 public class XMLReader extends AsyncTask<Void,Void,Node<String>> {
 
@@ -23,36 +24,48 @@ public class XMLReader extends AsyncTask<Void,Void,Node<String>> {
     private InputStream inputStream;
     private Node<String> root;
 
-    public XMLReader(InputStream inputStream) {
+    private Realm realmInstance;
+    private boolean alreadyCreated = false;
+
+    XMLReader(InputStream inputStream) {
         this.inputStream = inputStream;
     }
 
     @Override
     protected Node<String> doInBackground(Void... voids) {
 
+        realmInstance = Realm.getDefaultInstance();
+        RealmNode realmParent = realmInstance.where(RealmNode.class).findFirst();
+        if (realmParent != null)
+            alreadyCreated = true;
+
         try {
             parse(inputStream);
         } catch (XmlPullParserException | IOException e) {
             e.printStackTrace();
         }
-
+        realmInstance.close();
         return root;
     }
 
     @Override
     protected void onPostExecute(Node<String> node) {
         super.onPostExecute(node);
-        InterActivity.ontology = node;
-//        Log.e(TAG, "Variants --> " + Ontology.findInTree(node, "equipment"));
-
+        Ontology.setTree(node);
+        Log.e(TAG, "Ontology successfuly build !");
     }
 
     public Node<String> parse(InputStream inputStream) throws XmlPullParserException, IOException {
 
-            // "product" is the root note of our tree
-            root = new Node<>("product");
+        // "product" is the root note of our tree
+        root = new Node<>("product");
 
-            try {
+        // Creates root node
+        if (!alreadyCreated)
+            realmInstance.executeTransaction(realm -> realm.createObject(RealmNode.class, "product"));
+
+
+        try {
                 do {
                     Log.i(TAG, "Loop #"+ ++counter);
                     inputStream.reset();
@@ -161,6 +174,14 @@ public class XMLReader extends AsyncTask<Void,Void,Node<String>> {
             if (doNotExists) {
                 node.addChild(new Node<>(name));
                 ++createdtemsNumber;
+
+                if (!alreadyCreated) {
+                    RealmNode realmParent = realmInstance.where(RealmNode.class).equalTo("name", parent).findFirst();
+                    realmInstance.executeTransaction(realm -> {
+                        RealmNode newNode = realm.createObject(RealmNode.class, name);
+                        newNode.parent = realmParent;
+                    });
+                }
             }
 
         } else

@@ -125,54 +125,16 @@ public class InterActivity extends AppCompatActivity implements FragmentManager.
         // Load procedure natures, families and params from assets
         loadXMLAssets();
 
-        if (ontology == null) {
-            try {
-                // Read db.xml to build ontology
-                InputStream inputStream = getAssets().open("db.xml");
-//            ontology = new XMLReader().computeAbilities(inputStream);
-                new XMLReader(inputStream).execute();
-                // Result is automatically saved into ontology when finished
-//            ontology = task.get();
-
-//            Ontology.displayTree(ontology);
-//            for (Node<String> node : ontology.getChildren())
-//                Log.i(TAG, "Node name="+node.getName()+" parent="+node.getParent());
-            } catch (IOException e) {  // ExecutionException | InterruptedException |
-                e.printStackTrace();
-            }
-        }
-
-        // Ekylibre DSL testing (canopy)
-//        List<String> grammar = DSL.computeAbilities("can drive(equipment) and can move");
-//        List<String> grammar = DSL.computeAbilities("is equipment and can move and (can store(silage) or can store(raw_matter) or can store(grass) or can store(grain) or can store_fluid)");
-//        if (BuildConfig.DEBUG) Log.e(TAG, "GRAMMAR TEST --> " + grammar.toString());
-
-        // Testing Parboiled
-//        AbilitiesParser parser = Parboiled.createParser(AbilitiesParser.class);
-//        ParsingResult<?> result = new ReportingParseRunner(parser.booleanExpression()).run("can drive(equipment) and can move");
-//        if (!result.parseErrors.isEmpty())
-//            System.out.println(ErrorUtils.printParseError(result.parseErrors.get(0)));
-//        else
-//            System.out.println(printNodeTree(result) + '\n');
-
-        // ANTLR (working)
-//        QueryLanguageLexer lexer = new QueryLanguageLexer(CharStreams.fromString("is worker and can move"));
-//        QueryLanguageParser parser = new QueryLanguageParser(new CommonTokenStream(lexer));
-//
-//        ParseTreeWalker.DEFAULT.walk(new QueryLanguageBaseListener() {
-//            @Override
-//            public void enterVariety_name(QueryLanguageParser.Variety_nameContext ctx) {
-//                super.enterVariety_name(ctx);
-//                Log.e(TAG, "essence name - > " + ctx.name().getText());
+//        if (ontology == null) {
+//            try {
+//                // Read db.xml to build ontology
+//                InputStream inputStream = getAssets().open("db.xml");
+//                new XMLReader(inputStream).execute();
+//            } catch (IOException e) {
+//                e.printStackTrace();
 //            }
-//
-//            @Override
-//            public void enterAbility_name(QueryLanguageParser.Ability_nameContext ctx) {
-//                super.enterAbility_name(ctx);
-//                Log.e(TAG, "ability name - > " + ctx.name().getText());
-//            }
-//
-//        }, parser.boolean_expression());
+//        }
+
     }
 
     @Override
@@ -186,8 +148,8 @@ public class InterActivity extends AppCompatActivity implements FragmentManager.
         currentFragment = fragmentTag;
         invalidateOptionsMenu();
 
-        if (BuildConfig.DEBUG)
-            Log.i(TAG, "Current Fragment = " + currentFragment);
+//        if (BuildConfig.DEBUG)
+//            Log.i(TAG, "Current Fragment = " + currentFragment);
 
         FragmentTransaction ft = fragmentManager.beginTransaction();
         Fragment fragment;
