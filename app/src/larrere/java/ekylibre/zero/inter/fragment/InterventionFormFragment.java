@@ -57,7 +57,7 @@ import static ekylibre.zero.inter.enums.ParamType.PLANT;
 
 public class InterventionFormFragment extends Fragment {
 
-    private static final String TAG = "FormFragment";
+    private static final String TAG = "InterventionFormFragmen";
 
     private Context context;
     private OnFragmentInteractionListener listener;
@@ -202,7 +202,7 @@ public class InterventionFormFragment extends Fragment {
         // ------------- //
 
         for (GenericEntity entity : selectedProcedure.input) {
-            if (BuildConfig.DEBUG) Log.i(TAG, "input --> " + entity.name);
+            if (BuildConfig.DEBUG) Log.i(TAG, "Build layout for input --> " + entity.name);
 
             // Get layout
             View inputView = inflater.inflate(R.layout.widget_input, container, false);
@@ -224,33 +224,31 @@ public class InterventionFormFragment extends Fragment {
             inputRecycler.setAdapter(quantityItemAdapter);
 
             // Loop over all items availables for this role
-            List<GenericItem> filteredItems = Grammar.getFilteredItems(entity.filter, paramsList, null);
-            for (GenericItem item : filteredItems) {
+//            List<GenericItem> filteredItems = Grammar.getFilteredItems(entity.filter, paramsList, null);
+            for (GenericItem item : paramsList) {
 
-                ItemWithQuantity currentItem = null;
+                ItemWithQuantity existing = null;
 
                 // Get it if present in inputList
                 for (ItemWithQuantity quantityItem : inputList) {
                     if (item.id == quantityItem.id) {
-                        currentItem = quantityItem;
+                        existing = quantityItem;
                         break;
                     }
                 }
 
-                if (item.referenceName.contains(entity.name) && currentItem == null) {
-                    // If selected but not present, add it else, remove it
-                    inputList.add(new ItemWithQuantity(item.id, item.name, item.type, 0f, item.unit));
-
-                } else if (currentItem != null) {
-                    inputList.remove(currentItem);
-                }
+                // If selected but not present, add it else, remove it
+                if (existing == null) {
+                    if (item.referenceName.contains(entity.name))
+                        inputList.add(new ItemWithQuantity(item.id, item.name, item.type, 0f, item.unit));
+                } else
+                    if (!item.referenceName.contains(entity.name))
+                        inputList.remove(existing);
 
             }
 
-            if (inputList.isEmpty())
-                inputRecycler.setVisibility(View.GONE);
-            else
-                inputRecycler.setVisibility(View.VISIBLE);
+            // Check if we need to displau the recycler
+            inputRecycler.setVisibility(inputList.size() == 0 ? View.GONE : View.VISIBLE);
 
             // Add view
             widgetContainer.addView(inputView);
