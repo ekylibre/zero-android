@@ -41,6 +41,7 @@ import ekylibre.util.layout.component.WidgetParamView;
 import ekylibre.util.pojo.GenericEntity;
 import ekylibre.zero.BuildConfig;
 import ekylibre.zero.R;
+import ekylibre.zero.home.Zero;
 import ekylibre.zero.inter.InterActivity;
 import ekylibre.zero.inter.adapter.FormPeriodAdapter;
 import ekylibre.zero.inter.adapter.QuantityItemAdapter;
@@ -64,7 +65,6 @@ public class InterventionFormFragment extends Fragment {
     private List<Period> periodList;
     public static List<GenericItem> paramsList;
     private static List<ItemWithQuantity> inputList;
-    private Grammar grammar;
 
     // LAYOUT BINDINGS
     @BindView(R.id.widgets_container) LinearLayoutCompat widgetContainer;
@@ -95,8 +95,6 @@ public class InterventionFormFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         if (BuildConfig.DEBUG) Log.d(TAG, "onCreate");
-
-        grammar = new Grammar();
 
         ContentResolver cr = context.getContentResolver();
 
@@ -171,7 +169,7 @@ public class InterventionFormFragment extends Fragment {
             if (target.name.equals("cultivation"))
                 label.setText(R.string.crop_parcel);
             else {
-                @StringRes final int labelRes = getResources().getIdentifier(target.name, "string", context.getPackageName());
+                @StringRes final int labelRes = getResources().getIdentifier(target.name, "string", Zero.getPkgName());
                 label.setText(labelRes);
             }
             TextView addButton = cropParcelView.findViewById(R.id.widget_add);
@@ -211,7 +209,7 @@ public class InterventionFormFragment extends Fragment {
 
             // Set param label
             TextView label = inputView.findViewById(R.id.widget_label);
-            @StringRes final int labelRes = getResources().getIdentifier(entity.name, "string", context.getPackageName());
+            @StringRes final int labelRes = getResources().getIdentifier(entity.name, "string", Zero.getPkgName());
             label.setText(labelRes);
 
             // Add onClick listener
@@ -226,7 +224,7 @@ public class InterventionFormFragment extends Fragment {
             inputRecycler.setAdapter(quantityItemAdapter);
 
             // Loop over all items availables for this role
-            List<GenericItem> filteredItems = grammar.getFilteredItems(entity.filter, paramsList, null);
+            List<GenericItem> filteredItems = Grammar.getFilteredItems(entity.filter, paramsList, null);
             for (GenericItem item : filteredItems) {
 
                 ItemWithQuantity currentItem = null;

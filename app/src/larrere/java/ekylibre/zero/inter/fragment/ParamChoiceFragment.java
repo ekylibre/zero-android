@@ -21,6 +21,7 @@ import java.util.List;
 
 import ekylibre.util.antlr4.Grammar;
 import ekylibre.zero.R;
+import ekylibre.zero.home.Zero;
 import ekylibre.zero.inter.InterActivity;
 import ekylibre.zero.inter.adapter.SelectableItemAdapter;
 import ekylibre.zero.inter.enums.ParamType.Type;
@@ -67,7 +68,7 @@ public class ParamChoiceFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         @StringRes
-        int titleRes = getResources().getIdentifier(paramType, "string", context.getPackageName());
+        int titleRes = getResources().getIdentifier(paramType, "string", Zero.getPkgName());
         InterActivity.actionBar.setTitle(titleRes);
 
         // Load required items

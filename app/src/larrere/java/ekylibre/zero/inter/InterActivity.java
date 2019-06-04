@@ -44,6 +44,7 @@ import ekylibre.util.pojo.ProcedureEntity;
 import ekylibre.util.ontology.XMLReader;
 import ekylibre.zero.BuildConfig;
 import ekylibre.zero.R;
+import ekylibre.zero.home.Zero;
 import ekylibre.zero.inter.fragment.CropParcelChoiceFragment;
 import ekylibre.zero.inter.fragment.InterventionFormFragment;
 import ekylibre.zero.inter.fragment.ParamChoiceFragment;
@@ -251,7 +252,7 @@ public class InterActivity extends AppCompatActivity implements FragmentManager.
 
                 // Fill procedure natures map
                 String name = procedureEntity.name;
-                int resId = getResources().getIdentifier(name, "string", getPackageName());
+                int resId = getResources().getIdentifier(name, "string", Zero.getPkgName());
                 Pair<String,String> procedureNaturePair = Pair.create(name, getString(resId));
 
                 for (String category : procedureEntity.categories) {

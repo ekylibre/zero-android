@@ -22,6 +22,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnTextChanged;
 import ekylibre.zero.R;
+import ekylibre.zero.home.Zero;
 import ekylibre.zero.inter.fragment.InterventionFormFragment;
 import ekylibre.zero.inter.model.GenericItem;
 import ekylibre.zero.inter.model.ItemWithQuantity;
@@ -101,7 +102,7 @@ public class QuantityItemAdapter extends RecyclerView.Adapter<QuantityItemAdapte
             if (item.unit != null)
                 if (!item.unit.equals("null")) {
                     @StringRes final int labelRes = context.getResources().getIdentifier(
-                            item.unit, "string", context.getPackageName());
+                            item.unit, "string", Zero.getPkgName());
                     unit.setText(labelRes);
                     unit.setVisibility(VISIBLE);
                 } else {

@@ -21,6 +21,7 @@ import java.util.Objects;
 
 import ekylibre.zero.BuildConfig;
 import ekylibre.zero.R;
+import ekylibre.zero.home.Zero;
 import ekylibre.zero.inter.InterActivity;
 import ekylibre.zero.inter.adapter.ProcedureChoiceAdapter;
 
@@ -75,8 +76,7 @@ public class ProcedureChoiceFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         // Set fragment title to procedure family
-        int resId = getResources().getIdentifier(titleRes, "string",
-                Objects.requireNonNull(getActivity()).getPackageName());
+        int resId = getResources().getIdentifier(titleRes, "string", Zero.getPkgName());
         InterActivity.actionBar.setTitle(resId);
 
         View view = inflater.inflate(R.layout.fragment_procedure_category_choice, container, false);

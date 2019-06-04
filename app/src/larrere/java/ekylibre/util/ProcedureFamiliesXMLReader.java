@@ -17,6 +17,7 @@ import java.util.Map;
 
 import androidx.core.util.Pair;
 import ekylibre.zero.BuildConfig;
+import ekylibre.zero.home.Zero;
 
 
 public class ProcedureFamiliesXMLReader {
@@ -93,7 +94,7 @@ public class ProcedureFamiliesXMLReader {
                 String activityFamily = parser.getAttributeValue(ns, "activity_family");
                 String[] families = activityFamily.split(", ");
 
-                int resId = context.getResources().getIdentifier(name, "string", context.getPackageName());
+                int resId = context.getResources().getIdentifier(name, "string", Zero.getPkgName());
                 Pair<String,String> categoryPair = Pair.create(name, context.getString(resId));
 
                 for (String family : families) {
