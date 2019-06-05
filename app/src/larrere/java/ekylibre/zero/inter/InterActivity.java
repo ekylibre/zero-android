@@ -32,6 +32,7 @@ import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import ekylibre.database.ZeroContract.WorkingPeriodAttributes;
 import ekylibre.database.ZeroContract.DetailedInterventionAttributes;
 import ekylibre.database.ZeroContract.DetailedInterventions;
 import ekylibre.util.AccountTool;
@@ -49,6 +50,8 @@ import ekylibre.zero.inter.fragment.ProcedureChoiceFragment;
 import ekylibre.zero.inter.fragment.ProcedureFamilyChoiceFragment;
 import ekylibre.zero.inter.model.CropParcel;
 import ekylibre.zero.inter.model.GenericItem;
+import ekylibre.zero.inter.model.Period;
+
 
 public class InterActivity extends AppCompatActivity implements FragmentManager.OnBackStackChangedListener,
         ProcedureFamilyChoiceFragment.OnFragmentInteractionListener,
@@ -411,10 +414,21 @@ public class InterActivity extends AppCompatActivity implements FragmentManager.
 
 
         // Storing working time
+        List<ContentValues> bulkPeriodCv = new ArrayList<>();
 
-        List<ContentValues> allParamsCv = new ArrayList<>();
+        for (Period period : InterventionFormFragment.periodList) {
+
+            ContentValues periodCv = new ContentValues();
+            periodCv.put(WorkingPeriodAttributes.DETAILED_INTERVENTION_ID, interId);
+            periodCv.put(WorkingPeriodAttributes.STARTED_AT, period.startDateTime.getTime());
+            periodCv.put(WorkingPeriodAttributes.STOPPED_AT, period.stopDateTime.getTime());
+            bulkPeriodCv.add(periodCv);
+        }
+        cr.bulkInsert(WorkingPeriodAttributes.CONTENT_URI, bulkPeriodCv.toArray(new ContentValues[0]));
 
         // Store parameters by reference_name
+        List<ContentValues> bulkParamCv = new ArrayList<>();
+
         for (GenericItem param : InterventionFormFragment.paramsList) {
             for (String refName : param.referenceName) {
 
@@ -428,12 +442,11 @@ public class InterActivity extends AppCompatActivity implements FragmentManager.
                     paramCv.put(DetailedInterventionAttributes.QUANTITY_UNIT_NAME, param.unit);
                 }
 
-                allParamsCv.add(paramCv);
+                bulkParamCv.add(paramCv);
             }
         }
-
         // Insert into database & get returning id
-        cr.bulkInsert(DetailedInterventionAttributes.CONTENT_URI, allParamsCv.toArray(new ContentValues[0]));
+        cr.bulkInsert(DetailedInterventionAttributes.CONTENT_URI, bulkParamCv.toArray(new ContentValues[0]));
 
         // Close the activity
         finish();

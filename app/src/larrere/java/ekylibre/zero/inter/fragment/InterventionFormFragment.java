@@ -47,6 +47,7 @@ import ekylibre.zero.inter.adapter.QuantityItemAdapter;
 import ekylibre.zero.inter.model.GenericItem;
 import ekylibre.zero.inter.model.Period;
 
+import static ekylibre.zero.inter.InterActivity.account;
 import static ekylibre.zero.inter.InterActivity.selectedProcedure;
 import static ekylibre.zero.inter.enums.ParamType.LAND_PARCEL;
 import static ekylibre.zero.inter.enums.ParamType.PLANT;
@@ -55,12 +56,12 @@ import static ekylibre.zero.inter.enums.ParamType.PLANT;
 public class InterventionFormFragment extends Fragment {
 
     private static final String TAG = "InterventionFormFragmen";
-    private static final String likeAccountName = String.format("user LIKE \"%s\"", InterActivity.account.name);
+    private static final String likeAccountName = String.format("user LIKE \"%s\"", account.name);
 
     private Context context;
     private OnFragmentInteractionListener listener;
 
-    private List<Period> periodList;
+    public static List<Period> periodList;
     public static List<GenericItem> paramsList;
 
     // LAYOUT BINDINGS
@@ -98,10 +99,6 @@ public class InterventionFormFragment extends Fragment {
         // Add one hour period as default
         periodList = new ArrayList<>();
         periodList.add(new Period());
-
-//        // Init cropParcelList
-//        cropParcelList = new ArrayList<>();
-//        cropParcelList.addAll(getPlants());
 
         paramsList = new ArrayList<>();
         paramsList.addAll(getUsers(cr));
