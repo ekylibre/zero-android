@@ -18,9 +18,11 @@ import ekylibre.zero.inter.model.GenericItem;
 public class CropParcelAdapter extends RecyclerView.Adapter<CropParcelAdapter.ViewHolder> {
 
     private final List<GenericItem> dataset;
+    private String role;
 
-    public CropParcelAdapter(List<GenericItem> items) {
-        dataset = items;
+    public CropParcelAdapter(List<GenericItem> dataset, String role) {
+        this.dataset = dataset;
+        this.role = role;
     }
 
     /**
@@ -64,12 +66,14 @@ public class CropParcelAdapter extends RecyclerView.Adapter<CropParcelAdapter.Vi
         @Override
         public void onClick(View v) {
 
-//            if (item.isSelected)
-//                InterventionFormFragment.paramsList.remove(item);
-//            else
-//                InterActivity.selectedCropParcels.add(item);
+            if (item.isSelected) {
+                item.isSelected = false;
+                item.referenceName.remove(role);
+            } else {
+                item.isSelected = true;
+                item.referenceName.add(role);
+            }
 
-            item.isSelected = !item.isSelected;
             view.setSelected(!view.isSelected());
             notifyItemChanged(pos);
 

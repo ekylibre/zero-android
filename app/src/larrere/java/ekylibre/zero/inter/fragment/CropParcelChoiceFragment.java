@@ -41,11 +41,11 @@ public class CropParcelChoiceFragment extends Fragment {
 
     @ParamType.Type
     private String paramType;
-    private String filter;
+//    private String filter;
     private List<GenericItem> dataset;
     private CropParcelAdapter adapter;
     private Context context;
-    public String currentTab;
+    private String currentTab;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -70,7 +70,7 @@ public class CropParcelChoiceFragment extends Fragment {
         context = getContext();
         if (getArguments() != null) {
             paramType = getArguments().getString("param_type");
-            filter = getArguments().getString("filter");
+//            filter = getArguments().getString("filter");
             Log.i(TAG, "Parcel type = " + paramType);
         }
     }
@@ -89,7 +89,7 @@ public class CropParcelChoiceFragment extends Fragment {
 
         RecyclerView recyclerView = view.findViewById(R.id.crop_parcel_recycler);
         recyclerView.setLayoutManager(new LinearLayoutManager(container.getContext()));
-        adapter = new CropParcelAdapter(dataset);
+        adapter = new CropParcelAdapter(dataset, paramType);
         recyclerView.setAdapter(adapter);
 
         TabLayout tabLayout = view.findViewById(R.id.tab_crop_parcel);

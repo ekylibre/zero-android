@@ -34,12 +34,14 @@ import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import ekylibre.database.ZeroContract;
 import ekylibre.database.ZeroContract.DetailedInterventionAttributes;
 import ekylibre.database.ZeroContract.DetailedInterventions;
 import ekylibre.util.AccountTool;
 import ekylibre.util.ProcedureFamiliesXMLReader;
 import ekylibre.util.ProceduresXMLReader;
 import ekylibre.util.ontology.Node;
+import ekylibre.util.pojo.GenericEntity;
 import ekylibre.util.pojo.ProcedureEntity;
 import ekylibre.util.ontology.XMLReader;
 import ekylibre.zero.BuildConfig;
@@ -52,9 +54,6 @@ import ekylibre.zero.inter.fragment.ProcedureChoiceFragment;
 import ekylibre.zero.inter.fragment.ProcedureFamilyChoiceFragment;
 import ekylibre.zero.inter.model.CropParcel;
 import ekylibre.zero.inter.model.GenericItem;
-
-import static ekylibre.zero.inter.enums.ParamType.LAND_PARCEL;
-import static ekylibre.zero.inter.enums.ParamType.PLANT;
 
 public class InterActivity extends AppCompatActivity implements FragmentManager.OnBackStackChangedListener,
         ProcedureFamilyChoiceFragment.OnFragmentInteractionListener,
@@ -431,57 +430,102 @@ public class InterActivity extends AppCompatActivity implements FragmentManager.
 
         // Storing working time
 
+
+
+        // Initialize parameters list by endpoint
+        List<ContentValues> targetsCv = new ArrayList<>();
+        List<ContentValues> equipmentsCv = new ArrayList<>();
+        List<ContentValues> workersCv = new ArrayList<>();
+        List<ContentValues> inputsAttributesCv = new ArrayList<>();
+        List<ContentValues> outputsAttributesCv = new ArrayList<>();
+
         // Store parameters by reference_name
         for (GenericItem param : InterventionFormFragment.paramsList) {
-            if (param.isSelected) {
+            for (String refName : param.referenceName) {
 
-                for (String role : param.referenceName) {
-                    Log.e(TAG, role + " / " + param.type);
+                ContentValues paramCv = new ContentValues();
+                paramCv.put(DetailedInterventionAttributes.REFERENCE_ID, param.id);
+                paramCv.put(DetailedInterventionAttributes.REFERENCE_NAME, refName);
 
-                    switch (param.type) {
+                switch (param.type) {
 
-                        case "equipment":               // equipments
-                        case "handling_equipment":
-                        case "motorized_vehicle":
-                        case "portable_equipment":
-                        case "tank":
-                        case "trailed_equipment":
-                        case "tractor":
-                        case "worker":                  // workers
-                        case "seed":                    // inputs
-                        case "seedling":
-                        case "preparation":
-                        case "matter":
-                        case "oil":
-                        case "excrement":
-                        case "cucurbita_maxima_potimarron":
-                        case "pomace":
-                        case "water":
-                        case "vegetable":
-                        case PLANT:
-                        case LAND_PARCEL:
-                            saveAttribute(cr, interId, role, param);
-                            break;
+                    case "plant":
+                    case "land_parcel":
+                        targetsCv.add(paramCv);
+                        break;
 
-                    }
+                    case "doer":
+                        workersCv.add(paramCv);
+                        break;
+
+                    case "tool":
+                        equipmentsCv.add(paramCv);
+                        break;
+
                 }
             }
         }
 
-        String whereClause = DetailedInterventions._ID + "=?";
-        String[] args = new String[] {String.valueOf(interId)};
+//        for (ItemWithQuantity param : inputList) {
+//
+//            for (String refName : param.type) {
+//
+//                ContentValues paramCv = new ContentValues();
+//                paramCv.put(DetailedInterventionAttributes.REFERENCE_ID, param.id);
+//                paramCv.put(DetailedInterventionAttributes.REFERENCE_NAME, refName);
+//            }
+//        }
 
-        try (Cursor cursor = cr.query(
-                DetailedInterventions.CONTENT_URI,
-                DetailedInterventions.PROJECTION_ALL,
-                whereClause, args, null)) {
 
-            while (cursor != null && cursor.moveToNext())
-                Log.i(TAG, "L'enregistrement est bien en base");
-        }
-
-        // Close the activity
-        finish();
+//            if (param.isSelected) {
+//
+//                for (String role : param.referenceName) {
+//                    Log.e(TAG, role + " / " + param.type);
+//
+//                    switch (param.type) {
+//
+//                        case "equipment":               // equipments
+//                        case "handling_equipment":
+//                        case "motorized_vehicle":
+//                        case "portable_equipment":
+//                        case "tank":
+//                        case "trailed_equipment":
+//                        case "tractor":
+//                        case "worker":                  // workers
+//                        case "seed":                    // inputs
+//                        case "seedling":
+//                        case "preparation":
+//                        case "matter":
+//                        case "oil":
+//                        case "excrement":
+//                        case "cucurbita_maxima_potimarron":
+//                        case "pomace":
+//                        case "water":
+//                        case "vegetable":
+//                        case PLANT:
+//                        case LAND_PARCEL:
+//                            saveAttribute(cr, interId, role, param);
+//                            break;
+//
+//                    }
+//                }
+//            }
+//        }
+//
+//        String whereClause = DetailedInterventions._ID + "=?";
+//        String[] args = new String[] {String.valueOf(interId)};
+//
+//        try (Cursor cursor = cr.query(
+//                DetailedInterventions.CONTENT_URI,
+//                DetailedInterventions.PROJECTION_ALL,
+//                whereClause, args, null)) {
+//
+//            while (cursor != null && cursor.moveToNext())
+//                Log.i(TAG, "L'enregistrement est bien en base");
+//        }
+//
+//        // Close the activity
+//        finish();
 
 
 //        // Trying sync query

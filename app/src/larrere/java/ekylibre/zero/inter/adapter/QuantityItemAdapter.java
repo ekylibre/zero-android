@@ -1,8 +1,6 @@
 package ekylibre.zero.inter.adapter;
 
 import android.content.Context;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,7 +23,6 @@ import ekylibre.zero.R;
 import ekylibre.zero.home.Zero;
 import ekylibre.zero.inter.fragment.InterventionFormFragment;
 import ekylibre.zero.inter.model.GenericItem;
-import ekylibre.zero.inter.model.ItemWithQuantity;
 
 import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
@@ -33,13 +30,12 @@ import static android.view.View.VISIBLE;
 
 public class QuantityItemAdapter extends RecyclerView.Adapter<QuantityItemAdapter.ViewHolder> {
 
-    private final List<ItemWithQuantity> dataset;
-    private final RecyclerView recyclerView;
+    private final List<GenericItem> dataset;
+    private RecyclerView recyclerView;
     private final String role;
 
-    public QuantityItemAdapter(List<ItemWithQuantity> dataset, RecyclerView recyclerView, String role) {
+    public QuantityItemAdapter(List<GenericItem> dataset, String role) {
         this.dataset = dataset;
-        this.recyclerView = recyclerView;
         this.role = role;
     }
 
@@ -59,7 +55,7 @@ public class QuantityItemAdapter extends RecyclerView.Adapter<QuantityItemAdapte
         }
 
         // Item reference
-        ItemWithQuantity item;
+        GenericItem item;
         Context context;
 
         ViewHolder(View itemView) {
@@ -92,13 +88,13 @@ public class QuantityItemAdapter extends RecyclerView.Adapter<QuantityItemAdapte
          * The methode in charge of displaying an item
          * @param item The current Period item
          */
-        void display(ItemWithQuantity item) {
+        void display(GenericItem item) {
 
             // Save reference of the current item
             this.item = item;
             // Set fields according to current item
             name.setText(item.name != null ? item.name : "");
-            quantity.setText(item.quantity != null ? item.quantity.toString() : "");
+            quantity.setText(item.quantity != null ? item.quantity.toString() : String.valueOf(0f));
             if (item.unit != null)
                 if (!item.unit.equals("null")) {
                     @StringRes final int labelRes = context.getResources().getIdentifier(
@@ -112,6 +108,12 @@ public class QuantityItemAdapter extends RecyclerView.Adapter<QuantityItemAdapte
                 unit.setVisibility(GONE);
             }
         }
+    }
+
+    @Override
+    public void onAttachedToRecyclerView(@NonNull RecyclerView recyclerView) {
+        super.onAttachedToRecyclerView(recyclerView);
+        this.recyclerView = recyclerView;
     }
 
     @NonNull
