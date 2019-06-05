@@ -405,7 +405,7 @@ public class InterventionFormFragment extends Fragment {
 //                        cursor.getString(2),    // type
                         "input",
                         cursor.getString(5).split(","),    // abilities
-                        cursor.getString(3)     // unit
+                        cursor.isNull(3) ? null : cursor.getString(3)   // unit
                 ));
             }
         }

@@ -57,7 +57,7 @@ public class Input {
         id = object.getInt("id");
         name = object.getString("name");
         reference_name = object.getString("reference_name");
-        quantity_unit_name = object.getString("quantity_unit_name");
+        quantity_unit_name = object.isNull("quantity_unit_name") ? null : object.getString("quantity_unit_name");
         if (!object.isNull("variety"))
             variety = object.getString("variety");
 

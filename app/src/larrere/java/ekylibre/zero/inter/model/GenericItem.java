@@ -1,5 +1,6 @@
 package ekylibre.zero.inter.model;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,7 +11,7 @@ public class GenericItem {
     public String number;
     public String type;
     public String[] abilities;
-    public Float quantity;
+    public BigDecimal quantity;
     public String unit;
     public boolean isSelected;
     public List<String> referenceName;

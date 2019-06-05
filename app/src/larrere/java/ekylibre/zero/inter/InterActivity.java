@@ -3,9 +3,7 @@ package ekylibre.zero.inter;
 import android.accounts.Account;
 import android.content.ContentResolver;
 import android.content.ContentValues;
-import android.database.Cursor;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.ArrayMap;
 import android.util.Log;
@@ -34,16 +32,13 @@ import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import ekylibre.database.ZeroContract;
 import ekylibre.database.ZeroContract.DetailedInterventionAttributes;
 import ekylibre.database.ZeroContract.DetailedInterventions;
 import ekylibre.util.AccountTool;
 import ekylibre.util.ProcedureFamiliesXMLReader;
 import ekylibre.util.ProceduresXMLReader;
 import ekylibre.util.ontology.Node;
-import ekylibre.util.pojo.GenericEntity;
 import ekylibre.util.pojo.ProcedureEntity;
-import ekylibre.util.ontology.XMLReader;
 import ekylibre.zero.BuildConfig;
 import ekylibre.zero.R;
 import ekylibre.zero.home.Zero;
@@ -67,8 +62,6 @@ public class InterActivity extends AppCompatActivity implements FragmentManager.
     public static final String PROCEDURE_NATURE_FRAGMENT = "ekylibre.zero.fragments.procedure.nature";
     public static final String INTERVENTION_FORM = "ekylibre.zero.fragments.intervention.form";
     public static final String PARAM_FRAGMENT = "ekylibre.zero.fragments.intervention.param";
-    public static final String CROP_CHOICE_FRAGMENT = "ekylibre.zero.fragments.crop.choice";
-    public static final String INPUT_CHOICE_FRAGMENT = "ekylibre.zero.fragments.input.choice";
 
     private static final Pair<Integer,String> ADMINISTERING = Pair.create(R.id.administering, "administering");
     private static final Pair<Integer,String> ANIMAL_FARMING = Pair.create(R.id.animal_farming, "animal_farming");
@@ -124,17 +117,6 @@ public class InterActivity extends AppCompatActivity implements FragmentManager.
 
         // Load procedure natures, families and params from assets
         loadXMLAssets();
-
-//        if (ontology == null) {
-//            try {
-//                // Read db.xml to build ontology
-//                InputStream inputStream = getAssets().open("db.xml");
-//                new XMLReader(inputStream).execute();
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//            }
-//        }
-
     }
 
     @Override
@@ -430,87 +412,31 @@ public class InterActivity extends AppCompatActivity implements FragmentManager.
 
         // Storing working time
 
-
-
-        // Initialize parameters list by endpoint
-        List<ContentValues> targetsCv = new ArrayList<>();
-        List<ContentValues> equipmentsCv = new ArrayList<>();
-        List<ContentValues> workersCv = new ArrayList<>();
-        List<ContentValues> inputsAttributesCv = new ArrayList<>();
-        List<ContentValues> outputsAttributesCv = new ArrayList<>();
+        List<ContentValues> allParamsCv = new ArrayList<>();
 
         // Store parameters by reference_name
         for (GenericItem param : InterventionFormFragment.paramsList) {
             for (String refName : param.referenceName) {
 
                 ContentValues paramCv = new ContentValues();
+                paramCv.put(DetailedInterventionAttributes.DETAILED_INTERVENTION_ID, interId);
                 paramCv.put(DetailedInterventionAttributes.REFERENCE_ID, param.id);
                 paramCv.put(DetailedInterventionAttributes.REFERENCE_NAME, refName);
 
-                switch (param.type) {
-
-                    case "plant":
-                    case "land_parcel":
-                        targetsCv.add(paramCv);
-                        break;
-
-                    case "doer":
-                        workersCv.add(paramCv);
-                        break;
-
-                    case "tool":
-                        equipmentsCv.add(paramCv);
-                        break;
-
+                if (param.type.equals("input")) {
+                    paramCv.put(DetailedInterventionAttributes.QUANTITY_VALUE, param.quantity.toString());
+                    paramCv.put(DetailedInterventionAttributes.QUANTITY_UNIT_NAME, param.unit);
                 }
+
+                allParamsCv.add(paramCv);
             }
         }
 
-//        for (ItemWithQuantity param : inputList) {
-//
-//            for (String refName : param.type) {
-//
-//                ContentValues paramCv = new ContentValues();
-//                paramCv.put(DetailedInterventionAttributes.REFERENCE_ID, param.id);
-//                paramCv.put(DetailedInterventionAttributes.REFERENCE_NAME, refName);
-//            }
-//        }
+        // Insert into database & get returning id
+        cr.bulkInsert(DetailedInterventionAttributes.CONTENT_URI, allParamsCv.toArray(new ContentValues[0]));
 
-
-//            if (param.isSelected) {
-//
-//                for (String role : param.referenceName) {
-//                    Log.e(TAG, role + " / " + param.type);
-//
-//                    switch (param.type) {
-//
-//                        case "equipment":               // equipments
-//                        case "handling_equipment":
-//                        case "motorized_vehicle":
-//                        case "portable_equipment":
-//                        case "tank":
-//                        case "trailed_equipment":
-//                        case "tractor":
-//                        case "worker":                  // workers
-//                        case "seed":                    // inputs
-//                        case "seedling":
-//                        case "preparation":
-//                        case "matter":
-//                        case "oil":
-//                        case "excrement":
-//                        case "cucurbita_maxima_potimarron":
-//                        case "pomace":
-//                        case "water":
-//                        case "vegetable":
-//                        case PLANT:
-//                        case LAND_PARCEL:
-//                            saveAttribute(cr, interId, role, param);
-//                            break;
-//
-//                    }
-//                }
-//            }
-//        }
+        // Close the activity
+        finish();
 //
 //        String whereClause = DetailedInterventions._ID + "=?";
 //        String[] args = new String[] {String.valueOf(interId)};
@@ -524,8 +450,6 @@ public class InterActivity extends AppCompatActivity implements FragmentManager.
 //                Log.i(TAG, "L'enregistrement est bien en base");
 //        }
 //
-//        // Close the activity
-//        finish();
 
 
 //        // Trying sync query

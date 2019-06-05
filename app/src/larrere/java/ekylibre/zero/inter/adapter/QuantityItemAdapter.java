@@ -14,6 +14,7 @@ import androidx.annotation.StringRes;
 import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import butterknife.BindView;
@@ -51,7 +52,7 @@ public class QuantityItemAdapter extends RecyclerView.Adapter<QuantityItemAdapte
         // Set quantity click listeners
         @OnTextChanged(R.id.quantity_value)
         void onQuantityChanged(CharSequence value, int start, int count, int after) {
-            item.quantity = Float.valueOf(value.length() > 0 ? value.toString() : "0");
+            item.quantity = new BigDecimal(value.length() > 0 ? value.toString() : "0");
         }
 
         // Item reference
@@ -95,18 +96,14 @@ public class QuantityItemAdapter extends RecyclerView.Adapter<QuantityItemAdapte
             // Set fields according to current item
             name.setText(item.name != null ? item.name : "");
             quantity.setText(item.quantity != null ? item.quantity.toString() : String.valueOf(0f));
-            if (item.unit != null)
-                if (!item.unit.equals("null")) {
-                    @StringRes final int labelRes = context.getResources().getIdentifier(
-                            item.unit, "string", Zero.getPkgName());
-                    unit.setText(labelRes);
-                    unit.setVisibility(VISIBLE);
-                } else {
-                    unit.setVisibility(GONE);
-                }
-            else {
+            if (item.unit != null) {
+                Log.e("ItemAdapter", "Item unit = " + item.unit);
+                @StringRes final int labelRes = context.getResources().getIdentifier(
+                        item.unit, "string", Zero.getPkgName());
+                unit.setText(labelRes);
+                unit.setVisibility(VISIBLE);
+            } else
                 unit.setVisibility(GONE);
-            }
         }
     }
 
