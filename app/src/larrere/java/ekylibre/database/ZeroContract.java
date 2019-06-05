@@ -279,6 +279,7 @@ public final class ZeroContract {
         String TABLE_NAME = "detailed_interventions";  // carefull, intervention table name exists !
         String PROCEDURE_NAME = "procedure_name";
         String CREATED_ON = "created_on";
+        String EK_ID = "ek_id";
         String USER = "user";
     }
 
@@ -667,7 +668,7 @@ public final class ZeroContract {
     public static final class DetailedInterventions implements DetailedInterventionColumns {
         public static final Uri CONTENT_URI = Uri.withAppendedPath(ZeroContract.CONTENT_URI, "detailed_interventions");
         public static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/vnd.ekylibre.zero.detailed_interventions";
-        public static final String[] PROJECTION_ALL = {_ID, PROCEDURE_NAME, CREATED_ON, USER};
+        public static final String[] PROJECTION_ALL = {_ID, PROCEDURE_NAME, CREATED_ON, EK_ID, USER};
         public static final String SORT_ORDER_DEFAULT = CREATED_ON + " DESC";
     }
 

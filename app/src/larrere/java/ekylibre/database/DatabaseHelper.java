@@ -470,6 +470,7 @@ public class DatabaseHelper extends SQLiteOpenHelper
                         ZeroContract.DetailedInterventions._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                         ZeroContract.DetailedInterventions.PROCEDURE_NAME + " TEXT NOT NULL, " +
                         ZeroContract.DetailedInterventions.CREATED_ON + " DATETIME NOT NULL, " +
+                        ZeroContract.DetailedInterventions.EK_ID + " INTEGER, " +
                         ZeroContract.DetailedInterventions.USER + " TEXT)");
 
                 database.execSQL("CREATE TABLE IF NOT EXISTS " + ZeroContract.DetailedInterventionAttributes.TABLE_NAME + "(" +
@@ -519,7 +520,7 @@ public class DatabaseHelper extends SQLiteOpenHelper
                         ZeroContract.Inputs.EK_ID + " INTEGER PRIMARY KEY, " +
                         ZeroContract.Inputs.NAME + " TEXT NOT NULL, " +
                         ZeroContract.Inputs.REFERENCE_NAME + " TEXT, " +
-                        ZeroContract.Inputs.QUANTITY_UNIT_NAME + " TEXT NOT NULL, " +
+                        ZeroContract.Inputs.QUANTITY_UNIT_NAME + " TEXT, " +
                         ZeroContract.Inputs.VARIETY + " TEXT, " +
                         ZeroContract.Inputs.ABILITIES + " TEXT, " +
                         ZeroContract.Inputs.DEAD_AT + " DATETIME, " +
@@ -529,7 +530,7 @@ public class DatabaseHelper extends SQLiteOpenHelper
                         ZeroContract.Outputs.EK_ID + " INTEGER PRIMARY KEY, " +
                         ZeroContract.Outputs.NAME + " TEXT NOT NULL, " +
                         ZeroContract.Outputs.REFERENCE_NAME + " TEXT, " +
-                        ZeroContract.Outputs.QUANTITY_UNIT_NAME + " TEXT NOT NULL, " +
+                        ZeroContract.Outputs.QUANTITY_UNIT_NAME + " TEXT, " +
                         ZeroContract.Outputs.VARIETY + " TEXT, " +
                         ZeroContract.Outputs.ABILITIES + " TEXT, " +
                         ZeroContract.Outputs.DEAD_AT + " DATETIME, " +
