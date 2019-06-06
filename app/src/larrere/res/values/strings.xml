@@ -396,5 +396,8 @@
     <string name="unity_per_square_meter"><![CDATA[ ./m<sup><small>2</small></sup> ]]></string>
     <string name="watt">W</string>
     <string name="watt_per_square_meter"><![CDATA[ W/m<sup><small>2</small></sup> ]]></string>
+    <string name="zone">Zone</string>
+    <string name="variety">Variété</string>
+    <string name="batch_number">N° de lot</string>
 
 </resources>

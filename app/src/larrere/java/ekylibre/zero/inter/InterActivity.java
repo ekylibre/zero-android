@@ -384,16 +384,19 @@ public class InterActivity extends AppCompatActivity implements FragmentManager.
         return true;
     }
 
-    private void saveAttribute(ContentResolver cr, long id, String role, GenericItem item) {
-        ContentValues cv = new ContentValues();
-        cv.put(DetailedInterventionAttributes.DETAILED_INTERVENTION_ID, id);
-        cv.put(DetailedInterventionAttributes.REFERENCE_NAME, role);
-        cv.put(DetailedInterventionAttributes.REFERENCE_ID, item.id);
-        Uri plantUri = cr.insert(DetailedInterventionAttributes.CONTENT_URI, cv);
-        if (BuildConfig.DEBUG && plantUri != null && plantUri.getLastPathSegment() != null)
-            Log.i(TAG, role + " -> " + item.name + " (id=" + plantUri.getLastPathSegment() + ")");
-    }
+//    private void saveAttribute(ContentResolver cr, long id, String role, GenericItem item) {
+//        ContentValues cv = new ContentValues();
+//        cv.put(DetailedInterventionAttributes.DETAILED_INTERVENTION_ID, id);
+//        cv.put(DetailedInterventionAttributes.REFERENCE_NAME, role);
+//        cv.put(DetailedInterventionAttributes.REFERENCE_ID, item.id);
+//        Uri plantUri = cr.insert(DetailedInterventionAttributes.CONTENT_URI, cv);
+//        if (BuildConfig.DEBUG && plantUri != null && plantUri.getLastPathSegment() != null)
+//            Log.i(TAG, role + " -> " + item.name + " (id=" + plantUri.getLastPathSegment() + ")");
+//    }
 
+    /**
+     * Method used to verify and save intervention
+     */
     private void saveIntervention() {
 
         ContentResolver cr = getContentResolver();
@@ -413,7 +416,10 @@ public class InterActivity extends AppCompatActivity implements FragmentManager.
             Log.i(TAG, "Intervention id = " + interId);
 
 
-        // Storing working time
+        // ------------ //
+        // Working time //
+        // ------------ //
+
         List<ContentValues> bulkPeriodCv = new ArrayList<>();
 
         for (Period period : InterventionFormFragment.periodList) {
@@ -426,7 +432,11 @@ public class InterActivity extends AppCompatActivity implements FragmentManager.
         }
         cr.bulkInsert(WorkingPeriodAttributes.CONTENT_URI, bulkPeriodCv.toArray(new ContentValues[0]));
 
-        // Store parameters by reference_name
+
+        // ----------------------- //
+        // Intervention parameters //
+        // ----------------------- //
+
         List<ContentValues> bulkParamCv = new ArrayList<>();
 
         for (GenericItem param : InterventionFormFragment.paramsList) {
@@ -437,7 +447,7 @@ public class InterActivity extends AppCompatActivity implements FragmentManager.
                 paramCv.put(DetailedInterventionAttributes.REFERENCE_ID, param.id);
                 paramCv.put(DetailedInterventionAttributes.REFERENCE_NAME, refName);
 
-                if (param.type.equals("input")) {
+                if (param.type.equals("input") || param.type.equals("output") ) {
                     paramCv.put(DetailedInterventionAttributes.QUANTITY_VALUE, param.quantity.toString());
                     paramCv.put(DetailedInterventionAttributes.QUANTITY_UNIT_NAME, param.unit);
                 }
@@ -448,8 +458,16 @@ public class InterActivity extends AppCompatActivity implements FragmentManager.
         // Insert into database & get returning id
         cr.bulkInsert(DetailedInterventionAttributes.CONTENT_URI, bulkParamCv.toArray(new ContentValues[0]));
 
-        // Close the activity
+
+        // ------ //
+        // Finish //
+        // ------ //
+
         finish();
+
+
+
+
 //
 //        String whereClause = DetailedInterventions._ID + "=?";
 //        String[] args = new String[] {String.valueOf(interId)};

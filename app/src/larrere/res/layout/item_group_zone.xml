@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingBottom="12dp"
+    android:background="@drawable/stroke_background_round_corners">
+
+    <androidx.constraintlayout.widget.Barrier
+        android:id="@+id/barrier"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:barrierDirection="right"
+        app:constraint_referenced_ids="parcel_label,crop_label"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <androidx.constraintlayout.widget.Barrier
+        android:id="@+id/barrier_crop"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:barrierDirection="right"
+        app:constraint_referenced_ids="crop_variety_label,crop_number_label"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/zone_delete"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:srcCompat="@drawable/cancel"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_margin="12dp"
+        android:adjustViewBounds="true"
+        android:scaleType="fitXY" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/parcel_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:text="@string/land_parcel"
+        android:textStyle="bold"/>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/parcel_add"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="@id/parcel_label"
+        app:layout_constraintBottom_toBottomOf="@id/parcel_label"
+        app:layout_constraintStart_toEndOf="@id/barrier"
+        android:layout_marginStart="12dp"
+        android:text="@string/add"
+        style="@style/AddTextButton"
+        android:visibility="visible"/>
+
+    <com.google.android.material.chip.Chip
+        android:id="@+id/parcel_chip"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        app:closeIconEnabled="true"
+        app:layout_constraintStart_toStartOf="@id/parcel_label"
+        app:layout_constraintTop_toBottomOf="@id/parcel_label"
+        tools:text="BAX2 Asperge Bio #2"
+        android:visibility="gone" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/crop_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/parcel_chip"
+        android:layout_marginTop="16dp"
+        android:layout_marginStart="16dp"
+        android:text="@string/crop"
+        android:textStyle="bold"/>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/crop_add"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="@id/crop_label"
+        app:layout_constraintBottom_toBottomOf="@id/crop_label"
+        app:layout_constraintStart_toEndOf="@id/barrier"
+        android:layout_marginStart="12dp"
+        android:text="@string/add"
+        style="@style/AddTextButton"
+        android:visibility="visible"/>
+
+    <com.google.android.material.chip.Chip
+        android:id="@+id/crop_chip"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="Culture d'Asperge (Tonne)"
+        app:layout_constraintStart_toStartOf="@id/crop_label"
+        app:layout_constraintTop_toBottomOf="@id/crop_label"
+        android:layout_marginStart="16dp"
+        app:closeIconEnabled="true"
+        android:visibility="gone" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/crop_variety_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="@id/crop_chip"
+        app:layout_constraintBaseline_toBaselineOf="@id/variety_value"
+        android:layout_marginTop="8dp"
+        android:text="@string/variety"
+        android:textStyle="bold"
+        android:labelFor="@id/variety_value"
+        android:visibility="gone"/>
+
+    <EditText
+        android:id="@+id/variety_value"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/crop_chip"
+        app:layout_constraintStart_toEndOf="@id/barrier_crop"
+        app:layout_constraintEnd_toStartOf="@id/zone_delete"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="6dp"
+        android:paddingStart="@dimen/field_padding_horizontal"
+        android:paddingEnd="@dimen/field_padding_horizontal"
+        android:paddingTop="@dimen/field_padding_vertical"
+        android:paddingBottom="@dimen/field_padding_vertical"
+        android:inputType="text"
+        android:imeOptions="actionDone"
+        android:textSize="15sp"
+        android:background="@drawable/field_rounded_white"
+        tools:text="Apache"
+        tools:ignore="Autofill"
+        android:visibility="gone"/>
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/crop_number_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="@id/crop_chip"
+        app:layout_constraintBaseline_toBaselineOf="@id/batch_number_value"
+        android:layout_marginTop="8dp"
+        android:text="@string/batch_number"
+        android:textStyle="bold"
+        android:labelFor="@id/batch_number_value"
+        android:visibility="gone"/>
+
+    <EditText
+        android:id="@+id/batch_number_value"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/variety_value"
+        app:layout_constraintStart_toEndOf="@id/barrier_crop"
+        app:layout_constraintEnd_toStartOf="@id/zone_delete"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="10dp"
+        android:paddingStart="@dimen/field_padding_horizontal"
+        android:paddingEnd="@dimen/field_padding_horizontal"
+        android:paddingTop="@dimen/field_padding_vertical"
+        android:paddingBottom="@dimen/field_padding_vertical"
+        android:inputType="text"
+        android:imeOptions="actionDone"
+        android:textSize="15sp"
+        android:background="@drawable/field_rounded_white"
+        tools:text="P20190000256"
+        tools:ignore="Autofill,TextFields"
+        android:visibility="gone"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

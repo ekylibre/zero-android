@@ -12,7 +12,6 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.annotation.StringRes;
 import androidx.appcompat.widget.LinearLayoutCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -31,16 +30,16 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import ekylibre.database.ZeroContract.Equipments;
 import ekylibre.database.ZeroContract.Inputs;
+import ekylibre.database.ZeroContract.Outputs;
 import ekylibre.database.ZeroContract.LandParcels;
 import ekylibre.database.ZeroContract.Plants;
 import ekylibre.database.ZeroContract.Workers;
 import ekylibre.util.MarginTopItemDecoration;
-import ekylibre.util.Translate;
+import ekylibre.util.Helper;
 import ekylibre.util.layout.component.WidgetParamView;
 import ekylibre.util.pojo.GenericEntity;
 import ekylibre.zero.BuildConfig;
 import ekylibre.zero.R;
-import ekylibre.zero.home.Zero;
 import ekylibre.zero.inter.InterActivity;
 import ekylibre.zero.inter.adapter.FormPeriodAdapter;
 import ekylibre.zero.inter.adapter.QuantityItemAdapter;
@@ -56,7 +55,8 @@ import static ekylibre.zero.inter.enums.ParamType.PLANT;
 public class InterventionFormFragment extends Fragment {
 
     private static final String TAG = "InterventionFormFragmen";
-    private static final String likeAccountName = String.format("user LIKE \"%s\"", account.name);
+    private static final String accountAndNotDead =
+            String.format("user LIKE \"%s\" AND dead_at IS NULL", account.name);
 
     private Context context;
     private OnFragmentInteractionListener listener;
@@ -105,6 +105,7 @@ public class InterventionFormFragment extends Fragment {
         paramsList.addAll(getTools(cr));
         paramsList.addAll(getPlantsAndLandParcels(cr));
         paramsList.addAll(getInputs(cr));
+        paramsList.addAll(getOutputs(cr));
     }
 
     @Override
@@ -113,7 +114,7 @@ public class InterventionFormFragment extends Fragment {
         if (BuildConfig.DEBUG) Log.d(TAG, "onCreateView");
 
         // Set title
-        InterActivity.actionBar.setTitle(Translate.getStringId(context, InterActivity.selectedProcedure.name));
+        InterActivity.actionBar.setTitle(Helper.getStringId(InterActivity.selectedProcedure.name));
 
         // Inflate layout
         View view = inflater.inflate(R.layout.fragment_intervention_form, container, false);
@@ -138,6 +139,33 @@ public class InterventionFormFragment extends Fragment {
         // Group layout //
         // ------------ //
 
+        // Group attributes can only be [target], [input] or [output]
+
+        if (selectedProcedure.group != null) {
+
+            // Check if there is target in this group
+            for (GenericEntity target : selectedProcedure.target) {
+                if (target.group.equals(selectedProcedure.group)) {
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                }
+            }
+
+
+
+        }
 
 
 
@@ -147,50 +175,41 @@ public class InterventionFormFragment extends Fragment {
 
         // Check wether to display crop, parcel or both selector
         for (GenericEntity target : selectedProcedure.target) {
-//            switch (target.name) {
 
-//                case "land_parcel":
-//                case "plant":
-//                    widgetContainer.addView(new WidgetParamView(context, listener, target, paramsList));
-//                    break;
+            if (target.group == null) {
 
-//                case "cultivation":
+                // Inflate the layout
+                View cropParcelView = inflater.inflate(R.layout.widget_param_layout, container, false);
+                TextView label = cropParcelView.findViewById(R.id.widget_label);
 
-            // Inflate the layout
-            View cropParcelView = inflater.inflate(R.layout.widget_param_layout, container, false);
-            TextView label = cropParcelView.findViewById(R.id.widget_label);
-
-            // Set the title
-            if (target.name.equals("cultivation"))
-                label.setText(R.string.crop_parcel);
-            else {
-                @StringRes final int labelRes = getResources().getIdentifier(target.name, "string", Zero.getPkgName());
-                label.setText(labelRes);
-            }
-            TextView addButton = cropParcelView.findViewById(R.id.widget_add);
-            ChipGroup cropChipGroup = cropParcelView.findViewById(R.id.widget_chips_group);
-            addButton.setOnClickListener(v -> listener.onFormFragmentInteraction(target.name, target.filter));  // CROP_CHOICE_FRAGMENT
-
-            // ChipGroup Logic
-            for (GenericItem item : paramsList) {
-                if ((item.type.equals(PLANT) || item.type.equals(LAND_PARCEL)) && item.isSelected) {
-                    Chip chip = new Chip(context);
-                    chip.setText(item.name);
-                    chip.setCloseIconVisible(true);
-                    chip.setOnCloseIconClickListener(v -> {
-                        cropChipGroup.removeView(chip);
-                        item.isSelected = false;
-                        item.referenceName.remove(target.name);
-                      chipGroupDisplay(cropChipGroup);
-                    });
-                    cropChipGroup.addView(chip);
+                // Set the title
+                if (target.name.equals("cultivation"))
+                    label.setText(R.string.crop_parcel);
+                else {
+                    label.setText(Helper.getStringId(target.name));
                 }
-            }
-            chipGroupDisplay(cropChipGroup);
-            widgetContainer.addView(cropParcelView);
+                TextView addButton = cropParcelView.findViewById(R.id.widget_add);
+                ChipGroup cropChipGroup = cropParcelView.findViewById(R.id.widget_chips_group);
+                addButton.setOnClickListener(v -> listener.onFormFragmentInteraction(target.name, target.filter));  // CROP_CHOICE_FRAGMENT
 
-//                    break;
-//            }
+                // ChipGroup Logic
+                for (GenericItem item : paramsList) {
+                    if ((item.type.equals(PLANT) || item.type.equals(LAND_PARCEL)) && item.isSelected) {
+                        Chip chip = new Chip(context);
+                        chip.setText(item.name);
+                        chip.setCloseIconVisible(true);
+                        chip.setOnCloseIconClickListener(v -> {
+                            cropChipGroup.removeView(chip);
+                            item.isSelected = false;
+                            item.referenceName.remove(target.name);
+                            chipGroupDisplay(cropChipGroup);
+                        });
+                        cropChipGroup.addView(chip);
+                    }
+                }
+                chipGroupDisplay(cropChipGroup);
+                widgetContainer.addView(cropParcelView);
+            }
         }
 
         // ------------- //
@@ -200,41 +219,79 @@ public class InterventionFormFragment extends Fragment {
         for (GenericEntity inputType : selectedProcedure.input) {
             if (BuildConfig.DEBUG) Log.i(TAG, "Build layout for input --> " + inputType.name);
 
-            // Get layout
-            View inputView = inflater.inflate(R.layout.widget_input, container, false);
 
-            // Set param label
-            TextView label = inputView.findViewById(R.id.widget_label);
-            @StringRes final int labelRes = getResources().getIdentifier(inputType.name, "string", Zero.getPkgName());
-            label.setText(labelRes);
+            if (inputType.group == null) {
+                if (BuildConfig.DEBUG) Log.i(TAG, "Build layout for input --> " + inputType.name);
 
-            // Add onClick listener
-            TextView addButton = inputView.findViewById(R.id.widget_add);
-            addButton.setOnClickListener(v -> listener.onFormFragmentInteraction(inputType.name, inputType.filter));
+                // Get layout
+                View inputView = inflater.inflate(R.layout.widget_input, container, false);
 
-            // Initialize Recycler
-            RecyclerView inputRecycler = inputView.findViewById(R.id.widget_recycler);
-            inputRecycler.setLayoutManager(new LinearLayoutManager(context));
-            inputRecycler.addItemDecoration(new MarginTopItemDecoration(context, 16));
-            QuantityItemAdapter quantityItemAdapter = new QuantityItemAdapter(
-                    getCurrentDataset(inputType.name), inputType.name);
-            inputRecycler.setAdapter(quantityItemAdapter);
-            inputRecycler.requestLayout();
+                // Set param label
+                TextView label = inputView.findViewById(R.id.widget_label);
+                label.setText(Helper.getStringId(inputType.name));
 
-            Log.e(TAG, "Adapter size = " + quantityItemAdapter.getItemCount());
+                // Add onClick listener
+                TextView addButton = inputView.findViewById(R.id.widget_add);
+                addButton.setOnClickListener(v -> listener.onFormFragmentInteraction(inputType.name, inputType.filter));
 
-            // Set visibility if one item is corresponding current input type
-            int visibility = quantityItemAdapter.getItemCount() == 0 ? View.GONE : View.VISIBLE;
-            inputRecycler.setVisibility(visibility);
+                // Initialize Recycler
+                RecyclerView inputRecycler = inputView.findViewById(R.id.widget_recycler);
+                inputRecycler.setLayoutManager(new LinearLayoutManager(context));
+                inputRecycler.addItemDecoration(new MarginTopItemDecoration(context, 16));
+                QuantityItemAdapter quantityItemAdapter = new QuantityItemAdapter(
+                        getCurrentDataset(inputType.name), inputType.name);
+                inputRecycler.setAdapter(quantityItemAdapter);
+                inputRecycler.requestLayout();
 
-//            for (GenericItem item : inputList)
-//                if (item.referenceName.contains(inputType.name)) {
-//                    visibility = View.VISIBLE;
-//                    break;
-//                }
+                Log.e(TAG, "Adapter size = " + quantityItemAdapter.getItemCount());
 
-            // Add view
-            widgetContainer.addView(inputView);
+                // Set visibility if one item is corresponding current input type
+                int visibility = quantityItemAdapter.getItemCount() == 0 ? View.GONE : View.VISIBLE;
+                inputRecycler.setVisibility(visibility);
+
+                // Add view
+                widgetContainer.addView(inputView);
+            }
+        }
+
+        // ------------- //
+        // Output layout //
+        // ------------- //
+
+        for (GenericEntity outputType : selectedProcedure.input) {
+
+            if (outputType.group == null) {
+                if (BuildConfig.DEBUG) Log.i(TAG, "Build layout for output --> " + outputType.name);
+
+                // Get layout (same as input)
+                View inputView = inflater.inflate(R.layout.widget_input, container, false);
+
+                // Set param label
+                TextView label = inputView.findViewById(R.id.widget_label);
+                label.setText(Helper.getStringId(outputType.name));
+
+                // Add onClick listener
+                TextView addButton = inputView.findViewById(R.id.widget_add);
+                addButton.setOnClickListener(v -> listener.onFormFragmentInteraction(outputType.name, outputType.filter));
+
+                // Initialize Recycler
+                RecyclerView inputRecycler = inputView.findViewById(R.id.widget_recycler);
+                inputRecycler.setLayoutManager(new LinearLayoutManager(context));
+                inputRecycler.addItemDecoration(new MarginTopItemDecoration(context, 16));
+                QuantityItemAdapter quantityItemAdapter = new QuantityItemAdapter(
+                        getCurrentDataset(outputType.name), outputType.name);
+                inputRecycler.setAdapter(quantityItemAdapter);
+                inputRecycler.requestLayout();
+
+                Log.e(TAG, "Adapter size = " + quantityItemAdapter.getItemCount());
+
+                // Set visibility if one item is corresponding current input type
+                int visibility = quantityItemAdapter.getItemCount() == 0 ? View.GONE : View.VISIBLE;
+                inputRecycler.setVisibility(visibility);
+
+                // Add view
+                widgetContainer.addView(inputView);
+            }
         }
 
         // -------------- //
@@ -263,20 +320,9 @@ public class InterventionFormFragment extends Fragment {
         List<GenericItem> dataset = new ArrayList<>();
 
         // Loop over all items availables for this role
-        for (GenericItem item : paramsList) {
-
+        for (GenericItem item : paramsList)
             if (item.referenceName.contains(role))
                 dataset.add(item);
-
-
-//            if (inputList.contains(item)) {
-//                if (!item.referenceName.contains(role))
-//                    inputList.remove(item);
-//            } else {
-//                if (item.referenceName.contains(role))
-//                    inputList.add(item);
-//            }
-        }
 
         return dataset;
     }
@@ -303,9 +349,7 @@ public class InterventionFormFragment extends Fragment {
 
         // Load Plants
         try (Cursor cursor = cr.query(Plants.CONTENT_URI, Plants.PROJECTION_INTER,
-                likeAccountName + " AND " + Plants.ACTIVE + " == " + 1
-                        + " AND " + Plants.DEAD_AT + " IS NULL",
-                null, Plants.SORT_ORDER_NAME)) {
+                accountAndNotDead, null, Plants.SORT_ORDER_NAME)) {
 
             while (cursor != null && cursor.moveToNext())
                 list.add(new GenericItem(
@@ -320,8 +364,7 @@ public class InterventionFormFragment extends Fragment {
 
 //        // Load Land Parcels
         try (Cursor cursor = cr.query(LandParcels.CONTENT_URI, LandParcels.PROJECTION_ALL,
-                likeAccountName + " AND " + LandParcels.DEAD_AT + " IS NULL",
-                null, LandParcels.SORT_ORDER_DEFAULT)) {
+                accountAndNotDead, null, LandParcels.SORT_ORDER_DEFAULT)) {
 
             while (cursor != null && cursor.moveToNext())
                 list.add(new GenericItem(
@@ -334,7 +377,7 @@ public class InterventionFormFragment extends Fragment {
                 ));
         }
 
-        sortAlphabetically(list);
+//        sortAlphabetically(list);
         return list;
     }
 
@@ -343,8 +386,7 @@ public class InterventionFormFragment extends Fragment {
 
         // Load Workers
         try (Cursor cursor = cr.query(Workers.CONTENT_URI, Workers.PROJECTION_ALL,
-                likeAccountName + " AND " + Workers.DEAD_AT + " IS NULL",
-                null, Workers.SORT_ORDER_DEFAULT)) {
+                accountAndNotDead, null, Workers.SORT_ORDER_DEFAULT)) {
 
             while (cursor != null && cursor.moveToNext())
                 list.add(new GenericItem(
@@ -358,7 +400,7 @@ public class InterventionFormFragment extends Fragment {
                 ));
         }
 
-        sortAlphabetically(list);
+//        sortAlphabetically(list);
         return list;
     }
 
@@ -367,8 +409,7 @@ public class InterventionFormFragment extends Fragment {
 
         // Load Plants
         try (Cursor cursor = cr.query(Equipments.CONTENT_URI, Equipments.PROJECTION_ALL,
-                likeAccountName + " AND " + Equipments.DEAD_AT + " IS NULL",
-                null, Equipments.SORT_ORDER_DEFAULT)) {
+                accountAndNotDead, null, Equipments.SORT_ORDER_DEFAULT)) {
 
             while (cursor != null && cursor.moveToNext())
                 list.add(new GenericItem(
@@ -382,7 +423,7 @@ public class InterventionFormFragment extends Fragment {
                 ));
         }
 
-        sortAlphabetically(list);
+//        sortAlphabetically(list);
         return list;
     }
 
@@ -391,8 +432,7 @@ public class InterventionFormFragment extends Fragment {
 
         // Load Inputs
         try (Cursor cursor = cr.query(Inputs.CONTENT_URI, Inputs.PROJECTION_ALL,
-                likeAccountName + " AND " + Inputs.DEAD_AT + " IS NULL",
-                null, Inputs.SORT_ORDER_DEFAULT)) {
+                accountAndNotDead, null, Inputs.SORT_ORDER_DEFAULT)) {
 
             while (cursor != null && cursor.moveToNext()) {
                 list.add(new GenericItem(
@@ -406,7 +446,29 @@ public class InterventionFormFragment extends Fragment {
                 ));
             }
         }
-        sortAlphabetically(list);
+//        sortAlphabetically(list);
+        return list;
+    }
+
+    private List<GenericItem> getOutputs(ContentResolver cr) {
+        List<GenericItem> list = new ArrayList<>();
+
+        // Load Inputs
+        try (Cursor cursor = cr.query(Outputs.CONTENT_URI, Outputs.PROJECTION_ALL,
+                accountAndNotDead, null, Outputs.SORT_ORDER_DEFAULT)) {
+
+            while (cursor != null && cursor.moveToNext()) {
+                list.add(new GenericItem(
+                        cursor.getInt(0),       // ek_id
+                        cursor.getString(1),    // name
+                        cursor.getString(4),    // number
+                        "output",               // type
+                        cursor.getString(5).split(","),    // abilities
+                        cursor.isNull(3) ? null : cursor.getString(3)   // unit
+                ));
+            }
+        }
+//        sortAlphabetically(list);
         return list;
     }
 
