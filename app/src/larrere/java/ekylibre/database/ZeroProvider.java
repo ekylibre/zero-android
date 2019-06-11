@@ -78,6 +78,8 @@ public class ZeroProvider extends ContentProvider {
     public static final int ROUTE_DETAILED_INTERVENTIONS_ITEM = 1513;
     public static final int ROUTE_DETAILED_INTERVENTION_ATTRIBUTES_LIST = 1514;
     public static final int ROUTE_DETAILED_INTERVENTION_ATTRIBUTES_ITEM = 1515;
+    public static final int ROUTE_BUILDING_DIVISIONS_LIST = 1516;
+    public static final int ROUTE_BUILDING_DIVISIONS_ITEM = 1517;
 
     // UriMatcher, used to decode incoming URIs.
     private static final UriMatcher URI_MATCHER = new UriMatcher(UriMatcher.NO_MATCH);
@@ -135,6 +137,8 @@ public class ZeroProvider extends ContentProvider {
         URI_MATCHER.addURI(ZeroContract.AUTHORITY, "detailed_intervention_attributes/#", ROUTE_DETAILED_INTERVENTION_ATTRIBUTES_ITEM);
         URI_MATCHER.addURI(ZeroContract.AUTHORITY, "working_period_attributes", ROUTE_WORKING_PERIOD_ATTRIBUTES_LIST);
         URI_MATCHER.addURI(ZeroContract.AUTHORITY, "working_period_attributes/#", ROUTE_WORKING_PERIOD_ATTRIBUTES_ITEM);
+        URI_MATCHER.addURI(ZeroContract.AUTHORITY, "building_divisions", ROUTE_BUILDING_DIVISIONS_LIST);
+        URI_MATCHER.addURI(ZeroContract.AUTHORITY, "building_divisions/#", ROUTE_BUILDING_DIVISIONS_ITEM);
     }
 
     private DatabaseHelper mDatabaseHelper;
@@ -145,7 +149,7 @@ public class ZeroProvider extends ContentProvider {
         return true;
     }
 
-    // Determine the mime type for records returned by a given URI.
+    // Determine the mime variety for records returned by a given URI.
     @Override
     public String getType(@NonNull Uri uri) {
 
@@ -234,6 +238,10 @@ public class ZeroProvider extends ContentProvider {
             case ROUTE_LAND_PARCELS_LIST:
             case ROUTE_LAND_PARCELS_ITEM:
                 return ZeroContract.LandParcels.CONTENT_TYPE;
+
+            case ROUTE_BUILDING_DIVISIONS_LIST:
+            case ROUTE_BUILDING_DIVISIONS_ITEM:
+                return ZeroContract.BuildingDivisions.CONTENT_TYPE;
 
             case ROUTE_INPUTS_LIST:
             case ROUTE_INPUTS_ITEM:
@@ -494,6 +502,16 @@ public class ZeroProvider extends ContentProvider {
                 cursor.setNotificationUri(contentResolver, uri);
                 return cursor;
 
+            case ROUTE_BUILDING_DIVISIONS_ITEM:
+                id = uri.getLastPathSegment();
+                builder.where(ZeroContract.BuildingDivisions.EK_ID + "=?", id);
+            case ROUTE_BUILDING_DIVISIONS_LIST:
+                builder.table(ZeroContract.BuildingDivisions.TABLE_NAME)
+                        .where(selection, selectionArgs);
+                cursor = builder.query(database, projection, sortOrder);
+                cursor.setNotificationUri(contentResolver, uri);
+                return cursor;
+
             case ROUTE_INPUTS_ITEM:
                 id = uri.getLastPathSegment();
                 builder.where(ZeroContract.Inputs.EK_ID + "=?", id);
@@ -693,6 +711,13 @@ public class ZeroProvider extends ContentProvider {
                 result = Uri.parse(ZeroContract.LandParcels.CONTENT_URI + "/" + id);
                 break;
             case ROUTE_LAND_PARCELS_ITEM:
+                throw new UnsupportedOperationException("Insert not supported on URI: " + uri);
+
+            case ROUTE_BUILDING_DIVISIONS_LIST:
+                id = database.insertWithOnConflict(ZeroContract.BuildingDivisions.TABLE_NAME, null, values, SQLiteDatabase.CONFLICT_REPLACE);
+                result = Uri.parse(ZeroContract.BuildingDivisions.CONTENT_URI + "/" + id);
+                break;
+            case ROUTE_BUILDING_DIVISIONS_ITEM:
                 throw new UnsupportedOperationException("Insert not supported on URI: " + uri);
 
             case ROUTE_INPUTS_LIST:
@@ -987,6 +1012,18 @@ public class ZeroProvider extends ContentProvider {
             case ROUTE_LAND_PARCELS_ITEM:
                 count = builder.table(ZeroContract.LandParcels.TABLE_NAME)
                         .where(ZeroContract.LandParcels.EK_ID + "=?", id)
+                        .where(selection, selectionArgs)
+                        .delete(database);
+                break;
+
+            case ROUTE_BUILDING_DIVISIONS_LIST:
+                count = builder.table(ZeroContract.BuildingDivisions.TABLE_NAME)
+                        .where(selection, selectionArgs)
+                        .delete(database);
+                break;
+            case ROUTE_BUILDING_DIVISIONS_ITEM:
+                count = builder.table(ZeroContract.BuildingDivisions.TABLE_NAME)
+                        .where(ZeroContract.BuildingDivisions.EK_ID + "=?", id)
                         .where(selection, selectionArgs)
                         .delete(database);
                 break;
@@ -1331,6 +1368,19 @@ public class ZeroProvider extends ContentProvider {
                 id = uri.getLastPathSegment();
                 count = builder.table(ZeroContract.LandParcels.TABLE_NAME)
                         .where(ZeroContract.LandParcels.EK_ID + "=?", id)
+                        .where(selection, selectionArgs)
+                        .update(database, values);
+                break;
+
+            case ROUTE_BUILDING_DIVISIONS_LIST:
+                count = builder.table(ZeroContract.BuildingDivisions.TABLE_NAME)
+                        .where(selection, selectionArgs)
+                        .update(database, values);
+                break;
+            case ROUTE_BUILDING_DIVISIONS_ITEM:
+                id = uri.getLastPathSegment();
+                count = builder.table(ZeroContract.BuildingDivisions.TABLE_NAME)
+                        .where(ZeroContract.BuildingDivisions.EK_ID + "=?", id)
                         .where(selection, selectionArgs)
                         .update(database, values);
                 break;

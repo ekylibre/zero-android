@@ -224,6 +224,7 @@ public final class ZeroContract {
         String TABLE_NAME = "equipments";
         String EK_ID = "ek_id";
         String NAME = "name";
+        String WORK_NUMBER = "work_number";
         String NUMBER = "number";
         String VARIETY = "variety";
         String ABILITIES = "abilities";
@@ -236,7 +237,8 @@ public final class ZeroContract {
         String EK_ID = "ek_id";
         String NAME = "name";
         String NUMBER = "number";
-        String QUALIFICATION = "qualification";
+        String WORK_NUMBER = "work_number";
+        String VARIETY = "variety";
         String ABILITIES = "abilities";
         String DEAD_AT = "dead_at";
         String USER = "user";
@@ -251,27 +253,34 @@ public final class ZeroContract {
         String USER = "user";
     }
 
-    public interface InputColumns {
-        String TABLE_NAME = "inputs";
+    public interface BuildingDivisionsColumns {
+        String TABLE_NAME = "building_divisions";
         String EK_ID = "ek_id";
         String NAME = "name";
-        String REFERENCE_NAME = "reference_name";
-        String QUANTITY_UNIT_NAME = "quantity_unit_name";
-        String VARIETY = "variety";
-        String ABILITIES = "abilities";
+        String NET_SURFACE_AREA = "net_surface_area";
         String DEAD_AT = "dead_at";
         String USER = "user";
     }
 
-    public interface OutputColumns {
+    public interface InputColumns {
         String TABLE_NAME = "inputs";
         String EK_ID = "ek_id";
         String NAME = "name";
-        String REFERENCE_NAME = "reference_name";
-        String QUANTITY_UNIT_NAME = "quantity_unit_name";
+        String NUMBER = "number";
+        String CONTAINER_NAME = "containerName";
         String VARIETY = "variety";
         String ABILITIES = "abilities";
-        String DEAD_AT = "dead_at";
+        String POPULATION = "population";
+        String USER = "user";
+    }
+
+    public interface OutputColumns {
+        String TABLE_NAME = "outputs";
+        String EK_ID = "ek_id";
+        String NAME = "name";
+        String VARIETY = "variety";
+        String NUMBER = "number";
+        String ABILITIES = "abilities";
         String USER = "user";
     }
 
@@ -604,7 +613,7 @@ public final class ZeroContract {
         public static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE +
                 "/vnd.ekylibre.zero.equipments";
 
-        public static final String[] PROJECTION_ALL = {EK_ID, NAME, NUMBER, VARIETY, ABILITIES, USER, DEAD_AT};
+        public static final String[] PROJECTION_ALL = {EK_ID, NAME, NUMBER, WORK_NUMBER, VARIETY, ABILITIES};
 
         public static final String SORT_ORDER_DEFAULT = NAME + " ASC";
     }
@@ -618,7 +627,7 @@ public final class ZeroContract {
         public static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE +
                 "/vnd.ekylibre.zero.workers";
 
-        public static final String[] PROJECTION_ALL = {EK_ID, NAME, NUMBER, QUALIFICATION, ABILITIES, USER, DEAD_AT};
+        public static final String[] PROJECTION_ALL = {EK_ID, NAME, NUMBER, WORK_NUMBER, ABILITIES};
 
         public static final String SORT_ORDER_DEFAULT = NAME + " ASC";
     }
@@ -632,7 +641,21 @@ public final class ZeroContract {
         public static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE +
                 "/vnd.ekylibre.zero.land_parcels";
 
-        public static final String[] PROJECTION_ALL = {EK_ID, NAME, NET_SURFACE_AREA, USER, DEAD_AT};
+        public static final String[] PROJECTION_ALL = {EK_ID, NAME, NET_SURFACE_AREA};
+
+        public static final String SORT_ORDER_DEFAULT = NAME + " ASC";
+    }
+
+    public static final class BuildingDivisions implements BuildingDivisionsColumns {
+
+        // Content URI for this table
+        public static final Uri CONTENT_URI = Uri.withAppendedPath(
+                ZeroContract.CONTENT_URI,"building_divisions");
+        // MIME type for list and individual record.
+        public static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE +
+                "/vnd.ekylibre.zero.building_divisions";
+
+        public static final String[] PROJECTION_ALL = {EK_ID, NAME, NET_SURFACE_AREA};
 
         public static final String SORT_ORDER_DEFAULT = NAME + " ASC";
     }
@@ -646,7 +669,7 @@ public final class ZeroContract {
         public static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE +
                 "/vnd.ekylibre.zero.inputs";
 
-        public static final String[] PROJECTION_ALL = {EK_ID, NAME, REFERENCE_NAME, QUANTITY_UNIT_NAME, VARIETY, ABILITIES, USER, DEAD_AT};
+        public static final String[] PROJECTION_ALL = {EK_ID, NAME, NUMBER, VARIETY, ABILITIES, POPULATION, CONTAINER_NAME};
 
         public static final String SORT_ORDER_DEFAULT = NAME + " ASC";
     }
@@ -660,7 +683,7 @@ public final class ZeroContract {
         public static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE +
                 "/vnd.ekylibre.zero.outputs";
 
-        public static final String[] PROJECTION_ALL = {EK_ID, NAME, REFERENCE_NAME , QUANTITY_UNIT_NAME, VARIETY, ABILITIES, USER, DEAD_AT};
+        public static final String[] PROJECTION_ALL = {EK_ID, NAME, VARIETY, NUMBER, ABILITIES};
 
         public static final String SORT_ORDER_DEFAULT = NAME + " ASC";
     }

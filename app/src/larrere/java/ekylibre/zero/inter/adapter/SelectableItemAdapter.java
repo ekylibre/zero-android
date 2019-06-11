@@ -65,7 +65,7 @@ public class SelectableItemAdapter extends RecyclerView.Adapter<SelectableItemAd
             }
             firstLine.setText(item.name);
             firstLine.setTextColor(ContextCompat.getColor(context, textColor));
-            secondLine.setText(item.number);
+            secondLine.setText(item.workNumber != null ? (item.workNumber + " (" + item.number + ")"): item.number);
             secondLine.setTextColor(ContextCompat.getColor(context, textColor));
             itemView.setBackgroundColor(ContextCompat.getColor(context, colorId));
         }

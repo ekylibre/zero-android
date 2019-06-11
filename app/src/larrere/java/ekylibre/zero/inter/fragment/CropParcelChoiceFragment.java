@@ -150,7 +150,7 @@ public class CropParcelChoiceFragment extends Fragment {
         dataset.clear();
         currentTab = tab == 0 ? PLANT : LAND_PARCEL;
         for (GenericItem item : InterventionFormFragment.paramsList)
-            if (item.type.equals(currentTab))
+            if (item.variety.equals(currentTab))
                 dataset.add(item);
         adapter.notifyDataSetChanged();
     }
@@ -158,7 +158,7 @@ public class CropParcelChoiceFragment extends Fragment {
     private void filterList(String text) {
         dataset.clear();
         for (GenericItem item : InterventionFormFragment.paramsList)
-            if (item.type.equals(currentTab))
+            if (item.variety.equals(currentTab))
                 if (text != null) {
                     String filterText = StringUtils.stripAccents(text.toLowerCase());
                     String name = StringUtils.stripAccents(item.name.toLowerCase());

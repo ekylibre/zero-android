@@ -447,7 +447,7 @@ public class InterActivity extends AppCompatActivity implements FragmentManager.
                 paramCv.put(DetailedInterventionAttributes.REFERENCE_ID, param.id);
                 paramCv.put(DetailedInterventionAttributes.REFERENCE_NAME, refName);
 
-                if (param.type.equals("input") || param.type.equals("output") ) {
+                if (param.variety.equals("input") || param.variety.equals("output") ) {
                     paramCv.put(DetailedInterventionAttributes.QUANTITY_VALUE, param.quantity.toString());
                     paramCv.put(DetailedInterventionAttributes.QUANTITY_UNIT_NAME, param.unit);
                 }

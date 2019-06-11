@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:paddingBottom="12dp"
-    android:background="@drawable/stroke_background_round_corners">
+    android:background="@drawable/background_round_corners">
 
     <androidx.constraintlayout.widget.Barrier
         android:id="@+id/barrier"

@@ -24,9 +24,9 @@ import static ekylibre.util.Helper.iso8601;
  * Created by antoine on 22/04/16.
  */
 
-public class LandParcel {
+public class BuildingDivisions {
 
-    private static final String TAG = "LandParcel";
+    private static final String TAG = "BuildingDivisions";
     private static final DecimalFormat df = new DecimalFormat("###.#", DecimalFormatSymbols.getInstance(Locale.FRENCH));
 
     public int id;
@@ -34,24 +34,24 @@ public class LandParcel {
     public String net_surface_area;
     public Date deadAt;
 
-    public static List<LandParcel> all(Instance instance, String attributes) throws JSONException, IOException, HTTPException, ParseException {
+    public static List<BuildingDivisions> all(Instance instance, String attributes) throws JSONException, IOException, HTTPException, ParseException {
 
         if (BuildConfig.DEBUG)
-            Log.d(TAG, "Get JSONArray => /api/v1/land_parcels || params = " + attributes);
+            Log.d(TAG, "Get JSONArray => /api/v1/building_divisions || params = " + attributes);
 
-        JSONArray json = instance.getJSONArray("/api/v1/land_parcels", attributes);
-        List<LandParcel> array = new ArrayList<>();
+        JSONArray json = instance.getJSONArray("/api/v1/building_divisions", attributes);
+        List<BuildingDivisions> array = new ArrayList<>();
 
         for(int i = 0 ; i < json.length() ; i++ )
-            array.add(new LandParcel(json.getJSONObject(i)));
+            array.add(new BuildingDivisions(json.getJSONObject(i)));
 
         return array;
     }
 
-    private LandParcel(JSONObject object) throws JSONException, ParseException {
+    private BuildingDivisions(JSONObject object) throws JSONException, ParseException {
 
         if (BuildConfig.DEBUG)
-            Log.d(TAG, "Object LandParcel : " + object.toString());
+            Log.d(TAG, "Object building_divisions : " + object.toString());
 
         id = object.getInt("id");
         name = object.getString("name");
