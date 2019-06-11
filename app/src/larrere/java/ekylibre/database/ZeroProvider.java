@@ -81,6 +81,9 @@ public class ZeroProvider extends ContentProvider {
     public static final int ROUTE_BUILDING_DIVISIONS_LIST = 1516;
     public static final int ROUTE_BUILDING_DIVISIONS_ITEM = 1517;
 
+    public static final int ROUTE_PRODUCTS_LIST = 1518;
+    public static final int ROUTE_PRODUCTS_ITEM = 1519;
+
     // UriMatcher, used to decode incoming URIs.
     private static final UriMatcher URI_MATCHER = new UriMatcher(UriMatcher.NO_MATCH);
 
@@ -139,6 +142,8 @@ public class ZeroProvider extends ContentProvider {
         URI_MATCHER.addURI(ZeroContract.AUTHORITY, "working_period_attributes/#", ROUTE_WORKING_PERIOD_ATTRIBUTES_ITEM);
         URI_MATCHER.addURI(ZeroContract.AUTHORITY, "building_divisions", ROUTE_BUILDING_DIVISIONS_LIST);
         URI_MATCHER.addURI(ZeroContract.AUTHORITY, "building_divisions/#", ROUTE_BUILDING_DIVISIONS_ITEM);
+        URI_MATCHER.addURI(ZeroContract.AUTHORITY, "products", ROUTE_PRODUCTS_LIST);
+        URI_MATCHER.addURI(ZeroContract.AUTHORITY, "products/#", ROUTE_PRODUCTS_ITEM);
     }
 
     private DatabaseHelper mDatabaseHelper;
@@ -263,6 +268,10 @@ public class ZeroProvider extends ContentProvider {
             case ROUTE_WORKING_PERIOD_ATTRIBUTES_ITEM:
                 return ZeroContract.WorkingPeriodAttributes.CONTENT_TYPE;
 
+            case ROUTE_PRODUCTS_LIST:
+            case ROUTE_PRODUCTS_ITEM:
+                return ZeroContract.Products.CONTENT_TYPE;
+
             default:
                 throw new UnsupportedOperationException("Unknown URI: " + uri);
         }
@@ -278,7 +287,7 @@ public class ZeroProvider extends ContentProvider {
     public Cursor query(@NonNull Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
         SQLiteDatabase database = mDatabaseHelper.getReadableDatabase();
         SelectionBuilder builder = new SelectionBuilder();
-        String id;
+        String id = uri.getLastPathSegment();
         Cursor cursor;
         Context context = getContext();
         assert context != null;
@@ -286,7 +295,6 @@ public class ZeroProvider extends ContentProvider {
         switch (URI_MATCHER.match(uri)) {
             case ROUTE_CRUMB_ITEM:
                 // Return a single crumb, by ID.
-                id = uri.getLastPathSegment();
                 builder.where(ZeroContract.CrumbsColumns._ID + "=?", id);
             case ROUTE_CRUMB_LIST:
                 // Return all known crumbs.
@@ -300,7 +308,6 @@ public class ZeroProvider extends ContentProvider {
 
             case ROUTE_ISSUE_ITEM:
                 // Return a single ISSUE, by ID.
-                id = uri.getLastPathSegment();
                 builder.where(ZeroContract.IssuesColumns._ID + "=?", id);
             case ROUTE_ISSUE_LIST:
                 // Return all known Issue.
@@ -313,7 +320,6 @@ public class ZeroProvider extends ContentProvider {
                 return cursor;
 
             case ROUTE_PLANT_COUNTING_ITEM:
-                id = uri.getLastPathSegment();
                 builder.where(ZeroContract.PlantCountingsColumns._ID + "=?", id);
             case ROUTE_PLANT_COUNTING_LIST:
                 builder.table(ZeroContract.PlantCountingsColumns.TABLE_NAME)
@@ -323,7 +329,6 @@ public class ZeroProvider extends ContentProvider {
                 return cursor;
 
             case ROUTE_PLANT_COUNTING_ITEM_ITEM:
-                id = uri.getLastPathSegment();
                 builder.where(ZeroContract.PlantCountingItemsColumns._ID + "=?", id);
             case ROUTE_PLANT_COUNTING_ITEM_LIST:                // Return all known Issue.
                 builder.table(ZeroContract.PlantCountingItemsColumns.TABLE_NAME)
@@ -333,7 +338,6 @@ public class ZeroProvider extends ContentProvider {
                 return cursor;
 
             case ROUTE_PLANT_DENSITY_ABACUS_ITEM:
-                id = uri.getLastPathSegment();
                 builder.where(ZeroContract.PlantDensityAbaciColumns._ID + "=?", id);
             case ROUTE_PLANT_DENSITY_ABACUS_LIST:                // Return all known Issue.
                 builder.table(ZeroContract.PlantDensityAbaciColumns.TABLE_NAME)
@@ -343,7 +347,6 @@ public class ZeroProvider extends ContentProvider {
                 return cursor;
 
             case ROUTE_PLANT_DENSITY_ABACUS_ITEM_ITEM:
-                id = uri.getLastPathSegment();
                 builder.where(ZeroContract.PlantDensityAbacusItemsColumns._ID + "=?", id);
             case ROUTE_PLANT_DENSITY_ABACUS_ITEM_LIST:                // Return all known Issue.
                 builder.table(ZeroContract.PlantDensityAbacusItemsColumns.TABLE_NAME)
@@ -353,7 +356,6 @@ public class ZeroProvider extends ContentProvider {
                 return cursor;
 
             case ROUTE_PLANT_ITEM:
-                id = uri.getLastPathSegment();
                 builder.where(ZeroContract.PlantsColumns._ID + "=?", id);
             case ROUTE_PLANT_LIST:                // Return all known Issue.
                 builder.table(ZeroContract.PlantsColumns.TABLE_NAME)
@@ -363,7 +365,6 @@ public class ZeroProvider extends ContentProvider {
                 return cursor;
 
             case ROUTE_INTERVENTION_ITEM:
-                id = uri.getLastPathSegment();
                 builder.where(ZeroContract.InterventionsColumns._ID + "=?", id);
             case ROUTE_INTERVENTION_LIST:
                 builder.table(ZeroContract.InterventionsColumns.TABLE_NAME)
@@ -373,7 +374,6 @@ public class ZeroProvider extends ContentProvider {
                 return cursor;
 
             case ROUTE_INTERVENTION_PARAMETERS_ITEM:
-                id = uri.getLastPathSegment();
                 builder.where(ZeroContract.InterventionParametersColumns._ID + "=?", id);
             case ROUTE_INTERVENTION_PARAMETERS_LIST:
                 builder.table(ZeroContract.InterventionParametersColumns.TABLE_NAME)
@@ -383,7 +383,6 @@ public class ZeroProvider extends ContentProvider {
                 return cursor;
 
             case ROUTE_WORKING_PERIODS_ITEM:
-                id = uri.getLastPathSegment();
                 builder.where(ZeroContract.WorkingPeriodsColumns._ID + "=?", id);
             case ROUTE_WORKING_PERIODS_LIST:
                 builder.table(ZeroContract.WorkingPeriodsColumns.TABLE_NAME)
@@ -393,7 +392,6 @@ public class ZeroProvider extends ContentProvider {
                 return cursor;
 
             case ROUTE_CONTACTS_ITEM:
-                id = uri.getLastPathSegment();
                 builder.where(ZeroContract.Contacts._ID + "=?", id);
             case ROUTE_CONTACTS_LIST:
                 builder.table(ZeroContract.Contacts.TABLE_NAME)
@@ -403,7 +401,6 @@ public class ZeroProvider extends ContentProvider {
                 return cursor;
 
             case ROUTE_CONTACT_PARAMS_ITEM:
-                id = uri.getLastPathSegment();
                 builder.where(ZeroContract.ContactParams._ID + "=?", id);
             case ROUTE_CONTACT_PARAMS_LIST:
                 builder.table(ZeroContract.ContactParams.TABLE_NAME)
@@ -413,7 +410,6 @@ public class ZeroProvider extends ContentProvider {
                 return cursor;
 
             case ROUTE_LAST_SYNCS_ITEM:
-                id = uri.getLastPathSegment();
                 builder.where(ZeroContract.LastSyncs._ID + "=?", id);
             case ROUTE_LAST_SYNCS_LIST:
                 builder.table(ZeroContract.LastSyncs.TABLE_NAME)
@@ -423,7 +419,6 @@ public class ZeroProvider extends ContentProvider {
                 return cursor;
 
             case ROUTE_OBSERVATIONS_ITEM:
-                id = uri.getLastPathSegment();
                 builder.where(ZeroContract.Observations._ID + "=?", id);
             case ROUTE_OBSERVATIONS_LIST:
                 builder.table(ZeroContract.Observations.TABLE_NAME)
@@ -433,7 +428,6 @@ public class ZeroProvider extends ContentProvider {
                 return cursor;
 
             case ROUTE_OBSERVATION_PLANTS_ITEM:
-                id = uri.getLastPathSegment();
                 builder.where(ZeroContract.ObservationPlants._ID + "=?", id);
             case ROUTE_OBSERVATION_PLANTS_LIST:
                 builder.table(ZeroContract.ObservationPlants.TABLE_NAME)
@@ -443,7 +437,6 @@ public class ZeroProvider extends ContentProvider {
                 return cursor;
 
             case ROUTE_OBSERVATION_ISSUES_ITEM:
-                id = uri.getLastPathSegment();
                 builder.where(ZeroContract.ObservationIssues._ID + "=?", id);
             case ROUTE_OBSERVATION_ISSUES_LIST:
                 builder.table(ZeroContract.ObservationIssues.TABLE_NAME)
@@ -453,7 +446,6 @@ public class ZeroProvider extends ContentProvider {
                 return cursor;
 
             case ROUTE_ISSUE_NATURES_ITEM:
-                id = uri.getLastPathSegment();
                 builder.where(ZeroContract.IssueNatures._ID + "=?", id);
             case ROUTE_ISSUE_NATURES_LIST:
                 builder.table(ZeroContract.IssueNatures.TABLE_NAME)
@@ -463,7 +455,6 @@ public class ZeroProvider extends ContentProvider {
                 return cursor;
 
             case ROUTE_VEGETAL_SCALE_ITEM:
-                id = uri.getLastPathSegment();
                 builder.where(ZeroContract.VegetalScale._ID + "=?", id);
             case ROUTE_VEGETAL_SCALE_LIST:
                 builder.table(ZeroContract.VegetalScale.TABLE_NAME)
@@ -473,7 +464,6 @@ public class ZeroProvider extends ContentProvider {
                 return cursor;
 
             case ROUTE_EQUIPMENTS_ITEM:
-                id = uri.getLastPathSegment();
                 builder.where(ZeroContract.Equipments.EK_ID + "=?", id);
             case ROUTE_EQUIPMENTS_LIST:
                 builder.table(ZeroContract.Equipments.TABLE_NAME)
@@ -483,7 +473,6 @@ public class ZeroProvider extends ContentProvider {
                 return cursor;
 
             case ROUTE_WORKERS_ITEM:
-                id = uri.getLastPathSegment();
                 builder.where(ZeroContract.Workers.EK_ID + "=?", id);
             case ROUTE_WORKERS_LIST:
                 builder.table(ZeroContract.Workers.TABLE_NAME)
@@ -493,7 +482,6 @@ public class ZeroProvider extends ContentProvider {
                 return cursor;
 
             case ROUTE_LAND_PARCELS_ITEM:
-                id = uri.getLastPathSegment();
                 builder.where(ZeroContract.LandParcels.EK_ID + "=?", id);
             case ROUTE_LAND_PARCELS_LIST:
                 builder.table(ZeroContract.LandParcels.TABLE_NAME)
@@ -503,7 +491,6 @@ public class ZeroProvider extends ContentProvider {
                 return cursor;
 
             case ROUTE_BUILDING_DIVISIONS_ITEM:
-                id = uri.getLastPathSegment();
                 builder.where(ZeroContract.BuildingDivisions.EK_ID + "=?", id);
             case ROUTE_BUILDING_DIVISIONS_LIST:
                 builder.table(ZeroContract.BuildingDivisions.TABLE_NAME)
@@ -513,7 +500,6 @@ public class ZeroProvider extends ContentProvider {
                 return cursor;
 
             case ROUTE_INPUTS_ITEM:
-                id = uri.getLastPathSegment();
                 builder.where(ZeroContract.Inputs.EK_ID + "=?", id);
             case ROUTE_INPUTS_LIST:
                 builder.table(ZeroContract.Inputs.TABLE_NAME)
@@ -523,7 +509,6 @@ public class ZeroProvider extends ContentProvider {
                 return cursor;
 
             case ROUTE_OUTPUTS_ITEM:
-                id = uri.getLastPathSegment();
                 builder.where(ZeroContract.Outputs.EK_ID + "=?", id);
             case ROUTE_OUTPUTS_LIST:
                 builder.table(ZeroContract.Outputs.TABLE_NAME)
@@ -533,7 +518,6 @@ public class ZeroProvider extends ContentProvider {
                 return cursor;
 
             case ROUTE_DETAILED_INTERVENTIONS_ITEM:
-                id = uri.getLastPathSegment();
                 builder.where(ZeroContract.DetailedInterventions._ID + "=?", id);
             case ROUTE_DETAILED_INTERVENTIONS_LIST:
                 builder.table(ZeroContract.DetailedInterventions.TABLE_NAME)
@@ -543,7 +527,6 @@ public class ZeroProvider extends ContentProvider {
                 return cursor;
 
             case ROUTE_DETAILED_INTERVENTION_ATTRIBUTES_ITEM:
-                id = uri.getLastPathSegment();
                 builder.where(ZeroContract.DetailedInterventionAttributes._ID + "=?", id);
             case ROUTE_DETAILED_INTERVENTION_ATTRIBUTES_LIST:
                 builder.table(ZeroContract.DetailedInterventionAttributes.TABLE_NAME)
@@ -553,10 +536,18 @@ public class ZeroProvider extends ContentProvider {
                 return cursor;
 
             case ROUTE_WORKING_PERIOD_ATTRIBUTES_ITEM:
-                id = uri.getLastPathSegment();
                 builder.where(ZeroContract.WorkingPeriodAttributes._ID + "=?", id);
             case ROUTE_WORKING_PERIOD_ATTRIBUTES_LIST:
                 builder.table(ZeroContract.WorkingPeriodAttributes.TABLE_NAME)
+                        .where(selection, selectionArgs);
+                cursor = builder.query(database, projection, sortOrder);
+                cursor.setNotificationUri(contentResolver, uri);
+                return cursor;
+
+            case ROUTE_PRODUCTS_ITEM:
+                builder.where(ZeroContract.Products.EK_ID + "=?", id);
+            case ROUTE_PRODUCTS_LIST:
+                builder.table(ZeroContract.Products.TABLE_NAME)
                         .where(selection, selectionArgs);
                 cursor = builder.query(database, projection, sortOrder);
                 cursor.setNotificationUri(contentResolver, uri);
@@ -753,6 +744,13 @@ public class ZeroProvider extends ContentProvider {
                 result = Uri.parse(ZeroContract.WorkingPeriodAttributes.CONTENT_URI + "/" + id);
                 break;
             case ROUTE_WORKING_PERIOD_ATTRIBUTES_ITEM:
+                throw new UnsupportedOperationException("Insert not supported on URI: " + uri);
+
+            case ROUTE_PRODUCTS_LIST:
+                id = database.insertWithOnConflict(ZeroContract.Products.TABLE_NAME, null, values, SQLiteDatabase.CONFLICT_REPLACE);
+                result = Uri.parse(ZeroContract.Products.CONTENT_URI + "/" + id);
+                break;
+            case ROUTE_PRODUCTS_ITEM:
                 throw new UnsupportedOperationException("Insert not supported on URI: " + uri);
 
                 default:
@@ -1088,6 +1086,18 @@ public class ZeroProvider extends ContentProvider {
                         .delete(database);
                 break;
 
+            case ROUTE_PRODUCTS_LIST:
+                count = builder.table(ZeroContract.Products.TABLE_NAME)
+                        .where(selection, selectionArgs)
+                        .delete(database);
+                break;
+            case ROUTE_PRODUCTS_ITEM:
+                count = builder.table(ZeroContract.Products.TABLE_NAME)
+                        .where(ZeroContract.Products.EK_ID + "=?", id)
+                        .where(selection, selectionArgs)
+                        .delete(database);
+                break;
+
             default:
                 throw new UnsupportedOperationException("Unknown URI: " + uri);
         }
@@ -1107,7 +1117,7 @@ public class ZeroProvider extends ContentProvider {
         final SQLiteDatabase database = mDatabaseHelper.getWritableDatabase();
         final int match = URI_MATCHER.match(uri);
         int count;
-        String id;
+        String id = uri.getLastPathSegment();
         switch (match) {
             case ROUTE_CRUMB_LIST:
                 count = builder.table(ZeroContract.CrumbsColumns.TABLE_NAME)
@@ -1115,7 +1125,6 @@ public class ZeroProvider extends ContentProvider {
                         .update(database, values);
                 break;
             case ROUTE_CRUMB_ITEM:
-                id = uri.getLastPathSegment();
                 count = builder.table(ZeroContract.CrumbsColumns.TABLE_NAME)
                         .where(ZeroContract.CrumbsColumns._ID + "=?", id)
                         .where(selection, selectionArgs)
@@ -1127,7 +1136,6 @@ public class ZeroProvider extends ContentProvider {
                         .update(database, values);
                 break;
             case ROUTE_ISSUE_ITEM:
-                id = uri.getLastPathSegment();
                 count = builder.table(ZeroContract.IssuesColumns.TABLE_NAME)
                         .where(ZeroContract.IssuesColumns._ID + "=?", id)
                         .where(selection, selectionArgs)
@@ -1140,7 +1148,6 @@ public class ZeroProvider extends ContentProvider {
                         .update(database, values);
                 break;
             case ROUTE_PLANT_COUNTING_ITEM:
-                id = uri.getLastPathSegment();
                 count = builder.table(ZeroContract.PlantCountingsColumns.TABLE_NAME)
                         .where(ZeroContract.PlantCountingsColumns._ID + "=?", id)
                         .where(selection, selectionArgs)
@@ -1153,7 +1160,6 @@ public class ZeroProvider extends ContentProvider {
                         .update(database, values);
                 break;
             case ROUTE_PLANT_COUNTING_ITEM_ITEM:
-                id = uri.getLastPathSegment();
                 count = builder.table(ZeroContract.PlantCountingItemsColumns.TABLE_NAME)
                         .where(ZeroContract.PlantCountingItemsColumns._ID + "=?", id)
                         .where(selection, selectionArgs)
@@ -1165,7 +1171,6 @@ public class ZeroProvider extends ContentProvider {
                         .update(database, values);
                 break;
             case ROUTE_PLANT_DENSITY_ABACUS_ITEM:
-                id = uri.getLastPathSegment();
                 count = builder.table(ZeroContract.PlantDensityAbaciColumns.TABLE_NAME)
                         .where(ZeroContract.PlantDensityAbaciColumns._ID + "=?", id)
                         .where(selection, selectionArgs)
@@ -1177,7 +1182,6 @@ public class ZeroProvider extends ContentProvider {
                         .update(database, values);
                 break;
             case ROUTE_PLANT_DENSITY_ABACUS_ITEM_ITEM:
-                id = uri.getLastPathSegment();
                 count = builder.table(ZeroContract.PlantDensityAbacusItemsColumns.TABLE_NAME)
                         .where(ZeroContract.PlantDensityAbacusItemsColumns._ID + "=?", id)
                         .where(selection, selectionArgs)
@@ -1189,7 +1193,6 @@ public class ZeroProvider extends ContentProvider {
                         .update(database, values);
                 break;
             case ROUTE_PLANT_ITEM:
-                id = uri.getLastPathSegment();
                 count = builder.table(ZeroContract.PlantsColumns.TABLE_NAME)
                         .where(ZeroContract.PlantsColumns._ID + "=?", id)
                         .where(selection, selectionArgs)
@@ -1201,7 +1204,6 @@ public class ZeroProvider extends ContentProvider {
                         .update(database, values);
                 break;
             case ROUTE_INTERVENTION_ITEM:
-                id = uri.getLastPathSegment();
                 count = builder.table(ZeroContract.InterventionsColumns.TABLE_NAME)
                         .where(ZeroContract.InterventionsColumns._ID + "=?", id)
                         .where(selection, selectionArgs)
@@ -1213,7 +1215,6 @@ public class ZeroProvider extends ContentProvider {
                         .update(database, values);
                 break;
             case ROUTE_INTERVENTION_PARAMETERS_ITEM:
-                id = uri.getLastPathSegment();
                 count = builder.table(ZeroContract.InterventionParametersColumns.TABLE_NAME)
                         .where(ZeroContract.InterventionParametersColumns._ID + "=?", id)
                         .where(selection, selectionArgs)
@@ -1225,7 +1226,6 @@ public class ZeroProvider extends ContentProvider {
                         .update(database, values);
                 break;
             case ROUTE_WORKING_PERIODS_ITEM:
-                id = uri.getLastPathSegment();
                 count = builder.table(ZeroContract.WorkingPeriodsColumns.TABLE_NAME)
                         .where(ZeroContract.WorkingPeriodsColumns._ID + "=?", id)
                         .where(selection, selectionArgs)
@@ -1237,7 +1237,6 @@ public class ZeroProvider extends ContentProvider {
                         .update(database, values);
                 break;
             case ROUTE_CONTACTS_ITEM:
-                id = uri.getLastPathSegment();
                 count = builder.table(ZeroContract.Contacts.TABLE_NAME)
                         .where(ZeroContract.Contacts._ID + "=?", id)
                         .where(selection, selectionArgs)
@@ -1249,7 +1248,6 @@ public class ZeroProvider extends ContentProvider {
                         .update(database, values);
                 break;
             case ROUTE_CONTACT_PARAMS_ITEM:
-                id = uri.getLastPathSegment();
                 count = builder.table(ZeroContract.ContactParams.TABLE_NAME)
                         .where(ZeroContract.ContactParams._ID + "=?", id)
                         .where(selection, selectionArgs)
@@ -1261,7 +1259,6 @@ public class ZeroProvider extends ContentProvider {
                         .update(database, values);
                 break;
             case ROUTE_LAST_SYNCS_ITEM:
-                id = uri.getLastPathSegment();
                 count = builder.table(ZeroContract.LastSyncs.TABLE_NAME)
                         .where(ZeroContract.LastSyncs._ID + "=?", id)
                         .where(selection, selectionArgs)
@@ -1274,7 +1271,6 @@ public class ZeroProvider extends ContentProvider {
                         .update(database, values);
                 break;
             case ROUTE_OBSERVATIONS_ITEM:
-                id = uri.getLastPathSegment();
                 count = builder.table(ZeroContract.Observations.TABLE_NAME)
                         .where(ZeroContract.Observations._ID + "=?", id)
                         .where(selection, selectionArgs)
@@ -1287,7 +1283,6 @@ public class ZeroProvider extends ContentProvider {
                         .update(database, values);
                 break;
             case ROUTE_OBSERVATION_PLANTS_ITEM:
-                id = uri.getLastPathSegment();
                 count = builder.table(ZeroContract.ObservationPlants.TABLE_NAME)
                         .where(ZeroContract.ObservationPlants._ID + "=?", id)
                         .where(selection, selectionArgs)
@@ -1300,7 +1295,6 @@ public class ZeroProvider extends ContentProvider {
                         .update(database, values);
                 break;
             case ROUTE_OBSERVATION_ISSUES_ITEM:
-                id = uri.getLastPathSegment();
                 count = builder.table(ZeroContract.ObservationIssues.TABLE_NAME)
                         .where(ZeroContract.ObservationIssues._ID + "=?", id)
                         .where(selection, selectionArgs)
@@ -1313,7 +1307,6 @@ public class ZeroProvider extends ContentProvider {
                         .update(database, values);
                 break;
             case ROUTE_ISSUE_NATURES_ITEM:
-                id = uri.getLastPathSegment();
                 count = builder.table(ZeroContract.IssueNatures.TABLE_NAME)
                         .where(ZeroContract.IssueNatures._ID + "=?", id)
                         .where(selection, selectionArgs)
@@ -1326,7 +1319,6 @@ public class ZeroProvider extends ContentProvider {
                         .update(database, values);
                 break;
             case ROUTE_VEGETAL_SCALE_ITEM:
-                id = uri.getLastPathSegment();
                 count = builder.table(ZeroContract.VegetalScale.TABLE_NAME)
                         .where(ZeroContract.VegetalScale._ID + "=?", id)
                         .where(selection, selectionArgs)
@@ -1339,7 +1331,6 @@ public class ZeroProvider extends ContentProvider {
                         .update(database, values);
                 break;
             case ROUTE_EQUIPMENTS_ITEM:
-                id = uri.getLastPathSegment();
                 count = builder.table(ZeroContract.Equipments.TABLE_NAME)
                         .where(ZeroContract.Equipments.EK_ID + "=?", id)
                         .where(selection, selectionArgs)
@@ -1352,7 +1343,6 @@ public class ZeroProvider extends ContentProvider {
                         .update(database, values);
                 break;
             case ROUTE_WORKERS_ITEM:
-                id = uri.getLastPathSegment();
                 count = builder.table(ZeroContract.Workers.TABLE_NAME)
                         .where(ZeroContract.Workers.EK_ID + "=?", id)
                         .where(selection, selectionArgs)
@@ -1365,7 +1355,6 @@ public class ZeroProvider extends ContentProvider {
                         .update(database, values);
                 break;
             case ROUTE_LAND_PARCELS_ITEM:
-                id = uri.getLastPathSegment();
                 count = builder.table(ZeroContract.LandParcels.TABLE_NAME)
                         .where(ZeroContract.LandParcels.EK_ID + "=?", id)
                         .where(selection, selectionArgs)
@@ -1378,7 +1367,6 @@ public class ZeroProvider extends ContentProvider {
                         .update(database, values);
                 break;
             case ROUTE_BUILDING_DIVISIONS_ITEM:
-                id = uri.getLastPathSegment();
                 count = builder.table(ZeroContract.BuildingDivisions.TABLE_NAME)
                         .where(ZeroContract.BuildingDivisions.EK_ID + "=?", id)
                         .where(selection, selectionArgs)
@@ -1391,7 +1379,6 @@ public class ZeroProvider extends ContentProvider {
                         .update(database, values);
                 break;
             case ROUTE_INPUTS_ITEM:
-                id = uri.getLastPathSegment();
                 count = builder.table(ZeroContract.Inputs.TABLE_NAME)
                         .where(ZeroContract.Inputs.EK_ID + "=?", id)
                         .where(selection, selectionArgs)
@@ -1404,7 +1391,6 @@ public class ZeroProvider extends ContentProvider {
                         .update(database, values);
                 break;
             case ROUTE_OUTPUTS_ITEM:
-                id = uri.getLastPathSegment();
                 count = builder.table(ZeroContract.Outputs.TABLE_NAME)
                         .where(ZeroContract.Outputs.EK_ID + "=?", id)
                         .where(selection, selectionArgs)
@@ -1417,7 +1403,6 @@ public class ZeroProvider extends ContentProvider {
                         .update(database, values);
                 break;
             case ROUTE_DETAILED_INTERVENTIONS_ITEM:
-                id = uri.getLastPathSegment();
                 count = builder.table(ZeroContract.DetailedInterventions.TABLE_NAME)
                         .where(ZeroContract.DetailedInterventions._ID + "=?", id)
                         .where(selection, selectionArgs)
@@ -1430,7 +1415,6 @@ public class ZeroProvider extends ContentProvider {
                         .update(database, values);
                 break;
             case ROUTE_DETAILED_INTERVENTION_ATTRIBUTES_ITEM:
-                id = uri.getLastPathSegment();
                 count = builder.table(ZeroContract.DetailedInterventionAttributes.TABLE_NAME)
                         .where(ZeroContract.DetailedInterventionAttributes._ID + "=?", id)
                         .where(selection, selectionArgs)
@@ -1443,9 +1427,20 @@ public class ZeroProvider extends ContentProvider {
                         .update(database, values);
                 break;
             case ROUTE_WORKING_PERIOD_ATTRIBUTES_ITEM:
-                id = uri.getLastPathSegment();
                 count = builder.table(ZeroContract.WorkingPeriodAttributes.TABLE_NAME)
                         .where(ZeroContract.WorkingPeriodAttributes._ID + "=?", id)
+                        .where(selection, selectionArgs)
+                        .update(database, values);
+                break;
+
+            case ROUTE_PRODUCTS_LIST:
+                count = builder.table(ZeroContract.Products.TABLE_NAME)
+                        .where(selection, selectionArgs)
+                        .update(database, values);
+                break;
+            case ROUTE_PRODUCTS_ITEM:
+                count = builder.table(ZeroContract.Products.TABLE_NAME)
+                        .where(ZeroContract.Products.EK_ID + "=?", id)
                         .where(selection, selectionArgs)
                         .update(database, values);
                 break;

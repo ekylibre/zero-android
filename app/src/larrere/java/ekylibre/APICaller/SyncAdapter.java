@@ -171,13 +171,15 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
             if (BuildConfig.DEBUG) Log.d(TAG, "... New account is " + account.name + " ...");
 
             pullPlantDensityAbaci(account, extras, authority, provider, syncResult);
-            pullPlants(account, extras, authority, provider, syncResult);
-            pullLandParcels(account);
-            pullBuildingDivisions(account);
-            pullWorkers(account);
-            pullEquipments(account);
-            pullInputs(account);
-            pullOutputs(account);
+//            pullPlants(account, extras, authority, provider, syncResult);
+//            pullLandParcels(account);
+//            pullBuildingDivisions(account);
+//            pullWorkers(account);
+//            pullEquipments(account);
+//            pullInputs(account);
+//            pullOutputs(account);
+
+            pullProducts(account);
 
             pushIssues(account, extras, authority, provider, syncResult);
             pushPlantCounting(account, extras, authority, provider, syncResult);
@@ -1455,6 +1457,60 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
 
         if (BuildConfig.DEBUG)
             Log.i(TAG, "Finish network outputs synchronization");
+    }
+
+    /**
+     *   The main request for products
+     */
+    private void pullProducts(Account account) {
+
+        if (BuildConfig.DEBUG)
+            Log.i(TAG, "Beginning network products synchronization");
+
+        ContentValues cv = new ContentValues();
+        Instance instance = getInstance(account);
+
+        List<Product> productList = null;
+
+        try {
+            productList = Product.all(instance, lastSyncattribute);
+        } catch (JSONException | IOException | HTTPException | ParseException e) {
+            e.printStackTrace();
+        }
+
+        if (productList == null)
+            return;
+
+        if (BuildConfig.DEBUG)
+            Log.d(TAG, "There is " + productList.size() + " products." );
+
+        for (Product product : productList) {
+            cv.put(ZeroContract.Products.EK_ID, product.id);
+            cv.put(ZeroContract.Products.NAME, product.name);
+            cv.put(ZeroContract.Products.VARIETY, product.variety);
+            if (product.abilities != null)
+                cv.put(ZeroContract.Products.ABILITIES, product.abilities);
+            if (product.number != null)
+                cv.put(ZeroContract.Products.NUMBER, product.number);
+            if (product.workNumber != null)
+                cv.put(ZeroContract.Products.WORK_NUMBER, product.workNumber);
+            if (product.population != null)
+                cv.put(ZeroContract.Products.POPULATION, product.population.toString());
+            if (product.containerName != null)
+                cv.put(ZeroContract.Products.CONTAINER_NAME, product.containerName);
+            if (product.deadAt != null)
+                cv.put(ZeroContract.Products.DEAD_AT, product.deadAt.getTime());
+            if (product.netSurfaceArea != null)
+                cv.put(ZeroContract.Products.NET_SURFACE_AREA, product.netSurfaceArea);
+
+            cv.put(ZeroContract.Products.USER, account.name);
+            mContentResolver.insert(ZeroContract.Products.CONTENT_URI, cv);
+
+            cv.clear();
+        }
+
+        if (BuildConfig.DEBUG)
+            Log.i(TAG, "Finish network products synchronization");
     }
 
     protected Instance getInstance(Account account)

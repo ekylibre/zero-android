@@ -543,6 +543,19 @@ public class DatabaseHelper extends SQLiteOpenHelper
                         ZeroContract.Outputs.ABILITIES + " TEXT, " +
                         ZeroContract.Outputs.USER + " TEXT)");
 
+                database.execSQL("CREATE TABLE IF NOT EXISTS " + ZeroContract.Products.TABLE_NAME + "(" +
+                        ZeroContract.Products.EK_ID + " INTEGER PRIMARY KEY, " +
+                        ZeroContract.Products.NAME + " TEXT NOT NULL, " +
+                        ZeroContract.Products.NUMBER + " TEXT, " +
+                        ZeroContract.Products.WORK_NUMBER + " TEXT, " +
+                        ZeroContract.Products.VARIETY + " TEXT, " +
+                        ZeroContract.Products.ABILITIES + " TEXT, " +
+                        ZeroContract.Products.POPULATION + " REAL, " +
+                        ZeroContract.Products.CONTAINER_NAME + " TEXT, " +
+                        ZeroContract.Products.DEAD_AT + " DATETIME, " +
+                        ZeroContract.Products.NET_SURFACE_AREA + " TEXT, " +
+                        ZeroContract.Products.USER + " TEXT)");
+
                 if (newVersion == 22)
                     break;
             }
