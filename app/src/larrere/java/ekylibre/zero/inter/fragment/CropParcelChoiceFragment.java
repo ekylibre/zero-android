@@ -19,20 +19,18 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.tabs.TabLayout;
 
-import org.apache.commons.lang3.StringUtils;
-
 import java.util.ArrayList;
 import java.util.List;
 
+import ekylibre.util.antlr4.Grammar;
 import ekylibre.zero.R;
 import ekylibre.zero.home.Zero;
 import ekylibre.zero.inter.InterActivity;
-import ekylibre.zero.inter.adapter.CropParcelAdapter;
+import ekylibre.zero.inter.adapter.SelectableItemAdapter;
 import ekylibre.zero.inter.enums.ParamType;
 import ekylibre.zero.inter.model.GenericItem;
 
-import static ekylibre.zero.inter.enums.ParamType.LAND_PARCEL;
-import static ekylibre.zero.inter.enums.ParamType.PLANT;
+import static ekylibre.zero.inter.fragment.InterventionFormFragment.paramsList;
 
 
 public class CropParcelChoiceFragment extends Fragment {
@@ -41,11 +39,10 @@ public class CropParcelChoiceFragment extends Fragment {
 
     @ParamType.Type
     private String paramType;
-//    private String filter;
     private List<GenericItem> dataset;
-    private CropParcelAdapter adapter;
+    private SelectableItemAdapter adapter;
     private Context context;
-    private String currentTab;
+    private TabLayout tabLayout;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -89,17 +86,19 @@ public class CropParcelChoiceFragment extends Fragment {
 
         RecyclerView recyclerView = view.findViewById(R.id.crop_parcel_recycler);
         recyclerView.setLayoutManager(new LinearLayoutManager(container.getContext()));
-        adapter = new CropParcelAdapter(dataset, paramType);
+        adapter = new SelectableItemAdapter(dataset, paramType);
         recyclerView.setAdapter(adapter);
 
-        TabLayout tabLayout = view.findViewById(R.id.tab_crop_parcel);
+        tabLayout = view.findViewById(R.id.tab_crop_parcel);
 
         if (paramType.equals("cultivation")) {
             tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
                 @Override public void onTabUnselected(TabLayout.Tab tab) {}
                 @Override public void onTabReselected(TabLayout.Tab tab) {}
                 @Override public void onTabSelected(TabLayout.Tab tab) {
-                    queryDatabaseForList(tab.getPosition());
+                    dataset.clear();
+                    dataset.addAll(Grammar.getFilteredItems(getCurrentTabFilter(), paramsList, null));
+                    adapter.notifyDataSetChanged();
                 }
             });
             tabLayout.setVisibility(View.VISIBLE);
@@ -107,9 +106,13 @@ public class CropParcelChoiceFragment extends Fragment {
             tabLayout.setVisibility(View.GONE);
         }
 
+        // Default filter
+        dataset.addAll(Grammar.getFilteredItems("is plant", paramsList, null));
+        adapter.notifyDataSetChanged();
+
 //        currentTab = paramType.equals("parcel") ? LAND_PARCEL : PLANT;
         // Query data for first tab
-        queryDatabaseForList(paramType.equals("parcel") ? 1 : 0);
+//        queryDatabaseForList(paramType.equals("parcel") ? 1 : 0);
 
         // SeachField logic
         SearchView searchView = view.findViewById(R.id.search_field);
@@ -117,22 +120,24 @@ public class CropParcelChoiceFragment extends Fragment {
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String text) {
-                filterList(text);
+                dataset.clear();
+                dataset.addAll(Grammar.getFilteredItems(getCurrentTabFilter(), paramsList, text));
+                adapter.notifyDataSetChanged();
                 return false;
             }
             @Override
             public boolean onQueryTextChange(String text) {
-                if (text.length() > 1)
-                    filterList(text);
-                else
-                    filterList(null);
+                dataset.clear();
+                dataset.addAll(Grammar.getFilteredItems(getCurrentTabFilter(), paramsList, text.length() > 1 ? text : null));
+                adapter.notifyDataSetChanged();
                 return false;
             }
         });
 
         searchView.setOnCloseListener(() -> {
             // Reset search
-            filterList(null);
+            dataset.clear();
+            dataset.addAll(Grammar.getFilteredItems(getCurrentTabFilter(), paramsList, null));
             searchView.clearFocus();
             InputMethodManager imm = (InputMethodManager) context.getSystemService(Activity.INPUT_METHOD_SERVICE);
             Log.e("PAramChoiceFragment", "ime ?");
@@ -146,31 +151,35 @@ public class CropParcelChoiceFragment extends Fragment {
         return view;
     }
 
-    private void queryDatabaseForList(int tab) {
-        dataset.clear();
-        currentTab = tab == 0 ? PLANT : LAND_PARCEL;
-        for (GenericItem item : InterventionFormFragment.paramsList)
-            if (item.variety.equals(currentTab))
-                dataset.add(item);
-        adapter.notifyDataSetChanged();
+    private String getCurrentTabFilter() {
+        return tabLayout.getSelectedTabPosition() == 0 ? "is plant" : "is land_parcel";
     }
 
-    private void filterList(String text) {
-        dataset.clear();
-        for (GenericItem item : InterventionFormFragment.paramsList)
-            if (item.variety.equals(currentTab))
-                if (text != null) {
-                    String filterText = StringUtils.stripAccents(text.toLowerCase());
-                    String name = StringUtils.stripAccents(item.name.toLowerCase());
-                    String number = "";
-                    if (item.number != null && item.number.isEmpty())
-                        number = StringUtils.stripAccents(item.number.toLowerCase());
-                    if (name.contains(filterText) || number.contains(filterText))
-                        dataset.add(item);
-                } else
-                    dataset.add(item);
-
-        adapter.notifyDataSetChanged();
-    }
+//    private void queryDatabaseForList(int tab) {
+//        dataset.clear();
+//        currentTab = tab == 0 ? PLANT : LAND_PARCEL;
+//        for (GenericItem item : InterventionFormFragment.paramsList)
+//            if (item.variety.equals(currentTab))
+//                dataset.add(item);
+//        adapter.notifyDataSetChanged();
+//    }
+//
+//    private void filterList(String text) {
+//        dataset.clear();
+//        for (GenericItem item : InterventionFormFragment.paramsList)
+//            if (item.variety.equals(currentTab))
+//                if (text != null) {
+//                    String filterText = StringUtils.stripAccents(text.toLowerCase());
+//                    String name = StringUtils.stripAccents(item.name.toLowerCase());
+//                    String number = "";
+//                    if (item.number != null && item.number.isEmpty())
+//                        number = StringUtils.stripAccents(item.number.toLowerCase());
+//                    if (name.contains(filterText) || number.contains(filterText))
+//                        dataset.add(item);
+//                } else
+//                    dataset.add(item);
+//
+//        adapter.notifyDataSetChanged();
+//    }
 
 }

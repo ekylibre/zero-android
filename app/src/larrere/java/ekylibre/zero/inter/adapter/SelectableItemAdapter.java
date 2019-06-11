@@ -33,6 +33,7 @@ public class SelectableItemAdapter extends RecyclerView.Adapter<SelectableItemAd
 
         @BindView(R.id.item_first_line) TextView firstLine;
         @BindView(R.id.item_second_line) TextView secondLine;
+        @BindView(R.id.item_third_line) TextView thirdLine;
         GenericItem item;
 
         ViewHolder(View itemView) {
@@ -40,11 +41,11 @@ public class SelectableItemAdapter extends RecyclerView.Adapter<SelectableItemAd
             ButterKnife.bind(this, itemView);
             itemView.setOnClickListener(v -> {
                 if (item.referenceName.contains(role)) {
-                    item.isSelected = false;
+//                    item.isSelected = false;
                     v.setSelected(false);
                     item.referenceName.remove(role);
                 } else {
-                    item.isSelected = true;
+//                    item.isSelected = true;
                     v.setSelected(true);
                     item.referenceName.add(role);
                 }
@@ -63,11 +64,28 @@ public class SelectableItemAdapter extends RecyclerView.Adapter<SelectableItemAd
                 colorId = R.color.basic_blue;
                 textColor = R.color.white;
             }
+
             firstLine.setText(item.name);
             firstLine.setTextColor(ContextCompat.getColor(context, textColor));
-            secondLine.setText(item.workNumber != null ? (item.workNumber + " (" + item.number + ")"): item.number);
+
+            StringBuilder sb = new StringBuilder();
+            if (item.netSurfaceArea != null)
+                sb.append(item.netSurfaceArea).append(" - ");
+            else if (item.workNumber != null)
+                sb.append(item.workNumber).append(" - ");
+            if (item.number != null)
+                sb.append(item.number);
+            if (item.containerName != null)
+                sb.append(" - ").append(item.containerName);
+            secondLine.setText(sb.toString());
             secondLine.setTextColor(ContextCompat.getColor(context, textColor));
             itemView.setBackgroundColor(ContextCompat.getColor(context, colorId));
+
+            if (item.population != null) {
+                thirdLine.setText(item.population);
+                thirdLine.setVisibility(View.VISIBLE);
+            } else
+                thirdLine.setVisibility(View.GONE);
         }
     }
 

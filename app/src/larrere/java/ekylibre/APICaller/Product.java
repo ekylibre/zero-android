@@ -2,6 +2,8 @@ package ekylibre.APICaller;
 
 import android.util.Log;
 
+import androidx.annotation.Nullable;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -34,7 +36,8 @@ public class Product {
     public String workNumber;
     public String variety;
     public String abilities;
-    public BigDecimal population;
+    public String population;
+    public String unit;
     public String containerName;
     public Date deadAt;
     public String netSurfaceArea;
@@ -63,8 +66,7 @@ public class Product {
         name = object.getString("name");
         variety = object.getString("variety");
 
-        if (object.has("abilities") && !object.isNull("abilities"))
-            abilities = computeAbilities(object.getJSONArray("abilities"));
+        abilities = computeAbilities(object);
 
         if (object.has("number") && !object.isNull("number"))
             number = object.getString("number");
@@ -72,8 +74,16 @@ public class Product {
         if (object.has("work_number") && !object.isNull("work_number") && !object.getString("work_number").equals(""))
             workNumber = object.getString("work_number");
 
-        if (object.has("population") && !object.isNull("population"))
-            population = new BigDecimal(object.getString("population"));
+        if (object.has("variant_unit_name") && !object.isNull("variant_unit_name"))
+            unit = object.getString("variant_unit_name");
+
+        if (object.has("population") && !object.isNull("population")) {
+            StringBuilder sb = new StringBuilder();
+            sb.append(df.format(Float.parseFloat(object.getString("population"))));
+            if (unit != null && !unit.equals(""))
+                sb.append(" ").append(unit);
+            population = sb.toString();
+        }
 
         if (object.has("container_name") && !object.isNull("container_name"))
             containerName = object.getString("container_name");
@@ -85,13 +95,15 @@ public class Product {
             netSurfaceArea = getSurfaceArea(object.getJSONObject("net_surface_area"));
     }
 
-    private String computeAbilities(JSONArray array) throws JSONException {
+    private String computeAbilities(JSONObject object) throws JSONException {
 
         StringBuilder sb = new StringBuilder();
 
-        // Compute abilities
-        for (int i=0; i < array.length(); i++)
-            sb.append("can ").append(array.getString(i)).append(",");
+        if (object.has("abilities") && !object.isNull("abilities")) {
+            JSONArray array = object.getJSONArray("abilities");
+            for (int i = 0; i < array.length(); i++)
+                sb.append("can ").append(array.getString(i)).append(",");
+        }
 
         // Compute varieties
         List<String> varieties = Grammar.computeItemAbilities("is " + variety);

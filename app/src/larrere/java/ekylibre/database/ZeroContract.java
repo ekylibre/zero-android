@@ -295,6 +295,7 @@ public final class ZeroContract {
         String VARIETY = "variety";
         String ABILITIES = "abilities";
         String POPULATION = "population";
+        String UNIT = "unit";
         String CONTAINER_NAME = "container_name";
         String DEAD_AT = "dead_at";
         String NET_SURFACE_AREA = "net_surface_area";
@@ -684,7 +685,7 @@ public final class ZeroContract {
         public static final Uri CONTENT_URI = getUri(TABLE_NAME);
         public static final String CONTENT_TYPE = DIR_BASE + TABLE_NAME;
         public static final String[] PROJECTION = {EK_ID, NAME, NUMBER, WORK_NUMBER, VARIETY,
-                ABILITIES, POPULATION, CONTAINER_NAME, DEAD_AT, NET_SURFACE_AREA};
+                ABILITIES, POPULATION, UNIT, CONTAINER_NAME, NET_SURFACE_AREA};
         public static final String ORDER_BY_NAME = NAME + " ASC";
     }
 

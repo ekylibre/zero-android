@@ -134,7 +134,10 @@ public class Grammar {
                     String filterText = StringUtils.stripAccents(search.toLowerCase());
                     String name = StringUtils.stripAccents(item.name.toLowerCase());
                     String number = StringUtils.stripAccents(item.number.toLowerCase());
-                    if (name.contains(filterText) || number.contains(filterText))
+                    String workNumber = "";
+                    if (item.workNumber != null)
+                        workNumber = StringUtils.stripAccents(item.workNumber.toLowerCase());
+                    if (name.contains(filterText) || number.contains(filterText) || workNumber.contains(filterText))
                         list.add(item);
                 } else {
                     list.add(item);

@@ -8,6 +8,7 @@ import android.widget.TextView;
 
 import java.util.List;
 
+import androidx.annotation.ColorRes;
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
@@ -49,8 +50,8 @@ public class CropParcelAdapter extends RecyclerView.Adapter<CropParcelAdapter.Vi
         void display(int position, int backgroundId) {
             pos = position;
             item = dataset.get(position);
-            int textColor = R.color.primary_text;
-            if (item.isSelected) {
+            @ColorRes int textColor = R.color.primary_text;
+            if (item.referenceName.contains(role)) {
                 backgroundId = R.color.basic_blue;
                 textColor = R.color.white;
             }
@@ -60,19 +61,26 @@ public class CropParcelAdapter extends RecyclerView.Adapter<CropParcelAdapter.Vi
             view.setBackgroundColor(ContextCompat.getColor(context, backgroundId));
             // Set text
             firstLine.setText(item.name);
-            secondLine.setText(item.number);
+            String secLine = item.netSurfaceArea + (item.number != null ? " ("+item.number+")" : "");
+            secondLine.setText(secLine);
         }
 
         @Override
         public void onClick(View v) {
 
-            if (item.isSelected) {
-                item.isSelected = false;
+            if (item.referenceName.contains(role))
                 item.referenceName.remove(role);
-            } else {
-                item.isSelected = true;
+            else
                 item.referenceName.add(role);
-            }
+
+
+//            if (item.isSelected) {
+//                item.isSelected = false;
+//                item.referenceName.remove(role);
+//            } else {
+//                item.isSelected = true;
+//                item.referenceName.add(role);
+//            }
 
             view.setSelected(!view.isSelected());
             notifyItemChanged(pos);
@@ -90,7 +98,7 @@ public class CropParcelAdapter extends RecyclerView.Adapter<CropParcelAdapter.Vi
 
     @Override
     public void onBindViewHolder(@NonNull final ViewHolder holder, int position) {
-        int backgroundId = position %2 == 1 ? R.color.another_light_grey : R.color.white;
+        @ColorRes int backgroundId = position %2 == 1 ? R.color.another_light_grey : R.color.white;
         holder.display(position, backgroundId);
     }
 

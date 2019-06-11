@@ -550,7 +550,8 @@ public class DatabaseHelper extends SQLiteOpenHelper
                         ZeroContract.Products.WORK_NUMBER + " TEXT, " +
                         ZeroContract.Products.VARIETY + " TEXT, " +
                         ZeroContract.Products.ABILITIES + " TEXT, " +
-                        ZeroContract.Products.POPULATION + " REAL, " +
+                        ZeroContract.Products.POPULATION + " TEXT, " +
+                        ZeroContract.Products.UNIT + " TEXT, " +
                         ZeroContract.Products.CONTAINER_NAME + " TEXT, " +
                         ZeroContract.Products.DEAD_AT + " DATETIME, " +
                         ZeroContract.Products.NET_SURFACE_AREA + " TEXT, " +

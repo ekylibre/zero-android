@@ -14,40 +14,27 @@ public class GenericItem {
     public String[] abilities;
     public BigDecimal quantity;
     public String unit;
-    public boolean isSelected;
+//    public boolean isSelected;
     public List<String> referenceName;
-    public BigDecimal population;
+    public String population;
+    public String containerName;
+    public String netSurfaceArea;
 
-    public GenericItem(String variety) {
-        this.variety = variety;
-        this.referenceName = new ArrayList<>();
-    }
-
-    public GenericItem(int id, String name, String number, String workNumber, String variety, String[] abilities, String unit, BigDecimal population) {
-        this.id = id;
-        this.name = name;
-        this.number = number;
-        this.workNumber = workNumber;
-        this.variety = variety;
-        this.abilities = abilities;
+    public GenericItem() {
         this.quantity = null;
-        this.unit = unit;
-        this.isSelected = false;
         this.referenceName = new ArrayList<>();
-        this.population = population;
     }
 
-    public GenericItem(int id, String name, String number, String workNumber, String variety, String[] abilities, String unit) {
-        this.id = id;
-        this.name = name;
-        this.number = number;
-        this.workNumber = workNumber;
-        this.variety = variety;
-        this.abilities = abilities;
-        this.quantity = null;
-        this.unit = unit;
-        this.isSelected = false;
-        this.referenceName = new ArrayList<>();
-        this.population = null;
-    }
+//    public GenericItem(int id, String name, String number, String workNumber, String variety, String[] abilities, String unit, BigDecimal population) {
+//        this.id = id;
+//        this.name = name;
+//        this.number = number;
+//        this.workNumber = workNumber;
+//        this.variety = variety;
+//        this.abilities = abilities;
+//        this.unit = unit;
+////        this.isSelected = false;
+//        this.referenceName = new ArrayList<>();
+//        this.population = population;
+//    }
 }

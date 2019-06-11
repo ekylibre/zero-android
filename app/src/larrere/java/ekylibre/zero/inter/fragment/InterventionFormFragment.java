@@ -30,6 +30,8 @@ import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import ekylibre.APICaller.Product;
+import ekylibre.database.ZeroContract.Products;
 import ekylibre.database.ZeroContract.Equipments;
 import ekylibre.database.ZeroContract.Inputs;
 import ekylibre.database.ZeroContract.Outputs;
@@ -107,22 +109,15 @@ public class InterventionFormFragment extends Fragment {
         zoneList.add(new Zone());
 
         paramsList = new ArrayList<>();
-        paramsList.addAll(getUsers(cr));
-        paramsList.addAll(getTools(cr));
-        paramsList.addAll(getPlantsAndLandParcels(cr));
-        paramsList.addAll(getBuildingDivisions(cr));
-        paramsList.addAll(getInputs(cr));
-        paramsList.addAll(getOutputs(cr));
+        paramsList.addAll(getProducts(cr));
 
-        if (BuildConfig.DEBUG)
-            Log.i(TAG, paramsList.size() + " items in paramsList");
+//        paramsList.addAll(getUsers(cr));
+//        paramsList.addAll(getTools(cr));
+//        paramsList.addAll(getPlantsAndLandParcels(cr));
+//        paramsList.addAll(getBuildingDivisions(cr));
+//        paramsList.addAll(getInputs(cr));
+//        paramsList.addAll(getOutputs(cr));
 
-        for (GenericItem item : paramsList) {
-            if (item.id == 9604) {
-                Log.e(TAG, "Item truc est présent");
-                break;
-            }
-        }
     }
 
     @Override
@@ -189,6 +184,16 @@ public class InterventionFormFragment extends Fragment {
             widgetContainer.addView(zoneView);
         }
 
+        // -------------- //
+        // Workers layout //
+        // -------------- //
+
+        for (GenericEntity entity : selectedProcedure.target) {
+            if (BuildConfig.DEBUG)
+                Log.i(TAG, "target --> " + entity.name);
+            if (entity.group == null)
+                widgetContainer.addView(new WidgetParamView(context, listener, entity, paramsList));
+        }
 
 
         // ----------- //
@@ -196,43 +201,44 @@ public class InterventionFormFragment extends Fragment {
         // ----------- //
 
         // Check wether to display crop, parcel or both selector
-        for (GenericEntity target : selectedProcedure.target) {
-
-            if (target.group == null) {
-
-                // Inflate the layout
-                View cropParcelView = inflater.inflate(R.layout.widget_param_layout, container, false);
-                TextView label = cropParcelView.findViewById(R.id.widget_label);
-
-                // Set the title
-                if (target.name.equals("cultivation"))
-                    label.setText(R.string.crop_parcel);
-                else {
-                    label.setText(Helper.getStringId(target.name));
-                }
-                TextView addButton = cropParcelView.findViewById(R.id.widget_add);
-                ChipGroup cropChipGroup = cropParcelView.findViewById(R.id.widget_chips_group);
-                addButton.setOnClickListener(v -> listener.onFormFragmentInteraction(target.name, target.filter));  // CROP_CHOICE_FRAGMENT
-
-                // ChipGroup Logic
-                for (GenericItem item : paramsList) {
-                    if ((item.variety.equals(PLANT) || item.variety.equals(LAND_PARCEL)) && item.isSelected) {
-                        Chip chip = new Chip(context);
-                        chip.setText(item.name);
-                        chip.setCloseIconVisible(true);
-                        chip.setOnCloseIconClickListener(v -> {
-                            cropChipGroup.removeView(chip);
-                            item.isSelected = false;
-                            item.referenceName.remove(target.name);
-                            chipGroupDisplay(cropChipGroup);
-                        });
-                        cropChipGroup.addView(chip);
-                    }
-                }
-                chipGroupDisplay(cropChipGroup);
-                widgetContainer.addView(cropParcelView);
-            }
-        }
+//        for (GenericEntity target : selectedProcedure.target) {
+//
+//            if (target.group == null) {
+//
+//                // Inflate the layout
+//                View cropParcelView = inflater.inflate(R.layout.widget_param_layout, container, false);
+//                TextView label = cropParcelView.findViewById(R.id.widget_label);
+//
+//                // Set the title
+//                if (target.name.equals("cultivation"))
+//                    label.setText(R.string.crop_parcel);
+//                else {
+//                    label.setText(Helper.getStringId(target.name));
+//                }
+//                TextView addButton = cropParcelView.findViewById(R.id.widget_add);
+//                ChipGroup cropChipGroup = cropParcelView.findViewById(R.id.widget_chips_group);
+//                addButton.setOnClickListener(v -> listener.onFormFragmentInteraction(target.name, target.filter));  // CROP_CHOICE_FRAGMENT
+//
+//                // ChipGroup Logic
+//                for (GenericItem item : paramsList) {
+//                    if (item.referenceName.contains(target.name)) {
+////                    if ((item.variety.equals(PLANT) || item.variety.equals(LAND_PARCEL)) && item.isSelected) {
+//                        Chip chip = new Chip(context);
+//                        chip.setText(item.name);
+//                        chip.setCloseIconVisible(true);
+//                        chip.setOnCloseIconClickListener(v -> {
+//                            cropChipGroup.removeView(chip);
+////                            item.isSelected = false;
+//                            item.referenceName.remove(target.name);
+//                            chipGroupDisplay(cropChipGroup);
+//                        });
+//                        cropChipGroup.addView(chip);
+//                    }
+//                }
+//                chipGroupDisplay(cropChipGroup);
+//                widgetContainer.addView(cropParcelView);
+//            }
+//        }
 
         // ------------- //
         // Inputs layout //
@@ -349,15 +355,15 @@ public class InterventionFormFragment extends Fragment {
         return dataset;
     }
 
-    private void chipGroupDisplay(ChipGroup group) {
-        boolean itemCounter = false;
-        for (GenericItem item : paramsList)
-            if ((item.variety.equals(PLANT) || item.variety.equals(LAND_PARCEL)) && item.isSelected) {
-                itemCounter = true;
-                break;
-            }
-        group.setVisibility(itemCounter ? View.VISIBLE : View.GONE);
-    }
+//    private void chipGroupDisplay(ChipGroup group) {
+//        boolean itemCounter = false;
+//        for (GenericItem item : paramsList)
+//            if ((item.variety.equals(PLANT) || item.variety.equals(LAND_PARCEL)) && item.isSelected) {
+//                itemCounter = true;
+//                break;
+//            }
+//        group.setVisibility(itemCounter ? View.VISIBLE : View.GONE);
+//    }
 
     @Override
     public void onDetach() {
@@ -365,157 +371,191 @@ public class InterventionFormFragment extends Fragment {
         listener = null;
     }
 
-    private List<GenericItem> getPlantsAndLandParcels(ContentResolver cr) {
-        List<GenericItem> list = new ArrayList<>();
-
-        final String whereClause = String.format("user LIKE \"%s\" AND dead_at IS NULL OR dead_at < datetime('now')", account.name);
-
-        // Load Plants
-        try (Cursor cursor = cr.query(Plants.CONTENT_URI, Plants.PROJECTION_INTER,
-                whereClause, null, Plants.SORT_ORDER_NAME)) {
-
-            while (cursor != null && cursor.moveToNext()) {
-                GenericItem item = new GenericItem(PLANT);
-                item.id = cursor.getInt(1);
-                item.name = cursor.getString(2);
-                item.number = cursor.getString(4);  // Surface in this case
-                list.add(item);
-            }
-        }
-
-        // Load Land Parcels
-        try (Cursor cursor = cr.query(LandParcels.CONTENT_URI, LandParcels.PROJECTION_ALL,
-                whereClause, null, LandParcels.SORT_ORDER_DEFAULT)) {
-
-            while (cursor != null && cursor.moveToNext()) {
-                GenericItem item = new GenericItem(LAND_PARCEL);
-                item.id = cursor.getInt(0);
-                item.name = cursor.getString(1);
-                item.number = cursor.getString(2);  // Surface in this case
-                list.add(item);
-            }
-        }
-
-        return list;
-    }
-
-    private List<GenericItem> getBuildingDivisions(ContentResolver cr) {
-        List<GenericItem> list = new ArrayList<>();
-
-        final String whereClause = String.format("user LIKE \"%s\" AND dead_at IS NULL OR dead_at < datetime('now')", account.name);
-
-        // Load Plants
-        try (Cursor cursor = cr.query(Plants.CONTENT_URI, Plants.PROJECTION_INTER,
-                whereClause, null, Plants.SORT_ORDER_NAME)) {
-
-            while (cursor != null && cursor.moveToNext()) {
-                GenericItem item = new GenericItem("building_division");
-                item.id = cursor.getInt(1);
-                item.name = cursor.getString(2);
-                item.number = cursor.getString(4);  // Surface in this case
-                list.add(item);
-            }
-        }
-
-        return list;
-    }
-
-    private List<GenericItem> getUsers(ContentResolver cr) {
-        List<GenericItem> list = new ArrayList<>();
-
-        final String whereClause = String.format("user LIKE \"%s\" AND (dead_at IS NULL OR dead_at > %d)", account.name, new Date().getTime());
-
-        try (Cursor cursor = cr.query(Workers.CONTENT_URI, Workers.PROJECTION_ALL,
-                whereClause, null, Workers.SORT_ORDER_DEFAULT)) {
-
-            // Projection = {EK_ID, NAME, NUMBER, WORK_NUMBER, ABILITIES}
-
-            while (cursor != null && cursor.moveToNext()) {
-                GenericItem item = new GenericItem("doer");
-                item.id = cursor.getInt(0);
-                item.name = cursor.getString(1);
-                item.number = cursor.getString(2);
-                item.workNumber = cursor.getString(3);
-                item.abilities = cursor.getString(4).split(",");
-                list.add(item);
-            }
-        }
-
-        return list;
-    }
-
-    private List<GenericItem> getTools(ContentResolver cr) {
-        List<GenericItem> list = new ArrayList<>();
-
-        try (Cursor cursor = cr.query(Equipments.CONTENT_URI, Equipments.PROJECTION_ALL,
-                "user = \"" + "123456"+ "\" AND (dead_at IS NULL OR CAST(dead_at AS INTEGER) > CAST(" + new Date().getTime() + " AS INTEGER))",
-                null, Equipments.SORT_ORDER_DEFAULT)) {
-
-            // Projection = {EK_ID, NAME, NUMBER, WORK_NUMBER, VARIETY, ABILITIES}
-
+//    private List<GenericItem> getPlantsAndLandParcels(ContentResolver cr) {
+//        List<GenericItem> list = new ArrayList<>();
+//
+//        final String whereClause = String.format("user LIKE \"%s\" AND dead_at IS NULL OR dead_at < datetime('now')", account.name);
+//
+//        // Load Plants
+//        try (Cursor cursor = cr.query(Plants.CONTENT_URI, Plants.PROJECTION_INTER,
+//                whereClause, null, Plants.SORT_ORDER_NAME)) {
+//
 //            while (cursor != null && cursor.moveToNext()) {
-//                GenericItem item = new GenericItem("tool");
+//                GenericItem item = new GenericItem(PLANT);
+//                item.id = cursor.getInt(1);
+//                item.name = cursor.getString(2);
+//                item.number = cursor.getString(4);  // Surface in this case
+//                list.add(item);
+//            }
+//        }
+//
+//        // Load Land Parcels
+//        try (Cursor cursor = cr.query(LandParcels.CONTENT_URI, LandParcels.PROJECTION_ALL,
+//                whereClause, null, LandParcels.SORT_ORDER_DEFAULT)) {
+//
+//            while (cursor != null && cursor.moveToNext()) {
+//                GenericItem item = new GenericItem(LAND_PARCEL);
+//                item.id = cursor.getInt(0);
+//                item.name = cursor.getString(1);
+//                item.number = cursor.getString(2);  // Surface in this case
+//                list.add(item);
+//            }
+//        }
+//
+//        return list;
+//    }
+
+//    private List<GenericItem> getBuildingDivisions(ContentResolver cr) {
+//        List<GenericItem> list = new ArrayList<>();
+//
+//        final String whereClause = String.format("user LIKE \"%s\" AND dead_at IS NULL OR dead_at < datetime('now')", account.name);
+//
+//        // Load Plants
+//        try (Cursor cursor = cr.query(Plants.CONTENT_URI, Plants.PROJECTION_INTER,
+//                whereClause, null, Plants.SORT_ORDER_NAME)) {
+//
+//            while (cursor != null && cursor.moveToNext()) {
+//                GenericItem item = new GenericItem("building_division");
+//                item.id = cursor.getInt(1);
+//                item.name = cursor.getString(2);
+//                item.number = cursor.getString(4);  // Surface in this case
+//                list.add(item);
+//            }
+//        }
+//
+//        return list;
+//    }
+
+//    private List<GenericItem> getUsers(ContentResolver cr) {
+//        List<GenericItem> list = new ArrayList<>();
+//
+//        final String whereClause = String.format("user LIKE \"%s\" AND (dead_at IS NULL OR dead_at > %d)", account.name, new Date().getTime());
+//
+//        try (Cursor cursor = cr.query(Workers.CONTENT_URI, Workers.PROJECTION_ALL,
+//                whereClause, null, Workers.SORT_ORDER_DEFAULT)) {
+//
+//            // Projection = {EK_ID, NAME, NUMBER, WORK_NUMBER, ABILITIES}
+//
+//            while (cursor != null && cursor.moveToNext()) {
+//                GenericItem item = new GenericItem("doer");
 //                item.id = cursor.getInt(0);
 //                item.name = cursor.getString(1);
 //                item.number = cursor.getString(2);
 //                item.workNumber = cursor.getString(3);
-//                item.variety = cursor.getString(4);
-//                item.abilities = cursor.getString(5).split(",");
+//                item.abilities = cursor.getString(4).split(",");
 //                list.add(item);
 //            }
-        }
+//        }
+//
+//        return list;
+//    }
 
-        return list;
-    }
+//    private List<GenericItem> getTools(ContentResolver cr) {
+//        List<GenericItem> list = new ArrayList<>();
+//
+//        try (Cursor cursor = cr.query(Equipments.CONTENT_URI, Equipments.PROJECTION_ALL,
+//                "user = \"" + "123456"+ "\" AND (dead_at IS NULL OR CAST(dead_at AS INTEGER) > CAST(" + new Date().getTime() + " AS INTEGER))",
+//                null, Equipments.SORT_ORDER_DEFAULT)) {
+//
+//            // Projection = {EK_ID, NAME, NUMBER, WORK_NUMBER, VARIETY, ABILITIES}
+//
+////            while (cursor != null && cursor.moveToNext()) {
+////                GenericItem item = new GenericItem("tool");
+////                item.id = cursor.getInt(0);
+////                item.name = cursor.getString(1);
+////                item.number = cursor.getString(2);
+////                item.workNumber = cursor.getString(3);
+////                item.variety = cursor.getString(4);
+////                item.abilities = cursor.getString(5).split(",");
+////                list.add(item);
+////            }
+//        }
+//
+//        return list;
+//    }
 
-    private List<GenericItem> getInputs(ContentResolver cr) {
+//    private List<GenericItem> getInputs(ContentResolver cr) {
+//        List<GenericItem> list = new ArrayList<>();
+//
+//        final String whereClause = String.format("user LIKE \"%s\"", account.name);
+//
+//        try (Cursor cursor = cr.query(Inputs.CONTENT_URI, Inputs.PROJECTION_ALL,
+//                whereClause, null, Inputs.SORT_ORDER_DEFAULT)) {
+//
+//            // Projection = {EK_ID, NAME, NUMBER, VARIETY, ABILITIES, POPULATION, CONTAINER_NAME}
+//
+//            while (cursor != null && cursor.moveToNext()) {
+//                GenericItem item = new GenericItem("input");
+//                item.id = cursor.getInt(0);
+//                item.name = cursor.getString(1);
+//                item.number = cursor.getString(2);
+//                item.variety = cursor.getString(3);
+//                item.abilities = cursor.getString(4).split(",");
+//                item.population = new BigDecimal(cursor.getString(5));
+//                item.workNumber = cursor.getString(6);  // container_name in this case
+//                list.add(item);
+//            }
+//        }
+//
+//        return list;
+//    }
+
+//    private List<GenericItem> getOutputs(ContentResolver cr) {
+//        List<GenericItem> list = new ArrayList<>();
+//
+//        final String whereClause = String.format("user LIKE \"%s\"", account.name);
+//
+//        // Load Inputs
+//        try (Cursor cursor = cr.query(Outputs.CONTENT_URI, Outputs.PROJECTION_ALL,
+//                whereClause, null, Outputs.SORT_ORDER_DEFAULT)) {
+//
+//            // {EK_ID, NAME, VARIETY, NUMBER, ABILITIES}
+//
+//            while (cursor != null && cursor.moveToNext()) {
+//
+//                GenericItem item = new GenericItem("output");
+//                item.id = cursor.getInt(0);
+//                item.name = cursor.getString(1);
+//                item.variety = cursor.getString(2);
+//                item.number = cursor.getString(3);
+//                item.abilities = cursor.getString(4).split(",");
+//                list.add(item);
+//            }
+//        }
+//
+//        return list;
+//    }
+
+    private List<GenericItem> getProducts(ContentResolver cr) {
         List<GenericItem> list = new ArrayList<>();
 
-        final String whereClause = String.format("user LIKE \"%s\"", account.name);
+        final String whereClause = "user LIKE ? AND (dead_at IS NULL OR dead_at > CAST(? AS INTEGER))";
 
-        try (Cursor cursor = cr.query(Inputs.CONTENT_URI, Inputs.PROJECTION_ALL,
-                whereClause, null, Inputs.SORT_ORDER_DEFAULT)) {
+        // Load Inputs
+        try (Cursor cursor = cr.query(Products.CONTENT_URI, Products.PROJECTION,
+                whereClause, new String[] {account.name, String.valueOf(new Date().getTime())}, Products.ORDER_BY_NAME)) {
 
-            // Projection = {EK_ID, NAME, NUMBER, VARIETY, ABILITIES, POPULATION, CONTAINER_NAME}
+            // {EK_ID, NAME, NUMBER, WORK_NUMBER, VARIETY, ABILITIES,
+            // POPULATION, POPULATION_UNIT, CONTAINER_NAME, NET_SURFACE_AREA}
 
             while (cursor != null && cursor.moveToNext()) {
-                GenericItem item = new GenericItem("input");
+
+                GenericItem item = new GenericItem();
                 item.id = cursor.getInt(0);
                 item.name = cursor.getString(1);
                 item.number = cursor.getString(2);
-                item.variety = cursor.getString(3);
-                item.abilities = cursor.getString(4).split(",");
-                item.population = new BigDecimal(cursor.getString(5));
-                item.workNumber = cursor.getString(6);  // container_name in this case
+                item.workNumber = cursor.getString(3);
+                item.variety = cursor.getString(4);
+                item.abilities = cursor.getString(5).split(",");
+                item.population = cursor.getString(6);
+                item.unit = cursor.getString(7);
+                item.containerName = cursor.getString(8);
+                item.netSurfaceArea = cursor.getString(9);
                 list.add(item);
             }
         }
 
-        return list;
-    }
-
-    private List<GenericItem> getOutputs(ContentResolver cr) {
-        List<GenericItem> list = new ArrayList<>();
-
-        final String whereClause = String.format("user LIKE \"%s\"", account.name);
-
-        // Load Inputs
-        try (Cursor cursor = cr.query(Outputs.CONTENT_URI, Outputs.PROJECTION_ALL,
-                whereClause, null, Outputs.SORT_ORDER_DEFAULT)) {
-
-            // {EK_ID, NAME, VARIETY, NUMBER, ABILITIES}
-
-            while (cursor != null && cursor.moveToNext()) {
-
-                GenericItem item = new GenericItem("output");
-                item.id = cursor.getInt(0);
-                item.name = cursor.getString(1);
-                item.variety = cursor.getString(2);
-                item.number = cursor.getString(3);
-                item.abilities = cursor.getString(4).split(",");
-                list.add(item);
-            }
-        }
+        Log.e(TAG, "Param list size = "+ list.size());
 
         return list;
     }
