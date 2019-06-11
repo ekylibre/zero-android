@@ -15,6 +15,8 @@ public final class ZeroContract {
 
     // Content URI for this provider
     public static final Uri CONTENT_URI = Uri.parse("content://" + AUTHORITY);
+    private static final String DIR_BASE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/vnd.ekylibre.zero.";
+    private static final String ITEM_BASE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/vnd.ekylibre.zero.";
 
     public interface InterventionsColumns extends BaseColumns {
         String TABLE_NAME = "intervention";
@@ -284,6 +286,21 @@ public final class ZeroContract {
         String USER = "user";
     }
 
+    public interface ProductColumns {
+        String TABLE_NAME = "products";
+        String EK_ID = "ek_id";
+        String NAME = "name";
+        String NUMBER = "number";
+        String WORK_NUMBER = "work_number";
+        String VARIETY = "variety";
+        String ABILITIES = "abilities";
+        String POPULATION = "population";
+        String CONTAINER_NAME = "container_name";
+        String DEAD_AT = "dead_at";
+        String NET_SURFACE_AREA = "net_surface_area";
+        String USER = "user";
+    }
+
     public interface DetailedInterventionColumns extends BaseColumns {
         String TABLE_NAME = "detailed_interventions";  // carefull, intervention table name exists !
         String PROCEDURE_NAME = "procedure_name";
@@ -312,9 +329,9 @@ public final class ZeroContract {
         // Content URI for this table
         public static final Uri CONTENT_URI = Uri.withAppendedPath(ZeroContract.CONTENT_URI, "crumbs");
         // MIME type for lists of records.
-        public static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/vnd.ekylibre.zero.crumbs";
+        public static final String CONTENT_TYPE = DIR_BASE + "crumbs";
         // MIME type for individual record.
-        public static final String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/vnd.ekylibre.zero.crumb";
+        public static final String CONTENT_ITEM_TYPE = ITEM_BASE + "crumb";
 
         public static final String[] PROJECTION_ALL = {_ID, TYPE, LATITUDE, LONGITUDE, READ_AT, ACCURACY, METADATA, SYNCED, FK_INTERVENTION};
         public static final String[] PROJECTION_NONE = {_ID};
@@ -327,9 +344,9 @@ public final class ZeroContract {
         // Content URI for this table
         public static final Uri CONTENT_URI = Uri.withAppendedPath(ZeroContract.CONTENT_URI, "interventions");
         // MIME type for lists of records.
-        public static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/vnd.ekylibre.zero.interventions";
+        public static final String CONTENT_TYPE = DIR_BASE + "interventions";
         // MIME type for individual record.
-        public static final String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/vnd.ekylibre.zero.intervention";
+        public static final String CONTENT_ITEM_TYPE = ITEM_BASE + "intervention";
 
         public static final String[] PROJECTION_ALL = {_ID};
         public static final String[] PROJECTION_BASIC = {_ID, NAME, DESCRIPTION, STARTED_AT,
@@ -350,9 +367,9 @@ public final class ZeroContract {
         // Content URI for this table
         public static final Uri CONTENT_URI = Uri.withAppendedPath(ZeroContract.CONTENT_URI, "intervention_parameters");
         // MIME type for lists of records.
-        public static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/vnd.ekylibre.zero.intervention_parameters";
+        public static final String CONTENT_TYPE = DIR_BASE + "intervention_parameters";
         // MIME type for individual record.
-        public static final String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/vnd.ekylibre.zero.intervention_parameter";
+        public static final String CONTENT_ITEM_TYPE = ITEM_BASE + "intervention_parameter";
 
         public static final String[] PROJECTION_ALL = {_ID};
         public static final String[] PROJECTION_NONE = {_ID};
@@ -370,9 +387,9 @@ public final class ZeroContract {
         // Content URI for this table
         public static final Uri CONTENT_URI = Uri.withAppendedPath(ZeroContract.CONTENT_URI, "working_periods");
         // MIME type for lists of records.
-        public static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/vnd.ekylibre.zero.working_periods";
+        public static final String CONTENT_TYPE = DIR_BASE + "working_periods";
         // MIME type for individual record.
-        public static final String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/vnd.ekylibre.zero.working_periods";
+        public static final String CONTENT_ITEM_TYPE = ITEM_BASE + "working_periods";
 
         public static final String[] PROJECTION_ALL = {_ID};
         public static final String[] PROJECTION_POST = {_ID, STARTED_AT, STOPPED_AT, NATURE};
@@ -386,9 +403,9 @@ public final class ZeroContract {
         // Content URI for this table
         public static final Uri CONTENT_URI = Uri.withAppendedPath(ZeroContract.CONTENT_URI, "issues");
         // MIME type for lists of records.
-        public static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/vnd.ekylibre.zero.issues";
+        public static final String CONTENT_TYPE = DIR_BASE + "issues";
         // MIME type for individual record.
-        public static final String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/vnd.ekylibre.zero.issue";
+        public static final String CONTENT_ITEM_TYPE = ITEM_BASE + "issue";
 
         public static final String[] PROJECTION_ALL = {_ID, NATURE, SEVERITY, EMERGENCY, SYNCED, DESCRIPTION, PINNED, SYNCED_AT, OBSERVED_AT, LATITUDE, LONGITUDE};
         public static final String[] PROJECTION_NONE = {_ID};
@@ -400,9 +417,9 @@ public final class ZeroContract {
         // Content URI for this table
         public static final Uri CONTENT_URI = Uri.withAppendedPath(ZeroContract.CONTENT_URI, "plant_countings");
         // MIME type for lists of records.
-        public static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/vnd.ekylibre.zero.plant_countings";
+        public static final String CONTENT_TYPE = DIR_BASE + "plant_countings";
         // MIME type for individual record.
-        public static final String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/vnd.ekylibre.zero.plant_counting";
+        public static final String CONTENT_ITEM_TYPE = ITEM_BASE + "plant_counting";
 
         public static final String[] PROJECTION_ALL = {_ID, OBSERVED_AT, LATITUDE, LONGITUDE,
                 OBSERVATION,  PLANT_DENSITY_ABACUS_ITEM_ID, SYNCED_AT, PLANT_DENSITY_ABACUS_ID,
@@ -416,9 +433,9 @@ public final class ZeroContract {
         // Content URI for this table
         public static final Uri CONTENT_URI = Uri.withAppendedPath(ZeroContract.CONTENT_URI, "plant_counting_items");
         // MIME type for lists of records.
-        public static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/vnd.ekylibre.zero.plant_counting_items";
+        public static final String CONTENT_TYPE = DIR_BASE + "plant_counting_items";
         // MIME type for individual record.
-        public static final String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/vnd.ekylibre.zero.plant_counting_item";
+        public static final String CONTENT_ITEM_TYPE = ITEM_BASE + "plant_counting_item";
 
         public static final String[] PROJECTION_ALL = {_ID, VALUE, PLANT_COUNTING_ID};
         public static final String[] PROJECTION_NONE = {_ID};
@@ -430,9 +447,9 @@ public final class ZeroContract {
         // Content URI for this table
         public static final Uri CONTENT_URI = Uri.withAppendedPath(ZeroContract.CONTENT_URI, "plant_density_abaci");
         // MIME type for lists of records.
-        public static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/vnd.ekylibre.zero.plant_density_abaci";
+        public static final String CONTENT_TYPE = DIR_BASE + "plant_density_abaci";
         // MIME type for individual record.
-        public static final String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/vnd.ekylibre.zero.plant_density_abacus";
+        public static final String CONTENT_ITEM_TYPE = ITEM_BASE + "plant_density_abacus";
 
         public static final String[] PROJECTION_ALL = {_ID, NAME, VARIETY, GERMINATION_PERCENTAGE, SEEDING_DENSITY_UNIT, SAMPLING_LENGTH_UNIT, ACTIVITY_ID};
         public static final String[] PROJECTION_NONE = {_ID};
@@ -444,9 +461,9 @@ public final class ZeroContract {
         // Content URI for this table
         public static final Uri CONTENT_URI = Uri.withAppendedPath(ZeroContract.CONTENT_URI, "plant_density_abacus_items");
         // MIME type for lists of records.
-        public static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/vnd.ekylibre.zero.plant_density_abacus_items";
+        public static final String CONTENT_TYPE = DIR_BASE + "plant_density_abacus_items";
         // MIME type for individual record.
-        public static final String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/vnd.ekylibre.zero.plant_density_abacus_item";
+        public static final String CONTENT_ITEM_TYPE = ITEM_BASE + "plant_density_abacus_item";
 
         public static final String[] PROJECTION_ALL = {_ID, SEEDING_DENSITY_VALUE, PLANTS_COUNT};
         public static final String[] PROJECTION_NONE = {_ID};
@@ -458,9 +475,9 @@ public final class ZeroContract {
         // Content URI for this table
         public static final Uri CONTENT_URI = Uri.withAppendedPath(ZeroContract.CONTENT_URI, "plants");
         // MIME type for lists of records.
-        public static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/vnd.ekylibre.zero.plants";
+        public static final String CONTENT_TYPE = DIR_BASE + "plants";
         // MIME type for individual record.
-        public static final String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/vnd.ekylibre.zero.plant";
+        public static final String CONTENT_ITEM_TYPE = ITEM_BASE + "plant";
 
         public static final String[] PROJECTION_ALL = {_ID, NAME, SHAPE, VARIETY, ACTIVE, ACTIVITY_ID};
         public static final String[] PROJECTION_OBS = {_ID, EK_ID, NAME, VARIETY, ACTIVITY_ID, ACTIVITY_NAME};
@@ -477,11 +494,9 @@ public final class ZeroContract {
         public static final Uri CONTENT_URI = Uri.withAppendedPath(ZeroContract.CONTENT_URI,
                 "contacts");
         // MIME type for lists of records.
-        public static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/vnd" +
-                ".ekylibre.zero.contacts";
+        public static final String CONTENT_TYPE = DIR_BASE + "/vnd.ekylibre.zero.contacts";
         // MIME type for individual record.
-        public static final String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE +
-                "/vnd.ekylibre.zero.contact";
+        public static final String CONTENT_ITEM_TYPE = ITEM_BASE + "contact";
 
         public static final String[] PROJECTION_ALL = {_ID, LAST_NAME, FIRST_NAME, USER, PICTURE};
         public static final String[] PROJECTION_NAME = {FIRST_NAME, LAST_NAME};
@@ -494,14 +509,11 @@ public final class ZeroContract {
     public static final class ContactParams implements ContactParamsColumns
     {
         // Content URI for this table
-        public static final Uri CONTENT_URI = Uri.withAppendedPath(ZeroContract.CONTENT_URI,
-                "contact_params");
+        public static final Uri CONTENT_URI = Uri.withAppendedPath(ZeroContract.CONTENT_URI, "contact_params");
         // MIME type for lists of records.
-        public static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/vnd" +
-                ".ekylibre.zero.contact_params";
+        public static final String CONTENT_TYPE = DIR_BASE + "contact_params";
         // MIME type for individual record.
-        public static final String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE +
-                "/vnd.ekylibre.zero.contact_param";
+        public static final String CONTENT_ITEM_TYPE = ITEM_BASE + "contact_param";
 
         public static final String[] PROJECTION_ALL = {_ID, FK_CONTACT, TYPE, EMAIL,
                 PHONE, MOBILE, WEBSITE, MAIL_LINES, POSTAL_CODE, CITY, COUNTRY};
@@ -514,14 +526,11 @@ public final class ZeroContract {
     public static final class LastSyncs implements LastSyncsColumns
     {
         // Content URI for this table
-        public static final Uri CONTENT_URI = Uri.withAppendedPath(ZeroContract.CONTENT_URI,
-                "last_syncs");
+        public static final Uri CONTENT_URI = Uri.withAppendedPath(ZeroContract.CONTENT_URI, "last_syncs");
         // MIME type for lists of records.
-        public static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/vnd" +
-                ".ekylibre.zero.last_syncs";
+        public static final String CONTENT_TYPE = DIR_BASE + "last_syncs";
         // MIME type for individual record.
-        public static final String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE +
-                "/vnd.ekylibre.zero.last_syncs";
+        public static final String CONTENT_ITEM_TYPE = ITEM_BASE + "last_syncs";
 
         public static final String[] PROJECTION_ALL = {_ID, USER, TYPE, DATE};
         public static final String[] PROJECTION_DATE = {DATE};
@@ -535,10 +544,9 @@ public final class ZeroContract {
     {
         // Content URI for this table
         public static final Uri CONTENT_URI = Uri.withAppendedPath(
-                ZeroContract.CONTENT_URI,"observations");
+                ZeroContract.CONTENT_URI, TABLE_NAME);
         // MIME type for list and individual record.
-        public static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE +
-                "/vnd.ekylibre.zero.observations";
+        public static final String CONTENT_TYPE = DIR_BASE + TABLE_NAME;
 
         public static final String[] PROJECTION_ALL = {_ID, ACTIVITY_ID, OBSERVED_ON, PLANTS,
                 SCALE_ID, PICTURES, DESCRIPTION, LONGITUDE, LATITUDE, USER};
@@ -548,28 +556,23 @@ public final class ZeroContract {
 
     }
 
-    public static final class ObservationPlants implements ObservationPlantColumns
-    {
+    public static final class ObservationPlants implements ObservationPlantColumns {
         // Content URI for this table
-        public static final Uri CONTENT_URI = Uri.withAppendedPath(
-                ZeroContract.CONTENT_URI,"observation_plants");
+        public static final Uri CONTENT_URI = getUri(TABLE_NAME);
         // MIME type for list and individual record.
-        public static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE +
-                "/vnd.ekylibre.zero.observation_plants";
+        public static final String CONTENT_TYPE = DIR_BASE + TABLE_NAME;
 
         public static final String[] PROJECTION_ALL = {_ID, FK_OBSERVATION, FK_PLANT, EKY_ID_PLANT};
 
         public static final String SORT_ORDER_DEFAULT = _ID + " ASC";
     }
 
-    public static final class ObservationIssues implements ObservationIssueColumns
-    {
+    public static final class ObservationIssues implements ObservationIssueColumns {
         // Content URI for this table
         public static final Uri CONTENT_URI = Uri.withAppendedPath(
-                ZeroContract.CONTENT_URI,"observation_issues");
+                ZeroContract.CONTENT_URI, TABLE_NAME);
         // MIME type for list and individual record.
-        public static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE +
-                "/vnd.ekylibre.zero.observation_issues";
+        public static final String CONTENT_TYPE = DIR_BASE + TABLE_NAME;
 
         public static final String[] PROJECTION_ALL = {_ID, FK_OBSERVATION, FK_ISSUE, EKY_ID_ISSUE};
 
@@ -580,10 +583,9 @@ public final class ZeroContract {
 
         // Content URI for this table
         public static final Uri CONTENT_URI = Uri.withAppendedPath(
-                ZeroContract.CONTENT_URI,"issue_natures");
+                ZeroContract.CONTENT_URI, TABLE_NAME);
         // MIME type for list and individual record.
-        public static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE +
-                "/vnd.ekylibre.zero.issue_natures";
+        public static final String CONTENT_TYPE = DIR_BASE + TABLE_NAME;
 
         public static final String[] PROJECTION_ALL = {_ID, CATEGORY, LABEL, NATURE};
 
@@ -594,10 +596,9 @@ public final class ZeroContract {
 
         // Content URI for this table
         public static final Uri CONTENT_URI = Uri.withAppendedPath(
-                ZeroContract.CONTENT_URI,"vegetal_scale");
+                ZeroContract.CONTENT_URI, TABLE_NAME);
         // MIME type for list and individual record.
-        public static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE +
-                "/vnd.ekylibre.zero.vegetal_scale";
+        public static final String CONTENT_TYPE = DIR_BASE + TABLE_NAME;
 
         public static final String[] PROJECTION_ALL = {_ID, REFERENCE, LABEL, VARIETY, POSITION};
 
@@ -608,10 +609,9 @@ public final class ZeroContract {
 
         // Content URI for this table
         public static final Uri CONTENT_URI = Uri.withAppendedPath(
-                ZeroContract.CONTENT_URI,"equipments");
+                ZeroContract.CONTENT_URI, TABLE_NAME);
         // MIME type for list and individual record.
-        public static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE +
-                "/vnd.ekylibre.zero.equipments";
+        public static final String CONTENT_TYPE = DIR_BASE + TABLE_NAME;
 
         public static final String[] PROJECTION_ALL = {EK_ID, NAME, NUMBER, WORK_NUMBER, VARIETY, ABILITIES};
 
@@ -622,10 +622,9 @@ public final class ZeroContract {
 
         // Content URI for this table
         public static final Uri CONTENT_URI = Uri.withAppendedPath(
-                ZeroContract.CONTENT_URI,"workers");
+                ZeroContract.CONTENT_URI, TABLE_NAME);
         // MIME type for list and individual record.
-        public static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE +
-                "/vnd.ekylibre.zero.workers";
+        public static final String CONTENT_TYPE = DIR_BASE + TABLE_NAME;
 
         public static final String[] PROJECTION_ALL = {EK_ID, NAME, NUMBER, WORK_NUMBER, ABILITIES};
 
@@ -636,10 +635,9 @@ public final class ZeroContract {
 
         // Content URI for this table
         public static final Uri CONTENT_URI = Uri.withAppendedPath(
-                ZeroContract.CONTENT_URI,"land_parcels");
+                ZeroContract.CONTENT_URI, TABLE_NAME);
         // MIME type for list and individual record.
-        public static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE +
-                "/vnd.ekylibre.zero.land_parcels";
+        public static final String CONTENT_TYPE = DIR_BASE + TABLE_NAME;
 
         public static final String[] PROJECTION_ALL = {EK_ID, NAME, NET_SURFACE_AREA};
 
@@ -650,10 +648,9 @@ public final class ZeroContract {
 
         // Content URI for this table
         public static final Uri CONTENT_URI = Uri.withAppendedPath(
-                ZeroContract.CONTENT_URI,"building_divisions");
+                ZeroContract.CONTENT_URI, TABLE_NAME);
         // MIME type for list and individual record.
-        public static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE +
-                "/vnd.ekylibre.zero.building_divisions";
+        public static final String CONTENT_TYPE = DIR_BASE + TABLE_NAME;
 
         public static final String[] PROJECTION_ALL = {EK_ID, NAME, NET_SURFACE_AREA};
 
@@ -664,10 +661,9 @@ public final class ZeroContract {
 
         // Content URI for this table
         public static final Uri CONTENT_URI = Uri.withAppendedPath(
-                ZeroContract.CONTENT_URI,"inputs");
+                ZeroContract.CONTENT_URI, TABLE_NAME);
         // MIME type for list and individual record.
-        public static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE +
-                "/vnd.ekylibre.zero.inputs";
+        public static final String CONTENT_TYPE = DIR_BASE + TABLE_NAME;
 
         public static final String[] PROJECTION_ALL = {EK_ID, NAME, NUMBER, VARIETY, ABILITIES, POPULATION, CONTAINER_NAME};
 
@@ -676,36 +672,44 @@ public final class ZeroContract {
 
     public static final class Outputs implements OutputColumns {
 
-        // Content URI for this table
-        public static final Uri CONTENT_URI = Uri.withAppendedPath(
-                ZeroContract.CONTENT_URI,"outputs");
-        // MIME type for list and individual record.
-        public static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE +
-                "/vnd.ekylibre.zero.outputs";
+        public static final Uri CONTENT_URI = getUri(TABLE_NAME);
+        public static final String CONTENT_TYPE = DIR_BASE + TABLE_NAME;
 
         public static final String[] PROJECTION_ALL = {EK_ID, NAME, VARIETY, NUMBER, ABILITIES};
 
         public static final String SORT_ORDER_DEFAULT = NAME + " ASC";
     }
 
+    public static final class Products implements ProductColumns {
+        public static final Uri CONTENT_URI = getUri(TABLE_NAME);
+        public static final String CONTENT_TYPE = DIR_BASE + TABLE_NAME;
+        public static final String[] PROJECTION = {EK_ID, NAME, NUMBER, WORK_NUMBER, VARIETY,
+                ABILITIES, POPULATION, CONTAINER_NAME, DEAD_AT, NET_SURFACE_AREA};
+        public static final String ORDER_BY_NAME = NAME + " ASC";
+    }
+
     public static final class DetailedInterventions implements DetailedInterventionColumns {
-        public static final Uri CONTENT_URI = Uri.withAppendedPath(ZeroContract.CONTENT_URI, "detailed_interventions");
-        public static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/vnd.ekylibre.zero.detailed_interventions";
+        public static final Uri CONTENT_URI = getUri(TABLE_NAME);
+        public static final String CONTENT_TYPE = DIR_BASE + TABLE_NAME;
         public static final String[] PROJECTION_ALL = {_ID, PROCEDURE_NAME, CREATED_ON, EK_ID, USER};
         public static final String SORT_ORDER_DEFAULT = CREATED_ON + " DESC";
     }
 
     public static final class DetailedInterventionAttributes implements DetailedInterventionAttributesColumns {
-        public static final Uri CONTENT_URI = Uri.withAppendedPath(ZeroContract.CONTENT_URI, "detailed_intervention_attributes");
-        public static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/vnd.ekylibre.zero.detailed_intervention_attributes";
+        public static final Uri CONTENT_URI = getUri(TABLE_NAME);
+        public static final String CONTENT_TYPE = DIR_BASE + TABLE_NAME;
         public static final String[] PROJECTION_ALL = {_ID, DETAILED_INTERVENTION_ID, REFERENCE_ID, REFERENCE_NAME, QUANTITY_VALUE, QUANTITY_UNIT_NAME};
         public static final String SORT_ORDER_DEFAULT = DETAILED_INTERVENTION_ID + " DESC";
     }
 
     public static final class WorkingPeriodAttributes implements WorkingPeriodAttributesColumns {
-        public static final Uri CONTENT_URI = Uri.withAppendedPath(ZeroContract.CONTENT_URI, "working_period_attributes");
-        public static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/vnd.ekylibre.zero.working_period_attributes";
+        public static final Uri CONTENT_URI = getUri(TABLE_NAME);
+        public static final String CONTENT_TYPE = DIR_BASE + TABLE_NAME;
         public static final String[] PROJECTION_ALL = {_ID, DETAILED_INTERVENTION_ID, STARTED_AT, STOPPED_AT};
         public static final String SORT_ORDER_DEFAULT = _ID + " DESC";
+    }
+
+    private static Uri getUri(String path) {
+        return Uri.withAppendedPath(ZeroContract.CONTENT_URI, path);
     }
 }
