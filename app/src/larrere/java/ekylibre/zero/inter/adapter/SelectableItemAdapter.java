@@ -69,14 +69,24 @@ public class SelectableItemAdapter extends RecyclerView.Adapter<SelectableItemAd
             firstLine.setTextColor(ContextCompat.getColor(context, textColor));
 
             StringBuilder sb = new StringBuilder();
+
             if (item.netSurfaceArea != null)
-                sb.append(item.netSurfaceArea).append(" - ");
+                sb.append(item.netSurfaceArea);
             else if (item.workNumber != null)
-                sb.append(item.workNumber).append(" - ");
-            if (item.number != null)
+                sb.append(item.workNumber);
+
+            if (item.number != null) {
+                if (sb.length() > 0)
+                    sb.append(" - ");
                 sb.append(item.number);
-            if (item.containerName != null)
-                sb.append(" - ").append(item.containerName);
+            }
+
+            if (item.containerName != null) {
+                if (sb.length() > 0)
+                    sb.append(" - ");
+                sb.append(item.containerName);
+            }
+
             secondLine.setText(sb.toString());
             secondLine.setTextColor(ContextCompat.getColor(context, textColor));
             itemView.setBackgroundColor(ContextCompat.getColor(context, colorId));
