@@ -1495,7 +1495,9 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
             if (product.workNumber != null)
                 cv.put(ZeroContract.Products.WORK_NUMBER, product.workNumber);
             if (product.population != null)
-                cv.put(ZeroContract.Products.POPULATION, product.population.toString());
+                cv.put(ZeroContract.Products.POPULATION, product.population);
+            if (product.unit != null)
+                cv.put(ZeroContract.Products.UNIT, product.unit);
             if (product.containerName != null)
                 cv.put(ZeroContract.Products.CONTAINER_NAME, product.containerName);
             if (product.deadAt != null)
