@@ -62,7 +62,7 @@ public class ZoneAdapter extends RecyclerView.Adapter<ZoneAdapter.ViewHolder> {
 
         @OnClick(R.id.parcel_add)
         void onParcelAdd() {
-            listener.onFormFragmentInteraction("land_parcel", "is land_parcel");
+            listener.onFormFragmentInteraction("land_parcel", "is land_parcel", "targets");
         }
 
         @OnClick(R.id.crop_add)

@@ -60,6 +60,7 @@ import ekylibre.zero.SettingsActivity;
 import ekylibre.zero.intervention.InterventionActivity;
 
 import static ekylibre.util.Helper.iso8601;
+import static ekylibre.util.Helper.simpleISO8601;
 
 /**
  * Handle the transfer of data between a server and an
@@ -171,13 +172,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
             if (BuildConfig.DEBUG) Log.d(TAG, "... New account is " + account.name + " ...");
 
             pullPlantDensityAbaci(account, extras, authority, provider, syncResult);
-//            pullPlants(account, extras, authority, provider, syncResult);
-//            pullLandParcels(account);
-//            pullBuildingDivisions(account);
-//            pullWorkers(account);
-//            pullEquipments(account);
-//            pullInputs(account);
-//            pullOutputs(account);
+            pullPlants(account, extras, authority, provider, syncResult);
 
             pullProducts(account);
 
@@ -187,6 +182,12 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
             pullIntervention(account, extras, authority, provider, syncResult);
 
             pushObservation(account);
+
+            try {
+                pushDetailedIntervention(account);
+            } catch (JSONException | IOException | HTTPException e) {
+                e.printStackTrace();
+            }
 
             pullContacts(account, extras, authority, provider, syncResult);
             cleanLocalDb(account);
@@ -1226,240 +1227,6 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
     }
 
     /**
-     *   Get workers from Ekylibre instance
-     */
-    private void pullWorkers(Account account) {
-
-        if (BuildConfig.DEBUG)
-            Log.i(TAG, "Beginning network workers synchronization");
-
-        ContentValues cv = new ContentValues();
-        Instance instance = getInstance(account);
-
-        List<Worker> workersList = null;
-        try {
-            workersList = Worker.all(instance, lastSyncattribute);
-        } catch (JSONException | IOException | HTTPException | ParseException e) {
-            e.printStackTrace();
-        }
-
-        if (workersList == null)
-            return;
-
-        if (BuildConfig.DEBUG)
-            Log.d(TAG, "Nombre de workers : " + workersList.size() );
-
-        for (Worker worker : workersList) {
-            cv.put(ZeroContract.Workers.EK_ID, worker.id);
-            cv.put(ZeroContract.Workers.NAME, worker.name);
-            cv.put(ZeroContract.Workers.NUMBER, worker.number);
-            cv.put(ZeroContract.Workers.WORK_NUMBER, worker.workNumber);
-            cv.put(ZeroContract.Workers.VARIETY, worker.variety);
-            cv.put(ZeroContract.Workers.ABILITIES, worker.abilities);
-            cv.put(ZeroContract.Workers.DEAD_AT, worker.deadAt != null ? worker.deadAt.getTime() : null);
-            cv.put(ZeroContract.Workers.USER, account.name);
-            mContentResolver.insert(ZeroContract.Workers.CONTENT_URI, cv);
-        }
-
-        if (BuildConfig.DEBUG)
-            Log.i(TAG, "Finish network workers synchronization");
-    }
-
-    /**
-     *   Get land parcels from Ekylibre instance
-     */
-    private void pullLandParcels(Account account) {
-
-        if (BuildConfig.DEBUG)
-            Log.i(TAG, "Beginning network land parcels synchronization");
-
-        ContentValues cv = new ContentValues();
-        Instance instance = getInstance(account);
-
-        List<LandParcel> landParcelsList = null;
-        try {
-            landParcelsList = LandParcel.all(instance, lastSyncattribute);
-        } catch (JSONException | IOException | HTTPException | ParseException e) {
-            e.printStackTrace();
-        }
-
-        if (landParcelsList == null)
-            return;
-
-        if (BuildConfig.DEBUG)
-            Log.d(TAG, "Nombre de parcelles : " + landParcelsList.size() );
-
-        for (LandParcel landParcel : landParcelsList) {
-            cv.put(ZeroContract.LandParcels.EK_ID, landParcel.id);
-            cv.put(ZeroContract.LandParcels.NAME, landParcel.name);
-            cv.put(ZeroContract.LandParcels.NET_SURFACE_AREA, landParcel.net_surface_area);
-            cv.put(ZeroContract.LandParcels.DEAD_AT, landParcel.deadAt != null ? landParcel.deadAt.getTime() : null);
-            cv.put(ZeroContract.LandParcels.USER, account.name);
-            mContentResolver.insert(ZeroContract.LandParcels.CONTENT_URI, cv);
-        }
-
-        if (BuildConfig.DEBUG)
-            Log.i(TAG, "Finish network land parcels synchronization");
-    }
-
-    /**
-     *   Get land parcels from Ekylibre instance
-     */
-    private void pullBuildingDivisions(Account account) {
-
-        if (BuildConfig.DEBUG)
-            Log.i(TAG, "Beginning network building_divisions synchronization");
-
-        ContentValues cv = new ContentValues();
-        Instance instance = getInstance(account);
-
-        List<BuildingDivisions> buildingDivisionsList = null;
-        try {
-            buildingDivisionsList = BuildingDivisions.all(instance, lastSyncattribute);
-        } catch (JSONException | IOException | HTTPException | ParseException e) {
-            e.printStackTrace();
-        }
-
-        if (buildingDivisionsList == null)
-            return;
-
-        if (BuildConfig.DEBUG)
-            Log.d(TAG, "Nombre de building_divisions : " + buildingDivisionsList.size() );
-
-        for (BuildingDivisions buildingDivision : buildingDivisionsList) {
-            cv.put(ZeroContract.BuildingDivisions.EK_ID, buildingDivision.id);
-            cv.put(ZeroContract.BuildingDivisions.NAME, buildingDivision.name);
-            cv.put(ZeroContract.BuildingDivisions.NET_SURFACE_AREA, buildingDivision.net_surface_area);
-            cv.put(ZeroContract.BuildingDivisions.DEAD_AT, buildingDivision.deadAt != null ? buildingDivision.deadAt.getTime() : null);
-            cv.put(ZeroContract.BuildingDivisions.USER, account.name);
-            mContentResolver.insert(ZeroContract.BuildingDivisions.CONTENT_URI, cv);
-        }
-
-        if (BuildConfig.DEBUG)
-            Log.i(TAG, "Finish network building_divisions synchronization");
-    }
-
-    /**
-     *   Get equipments from Ekylibre instance
-     */
-    private void pullEquipments(Account account) {
-
-        if (BuildConfig.DEBUG)
-            Log.i(TAG, "Beginning network equipments synchronization");
-
-        ContentValues cv = new ContentValues();
-        Instance instance = getInstance(account);
-
-        List<Equipment> equipmentsList = null;
-        try {
-            equipmentsList = Equipment.all(instance, lastSyncattribute);
-        } catch (JSONException | IOException | HTTPException | ParseException e) {
-            e.printStackTrace();
-        }
-
-        if (equipmentsList == null)
-            return;
-
-        if (BuildConfig.DEBUG)
-            Log.d(TAG, "Nombre d'equipments : " + equipmentsList.size() );
-
-        for (Equipment equipment : equipmentsList) {
-            cv.put(ZeroContract.Equipments.EK_ID, equipment.id);
-            cv.put(ZeroContract.Equipments.NAME, equipment.name);
-            cv.put(ZeroContract.Equipments.NUMBER, equipment.number);
-            cv.put(ZeroContract.Equipments.WORK_NUMBER, equipment.workNumber);
-            cv.put(ZeroContract.Equipments.VARIETY, equipment.variety);
-            cv.put(ZeroContract.Equipments.ABILITIES, equipment.abilities);
-            cv.put(ZeroContract.Equipments.DEAD_AT, equipment.deadAt != null ? equipment.deadAt.getTime() : null);
-            cv.put(ZeroContract.Equipments.USER, account.name);
-            mContentResolver.insert(ZeroContract.Equipments.CONTENT_URI, cv);
-        }
-
-        if (BuildConfig.DEBUG)
-            Log.i(TAG, "Finish network equipments synchronization");
-    }
-
-    /**
-     *   Get inputs from Ekylibre instance
-     */
-    private void pullInputs(Account account) {
-
-        if (BuildConfig.DEBUG)
-            Log.i(TAG, "Beginning network inputs synchronization");
-
-        ContentValues cv = new ContentValues();
-        Instance instance = getInstance(account);
-
-        List<Input> inputsList = null;
-
-        try {
-            inputsList = Input.all(instance, lastSyncattribute);
-        } catch (JSONException | IOException | HTTPException e) {
-            e.printStackTrace();
-        }
-
-        if (inputsList == null)
-            return;
-
-        if (BuildConfig.DEBUG)
-            Log.d(TAG, "Nombre d'inputs : " + inputsList.size() );
-
-        for (Input input : inputsList) {
-            cv.put(ZeroContract.Inputs.EK_ID, input.id);
-            cv.put(ZeroContract.Inputs.NAME, input.name);
-            cv.put(ZeroContract.Inputs.VARIETY, input.variety);
-            cv.put(ZeroContract.Inputs.ABILITIES, input.abilities);
-            cv.put(ZeroContract.Inputs.NUMBER, input.number);
-            cv.put(ZeroContract.Inputs.POPULATION, input.population.toString());
-            cv.put(ZeroContract.Inputs.CONTAINER_NAME, input.containerName);
-            cv.put(ZeroContract.Inputs.USER, account.name);
-            mContentResolver.insert(ZeroContract.Inputs.CONTENT_URI, cv);
-        }
-
-        if (BuildConfig.DEBUG)
-            Log.i(TAG, "Finish network inputs synchronization");
-    }
-
-    /**
-     *   Get outputs from Ekylibre instance
-     */
-    private void pullOutputs(Account account) {
-
-        if (BuildConfig.DEBUG)
-            Log.i(TAG, "Beginning network outputs synchronization");
-
-        ContentValues cv = new ContentValues();
-        Instance instance = getInstance(account);
-
-        List<Output> outputList = null;
-
-        try {
-            outputList = Output.all(instance, lastSyncattribute);
-        } catch (JSONException | IOException | HTTPException e) {
-            e.printStackTrace();
-        }
-
-        if (outputList == null)
-            return;
-
-        if (BuildConfig.DEBUG)
-            Log.d(TAG, "Nombre d'outputs : " + outputList.size() );
-
-        for (Output output : outputList) {
-            cv.put(ZeroContract.Outputs.EK_ID, output.id);
-            cv.put(ZeroContract.Outputs.NAME, output.name);
-            cv.put(ZeroContract.Outputs.VARIETY, output.variety);
-            cv.put(ZeroContract.Outputs.NUMBER, output.number);
-            cv.put(ZeroContract.Outputs.ABILITIES, output.abilities);
-            cv.put(ZeroContract.Outputs.USER, account.name);
-            mContentResolver.insert(ZeroContract.Outputs.CONTENT_URI, cv);
-        }
-
-        if (BuildConfig.DEBUG)
-            Log.i(TAG, "Finish network outputs synchronization");
-    }
-
-    /**
      *   The main request for products
      */
     private void pullProducts(Account account) {
@@ -1515,8 +1282,149 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
             Log.i(TAG, "Finish network products synchronization");
     }
 
-    protected Instance getInstance(Account account)
-    {
+    /**
+     * Push detailed intervention to Ekylibre
+     * @param account the current account
+     */
+    private void pushDetailedIntervention(Account account) throws JSONException, IOException, HTTPException {
+
+        Log.e(TAG, "Push DetailedIntervention");
+        Instance instance = getInstance(account);
+
+        // Get interventions that are not yet created in Ekylibre (no ek_id)
+        final String whereClause = "user LIKE ? AND ek_id IS NULL";
+        final String[] args = new String[] {account.name};
+
+        // Get all non-synced observations
+        try (Cursor cursor = mContentResolver.query(ZeroContract.DetailedInterventions.CONTENT_URI,
+                ZeroContract.DetailedInterventions.PROJECTION_ALL, whereClause, args,null)) {
+
+            // Projection --> _ID, PROCEDURE_NAME
+
+            // Loop over all selected interventions
+            while (cursor != null && cursor.moveToNext()) {
+
+                // Create new DetailedIntervention payload
+                JSONObject payload = new JSONObject();
+                payload.put("zero_id", cursor.getInt(0));
+                payload.put("procedure_name", cursor.getString(1));
+
+                // Prepare InterventionAttributes query
+                final String whereId = "detailed_intervention_id = ?";
+                final String[] id = new String[] {cursor.getString(0)};  // The current id
+
+                // --------------- //
+                // Working periods //
+                // --------------- //
+                try (Cursor cursPeriod = mContentResolver.query(ZeroContract.WorkingPeriodAttributes.CONTENT_URI,
+                        ZeroContract.WorkingPeriodAttributes.PROJECTION_ALL, whereId, id, null, null)) {
+
+                    // Create JSON array for working periods
+                    JSONArray workingPeriods = new JSONArray();
+
+                    while (cursPeriod != null && cursPeriod.moveToNext()) {
+                        JSONObject period = new JSONObject();
+//                        period.put("started_at", iso8601Print.print(new DateTime(new Date(cursPeriod.getInt(0)))));
+//                        Log.e(TAG, "Started at iso8601 -> " + period.getString("started_at"));
+//                        period.put("stopped_at", iso8601Print.print(new DateTime(new Date(cursPeriod.getInt(1)))));
+
+                        period.put("started_at", simpleISO8601.format(new Date(cursPeriod.getLong(0))));
+                        Log.e(TAG, "Started at iso8601 -> " + period.getString("started_at"));
+                        period.put("stopped_at", simpleISO8601.format(new Date(cursPeriod.getLong(1))));
+                        workingPeriods.put(period);
+                    }
+
+                    // Add working periods to main payload
+                    payload.put("working_periods_attributes", workingPeriods);
+                }
+
+                // ----------------------- //
+                // Intervention attributes //
+                // ----------------------- //
+                try (Cursor cursAttrs = mContentResolver.query(ZeroContract.DetailedInterventionAttributes.CONTENT_URI,
+                        ZeroContract.DetailedInterventionAttributes.PROJECTION_ALL, whereId, id, null, null)) {
+
+                    // Projection --> ROLE, REFERENCE_ID, REFERENCE_NAME, QUANTITY_VALUE, QUANTITY_UNIT_NAME
+
+                    JSONArray workersArray = new JSONArray();
+                    JSONArray targetsArray = new JSONArray();
+                    JSONArray equipmentsArray = new JSONArray();
+                    JSONArray inputsArray = new JSONArray();
+                    JSONArray outputsArray = new JSONArray();
+
+                    while (cursAttrs != null && cursAttrs.moveToNext()) {
+                        String role = cursAttrs.getString(0);
+                        switch (role) {
+                            case "workers":
+                                workersArray.put(composeJSONObject(cursAttrs));
+                                break;
+                            case "equipments":
+                                equipmentsArray.put(composeJSONObject(cursAttrs));
+                                break;
+                            case "targets":
+                                targetsArray.put(composeJSONObject(cursAttrs));
+                                break;
+                            case "inputs":
+                                inputsArray.put(composeQuantityJSONObject(cursAttrs));
+                                break;
+                            case "outputs":
+                                outputsArray.put(composeQuantityJSONObject(cursAttrs));
+                                break;
+                        }
+                    }
+
+                    if (workersArray.length() > 0)
+                        payload.put("workers", workersArray);
+
+                    if (equipmentsArray.length() > 0)
+                        payload.put("equipments", equipmentsArray);
+
+                    if (targetsArray.length() > 0)
+                        payload.put("targets", targetsArray);
+
+                    if (inputsArray.length() > 0)
+                        payload.put("inputs_attributes", inputsArray);
+
+                    if (outputsArray.length() > 0)
+                        payload.put("outputs_attributes", outputsArray);
+                }
+
+                // Push the new DetailedIntervention
+                long resultId = DetailedIntervention.create(instance, payload);
+                if (BuildConfig.DEBUG)
+                    Log.e(TAG, "Detailed Intervention #" + resultId +" created !" );
+
+                // Save the returning id
+                ContentValues cv = new ContentValues();
+                cv.put(ZeroContract.DetailedInterventions.EK_ID, resultId);
+                Uri uri = Uri.withAppendedPath(ZeroContract.DetailedInterventions.CONTENT_URI, cursor.getString(0));
+                Log.e(TAG, "uri -> " + uri);
+                mContentResolver.update(uri, cv, null, null);
+            }
+        }
+
+        if (BuildConfig.DEBUG)
+            Log.i(TAG, "Finish DetailedIntervention synchronization");
+    }
+
+    private JSONObject composeJSONObject(Cursor curs) throws JSONException {
+        JSONObject obj = new JSONObject();
+        obj.put("id", curs.getInt(1));
+        obj.put("reference_name", curs.getString(2));
+        return obj;
+    }
+
+    private JSONObject composeQuantityJSONObject(Cursor curs) throws JSONException {
+        JSONObject obj = new JSONObject();
+        obj.put("product_id", curs.getInt(1));
+        if (!curs.isNull(3))
+            obj.put("quantity_value", curs.getDouble(3));
+        if (!curs.isNull(4))
+            obj.put("quantity_handler", curs.getString(4));
+        return obj;
+    }
+
+    protected Instance getInstance(Account account) {
         Instance instance = null;
             try {
                 instance = new Instance(account, mAccountManager);
@@ -1527,5 +1435,4 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
             }
         return (instance);
     }
-
 }

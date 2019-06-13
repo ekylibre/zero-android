@@ -1,8 +1,7 @@
 package ekylibre.zero.inter.model;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
 
 public class GenericItem {
 
@@ -14,27 +13,14 @@ public class GenericItem {
     public String[] abilities;
     public BigDecimal quantity;
     public String unit;
-//    public boolean isSelected;
-    public List<String> referenceName;
+//    public List<String> referenceName;
+    public HashMap<String, String> referenceName;
     public String population;
     public String containerName;
     public String netSurfaceArea;
 
     public GenericItem() {
         this.quantity = null;
-        this.referenceName = new ArrayList<>();
+        this.referenceName = new HashMap<>();
     }
-
-//    public GenericItem(int id, String name, String number, String workNumber, String variety, String[] abilities, String unit, BigDecimal population) {
-//        this.id = id;
-//        this.name = name;
-//        this.number = number;
-//        this.workNumber = workNumber;
-//        this.variety = variety;
-//        this.abilities = abilities;
-//        this.unit = unit;
-////        this.isSelected = false;
-//        this.referenceName = new ArrayList<>();
-//        this.population = population;
-//    }
 }

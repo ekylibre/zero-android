@@ -86,7 +86,7 @@ public class CropParcelChoiceFragment extends Fragment {
 
         RecyclerView recyclerView = view.findViewById(R.id.crop_parcel_recycler);
         recyclerView.setLayoutManager(new LinearLayoutManager(container.getContext()));
-        adapter = new SelectableItemAdapter(dataset, paramType);
+        adapter = new SelectableItemAdapter(dataset, paramType, "targets");
         recyclerView.setAdapter(adapter);
 
         tabLayout = view.findViewById(R.id.tab_crop_parcel);

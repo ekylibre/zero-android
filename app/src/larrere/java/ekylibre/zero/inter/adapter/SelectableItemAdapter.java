@@ -1,19 +1,22 @@
 package ekylibre.zero.inter.adapter;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import java.util.List;
-
 import androidx.annotation.ColorRes;
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
+
+import java.util.List;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import ekylibre.zero.BuildConfig;
 import ekylibre.zero.R;
 import ekylibre.zero.inter.model.GenericItem;
 
@@ -21,12 +24,14 @@ import ekylibre.zero.inter.model.GenericItem;
 public class SelectableItemAdapter extends RecyclerView.Adapter<SelectableItemAdapter.ViewHolder> {
 
     private final List<GenericItem> dataset;
+    private final String paramType;
     private final String role;
 
     // CONTRUCTOR
-    public SelectableItemAdapter(List<GenericItem> dataset, String paramType) {
+    public SelectableItemAdapter(List<GenericItem> dataset, String paramType, String role) {
         this.dataset = dataset;
-        this.role = paramType;
+        this.paramType = paramType;
+        this.role = role;
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {
@@ -39,15 +44,18 @@ public class SelectableItemAdapter extends RecyclerView.Adapter<SelectableItemAd
         ViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
+
             itemView.setOnClickListener(v -> {
-                if (item.referenceName.contains(role)) {
+                if (item.referenceName.containsKey(paramType)) {
 //                    item.isSelected = false;
                     v.setSelected(false);
-                    item.referenceName.remove(role);
+                    item.referenceName.remove(paramType);
                 } else {
 //                    item.isSelected = true;
                     v.setSelected(true);
-                    item.referenceName.add(role);
+                    item.referenceName.put(paramType, role);
+                    if (BuildConfig.DEBUG)
+                        Log.i("Adapter", "Item role ("+role+") and type ("+ paramType+")");
                 }
                 notifyItemChanged(dataset.indexOf(item));
             });
@@ -60,7 +68,7 @@ public class SelectableItemAdapter extends RecyclerView.Adapter<SelectableItemAd
 
             @ColorRes int colorId = position %2 == 1 ? R.color.another_light_grey : R.color.white;
             @ColorRes int textColor = R.color.primary_text;
-            if (item.referenceName.contains(role)) {
+            if (item.referenceName.containsKey(paramType)) {
                 colorId = R.color.basic_blue;
                 textColor = R.color.white;
             }

@@ -17,10 +17,6 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.material.chip.Chip;
-import com.google.android.material.chip.ChipGroup;
-
-import java.math.BigDecimal;
 import java.text.Collator;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -30,16 +26,9 @@ import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import ekylibre.APICaller.Product;
 import ekylibre.database.ZeroContract.Products;
-import ekylibre.database.ZeroContract.Equipments;
-import ekylibre.database.ZeroContract.Inputs;
-import ekylibre.database.ZeroContract.Outputs;
-import ekylibre.database.ZeroContract.LandParcels;
-import ekylibre.database.ZeroContract.Plants;
-import ekylibre.database.ZeroContract.Workers;
-import ekylibre.util.MarginTopItemDecoration;
 import ekylibre.util.Helper;
+import ekylibre.util.MarginTopItemDecoration;
 import ekylibre.util.layout.component.WidgetParamView;
 import ekylibre.util.pojo.GenericEntity;
 import ekylibre.zero.BuildConfig;
@@ -54,8 +43,6 @@ import ekylibre.zero.inter.model.Zone;
 
 import static ekylibre.zero.inter.InterActivity.account;
 import static ekylibre.zero.inter.InterActivity.selectedProcedure;
-import static ekylibre.zero.inter.enums.ParamType.LAND_PARCEL;
-import static ekylibre.zero.inter.enums.ParamType.PLANT;
 
 
 public class InterventionFormFragment extends Fragment {
@@ -110,20 +97,13 @@ public class InterventionFormFragment extends Fragment {
 
         paramsList = new ArrayList<>();
         paramsList.addAll(getProducts(cr));
-
-//        paramsList.addAll(getUsers(cr));
-//        paramsList.addAll(getTools(cr));
-//        paramsList.addAll(getPlantsAndLandParcels(cr));
-//        paramsList.addAll(getBuildingDivisions(cr));
-//        paramsList.addAll(getInputs(cr));
-//        paramsList.addAll(getOutputs(cr));
-
     }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        if (BuildConfig.DEBUG) Log.d(TAG, "onCreateView");
+        if (BuildConfig.DEBUG)
+            Log.d(TAG, "onCreateView");
 
         // Set title
         InterActivity.actionBar.setTitle(Helper.getStringId(InterActivity.selectedProcedure.name));
@@ -185,14 +165,14 @@ public class InterventionFormFragment extends Fragment {
         }
 
         // -------------- //
-        // Workers layout //
+        // Targets layout //
         // -------------- //
 
         for (GenericEntity entity : selectedProcedure.target) {
             if (BuildConfig.DEBUG)
                 Log.i(TAG, "target --> " + entity.name);
             if (entity.group == null)
-                widgetContainer.addView(new WidgetParamView(context, listener, entity, paramsList));
+                widgetContainer.addView(new WidgetParamView(context, listener, entity, paramsList, "targets"));
         }
 
 
@@ -260,14 +240,14 @@ public class InterventionFormFragment extends Fragment {
 
                 // Add onClick listener
                 TextView addButton = inputView.findViewById(R.id.widget_add);
-                addButton.setOnClickListener(v -> listener.onFormFragmentInteraction(inputType.name, inputType.filter));
+                addButton.setOnClickListener(v -> listener.onFormFragmentInteraction(inputType.name, inputType.filter, "inputs"));
 
                 // Initialize Recycler
                 RecyclerView inputRecycler = inputView.findViewById(R.id.widget_recycler);
                 inputRecycler.setLayoutManager(new LinearLayoutManager(context));
                 inputRecycler.addItemDecoration(new MarginTopItemDecoration(context, 16));
                 QuantityItemAdapter quantityItemAdapter = new QuantityItemAdapter(
-                        getCurrentDataset(inputType.name), inputType.name);
+                        getCurrentDataset(inputType.name), inputType);
                 inputRecycler.setAdapter(quantityItemAdapter);
                 inputRecycler.requestLayout();
 
@@ -300,14 +280,14 @@ public class InterventionFormFragment extends Fragment {
 
                 // Add onClick listener
                 TextView addButton = inputView.findViewById(R.id.widget_add);
-                addButton.setOnClickListener(v -> listener.onFormFragmentInteraction(outputType.name, outputType.filter));
+                addButton.setOnClickListener(v -> listener.onFormFragmentInteraction(outputType.name, outputType.filter, "outputs"));
 
                 // Initialize Recycler
                 RecyclerView inputRecycler = inputView.findViewById(R.id.widget_recycler);
                 inputRecycler.setLayoutManager(new LinearLayoutManager(context));
                 inputRecycler.addItemDecoration(new MarginTopItemDecoration(context, 16));
                 QuantityItemAdapter quantityItemAdapter = new QuantityItemAdapter(
-                        getCurrentDataset(outputType.name), outputType.name);
+                        getCurrentDataset(outputType.name), outputType);
                 inputRecycler.setAdapter(quantityItemAdapter);
                 inputRecycler.requestLayout();
 
@@ -328,7 +308,7 @@ public class InterventionFormFragment extends Fragment {
 
         for (GenericEntity entity : selectedProcedure.doer) {
             if (BuildConfig.DEBUG) Log.i(TAG, "doer --> " + entity.name);
-            widgetContainer.addView(new WidgetParamView(context, listener, entity, paramsList));
+            widgetContainer.addView(new WidgetParamView(context, listener, entity, paramsList, "workers"));
         }
 
         // ----------------- //
@@ -337,7 +317,7 @@ public class InterventionFormFragment extends Fragment {
 
         for (GenericEntity entity : selectedProcedure.tool) {
             if (BuildConfig.DEBUG) Log.i(TAG, "tool --> " + entity.name);
-            widgetContainer.addView(new WidgetParamView(context, listener, entity, paramsList));
+            widgetContainer.addView(new WidgetParamView(context, listener, entity, paramsList, "equipments"));
         }
 
         return view;
@@ -349,7 +329,8 @@ public class InterventionFormFragment extends Fragment {
 
         // Loop over all items availables for this role
         for (GenericItem item : paramsList)
-            if (item.referenceName.contains(role))
+
+            if (item.referenceName.containsKey(role))
                 dataset.add(item);
 
         return dataset;
@@ -371,172 +352,18 @@ public class InterventionFormFragment extends Fragment {
         listener = null;
     }
 
-//    private List<GenericItem> getPlantsAndLandParcels(ContentResolver cr) {
-//        List<GenericItem> list = new ArrayList<>();
-//
-//        final String whereClause = String.format("user LIKE \"%s\" AND dead_at IS NULL OR dead_at < datetime('now')", account.name);
-//
-//        // Load Plants
-//        try (Cursor cursor = cr.query(Plants.CONTENT_URI, Plants.PROJECTION_INTER,
-//                whereClause, null, Plants.SORT_ORDER_NAME)) {
-//
-//            while (cursor != null && cursor.moveToNext()) {
-//                GenericItem item = new GenericItem(PLANT);
-//                item.id = cursor.getInt(1);
-//                item.name = cursor.getString(2);
-//                item.number = cursor.getString(4);  // Surface in this case
-//                list.add(item);
-//            }
-//        }
-//
-//        // Load Land Parcels
-//        try (Cursor cursor = cr.query(LandParcels.CONTENT_URI, LandParcels.PROJECTION_ALL,
-//                whereClause, null, LandParcels.SORT_ORDER_DEFAULT)) {
-//
-//            while (cursor != null && cursor.moveToNext()) {
-//                GenericItem item = new GenericItem(LAND_PARCEL);
-//                item.id = cursor.getInt(0);
-//                item.name = cursor.getString(1);
-//                item.number = cursor.getString(2);  // Surface in this case
-//                list.add(item);
-//            }
-//        }
-//
-//        return list;
-//    }
-
-//    private List<GenericItem> getBuildingDivisions(ContentResolver cr) {
-//        List<GenericItem> list = new ArrayList<>();
-//
-//        final String whereClause = String.format("user LIKE \"%s\" AND dead_at IS NULL OR dead_at < datetime('now')", account.name);
-//
-//        // Load Plants
-//        try (Cursor cursor = cr.query(Plants.CONTENT_URI, Plants.PROJECTION_INTER,
-//                whereClause, null, Plants.SORT_ORDER_NAME)) {
-//
-//            while (cursor != null && cursor.moveToNext()) {
-//                GenericItem item = new GenericItem("building_division");
-//                item.id = cursor.getInt(1);
-//                item.name = cursor.getString(2);
-//                item.number = cursor.getString(4);  // Surface in this case
-//                list.add(item);
-//            }
-//        }
-//
-//        return list;
-//    }
-
-//    private List<GenericItem> getUsers(ContentResolver cr) {
-//        List<GenericItem> list = new ArrayList<>();
-//
-//        final String whereClause = String.format("user LIKE \"%s\" AND (dead_at IS NULL OR dead_at > %d)", account.name, new Date().getTime());
-//
-//        try (Cursor cursor = cr.query(Workers.CONTENT_URI, Workers.PROJECTION_ALL,
-//                whereClause, null, Workers.SORT_ORDER_DEFAULT)) {
-//
-//            // Projection = {EK_ID, NAME, NUMBER, WORK_NUMBER, ABILITIES}
-//
-//            while (cursor != null && cursor.moveToNext()) {
-//                GenericItem item = new GenericItem("doer");
-//                item.id = cursor.getInt(0);
-//                item.name = cursor.getString(1);
-//                item.number = cursor.getString(2);
-//                item.workNumber = cursor.getString(3);
-//                item.abilities = cursor.getString(4).split(",");
-//                list.add(item);
-//            }
-//        }
-//
-//        return list;
-//    }
-
-//    private List<GenericItem> getTools(ContentResolver cr) {
-//        List<GenericItem> list = new ArrayList<>();
-//
-//        try (Cursor cursor = cr.query(Equipments.CONTENT_URI, Equipments.PROJECTION_ALL,
-//                "user = \"" + "123456"+ "\" AND (dead_at IS NULL OR CAST(dead_at AS INTEGER) > CAST(" + new Date().getTime() + " AS INTEGER))",
-//                null, Equipments.SORT_ORDER_DEFAULT)) {
-//
-//            // Projection = {EK_ID, NAME, NUMBER, WORK_NUMBER, VARIETY, ABILITIES}
-//
-////            while (cursor != null && cursor.moveToNext()) {
-////                GenericItem item = new GenericItem("tool");
-////                item.id = cursor.getInt(0);
-////                item.name = cursor.getString(1);
-////                item.number = cursor.getString(2);
-////                item.workNumber = cursor.getString(3);
-////                item.variety = cursor.getString(4);
-////                item.abilities = cursor.getString(5).split(",");
-////                list.add(item);
-////            }
-//        }
-//
-//        return list;
-//    }
-
-//    private List<GenericItem> getInputs(ContentResolver cr) {
-//        List<GenericItem> list = new ArrayList<>();
-//
-//        final String whereClause = String.format("user LIKE \"%s\"", account.name);
-//
-//        try (Cursor cursor = cr.query(Inputs.CONTENT_URI, Inputs.PROJECTION_ALL,
-//                whereClause, null, Inputs.SORT_ORDER_DEFAULT)) {
-//
-//            // Projection = {EK_ID, NAME, NUMBER, VARIETY, ABILITIES, POPULATION, CONTAINER_NAME}
-//
-//            while (cursor != null && cursor.moveToNext()) {
-//                GenericItem item = new GenericItem("input");
-//                item.id = cursor.getInt(0);
-//                item.name = cursor.getString(1);
-//                item.number = cursor.getString(2);
-//                item.variety = cursor.getString(3);
-//                item.abilities = cursor.getString(4).split(",");
-//                item.population = new BigDecimal(cursor.getString(5));
-//                item.workNumber = cursor.getString(6);  // container_name in this case
-//                list.add(item);
-//            }
-//        }
-//
-//        return list;
-//    }
-
-//    private List<GenericItem> getOutputs(ContentResolver cr) {
-//        List<GenericItem> list = new ArrayList<>();
-//
-//        final String whereClause = String.format("user LIKE \"%s\"", account.name);
-//
-//        // Load Inputs
-//        try (Cursor cursor = cr.query(Outputs.CONTENT_URI, Outputs.PROJECTION_ALL,
-//                whereClause, null, Outputs.SORT_ORDER_DEFAULT)) {
-//
-//            // {EK_ID, NAME, VARIETY, NUMBER, ABILITIES}
-//
-//            while (cursor != null && cursor.moveToNext()) {
-//
-//                GenericItem item = new GenericItem("output");
-//                item.id = cursor.getInt(0);
-//                item.name = cursor.getString(1);
-//                item.variety = cursor.getString(2);
-//                item.number = cursor.getString(3);
-//                item.abilities = cursor.getString(4).split(",");
-//                list.add(item);
-//            }
-//        }
-//
-//        return list;
-//    }
-
     private List<GenericItem> getProducts(ContentResolver cr) {
         List<GenericItem> list = new ArrayList<>();
 
         final String whereClause = "user LIKE ? AND (dead_at IS NULL OR dead_at > CAST(? AS INTEGER))";
+        final String[] args = new String[] {account.name, String.valueOf(new Date().getTime())};
 
         // Load Inputs
         try (Cursor cursor = cr.query(Products.CONTENT_URI, Products.PROJECTION,
-                whereClause, new String[] {account.name, String.valueOf(new Date().getTime())}, Products.ORDER_BY_NAME)) {
+                whereClause, args, Products.ORDER_BY_NAME)) {
 
-            // {EK_ID, NAME, NUMBER, WORK_NUMBER, VARIETY, ABILITIES,
-            // POPULATION, POPULATION_UNIT, CONTAINER_NAME, NET_SURFACE_AREA}
+            // Projection --> EK_ID, NAME, NUMBER, WORK_NUMBER, VARIETY, ABILITIES, POPULATION,
+            // POPULATION_UNIT, CONTAINER_NAME, NET_SURFACE_AREA
 
             while (cursor != null && cursor.moveToNext()) {
 
@@ -548,14 +375,15 @@ public class InterventionFormFragment extends Fragment {
                 item.variety = cursor.getString(4);
                 item.abilities = cursor.getString(5).split(",");
                 item.population = cursor.getString(6);
-                item.unit = cursor.getString(7);
+//                item.unit = cursor.getString(7);
                 item.containerName = cursor.getString(8);
                 item.netSurfaceArea = cursor.getString(9);
                 list.add(item);
             }
         }
 
-        Log.e(TAG, "Param list size = "+ list.size());
+        if (BuildConfig.DEBUG)
+            Log.e(TAG, "Param list size = "+ list.size());
 
         return list;
     }
@@ -568,7 +396,7 @@ public class InterventionFormFragment extends Fragment {
     }
 
     public interface OnFragmentInteractionListener {
-        void onFormFragmentInteraction(String fragmentTag, String filter);
+        void onFormFragmentInteraction(String fragmentTag, String filter, String role);
     }
 
 }

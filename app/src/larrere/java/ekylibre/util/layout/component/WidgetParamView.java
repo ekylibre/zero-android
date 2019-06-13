@@ -36,12 +36,14 @@ public class WidgetParamView extends ConstraintLayout {
 
     private List<GenericItem> paramList;
     private GenericEntity procedure;
+    private String role;
 
     public WidgetParamView(Context context, OnFragmentInteractionListener listener,
-                           GenericEntity procedure, List<GenericItem> paramList) {
+                           GenericEntity procedure, List<GenericItem> paramList, String role) {
         super(context);
         this.paramList = paramList;
         this.procedure = procedure;
+        this.role = role;
         init(context, listener);
     }
 
@@ -90,10 +92,10 @@ public class WidgetParamView extends ConstraintLayout {
 //
         // iconView.setImageResource(iconRes);
         labelView.setText(labelRes);
-        addButton.setOnClickListener(v -> listener.onFormFragmentInteraction(procedure.name, procedure.filter));
+        addButton.setOnClickListener(v -> listener.onFormFragmentInteraction(procedure.name, procedure.filter, role));
 
         for (GenericItem item : paramList) {
-            if (item.referenceName.contains(procedure.name)) {
+            if (item.referenceName.containsKey(procedure.name)) {
                 Chip chip = new Chip(context);
                 chip.setText(item.name);
                 chip.setCloseIconVisible(true);
@@ -116,7 +118,7 @@ public class WidgetParamView extends ConstraintLayout {
         int visibility = View.GONE;
 
         for (GenericItem item : filteredItems)
-            if (item.referenceName.contains(procedure.name)) {
+            if (item.referenceName.containsKey(procedure.name)) {
                 visibility = View.VISIBLE;
                 break;
             }

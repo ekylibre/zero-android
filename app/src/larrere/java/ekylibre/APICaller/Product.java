@@ -2,18 +2,14 @@ package ekylibre.APICaller;
 
 import android.util.Log;
 
-import androidx.annotation.Nullable;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -89,7 +85,8 @@ public class Product {
             containerName = object.getString("container_name");
 
         if (object.has("dead_at") && !object.isNull("dead_at"))
-            deadAt = iso8601.parse(String.valueOf(object.getString("dead_at")));
+            deadAt = iso8601.parse(object.getString("dead_at"));
+//            deadAt = iso8601Parser.parseDateTime(object.getString("dead_at")).toDate();
 
         if (object.has("net_surface_area") && !object.isNull("net_surface_area"))
             netSurfaceArea = getSurfaceArea(object.getJSONObject("net_surface_area"));

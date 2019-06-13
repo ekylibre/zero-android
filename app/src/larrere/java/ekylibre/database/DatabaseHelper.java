@@ -476,6 +476,7 @@ public class DatabaseHelper extends SQLiteOpenHelper
                 database.execSQL("CREATE TABLE IF NOT EXISTS " + ZeroContract.DetailedInterventionAttributes.TABLE_NAME + "(" +
                         ZeroContract.DetailedInterventionAttributes._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                         ZeroContract.DetailedInterventionAttributes.DETAILED_INTERVENTION_ID + " INTEGER NOT NULL, " +
+                        ZeroContract.DetailedInterventionAttributes.ROLE + " TEXT NOT NULL, " +
                         ZeroContract.DetailedInterventionAttributes.REFERENCE_NAME + " TEXT NOT NULL, " +
                         ZeroContract.DetailedInterventionAttributes.REFERENCE_ID + " INTEGER NOT NULL, " +
                         ZeroContract.DetailedInterventionAttributes.QUANTITY_VALUE + " REAL, " +

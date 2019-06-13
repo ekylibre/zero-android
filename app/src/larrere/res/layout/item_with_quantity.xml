@@ -48,21 +48,37 @@
         tools:text="45,6"
         tools:ignore="Autofill" />
 
-
-    <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/quantity_unit"
+    <Spinner
+        android:id="@+id/quantity_unit_spinner"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintBaseline_toBaselineOf="@id/quantity_value"
-        app:layout_constraintStart_toEndOf="@id/quantity_value"
-        android:layout_marginStart="6dp"
+        android:layout_marginStart="16dp"
+        android:background="@drawable/field_rounded_white"
+        android:entries="@array/picture_choice_keys"
+        android:imeOptions="actionDone"
+        android:inputType="numberDecimal"
         android:paddingStart="@dimen/field_padding_horizontal"
-        android:paddingEnd="@dimen/field_padding_horizontal"
         android:paddingTop="@dimen/field_padding_vertical"
+        android:paddingEnd="@dimen/field_padding_horizontal"
         android:paddingBottom="@dimen/field_padding_vertical"
-        tools:text="kg"
         android:textSize="16sp"
-        android:focusable="false"/>
+        app:layout_constraintBaseline_toBaselineOf="@id/quantity_value"
+        app:layout_constraintStart_toEndOf="@id/quantity_value" />
+
+    <!--<androidx.appcompat.widget.AppCompatTextView-->
+        <!--android:id="@+id/quantity_unit"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--app:layout_constraintBaseline_toBaselineOf="@id/quantity_value"-->
+        <!--app:layout_constraintStart_toEndOf="@id/quantity_value"-->
+        <!--android:layout_marginStart="6dp"-->
+        <!--android:paddingStart="@dimen/field_padding_horizontal"-->
+        <!--android:paddingEnd="@dimen/field_padding_horizontal"-->
+        <!--android:paddingTop="@dimen/field_padding_vertical"-->
+        <!--android:paddingBottom="@dimen/field_padding_vertical"-->
+        <!--tools:text="kg"-->
+        <!--android:textSize="16sp"-->
+        <!--android:focusable="false"/>-->
 
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/item_delete"

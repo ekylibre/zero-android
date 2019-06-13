@@ -37,17 +37,19 @@ public class ParamChoiceFragment extends Fragment {
     @Type
     private String paramType;
     private String filter;
+    private String role;
     private Context context;
     private List<GenericItem> dataset;
     private SelectableItemAdapter adapter;
 
     public ParamChoiceFragment() {}
 
-    public static ParamChoiceFragment newInstance(String param, String filter) {
+    public static ParamChoiceFragment newInstance(String param, String filter, String role) {
         ParamChoiceFragment fragment = new ParamChoiceFragment();
         Bundle args = new Bundle();
         args.putString("param_type", param);
         args.putString("filter", filter);
+        args.putString("role", role);
         fragment.setArguments(args);
         return fragment;
     }
@@ -59,6 +61,7 @@ public class ParamChoiceFragment extends Fragment {
         if (getArguments() != null) {
             paramType = getArguments().getString("param_type");
             filter = getArguments().getString("filter");
+            role = getArguments().getString("role");
             Log.i(TAG, "ParamType = " + paramType);
         }
     }
@@ -84,7 +87,7 @@ public class ParamChoiceFragment extends Fragment {
             view = inflater.inflate(R.layout.fragment_recycler_with_search_field, container, false);
             RecyclerView recyclerView = view.findViewById(R.id.recycler);
             recyclerView.setLayoutManager(new LinearLayoutManager(container.getContext()));
-            adapter = new SelectableItemAdapter(dataset, paramType);
+            adapter = new SelectableItemAdapter(dataset, paramType, role);
             recyclerView.setAdapter(adapter);
 
             // SeachField logic

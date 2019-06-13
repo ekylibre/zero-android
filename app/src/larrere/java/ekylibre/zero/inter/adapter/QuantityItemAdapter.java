@@ -1,27 +1,31 @@
 package ekylibre.zero.inter.adapter;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.StringRes;
 import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnTextChanged;
+import ekylibre.util.pojo.GenericEntity;
+import ekylibre.util.pojo.HandlerEntity;
+import ekylibre.util.pojo.SpinnerItem;
 import ekylibre.zero.R;
-import ekylibre.zero.home.Zero;
 import ekylibre.zero.inter.fragment.InterventionFormFragment;
 import ekylibre.zero.inter.model.GenericItem;
 
@@ -33,11 +37,22 @@ public class QuantityItemAdapter extends RecyclerView.Adapter<QuantityItemAdapte
 
     private final List<GenericItem> dataset;
     private RecyclerView recyclerView;
-    private final String role;
+    private final String paramType;
+    private final ArrayList<SpinnerItem> spinnerItems;
 
-    public QuantityItemAdapter(List<GenericItem> dataset, String role) {
+    public QuantityItemAdapter(List<GenericItem> dataset, GenericEntity inputType) {
         this.dataset = dataset;
-        this.role = role;
+        this.paramType = inputType.name;
+        this.spinnerItems = computeSpinnerItems(inputType.handler);
+    }
+
+    private ArrayList<SpinnerItem> computeSpinnerItems(List<HandlerEntity> handlers) {
+        ArrayList<SpinnerItem> spinnerList = new ArrayList<>();
+        for (HandlerEntity handler : handlers) {
+            if (handler.unit != null)
+                spinnerList.add(new SpinnerItem(handler.unit));
+        }
+        return spinnerList;
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {
@@ -45,7 +60,8 @@ public class QuantityItemAdapter extends RecyclerView.Adapter<QuantityItemAdapte
         // Layout
         @BindView(R.id.item_label) TextView name;
         @BindView(R.id.quantity_value) EditText quantity;
-        @BindView(R.id.quantity_unit) TextView unit;
+//        @BindView(R.id.quantity_unit) TextView unit;
+        @BindView(R.id.quantity_unit_spinner) Spinner unitSpinner;
         @BindView(R.id.item_warning_message) TextView warningMessage;
         @BindView(R.id.item_delete) ImageView deleteButton;
 
@@ -74,13 +90,22 @@ public class QuantityItemAdapter extends RecyclerView.Adapter<QuantityItemAdapte
                 dataset.remove(index);
                 notifyItemRemoved(index);
                 for (GenericItem simpleItem : InterventionFormFragment.paramsList) {
-                    if (simpleItem.id == item.id && simpleItem.referenceName.contains(role)) {
-                        simpleItem.referenceName.remove(role);
+                    if (simpleItem.id == item.id && simpleItem.referenceName.containsKey(paramType)) {
+                        simpleItem.referenceName.remove(paramType);
                         break;
                     }
                 }
                 if (dataset.isEmpty())
                     recyclerView.setVisibility(GONE);
+            });
+
+            unitSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override public void onNothingSelected(AdapterView<?> parent) { }
+                @Override
+                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                    SpinnerItem selectedUnit = (SpinnerItem) parent.getSelectedItem();
+                    item.unit = selectedUnit.getValue();
+                }
             });
 
         }
@@ -96,14 +121,20 @@ public class QuantityItemAdapter extends RecyclerView.Adapter<QuantityItemAdapte
             // Set fields according to current item
             name.setText(item.name != null ? item.name : "");
             quantity.setText(item.quantity != null ? item.quantity.toString() : String.valueOf(0f));
-            if (item.unit != null) {
-                Log.e("ItemAdapter", "Item unit = " + item.unit);
-                @StringRes final int labelRes = context.getResources().getIdentifier(
-                        item.unit, "string", Zero.getPkgName());
-                unit.setText(labelRes);
-                unit.setVisibility(VISIBLE);
+
+            if (spinnerItems.size() > 0) {
+                ArrayAdapter<SpinnerItem> adapter = new ArrayAdapter<>(context, android.R.layout.simple_spinner_item, spinnerItems);
+                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                unitSpinner.setAdapter(adapter);
+                unitSpinner.setVisibility(VISIBLE);
+                if (item.unit != null)
+                    unitSpinner.setSelection(spinnerItems.indexOf(new SpinnerItem(item.unit)));
+                else {
+                    item.unit = spinnerItems.get(0).getValue();
+                    unitSpinner.setSelection(0);
+                }
             } else
-                unit.setVisibility(GONE);
+                unitSpinner.setVisibility(GONE);
         }
     }
 

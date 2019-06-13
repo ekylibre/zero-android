@@ -313,6 +313,7 @@ public final class ZeroContract {
     public interface DetailedInterventionAttributesColumns extends BaseColumns {
         String TABLE_NAME = "detailed_intervention_attributes";  // carefull, intervention table name exists !
         String DETAILED_INTERVENTION_ID = "detailed_intervention_id";
+        String ROLE = "role";
         String REFERENCE_ID = "reference_id";
         String REFERENCE_NAME = "reference_name";
         String QUANTITY_VALUE = "quantity_value";
@@ -692,22 +693,19 @@ public final class ZeroContract {
     public static final class DetailedInterventions implements DetailedInterventionColumns {
         public static final Uri CONTENT_URI = getUri(TABLE_NAME);
         public static final String CONTENT_TYPE = DIR_BASE + TABLE_NAME;
-        public static final String[] PROJECTION_ALL = {_ID, PROCEDURE_NAME, CREATED_ON, EK_ID, USER};
-        public static final String SORT_ORDER_DEFAULT = CREATED_ON + " DESC";
+        public static final String[] PROJECTION_ALL = {_ID, PROCEDURE_NAME};
     }
 
     public static final class DetailedInterventionAttributes implements DetailedInterventionAttributesColumns {
         public static final Uri CONTENT_URI = getUri(TABLE_NAME);
         public static final String CONTENT_TYPE = DIR_BASE + TABLE_NAME;
-        public static final String[] PROJECTION_ALL = {_ID, DETAILED_INTERVENTION_ID, REFERENCE_ID, REFERENCE_NAME, QUANTITY_VALUE, QUANTITY_UNIT_NAME};
-        public static final String SORT_ORDER_DEFAULT = DETAILED_INTERVENTION_ID + " DESC";
+        public static final String[] PROJECTION_ALL = {ROLE, REFERENCE_ID, REFERENCE_NAME, QUANTITY_VALUE, QUANTITY_UNIT_NAME};
     }
 
     public static final class WorkingPeriodAttributes implements WorkingPeriodAttributesColumns {
         public static final Uri CONTENT_URI = getUri(TABLE_NAME);
         public static final String CONTENT_TYPE = DIR_BASE + TABLE_NAME;
-        public static final String[] PROJECTION_ALL = {_ID, DETAILED_INTERVENTION_ID, STARTED_AT, STOPPED_AT};
-        public static final String SORT_ORDER_DEFAULT = _ID + " DESC";
+        public static final String[] PROJECTION_ALL = {STARTED_AT, STOPPED_AT};
     }
 
     private static Uri getUri(String path) {

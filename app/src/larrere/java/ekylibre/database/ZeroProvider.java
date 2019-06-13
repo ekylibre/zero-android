@@ -135,7 +135,7 @@ public class ZeroProvider extends ContentProvider {
         URI_MATCHER.addURI(ZeroContract.AUTHORITY, "outputs", ROUTE_OUTPUTS_LIST);
         URI_MATCHER.addURI(ZeroContract.AUTHORITY, "outputs/#", ROUTE_OUTPUTS_ITEM);
         URI_MATCHER.addURI(ZeroContract.AUTHORITY, "detailed_interventions", ROUTE_DETAILED_INTERVENTIONS_LIST);
-        URI_MATCHER.addURI(ZeroContract.AUTHORITY, "detailed_interventions/#", ROUTE_DETAILED_INTERVENTION_ATTRIBUTES_ITEM);
+        URI_MATCHER.addURI(ZeroContract.AUTHORITY, "detailed_interventions/#", ROUTE_DETAILED_INTERVENTIONS_ITEM);
         URI_MATCHER.addURI(ZeroContract.AUTHORITY, "detailed_intervention_attributes", ROUTE_DETAILED_INTERVENTION_ATTRIBUTES_LIST);
         URI_MATCHER.addURI(ZeroContract.AUTHORITY, "detailed_intervention_attributes/#", ROUTE_DETAILED_INTERVENTION_ATTRIBUTES_ITEM);
         URI_MATCHER.addURI(ZeroContract.AUTHORITY, "working_period_attributes", ROUTE_WORKING_PERIOD_ATTRIBUTES_LIST);

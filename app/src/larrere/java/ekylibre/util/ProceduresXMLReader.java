@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import ekylibre.util.pojo.GenericEntity;
+import ekylibre.util.pojo.HandlerEntity;
 import ekylibre.util.pojo.ProcedureEntity;
 import ekylibre.zero.BuildConfig;
 
@@ -191,9 +192,18 @@ public class ProceduresXMLReader {
         if (inGroup)
             inputEntity.group = procedureEntity.group;
 
-        // Skip attribute balises for now
         do {
             parser.nextTag();
+
+            // Continue to next tag if not START_TAG
+            if (parser.getEventType() != XmlPullParser.START_TAG)
+                continue;
+
+            if (parser.getName().equals("handler"))
+                inputEntity.handler.add(readHandler(parser));
+            else
+                skip(parser);
+
         } while (!parser.getName().equals("input"));
 
         parser.require(XmlPullParser.END_TAG, ns, "input");
@@ -201,7 +211,28 @@ public class ProceduresXMLReader {
         return inputEntity;
     }
 
-    private GenericEntity readOuput(XmlPullParser parser) throws IOException, XmlPullParserException {
+    private HandlerEntity readHandler(XmlPullParser parser) throws IOException, XmlPullParserException {
+
+        parser.require(XmlPullParser.START_TAG, ns, "handler");
+        HandlerEntity handlerEntity = new HandlerEntity();
+
+        handlerEntity.name = parser.getAttributeValue(ns, "name");
+        handlerEntity.indicator = parser.getAttributeValue(ns, "indicator");
+        handlerEntity.unit = parser.getAttributeValue(ns, "unit");
+
+        parser.nextTag();
+        parser.require(XmlPullParser.END_TAG, ns, "handler");
+
+        if (BuildConfig.DEBUG) {
+            Log.i(TAG, "Name = " + handlerEntity.name);
+            Log.i(TAG, "Indicator = " + handlerEntity.indicator);
+            Log.i(TAG, "Unit = " + handlerEntity.unit);
+        }
+
+        return handlerEntity;
+    }
+
+        private GenericEntity readOuput(XmlPullParser parser) throws IOException, XmlPullParserException {
 
         parser.require(XmlPullParser.START_TAG, ns, "output");
         GenericEntity outputEntity = new GenericEntity();
@@ -212,13 +243,19 @@ public class ProceduresXMLReader {
         if (inGroup)
             outputEntity.group = procedureEntity.group;
 
-        // Skip attribute balises for now
-        while (true) {
+        do {
             parser.nextTag();
-            String name = parser.getName();
-            if (name.equals("output"))
-                break;
-        }
+
+            // Continue to next tag if not START_TAG
+            if (parser.getEventType() != XmlPullParser.START_TAG)
+                continue;
+
+            if (parser.getName().equals("handler"))
+                outputEntity.handler.add(readHandler(parser));
+            else
+                skip(parser);
+
+        } while (!parser.getName().equals("output"));
 
         parser.require(XmlPullParser.END_TAG, ns, "output");
 

@@ -32,9 +32,9 @@ import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import ekylibre.database.ZeroContract.WorkingPeriodAttributes;
 import ekylibre.database.ZeroContract.DetailedInterventionAttributes;
 import ekylibre.database.ZeroContract.DetailedInterventions;
+import ekylibre.database.ZeroContract.WorkingPeriodAttributes;
 import ekylibre.util.AccountTool;
 import ekylibre.util.ProcedureFamiliesXMLReader;
 import ekylibre.util.ProceduresXMLReader;
@@ -116,7 +116,7 @@ public class InterActivity extends AppCompatActivity implements FragmentManager.
         fragmentManager.addOnBackStackChangedListener(this);
 
         // Set first fragment to procedure family choice
-        replaceFragmentWith(PROCEDURE_FAMILY_FRAGMENT, null);
+        replaceFragmentWith(PROCEDURE_FAMILY_FRAGMENT, null, null);
 
         // Load procedure natures, families and params from assets
         loadXMLAssets();
@@ -127,7 +127,9 @@ public class InterActivity extends AppCompatActivity implements FragmentManager.
         super.onResume();
     }
 
-    void replaceFragmentWith(String fragmentTag, String filter) {
+    void replaceFragmentWith(String fragmentTag, String filter, String role) {
+
+        Log.e(TAG, "Role -> " + role);
 
         // Update current fragment reference
         currentFragment = fragmentTag;
@@ -140,6 +142,10 @@ public class InterActivity extends AppCompatActivity implements FragmentManager.
         Fragment fragment;
 
         switch (fragmentTag) {
+
+            case PROCEDURE_FAMILY_FRAGMENT:
+                fragment = ProcedureFamilyChoiceFragment.newInstance();
+                break;
 
             case PROCEDURE_CATEGORY_FRAGMENT:
             case PROCEDURE_NATURE_FRAGMENT:
@@ -156,17 +162,9 @@ public class InterActivity extends AppCompatActivity implements FragmentManager.
                 fragment = CropParcelChoiceFragment.newInstance(fragmentTag, filter);
                 break;
 
-//            case INPUT_CHOICE_FRAGMENT:
-//                fragment = InputChoiceFragment.newInstance();
-//                break;
-
-            case PROCEDURE_FAMILY_FRAGMENT:
-                fragment = ProcedureFamilyChoiceFragment.newInstance();
-                break;
-
             default:
                 // Default to param choice fragment list (inputs, equipments, workers...)
-                fragment = ParamChoiceFragment.newInstance(fragmentTag, filter);
+                fragment = ParamChoiceFragment.newInstance(fragmentTag, filter, role);
                 break;
         }
 
@@ -191,7 +189,7 @@ public class InterActivity extends AppCompatActivity implements FragmentManager.
         else if (id.equals(TOOL_MAINTAINING.first))
             currentFamily = TOOL_MAINTAINING;
 
-        replaceFragmentWith(PROCEDURE_CATEGORY_FRAGMENT, null);
+        replaceFragmentWith(PROCEDURE_CATEGORY_FRAGMENT, null, null);
     }
 
     public ProcedureEntity getProcedureItem(String name) {
@@ -264,8 +262,8 @@ public class InterActivity extends AppCompatActivity implements FragmentManager.
     }
 
     @Override
-    public void onFormFragmentInteraction(String fragmentTag, String filter) {
-        replaceFragmentWith(fragmentTag, filter);
+    public void onFormFragmentInteraction(String fragmentTag, String filter, String role) {
+        replaceFragmentWith(fragmentTag, filter, role);
     }
 
     @Override
@@ -274,11 +272,11 @@ public class InterActivity extends AppCompatActivity implements FragmentManager.
         if (PROCEDURE_CATEGORY_FRAGMENT.equals(fragmentRef)) {
             if (BuildConfig.DEBUG) Log.e(TAG, "category = " + item);
             currentCategory = item;
-            replaceFragmentWith(PROCEDURE_NATURE_FRAGMENT, null);
+            replaceFragmentWith(PROCEDURE_NATURE_FRAGMENT, null, null);
         } else {
             if (BuildConfig.DEBUG) Log.e(TAG, "procedure = " + item);
             selectedProcedure = getProcedureItem(item.first);
-            replaceFragmentWith(INTERVENTION_FORM, null);
+            replaceFragmentWith(INTERVENTION_FORM, null, null);
         }
     }
 
@@ -384,24 +382,19 @@ public class InterActivity extends AppCompatActivity implements FragmentManager.
         return true;
     }
 
-//    private void saveAttribute(ContentResolver cr, long id, String role, GenericItem item) {
-//        ContentValues cv = new ContentValues();
-//        cv.put(DetailedInterventionAttributes.DETAILED_INTERVENTION_ID, id);
-//        cv.put(DetailedInterventionAttributes.REFERENCE_NAME, role);
-//        cv.put(DetailedInterventionAttributes.REFERENCE_ID, item.id);
-//        Uri plantUri = cr.insert(DetailedInterventionAttributes.CONTENT_URI, cv);
-//        if (BuildConfig.DEBUG && plantUri != null && plantUri.getLastPathSegment() != null)
-//            Log.i(TAG, role + " -> " + item.name + " (id=" + plantUri.getLastPathSegment() + ")");
-//    }
-
     /**
      * Method used to verify and save intervention
      */
     private void saveIntervention() {
 
+        // Do some validation before saving
+
+        //
+
+        // Get content resolver instance
         ContentResolver cr = getContentResolver();
 
-        // Create base intervention
+        // Creating base intervention record
         ContentValues cv = new ContentValues();
         cv.put(DetailedInterventions.PROCEDURE_NAME, selectedProcedure.name);
         cv.put(DetailedInterventions.CREATED_ON, new Date().getTime());
@@ -440,14 +433,15 @@ public class InterActivity extends AppCompatActivity implements FragmentManager.
         List<ContentValues> bulkParamCv = new ArrayList<>();
 
         for (GenericItem param : InterventionFormFragment.paramsList) {
-            for (String refName : param.referenceName) {
+            for (Map.Entry<String, String> entry : param.referenceName.entrySet()) {
 
                 ContentValues paramCv = new ContentValues();
                 paramCv.put(DetailedInterventionAttributes.DETAILED_INTERVENTION_ID, interId);
                 paramCv.put(DetailedInterventionAttributes.REFERENCE_ID, param.id);
-                paramCv.put(DetailedInterventionAttributes.REFERENCE_NAME, refName);
+                paramCv.put(DetailedInterventionAttributes.REFERENCE_NAME, entry.getKey());
+                paramCv.put(DetailedInterventionAttributes.ROLE, entry.getValue());
 
-                if (param.variety.equals("input") || param.variety.equals("output") ) {
+                if (param.quantity != null ) {
                     paramCv.put(DetailedInterventionAttributes.QUANTITY_VALUE, param.quantity.toString());
                     paramCv.put(DetailedInterventionAttributes.QUANTITY_UNIT_NAME, param.unit);
                 }
