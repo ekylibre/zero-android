@@ -13,19 +13,22 @@
         android:layout_width="wrap_content"
         android:layout_height="24dp"
         tools:srcCompat="@drawable/icon_tractor"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toTopOf="@id/widget_add"
+        app:layout_constraintBottom_toBottomOf="@id/widget_add"
         app:layout_constraintStart_toStartOf="parent"
         android:adjustViewBounds="true"
-        android:scaleType="fitXY"/>
+        android:scaleType="fitXY" />
+
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/widget_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        app:layout_constraintTop_toTopOf="@id/widget_icon"
-        app:layout_constraintBottom_toBottomOf="@id/widget_icon"
+        app:layout_constraintTop_toTopOf="@id/widget_add"
+        app:layout_constraintBottom_toBottomOf="@id/widget_add"
         app:layout_constraintStart_toEndOf="@id/widget_icon"
-        tools:text="@string/tractor"/>
+        tools:text="@string/tractor"
+        android:textStyle="bold"/>
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/widget_add"

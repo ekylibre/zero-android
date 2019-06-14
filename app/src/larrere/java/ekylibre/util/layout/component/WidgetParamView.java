@@ -4,6 +4,7 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.StringRes;
@@ -21,6 +22,7 @@ import butterknife.ButterKnife;
 import ekylibre.util.pojo.GenericEntity;
 import ekylibre.zero.R;
 import ekylibre.zero.home.Zero;
+import ekylibre.zero.inter.fragment.InterventionFormFragment;
 import ekylibre.zero.inter.fragment.InterventionFormFragment.OnFragmentInteractionListener;
 import ekylibre.zero.inter.model.GenericItem;
 
@@ -33,6 +35,7 @@ public class WidgetParamView extends ConstraintLayout {
     @BindView(R.id.widget_label) TextView labelView;
     @BindView(R.id.widget_add) MaterialButton addButton;
     @BindView(R.id.widget_chips_group) ChipGroup chipGroup;
+    @BindView(R.id.widget_icon) ImageView iconView;
 
     private List<GenericItem> paramList;
     private GenericEntity procedure;
@@ -59,7 +62,7 @@ public class WidgetParamView extends ConstraintLayout {
 
         // Inflate layout
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View view = Objects.requireNonNull(inflater).inflate(R.layout.widget_param_layout, this);
+        View view = Objects.requireNonNull(inflater).inflate(R.layout.widget_param_layout_with_icon, this);
 
         // Bind Butterknife to created view
         ButterKnife.bind(this, view);
@@ -81,16 +84,11 @@ public class WidgetParamView extends ConstraintLayout {
 
         @StringRes
         final int labelRes = getResources().getIdentifier(procedure.name, "string", Zero.getPkgName());
-//
+
 //        @DrawableRes
-//        final int iconRes = getResources().getIdentifier("icon_" + type, "drawable", packageName);
-////        if (iconRes == 0) {
-////            List<String> driverList = Arrays.asList("doer", "driver");
-////            if ()
-////                iconRes = driverList.contains(type) ? R.drawable.icon_driver
-////        }
-//
-        // iconView.setImageResource(iconRes);
+//        final int iconRes = getResources().getIdentifier("icon_" + role, "drawable", Zero.getPkgName());
+
+        iconView.setImageResource(InterventionFormFragment.getWidgetIcon(procedure.name));
         labelView.setText(labelRes);
         addButton.setOnClickListener(v -> listener.onFormFragmentInteraction(procedure.name, procedure.filter, role));
 

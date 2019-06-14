@@ -37,4 +37,6 @@
         app:chipSpacing="6dp">
     </com.google.android.material.chip.ChipGroup>
 
+    <!-- TODO -> Manage "killable" and other attributes -->
+
 </androidx.constraintlayout.widget.ConstraintLayout>

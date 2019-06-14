@@ -2,7 +2,6 @@ package ekylibre.zero.inter.fragment;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,11 +14,9 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 
-import ekylibre.zero.BuildConfig;
 import ekylibre.zero.R;
 import ekylibre.zero.home.Zero;
 import ekylibre.zero.inter.InterActivity;
@@ -79,7 +76,7 @@ public class ProcedureChoiceFragment extends Fragment {
         int resId = getResources().getIdentifier(titleRes, "string", Zero.getPkgName());
         InterActivity.actionBar.setTitle(resId);
 
-        View view = inflater.inflate(R.layout.fragment_procedure_category_choice, container, false);
+        View view = inflater.inflate(R.layout.fragment_simple_recycler, container, false);
 
         // Set the adapter
         if (view instanceof RecyclerView) {

@@ -5,7 +5,7 @@
       <target name="cultivation" filter="(is plant or is land_parcel) and has indicator shape">
         <attribute name="working_zone" default-value="PRODUCT.shape" if="PRODUCT?"/>
       </target>
-      <input name="water" filter="is water">
+      <input name="" filter="is water">
         <handler name="population"/>
         <handler indicator="net_volume" unit="cubic_meter"
                  if="population_counting_is(PRODUCT, :decimal) > 0 and PRODUCT..net_volume?"

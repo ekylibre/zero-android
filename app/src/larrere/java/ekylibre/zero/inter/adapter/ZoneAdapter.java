@@ -1,6 +1,7 @@
 package ekylibre.zero.inter.adapter;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,6 +9,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.Group;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.button.MaterialButton;
@@ -49,6 +51,7 @@ public class ZoneAdapter extends RecyclerView.Adapter<ZoneAdapter.ViewHolder> {
         @BindView(R.id.parcel_chip) Chip parcelChip;
         @BindView(R.id.crop_chip) Chip cropChip;
         @BindView(R.id.zone_delete) ImageView deleteButton;
+        @BindView(R.id.group) Group group;
 
         @OnTextChanged(R.id.variety_value)
         void onVarietyChanged(CharSequence value) {
@@ -62,12 +65,16 @@ public class ZoneAdapter extends RecyclerView.Adapter<ZoneAdapter.ViewHolder> {
 
         @OnClick(R.id.parcel_add)
         void onParcelAdd() {
-            listener.onFormFragmentInteraction("land_parcel", "is land_parcel", "targets");
+            Log.e("Zone", "adapter position="+getAdapterPosition());
+            listener.onFormFragmentInteraction("zone_land_parcel",
+                    "is land_parcel", String.valueOf(getAdapterPosition()));
         }
 
         @OnClick(R.id.crop_add)
         void onCropAdd() {
-            // TODO -> bind to selector fragment
+            Log.e("Zone", "adapter position="+getAdapterPosition());
+            listener.onFormFragmentInteraction("zone_plant",
+                    "is plant", String.valueOf(getAdapterPosition()));
         }
 
         // Reference to the current zone
@@ -83,12 +90,16 @@ public class ZoneAdapter extends RecyclerView.Adapter<ZoneAdapter.ViewHolder> {
             // Get context from view
             context = itemView.getContext();
 
-            // Set delete click listeners TODO -> remove delete button in only one zone
-            deleteButton.setOnClickListener(v -> {
-                int index = dataset.indexOf(zone);
-                dataset.remove(index);
-                notifyItemRemoved(index);
-            });
+            if (getItemCount() > 0) {
+                // Set delete click listeners
+                deleteButton.setVisibility(VISIBLE);
+                deleteButton.setOnClickListener(v -> {
+                    int index = dataset.indexOf(zone);
+                    dataset.remove(index);
+                    notifyItemRemoved(index);
+                });
+            } else
+                deleteButton.setVisibility(GONE);
         }
         
         /**
@@ -101,12 +112,17 @@ public class ZoneAdapter extends RecyclerView.Adapter<ZoneAdapter.ViewHolder> {
             this.zone = currentZone;
 
             // Set Chips and fields visibility
-            parcelChip.setVisibility(zone.landParcel == null ? GONE : VISIBLE);
-            int cropVisibility = zone.plant == null ? GONE : VISIBLE;
-            cropChip.setVisibility(cropVisibility);
-            varietyEditText.setVisibility(cropVisibility);
-            batchNumberEditText.setVisibility(cropVisibility);
+            if (zone.landParcel != null) {
+                parcelChip.setText(zone.landParcel.name);
+                parcelChip.setVisibility(VISIBLE);
+            } else
+                parcelChip.setVisibility(GONE);
 
+            int visibility = zone.plant != null ? VISIBLE : GONE;
+            if (visibility == VISIBLE)
+                cropChip.setText(zone.plant.name);
+            cropChip.setVisibility(visibility);
+            group.setVisibility(visibility);
         }
     }
 
@@ -125,6 +141,7 @@ public class ZoneAdapter extends RecyclerView.Adapter<ZoneAdapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull final ViewHolder holder, int position) {
+        Log.e("Adapter", "dataset count = " + getItemCount());
         holder.display(dataset.get(position));
     }
 

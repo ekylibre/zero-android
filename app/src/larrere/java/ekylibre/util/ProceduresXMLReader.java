@@ -211,6 +211,27 @@ public class ProceduresXMLReader {
         return inputEntity;
     }
 
+    private HandlerEntity readAttribute(XmlPullParser parser) throws IOException, XmlPullParserException {
+
+        parser.require(XmlPullParser.START_TAG, ns, "attribute");
+        HandlerEntity handlerEntity = new HandlerEntity();
+
+        handlerEntity.name = parser.getAttributeValue(ns, "name");
+        handlerEntity.indicator = parser.getAttributeValue(ns, "indicator");
+        handlerEntity.unit = parser.getAttributeValue(ns, "unit");
+
+        parser.nextTag();
+        parser.require(XmlPullParser.END_TAG, ns, "handler");
+
+        if (BuildConfig.DEBUG) {
+            Log.i(TAG, "Name = " + handlerEntity.name);
+            Log.i(TAG, "Indicator = " + handlerEntity.indicator);
+            Log.i(TAG, "Unit = " + handlerEntity.unit);
+        }
+
+        return handlerEntity;
+    }
+
     private HandlerEntity readHandler(XmlPullParser parser) throws IOException, XmlPullParserException {
 
         parser.require(XmlPullParser.START_TAG, ns, "handler");

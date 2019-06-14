@@ -1,20 +1,20 @@
 package ekylibre.zero.inter.adapter;
 
-import androidx.annotation.NonNull;
-import androidx.core.content.ContextCompat;
-import androidx.core.util.Pair;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import ekylibre.zero.R;
-import ekylibre.zero.inter.fragment.ProcedureChoiceFragment.OnFragmentInteractionListener;
+import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
+import androidx.core.util.Pair;
+import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
+
+import ekylibre.zero.R;
+import ekylibre.zero.inter.fragment.ProcedureChoiceFragment.OnFragmentInteractionListener;
 
 public class ProcedureChoiceAdapter extends RecyclerView.Adapter<ProcedureChoiceAdapter.ViewHolder> {
 
@@ -55,8 +55,8 @@ public class ProcedureChoiceAdapter extends RecyclerView.Adapter<ProcedureChoice
         public void onClick(View v) {
             if (getAdapterPosition() == RecyclerView.NO_POSITION) return;
             // Send back item to activity
-            listener.onItemChoosed(item, fragmentTag);
-//            view.postDelayed(() -> listener.onItemChoosed(item), 200);
+//            listener.onItemChoosed(item, fragmentTag);
+            view.postDelayed(() -> listener.onItemChoosed(item, fragmentTag), 200);
         }
     }
 

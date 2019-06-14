@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -19,6 +20,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.text.Collator;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -135,15 +137,17 @@ public class InterventionFormFragment extends Fragment {
 
         if (selectedProcedure.group != null && selectedProcedure.group.equals("zone")) {
 
-            // Check if there is target in this group
-//            for (GenericEntity target : selectedProcedure.target) {
-//                if (target.group.equals(selectedProcedure.group)) {
+            if (BuildConfig.DEBUG)
+                Log.i(TAG, "group --> zone");
 
-            View zoneView = inflater.inflate(R.layout.widget_input, container, false);
+            View zoneView = inflater.inflate(R.layout.widget_with_icon_and_recycler, container, false);
+
+            ImageView icon = zoneView.findViewById(R.id.icon);
+            icon.setImageResource(getWidgetIcon("land_parcel"));
 
             // Set param label
             TextView label = zoneView.findViewById(R.id.widget_label);
-            label.setText(Helper.getStringId("zone"));
+            label.setText(Helper.getTranslation("zone"));
 
             // Initialize Recycler
             RecyclerView zoneRecycler = zoneView.findViewById(R.id.widget_recycler);
@@ -175,51 +179,6 @@ public class InterventionFormFragment extends Fragment {
                 widgetContainer.addView(new WidgetParamView(context, listener, entity, paramsList, "targets"));
         }
 
-
-        // ----------- //
-        // Crop layout //
-        // ----------- //
-
-        // Check wether to display crop, parcel or both selector
-//        for (GenericEntity target : selectedProcedure.target) {
-//
-//            if (target.group == null) {
-//
-//                // Inflate the layout
-//                View cropParcelView = inflater.inflate(R.layout.widget_param_layout, container, false);
-//                TextView label = cropParcelView.findViewById(R.id.widget_label);
-//
-//                // Set the title
-//                if (target.name.equals("cultivation"))
-//                    label.setText(R.string.crop_parcel);
-//                else {
-//                    label.setText(Helper.getStringId(target.name));
-//                }
-//                TextView addButton = cropParcelView.findViewById(R.id.widget_add);
-//                ChipGroup cropChipGroup = cropParcelView.findViewById(R.id.widget_chips_group);
-//                addButton.setOnClickListener(v -> listener.onFormFragmentInteraction(target.name, target.filter));  // CROP_CHOICE_FRAGMENT
-//
-//                // ChipGroup Logic
-//                for (GenericItem item : paramsList) {
-//                    if (item.referenceName.contains(target.name)) {
-////                    if ((item.variety.equals(PLANT) || item.variety.equals(LAND_PARCEL)) && item.isSelected) {
-//                        Chip chip = new Chip(context);
-//                        chip.setText(item.name);
-//                        chip.setCloseIconVisible(true);
-//                        chip.setOnCloseIconClickListener(v -> {
-//                            cropChipGroup.removeView(chip);
-////                            item.isSelected = false;
-//                            item.referenceName.remove(target.name);
-//                            chipGroupDisplay(cropChipGroup);
-//                        });
-//                        cropChipGroup.addView(chip);
-//                    }
-//                }
-//                chipGroupDisplay(cropChipGroup);
-//                widgetContainer.addView(cropParcelView);
-//            }
-//        }
-
         // ------------- //
         // Inputs layout //
         // ------------- //
@@ -232,7 +191,10 @@ public class InterventionFormFragment extends Fragment {
                 if (BuildConfig.DEBUG) Log.i(TAG, "Build layout for input --> " + inputType.name);
 
                 // Get layout
-                View inputView = inflater.inflate(R.layout.widget_input, container, false);
+                View inputView = inflater.inflate(R.layout.widget_with_icon_and_recycler, container, false);
+
+                ImageView icon = inputView.findViewById(R.id.icon);
+                icon.setImageResource(getWidgetIcon(inputType.name));
 
                 // Set param label
                 TextView label = inputView.findViewById(R.id.widget_label);
@@ -250,8 +212,6 @@ public class InterventionFormFragment extends Fragment {
                         getCurrentDataset(inputType.name), inputType);
                 inputRecycler.setAdapter(quantityItemAdapter);
                 inputRecycler.requestLayout();
-
-                Log.e(TAG, "Adapter size = " + quantityItemAdapter.getItemCount());
 
                 // Set visibility if one item is corresponding current input variety
                 int visibility = quantityItemAdapter.getItemCount() == 0 ? View.GONE : View.VISIBLE;
@@ -272,7 +232,10 @@ public class InterventionFormFragment extends Fragment {
                 if (BuildConfig.DEBUG) Log.i(TAG, "Build layout for output --> " + outputType.name);
 
                 // Get layout (same as input)
-                View inputView = inflater.inflate(R.layout.widget_input, container, false);
+                View inputView = inflater.inflate(R.layout.widget_with_icon_and_recycler, container, false);
+
+                ImageView icon = inputView.findViewById(R.id.icon);
+                icon.setImageResource(getWidgetIcon(outputType.name));
 
                 // Set param label
                 TextView label = inputView.findViewById(R.id.widget_label);
@@ -388,6 +351,36 @@ public class InterventionFormFragment extends Fragment {
         return list;
     }
 
+    public static int getWidgetIcon(String refName) {
+
+        List<String> targets = Arrays.asList("plant", "land_parcel", "cultivation");
+        List<String> drivers = Arrays.asList("driver", "forager_driver");
+        List<String> doers =  Arrays.asList("caregiver", "doer", "worker", "operator", "inseminator", "responsible", "wine_man", "mechanic");
+        List<String> inputs =  Arrays.asList("animal_food", "animal_medicine", "bottles",
+                "cleaner_product", "construction_material", "consumable_part", "consumable_part",
+                "corks", "disinfectant", "energy", "fertilizer", "food", "fuel", "herbicide",
+                "item", "litter", "mulching_material", "oenological_intrant", "oil",
+                "packaging_material", "plant_medicine", "plants", "pollinating_insects",
+                "product_to_prepare", "product_to_sort", "protective_canvas", "protective_net",
+                "replacement_part", "seedlings", "seeds", "stakes", "straw_to_bunch", "tunnel",
+                "vial", "water", "wine", "wire_fence");
+
+
+
+        if (refName.equals("tractor"))
+            return R.drawable.icon_tractor;
+        if (targets.contains(refName))
+            return R.drawable.icon_field;
+        if (drivers.contains(refName))
+            return R.drawable.icon_driver;
+        if (doers.contains(refName))
+            return R.drawable.icon_doer;
+        if (inputs.contains(refName))
+            return R.drawable.icon_sack;
+
+        return R.drawable.icon_trailer;
+    }
+
     private void sortAlphabetically(List<GenericItem> list) {
         Collections.sort(list, (ele1, ele2) -> {
             Collator localeCollator = Collator.getInstance(Locale.FRANCE);
@@ -400,3 +393,5 @@ public class InterventionFormFragment extends Fragment {
     }
 
 }
+
+

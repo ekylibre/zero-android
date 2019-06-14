@@ -8,12 +8,24 @@
     android:padding="16dp"
     android:background="@drawable/border_bottom">
 
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/icon"
+        android:layout_width="wrap_content"
+        android:layout_height="24dp"
+        app:srcCompat="@drawable/icon_calendar"
+        app:layout_constraintTop_toTopOf="@id/widget_add"
+        app:layout_constraintBottom_toBottomOf="@id/widget_add"
+        app:layout_constraintStart_toStartOf="parent"
+        android:adjustViewBounds="true"
+        android:scaleType="fitXY"/>
+
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/widget_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toEndOf="@id/icon"
         app:layout_constraintBaseline_toBaselineOf="@id/widget_add"
+        android:layout_marginStart="16dp"
         android:text="@string/input"
         android:textStyle="bold"/>
 

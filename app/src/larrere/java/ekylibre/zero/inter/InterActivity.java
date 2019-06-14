@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
@@ -48,6 +49,7 @@ import ekylibre.zero.inter.fragment.InterventionFormFragment;
 import ekylibre.zero.inter.fragment.ParamChoiceFragment;
 import ekylibre.zero.inter.fragment.ProcedureChoiceFragment;
 import ekylibre.zero.inter.fragment.ProcedureFamilyChoiceFragment;
+import ekylibre.zero.inter.fragment.SimpleChoiceFragment;
 import ekylibre.zero.inter.model.CropParcel;
 import ekylibre.zero.inter.model.GenericItem;
 import ekylibre.zero.inter.model.Period;
@@ -56,7 +58,8 @@ import ekylibre.zero.inter.model.Period;
 public class InterActivity extends AppCompatActivity implements FragmentManager.OnBackStackChangedListener,
         ProcedureFamilyChoiceFragment.OnFragmentInteractionListener,
         ProcedureChoiceFragment.OnFragmentInteractionListener,
-        InterventionFormFragment.OnFragmentInteractionListener {
+        InterventionFormFragment.OnFragmentInteractionListener,
+        SimpleChoiceFragment.OnFragmentInteractionListener {
 
     private static final String TAG = "NewInterventionActivity";
 
@@ -160,6 +163,15 @@ public class InterActivity extends AppCompatActivity implements FragmentManager.
             case "land_parcel":
             case "cultivation":
                 fragment = CropParcelChoiceFragment.newInstance(fragmentTag, filter);
+                break;
+
+                // TODO -> manage zone group
+            case "zone_plant":
+            case "zone_land_parcel":
+                // Role = zoneId here ton keep ref to current zone edition
+                // Zone item position passed with role variable
+                Log.i(TAG, "SimpleChoiceFragment.newInstance("+fragmentTag+", "+filter+", "+role+");");
+                fragment = SimpleChoiceFragment.newInstance(fragmentTag, filter, role);
                 break;
 
             default:
@@ -278,6 +290,11 @@ public class InterActivity extends AppCompatActivity implements FragmentManager.
             selectedProcedure = getProcedureItem(item.first);
             replaceFragmentWith(INTERVENTION_FORM, null, null);
         }
+    }
+
+    @Override
+    public void onItemChoosed() {
+        previousFragmentOrQuit();
     }
 
     /** *****************************************************************
@@ -457,37 +474,7 @@ public class InterActivity extends AppCompatActivity implements FragmentManager.
         // Finish //
         // ------ //
 
+        Toast.makeText(this, "L'intervention est enregistrée", Toast.LENGTH_LONG).show();
         finish();
-
-
-
-
-//
-//        String whereClause = DetailedInterventions._ID + "=?";
-//        String[] args = new String[] {String.valueOf(interId)};
-//
-//        try (Cursor cursor = cr.query(
-//                DetailedInterventions.CONTENT_URI,
-//                DetailedInterventions.PROJECTION_ALL,
-//                whereClause, args, null)) {
-//
-//            while (cursor != null && cursor.moveToNext())
-//                Log.i(TAG, "L'enregistrement est bien en base");
-//        }
-//
-
-
-//        // Trying sync query
-//        SQLiteDatabase db = new DatabaseHelper(this).getReadableDatabase();
-//
-//        // Get reference_name and reference_id of current parameter
-//        String query = "SELECT "+DetailedInterventionAttributes.REFERENCE_ID+", "+DetailedInterventionAttributes.REFERENCE_NAME
-//                +" FROM "+DetailedInterventionAttributes.TABLE_NAME+", "+ DetailedInterventions.TABLE_NAME
-//                +" WHERE "+DetailedInterventionAttributes.DETAILED_INTERVENTION_ID+"=?";
-//
-//        try(Cursor cursor = db.rawQuery(query, new String[] {String.valueOf(interId)})) {
-//            while (cursor != null && cursor.moveToNext())
-//                Log.e(TAG, "Raw query #" + cursor.getInt(0) + " " + cursor.getString(1));
-//        }
     }
 }

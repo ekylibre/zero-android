@@ -21,7 +21,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:barrierDirection="right"
-        app:constraint_referenced_ids="crop_variety_label,crop_number_label"
+        app:constraint_referenced_ids="crop_variety_label,batch_number_label"
         app:layout_constraintStart_toStartOf="parent" />
 
     <androidx.appcompat.widget.AppCompatImageView
@@ -43,8 +43,7 @@
         app:layout_constraintTop_toTopOf="parent"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
-        android:text="@string/land_parcel"
-        android:textStyle="bold"/>
+        android:text="@string/land_parcel" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/parcel_add"
@@ -67,6 +66,7 @@
         app:layout_constraintStart_toStartOf="@id/parcel_label"
         app:layout_constraintTop_toBottomOf="@id/parcel_label"
         tools:text="BAX2 Asperge Bio #2"
+        app:chipBackgroundColor="@color/white"
         android:visibility="gone" />
 
     <androidx.appcompat.widget.AppCompatTextView
@@ -77,8 +77,7 @@
         app:layout_constraintTop_toBottomOf="@id/parcel_chip"
         android:layout_marginTop="16dp"
         android:layout_marginStart="16dp"
-        android:text="@string/crop"
-        android:textStyle="bold"/>
+        android:text="@string/crop" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/crop_add"
@@ -101,6 +100,7 @@
         app:layout_constraintTop_toBottomOf="@id/crop_label"
         android:layout_marginStart="16dp"
         app:closeIconEnabled="true"
+        app:chipBackgroundColor="@color/white"
         android:visibility="gone" />
 
     <androidx.appcompat.widget.AppCompatTextView
@@ -111,9 +111,7 @@
         app:layout_constraintBaseline_toBaselineOf="@id/variety_value"
         android:layout_marginTop="8dp"
         android:text="@string/variety"
-        android:textStyle="bold"
-        android:labelFor="@id/variety_value"
-        android:visibility="gone"/>
+        android:labelFor="@id/variety_value" />
 
     <EditText
         android:id="@+id/variety_value"
@@ -133,20 +131,17 @@
         android:textSize="15sp"
         android:background="@drawable/field_rounded_white"
         tools:text="Apache"
-        tools:ignore="Autofill"
-        android:visibility="gone"/>
+        tools:ignore="Autofill" />
 
     <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/crop_number_label"
+        android:id="@+id/batch_number_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintStart_toStartOf="@id/crop_chip"
         app:layout_constraintBaseline_toBaselineOf="@id/batch_number_value"
         android:layout_marginTop="8dp"
         android:text="@string/batch_number"
-        android:textStyle="bold"
-        android:labelFor="@id/batch_number_value"
-        android:visibility="gone"/>
+        android:labelFor="@id/batch_number_value" />
 
     <EditText
         android:id="@+id/batch_number_value"
@@ -166,7 +161,13 @@
         android:textSize="15sp"
         android:background="@drawable/field_rounded_white"
         tools:text="P20190000256"
-        tools:ignore="Autofill,TextFields"
+        tools:ignore="Autofill,TextFields" />
+
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/group"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:constraint_referenced_ids="crop_variety_label,variety_value,batch_number_label,batch_number_value"
         android:visibility="gone"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

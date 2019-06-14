@@ -1,7 +1,5 @@
 package ekylibre.zero.inter.adapter;
 
-import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,103 +14,102 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import ekylibre.zero.BuildConfig;
+import butterknife.OnClick;
 import ekylibre.zero.R;
+import ekylibre.zero.inter.fragment.SimpleChoiceFragment.OnFragmentInteractionListener;
 import ekylibre.zero.inter.model.GenericItem;
+import ekylibre.zero.inter.model.Zone;
 
-
-public class SelectableItemAdapter extends RecyclerView.Adapter<SelectableItemAdapter.ViewHolder> {
+public class SimpleAdapter extends RecyclerView.Adapter<SimpleAdapter.ViewHolder> {
 
     private final List<GenericItem> dataset;
-    private final String paramType;
-    private final String role;
+    private final OnFragmentInteractionListener listener;
+    private final Zone zone;
+    private final String filter;
 
-    // CONTRUCTOR
-    public SelectableItemAdapter(List<GenericItem> dataset, String paramType, String role) {
+    public SimpleAdapter(List<GenericItem> dataset, OnFragmentInteractionListener listener,
+                         Zone zone, String filter) {
         this.dataset = dataset;
-        this.paramType = paramType;
-        this.role = role;
+        this.listener = listener;
+        this.zone = zone;
+        this.filter = filter;
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {
 
-        @BindView(R.id.item_first_line) TextView firstLine;
-        @BindView(R.id.item_second_line) TextView secondLine;
-        @BindView(R.id.item_third_line) TextView thirdLine;
         GenericItem item;
+
+        @BindView(R.id.item_first_line)
+        TextView firstLine;
+        @BindView(R.id.item_second_line)
+        TextView secondLine;
+        @BindView(R.id.item_third_line)
+        TextView thirdLine;
 
         ViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
-
-            itemView.setOnClickListener(v -> {
-                if (item.referenceName.containsKey(paramType)) {
-//                    item.isSelected = false;
-                    v.setSelected(false);
-                    item.referenceName.remove(paramType);
-                } else {
-//                    item.isSelected = true;
-                    v.setSelected(true);
-                    item.referenceName.put(paramType, role);
-                    if (BuildConfig.DEBUG)
-                        Log.i("Adapter", "Item role ("+role+") and type ("+ paramType+")");
-                }
-                notifyItemChanged(dataset.indexOf(item));
-            });
         }
 
         void display(int position) {
 
-            Context context = itemView.getContext();
+            // Save item reference
             item = dataset.get(position);
 
+            // Set background odd and even
             @ColorRes int colorId = position %2 == 1 ? R.color.another_light_grey : R.color.white;
-            @ColorRes int textColor = R.color.primary_text;
-            if (item.referenceName.containsKey(paramType)) {
-                colorId = R.color.basic_blue;
-                textColor = R.color.white;
-            }
+            itemView.setBackgroundColor(ContextCompat.getColor(itemView.getContext(), colorId));
 
+            // Set text
             firstLine.setText(item.name);
-            firstLine.setTextColor(ContextCompat.getColor(context, textColor));
 
+            // Compute second line
             StringBuilder sb = new StringBuilder();
-
             if (item.netSurfaceArea != null)
                 sb.append(item.netSurfaceArea);
             else if (item.workNumber != null)
                 sb.append(item.workNumber);
-
             if (item.number != null) {
                 if (sb.length() > 0)
                     sb.append(" - ");
                 sb.append(item.number);
             }
-
             if (item.containerName != null) {
                 if (sb.length() > 0)
                     sb.append(" - ");
                 sb.append(item.containerName);
             }
-
             secondLine.setText(sb.toString());
-            secondLine.setTextColor(ContextCompat.getColor(context, textColor));
-            itemView.setBackgroundColor(ContextCompat.getColor(context, colorId));
 
+            // Set third line if needed
             if (item.population != null) {
                 thirdLine.setText(item.population);
                 thirdLine.setVisibility(View.VISIBLE);
             } else
                 thirdLine.setVisibility(View.GONE);
         }
+
+        @OnClick
+        public void onClick(View view) {
+            if (getAdapterPosition() == RecyclerView.NO_POSITION)
+                return;
+
+            item.referenceName.put("zone", "targets");
+            if (filter.equals("is plant"))
+                zone.plant = item;
+            else
+                zone.landParcel = item;
+
+            // Send back item to activity
+//            listener.onItemChoosed(item, fragmentTag);
+            view.postDelayed(listener::onItemChoosed, 200);
+        }
     }
 
     @NonNull
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        // CREATE VIEW HOLDER AND INFLATING ITS XML LAYOUT
-        Context context = parent.getContext();
-        LayoutInflater inflater = LayoutInflater.from(context);
-        View view = inflater.inflate(R.layout.item_generic, parent, false);
+        View view = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.item_generic, parent, false);
         return new ViewHolder(view);
     }
 

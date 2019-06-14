@@ -8,7 +8,6 @@ import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -43,10 +42,6 @@ public class Grammar {
                     // If here reached, none of current extended ability variant match, skip item
                     continue itemLoop;
                 }
-
-                // Abilities test passed ! Do things here with matching item :
-                Log.i(TAG, "["+item.name+"] abilities -> " + Arrays.toString(item.abilities));
-                Log.d(TAG, "Required ability -> " + requiredAbilities);
 
                 if (search != null) {
 
