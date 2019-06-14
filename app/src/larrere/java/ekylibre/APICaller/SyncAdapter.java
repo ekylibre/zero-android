@@ -403,8 +403,8 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
             cv.put(ZeroContract.Plants.VARIETY, plants.getVariety());
             cv.put(ZeroContract.Plants.ACTIVITY_ID, plants.getActivityID());
             cv.put(ZeroContract.Plants.ACTIVITY_NAME, plants.getmActivityName());
-            cv.put(ZeroContract.Plants.NET_SURFACE_AREA, plants.net_surface_area);
-            cv.put(ZeroContract.Plants.DEAD_AT, plants.deadAt != null ? plants.deadAt.getTime() : null);
+//            cv.put(ZeroContract.Plants.NET_SURFACE_AREA, plants.net_surface_area);
+//            cv.put(ZeroContract.Plants.DEAD_AT, plants.deadAt != null ? plants.deadAt.getTime() : null);
             cv.put(ZeroContract.Plants.ACTIVE, true);
             cv.put(ZeroContract.Plants.USER, account.name);
             mContentResolver.insert(ZeroContract.Plants.CONTENT_URI, cv);

@@ -460,11 +460,11 @@ public class DatabaseHelper extends SQLiteOpenHelper
             }
             case 22:
             {
-
-                database.execSQL("ALTER TABLE " + ZeroContract.Plants.TABLE_NAME
-                        + " ADD " + ZeroContract.Plants.NET_SURFACE_AREA + " TEXT DEFAULT NULL");
-                database.execSQL("ALTER TABLE " + ZeroContract.Plants.TABLE_NAME
-                        + " ADD " + ZeroContract.Plants.DEAD_AT + " DATETIME DEFAULT NULL");
+//
+//                database.execSQL("ALTER TABLE " + ZeroContract.Plants.TABLE_NAME
+//                        + " ADD " + ZeroContract.Plants.NET_SURFACE_AREA + " TEXT DEFAULT NULL");
+//                database.execSQL("ALTER TABLE " + ZeroContract.Plants.TABLE_NAME
+//                        + " ADD " + ZeroContract.Plants.DEAD_AT + " DATETIME DEFAULT NULL");
 
                 database.execSQL("CREATE TABLE IF NOT EXISTS " + ZeroContract.DetailedInterventions.TABLE_NAME + "(" +
                         ZeroContract.DetailedInterventions._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
