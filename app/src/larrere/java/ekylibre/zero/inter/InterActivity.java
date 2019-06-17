@@ -411,7 +411,9 @@ public class InterActivity extends AppCompatActivity implements FragmentManager.
         // Get content resolver instance
         ContentResolver cr = getContentResolver();
 
-        // Creating base intervention record
+        // -------------------------- //
+        // Creating base intervention //
+        // -------------------------- //
         ContentValues cv = new ContentValues();
         cv.put(DetailedInterventions.PROCEDURE_NAME, selectedProcedure.name);
         cv.put(DetailedInterventions.CREATED_ON, new Date().getTime());

@@ -69,6 +69,7 @@ public abstract class UpdatableActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
+        Log.d(TAG, "onCreate()");
     }
 
     /*
@@ -96,7 +97,9 @@ public abstract class UpdatableActivity extends AppCompatActivity
     /*
     ** Called when sync starts
     */
-    protected void onSyncStart(){}
+    protected void onSyncStart(){
+        Log.e(TAG, "onSyncStart");
+    }
 
     /*
     ** Called when ping is sent
@@ -107,6 +110,7 @@ public abstract class UpdatableActivity extends AppCompatActivity
     protected void onResume()
     {
         super.onResume();
+        Log.d(TAG, "Register Broadcast receivers");
         registerReceiver(syncBroadcastReceiverFinish, syncIntentFilterFINISHED);
         registerReceiver(syncBroadcastReceiverStart, syncIntentFilterSTART);
         registerReceiver(pingBroadcastReceiver, pingIntentFilter);

@@ -77,6 +77,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
     private AccountManager mAccountManager;
     private Context mContext;
     private String lastSyncattribute;
+    private boolean error;
 
     /**
      * Set up the sync adapter
@@ -149,6 +150,8 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
         lastSyncattribute = lastSyncDate > 0 ? "?modified_since=" + sdf.format(new Date(lastSyncDate)) : null;
 
         mContext.sendBroadcast(new Intent(UpdatableActivity.ACTION_STARTED_SYNC));
+        Log.e(TAG, "ACTION_STARTED_SYNC");
+        error = false;
 
         if (BuildConfig.DEBUG)
             Log.i(TAG, "Destruction of tables which will be resynced !");
@@ -394,10 +397,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
             return;
 
         if (BuildConfig.DEBUG) Log.d(TAG, "Nombre de plants : " + plantsList.size() );
-        Iterator<Plant> plantsIterator = plantsList.iterator();
-        while(plantsIterator.hasNext())
-        {
-            Plant plants = plantsIterator.next();
+        for (Plant plants : plantsList) {
             cv.put(ZeroContract.Plants.EK_ID, plants.getId());
             cv.put(ZeroContract.Plants.NAME, plants.getName());
             cv.put(ZeroContract.Plants.VARIETY, plants.getVariety());

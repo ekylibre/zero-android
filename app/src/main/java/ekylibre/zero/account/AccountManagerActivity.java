@@ -108,7 +108,7 @@ public class AccountManagerActivity extends UpdatableActivity
     {
         if (account == null)
             return ;
-        Log.d("zero", "syncData: " + account.toString() + ", " + ZeroContract.AUTHORITY);
+        Log.d(TAG, "syncAll: " + account.toString() + ", " + ZeroContract.AUTHORITY);
         Bundle extras = new Bundle();
         extras.putBoolean(ContentResolver.SYNC_EXTRAS_MANUAL, true);
         extras.putBoolean(ContentResolver.SYNC_EXTRAS_EXPEDITED, true);

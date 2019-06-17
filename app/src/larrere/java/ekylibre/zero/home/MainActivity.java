@@ -98,6 +98,8 @@ public class MainActivity extends UpdatableActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        Log.e(TAG, "onCreate()");
+
         setTitle("Planning");
         PermissionManager.multiplePermissions(this, this);
 
@@ -119,8 +121,8 @@ public class MainActivity extends UpdatableActivity
         mNav_instance = (TextView)headerLayout.findViewById(R.id.nav_farmURL);
         mNav_avatar = headerLayout.findViewById(R.id.imageView);
         mPrgressBar = (ProgressBar)findViewById(R.id.progress_bar);
-        sync_data();
-        firstPass = false;
+//        sync_data();
+//        firstPass = false;
 
         // Load CSV if not already done
         SharedPreferences prefs = getSharedPreferences("prefs", Context.MODE_PRIVATE);
@@ -197,6 +199,7 @@ public class MainActivity extends UpdatableActivity
         setAccountName(mNavigationView);
         setTodolist();
         sync_data();
+        firstPass = false;
     }
 
     /*
@@ -439,9 +442,12 @@ public class MainActivity extends UpdatableActivity
     */
     private void    sync_data()
     {
-        if (mAccount == null || (syncedInLastMinutes() && !firstPass))
-            return ;
-        Log.d("zero", "syncData: " + mAccount.toString() + ", " + ZeroContract.AUTHORITY);
+        if (mAccount == null || (syncedInLastMinutes() && !firstPass)) {
+            Log.d(TAG, "syncData not running");
+            return;
+        }
+        onSyncStart();
+        Log.d(TAG, "syncData(): " + mAccount.toString() + ", " + ZeroContract.AUTHORITY);
         Bundle extras = new Bundle();
         extras.putBoolean(ContentResolver.SYNC_EXTRAS_MANUAL, true);
         extras.putBoolean(ContentResolver.SYNC_EXTRAS_EXPEDITED, true);
@@ -457,7 +463,7 @@ public class MainActivity extends UpdatableActivity
     {
         if (mAccount == null)
             return ;
-        Log.d("zero", "syncData: " + mAccount.toString() + ", " + ZeroContract.AUTHORITY);
+        Log.d(TAG, "forceSync_data(): " + mAccount.toString() + ", " + ZeroContract.AUTHORITY);
         Bundle extras = new Bundle();
         extras.putBoolean(ContentResolver.SYNC_EXTRAS_MANUAL, true);
         extras.putBoolean(ContentResolver.SYNC_EXTRAS_EXPEDITED, true);
@@ -490,6 +496,7 @@ public class MainActivity extends UpdatableActivity
 
     @Override
     protected void onSyncFinish() {
+        Log.e(TAG, "onSyncFinish()");
         todoListActivity.onSyncFinish();
         setTodolist();
         mPrgressBar.setVisibility(View.GONE);
@@ -499,6 +506,7 @@ public class MainActivity extends UpdatableActivity
 
     @Override
     protected void onSyncStart() {
+        Log.e(TAG, "onSyncStart()");
         todoListActivity.onSyncStart();
         mPrgressBar.setVisibility(View.VISIBLE);
         mPrgressBar.setScaleX((float) 0.15);
