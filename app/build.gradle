@@ -16,8 +16,8 @@ android {
         vectorDrawables.useSupportLibrary = true
         minSdkVersion 19
         targetSdkVersion 28
-        versionCode 26
-        versionName "0.7.6"
+        versionCode 29
+        versionName "0.7.9"
         resValue 'string', 'google_maps_key', google_maps_key
     }
     buildTypes {
