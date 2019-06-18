@@ -418,8 +418,16 @@ public class InterActivity extends AppCompatActivity implements FragmentManager.
         int counter;
         BigDecimal zero = new BigDecimal("0");
 
+        periodLoop: for (Period period1 : InterventionFormFragment.periodList)
+            for (Period period2 : InterventionFormFragment.periodList)
+                if (period2 != period1 && overlaps(period1, period2)) {
+                    valid = false;
+                    displayWarningDialog(this, "Attention, des periodes de travail se chevauchent");
+                    break periodLoop;
+                }
+
         // Check if one culture/parcel is set
-        if (selectedProcedure.target.size() > 0) {
+        if (valid && selectedProcedure.target.size() > 0) {
             counter = 0;
             for (GenericItem input : InterventionFormFragment.paramsList) {
                 if (input.referenceName.containsValue("targets")) {
@@ -526,6 +534,11 @@ public class InterActivity extends AppCompatActivity implements FragmentManager.
             Toast.makeText(this, "L'intervention est enregistrée", Toast.LENGTH_LONG).show();
             finish();
         }
+    }
+
+    private boolean overlaps(Period period1, Period period2){
+        return period1.startDateTime.getTime() <= period2.stopDateTime.getTime()
+                && period2.startDateTime.getTime() <= period1.stopDateTime.getTime();
     }
 
     private void displayWarningDialog(Context context, String text) {
