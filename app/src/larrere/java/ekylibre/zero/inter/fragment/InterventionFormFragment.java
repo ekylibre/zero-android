@@ -3,12 +3,14 @@ package ekylibre.zero.inter.fragment;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.database.Cursor;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -53,6 +55,7 @@ public class InterventionFormFragment extends Fragment {
 
     private Context context;
     private OnFragmentInteractionListener listener;
+    public static int scrollPosition = 0;
 
     public static List<Period> periodList;
     public static List<GenericItem> paramsList;
@@ -62,6 +65,7 @@ public class InterventionFormFragment extends Fragment {
     @BindView(R.id.widgets_container) LinearLayoutCompat widgetContainer;
     @BindView(R.id.form_period_recycler) RecyclerView periodRecycler;
     @BindView(R.id.form_period_add) TextView addPeriod;
+    @BindView(R.id.scroll_view) ScrollView scrollView;
 
 
     public static InterventionFormFragment newInstance() {
@@ -108,7 +112,7 @@ public class InterventionFormFragment extends Fragment {
             Log.d(TAG, "onCreateView");
 
         // Set title
-        InterActivity.actionBar.setTitle(Helper.getStringId(InterActivity.selectedProcedure.name));
+        InterActivity.actionBar.setTitle(Helper.getStringId(selectedProcedure.name));
 
         // Inflate layout
         View view = inflater.inflate(R.layout.fragment_intervention_form, container, false);
@@ -282,6 +286,11 @@ public class InterventionFormFragment extends Fragment {
             if (BuildConfig.DEBUG) Log.i(TAG, "tool --> " + entity.name);
             widgetContainer.addView(new WidgetParamView(context, listener, entity, paramsList, "equipments"));
         }
+
+        // Set ScrollView to previous position
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
+            scrollView.setOnScrollChangeListener((v, scrollX, scrollY, oldScrollX, oldScrollY) -> scrollPosition = scrollY);
+        scrollView.scrollTo(0, scrollPosition);
 
         return view;
     }

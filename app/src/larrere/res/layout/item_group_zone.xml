@@ -62,7 +62,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        app:closeIconEnabled="true"
         app:layout_constraintStart_toStartOf="@id/parcel_label"
         app:layout_constraintTop_toBottomOf="@id/parcel_label"
         tools:text="BAX2 Asperge Bio #2"
@@ -99,7 +98,6 @@
         app:layout_constraintStart_toStartOf="@id/crop_label"
         app:layout_constraintTop_toBottomOf="@id/crop_label"
         android:layout_marginStart="16dp"
-        app:closeIconEnabled="true"
         app:chipBackgroundColor="@color/white"
         android:visibility="gone" />
 

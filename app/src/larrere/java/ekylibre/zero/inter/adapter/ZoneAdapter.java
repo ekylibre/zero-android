@@ -53,6 +53,7 @@ public class ZoneAdapter extends RecyclerView.Adapter<ZoneAdapter.ViewHolder> {
         @BindView(R.id.zone_delete) ImageView deleteButton;
         @BindView(R.id.group) Group group;
 
+
         @OnTextChanged(R.id.variety_value)
         void onVarietyChanged(CharSequence value) {
             zone.newName = value.toString();
@@ -61,20 +62,6 @@ public class ZoneAdapter extends RecyclerView.Adapter<ZoneAdapter.ViewHolder> {
         @OnTextChanged(R.id.batch_number_value)
         void onBatchNumberChanged(CharSequence value) {
             zone.batchNumber = value.toString();
-        }
-
-        @OnClick(R.id.parcel_add)
-        void onParcelAdd() {
-            Log.e("Zone", "adapter position="+getAdapterPosition());
-            listener.onFormFragmentInteraction("zone_land_parcel",
-                    "is land_parcel", String.valueOf(getAdapterPosition()));
-        }
-
-        @OnClick(R.id.crop_add)
-        void onCropAdd() {
-            Log.e("Zone", "adapter position="+getAdapterPosition());
-            listener.onFormFragmentInteraction("zone_plant",
-                    "is plant", String.valueOf(getAdapterPosition()));
         }
 
         // Reference to the current zone
@@ -100,6 +87,18 @@ public class ZoneAdapter extends RecyclerView.Adapter<ZoneAdapter.ViewHolder> {
                 });
             } else
                 deleteButton.setVisibility(GONE);
+
+            parcelButton.setOnClickListener(v -> {
+                Log.e("Zone", "adapter position="+getAdapterPosition());
+                listener.onFormFragmentInteraction("zone_land_parcel",
+                        "is land_parcel", String.valueOf(getAdapterPosition()));
+            });
+
+            cropButton.setOnClickListener(v -> {
+                Log.e("Zone", "adapter position="+getAdapterPosition());
+                listener.onFormFragmentInteraction("zone_plant",
+                        "is plant", String.valueOf(getAdapterPosition()));
+            });
         }
         
         /**
@@ -115,12 +114,19 @@ public class ZoneAdapter extends RecyclerView.Adapter<ZoneAdapter.ViewHolder> {
             if (zone.landParcel != null) {
                 parcelChip.setText(zone.landParcel.name);
                 parcelChip.setVisibility(VISIBLE);
-            } else
+                parcelButton.setText("modifier");
+            } else {
                 parcelChip.setVisibility(GONE);
+                parcelButton.setText(context.getString(R.string.add));
+            }
 
             int visibility = zone.plant != null ? VISIBLE : GONE;
-            if (visibility == VISIBLE)
+            if (visibility == VISIBLE) {
                 cropChip.setText(zone.plant.name);
+                cropButton.setText("modifier");
+            } else {
+                cropButton.setText(context.getString(R.string.add));
+            }
             cropChip.setVisibility(visibility);
             group.setVisibility(visibility);
         }

@@ -3,6 +3,7 @@ package ekylibre.zero.inter;
 import android.accounts.Account;
 import android.content.ContentResolver;
 import android.content.ContentValues;
+import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.ArrayMap;
@@ -13,6 +14,7 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.util.Pair;
@@ -24,6 +26,7 @@ import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -411,77 +414,125 @@ public class InterActivity extends AppCompatActivity implements FragmentManager.
 
         // Do some validation before saving
 
-        //
+        boolean valid = true;
+        int counter;
+        BigDecimal zero = new BigDecimal("0");
 
-        // Get content resolver instance
-        ContentResolver cr = getContentResolver();
-
-        // -------------------------- //
-        // Creating base intervention //
-        // -------------------------- //
-        ContentValues cv = new ContentValues();
-        cv.put(DetailedInterventions.PROCEDURE_NAME, selectedProcedure.name);
-        cv.put(DetailedInterventions.CREATED_ON, new Date().getTime());
-        cv.put(DetailedInterventions.USER, account.name);
-
-        // Insert into database & get returning id
-        Uri uri = cr.insert(DetailedInterventions.CONTENT_URI, cv);
-        long interId = -1;
-        if (uri != null && uri.getLastPathSegment() != null)
-            interId = Long.valueOf(uri.getLastPathSegment());
-        if (BuildConfig.DEBUG)
-            Log.i(TAG, "Intervention id = " + interId);
-
-
-        // ------------ //
-        // Working time //
-        // ------------ //
-
-        List<ContentValues> bulkPeriodCv = new ArrayList<>();
-
-        for (Period period : InterventionFormFragment.periodList) {
-
-            ContentValues periodCv = new ContentValues();
-            periodCv.put(WorkingPeriodAttributes.DETAILED_INTERVENTION_ID, interId);
-            periodCv.put(WorkingPeriodAttributes.STARTED_AT, period.startDateTime.getTime());
-            periodCv.put(WorkingPeriodAttributes.STOPPED_AT, period.stopDateTime.getTime());
-            bulkPeriodCv.add(periodCv);
-        }
-        cr.bulkInsert(WorkingPeriodAttributes.CONTENT_URI, bulkPeriodCv.toArray(new ContentValues[0]));
-
-
-        // ----------------------- //
-        // Intervention parameters //
-        // ----------------------- //
-
-        List<ContentValues> bulkParamCv = new ArrayList<>();
-
-        for (GenericItem param : InterventionFormFragment.paramsList) {
-            for (Map.Entry<String, String> entry : param.referenceName.entrySet()) {
-
-                ContentValues paramCv = new ContentValues();
-                paramCv.put(DetailedInterventionAttributes.DETAILED_INTERVENTION_ID, interId);
-                paramCv.put(DetailedInterventionAttributes.REFERENCE_ID, param.id);
-                paramCv.put(DetailedInterventionAttributes.REFERENCE_NAME, entry.getKey());
-                paramCv.put(DetailedInterventionAttributes.ROLE, entry.getValue());
-
-                if (param.quantity != null ) {
-                    paramCv.put(DetailedInterventionAttributes.QUANTITY_VALUE, param.quantity.toString());
-                    paramCv.put(DetailedInterventionAttributes.QUANTITY_UNIT_NAME, param.unit);
+        // Check if one culture/parcel is set
+        if (selectedProcedure.target.size() > 0) {
+            counter = 0;
+            for (GenericItem input : InterventionFormFragment.paramsList) {
+                if (input.referenceName.containsValue("targets")) {
+                    ++counter;
+                    break;
                 }
-
-                bulkParamCv.add(paramCv);
+            }
+            // Check the is one input at least
+            if (counter == 0) {
+                valid = false;
+                displayWarningDialog(this, "Vous devez renseigner au moins une culture/parcelle");
             }
         }
-        // Insert into database & get returning id
-        cr.bulkInsert(DetailedInterventionAttributes.CONTENT_URI, bulkParamCv.toArray(new ContentValues[0]));
+
+        // Check if input needed and a quantity is set
+        if (valid && selectedProcedure.input.size() > 0) {
+            counter = 0;
+            for (GenericItem input : InterventionFormFragment.paramsList) {
+                if (input.referenceName.containsValue("inputs")) {
+                    ++counter;
+                    if (input.quantity == null || input.quantity.compareTo(zero) <= 0) {
+                        valid = false;
+                        displayWarningDialog(this, "If faut renseigner une quantité pour l'intrant");
+                        break;
+                    }
+                }
+            }
+            // Check the is one input at least
+            if (counter == 0) {
+                valid = false;
+                displayWarningDialog(this, "Vous devez renseigner au moins un intrant");
+            }
+        }
+
+        if (valid) {
+            // Get content resolver instance
+            ContentResolver cr = getContentResolver();
+
+            // -------------------------- //
+            // Creating base intervention //
+            // -------------------------- //
+            ContentValues cv = new ContentValues();
+            cv.put(DetailedInterventions.PROCEDURE_NAME, selectedProcedure.name);
+            cv.put(DetailedInterventions.CREATED_ON, new Date().getTime());
+            cv.put(DetailedInterventions.USER, account.name);
+
+            // Insert into database & get returning id
+            Uri uri = cr.insert(DetailedInterventions.CONTENT_URI, cv);
+            long interId = -1;
+            if (uri != null && uri.getLastPathSegment() != null)
+                interId = Long.valueOf(uri.getLastPathSegment());
+            if (BuildConfig.DEBUG)
+                Log.i(TAG, "Intervention id = " + interId);
 
 
-        // ------ //
-        // Finish //
-        // ------ //
+            // ------------ //
+            // Working time //
+            // ------------ //
 
-        Toast.makeText(this, "L'intervention est enregistrée", Toast.LENGTH_LONG).show();
-        finish();
+            List<ContentValues> bulkPeriodCv = new ArrayList<>();
+
+            for (Period period : InterventionFormFragment.periodList) {
+
+                ContentValues periodCv = new ContentValues();
+                periodCv.put(WorkingPeriodAttributes.DETAILED_INTERVENTION_ID, interId);
+                periodCv.put(WorkingPeriodAttributes.STARTED_AT, period.startDateTime.getTime());
+                periodCv.put(WorkingPeriodAttributes.STOPPED_AT, period.stopDateTime.getTime());
+                bulkPeriodCv.add(periodCv);
+            }
+            cr.bulkInsert(WorkingPeriodAttributes.CONTENT_URI, bulkPeriodCv.toArray(new ContentValues[0]));
+
+
+            // ----------------------- //
+            // Intervention parameters //
+            // ----------------------- //
+
+            List<ContentValues> bulkParamCv = new ArrayList<>();
+
+            for (GenericItem param : InterventionFormFragment.paramsList) {
+                for (Map.Entry<String, String> entry : param.referenceName.entrySet()) {
+
+                    ContentValues paramCv = new ContentValues();
+                    paramCv.put(DetailedInterventionAttributes.DETAILED_INTERVENTION_ID, interId);
+                    paramCv.put(DetailedInterventionAttributes.REFERENCE_ID, param.id);
+                    paramCv.put(DetailedInterventionAttributes.REFERENCE_NAME, entry.getKey());
+                    paramCv.put(DetailedInterventionAttributes.ROLE, entry.getValue());
+
+                    if (param.quantity != null) {
+                        paramCv.put(DetailedInterventionAttributes.QUANTITY_VALUE, param.quantity.toString());
+                        paramCv.put(DetailedInterventionAttributes.QUANTITY_UNIT_NAME, param.unit);
+                    }
+
+                    bulkParamCv.add(paramCv);
+                }
+            }
+            // Insert into database & get returning id
+            cr.bulkInsert(DetailedInterventionAttributes.CONTENT_URI, bulkParamCv.toArray(new ContentValues[0]));
+
+
+            // ------ //
+            // Finish //
+            // ------ //
+
+            Toast.makeText(this, "L'intervention est enregistrée", Toast.LENGTH_LONG).show();
+            finish();
+        }
+    }
+
+    private void displayWarningDialog(Context context, String text) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setMessage(text);
+        builder.setPositiveButton("Ok", (dialog, i) -> dialog.cancel());
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
 }
