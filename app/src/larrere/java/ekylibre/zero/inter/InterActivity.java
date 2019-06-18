@@ -342,13 +342,18 @@ public class InterActivity extends AppCompatActivity implements FragmentManager.
     @Override
     public void onBackStackChanged() {
         Fragment f = fragmentManager.findFragmentById(R.id.fragment_container);
-        if (BuildConfig.DEBUG)
-            Log.d(TAG, "onBackStackChanged");
 
         if (f instanceof InterventionFormFragment)
             currentFragment = INTERVENTION_FORM;
         else if (f instanceof ParamChoiceFragment)
             currentFragment = PARAM_FRAGMENT;
+        else if (f instanceof ProcedureChoiceFragment)
+            currentFragment = PROCEDURE_NATURE_FRAGMENT;
+
+        if (BuildConfig.DEBUG)
+            Log.d(TAG, "onBackStackChanged - current fragment is -> " + currentFragment);
+
+
 
         invalidateOptionsMenu();
 
