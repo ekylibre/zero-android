@@ -15,6 +15,8 @@ public final class ZeroContract {
 
     // Content URI for this provider
     public static final Uri CONTENT_URI = Uri.parse("content://" + AUTHORITY);
+    private static final String DIR_BASE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/vnd.ekylibre.zero.";
+    private static final String ITEM_BASE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/vnd.ekylibre.zero.";
 
     public interface InterventionsColumns extends BaseColumns {
         String TABLE_NAME = "intervention";
@@ -139,6 +141,8 @@ public final class ZeroContract {
         String USER = "user";
         String ACTIVITY_ID = "activity_id";
         String ACTIVITY_NAME = "activity_name";
+        String NET_SURFACE_AREA = "net_surface_area";
+        String DEAD_AT = "dead_at";
     }
 
     public interface ContactsColumns extends BaseColumns {
@@ -218,13 +222,118 @@ public final class ZeroContract {
         String POSITION = "position";
     }
 
-    public static final class Crumbs implements CrumbsColumns {
+    public interface EquipmentColumns {
+        String TABLE_NAME = "equipments";
+        String EK_ID = "ek_id";
+        String NAME = "name";
+        String WORK_NUMBER = "work_number";
+        String NUMBER = "number";
+        String VARIETY = "variety";
+        String ABILITIES = "abilities";
+        String DEAD_AT = "dead_at";
+        String USER = "user";
+    }
+
+    public interface WorkerColumns {
+        String TABLE_NAME = "workers";
+        String EK_ID = "ek_id";
+        String NAME = "name";
+        String NUMBER = "number";
+        String WORK_NUMBER = "work_number";
+        String VARIETY = "variety";
+        String ABILITIES = "abilities";
+        String DEAD_AT = "dead_at";
+        String USER = "user";
+    }
+
+    public interface LandParcelColumns {
+        String TABLE_NAME = "land_parcels";
+        String EK_ID = "ek_id";
+        String NAME = "name";
+        String NET_SURFACE_AREA = "net_surface_area";
+        String DEAD_AT = "dead_at";
+        String USER = "user";
+    }
+
+    public interface BuildingDivisionsColumns {
+        String TABLE_NAME = "building_divisions";
+        String EK_ID = "ek_id";
+        String NAME = "name";
+        String NET_SURFACE_AREA = "net_surface_area";
+        String DEAD_AT = "dead_at";
+        String USER = "user";
+    }
+
+    public interface InputColumns {
+        String TABLE_NAME = "inputs";
+        String EK_ID = "ek_id";
+        String NAME = "name";
+        String NUMBER = "number";
+        String CONTAINER_NAME = "containerName";
+        String VARIETY = "variety";
+        String ABILITIES = "abilities";
+        String POPULATION = "population";
+        String USER = "user";
+    }
+
+    public interface OutputColumns {
+        String TABLE_NAME = "outputs";
+        String EK_ID = "ek_id";
+        String NAME = "name";
+        String VARIETY = "variety";
+        String NUMBER = "number";
+        String ABILITIES = "abilities";
+        String USER = "user";
+    }
+
+    public interface ProductColumns {
+        String TABLE_NAME = "products";
+        String EK_ID = "ek_id";
+        String NAME = "name";
+        String NUMBER = "number";
+        String WORK_NUMBER = "work_number";
+        String VARIETY = "variety";
+        String ABILITIES = "abilities";
+        String POPULATION = "population";
+        String UNIT = "unit";
+        String CONTAINER_NAME = "container_name";
+        String DEAD_AT = "dead_at";
+        String NET_SURFACE_AREA = "net_surface_area";
+        String USER = "user";
+    }
+
+    public interface DetailedInterventionColumns extends BaseColumns {
+        String TABLE_NAME = "detailed_interventions";  // carefull, intervention table name exists !
+        String PROCEDURE_NAME = "procedure_name";
+        String CREATED_ON = "created_on";
+        String EK_ID = "ek_id";
+        String USER = "user";
+    }
+
+    public interface DetailedInterventionAttributesColumns extends BaseColumns {
+        String TABLE_NAME = "detailed_intervention_attributes";  // carefull, intervention table name exists !
+        String DETAILED_INTERVENTION_ID = "detailed_intervention_id";
+        String ROLE = "role";
+        String REFERENCE_ID = "reference_id";
+        String REFERENCE_NAME = "reference_name";
+        String QUANTITY_VALUE = "quantity_value";
+        String QUANTITY_UNIT_NAME = "quantity_unit_name";
+    }
+
+    public interface WorkingPeriodAttributesColumns extends BaseColumns {
+        String TABLE_NAME = "working_period_attributes";
+        String DETAILED_INTERVENTION_ID = "detailed_intervention_id";
+        String STARTED_AT = "started_at";
+        String STOPPED_AT = "stopped_at";
+    }
+
+    public static final class Crumbs implements ekylibre.database.ZeroContract.CrumbsColumns {
         // Content URI for this table
-        public static final Uri CONTENT_URI = Uri.withAppendedPath(ZeroContract.CONTENT_URI, "crumbs");
+        public static final Uri CONTENT_URI = Uri.withAppendedPath(ekylibre.database.ZeroContract.CONTENT_URI, "crumbs");
         // MIME type for lists of records.
-        public static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/vnd.ekylibre.zero.crumbs";
+        public static final String CONTENT_TYPE = DIR_BASE + "crumbs";
         // MIME type for individual record.
-        public static final String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/vnd.ekylibre.zero.crumb";
+        public static final String CONTENT_ITEM_TYPE = ITEM_BASE + "crumb";
 
         public static final String[] PROJECTION_ALL = {_ID, TYPE, LATITUDE, LONGITUDE, READ_AT, ACCURACY, METADATA, SYNCED, FK_INTERVENTION};
         public static final String[] PROJECTION_NONE = {_ID};
@@ -233,13 +342,13 @@ public final class ZeroContract {
 
     }
 
-    public static final class Interventions implements InterventionsColumns {
+    public static final class Interventions implements ekylibre.database.ZeroContract.InterventionsColumns {
         // Content URI for this table
-        public static final Uri CONTENT_URI = Uri.withAppendedPath(ZeroContract.CONTENT_URI, "interventions");
+        public static final Uri CONTENT_URI = Uri.withAppendedPath(ekylibre.database.ZeroContract.CONTENT_URI, "interventions");
         // MIME type for lists of records.
-        public static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/vnd.ekylibre.zero.interventions";
+        public static final String CONTENT_TYPE = DIR_BASE + "interventions";
         // MIME type for individual record.
-        public static final String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/vnd.ekylibre.zero.intervention";
+        public static final String CONTENT_ITEM_TYPE = ITEM_BASE + "intervention";
 
         public static final String[] PROJECTION_ALL = {_ID};
         public static final String[] PROJECTION_BASIC = {_ID, NAME, DESCRIPTION, STARTED_AT,
@@ -256,13 +365,13 @@ public final class ZeroContract {
 
     }
 
-    public static final class InterventionParameters implements InterventionParametersColumns {
+    public static final class InterventionParameters implements ekylibre.database.ZeroContract.InterventionParametersColumns {
         // Content URI for this table
-        public static final Uri CONTENT_URI = Uri.withAppendedPath(ZeroContract.CONTENT_URI, "intervention_parameters");
+        public static final Uri CONTENT_URI = Uri.withAppendedPath(ekylibre.database.ZeroContract.CONTENT_URI, "intervention_parameters");
         // MIME type for lists of records.
-        public static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/vnd.ekylibre.zero.intervention_parameters";
+        public static final String CONTENT_TYPE = DIR_BASE + "intervention_parameters";
         // MIME type for individual record.
-        public static final String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/vnd.ekylibre.zero.intervention_parameter";
+        public static final String CONTENT_ITEM_TYPE = ITEM_BASE + "intervention_parameter";
 
         public static final String[] PROJECTION_ALL = {_ID};
         public static final String[] PROJECTION_NONE = {_ID};
@@ -276,13 +385,13 @@ public final class ZeroContract {
 
     }
 
-    public static final class WorkingPeriods implements WorkingPeriodsColumns {
+    public static final class WorkingPeriods implements ekylibre.database.ZeroContract.WorkingPeriodsColumns {
         // Content URI for this table
-        public static final Uri CONTENT_URI = Uri.withAppendedPath(ZeroContract.CONTENT_URI, "working_periods");
+        public static final Uri CONTENT_URI = Uri.withAppendedPath(ekylibre.database.ZeroContract.CONTENT_URI, "working_periods");
         // MIME type for lists of records.
-        public static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/vnd.ekylibre.zero.working_periods";
+        public static final String CONTENT_TYPE = DIR_BASE + "working_periods";
         // MIME type for individual record.
-        public static final String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/vnd.ekylibre.zero.working_periods";
+        public static final String CONTENT_ITEM_TYPE = ITEM_BASE + "working_periods";
 
         public static final String[] PROJECTION_ALL = {_ID};
         public static final String[] PROJECTION_POST = {_ID, STARTED_AT, STOPPED_AT, NATURE};
@@ -292,13 +401,13 @@ public final class ZeroContract {
 
     }
 
-    public static final class Issues implements IssuesColumns {
+    public static final class Issues implements ekylibre.database.ZeroContract.IssuesColumns {
         // Content URI for this table
-        public static final Uri CONTENT_URI = Uri.withAppendedPath(ZeroContract.CONTENT_URI, "issues");
+        public static final Uri CONTENT_URI = Uri.withAppendedPath(ekylibre.database.ZeroContract.CONTENT_URI, "issues");
         // MIME type for lists of records.
-        public static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/vnd.ekylibre.zero.issues";
+        public static final String CONTENT_TYPE = DIR_BASE + "issues";
         // MIME type for individual record.
-        public static final String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/vnd.ekylibre.zero.issue";
+        public static final String CONTENT_ITEM_TYPE = ITEM_BASE + "issue";
 
         public static final String[] PROJECTION_ALL = {_ID, NATURE, SEVERITY, EMERGENCY, SYNCED, DESCRIPTION, PINNED, SYNCED_AT, OBSERVED_AT, LATITUDE, LONGITUDE};
         public static final String[] PROJECTION_NONE = {_ID};
@@ -306,13 +415,13 @@ public final class ZeroContract {
         public static final String SORT_ORDER_DEFAULT = _ID + " ASC";
     }
 
-    public static final class PlantCountings implements PlantCountingsColumns {
+    public static final class PlantCountings implements ekylibre.database.ZeroContract.PlantCountingsColumns {
         // Content URI for this table
-        public static final Uri CONTENT_URI = Uri.withAppendedPath(ZeroContract.CONTENT_URI, "plant_countings");
+        public static final Uri CONTENT_URI = Uri.withAppendedPath(ekylibre.database.ZeroContract.CONTENT_URI, "plant_countings");
         // MIME type for lists of records.
-        public static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/vnd.ekylibre.zero.plant_countings";
+        public static final String CONTENT_TYPE = DIR_BASE + "plant_countings";
         // MIME type for individual record.
-        public static final String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/vnd.ekylibre.zero.plant_counting";
+        public static final String CONTENT_ITEM_TYPE = ITEM_BASE + "plant_counting";
 
         public static final String[] PROJECTION_ALL = {_ID, OBSERVED_AT, LATITUDE, LONGITUDE,
                 OBSERVATION,  PLANT_DENSITY_ABACUS_ITEM_ID, SYNCED_AT, PLANT_DENSITY_ABACUS_ID,
@@ -322,13 +431,13 @@ public final class ZeroContract {
         public static final String SORT_ORDER_DEFAULT = _ID + " ASC";
     }
 
-    public static final class PlantCountingItems implements PlantCountingItemsColumns {
+    public static final class PlantCountingItems implements ekylibre.database.ZeroContract.PlantCountingItemsColumns {
         // Content URI for this table
-        public static final Uri CONTENT_URI = Uri.withAppendedPath(ZeroContract.CONTENT_URI, "plant_counting_items");
+        public static final Uri CONTENT_URI = Uri.withAppendedPath(ekylibre.database.ZeroContract.CONTENT_URI, "plant_counting_items");
         // MIME type for lists of records.
-        public static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/vnd.ekylibre.zero.plant_counting_items";
+        public static final String CONTENT_TYPE = DIR_BASE + "plant_counting_items";
         // MIME type for individual record.
-        public static final String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/vnd.ekylibre.zero.plant_counting_item";
+        public static final String CONTENT_ITEM_TYPE = ITEM_BASE + "plant_counting_item";
 
         public static final String[] PROJECTION_ALL = {_ID, VALUE, PLANT_COUNTING_ID};
         public static final String[] PROJECTION_NONE = {_ID};
@@ -336,13 +445,13 @@ public final class ZeroContract {
         public static final String SORT_ORDER_DEFAULT = _ID + " ASC";
     }
 
-    public static final class PlantDensityAbaci implements PlantDensityAbaciColumns {
+    public static final class PlantDensityAbaci implements ekylibre.database.ZeroContract.PlantDensityAbaciColumns {
         // Content URI for this table
-        public static final Uri CONTENT_URI = Uri.withAppendedPath(ZeroContract.CONTENT_URI, "plant_density_abaci");
+        public static final Uri CONTENT_URI = Uri.withAppendedPath(ekylibre.database.ZeroContract.CONTENT_URI, "plant_density_abaci");
         // MIME type for lists of records.
-        public static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/vnd.ekylibre.zero.plant_density_abaci";
+        public static final String CONTENT_TYPE = DIR_BASE + "plant_density_abaci";
         // MIME type for individual record.
-        public static final String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/vnd.ekylibre.zero.plant_density_abacus";
+        public static final String CONTENT_ITEM_TYPE = ITEM_BASE + "plant_density_abacus";
 
         public static final String[] PROJECTION_ALL = {_ID, NAME, VARIETY, GERMINATION_PERCENTAGE, SEEDING_DENSITY_UNIT, SAMPLING_LENGTH_UNIT, ACTIVITY_ID};
         public static final String[] PROJECTION_NONE = {_ID};
@@ -350,13 +459,13 @@ public final class ZeroContract {
         public static final String SORT_ORDER_DEFAULT = _ID + " ASC";
     }
 
-    public static final class PlantDensityAbacusItems implements PlantDensityAbacusItemsColumns {
+    public static final class PlantDensityAbacusItems implements ekylibre.database.ZeroContract.PlantDensityAbacusItemsColumns {
         // Content URI for this table
-        public static final Uri CONTENT_URI = Uri.withAppendedPath(ZeroContract.CONTENT_URI, "plant_density_abacus_items");
+        public static final Uri CONTENT_URI = Uri.withAppendedPath(ekylibre.database.ZeroContract.CONTENT_URI, "plant_density_abacus_items");
         // MIME type for lists of records.
-        public static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/vnd.ekylibre.zero.plant_density_abacus_items";
+        public static final String CONTENT_TYPE = DIR_BASE + "plant_density_abacus_items";
         // MIME type for individual record.
-        public static final String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/vnd.ekylibre.zero.plant_density_abacus_item";
+        public static final String CONTENT_ITEM_TYPE = ITEM_BASE + "plant_density_abacus_item";
 
         public static final String[] PROJECTION_ALL = {_ID, SEEDING_DENSITY_VALUE, PLANTS_COUNT};
         public static final String[] PROJECTION_NONE = {_ID};
@@ -364,32 +473,32 @@ public final class ZeroContract {
         public static final String SORT_ORDER_DEFAULT = _ID + " ASC";
     }
 
-    public static final class Plants implements PlantsColumns {
+    public static final class Plants implements ekylibre.database.ZeroContract.PlantsColumns {
         // Content URI for this table
-        public static final Uri CONTENT_URI = Uri.withAppendedPath(ZeroContract.CONTENT_URI, "plants");
+        public static final Uri CONTENT_URI = Uri.withAppendedPath(ekylibre.database.ZeroContract.CONTENT_URI, "plants");
         // MIME type for lists of records.
-        public static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/vnd.ekylibre.zero.plants";
+        public static final String CONTENT_TYPE = DIR_BASE + "plants";
         // MIME type for individual record.
-        public static final String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/vnd.ekylibre.zero.plant";
+        public static final String CONTENT_ITEM_TYPE = ITEM_BASE + "plant";
 
         public static final String[] PROJECTION_ALL = {_ID, NAME, SHAPE, VARIETY, ACTIVE, ACTIVITY_ID};
         public static final String[] PROJECTION_OBS = {_ID, EK_ID, NAME, VARIETY, ACTIVITY_ID, ACTIVITY_NAME};
+        public static final String[] PROJECTION_INTER = {_ID, EK_ID, NAME, VARIETY, NET_SURFACE_AREA, DEAD_AT, USER};
         public static final String[] PROJECTION_NONE = {_ID};
 
         public static final String SORT_ORDER_DEFAULT = _ID + " ASC";
+        public static final String SORT_ORDER_NAME = NAME + " ASC";
     }
 
-    public static final class Contacts implements ContactsColumns
+    public static final class Contacts implements ekylibre.database.ZeroContract.ContactsColumns
     {
         // Content URI for this table
-        public static final Uri CONTENT_URI = Uri.withAppendedPath(ZeroContract.CONTENT_URI,
+        public static final Uri CONTENT_URI = Uri.withAppendedPath(ekylibre.database.ZeroContract.CONTENT_URI,
                 "contacts");
         // MIME type for lists of records.
-        public static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/vnd" +
-                ".ekylibre.zero.contacts";
+        public static final String CONTENT_TYPE = DIR_BASE + "/vnd.ekylibre.zero.contacts";
         // MIME type for individual record.
-        public static final String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE +
-                "/vnd.ekylibre.zero.contact";
+        public static final String CONTENT_ITEM_TYPE = ITEM_BASE + "contact";
 
         public static final String[] PROJECTION_ALL = {_ID, LAST_NAME, FIRST_NAME, USER, PICTURE};
         public static final String[] PROJECTION_NAME = {FIRST_NAME, LAST_NAME};
@@ -399,17 +508,14 @@ public final class ZeroContract {
 
     }
 
-    public static final class ContactParams implements ContactParamsColumns
+    public static final class ContactParams implements ekylibre.database.ZeroContract.ContactParamsColumns
     {
         // Content URI for this table
-        public static final Uri CONTENT_URI = Uri.withAppendedPath(ZeroContract.CONTENT_URI,
-                "contact_params");
+        public static final Uri CONTENT_URI = Uri.withAppendedPath(ekylibre.database.ZeroContract.CONTENT_URI, "contact_params");
         // MIME type for lists of records.
-        public static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/vnd" +
-                ".ekylibre.zero.contact_params";
+        public static final String CONTENT_TYPE = DIR_BASE + "contact_params";
         // MIME type for individual record.
-        public static final String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE +
-                "/vnd.ekylibre.zero.contact_param";
+        public static final String CONTENT_ITEM_TYPE = ITEM_BASE + "contact_param";
 
         public static final String[] PROJECTION_ALL = {_ID, FK_CONTACT, TYPE, EMAIL,
                 PHONE, MOBILE, WEBSITE, MAIL_LINES, POSTAL_CODE, CITY, COUNTRY};
@@ -419,17 +525,14 @@ public final class ZeroContract {
 
     }
 
-    public static final class LastSyncs implements LastSyncsColumns
+    public static final class LastSyncs implements ekylibre.database.ZeroContract.LastSyncsColumns
     {
         // Content URI for this table
-        public static final Uri CONTENT_URI = Uri.withAppendedPath(ZeroContract.CONTENT_URI,
-                "last_syncs");
+        public static final Uri CONTENT_URI = Uri.withAppendedPath(ekylibre.database.ZeroContract.CONTENT_URI, "last_syncs");
         // MIME type for lists of records.
-        public static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/vnd" +
-                ".ekylibre.zero.last_syncs";
+        public static final String CONTENT_TYPE = DIR_BASE + "last_syncs";
         // MIME type for individual record.
-        public static final String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE +
-                "/vnd.ekylibre.zero.last_syncs";
+        public static final String CONTENT_ITEM_TYPE = ITEM_BASE + "last_syncs";
 
         public static final String[] PROJECTION_ALL = {_ID, USER, TYPE, DATE};
         public static final String[] PROJECTION_DATE = {DATE};
@@ -439,14 +542,13 @@ public final class ZeroContract {
 
     }
 
-    public static final class Observations implements ObservationsColumns
+    public static final class Observations implements ekylibre.database.ZeroContract.ObservationsColumns
     {
         // Content URI for this table
         public static final Uri CONTENT_URI = Uri.withAppendedPath(
-                ZeroContract.CONTENT_URI,"observations");
+                ekylibre.database.ZeroContract.CONTENT_URI, TABLE_NAME);
         // MIME type for list and individual record.
-        public static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE +
-                "/vnd.ekylibre.zero.observations";
+        public static final String CONTENT_TYPE = DIR_BASE + TABLE_NAME;
 
         public static final String[] PROJECTION_ALL = {_ID, ACTIVITY_ID, OBSERVED_ON, PLANTS,
                 SCALE_ID, PICTURES, DESCRIPTION, LONGITUDE, LATITUDE, USER};
@@ -456,59 +558,157 @@ public final class ZeroContract {
 
     }
 
-    public static final class ObservationPlants implements ObservationPlantColumns
-    {
+    public static final class ObservationPlants implements ekylibre.database.ZeroContract.ObservationPlantColumns {
         // Content URI for this table
-        public static final Uri CONTENT_URI = Uri.withAppendedPath(
-                ZeroContract.CONTENT_URI,"observation_plants");
+        public static final Uri CONTENT_URI = getUri(TABLE_NAME);
         // MIME type for list and individual record.
-        public static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE +
-                "/vnd.ekylibre.zero.observation_plants";
+        public static final String CONTENT_TYPE = DIR_BASE + TABLE_NAME;
 
         public static final String[] PROJECTION_ALL = {_ID, FK_OBSERVATION, FK_PLANT, EKY_ID_PLANT};
 
         public static final String SORT_ORDER_DEFAULT = _ID + " ASC";
     }
 
-    public static final class ObservationIssues implements ObservationIssueColumns
-    {
+    public static final class ObservationIssues implements ekylibre.database.ZeroContract.ObservationIssueColumns {
         // Content URI for this table
         public static final Uri CONTENT_URI = Uri.withAppendedPath(
-                ZeroContract.CONTENT_URI,"observation_issues");
+                ekylibre.database.ZeroContract.CONTENT_URI, TABLE_NAME);
         // MIME type for list and individual record.
-        public static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE +
-                "/vnd.ekylibre.zero.observation_issues";
+        public static final String CONTENT_TYPE = DIR_BASE + TABLE_NAME;
 
         public static final String[] PROJECTION_ALL = {_ID, FK_OBSERVATION, FK_ISSUE, EKY_ID_ISSUE};
 
         public static final String SORT_ORDER_DEFAULT = _ID + " ASC";
     }
 
-    public static final class IssueNatures implements IssueNatureColumns {
+    public static final class IssueNatures implements ekylibre.database.ZeroContract.IssueNatureColumns {
 
         // Content URI for this table
         public static final Uri CONTENT_URI = Uri.withAppendedPath(
-                ZeroContract.CONTENT_URI,"issue_natures");
+                ekylibre.database.ZeroContract.CONTENT_URI, TABLE_NAME);
         // MIME type for list and individual record.
-        public static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE +
-                "/vnd.ekylibre.zero.issue_natures";
+        public static final String CONTENT_TYPE = DIR_BASE + TABLE_NAME;
 
         public static final String[] PROJECTION_ALL = {_ID, CATEGORY, LABEL, NATURE};
 
         public static final String SORT_ORDER_DEFAULT = LABEL + " ASC";
     }
 
-    public static final class VegetalScale implements VegetalScaleColumns {
+    public static final class VegetalScale implements ekylibre.database.ZeroContract.VegetalScaleColumns {
 
         // Content URI for this table
         public static final Uri CONTENT_URI = Uri.withAppendedPath(
-                ZeroContract.CONTENT_URI,"vegetal_scale");
+                ekylibre.database.ZeroContract.CONTENT_URI, TABLE_NAME);
         // MIME type for list and individual record.
-        public static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE +
-                "/vnd.ekylibre.zero.vegetal_scale";
+        public static final String CONTENT_TYPE = DIR_BASE + TABLE_NAME;
 
         public static final String[] PROJECTION_ALL = {_ID, REFERENCE, LABEL, VARIETY, POSITION};
 
         public static final String SORT_ORDER_DEFAULT = POSITION + " ASC";
+    }
+
+    public static final class Equipments implements ekylibre.database.ZeroContract.EquipmentColumns {
+
+        // Content URI for this table
+        public static final Uri CONTENT_URI = Uri.withAppendedPath(
+                ekylibre.database.ZeroContract.CONTENT_URI, TABLE_NAME);
+        // MIME type for list and individual record.
+        public static final String CONTENT_TYPE = DIR_BASE + TABLE_NAME;
+
+        public static final String[] PROJECTION_ALL = {EK_ID, NAME, NUMBER, WORK_NUMBER, VARIETY, ABILITIES};
+
+        public static final String SORT_ORDER_DEFAULT = NAME + " ASC";
+    }
+
+    public static final class Workers implements ekylibre.database.ZeroContract.WorkerColumns {
+
+        // Content URI for this table
+        public static final Uri CONTENT_URI = Uri.withAppendedPath(
+                ekylibre.database.ZeroContract.CONTENT_URI, TABLE_NAME);
+        // MIME type for list and individual record.
+        public static final String CONTENT_TYPE = DIR_BASE + TABLE_NAME;
+
+        public static final String[] PROJECTION_ALL = {EK_ID, NAME, NUMBER, WORK_NUMBER, ABILITIES};
+
+        public static final String SORT_ORDER_DEFAULT = NAME + " ASC";
+    }
+
+    public static final class LandParcels implements ekylibre.database.ZeroContract.LandParcelColumns {
+
+        // Content URI for this table
+        public static final Uri CONTENT_URI = Uri.withAppendedPath(
+                ekylibre.database.ZeroContract.CONTENT_URI, TABLE_NAME);
+        // MIME type for list and individual record.
+        public static final String CONTENT_TYPE = DIR_BASE + TABLE_NAME;
+
+        public static final String[] PROJECTION_ALL = {EK_ID, NAME, NET_SURFACE_AREA};
+
+        public static final String SORT_ORDER_DEFAULT = NAME + " ASC";
+    }
+
+    public static final class BuildingDivisions implements ekylibre.database.ZeroContract.BuildingDivisionsColumns {
+
+        // Content URI for this table
+        public static final Uri CONTENT_URI = Uri.withAppendedPath(
+                ekylibre.database.ZeroContract.CONTENT_URI, TABLE_NAME);
+        // MIME type for list and individual record.
+        public static final String CONTENT_TYPE = DIR_BASE + TABLE_NAME;
+
+        public static final String[] PROJECTION_ALL = {EK_ID, NAME, NET_SURFACE_AREA};
+
+        public static final String SORT_ORDER_DEFAULT = NAME + " ASC";
+    }
+
+    public static final class Inputs implements ekylibre.database.ZeroContract.InputColumns {
+
+        // Content URI for this table
+        public static final Uri CONTENT_URI = Uri.withAppendedPath(
+                ekylibre.database.ZeroContract.CONTENT_URI, TABLE_NAME);
+        // MIME type for list and individual record.
+        public static final String CONTENT_TYPE = DIR_BASE + TABLE_NAME;
+
+        public static final String[] PROJECTION_ALL = {EK_ID, NAME, NUMBER, VARIETY, ABILITIES, POPULATION, CONTAINER_NAME};
+
+        public static final String SORT_ORDER_DEFAULT = NAME + " ASC";
+    }
+
+    public static final class Outputs implements ekylibre.database.ZeroContract.OutputColumns {
+
+        public static final Uri CONTENT_URI = getUri(TABLE_NAME);
+        public static final String CONTENT_TYPE = DIR_BASE + TABLE_NAME;
+
+        public static final String[] PROJECTION_ALL = {EK_ID, NAME, VARIETY, NUMBER, ABILITIES};
+
+        public static final String SORT_ORDER_DEFAULT = NAME + " ASC";
+    }
+
+    public static final class Products implements ekylibre.database.ZeroContract.ProductColumns {
+        public static final Uri CONTENT_URI = getUri(TABLE_NAME);
+        public static final String CONTENT_TYPE = DIR_BASE + TABLE_NAME;
+        public static final String[] PROJECTION = {EK_ID, NAME, NUMBER, WORK_NUMBER, VARIETY,
+                ABILITIES, POPULATION, UNIT, CONTAINER_NAME, NET_SURFACE_AREA};
+        public static final String ORDER_BY_NAME = NAME + " ASC";
+    }
+
+    public static final class DetailedInterventions implements ekylibre.database.ZeroContract.DetailedInterventionColumns {
+        public static final Uri CONTENT_URI = getUri(TABLE_NAME);
+        public static final String CONTENT_TYPE = DIR_BASE + TABLE_NAME;
+        public static final String[] PROJECTION_ALL = {_ID, PROCEDURE_NAME};
+    }
+
+    public static final class DetailedInterventionAttributes implements ekylibre.database.ZeroContract.DetailedInterventionAttributesColumns {
+        public static final Uri CONTENT_URI = getUri(TABLE_NAME);
+        public static final String CONTENT_TYPE = DIR_BASE + TABLE_NAME;
+        public static final String[] PROJECTION_ALL = {ROLE, REFERENCE_ID, REFERENCE_NAME, QUANTITY_VALUE, QUANTITY_UNIT_NAME};
+    }
+
+    public static final class WorkingPeriodAttributes implements ekylibre.database.ZeroContract.WorkingPeriodAttributesColumns {
+        public static final Uri CONTENT_URI = getUri(TABLE_NAME);
+        public static final String CONTENT_TYPE = DIR_BASE + TABLE_NAME;
+        public static final String[] PROJECTION_ALL = {STARTED_AT, STOPPED_AT};
+    }
+
+    private static Uri getUri(String path) {
+        return Uri.withAppendedPath(ekylibre.database.ZeroContract.CONTENT_URI, path);
     }
 }

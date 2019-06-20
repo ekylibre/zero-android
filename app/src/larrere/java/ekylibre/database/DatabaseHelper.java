@@ -1,23 +1,15 @@
 package ekylibre.database;
 
-import android.content.ContentValues;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-
-import ekylibre.util.AccountTool;
-import ekylibre.util.CSVReader;
 import ekylibre.zero.BuildConfig;
-import ekylibre.zero.ObservationActivity;
 
 public class DatabaseHelper extends SQLiteOpenHelper
 {
-    private static final int DATABASE_VERSION = 21;
+    private static final int DATABASE_VERSION = 22;
 
     private static final String DATABASE_NAME = "zero";
 
@@ -32,9 +24,9 @@ public class DatabaseHelper extends SQLiteOpenHelper
 
 
     /*
-    ** Use this to enable constraint on foreign key, but it's actually not working
-    ** Crash on the onDelete dunno why => FOREIGN KEY constraint failed (code 787)
-    */
+     ** Use this to enable constraint on foreign key, but it's actually not working
+     ** Crash on the onDelete dunno why => FOREIGN KEY constraint failed (code 787)
+     */
 
 /*
     @Override
@@ -50,9 +42,9 @@ public class DatabaseHelper extends SQLiteOpenHelper
 
 
     /*
-    ** Called on the first creation of the DB if there is no DB with the same DATABASE_NAME
-    ** Parameters NO_VERSION is used to say there isn't any version at the creation
-    */
+     ** Called on the first creation of the DB if there is no DB with the same DATABASE_NAME
+     ** Parameters NO_VERSION is used to say there isn't any version at the creation
+     */
     @Override
     public void onCreate(SQLiteDatabase database)
     {
@@ -60,10 +52,10 @@ public class DatabaseHelper extends SQLiteOpenHelper
     }
 
     /*
-    ** Called when the newVersion is > than oldVersion
-    ** Execute migration from oldVersion + 1 to DATABASE_VERSION
-    ** note : +1 is applied to oldVersion to start at the next migration that is needed by current device
-    */
+     ** Called when the newVersion is > than oldVersion
+     ** Execute migration from oldVersion + 1 to DATABASE_VERSION
+     ** note : +1 is applied to oldVersion to start at the next migration that is needed by current device
+     */
     @Override
     public void onUpgrade(SQLiteDatabase database, int oldVersion, int newVersion)
     {
@@ -181,11 +173,11 @@ public class DatabaseHelper extends SQLiteOpenHelper
             case 7:
             {
                 /*
-                ** Sorry for this part of code,
-                ** SQLITE doesn't implement ALTER COLUMN and I had to change ID to be in
-                ** autoincrement mode and add the ekylibre instance ID
-                ** to deal with multi account problems on IDs.
-                */
+                 ** Sorry for this part of code,
+                 ** SQLITE doesn't implement ALTER COLUMN and I had to change ID to be in
+                 ** autoincrement mode and add the ekylibre instance ID
+                 ** to deal with multi account problems on IDs.
+                 */
                 database.execSQL("DROP TABLE IF EXISTS plant_density_abaci");
                 database.execSQL("DROP TABLE IF EXISTS plant_density_abacus_items");
                 database.execSQL("DROP TABLE IF EXISTS plants");
@@ -459,11 +451,114 @@ public class DatabaseHelper extends SQLiteOpenHelper
                         ZeroContract.ObservationIssues.FK_ISSUE + " INTEGER NOT NULL, " +
                         ZeroContract.ObservationIssues.EKY_ID_ISSUE + " INTEGER, " +
                         "FOREIGN KEY (" + ZeroContract.ObservationIssues.FK_OBSERVATION + ") " +
-                            "REFERENCES " + ZeroContract.Observations.TABLE_NAME + "(_id), " +
+                        "REFERENCES " + ZeroContract.Observations.TABLE_NAME + "(_id), " +
                         "FOREIGN KEY (" + ZeroContract.ObservationIssues.FK_ISSUE + ") " +
-                            "REFERENCES " + ZeroContract.Issues.TABLE_NAME + "(_id))");
+                        "REFERENCES " + ZeroContract.Issues.TABLE_NAME + "(_id))");
 
                 if (newVersion == 21)
+                    break;
+            }
+            case 22:
+            {
+//
+//                database.execSQL("ALTER TABLE " + ZeroContract.Plants.TABLE_NAME
+//                        + " ADD " + ZeroContract.Plants.NET_SURFACE_AREA + " TEXT DEFAULT NULL");
+//                database.execSQL("ALTER TABLE " + ZeroContract.Plants.TABLE_NAME
+//                        + " ADD " + ZeroContract.Plants.DEAD_AT + " DATETIME DEFAULT NULL");
+
+                database.execSQL("CREATE TABLE IF NOT EXISTS " + ZeroContract.DetailedInterventions.TABLE_NAME + "(" +
+                        ZeroContract.DetailedInterventions._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                        ZeroContract.DetailedInterventions.PROCEDURE_NAME + " TEXT NOT NULL, " +
+                        ZeroContract.DetailedInterventions.CREATED_ON + " DATETIME NOT NULL, " +
+                        ZeroContract.DetailedInterventions.EK_ID + " INTEGER, " +
+                        ZeroContract.DetailedInterventions.USER + " TEXT)");
+
+                database.execSQL("CREATE TABLE IF NOT EXISTS " + ZeroContract.DetailedInterventionAttributes.TABLE_NAME + "(" +
+                        ZeroContract.DetailedInterventionAttributes._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                        ZeroContract.DetailedInterventionAttributes.DETAILED_INTERVENTION_ID + " INTEGER NOT NULL, " +
+                        ZeroContract.DetailedInterventionAttributes.ROLE + " TEXT NOT NULL, " +
+                        ZeroContract.DetailedInterventionAttributes.REFERENCE_NAME + " TEXT NOT NULL, " +
+                        ZeroContract.DetailedInterventionAttributes.REFERENCE_ID + " INTEGER NOT NULL, " +
+                        ZeroContract.DetailedInterventionAttributes.QUANTITY_VALUE + " REAL, " +
+                        ZeroContract.DetailedInterventionAttributes.QUANTITY_UNIT_NAME + " TEXT, " +
+                        "FOREIGN KEY ("+ZeroContract.DetailedInterventionAttributes.DETAILED_INTERVENTION_ID +") " +
+                        "REFERENCES "+ZeroContract.DetailedInterventions.TABLE_NAME+"("+ZeroContract.DetailedInterventions._ID+"));");
+
+                database.execSQL("CREATE TABLE IF NOT EXISTS " + ZeroContract.WorkingPeriodAttributes.TABLE_NAME + "(" +
+                        ZeroContract.WorkingPeriodAttributes._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                        ZeroContract.WorkingPeriodAttributes.DETAILED_INTERVENTION_ID + " INTEGER NOT NULL, " +
+                        ZeroContract.WorkingPeriodAttributes.STARTED_AT + " DATETIME NOT NULL, " +
+                        ZeroContract.WorkingPeriodAttributes.STOPPED_AT + " DATETIME NOT NULL, " +
+                        "FOREIGN KEY ("+ZeroContract.WorkingPeriodAttributes.DETAILED_INTERVENTION_ID +") " +
+                        "REFERENCES "+ZeroContract.DetailedInterventions.TABLE_NAME+"("+ZeroContract.DetailedInterventions._ID+"));");
+
+                database.execSQL("CREATE TABLE IF NOT EXISTS " + ZeroContract.Equipments.TABLE_NAME + "(" +
+                        ZeroContract.Equipments.EK_ID + " INTEGER PRIMARY KEY, " +
+                        ZeroContract.Equipments.NAME + " TEXT NOT NULL, " +
+                        ZeroContract.Equipments.NUMBER + " TEXT, " +
+                        ZeroContract.Workers.WORK_NUMBER + " TEXT, " +
+                        ZeroContract.Equipments.VARIETY + " TEXT NOT NULL, " +
+                        ZeroContract.Equipments.ABILITIES + " TEXT, " +
+                        ZeroContract.Equipments.DEAD_AT + " DATETIME, " +
+                        ZeroContract.Equipments.USER + " TEXT)");
+
+                database.execSQL("CREATE TABLE IF NOT EXISTS " + ZeroContract.Workers.TABLE_NAME + "(" +
+                        ZeroContract.Workers.EK_ID + " INTEGER PRIMARY KEY, " +
+                        ZeroContract.Workers.NAME + " TEXT NOT NULL, " +
+                        ZeroContract.Workers.NUMBER + " TEXT, " +
+                        ZeroContract.Workers.WORK_NUMBER + " TEXT, " +
+                        ZeroContract.Workers.VARIETY + " TEXT NOT NULL, " +
+                        ZeroContract.Workers.ABILITIES + " TEXT, " +
+                        ZeroContract.Workers.DEAD_AT + " DATETIME, " +
+                        ZeroContract.Workers.USER + " TEXT)");
+
+                database.execSQL("CREATE TABLE IF NOT EXISTS " + ZeroContract.LandParcels.TABLE_NAME + "(" +
+                        ZeroContract.LandParcels.EK_ID + " INTEGER PRIMARY KEY, " +
+                        ZeroContract.LandParcels.NAME + " TEXT NOT NULL, " +
+                        ZeroContract.LandParcels.NET_SURFACE_AREA + " TEXT, " +
+                        ZeroContract.LandParcels.DEAD_AT + " DATETIME, " +
+                        ZeroContract.LandParcels.USER + " TEXT)");
+
+                database.execSQL("CREATE TABLE IF NOT EXISTS " + ZeroContract.BuildingDivisions.TABLE_NAME + "(" +
+                        ZeroContract.LandParcels.EK_ID + " INTEGER PRIMARY KEY, " +
+                        ZeroContract.LandParcels.NAME + " TEXT NOT NULL, " +
+                        ZeroContract.LandParcels.NET_SURFACE_AREA + " TEXT, " +
+                        ZeroContract.LandParcels.DEAD_AT + " DATETIME, " +
+                        ZeroContract.LandParcels.USER + " TEXT)");
+
+                database.execSQL("CREATE TABLE IF NOT EXISTS " + ZeroContract.Inputs.TABLE_NAME + "(" +
+                        ZeroContract.Inputs.EK_ID + " INTEGER PRIMARY KEY, " +
+                        ZeroContract.Inputs.NAME + " TEXT NOT NULL, " +
+                        ZeroContract.Inputs.VARIETY + " TEXT, " +
+                        ZeroContract.Inputs.ABILITIES + " TEXT, " +
+                        ZeroContract.Inputs.NUMBER + " TEXT, " +
+                        ZeroContract.Inputs.POPULATION + " REAL, " +
+                        ZeroContract.Inputs.CONTAINER_NAME + " TEXT, " +
+                        ZeroContract.Inputs.USER + " TEXT)");
+
+                database.execSQL("CREATE TABLE IF NOT EXISTS " + ZeroContract.Outputs.TABLE_NAME + "(" +
+                        ZeroContract.Outputs.EK_ID + " INTEGER PRIMARY KEY, " +
+                        ZeroContract.Outputs.NAME + " TEXT NOT NULL, " +
+                        ZeroContract.Outputs.VARIETY + " TEXT, " +
+                        ZeroContract.Outputs.NUMBER + " TEXT, " +
+                        ZeroContract.Outputs.ABILITIES + " TEXT, " +
+                        ZeroContract.Outputs.USER + " TEXT)");
+
+                database.execSQL("CREATE TABLE IF NOT EXISTS " + ZeroContract.Products.TABLE_NAME + "(" +
+                        ZeroContract.Products.EK_ID + " INTEGER PRIMARY KEY, " +
+                        ZeroContract.Products.NAME + " TEXT NOT NULL, " +
+                        ZeroContract.Products.NUMBER + " TEXT, " +
+                        ZeroContract.Products.WORK_NUMBER + " TEXT, " +
+                        ZeroContract.Products.VARIETY + " TEXT, " +
+                        ZeroContract.Products.ABILITIES + " TEXT, " +
+                        ZeroContract.Products.POPULATION + " TEXT, " +
+                        ZeroContract.Products.UNIT + " TEXT, " +
+                        ZeroContract.Products.CONTAINER_NAME + " TEXT, " +
+                        ZeroContract.Products.DEAD_AT + " DATETIME, " +
+                        ZeroContract.Products.NET_SURFACE_AREA + " TEXT, " +
+                        ZeroContract.Products.USER + " TEXT)");
+
+                if (newVersion == 22)
                     break;
             }
         }
