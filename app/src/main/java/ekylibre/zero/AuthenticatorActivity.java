@@ -72,6 +72,11 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity implemen
         if (mAccountName != null) {
             mAccountNameEdit.setText(mAccountName);
         }
+
+        if (BuildConfig.DEBUG) {
+            mAccountInstanceEdit.setText("https://fermes-larrere.larrere-dev.farm");
+            mAccountNameEdit.setText("admin@ekylibre.org");
+        }
     }
 
     public void signIn(View view) {

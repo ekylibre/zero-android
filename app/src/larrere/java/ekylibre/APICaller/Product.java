@@ -41,8 +41,8 @@ public class Product {
     public static List<Product> all(Instance instance, String attributes)
             throws JSONException, IOException, HTTPException, ParseException {
 
-        if (BuildConfig.DEBUG)
-            Log.d(TAG, "Get JSONArray => /api/v1/products || params = " + attributes);
+//        if (BuildConfig.DEBUG)
+//            Log.d(TAG, "Get JSONArray => /api/v1/products || params = " + attributes);
 
         JSONArray json = instance.getJSONArray("/api/v1/products", attributes);
         List<Product> array = new ArrayList<>();

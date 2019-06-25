@@ -450,7 +450,7 @@ public class InterActivity extends AppCompatActivity implements FragmentManager.
                     ++counter;
                     if (input.quantity == null || input.quantity.compareTo(zero) <= 0) {
                         valid = false;
-                        displayWarningDialog(this, "If faut renseigner une quantité pour l'intrant");
+                        displayWarningDialog(this, "Il faut renseigner une quantité pour l'intrant");
                         break;
                     }
                 }

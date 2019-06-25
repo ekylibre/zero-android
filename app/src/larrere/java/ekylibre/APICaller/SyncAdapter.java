@@ -59,6 +59,7 @@ import ekylibre.zero.BuildConfig;
 import ekylibre.zero.SettingsActivity;
 import ekylibre.zero.intervention.InterventionActivity;
 
+import static ekylibre.util.Helper.getTranslation;
 import static ekylibre.util.Helper.iso8601;
 import static ekylibre.util.Helper.simpleISO8601;
 
@@ -69,7 +70,7 @@ import static ekylibre.util.Helper.simpleISO8601;
 public class SyncAdapter extends AbstractThreadedSyncAdapter
 {
     public static final String TAG = "SyncAdapter";
-    public static final String ACCOUNT_TYPE = "ekylibre.account.basic";
+    public static final String ACCOUNT_TYPE = getTranslation("accountType");  // "ekylibre.account.basic.dev";
     public static final String SYNC_STARTED = "sync_started";
     public static final String SYNC_FINISHED = "sync_finished";
 
@@ -88,6 +89,8 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
         mContentResolver = context.getContentResolver();
         mAccountManager = AccountManager.get(context);
         mContext = context;
+
+        Log.e(TAG, "permsync " + getTranslation("permSyncData"));
     }
 
     /**
@@ -177,14 +180,14 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
             pullPlantDensityAbaci(account, extras, authority, provider, syncResult);
             pullPlants(account, extras, authority, provider, syncResult);
 
-            pullProducts(account);
-
             pushIssues(account, extras, authority, provider, syncResult);
             pushPlantCounting(account, extras, authority, provider, syncResult);
             pushIntervention(account, extras, authority, provider, syncResult);
             pullIntervention(account, extras, authority, provider, syncResult);
 
             pushObservation(account);
+
+            pullProducts(account);
 
             try {
                 pushDetailedIntervention(account);
@@ -1373,6 +1376,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
                         }
                     }
 
+                    // Add all attributs to corresponding payload value
                     if (workersArray.length() > 0)
                         payload.put("workers", workersArray);
 
@@ -1417,6 +1421,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
     private JSONObject composeQuantityJSONObject(Cursor curs) throws JSONException {
         JSONObject obj = new JSONObject();
         obj.put("product_id", curs.getInt(1));
+        obj.put("reference_name", curs.getString(2));
         if (!curs.isNull(3))
             obj.put("quantity_value", curs.getDouble(3));
         if (!curs.isNull(4))

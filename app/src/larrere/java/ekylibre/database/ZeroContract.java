@@ -3,6 +3,7 @@ package ekylibre.database;
 import android.content.ContentResolver;
 import android.net.Uri;
 import android.provider.BaseColumns;
+import android.util.Log;
 
 import ekylibre.zero.BuildConfig;
 
@@ -17,6 +18,10 @@ public final class ZeroContract {
     public static final Uri CONTENT_URI = Uri.parse("content://" + AUTHORITY);
     private static final String DIR_BASE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/vnd.ekylibre.zero.";
     private static final String ITEM_BASE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/vnd.ekylibre.zero.";
+
+    ZeroContract() {
+        Log.e("ZeroContract", "AUTHORITY = "+AUTHORITY);
+    }
 
     public interface InterventionsColumns extends BaseColumns {
         String TABLE_NAME = "intervention";

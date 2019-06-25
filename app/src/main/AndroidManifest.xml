@@ -16,11 +16,11 @@
 
 
     <permission
-        android:name="ekylibre.zero.permission.AUTHENTICATE_ACCOUNTS"
+        android:name="permAuthenticateAccounts"
         android:label="@string/permlab_authenticateAccounts"
         android:permissionGroup="android.permission-group.ACCOUNTS" />
     <permission
-        android:name="ekylibre.zero.permission.SYNC_DATA"
+        android:name="permSyncData"
         android:label="@string/permlab_syncData"
         android:permissionGroup="android.permission-group.SYNC_SETTINGS" />
 
@@ -40,8 +40,11 @@
     <uses-permission android:name="android.permission.READ_SYNC_STATS" />
     <uses-permission android:name="android.permission.USE_CREDENTIALS" />
     <uses-permission android:name="android.permission.WRITE_SYNC_SETTINGS" />
-    <uses-permission android:name="ekylibre.zero.permission.SYNC_DATA" />
-    <uses-permission android:name="ekylibre.zero.permission.AUTHENTICATE_ACCOUNTS" />
+    <!-- TODO -->
+    <uses-permission android:name="@string/permSyncData" />
+    <uses-permission android:name="@string/permAuthenticateAccounts" />
+    <!--<uses-permission android:name="ekylibre.zero.permission.SYNC_DATA" />-->
+    <!--<uses-permission android:name="ekylibre.zero.permission.AUTHENTICATE_ACCOUNTS" />-->
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.VIBRATE"/>
@@ -95,7 +98,7 @@
 
         <service
             android:name="ekylibre.service.AuthenticatorService"
-            android:permission="ekylibre.zero.permission.AUTHENTICATE_ACCOUNTS">
+            android:permission="@string/permAuthenticateAccounts">
             <intent-filter>
                 <action android:name="android.accounts.AccountAuthenticator" />
             </intent-filter>
@@ -114,7 +117,7 @@
         <!-- Content provider -->
         <provider
             android:name="ekylibre.database.ZeroProvider"
-            android:authorities="@string/providerName"
+            android:authorities="@string/applicationId"
             android:exported="false"
             android:syncable="true" />
 
@@ -122,7 +125,7 @@
         <service
             android:name="ekylibre.service.SyncService"
             android:label="@string/service_name"
-            android:permission="ekylibre.zero.permission.SYNC_DATA"
+            android:permission="@string/permSyncData"
             android:process=":sync">
             <intent-filter>
                 <action android:name="android.content.SyncAdapter" />
