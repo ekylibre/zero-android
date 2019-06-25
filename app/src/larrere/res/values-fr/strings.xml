@@ -468,10 +468,10 @@
     <string name="centimeter">cm</string>
     <string name="centimole">cmol</string>
     <string name="centimole_per_kilogram">cmol/kg</string>
-    <string name="cubic_centimeter">cm\u00B2</string>
-    <string name="cubic_meter">m\u00B2</string>
-    <string name="cubic_meter_per_hectare">m\u00B2/ha</string>
-    <string name="cubic_meter_per_hour">m\u00B2/h</string>
+    <string name="cubic_centimeter">cm\u00B3</string>
+    <string name="cubic_meter">m\u00B3</string>
+    <string name="cubic_meter_per_hectare">m\u00B3/ha</string>
+    <string name="cubic_meter_per_hour">m\u00B3/h</string>
     <string name="day">j.</string>
     <string name="degree">°</string>
     <string name="dozen">dz</string>
