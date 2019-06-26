@@ -41,6 +41,7 @@ import java.nio.charset.StandardCharsets;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
@@ -89,8 +90,6 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
         mContentResolver = context.getContentResolver();
         mAccountManager = AccountManager.get(context);
         mContext = context;
-
-        Log.e(TAG, "permsync " + getTranslation("permSyncData"));
     }
 
     /**
@@ -1309,7 +1308,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
 
                 // Create new DetailedIntervention payload
                 JSONObject payload = new JSONObject();
-                payload.put("zero_id", cursor.getInt(0));
+                payload.put("providers", Collections.singletonMap("zero_id", cursor.getInt(0)));
                 payload.put("procedure_name", cursor.getString(1));
 
                 // Prepare InterventionAttributes query
@@ -1378,13 +1377,13 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
 
                     // Add all attributs to corresponding payload value
                     if (workersArray.length() > 0)
-                        payload.put("workers", workersArray);
+                        payload.put("doers_attributes", workersArray);
 
                     if (equipmentsArray.length() > 0)
-                        payload.put("equipments", equipmentsArray);
+                        payload.put("tools_attributes", equipmentsArray);
 
                     if (targetsArray.length() > 0)
-                        payload.put("targets", targetsArray);
+                        payload.put("targets_attributes", targetsArray);
 
                     if (inputsArray.length() > 0)
                         payload.put("inputs_attributes", inputsArray);
@@ -1395,15 +1394,20 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
 
                 // Push the new DetailedIntervention
                 long resultId = DetailedIntervention.create(instance, payload);
-                if (BuildConfig.DEBUG)
-                    Log.e(TAG, "Detailed Intervention #" + resultId +" created !" );
 
-                // Save the returning id
-                ContentValues cv = new ContentValues();
-                cv.put(ZeroContract.DetailedInterventions.EK_ID, resultId);
-                Uri uri = Uri.withAppendedPath(ZeroContract.DetailedInterventions.CONTENT_URI, cursor.getString(0));
-                Log.e(TAG, "uri -> " + uri);
-                mContentResolver.update(uri, cv, null, null);
+                if (resultId != -1) {
+                    if (BuildConfig.DEBUG)
+                        Log.i(TAG, "Detailed Intervention #" + resultId + " created !");
+
+                    // Save the returning id
+                    ContentValues cv = new ContentValues();
+                    cv.put(ZeroContract.DetailedInterventions.EK_ID, resultId);
+                    Uri uri = Uri.withAppendedPath(ZeroContract.DetailedInterventions.CONTENT_URI, cursor.getString(0));
+                    Log.e(TAG, "uri -> " + uri);
+                    mContentResolver.update(uri, cv, null, null);
+                } else
+                    if (BuildConfig.DEBUG)
+                        Log.e(TAG, "Error while saving intervention...");
             }
         }
 

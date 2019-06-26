@@ -54,8 +54,6 @@ public class SelectableItemAdapter extends RecyclerView.Adapter<SelectableItemAd
 //                    item.isSelected = true;
                     v.setSelected(true);
                     item.referenceName.put(paramType, role);
-                    if (BuildConfig.DEBUG)
-                        Log.i("Adapter", "Item role ("+role+") and type ("+ paramType+")");
                 }
                 notifyItemChanged(dataset.indexOf(item));
             });

@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ekylibre.util.antlr4.Grammar;
+import ekylibre.zero.BuildConfig;
 import ekylibre.zero.R;
 import ekylibre.zero.home.Zero;
 import ekylibre.zero.inter.InterActivity;
@@ -62,7 +63,8 @@ public class ParamChoiceFragment extends Fragment {
             paramType = getArguments().getString("param_type");
             filter = getArguments().getString("filter");
             role = getArguments().getString("role");
-            Log.i(TAG, "ParamType = " + paramType);
+            if (BuildConfig.DEBUG)
+                Log.i(TAG, "ParamType = " + paramType);
         }
     }
 

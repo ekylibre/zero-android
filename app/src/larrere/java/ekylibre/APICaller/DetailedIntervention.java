@@ -14,6 +14,7 @@ public class DetailedIntervention {
             throws JSONException, IOException, HTTPException {
 
         JSONObject json = instance.post("/api/v1/interventions", attributes);
-        return json.getLong("id");
+
+        return json.isNull("id") ? -1 : json.getLong("id");
     }
 }

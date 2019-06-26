@@ -98,7 +98,8 @@ public class MainActivity extends UpdatableActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Log.e(TAG, "onCreate()");
+        if (BuildConfig.DEBUG)
+            Log.d(TAG, "onCreate()");
 
         setTitle("Planning");
         PermissionManager.multiplePermissions(this, this);
@@ -496,7 +497,6 @@ public class MainActivity extends UpdatableActivity
 
     @Override
     protected void onSyncFinish() {
-        Log.e(TAG, "onSyncFinish()");
         todoListActivity.onSyncFinish();
         setTodolist();
         mPrgressBar.setVisibility(View.GONE);
@@ -506,7 +506,6 @@ public class MainActivity extends UpdatableActivity
 
     @Override
     protected void onSyncStart() {
-        Log.e(TAG, "onSyncStart()");
         todoListActivity.onSyncStart();
         mPrgressBar.setVisibility(View.VISIBLE);
         mPrgressBar.setScaleX((float) 0.15);

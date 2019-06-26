@@ -77,7 +77,7 @@ public class ZoneAdapter extends RecyclerView.Adapter<ZoneAdapter.ViewHolder> {
             // Get context from view
             context = itemView.getContext();
 
-            if (getItemCount() > 0) {
+            if (getItemCount() > 1) {
                 // Set delete click listeners
                 deleteButton.setVisibility(VISIBLE);
                 deleteButton.setOnClickListener(v -> {
@@ -124,6 +124,8 @@ public class ZoneAdapter extends RecyclerView.Adapter<ZoneAdapter.ViewHolder> {
             if (visibility == VISIBLE) {
                 cropChip.setText(zone.plant.name);
                 cropButton.setText("modifier");
+                varietyEditText.setText(zone.newName);
+                batchNumberEditText.setText(zone.batchNumber);
             } else {
                 cropButton.setText(context.getString(R.string.add));
             }

@@ -9,7 +9,7 @@ import ekylibre.zero.BuildConfig;
 
 public class DatabaseHelper extends SQLiteOpenHelper
 {
-    private static final int DATABASE_VERSION = 22;
+    private static final int DATABASE_VERSION = 23;
 
     private static final String DATABASE_NAME = "zero";
 
@@ -559,6 +559,14 @@ public class DatabaseHelper extends SQLiteOpenHelper
                         ZeroContract.Products.USER + " TEXT)");
 
                 if (newVersion == 22)
+                    break;
+            }
+            case 23:
+            {
+                database.execSQL("ALTER TABLE " + ZeroContract.DetailedInterventionAttributes.TABLE_NAME
+                        + " ADD " + ZeroContract.DetailedInterventionAttributes.GROUP_ID + " INTEGER DEFAULT NULL");
+
+                if (newVersion == 23)
                     break;
             }
         }

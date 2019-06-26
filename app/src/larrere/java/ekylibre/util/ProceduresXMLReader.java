@@ -17,7 +17,7 @@ import ekylibre.zero.BuildConfig;
 
 public class ProceduresXMLReader {
 
-    private static final String TAG = "XMLParser";
+    private static final String TAG = "ProceduresXMLReader";
     private static final String ns = null;
     private boolean inGroup = false;
     private ProcedureEntity procedureEntity;
@@ -223,12 +223,6 @@ public class ProceduresXMLReader {
         parser.nextTag();
         parser.require(XmlPullParser.END_TAG, ns, "handler");
 
-        if (BuildConfig.DEBUG) {
-            Log.i(TAG, "Name = " + handlerEntity.name);
-            Log.i(TAG, "Indicator = " + handlerEntity.indicator);
-            Log.i(TAG, "Unit = " + handlerEntity.unit);
-        }
-
         return handlerEntity;
     }
 
@@ -243,12 +237,6 @@ public class ProceduresXMLReader {
 
         parser.nextTag();
         parser.require(XmlPullParser.END_TAG, ns, "handler");
-
-        if (BuildConfig.DEBUG) {
-            Log.i(TAG, "Name = " + handlerEntity.name);
-            Log.i(TAG, "Indicator = " + handlerEntity.indicator);
-            Log.i(TAG, "Unit = " + handlerEntity.unit);
-        }
 
         return handlerEntity;
     }
@@ -316,7 +304,7 @@ public class ProceduresXMLReader {
     private void skip(XmlPullParser parser) throws XmlPullParserException, IOException {
 
         if (BuildConfig.DEBUG)
-            Log.d(TAG, "skipping..." + parser.getName());
+            Log.v(TAG, "skipping " + parser.getName());
 
         if (parser.getEventType() != XmlPullParser.START_TAG)
             throw new IllegalStateException();

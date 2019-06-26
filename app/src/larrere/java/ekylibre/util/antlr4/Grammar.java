@@ -13,6 +13,7 @@ import java.util.List;
 
 import ekylibre.util.antlr4.QueryLanguageParser.AbilityContext;
 import ekylibre.util.ontology.Ontology;
+import ekylibre.zero.BuildConfig;
 import ekylibre.zero.inter.model.GenericItem;
 
 public class Grammar {
@@ -26,7 +27,8 @@ public class Grammar {
         // Prepare required abilities variants
         List<List<String>> requiredAbilities = computeAbilitiesPhrase(procedureFilter);
 
-        Log.e(TAG, "Mandatory abilities --> " + requiredAbilities);
+        if (BuildConfig.DEBUG)
+            Log.d(TAG, "Mandatory abilities --> " + requiredAbilities);
 
         // Loop over all available items
         itemLoop: for (GenericItem item : items) {

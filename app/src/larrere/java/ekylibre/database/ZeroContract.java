@@ -323,6 +323,7 @@ public final class ZeroContract {
         String REFERENCE_NAME = "reference_name";
         String QUANTITY_VALUE = "quantity_value";
         String QUANTITY_UNIT_NAME = "quantity_unit_name";
+        String GROUP_ID = "group_id";
     }
 
     public interface WorkingPeriodAttributesColumns extends BaseColumns {
@@ -330,6 +331,15 @@ public final class ZeroContract {
         String DETAILED_INTERVENTION_ID = "detailed_intervention_id";
         String STARTED_AT = "started_at";
         String STOPPED_AT = "stopped_at";
+    }
+
+    public interface GroupAttributesColumns extends BaseColumns {
+        String TABLE_NAME = "zones";
+        String DETAILED_INTERVENTION_ID = "detailed_intervention_id";
+        String ROLE = "role";
+        String REFERENCE_NAME = "reference_name";
+        String QUANTITY_VALUE = "quantity_value";
+        String QUANTITY_UNIT_NAME = "quantity_unit_name";
     }
 
     public static final class Crumbs implements CrumbsColumns {
@@ -704,7 +714,7 @@ public final class ZeroContract {
     public static final class DetailedInterventionAttributes implements DetailedInterventionAttributesColumns {
         public static final Uri CONTENT_URI = getUri(TABLE_NAME);
         public static final String CONTENT_TYPE = DIR_BASE + TABLE_NAME;
-        public static final String[] PROJECTION_ALL = {ROLE, REFERENCE_ID, REFERENCE_NAME, QUANTITY_VALUE, QUANTITY_UNIT_NAME};
+        public static final String[] PROJECTION_ALL = {ROLE, REFERENCE_ID, REFERENCE_NAME, QUANTITY_VALUE, QUANTITY_UNIT_NAME, GROUP_ID};
     }
 
     public static final class WorkingPeriodAttributes implements WorkingPeriodAttributesColumns {

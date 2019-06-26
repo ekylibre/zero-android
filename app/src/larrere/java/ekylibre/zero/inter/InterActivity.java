@@ -56,6 +56,7 @@ import ekylibre.zero.inter.fragment.SimpleChoiceFragment;
 import ekylibre.zero.inter.model.CropParcel;
 import ekylibre.zero.inter.model.GenericItem;
 import ekylibre.zero.inter.model.Period;
+import ekylibre.zero.inter.model.Zone;
 
 
 public class InterActivity extends AppCompatActivity implements FragmentManager.OnBackStackChangedListener,
@@ -135,7 +136,8 @@ public class InterActivity extends AppCompatActivity implements FragmentManager.
 
     void replaceFragmentWith(String fragmentTag, String filter, String role) {
 
-        Log.e(TAG, "Role -> " + role);
+        if (BuildConfig.DEBUG && role != null)
+            Log.i(TAG, "Role -> " + role);
 
         // Update current fragment reference
         currentFragment = fragmentTag;
@@ -285,11 +287,13 @@ public class InterActivity extends AppCompatActivity implements FragmentManager.
     public void onItemChoosed(Pair<String,String> item, String fragmentRef) {
 
         if (PROCEDURE_CATEGORY_FRAGMENT.equals(fragmentRef)) {
-            if (BuildConfig.DEBUG) Log.e(TAG, "category = " + item);
+            if (BuildConfig.DEBUG)
+                Log.i(TAG, "Category -> " + item);
             currentCategory = item;
             replaceFragmentWith(PROCEDURE_NATURE_FRAGMENT, null, null);
         } else {
-            if (BuildConfig.DEBUG) Log.e(TAG, "procedure = " + item);
+            if (BuildConfig.DEBUG)
+                Log.i(TAG, "Procedure -> " + item);
             selectedProcedure = getProcedureItem(item.first);
             replaceFragmentWith(INTERVENTION_FORM, null, null);
         }
@@ -309,7 +313,7 @@ public class InterActivity extends AppCompatActivity implements FragmentManager.
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         menu.clear();
-        if (BuildConfig.DEBUG) Log.d(TAG, "onCreateOptionMenu");
+        if (BuildConfig.DEBUG) Log.v(TAG, "onCreateOptionMenu");
 //        if (currentFragment.equals(INTERVENTION_FORM)) {
 //            menu.clear();
 //            menu.add()
@@ -323,7 +327,7 @@ public class InterActivity extends AppCompatActivity implements FragmentManager.
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
-        Log.d(TAG, "onPrepareOptionMenu");
+        Log.v(TAG, "onPrepareOptionMenu");
         switch (currentFragment) {
             case INTERVENTION_FORM:
                 menu.findItem(R.id.action_inter_save).setVisible(true);
@@ -354,7 +358,7 @@ public class InterActivity extends AppCompatActivity implements FragmentManager.
             currentFragment = PROCEDURE_NATURE_FRAGMENT;
 
         if (BuildConfig.DEBUG)
-            Log.d(TAG, "onBackStackChanged - current fragment is -> " + currentFragment);
+            Log.v(TAG, "onBackStackChanged - current fragment is -> " + currentFragment);
 
 
 
@@ -411,6 +415,19 @@ public class InterActivity extends AppCompatActivity implements FragmentManager.
      * Method used to verify and save intervention
      */
     private void saveIntervention() {
+
+        // test
+        for(Zone zone : InterventionFormFragment.zoneList) {
+            Log.i(TAG, "---");
+            Log.e(TAG, "zone " + zone.landParcel + " " + zone.plant + " " + zone.newName);
+        }
+
+        for (GenericItem item : InterventionFormFragment.paramsList) {
+            if (item.referenceName.containsValue("targets")) {
+                Log.i(TAG, "---");
+                Log.e(TAG, "item " + item);
+            }
+        }
 
         // Do some validation before saving
 
@@ -499,6 +516,32 @@ public class InterActivity extends AppCompatActivity implements FragmentManager.
             }
             cr.bulkInsert(WorkingPeriodAttributes.CONTENT_URI, bulkPeriodCv.toArray(new ContentValues[0]));
 
+//            // ---------------- //
+//            // Zones parameters //
+//            // ---------------- //
+//
+//            List<ContentValues> bulkZoneCv = new ArrayList<>();
+//
+//            for (Zone zone : InterventionFormFragment.zoneList) {
+//
+//                ContentValues zoneCv = new ContentValues();
+//                zoneCv.put(DetailedInterventionAttributes.DETAILED_INTERVENTION_ID, interId);
+//                zoneCv.put(DetailedInterventionAttributes.REFERENCE_ID, zone..id);
+//                zoneCv.put(DetailedInterventionAttributes.REFERENCE_NAME, entry.getKey());
+//                zoneCv.put(DetailedInterventionAttributes.ROLE, entry.getValue());
+//
+//                if (param.quantity != null) {
+//                    zoneCv.put(DetailedInterventionAttributes.QUANTITY_VALUE, param.quantity.toString());
+//                    zoneCv.put(DetailedInterventionAttributes.QUANTITY_UNIT_NAME, param.unit);
+//                }
+//
+//                    bulkZoneCv.add(zoneCv);
+//                    }
+//                }
+//            }
+//            // Insert into database & get returning id
+//            cr.bulkInsert(DetailedInterventionAttributes.CONTENT_URI, bulkParamCv.toArray(new ContentValues[0]));
+
 
             // ----------------------- //
             // Intervention parameters //
@@ -509,18 +552,23 @@ public class InterActivity extends AppCompatActivity implements FragmentManager.
             for (GenericItem param : InterventionFormFragment.paramsList) {
                 for (Map.Entry<String, String> entry : param.referenceName.entrySet()) {
 
-                    ContentValues paramCv = new ContentValues();
-                    paramCv.put(DetailedInterventionAttributes.DETAILED_INTERVENTION_ID, interId);
-                    paramCv.put(DetailedInterventionAttributes.REFERENCE_ID, param.id);
-                    paramCv.put(DetailedInterventionAttributes.REFERENCE_NAME, entry.getKey());
-                    paramCv.put(DetailedInterventionAttributes.ROLE, entry.getValue());
+                    // Do not treat zones here
+                    if (!entry.getValue().equals("zone")) {
 
-                    if (param.quantity != null) {
-                        paramCv.put(DetailedInterventionAttributes.QUANTITY_VALUE, param.quantity.toString());
-                        paramCv.put(DetailedInterventionAttributes.QUANTITY_UNIT_NAME, param.unit);
+                        ContentValues paramCv = new ContentValues();
+                        paramCv.put(DetailedInterventionAttributes.DETAILED_INTERVENTION_ID, interId);
+                        paramCv.put(DetailedInterventionAttributes.REFERENCE_ID, param.id);
+                        paramCv.put(DetailedInterventionAttributes.REFERENCE_NAME, entry.getKey());
+                        paramCv.put(DetailedInterventionAttributes.ROLE, entry.getValue());
+
+                        if (param.quantity != null) {
+                            paramCv.put(DetailedInterventionAttributes.QUANTITY_VALUE, param.quantity.toString());
+                            paramCv.put(DetailedInterventionAttributes.QUANTITY_UNIT_NAME, param.unit);
+                        }
+
+                        bulkParamCv.add(paramCv);
                     }
-
-                    bulkParamCv.add(paramCv);
+                    // TODO -> set group_id with current zone position in array
                 }
             }
             // Insert into database & get returning id

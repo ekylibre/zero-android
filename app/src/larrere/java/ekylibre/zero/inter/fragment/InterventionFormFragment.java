@@ -55,7 +55,7 @@ public class InterventionFormFragment extends Fragment {
 
     private Context context;
     private OnFragmentInteractionListener listener;
-    public static int scrollPosition = 0;
+    private static int scrollPosition = 0;
 
     public static List<Period> periodList;
     public static List<GenericItem> paramsList;
@@ -90,7 +90,8 @@ public class InterventionFormFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if (BuildConfig.DEBUG) Log.d(TAG, "onCreate");
+        if (BuildConfig.DEBUG)
+            Log.v(TAG, "onCreate");
 
         ContentResolver cr = context.getContentResolver();
 
@@ -109,7 +110,7 @@ public class InterventionFormFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         if (BuildConfig.DEBUG)
-            Log.d(TAG, "onCreateView");
+            Log.v(TAG, "onCreateView");
 
         // Set title
         InterActivity.actionBar.setTitle(Helper.getStringId(selectedProcedure.name));
@@ -188,11 +189,9 @@ public class InterventionFormFragment extends Fragment {
         // ------------- //
 
         for (GenericEntity inputType : selectedProcedure.input) {
-            if (BuildConfig.DEBUG) Log.i(TAG, "Build layout for input --> " + inputType.name);
-
 
             if (inputType.group == null) {
-                if (BuildConfig.DEBUG) Log.i(TAG, "Build layout for input --> " + inputType.name);
+                if (BuildConfig.DEBUG) Log.i(TAG, "input --> " + inputType.name);
 
                 // Get layout
                 View inputView = inflater.inflate(R.layout.widget_with_icon_and_recycler, container, false);
@@ -257,8 +256,6 @@ public class InterventionFormFragment extends Fragment {
                         getCurrentDataset(outputType.name), outputType);
                 inputRecycler.setAdapter(quantityItemAdapter);
                 inputRecycler.requestLayout();
-
-                Log.e(TAG, "Adapter size = " + quantityItemAdapter.getItemCount());
 
                 // Set visibility if one item is corresponding current input variety
                 int visibility = quantityItemAdapter.getItemCount() == 0 ? View.GONE : View.VISIBLE;
@@ -353,9 +350,6 @@ public class InterventionFormFragment extends Fragment {
                 list.add(item);
             }
         }
-
-        if (BuildConfig.DEBUG)
-            Log.e(TAG, "Param list size = "+ list.size());
 
         return list;
     }
