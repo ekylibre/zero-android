@@ -566,6 +566,24 @@ public class DatabaseHelper extends SQLiteOpenHelper
                 database.execSQL("ALTER TABLE " + ZeroContract.DetailedInterventionAttributes.TABLE_NAME
                         + " ADD " + ZeroContract.DetailedInterventionAttributes.GROUP_ID + " INTEGER DEFAULT NULL");
 
+                database.execSQL("CREATE TABLE IF NOT EXISTS " + ZeroContract.GroupZones.TABLE_NAME + "(" +
+                        ZeroContract.GroupZones._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                        ZeroContract.GroupZones.DETAILED_INTERVENTION_ID + " INTEGER NOT NULL, " +
+                        ZeroContract.GroupZones.TARGET_ID + " INTEGER, " +
+                        ZeroContract.GroupZones.OUTPUT_ID + " INTEGER, " +
+                        ZeroContract.GroupZones.NEW_NAME + " TEXT, " +
+                        ZeroContract.GroupZones.BATCH_NUMBER + " TEXT, " +
+                        "FOREIGN KEY ("+ZeroContract.GroupZones.DETAILED_INTERVENTION_ID +") " +
+                        "REFERENCES "+ZeroContract.DetailedInterventions.TABLE_NAME+"("+ZeroContract.DetailedInterventions._ID + "))");
+
+                database.execSQL("CREATE TABLE IF NOT EXISTS " + ZeroContract.Variants.TABLE_NAME + "(" +
+                        ZeroContract.Variants.EK_ID + " INTEGER PRIMARY KEY, " +
+                        ZeroContract.Variants.NAME + " INTEGER NOT NULL, " +
+                        ZeroContract.Variants.NUMBER + " TEXT, " +
+                        ZeroContract.Variants.VARIETY + " INTEGER NOT NULL, " +
+                        ZeroContract.Variants.ABILITIES + " TEXT ," +
+                        ZeroContract.Variants.USER + " TEXT)");
+
                 if (newVersion == 23)
                     break;
             }

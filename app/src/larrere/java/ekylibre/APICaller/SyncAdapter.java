@@ -41,7 +41,6 @@ import java.nio.charset.StandardCharsets;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
@@ -173,8 +172,8 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
 
             account = accountList[i];
 
-            if (BuildConfig.DEBUG) Log.d(TAG, "... Sync new account ...");
-            if (BuildConfig.DEBUG) Log.d(TAG, "... New account is " + account.name + " ...");
+            if (BuildConfig.DEBUG)
+                Log.d(TAG, "Sync account -> " + account.name);
 
             pullPlantDensityAbaci(account, extras, authority, provider, syncResult);
             pullPlants(account, extras, authority, provider, syncResult);
@@ -187,6 +186,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
             pushObservation(account);
 
             pullProducts(account);
+            pullVariants(account);
 
             try {
                 pushDetailedIntervention(account);
@@ -200,7 +200,10 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
 
         mContext.sendBroadcast(new Intent(UpdatableActivity.ACTION_FINISHED_SYNC));
         // Save last sync date
-        prefs.edit().putLong("last_sync_date", new Date().getTime()).apply();
+        if (error)
+            prefs.edit().putLong("last_sync_date", 0).apply();
+        else
+            prefs.edit().putLong("last_sync_date", new Date().getTime()).apply();
     }
 
     private void cleanLocalDb(Account account)
@@ -1245,6 +1248,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
             productList = Product.all(instance, lastSyncattribute);
         } catch (JSONException | IOException | HTTPException | ParseException e) {
             e.printStackTrace();
+            error = true;
         }
 
         if (productList == null)
@@ -1285,6 +1289,50 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
     }
 
     /**
+     *   The main request for variants
+     */
+    private void pullVariants(Account account) {
+
+        if (BuildConfig.DEBUG)
+            Log.i(TAG, "Beginning network variants synchronization");
+
+        ContentValues cv = new ContentValues();
+        Instance instance = getInstance(account);
+
+        List<Variant> variantList = null;
+
+        try {
+            variantList = Variant.all(instance, lastSyncattribute);
+        } catch (JSONException | IOException | HTTPException e) {
+            e.printStackTrace();
+        }
+
+        if (variantList == null)
+            return;
+
+        if (BuildConfig.DEBUG)
+            Log.d(TAG, "There is " + variantList.size() + " variants." );
+
+        for (Variant variant : variantList) {
+            cv.put(ZeroContract.Variants.EK_ID, variant.id);
+            cv.put(ZeroContract.Variants.NAME, variant.name);
+            cv.put(ZeroContract.Variants.VARIETY, variant.variety);
+            if (variant.abilities != null)
+                cv.put(ZeroContract.Variants.ABILITIES, variant.abilities);
+            if (variant.number != null)
+                cv.put(ZeroContract.Variants.NUMBER, variant.number);
+
+            cv.put(ZeroContract.Variants.USER, account.name);
+            mContentResolver.insert(ZeroContract.Variants.CONTENT_URI, cv);
+
+            cv.clear();
+        }
+
+        if (BuildConfig.DEBUG)
+            Log.i(TAG, "Finish network variants synchronization");
+    }
+
+    /**
      * Push detailed intervention to Ekylibre
      * @param account the current account
      */
@@ -1308,7 +1356,9 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
 
                 // Create new DetailedIntervention payload
                 JSONObject payload = new JSONObject();
-                payload.put("providers", Collections.singletonMap("zero_id", cursor.getInt(0)));
+                JSONObject provider = new JSONObject();
+                provider.put("zero_id", cursor.getInt(0));
+                payload.put("providers", provider);
                 payload.put("procedure_name", cursor.getString(1));
 
                 // Prepare InterventionAttributes query
@@ -1417,7 +1467,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
 
     private JSONObject composeJSONObject(Cursor curs) throws JSONException {
         JSONObject obj = new JSONObject();
-        obj.put("id", curs.getInt(1));
+        obj.put("product_id", curs.getInt(1));
         obj.put("reference_name", curs.getString(2));
         return obj;
     }

@@ -83,6 +83,10 @@ public class ZeroProvider extends ContentProvider {
 
     public static final int ROUTE_PRODUCTS_LIST = 1518;
     public static final int ROUTE_PRODUCTS_ITEM = 1519;
+    public static final int ROUTE_VARIANTS_LIST = 1520;
+    public static final int ROUTE_VARIANTS_ITEM = 1521;
+    public static final int ROUTE_GROUP_ZONES_LIST = 1522;
+    public static final int ROUTE_GROUP_ZONES_ITEM = 1523;
 
     // UriMatcher, used to decode incoming URIs.
     private static final UriMatcher URI_MATCHER = new UriMatcher(UriMatcher.NO_MATCH);
@@ -144,6 +148,10 @@ public class ZeroProvider extends ContentProvider {
         URI_MATCHER.addURI(ZeroContract.AUTHORITY, "building_divisions/#", ROUTE_BUILDING_DIVISIONS_ITEM);
         URI_MATCHER.addURI(ZeroContract.AUTHORITY, "products", ROUTE_PRODUCTS_LIST);
         URI_MATCHER.addURI(ZeroContract.AUTHORITY, "products/#", ROUTE_PRODUCTS_ITEM);
+        URI_MATCHER.addURI(ZeroContract.AUTHORITY, "variants", ROUTE_VARIANTS_LIST);
+        URI_MATCHER.addURI(ZeroContract.AUTHORITY, "variants/#", ROUTE_VARIANTS_ITEM);
+        URI_MATCHER.addURI(ZeroContract.AUTHORITY, "group_zones", ROUTE_GROUP_ZONES_LIST);
+        URI_MATCHER.addURI(ZeroContract.AUTHORITY, "group_zones/#", ROUTE_GROUP_ZONES_ITEM);
     }
 
     private DatabaseHelper mDatabaseHelper;
@@ -271,6 +279,14 @@ public class ZeroProvider extends ContentProvider {
             case ROUTE_PRODUCTS_LIST:
             case ROUTE_PRODUCTS_ITEM:
                 return ZeroContract.Products.CONTENT_TYPE;
+
+            case ROUTE_VARIANTS_LIST:
+            case ROUTE_VARIANTS_ITEM:
+                return ZeroContract.Variants.CONTENT_TYPE;
+
+            case ROUTE_GROUP_ZONES_LIST:
+            case ROUTE_GROUP_ZONES_ITEM:
+                return ZeroContract.GroupZones.CONTENT_TYPE;
 
             default:
                 throw new UnsupportedOperationException("Unknown URI: " + uri);
@@ -553,6 +569,24 @@ public class ZeroProvider extends ContentProvider {
                 cursor.setNotificationUri(contentResolver, uri);
                 return cursor;
 
+            case ROUTE_VARIANTS_ITEM:
+                builder.where(ZeroContract.Variants.EK_ID + "=?", id);
+            case ROUTE_VARIANTS_LIST:
+                builder.table(ZeroContract.Variants.TABLE_NAME)
+                        .where(selection, selectionArgs);
+                cursor = builder.query(database, projection, sortOrder);
+                cursor.setNotificationUri(contentResolver, uri);
+                return cursor;
+
+            case ROUTE_GROUP_ZONES_ITEM:
+                builder.where(ZeroContract.GroupZones._ID + "=?", id);
+            case ROUTE_GROUP_ZONES_LIST:
+                builder.table(ZeroContract.GroupZones.TABLE_NAME)
+                        .where(selection, selectionArgs);
+                cursor = builder.query(database, projection, sortOrder);
+                cursor.setNotificationUri(contentResolver, uri);
+                return cursor;
+
             default:
                 throw new UnsupportedOperationException("Unknown URI: " + uri);
         }
@@ -751,6 +785,20 @@ public class ZeroProvider extends ContentProvider {
                 result = Uri.parse(ZeroContract.Products.CONTENT_URI + "/" + id);
                 break;
             case ROUTE_PRODUCTS_ITEM:
+                throw new UnsupportedOperationException("Insert not supported on URI: " + uri);
+
+            case ROUTE_VARIANTS_LIST:
+                id = database.insertWithOnConflict(ZeroContract.Variants.TABLE_NAME, null, values, SQLiteDatabase.CONFLICT_REPLACE);
+                result = Uri.parse(ZeroContract.Variants.CONTENT_URI + "/" + id);
+                break;
+            case ROUTE_VARIANTS_ITEM:
+                throw new UnsupportedOperationException("Insert not supported on URI: " + uri);
+
+            case ROUTE_GROUP_ZONES_LIST:
+                id = database.insert(ZeroContract.GroupZones.TABLE_NAME, null, values);
+                result = Uri.parse(ZeroContract.GroupZones.CONTENT_URI + "/" + id);
+                break;
+            case ROUTE_GROUP_ZONES_ITEM:
                 throw new UnsupportedOperationException("Insert not supported on URI: " + uri);
 
                 default:
@@ -1098,6 +1146,30 @@ public class ZeroProvider extends ContentProvider {
                         .delete(database);
                 break;
 
+            case ROUTE_VARIANTS_LIST:
+                count = builder.table(ZeroContract.Variants.TABLE_NAME)
+                        .where(selection, selectionArgs)
+                        .delete(database);
+                break;
+            case ROUTE_VARIANTS_ITEM:
+                count = builder.table(ZeroContract.Variants.TABLE_NAME)
+                        .where(ZeroContract.Variants.EK_ID + "=?", id)
+                        .where(selection, selectionArgs)
+                        .delete(database);
+                break;
+
+            case ROUTE_GROUP_ZONES_LIST:
+                count = builder.table(ZeroContract.GroupZones.TABLE_NAME)
+                        .where(selection, selectionArgs)
+                        .delete(database);
+                break;
+            case ROUTE_GROUP_ZONES_ITEM:
+                count = builder.table(ZeroContract.GroupZones.TABLE_NAME)
+                        .where(ZeroContract.GroupZones._ID + "=?", id)
+                        .where(selection, selectionArgs)
+                        .delete(database);
+                break;
+
             default:
                 throw new UnsupportedOperationException("Unknown URI: " + uri);
         }
@@ -1441,6 +1513,30 @@ public class ZeroProvider extends ContentProvider {
             case ROUTE_PRODUCTS_ITEM:
                 count = builder.table(ZeroContract.Products.TABLE_NAME)
                         .where(ZeroContract.Products.EK_ID + "=?", id)
+                        .where(selection, selectionArgs)
+                        .update(database, values);
+                break;
+
+            case ROUTE_VARIANTS_LIST:
+                count = builder.table(ZeroContract.Variants.TABLE_NAME)
+                        .where(selection, selectionArgs)
+                        .update(database, values);
+                break;
+            case ROUTE_VARIANTS_ITEM:
+                count = builder.table(ZeroContract.Variants.TABLE_NAME)
+                        .where(ZeroContract.Variants.EK_ID + "=?", id)
+                        .where(selection, selectionArgs)
+                        .update(database, values);
+                break;
+
+            case ROUTE_GROUP_ZONES_LIST:
+                count = builder.table(ZeroContract.GroupZones.TABLE_NAME)
+                        .where(selection, selectionArgs)
+                        .update(database, values);
+                break;
+            case ROUTE_GROUP_ZONES_ITEM:
+                count = builder.table(ZeroContract.GroupZones.TABLE_NAME)
+                        .where(ZeroContract.GroupZones._ID + "=?", id)
                         .where(selection, selectionArgs)
                         .update(database, values);
                 break;

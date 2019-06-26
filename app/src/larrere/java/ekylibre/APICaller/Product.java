@@ -84,8 +84,10 @@ public class Product {
         if (object.has("container_name") && !object.isNull("container_name"))
             containerName = object.getString("container_name");
 
-        if (object.has("dead_at") && !object.isNull("dead_at"))
+        if (object.has("dead_at") && !object.isNull("dead_at")) {
+            Log.e(TAG, "dead_at" + object.getString("dead_at"));
             deadAt = iso8601.parse(object.getString("dead_at"));
+        }
 //            deadAt = iso8601Parser.parseDateTime(object.getString("dead_at")).toDate();
 
         if (object.has("net_surface_area") && !object.isNull("net_surface_area"))

@@ -153,7 +153,7 @@ public class Instance
             SSLSocketFactory sf = SSLSocketFactory.getSocketFactory();
             sf.setHostnameVerifier(SSLSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER);
             scheme = new Scheme("https", sf, 443);
-            Log.e(TAG, "Scheme 2 = " + scheme);
+            Log.d(TAG, "Scheme 2 = " + scheme);
             httpClient.getConnectionManager().getSchemeRegistry().register(scheme);
         }
 
@@ -269,7 +269,7 @@ public class Instance
         HttpClient httpClient = new DefaultHttpClient();
         if (BuildConfig.DEBUG) {
             Log.d("zero", "GET " + url);
-            Log.e(TAG, "Scheme 3 = " + scheme);
+            Log.d(TAG, "Scheme 3 = " + scheme);
             httpClient.getConnectionManager().getSchemeRegistry().register(scheme);
         }
         HttpGet httpGet = new HttpGet(url);
@@ -385,7 +385,7 @@ public class Instance
         HttpClient httpClient = new DefaultHttpClient();
         if (BuildConfig.DEBUG) {
             Log.d("zero", "GET " + url);
-            Log.e(TAG, "Scheme 4 = " + scheme);
+            Log.d(TAG, "Scheme 4 = " + scheme);
             httpClient.getConnectionManager().getSchemeRegistry().register(scheme);
         }
         HttpGet httpGet = new HttpGet(url);

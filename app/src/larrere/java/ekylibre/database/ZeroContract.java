@@ -307,6 +307,16 @@ public final class ZeroContract {
         String USER = "user";
     }
 
+    public interface VariantColumns {
+        String TABLE_NAME = "variants";
+        String EK_ID = "ek_id";
+        String NAME = "name";
+        String NUMBER = "number";
+        String VARIETY = "variety";
+        String ABILITIES = "abilities";
+        String USER = "user";
+    }
+
     public interface DetailedInterventionColumns extends BaseColumns {
         String TABLE_NAME = "detailed_interventions";  // carefull, intervention table name exists !
         String PROCEDURE_NAME = "procedure_name";
@@ -333,13 +343,13 @@ public final class ZeroContract {
         String STOPPED_AT = "stopped_at";
     }
 
-    public interface GroupAttributesColumns extends BaseColumns {
-        String TABLE_NAME = "zones";
+    public interface GroupZoneColumns extends BaseColumns {
+        String TABLE_NAME = "group_zones";
         String DETAILED_INTERVENTION_ID = "detailed_intervention_id";
-        String ROLE = "role";
-        String REFERENCE_NAME = "reference_name";
-        String QUANTITY_VALUE = "quantity_value";
-        String QUANTITY_UNIT_NAME = "quantity_unit_name";
+        String TARGET_ID = "target_id";
+        String OUTPUT_ID = "output_id";
+        String NEW_NAME = "new_name";
+        String BATCH_NUMBER = "batch_number";
     }
 
     public static final class Crumbs implements CrumbsColumns {
@@ -705,6 +715,13 @@ public final class ZeroContract {
         public static final String ORDER_BY_NAME = NAME + " ASC";
     }
 
+    public static final class Variants implements VariantColumns {
+        public static final Uri CONTENT_URI = getUri(TABLE_NAME);
+        public static final String CONTENT_TYPE = DIR_BASE + TABLE_NAME;
+        public static final String[] PROJECTION = {EK_ID, NAME, NUMBER, VARIETY, ABILITIES};
+        public static final String ORDER_BY_NAME = NAME + " ASC";
+    }
+
     public static final class DetailedInterventions implements DetailedInterventionColumns {
         public static final Uri CONTENT_URI = getUri(TABLE_NAME);
         public static final String CONTENT_TYPE = DIR_BASE + TABLE_NAME;
@@ -721,6 +738,12 @@ public final class ZeroContract {
         public static final Uri CONTENT_URI = getUri(TABLE_NAME);
         public static final String CONTENT_TYPE = DIR_BASE + TABLE_NAME;
         public static final String[] PROJECTION_ALL = {STARTED_AT, STOPPED_AT};
+    }
+
+    public static final class GroupZones implements GroupZoneColumns {
+        public static final Uri CONTENT_URI = getUri(TABLE_NAME);
+        public static final String CONTENT_TYPE = DIR_BASE + TABLE_NAME;
+        public static final String[] PROJECTION_ALL = {DETAILED_INTERVENTION_ID, TARGET_ID, OUTPUT_ID, NEW_NAME, BATCH_NUMBER};
     }
 
     private static Uri getUri(String path) {

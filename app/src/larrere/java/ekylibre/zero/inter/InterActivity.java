@@ -2,6 +2,7 @@ package ekylibre.zero.inter;
 
 import android.accounts.Account;
 import android.content.ContentResolver;
+import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
 import android.net.Uri;
@@ -36,6 +37,7 @@ import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import ekylibre.database.ZeroContract.GroupZones;
 import ekylibre.database.ZeroContract.DetailedInterventionAttributes;
 import ekylibre.database.ZeroContract.DetailedInterventions;
 import ekylibre.database.ZeroContract.WorkingPeriodAttributes;
@@ -493,9 +495,10 @@ public class InterActivity extends AppCompatActivity implements FragmentManager.
 
             // Insert into database & get returning id
             Uri uri = cr.insert(DetailedInterventions.CONTENT_URI, cv);
-            long interId = -1;
-            if (uri != null && uri.getLastPathSegment() != null)
-                interId = Long.valueOf(uri.getLastPathSegment());
+            long interId = ContentUris.parseId(uri);
+//            long interId = -1;
+//            if (uri != null && uri.getLastPathSegment() != null)
+//                interId = Long.valueOf(uri.getLastPathSegment());
             if (BuildConfig.DEBUG)
                 Log.i(TAG, "Intervention id = " + interId);
 
@@ -516,31 +519,42 @@ public class InterActivity extends AppCompatActivity implements FragmentManager.
             }
             cr.bulkInsert(WorkingPeriodAttributes.CONTENT_URI, bulkPeriodCv.toArray(new ContentValues[0]));
 
-//            // ---------------- //
-//            // Zones parameters //
-//            // ---------------- //
-//
-//            List<ContentValues> bulkZoneCv = new ArrayList<>();
-//
-//            for (Zone zone : InterventionFormFragment.zoneList) {
-//
-//                ContentValues zoneCv = new ContentValues();
-//                zoneCv.put(DetailedInterventionAttributes.DETAILED_INTERVENTION_ID, interId);
-//                zoneCv.put(DetailedInterventionAttributes.REFERENCE_ID, zone..id);
-//                zoneCv.put(DetailedInterventionAttributes.REFERENCE_NAME, entry.getKey());
-//                zoneCv.put(DetailedInterventionAttributes.ROLE, entry.getValue());
-//
-//                if (param.quantity != null) {
-//                    zoneCv.put(DetailedInterventionAttributes.QUANTITY_VALUE, param.quantity.toString());
-//                    zoneCv.put(DetailedInterventionAttributes.QUANTITY_UNIT_NAME, param.unit);
-//                }
-//
-//                    bulkZoneCv.add(zoneCv);
-//                    }
-//                }
-//            }
-//            // Insert into database & get returning id
-//            cr.bulkInsert(DetailedInterventionAttributes.CONTENT_URI, bulkParamCv.toArray(new ContentValues[0]));
+
+            // ---------------- //
+            // Zones parameters //
+            // ---------------- //
+
+            for (Zone zone : InterventionFormFragment.zoneList) {
+
+                // Save new zone
+                ContentValues zoneCv = new ContentValues();
+                zoneCv.put(GroupZones.DETAILED_INTERVENTION_ID, interId);
+//                zoneCv.put(GroupZones.TARGET_ID, targetId);
+//                zoneCv.put(GroupZones.OUTPUT_ID, outputId);
+                zoneCv.put(GroupZones.NEW_NAME, zone.newName);
+                zoneCv.put(GroupZones.BATCH_NUMBER, zone.batchNumber);
+
+                // Insert into database & get returning id
+                Uri zoneUri = cr.insert(GroupZones.CONTENT_URI, zoneCv);
+                long zoneId = ContentUris.parseId(zoneUri);
+
+                // Save target and get id back
+                Uri targetUri = cr.insert(DetailedInterventionAttributes.CONTENT_URI,
+                        getContentValue(interId, zone.landParcel, "land_parcel", "targets", zoneId));
+                long targetId = ContentUris.parseId(targetUri);
+
+                // Save output and get id back
+                Uri outputUri = cr.insert(DetailedInterventionAttributes.CONTENT_URI,
+                        getContentValue(interId, zone.plant, "plant", "outputs", zoneId));
+                long outputId = ContentUris.parseId(outputUri);
+
+                // Updates current zone with created ids
+                zoneCv.put(GroupZones.TARGET_ID, targetId);
+                zoneCv.put(GroupZones.OUTPUT_ID, outputId);
+
+                cr.update(zoneUri, zoneCv, null, null);
+            }
+
 
 
             // ----------------------- //
@@ -549,28 +563,12 @@ public class InterActivity extends AppCompatActivity implements FragmentManager.
 
             List<ContentValues> bulkParamCv = new ArrayList<>();
 
-            for (GenericItem param : InterventionFormFragment.paramsList) {
-                for (Map.Entry<String, String> entry : param.referenceName.entrySet()) {
+            for (GenericItem param : InterventionFormFragment.paramsList)
+                for (Map.Entry<String,String> entry : param.referenceName.entrySet())
+                    // Do not save zones parameters here
+                    if (!entry.getKey().equals("zone"))
+                        bulkParamCv.add(getContentValue(interId, param, entry.getKey(), entry.getValue(), null));
 
-                    // Do not treat zones here
-                    if (!entry.getValue().equals("zone")) {
-
-                        ContentValues paramCv = new ContentValues();
-                        paramCv.put(DetailedInterventionAttributes.DETAILED_INTERVENTION_ID, interId);
-                        paramCv.put(DetailedInterventionAttributes.REFERENCE_ID, param.id);
-                        paramCv.put(DetailedInterventionAttributes.REFERENCE_NAME, entry.getKey());
-                        paramCv.put(DetailedInterventionAttributes.ROLE, entry.getValue());
-
-                        if (param.quantity != null) {
-                            paramCv.put(DetailedInterventionAttributes.QUANTITY_VALUE, param.quantity.toString());
-                            paramCv.put(DetailedInterventionAttributes.QUANTITY_UNIT_NAME, param.unit);
-                        }
-
-                        bulkParamCv.add(paramCv);
-                    }
-                    // TODO -> set group_id with current zone position in array
-                }
-            }
             // Insert into database & get returning id
             cr.bulkInsert(DetailedInterventionAttributes.CONTENT_URI, bulkParamCv.toArray(new ContentValues[0]));
 
@@ -582,6 +580,23 @@ public class InterActivity extends AppCompatActivity implements FragmentManager.
             Toast.makeText(this, "L'intervention est enregistrée", Toast.LENGTH_LONG).show();
             finish();
         }
+    }
+
+    private ContentValues getContentValue(long interId, GenericItem param, String refName, String role, Long groupId) {
+        ContentValues paramCv = new ContentValues();
+        paramCv.put(DetailedInterventionAttributes.DETAILED_INTERVENTION_ID, interId);
+        paramCv.put(DetailedInterventionAttributes.REFERENCE_ID, param.id);
+        paramCv.put(DetailedInterventionAttributes.REFERENCE_NAME, refName);
+        paramCv.put(DetailedInterventionAttributes.ROLE, role);
+
+        if (groupId != null)
+            paramCv.put(DetailedInterventionAttributes.GROUP_ID, groupId);
+
+        if (param.quantity != null) {
+            paramCv.put(DetailedInterventionAttributes.QUANTITY_VALUE, param.quantity.toString());
+            paramCv.put(DetailedInterventionAttributes.QUANTITY_UNIT_NAME, param.unit);
+        }
+        return paramCv;
     }
 
     private boolean overlaps(Period period1, Period period2){
