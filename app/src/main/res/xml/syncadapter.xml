@@ -2,7 +2,7 @@
 <sync-adapter
     xmlns:android="http://schemas.android.com/apk/res/android"
     android="http://schemas.android.com/apk/res/android"
-    android:accountType="ekylibre.account.basic.dev"
+    android:accountType="@string/accountType"
     android:allowParallelSyncs="false"
     android:contentAuthority="@string/applicationId"
     android:isAlwaysSyncable="true"

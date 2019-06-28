@@ -26,6 +26,7 @@ import ekylibre.zero.inter.model.GenericItem;
 import ekylibre.zero.inter.model.Zone;
 
 import static ekylibre.zero.inter.fragment.InterventionFormFragment.paramsList;
+import static ekylibre.zero.inter.fragment.InterventionFormFragment.variantsList;
 
 
 public class SimpleChoiceFragment extends Fragment {
@@ -66,9 +67,11 @@ public class SimpleChoiceFragment extends Fragment {
         // Set fragment title to procedure family
         InterActivity.actionBar.setTitle(Helper.getTranslation(referenceName.replace("zone_", "")));
 
+        List<GenericItem> itemList = referenceName.equals("zone_plant") ? variantsList : paramsList;
+
         // Load required items
         dataset = new ArrayList<>();
-        dataset.addAll(Grammar.getFilteredItems(filter, paramsList, null));
+        dataset.addAll(Grammar.getFilteredItems(filter, itemList, null));
 
         View view;
 
@@ -97,13 +100,13 @@ public class SimpleChoiceFragment extends Fragment {
             searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
                 @Override public boolean onQueryTextSubmit(String text) {
                     dataset.clear();
-                    dataset.addAll(Grammar.getFilteredItems(filter, paramsList, text));
+                    dataset.addAll(Grammar.getFilteredItems(filter, itemList, text));
                     adapter.notifyDataSetChanged();
                     return false;
                 }
                 @Override public boolean onQueryTextChange(String text) {
                     dataset.clear();
-                    dataset.addAll(Grammar.getFilteredItems(filter, paramsList, text.length() > 1 ? text : null));
+                    dataset.addAll(Grammar.getFilteredItems(filter, itemList, text.length() > 1 ? text : null));
                     adapter.notifyDataSetChanged();
                     return false;
                 }
@@ -111,7 +114,7 @@ public class SimpleChoiceFragment extends Fragment {
 
             searchView.setOnCloseListener(() -> {
                 // Reset search
-                dataset = Grammar.getFilteredItems(filter, paramsList, null);
+                dataset = Grammar.getFilteredItems(filter, itemList, null);
                 adapter.notifyDataSetChanged();
                 searchView.clearFocus();
                 // TODO -> hide keyboard

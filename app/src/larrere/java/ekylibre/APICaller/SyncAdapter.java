@@ -28,6 +28,10 @@ import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.security.ProviderInstaller;
 
+import org.joda.time.DateTime;
+import org.joda.time.LocalDateTime;
+import org.joda.time.format.DateTimeFormatter;
+import org.joda.time.format.ISODateTimeFormat;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -61,7 +65,6 @@ import ekylibre.zero.intervention.InterventionActivity;
 
 import static ekylibre.util.Helper.getTranslation;
 import static ekylibre.util.Helper.iso8601;
-import static ekylibre.util.Helper.simpleISO8601;
 
 /**
  * Handle the transfer of data between a server and an
@@ -167,43 +170,46 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
         if (BuildConfig.DEBUG)
             Log.d(TAG, "Performing Sync ! Pushing all the local data to Ekylibre instance");
 
-        int i = -1;
-        while (++i < accountList.length) {
-
-            account = accountList[i];
+       for (Account acc : accountList) {
 
             if (BuildConfig.DEBUG)
                 Log.d(TAG, "Sync account -> " + account.name);
 
-            pullPlantDensityAbaci(account, extras, authority, provider, syncResult);
-            pullPlants(account, extras, authority, provider, syncResult);
+            pullPlantDensityAbaci(acc, extras, authority, provider, syncResult);
+            pullPlants(acc, extras, authority, provider, syncResult);
 
-            pushIssues(account, extras, authority, provider, syncResult);
-            pushPlantCounting(account, extras, authority, provider, syncResult);
-            pushIntervention(account, extras, authority, provider, syncResult);
-            pullIntervention(account, extras, authority, provider, syncResult);
+            pushIssues(acc, extras, authority, provider, syncResult);
+            pushPlantCounting(acc, extras, authority, provider, syncResult);
+            pushIntervention(acc, extras, authority, provider, syncResult);
+            pullIntervention(acc, extras, authority, provider, syncResult);
 
-            pushObservation(account);
+            pushObservation(acc);
 
-            pullProducts(account);
-            pullVariants(account);
+            pullVariants(acc);
+            pullProducts(acc);
 
             try {
-                pushDetailedIntervention(account);
+                pushDetailedIntervention(acc);
             } catch (JSONException | IOException | HTTPException e) {
                 e.printStackTrace();
             }
 
-            pullContacts(account, extras, authority, provider, syncResult);
-            cleanLocalDb(account);
+            pullContacts(acc, extras, authority, provider, syncResult);
+            cleanLocalDb(acc);
         }
 
         mContext.sendBroadcast(new Intent(UpdatableActivity.ACTION_FINISHED_SYNC));
         // Save last sync date
-        if (error)
+        if (error) {
             prefs.edit().putLong("last_sync_date", 0).apply();
-        else
+            if (BuildConfig.DEBUG)
+                Log.e(TAG, "Sync error, will try again next time");
+        }
+        else {
             prefs.edit().putLong("last_sync_date", new Date().getTime()).apply();
+            if (BuildConfig.DEBUG)
+                Log.i(TAG, "No sync error, all is ok");
+        }
     }
 
     private void cleanLocalDb(Account account)
@@ -1239,53 +1245,69 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
         if (BuildConfig.DEBUG)
             Log.i(TAG, "Beginning network products synchronization");
 
-        ContentValues cv = new ContentValues();
         Instance instance = getInstance(account);
 
         List<Product> productList = null;
 
-        try {
-            productList = Product.all(instance, lastSyncattribute);
-        } catch (JSONException | IOException | HTTPException | ParseException e) {
-            e.printStackTrace();
-            error = true;
+        String[] productTypes = new String[] {"equipments", "land_parcels", "matters", "plants", "workers"};
+
+        for (String type : productTypes) {
+            try {
+                productList = Product.all(instance, lastSyncattribute, type);
+            } catch (JSONException | IOException | HTTPException | ParseException e) {
+                Log.e(TAG, "Failed to load PRODUCTS -> " + e.getMessage());
+                error = true;
+            }
+
+            if (productList == null)
+                return;
+
+            if (BuildConfig.DEBUG)
+                Log.d(TAG, "There is " + productList.size() + " products.");
+
+            List<ContentValues> bulkProductsCV = new ArrayList<>();
+
+            int index = 0;
+            for (Product product : productList) {
+                ContentValues cv = new ContentValues();
+                cv.put(ZeroContract.Products.EK_ID, product.id);
+                cv.put(ZeroContract.Products.NAME, product.name);
+                cv.put(ZeroContract.Products.VARIETY, product.variety);
+                if (product.abilities != null)
+                    cv.put(ZeroContract.Products.ABILITIES, product.abilities);
+                if (product.number != null)
+                    cv.put(ZeroContract.Products.NUMBER, product.number);
+                if (product.workNumber != null)
+                    cv.put(ZeroContract.Products.WORK_NUMBER, product.workNumber);
+                if (product.population != null)
+                    cv.put(ZeroContract.Products.POPULATION, product.population);
+                if (product.unit != null)
+                    cv.put(ZeroContract.Products.UNIT, product.unit);
+                if (product.containerName != null)
+                    cv.put(ZeroContract.Products.CONTAINER_NAME, product.containerName);
+                if (product.deadAt != null)
+                    cv.put(ZeroContract.Products.DEAD_AT, product.deadAt.getTime());
+                if (product.netSurfaceArea != null)
+                    cv.put(ZeroContract.Products.NET_SURFACE_AREA, product.netSurfaceArea);
+                if (product.production_started_on != null)
+                    cv.put(ZeroContract.Products.PRODUCTION_STARTED_ON, product.production_started_on.getTime());
+                if (product.production_stopped_on != null)
+                    cv.put(ZeroContract.Products.PRODUCTION_STOPPED_ON, product.production_stopped_on.getTime());
+
+                cv.put(ZeroContract.Products.USER, account.name);
+
+                bulkProductsCV.add(cv);
+
+                if (++index % 250 == 0) {
+                    Log.i(TAG, "Index = " + index);
+                    mContentResolver.bulkInsert(ZeroContract.Products.CONTENT_URI, bulkProductsCV.toArray(new ContentValues[0]));
+                    bulkProductsCV.clear();
+                }
+            }
+            Log.i(TAG, "Index = " + index);
+            mContentResolver.bulkInsert(ZeroContract.Products.CONTENT_URI, bulkProductsCV.toArray(new ContentValues[0]));
         }
-
-        if (productList == null)
-            return;
-
-        if (BuildConfig.DEBUG)
-            Log.d(TAG, "There is " + productList.size() + " products." );
-
-        for (Product product : productList) {
-            cv.put(ZeroContract.Products.EK_ID, product.id);
-            cv.put(ZeroContract.Products.NAME, product.name);
-            cv.put(ZeroContract.Products.VARIETY, product.variety);
-            if (product.abilities != null)
-                cv.put(ZeroContract.Products.ABILITIES, product.abilities);
-            if (product.number != null)
-                cv.put(ZeroContract.Products.NUMBER, product.number);
-            if (product.workNumber != null)
-                cv.put(ZeroContract.Products.WORK_NUMBER, product.workNumber);
-            if (product.population != null)
-                cv.put(ZeroContract.Products.POPULATION, product.population);
-            if (product.unit != null)
-                cv.put(ZeroContract.Products.UNIT, product.unit);
-            if (product.containerName != null)
-                cv.put(ZeroContract.Products.CONTAINER_NAME, product.containerName);
-            if (product.deadAt != null)
-                cv.put(ZeroContract.Products.DEAD_AT, product.deadAt.getTime());
-            if (product.netSurfaceArea != null)
-                cv.put(ZeroContract.Products.NET_SURFACE_AREA, product.netSurfaceArea);
-
-            cv.put(ZeroContract.Products.USER, account.name);
-            mContentResolver.insert(ZeroContract.Products.CONTENT_URI, cv);
-
-            cv.clear();
-        }
-
-        if (BuildConfig.DEBUG)
-            Log.i(TAG, "Finish network products synchronization");
+        Log.i(TAG, "Finish network products synchronization");
     }
 
     /**
@@ -1296,7 +1318,6 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
         if (BuildConfig.DEBUG)
             Log.i(TAG, "Beginning network variants synchronization");
 
-        ContentValues cv = new ContentValues();
         Instance instance = getInstance(account);
 
         List<Variant> variantList = null;
@@ -1313,7 +1334,11 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
         if (BuildConfig.DEBUG)
             Log.d(TAG, "There is " + variantList.size() + " variants." );
 
+        List<ContentValues> bulkVariantsCV = new ArrayList<>();
+
+        int index = 0;
         for (Variant variant : variantList) {
+            ContentValues cv = new ContentValues();
             cv.put(ZeroContract.Variants.EK_ID, variant.id);
             cv.put(ZeroContract.Variants.NAME, variant.name);
             cv.put(ZeroContract.Variants.VARIETY, variant.variety);
@@ -1323,10 +1348,17 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
                 cv.put(ZeroContract.Variants.NUMBER, variant.number);
 
             cv.put(ZeroContract.Variants.USER, account.name);
-            mContentResolver.insert(ZeroContract.Variants.CONTENT_URI, cv);
 
-            cv.clear();
+            bulkVariantsCV.add(cv);
+
+            if (++index % 250 == 0) {
+                Log.i(TAG, "Index = " + index);
+                mContentResolver.bulkInsert(ZeroContract.Variants.CONTENT_URI, bulkVariantsCV.toArray(new ContentValues[0]));
+                bulkVariantsCV.clear();
+            }
         }
+        Log.i(TAG, "Index = " + index);
+        mContentResolver.bulkInsert(ZeroContract.Variants.CONTENT_URI, bulkVariantsCV.toArray(new ContentValues[0]));
 
         if (BuildConfig.DEBUG)
             Log.i(TAG, "Finish network variants synchronization");
@@ -1380,14 +1412,76 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
 //                        Log.e(TAG, "Started at iso8601 -> " + period.getString("started_at"));
 //                        period.put("stopped_at", iso8601Print.print(new DateTime(new Date(cursPeriod.getInt(1)))));
 
-                        period.put("started_at", simpleISO8601.format(new Date(cursPeriod.getLong(0))));
+//                        period.put("started_at", simpleISO8601.format(new Date(cursPeriod.getLong(0))));
+//                        Log.e(TAG, "Started at iso8601 -> " + period.getString("started_at"));
+//                        period.put("stopped_at", simpleISO8601.format(new Date(cursPeriod.getLong(1))));
+
+                        DateTimeFormatter iso = ISODateTimeFormat.dateTime();
+//                        DateTimeZone dtZone = DateTimeZone.forID("Europe/Paris");
+
+                        LocalDateTime dt1 = new LocalDateTime(cursPeriod.getLong(0)); //.withZone(dtZone)
+                        String started_at = iso.print(dt1);
+                        DateTime dt2 = new DateTime(cursPeriod.getLong(1));
+                        String stopped_at = iso.print(dt2);
+
+                        period.put("started_at", started_at);
+                        period.put("stopped_at", stopped_at);
+
                         Log.e(TAG, "Started at iso8601 -> " + period.getString("started_at"));
-                        period.put("stopped_at", simpleISO8601.format(new Date(cursPeriod.getLong(1))));
+                        Log.e(TAG, "Stopped at iso8601 -> " + period.getString("stopped_at"));
+
                         workingPeriods.put(period);
                     }
 
                     // Add working periods to main payload
                     payload.put("working_periods_attributes", workingPeriods);
+                }
+
+                // ---------------- //
+                // Group attributes //
+                // ---------------- //
+                JSONArray zoneArray = new JSONArray();
+                try (Cursor cursZone = mContentResolver.query(ZeroContract.GroupZones.CONTENT_URI,
+                        ZeroContract.GroupZones.PROJECTION_ALL, whereId, id, null, null)) {
+
+                    while (cursZone != null && cursZone.moveToNext()) {
+                        JSONObject zone = new JSONObject();
+                        zone.put("reference_name", "zone");
+
+                        // Get target
+                        try (Cursor targetCurs = mContentResolver.query(ZeroContract.DetailedInterventionAttributes.CONTENT_URI,
+                                ZeroContract.DetailedInterventionAttributes.PROJECTION_ALL, "_id = ?",
+                                new String[] {cursZone.getString(1)}, null, null)) {
+
+                            JSONArray targetObjectList = new JSONArray();
+
+                            while (targetCurs != null && targetCurs.moveToNext()) {
+                                targetObjectList.put(composeJSONObject(targetCurs));
+                                zone.put("targets_attributes", targetObjectList);
+                            }
+                        }
+
+                        // Get output
+                        try (Cursor outputCurs = mContentResolver.query(ZeroContract.DetailedInterventionAttributes.CONTENT_URI,
+                                ZeroContract.DetailedInterventionAttributes.PROJECTION_ALL, "_id = ?",
+                                new String[] {cursZone.getString(2)}, null, null)) {
+
+                            JSONArray outputObjectList = new JSONArray();
+
+                            while (outputCurs != null && outputCurs.moveToNext()) {
+                                JSONObject outputObject = new JSONObject();
+                                outputObject.put("variant_id", outputCurs.getInt(1));
+                                outputObject.put("reference_name", outputCurs.getString(2));
+                                outputObject.put("variety", cursZone.getString(3));
+                                outputObject.put("batch_number", cursZone.getString(4));
+                                outputObjectList.put(outputObject);
+                                zone.put("outputs_attributes", outputObjectList);
+                            }
+                        }
+
+                        // Add created zone to list
+                        zoneArray.put(zone);
+                    }
                 }
 
                 // ----------------------- //
@@ -1407,20 +1501,28 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
                     while (cursAttrs != null && cursAttrs.moveToNext()) {
                         String role = cursAttrs.getString(0);
                         switch (role) {
+
                             case "workers":
                                 workersArray.put(composeJSONObject(cursAttrs));
                                 break;
+
                             case "equipments":
                                 equipmentsArray.put(composeJSONObject(cursAttrs));
                                 break;
+
                             case "targets":
-                                targetsArray.put(composeJSONObject(cursAttrs));
+                                if (cursAttrs.isNull(5))
+                                    targetsArray.put(composeJSONObject(cursAttrs));
                                 break;
+
                             case "inputs":
-                                inputsArray.put(composeQuantityJSONObject(cursAttrs));
+                                if (cursAttrs.isNull(5))
+                                    inputsArray.put(composeQuantityJSONObject(cursAttrs, "product_id"));
                                 break;
+
                             case "outputs":
-                                outputsArray.put(composeQuantityJSONObject(cursAttrs));
+                                if (cursAttrs.isNull(5))
+                                    outputsArray.put(composeQuantityJSONObject(cursAttrs, "variant_id"));
                                 break;
                         }
                     }
@@ -1440,6 +1542,9 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
 
                     if (outputsArray.length() > 0)
                         payload.put("outputs_attributes", outputsArray);
+
+                    if (zoneArray.length() > 0)
+                        payload.put("group_parameters_attributes", zoneArray);
                 }
 
                 // Push the new DetailedIntervention
@@ -1472,9 +1577,9 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
         return obj;
     }
 
-    private JSONObject composeQuantityJSONObject(Cursor curs) throws JSONException {
+    private JSONObject composeQuantityJSONObject(Cursor curs, String idType) throws JSONException {
         JSONObject obj = new JSONObject();
-        obj.put("product_id", curs.getInt(1));
+        obj.put(idType, curs.getInt(1));
         obj.put("reference_name", curs.getString(2));
         if (!curs.isNull(3))
             obj.put("quantity_value", curs.getDouble(3));

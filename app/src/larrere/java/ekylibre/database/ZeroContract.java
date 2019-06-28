@@ -304,6 +304,8 @@ public final class ZeroContract {
         String CONTAINER_NAME = "container_name";
         String DEAD_AT = "dead_at";
         String NET_SURFACE_AREA = "net_surface_area";
+        String PRODUCTION_STARTED_ON = "production_started_on";
+        String PRODUCTION_STOPPED_ON = "production_stopped_on";
         String USER = "user";
     }
 
@@ -711,7 +713,7 @@ public final class ZeroContract {
         public static final Uri CONTENT_URI = getUri(TABLE_NAME);
         public static final String CONTENT_TYPE = DIR_BASE + TABLE_NAME;
         public static final String[] PROJECTION = {EK_ID, NAME, NUMBER, WORK_NUMBER, VARIETY,
-                ABILITIES, POPULATION, UNIT, CONTAINER_NAME, NET_SURFACE_AREA};
+                ABILITIES, POPULATION, UNIT, CONTAINER_NAME, NET_SURFACE_AREA, PRODUCTION_STARTED_ON, PRODUCTION_STOPPED_ON};
         public static final String ORDER_BY_NAME = NAME + " ASC";
     }
 

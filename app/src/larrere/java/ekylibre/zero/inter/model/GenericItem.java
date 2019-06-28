@@ -1,6 +1,7 @@
 package ekylibre.zero.inter.model;
 
 import java.math.BigDecimal;
+import java.util.Date;
 import java.util.HashMap;
 
 public class GenericItem {
@@ -18,6 +19,8 @@ public class GenericItem {
     public String population;
     public String containerName;
     public String netSurfaceArea;
+    public Date production_started_at;
+    public Date production_stopped_at;
 
     public GenericItem() {
         this.quantity = null;

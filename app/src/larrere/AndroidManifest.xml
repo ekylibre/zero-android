@@ -17,7 +17,7 @@
 
         <provider
             android:name="androidx.core.content.FileProvider"
-            android:authorities="ekylibre.zero.larrere.dev.fileprovider"
+            android:authorities="@string/fileProvider"
             android:exported="false"
             android:grantUriPermissions="true">
             <meta-data

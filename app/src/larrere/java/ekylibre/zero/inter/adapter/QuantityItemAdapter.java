@@ -50,7 +50,7 @@ public class QuantityItemAdapter extends RecyclerView.Adapter<QuantityItemAdapte
         ArrayList<SpinnerItem> spinnerList = new ArrayList<>();
         for (HandlerEntity handler : handlers) {
             if (handler.unit != null)
-                spinnerList.add(new SpinnerItem(handler.unit));
+                spinnerList.add(new SpinnerItem(handler.unit, handler.indicator));
         }
         return spinnerList;
     }
@@ -104,7 +104,7 @@ public class QuantityItemAdapter extends RecyclerView.Adapter<QuantityItemAdapte
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                     SpinnerItem selectedUnit = (SpinnerItem) parent.getSelectedItem();
-                    item.unit = selectedUnit.getValue();
+                    item.unit = selectedUnit.getIndicator();
                 }
             });
 
@@ -128,7 +128,7 @@ public class QuantityItemAdapter extends RecyclerView.Adapter<QuantityItemAdapte
                 unitSpinner.setAdapter(adapter);
                 unitSpinner.setVisibility(VISIBLE);
                 if (item.unit != null)
-                    unitSpinner.setSelection(spinnerItems.indexOf(new SpinnerItem(item.unit)));
+                    unitSpinner.setSelection(SpinnerItem.getIndex(spinnerItems, item.unit));
                 else {
                     item.unit = spinnerItems.get(0).getValue();
                     unitSpinner.setSelection(0);

@@ -30,6 +30,7 @@ import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import ekylibre.database.ZeroContract.Variants;
 import ekylibre.database.ZeroContract.Products;
 import ekylibre.util.Helper;
 import ekylibre.util.MarginTopItemDecoration;
@@ -59,6 +60,7 @@ public class InterventionFormFragment extends Fragment {
 
     public static List<Period> periodList;
     public static List<GenericItem> paramsList;
+    public static List<GenericItem> variantsList;
     public static List<Zone> zoneList;
 
     // LAYOUT BINDINGS
@@ -104,6 +106,9 @@ public class InterventionFormFragment extends Fragment {
 
         paramsList = new ArrayList<>();
         paramsList.addAll(getProducts(cr));
+
+        variantsList = new ArrayList<>();
+        variantsList.addAll(getVariants(cr));
     }
 
     @Override
@@ -212,7 +217,7 @@ public class InterventionFormFragment extends Fragment {
                 inputRecycler.setLayoutManager(new LinearLayoutManager(context));
                 inputRecycler.addItemDecoration(new MarginTopItemDecoration(context, 16));
                 QuantityItemAdapter quantityItemAdapter = new QuantityItemAdapter(
-                        getCurrentDataset(inputType.name), inputType);
+                        getCurrentDataset(inputType.name, "inputs"), inputType);
                 inputRecycler.setAdapter(quantityItemAdapter);
                 inputRecycler.requestLayout();
 
@@ -253,7 +258,7 @@ public class InterventionFormFragment extends Fragment {
                 inputRecycler.setLayoutManager(new LinearLayoutManager(context));
                 inputRecycler.addItemDecoration(new MarginTopItemDecoration(context, 16));
                 QuantityItemAdapter quantityItemAdapter = new QuantityItemAdapter(
-                        getCurrentDataset(outputType.name), outputType);
+                        getCurrentDataset(outputType.name, "outputs"), outputType);
                 inputRecycler.setAdapter(quantityItemAdapter);
                 inputRecycler.requestLayout();
 
@@ -292,14 +297,15 @@ public class InterventionFormFragment extends Fragment {
         return view;
     }
 
-    private List<GenericItem> getCurrentDataset(String role) {
+    private List<GenericItem> getCurrentDataset(String type, String role) {
 
         List<GenericItem> dataset = new ArrayList<>();
 
-        // Loop over all items availables for this role
-        for (GenericItem item : paramsList)
+        List<GenericItem> items = role.equals("outputs") ? variantsList : paramsList;
 
-            if (item.referenceName.containsKey(role))
+        // Loop over all items availables for this role
+        for (GenericItem item : items)
+            if (item.referenceName.containsKey(type))
                 dataset.add(item);
 
         return dataset;
@@ -347,6 +353,32 @@ public class InterventionFormFragment extends Fragment {
 //                item.unit = cursor.getString(7);
                 item.containerName = cursor.getString(8);
                 item.netSurfaceArea = cursor.getString(9);
+                list.add(item);
+            }
+        }
+
+        return list;
+    }
+
+    private List<GenericItem> getVariants(ContentResolver cr) {
+        List<GenericItem> list = new ArrayList<>();
+
+        final String whereClause = "user LIKE ?";
+        final String[] args = new String[] {account.name};
+
+        // Load Inputs
+        try (Cursor cursor = cr.query(Variants.CONTENT_URI, Variants.PROJECTION,
+                whereClause, args, Variants.ORDER_BY_NAME)) {
+
+            // Projection --> EK_ID, NAME, NUMBER, VARIETY, ABILITIES
+
+            while (cursor != null && cursor.moveToNext()) {
+                GenericItem item = new GenericItem();
+                item.id = cursor.getInt(0);
+                item.name = cursor.getString(1);
+                item.number = cursor.getString(2);
+                item.variety = cursor.getString(3);
+                item.abilities = cursor.getString(4).split(",");
                 list.add(item);
             }
         }

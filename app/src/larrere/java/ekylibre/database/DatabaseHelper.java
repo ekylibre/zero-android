@@ -584,6 +584,12 @@ public class DatabaseHelper extends SQLiteOpenHelper
                         ZeroContract.Variants.ABILITIES + " TEXT ," +
                         ZeroContract.Variants.USER + " TEXT)");
 
+                database.execSQL("ALTER TABLE " + ZeroContract.Products.TABLE_NAME
+                        + " ADD " + ZeroContract.Products.PRODUCTION_STARTED_ON + " DATETIME");
+
+                database.execSQL("ALTER TABLE " + ZeroContract.Products.TABLE_NAME
+                        + " ADD " + ZeroContract.Products.PRODUCTION_STOPPED_ON + " DATETIME");
+
                 if (newVersion == 23)
                     break;
             }

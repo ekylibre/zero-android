@@ -524,35 +524,38 @@ public class InterActivity extends AppCompatActivity implements FragmentManager.
             // Zones parameters //
             // ---------------- //
 
-            for (Zone zone : InterventionFormFragment.zoneList) {
+            if (selectedProcedure.group != null) {
+                Log.i(TAG, "zone -> " + selectedProcedure.group);
+                for (Zone zone : InterventionFormFragment.zoneList) {
 
-                // Save new zone
-                ContentValues zoneCv = new ContentValues();
-                zoneCv.put(GroupZones.DETAILED_INTERVENTION_ID, interId);
+                    // Save new zone
+                    ContentValues zoneCv = new ContentValues();
+                    zoneCv.put(GroupZones.DETAILED_INTERVENTION_ID, interId);
 //                zoneCv.put(GroupZones.TARGET_ID, targetId);
 //                zoneCv.put(GroupZones.OUTPUT_ID, outputId);
-                zoneCv.put(GroupZones.NEW_NAME, zone.newName);
-                zoneCv.put(GroupZones.BATCH_NUMBER, zone.batchNumber);
+                    zoneCv.put(GroupZones.NEW_NAME, zone.newName);
+                    zoneCv.put(GroupZones.BATCH_NUMBER, zone.batchNumber);
 
-                // Insert into database & get returning id
-                Uri zoneUri = cr.insert(GroupZones.CONTENT_URI, zoneCv);
-                long zoneId = ContentUris.parseId(zoneUri);
+                    // Insert into database & get returning id
+                    Uri zoneUri = cr.insert(GroupZones.CONTENT_URI, zoneCv);
+                    long zoneId = ContentUris.parseId(zoneUri);
 
-                // Save target and get id back
-                Uri targetUri = cr.insert(DetailedInterventionAttributes.CONTENT_URI,
-                        getContentValue(interId, zone.landParcel, "land_parcel", "targets", zoneId));
-                long targetId = ContentUris.parseId(targetUri);
+                    // Save target and get id back
+                    Uri targetUri = cr.insert(DetailedInterventionAttributes.CONTENT_URI,
+                            getContentValue(interId, zone.landParcel, "land_parcel", "targets", zoneId));
+                    long targetId = ContentUris.parseId(targetUri);
 
-                // Save output and get id back
-                Uri outputUri = cr.insert(DetailedInterventionAttributes.CONTENT_URI,
-                        getContentValue(interId, zone.plant, "plant", "outputs", zoneId));
-                long outputId = ContentUris.parseId(outputUri);
+                    // Save output and get id back
+                    Uri outputUri = cr.insert(DetailedInterventionAttributes.CONTENT_URI,
+                            getContentValue(interId, zone.plant, "plant", "outputs", zoneId));
+                    long outputId = ContentUris.parseId(outputUri);
 
-                // Updates current zone with created ids
-                zoneCv.put(GroupZones.TARGET_ID, targetId);
-                zoneCv.put(GroupZones.OUTPUT_ID, outputId);
+                    // Updates current zone with created ids
+                    zoneCv.put(GroupZones.TARGET_ID, targetId);
+                    zoneCv.put(GroupZones.OUTPUT_ID, outputId);
 
-                cr.update(zoneUri, zoneCv, null, null);
+                    cr.update(zoneUri, zoneCv, null, null);
+                }
             }
 
 
@@ -564,6 +567,12 @@ public class InterActivity extends AppCompatActivity implements FragmentManager.
             List<ContentValues> bulkParamCv = new ArrayList<>();
 
             for (GenericItem param : InterventionFormFragment.paramsList)
+                for (Map.Entry<String,String> entry : param.referenceName.entrySet())
+                    // Do not save zones parameters here
+                    if (!entry.getKey().equals("zone"))
+                        bulkParamCv.add(getContentValue(interId, param, entry.getKey(), entry.getValue(), null));
+
+            for (GenericItem param : InterventionFormFragment.variantsList)
                 for (Map.Entry<String,String> entry : param.referenceName.entrySet())
                     // Do not save zones parameters here
                     if (!entry.getKey().equals("zone"))

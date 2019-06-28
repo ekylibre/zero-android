@@ -29,6 +29,7 @@ import ekylibre.zero.inter.enums.ParamType.Type;
 import ekylibre.zero.inter.model.GenericItem;
 
 import static ekylibre.zero.inter.fragment.InterventionFormFragment.paramsList;
+import static ekylibre.zero.inter.fragment.InterventionFormFragment.variantsList;
 
 
 public class ParamChoiceFragment extends Fragment {
@@ -79,7 +80,10 @@ public class ParamChoiceFragment extends Fragment {
         // Load required items
         dataset = new ArrayList<>();
         Log.i(TAG, "Filter = "+ filter);
-        dataset.addAll(Grammar.getFilteredItems(filter, paramsList, null));
+
+        List<GenericItem> itemList = role.equals("outputs") ? variantsList : paramsList;
+
+        dataset.addAll(Grammar.getFilteredItems(filter, itemList, null));
 
         View view;
         if (dataset.isEmpty()) {
@@ -99,7 +103,7 @@ public class ParamChoiceFragment extends Fragment {
                 @Override
                 public boolean onQueryTextSubmit(String text) {
                     dataset.clear();
-                    dataset.addAll(Grammar.getFilteredItems(filter, paramsList, text));
+                    dataset.addAll(Grammar.getFilteredItems(filter, itemList, text));
                     Log.i(TAG, "dataset = "+dataset);
                     adapter.notifyDataSetChanged();
                     Log.e(TAG, "dataset changed");
@@ -108,7 +112,7 @@ public class ParamChoiceFragment extends Fragment {
                 @Override
                 public boolean onQueryTextChange(String text) {
                     dataset.clear();
-                    dataset.addAll(Grammar.getFilteredItems(filter, paramsList, text.length() > 1 ? text : null));
+                    dataset.addAll(Grammar.getFilteredItems(filter, itemList, text.length() > 1 ? text : null));
                     adapter.notifyDataSetChanged();
                     return false;
                 }
@@ -116,7 +120,7 @@ public class ParamChoiceFragment extends Fragment {
 
             searchView.setOnCloseListener(() -> {
                 // Reset search
-                dataset = Grammar.getFilteredItems(filter, paramsList, null);
+                dataset = Grammar.getFilteredItems(filter, itemList, null);
                 adapter.notifyDataSetChanged();
                 searchView.clearFocus();
                 InputMethodManager imm = (InputMethodManager) context.getSystemService(Activity.INPUT_METHOD_SERVICE);

@@ -17,9 +17,9 @@ import java.util.Locale;
 
 import ekylibre.exceptions.HTTPException;
 import ekylibre.util.antlr4.Grammar;
-import ekylibre.zero.BuildConfig;
 
-import static ekylibre.util.Helper.iso8601;
+import static ekylibre.util.Helper.iso8601date;
+import static ekylibre.util.Helper.parseISO8601toDate;
 
 public class Product {
 
@@ -37,14 +37,16 @@ public class Product {
     public String containerName;
     public Date deadAt;
     public String netSurfaceArea;
+    public Date production_started_on;
+    public Date production_stopped_on;
 
-    public static List<Product> all(Instance instance, String attributes)
+    public static List<Product> all(Instance instance, String attributes, String type)
             throws JSONException, IOException, HTTPException, ParseException {
 
 //        if (BuildConfig.DEBUG)
 //            Log.d(TAG, "Get JSONArray => /api/v1/products || params = " + attributes);
 
-        JSONArray json = instance.getJSONArray("/api/v1/products", attributes);
+        JSONArray json = instance.getJSONArray("/api/v1/products/" + type, attributes);
         List<Product> array = new ArrayList<>();
 
         for(int i = 0 ; i < json.length() ; i++ )
@@ -55,8 +57,8 @@ public class Product {
 
     private Product(JSONObject object) throws JSONException, ParseException {
 
-        if (BuildConfig.DEBUG)
-            Log.d(TAG, "Product object -> " + object.toString());
+//        if (BuildConfig.DEBUG)
+//            Log.d(TAG, "Product object -> " + object.toString());
 
         id = object.getInt("id");
         name = object.getString("name");
@@ -85,13 +87,19 @@ public class Product {
             containerName = object.getString("container_name");
 
         if (object.has("dead_at") && !object.isNull("dead_at")) {
-            Log.e(TAG, "dead_at" + object.getString("dead_at"));
-            deadAt = iso8601.parse(object.getString("dead_at"));
+            Log.e(TAG, "dead_at received -> " + object.getString("dead_at"));
+            deadAt = parseISO8601toDate(object.getString("dead_at"));
+            Log.e(TAG, "dead_at converted -> " + deadAt.toString());
         }
 //            deadAt = iso8601Parser.parseDateTime(object.getString("dead_at")).toDate();
 
         if (object.has("net_surface_area") && !object.isNull("net_surface_area"))
             netSurfaceArea = getSurfaceArea(object.getJSONObject("net_surface_area"));
+
+        if (object.has("production_started_on") && !object.isNull("production_started_on"))
+            production_started_on = iso8601date.parse(object.getString("production_started_on"));
+        if (object.has("production_stopped_on") && !object.isNull("production_stopped_on"))
+            production_stopped_on = iso8601date.parse(object.getString("production_stopped_on"));
     }
 
     private String computeAbilities(JSONObject object) throws JSONException {
