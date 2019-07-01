@@ -41,8 +41,8 @@
     <uses-permission android:name="android.permission.USE_CREDENTIALS" />
     <uses-permission android:name="android.permission.WRITE_SYNC_SETTINGS" />
     <!-- TODO -->
-    <uses-permission android:name="@string/permSyncData" />
-    <uses-permission android:name="@string/permAuthenticateAccounts" />
+    <uses-permission android:name="${applicationId}.permission.SYNC_DATA" />
+    <uses-permission android:name="${applicationId}.permission.AUTHENTICATE_ACCOUNTS" />
     <!--<uses-permission android:name="ekylibre.zero.permission.SYNC_DATA" />-->
     <!--<uses-permission android:name="ekylibre.zero.permission.AUTHENTICATE_ACCOUNTS" />-->
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
@@ -98,7 +98,7 @@
 
         <service
             android:name="ekylibre.service.AuthenticatorService"
-            android:permission="@string/permAuthenticateAccounts">
+            android:permission="${applicationId}.permission.AUTHENTICATE_ACCOUNTS">
             <intent-filter>
                 <action android:name="android.accounts.AccountAuthenticator" />
             </intent-filter>
@@ -125,7 +125,7 @@
         <service
             android:name="ekylibre.service.SyncService"
             android:label="@string/service_name"
-            android:permission="@string/permSyncData"
+            android:permission="${applicationId}.permission.SYNC_DATA"
             android:process=":sync">
             <intent-filter>
                 <action android:name="android.content.SyncAdapter" />

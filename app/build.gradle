@@ -16,7 +16,7 @@ android {
         applicationId "ekylibre.zero"
         minSdkVersion 19
         targetSdkVersion 28
-        versionCode 33
+        versionCode 34
         versionName "0.9.0"
         resValue 'string', 'google_maps_key', google_maps_key
         signingConfig signingConfigs.config
