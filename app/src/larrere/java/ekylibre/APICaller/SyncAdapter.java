@@ -28,7 +28,6 @@ import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.security.ProviderInstaller;
 
-import org.joda.time.DateTime;
 import org.joda.time.LocalDateTime;
 import org.joda.time.format.DateTimeFormatter;
 import org.joda.time.format.ISODateTimeFormat;
@@ -1421,7 +1420,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
 
                         LocalDateTime dt1 = new LocalDateTime(cursPeriod.getLong(0)); //.withZone(dtZone)
                         String started_at = iso.print(dt1);
-                        DateTime dt2 = new DateTime(cursPeriod.getLong(1));
+                        LocalDateTime dt2 = new LocalDateTime(cursPeriod.getLong(1));
                         String stopped_at = iso.print(dt2);
 
                         period.put("started_at", started_at);
