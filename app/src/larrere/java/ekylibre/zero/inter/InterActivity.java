@@ -45,6 +45,7 @@ import ekylibre.util.AccountTool;
 import ekylibre.util.ProcedureFamiliesXMLReader;
 import ekylibre.util.ProceduresXMLReader;
 import ekylibre.util.ontology.Node;
+import ekylibre.util.pojo.GenericEntity;
 import ekylibre.util.pojo.ProcedureEntity;
 import ekylibre.zero.BuildConfig;
 import ekylibre.zero.R;
@@ -59,6 +60,8 @@ import ekylibre.zero.inter.model.CropParcel;
 import ekylibre.zero.inter.model.GenericItem;
 import ekylibre.zero.inter.model.Period;
 import ekylibre.zero.inter.model.Zone;
+
+import static ekylibre.util.Helper.getTranslation;
 
 
 public class InterActivity extends AppCompatActivity implements FragmentManager.OnBackStackChangedListener,
@@ -418,66 +421,167 @@ public class InterActivity extends AppCompatActivity implements FragmentManager.
      */
     private void saveIntervention() {
 
-        // test
-        for(Zone zone : InterventionFormFragment.zoneList) {
-            Log.i(TAG, "---");
-            Log.e(TAG, "zone " + zone.landParcel + " " + zone.plant + " " + zone.newName);
-        }
-
-        for (GenericItem item : InterventionFormFragment.paramsList) {
-            if (item.referenceName.containsValue("targets")) {
-                Log.i(TAG, "---");
-                Log.e(TAG, "item " + item);
-            }
-        }
-
-        // Do some validation before saving
+        // ----------- //
+        // VALIDATIONS //
+        // ----------- //
 
         boolean valid = true;
         int counter;
         BigDecimal zero = new BigDecimal("0");
 
-        periodLoop: for (Period period1 : InterventionFormFragment.periodList)
+        periodLoop: for (Period period1 : InterventionFormFragment.periodList) {
+
+            // Check for period overlapping
             for (Period period2 : InterventionFormFragment.periodList)
                 if (period2 != period1 && overlaps(period1, period2)) {
                     valid = false;
                     displayWarningDialog(this, "Attention, des periodes de travail se chevauchent");
                     break periodLoop;
                 }
+        }
 
         // Check if one culture/parcel is set
         if (valid && selectedProcedure.target.size() > 0) {
-            counter = 0;
-            for (GenericItem input : InterventionFormFragment.paramsList) {
-                if (input.referenceName.containsValue("targets")) {
-                    ++counter;
-                    break;
+
+            for (GenericEntity target : selectedProcedure.target) {
+                Log.d(TAG, "Validate " + target.name);
+
+                counter = 0;
+                for (GenericItem item : InterventionFormFragment.paramsList) {
+
+                    if (item.referenceName.containsKey(target.name)) {
+                        ++counter;
+
+                        // Check periods contained in productions dates
+                        if (item.production_started_at != null) {
+                            Log.i(TAG, "production_started_at = " + item.production_started_at);
+                            for (Period period : InterventionFormFragment.periodList) {
+                                if (!isContained(period, item.production_started_at, item.production_stopped_at)) {
+                                    valid = false;
+                                    displayWarningDialog(this, "La periode ne correspond pas aux dates de la production");
+                                    break;
+                                }
+                            }
+                        } else
+                            Log.w(TAG, "No dates to check");
+                        break;
+                    }
                 }
-            }
-            // Check the is one input at least
-            if (counter == 0) {
-                valid = false;
-                displayWarningDialog(this, "Vous devez renseigner au moins une culture/parcelle");
+                // Check there is one target at least
+                // Check if this target is mandatory (in cardinality)
+                if (target.cardinality == null || target.cardinality.equals("1")) {
+                    if (counter == 0) {
+                        valid = false;
+                        displayWarningDialog(this, "Vous devez renseigner au moins une culture/parcelle");
+                        break;
+                    } else
+                        Log.i(TAG, "Validation OK for " + target.name);
+                }
+
             }
         }
 
         // Check if input needed and a quantity is set
         if (valid && selectedProcedure.input.size() > 0) {
-            counter = 0;
-            for (GenericItem input : InterventionFormFragment.paramsList) {
-                if (input.referenceName.containsValue("inputs")) {
-                    ++counter;
-                    if (input.quantity == null || input.quantity.compareTo(zero) <= 0) {
-                        valid = false;
-                        displayWarningDialog(this, "Il faut renseigner une quantité pour l'intrant");
-                        break;
+
+            for (GenericEntity input : selectedProcedure.input) {
+                Log.d(TAG, "Validate " + input.name);
+
+                counter = 0;
+                for (GenericItem item : InterventionFormFragment.paramsList) {
+                    if (item.referenceName.containsKey(input.name)) {
+                        ++counter;
+                        if (item.quantity == null || item.quantity.compareTo(zero) <= 0) {
+                            valid = false;
+                            displayWarningDialog(this, "Il faut renseigner une quantité pour l'intrant");
+                            break;
+                        }
                     }
                 }
+                // Check the is one input at least
+                if (input.cardinality == null || input.cardinality.equals("1")) {
+                    if (counter == 0) {
+                        valid = false;
+                        displayWarningDialog(this, "Vous devez renseigner au moins un " + input.name);
+                        break;
+                    } else
+                        Log.i(TAG, "Validation OK for " + input.name);
+                }
             }
-            // Check the is one input at least
-            if (counter == 0) {
-                valid = false;
-                displayWarningDialog(this, "Vous devez renseigner au moins un intrant");
+        }
+
+        // Check if input needed and a quantity is set
+        if (valid && selectedProcedure.output.size() > 0) {
+
+            for (GenericEntity output : selectedProcedure.output) {
+                Log.d(TAG, "Validate " + output.name);
+
+                counter = 0;
+                for (GenericItem item : InterventionFormFragment.variantsList) {
+                    if (item.referenceName.containsKey(output.name)) {
+                        ++counter;
+                        if (!output.group.equals("zone")) {
+                            if (item.quantity == null || item.quantity.compareTo(zero) <= 0) {
+                                valid = false;
+                                displayWarningDialog(this, "Il faut renseigner une quantité pour l'extrant");
+                                break;
+                            }
+                        }
+                    }
+                }
+                // Check the is one input at least
+                if (output.cardinality == null || output.cardinality.equals("1")) {
+                    if (counter == 0) {
+                        valid = false;
+                        displayWarningDialog(this, "Vous devez renseigner au moins un " + getTranslation(output.name));
+                        break;
+                    } else
+                        Log.i(TAG, "Validation OK for " + output.name);
+                }
+            }
+        }
+
+        // Check if input needed and a quantity is set
+        if (valid && selectedProcedure.doer.size() > 0) {
+
+            for (GenericEntity doer : selectedProcedure.doer) {
+                Log.d(TAG, "Validate " + doer.name);
+
+                counter = 0;
+                for (GenericItem item : InterventionFormFragment.paramsList)
+                    if (item.referenceName.containsKey(doer.name))
+                        ++counter;
+
+                // Check the is one input at least
+                if (doer.cardinality == null || doer.cardinality.equals("1"))
+                    if (counter == 0) {
+                        valid = false;
+                        displayWarningDialog(this, "Vous devez renseigner au moins un " + getTranslation(doer.name));
+                        break;
+                    } else
+                        Log.i(TAG, "Validation OK for " + doer.name);
+            }
+        }
+
+        // Check if input needed and a quantity is set
+        if (valid && selectedProcedure.tool.size() > 0) {
+
+            for (GenericEntity tool : selectedProcedure.tool) {
+                Log.d(TAG, "Validate " + tool.name);
+
+                counter = 0;
+                for (GenericItem item : InterventionFormFragment.paramsList)
+                    if (item.referenceName.containsKey(tool.name))
+                        ++counter;
+
+                // Check the is one input at least
+                if (tool.cardinality == null || tool.cardinality.equals("1"))
+                    if (counter == 0) {
+                        valid = false;
+                        displayWarningDialog(this, "Vous devez renseigner au moins un " + getTranslation(tool.name));
+                        break;
+                    } else
+                        Log.i(TAG, "Validation OK for " + tool.name);
             }
         }
 
@@ -611,6 +715,11 @@ public class InterActivity extends AppCompatActivity implements FragmentManager.
     private boolean overlaps(Period period1, Period period2){
         return period1.startDateTime.getTime() <= period2.stopDateTime.getTime()
                 && period2.startDateTime.getTime() <= period1.stopDateTime.getTime();
+    }
+
+    private boolean isContained(Period period, Date start, Date stop){
+        return period.startDateTime.getTime() >= start.getTime() && period.startDateTime.getTime() <=stop.getTime()
+                && period.stopDateTime.getTime() >= start.getTime() && period.stopDateTime.getTime() <= stop.getTime();
     }
 
     private void displayWarningDialog(Context context, String text) {

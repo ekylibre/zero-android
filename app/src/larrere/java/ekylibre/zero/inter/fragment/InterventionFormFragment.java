@@ -353,6 +353,9 @@ public class InterventionFormFragment extends Fragment {
 //                item.unit = cursor.getString(7);
                 item.containerName = cursor.getString(8);
                 item.netSurfaceArea = cursor.getString(9);
+                item.production_started_at = new Date(cursor.getLong(10));
+                item.production_stopped_at = new Date(cursor.getLong(11));
+
                 list.add(item);
             }
         }
